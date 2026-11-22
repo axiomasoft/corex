@@ -125,7 +125,7 @@
                 },
                 "default_major": {
                     "type": "string",
-                    "default": "v1"
+                    "default": "v2"
                 },
                 "discovery": {
                     "type": "string",

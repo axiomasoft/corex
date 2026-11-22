@@ -48,22 +48,22 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
     public function forCurrentPrincipal(TenantContext $context): DataScope
     {
         $actual = ($this->application)()->make(TenantContextResolver::class)->current();
-        $this->checkLogical($actual, $context->account->id, $context->workspace?->id);
+        $this->checkLogical(context: $actual, account: $context->account->id, workspace: $context->workspace?->id);
         $binding = $this->binding($actual);
-        $this->verify($binding, $actual);
+        $this->verify(binding: $binding, context: $actual);
         $principal = ($this->application)()->make(WorkPrincipalAuthority::class)->current($actual);
 
-        return new DataScope($binding->deploymentId, $actual->account->id, $actual->workspace?->id, $binding->bindingId,
-            $binding->bindingGeneration, $binding->accountIncarnation, $binding->restoreEpoch, $principal->kind, $principal->id);
+        return new DataScope(deploymentId: $binding->deploymentId, accountId: $actual->account->id, workspaceId: $actual->workspace?->id, bindingId: $binding->bindingId,
+            bindingGeneration: $binding->bindingGeneration, accountIncarnation: $binding->accountIncarnation, restoreEpoch: $binding->restoreEpoch, principalKind: $principal->kind, principalId: $principal->id);
     }
 
     public function assert(DataScope $scope, ?ConnectionInterface $connection = null): TenantContext
     {
         $context = ($this->application)()->make(TenantContextResolver::class)->current();
-        $this->checkLogical($context, $scope->accountId, $scope->workspaceId);
+        $this->checkLogical(context: $context, account: $scope->accountId, workspace: $scope->workspaceId);
         $binding = ($this->application)()->make(ScopeAuthority::class)->resolve($context->account);
         $binding->assertScope($scope);
-        $actual = $this->verify($binding, $context);
+        $actual = $this->verify(binding: $binding, context: $context);
 
         if ($connection !== null && $actual !== $connection) {
             throw new ScopeContextMismatch('Work connection does not belong to the active physical owner.');
@@ -88,27 +88,27 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
 
     public function run(DataScope $scope, Closure $work): mixed
     {
-        return $this->execute($scope, $work, false);
+        return $this->execute(scope: $scope, work: $work, durable: false);
     }
 
     public function runStored(DataScope $scope, StoredWorkProof $proof, Closure $work, ?OperationKey $attempt = null): mixed
     {
         ($this->application)()->make(StoredWorkOrigins::class)->verify($scope, $proof);
 
-        return $this->execute($scope, $work, true, $attempt);
+        return $this->execute(scope: $scope, work: $work, durable: true, attempt: $attempt);
     }
 
     public function assertReceipt(ProviderEffectStatus $status, ConnectionInterface $connection): TenantContext
     {
         $scope = $status->ticket->scope;
         $context = ($this->application)()->make(TenantContextResolver::class)->current();
-        $this->checkLogical($context, $scope->accountId, $scope->workspaceId);
+        $this->checkLogical(context: $context, account: $scope->accountId, workspace: $scope->workspaceId);
         $binding = ($this->application)()->make(ScopeAuthority::class)->resolve($context->account);
         $binding->assertScope($scope);
         $principal = ($this->application)()->make(WorkPrincipalAuthority::class)->current($context);
 
         if ($status->effect->identity() !== $status->ticket->key->id || $principal->kind !== $scope->principalKind || $principal->id !== $scope->principalId
-            || $this->verify($binding, $context) !== $connection || ! ($this->application)()->make(LocalWorkTransactions::class)->holdsReceipt($status->ticket, $connection)) {
+            || $this->verify(binding: $binding, context: $context) !== $connection || ! ($this->application)()->make(LocalWorkTransactions::class)->holdsReceipt($status->ticket, $connection)) {
             throw new ScopeContextMismatch('This receipt does not belong to the verified projector frame.');
         }
 
@@ -124,7 +124,7 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
             return false;
         }
 
-        return $this->execute($initial->ticket->scope, function () use ($effect, $ledger, $initial): bool {
+        return $this->execute(scope: $initial->ticket->scope, work: function () use ($effect, $ledger, $initial): bool {
             $projector = null;
             foreach (($this->application)()->tagged(ProviderReceiptProjector::class) as $candidate) {
                 if ($candidate instanceof ProviderReceiptProjector && $candidate->owner() === $effect->owner) {
@@ -171,11 +171,11 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
             }
 
             if ($status->state !== 'reconciled') {
-                ($this->application)()->make(ScopeAdmission::class)->settle($status->ticket, new AttemptEvidence('reconciled', $receipt));
+                ($this->application)()->make(ScopeAdmission::class)->settle($status->ticket, new AttemptEvidence(outcome: 'reconciled', reference: $receipt));
             }
 
             return true;
-        }, true, provider: $initial->ticket);
+        }, durable: true, provider: $initial->ticket);
     }
 
     /**
@@ -216,7 +216,7 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
         }
         $admission = ($this->application)()->make(ScopeAdmission::class);
         $ticket = $provider === null
-            ? $admission->acquire($scope, $attempt ?? new OperationKey((string) Str::uuid7(), 1), AdmissionKind::LocalWrite)
+            ? $admission->acquire($scope, $attempt ?? new OperationKey(id: (string) Str::uuid7(), attempt: 1), AdmissionKind::LocalWrite)
             : ($this->application)()->make(DatabaseScopeControl::class)->receiptTicket($provider);
         $transactions = ($this->application)()->make(LocalWorkTransactions::class);
 
@@ -234,8 +234,8 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
             $manager = ($this->application)()->make(TenancyManager::class);
             $invoke = function () use ($scope, $binding, $durable, $work, $transactions, $admission, $ticket): mixed {
                 $context = ($this->application)()->make(TenantContextResolver::class)->current();
-                $this->checkLogical($context, $scope->accountId, $scope->workspaceId);
-                $connection = $this->verify($binding, $context);
+                $this->checkLogical(context: $context, account: $scope->accountId, workspace: $scope->workspaceId);
+                $connection = $this->verify(binding: $binding, context: $context);
 
                 if ($durable) {
                     ($this->application)()->forgetScopedInstances();
@@ -261,7 +261,7 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
                 $result = $manager->runFor($account, null, $invoke);
             } else {
                 $result = $manager->runFor($account, null, function () use ($scope, $binding, $account, $manager, $directory, $invoke): mixed {
-                    $this->verify($binding, ($this->application)()->make(TenantContextResolver::class)->current());
+                    $this->verify(binding: $binding, context: ($this->application)()->make(TenantContextResolver::class)->current());
 
                     return $manager->runFor($account, $directory->workspace($scope->workspaceId), $invoke);
                 });
@@ -278,7 +278,7 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
                 }
 
                 if ($outerBinding !== null && $restored !== null) {
-                    $this->verify($outerBinding, $restored);
+                    $this->verify(binding: $outerBinding, context: $restored);
                 } elseif ($outerConnection !== null && ($database->getConnections()[$outerName] ?? null) !== $outerConnection) {
                     throw new ScopeContextMismatch('The central connection was not restored.');
                 }

@@ -45,7 +45,7 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
 
     public function store(MediaContext $context, UploadInput $input): MediaFileRef
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
 
         if (! $this->policy->allows(context: $context, action: MediaAction::Store, subject: new MediaSubject)) {
             throw new MediaAccessDenied('Media upload is denied.');
@@ -108,7 +108,7 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
         }
 
         try {
-            return $this->blobs->transaction($this->connection, function () use ($context, $id, $input, $digest, $size, $mime, $checksum, $bytes): MediaFileRef {
+            return $this->blobs->transaction(connection: $this->connection, callback: function () use ($context, $id, $input, $digest, $size, $mime, $checksum, $bytes): MediaFileRef {
                 $scope = $this->operations->enlist();
                 $this->connection->table('med_files')->insert([
                     ...$this->operations->conversionIdentity($scope),
@@ -119,13 +119,13 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
                     'version' => 1, 'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
                 ]);
                 // Owner row is locked before Vaulter acquires the blob lock.
-                $blob = $this->blobs->commit($bytes, $context->tenant->account->id);
-                $reference = new MediaFileRef($id, $input->purpose, $mime, $size, $checksum, 'ready');
+                $blob = $this->blobs->commit(bytes: $bytes, accountId: $context->tenant->account->id);
+                $reference = new MediaFileRef(id: $id, kind: $input->purpose, mimeType: $mime, sizeBytes: $size, sha256: $checksum, state: 'ready');
 
-                if (! $this->policy->allows($context, MediaAction::Store, new MediaSubject($reference))) {
+                if (! $this->policy->allows(context: $context, action: MediaAction::Store, subject: new MediaSubject($reference))) {
                     throw new MediaAccessDenied('Media upload is denied.');
                 }
-                $this->blobs->pin($blob->id, 'corex.media.file', $id);
+                $this->blobs->pin(blobId: $blob->id, ownerType: 'corex.media.file', referenceKey: $id);
                 $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $id)->update([
                     'blob_id' => $blob->id, 'state' => 'ready', 'updated_at' => $this->clock->now(),
                 ]);
@@ -149,7 +149,7 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
 
     public function read(MediaContext $context, string $fileId): MediaReadRef
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
         $file = $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $fileId)->where('account_id', $context->tenant->account->id)->where('state', 'ready')->first();
 
         if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($file)))) {
@@ -162,7 +162,7 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
             sizeBytes: Value::integer($file->size_bytes),
             sha256: Value::text($file->sha256),
             openStream: function () use ($context, $file): mixed {
-                $this->blobs->assertContext($this->connection, $context);
+                $this->blobs->assertContext(connection: $this->connection, context: $context);
                 $current = $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $file->id)->where('account_id', $context->tenant->account->id)->where('state', 'ready')->first();
 
                 if ($current === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($current)))) {
@@ -183,8 +183,8 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
     public function readConversion(MediaContext $context, string $fileId, string $profile): ?MediaReadRef
     {
         // The parent reference is the authorization boundary for every derivative.
-        $this->read($context, $fileId);
-        $conversion = $this->conversions->ready($fileId, $profile);
+        $this->read(context: $context, fileId: $fileId);
+        $conversion = $this->conversions->ready(fileId: $fileId, profileKey: $profile);
 
         if ($conversion === null) {
             return null;
@@ -192,25 +192,25 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
 
         return new MediaReadRef(
             fileId: $fileId,
-            mimeType: Value::text(Value::field($conversion, 'mime_type')),
-            sizeBytes: Value::integer(Value::field($conversion, 'size_bytes')),
-            sha256: Value::text(Value::field($conversion, 'sha256')),
+            mimeType: Value::text(Value::field(row: $conversion, name: 'mime_type')),
+            sizeBytes: Value::integer(Value::field(row: $conversion, name: 'size_bytes')),
+            sha256: Value::text(Value::field(row: $conversion, name: 'sha256')),
             openStream: function () use ($context, $fileId, $profile, $conversion): mixed {
-                $this->read($context, $fileId);
-                $current = $this->conversions->ready($fileId, $profile);
+                $this->read(context: $context, fileId: $fileId);
+                $current = $this->conversions->ready(fileId: $fileId, profileKey: $profile);
 
-                if ($current === null || Value::field($current, 'id') !== Value::field($conversion, 'id')) {
+                if ($current === null || Value::field(row: $current, name: 'id') !== Value::field(row: $conversion, name: 'id')) {
                     throw new MediaOperationConflict('The conversion reference is no longer current.');
                 }
 
-                return $this->blobs->read(Value::text(Value::field($current, 'blob_id')));
+                return $this->blobs->read(Value::text(Value::field(row: $current, name: 'blob_id')));
             },
         );
     }
 
     public function delete(MediaContext $context, string $fileId): DeleteResult
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
         $candidate = $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $fileId)->where('account_id', $context->tenant->account->id)->first();
 
         if ($candidate !== null && ! $this->policy->allows(context: $context, action: MediaAction::Delete, subject: new MediaSubject($this->reference($candidate)))) {
@@ -246,7 +246,7 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
 
     public function requestConversion(MediaContext $context, string $fileId, string $profile): MediaConversionRef
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
         $file = $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $fileId)->where('account_id', $context->tenant->account->id)->where('state', 'ready')->first();
 
         if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($file)))) {
@@ -258,7 +258,7 @@ final readonly class SqlMediaLibrary implements ConversionOperations, MediaLibra
 
     public function inspect(MediaContext $context, MediaConversionRef $ref): ConversionStatus
     {
-        $this->read($context, $ref->fileId);
+        $this->read(context: $context, fileId: $ref->fileId);
 
         return $this->operations->status($ref);
     }

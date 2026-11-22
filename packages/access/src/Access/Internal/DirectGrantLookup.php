@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Access\Access\Internal;
 
 use CoreX\Context\Contracts\Principal;
+use DateTimeImmutable;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Packman\Attributes\Internal;
@@ -19,11 +21,11 @@ final readonly class DirectGrantLookup
         private ClockInterface $clock,
     ) {}
 
-    public function hasActive(Principal $p, string $key): bool
+    public function hasActive(Principal $p, string $key, ?DateTimeImmutable $at = null, ?ConnectionInterface $connection = null): bool
     {
-        $now = $this->clock->now()->format('Y-m-d H:i:s.uP');
+        $now = ($at ?? $this->clock->now())->format('Y-m-d H:i:s.uP');
 
-        return $this->connections->connection()->table('aut_direct_grants')
+        return ($connection ?? $this->connections->connection())->table('aut_direct_grants')
             ->where('principal_type', $p->principalType()->value)
             ->where('principal_id', $p->principalId())
             ->where('permission_key', $key)

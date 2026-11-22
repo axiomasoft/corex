@@ -28,7 +28,7 @@ final class MeilisearchDriverFactory
 {
     public function candidates(Application $app): CandidateDriver
     {
-        return new MeilisearchCandidateDriver($this->clients($app), $app->make(CurrentWorkScope::class), $this->cluster($app));
+        return new MeilisearchCandidateDriver(clients: $this->clients($app), current: $app->make(CurrentWorkScope::class), cluster: $this->cluster($app));
     }
 
     public function index(Application $app): IndexDriver

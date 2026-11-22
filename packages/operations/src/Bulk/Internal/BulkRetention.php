@@ -70,7 +70,7 @@ final readonly class BulkRetention
     {
         $this->assertLimit($limit);
 
-        return $this->connection->transaction(fn (): array => $this->pruneAdmitted($scope, $limit));
+        return $this->connection->transaction(fn (): array => $this->pruneAdmitted(scope: $scope, limit: $limit));
     }
 
     /** @return array{cleared: int, removed: int} */
@@ -91,7 +91,7 @@ final readonly class BulkRetention
 
         foreach ($removeRows as $row) {
             if ($this->trusted(row: $row, scope: $scope)) {
-                $this->enlist($scope, $row);
+                $this->enlist(scope: $scope, row: $row);
                 $removeIds[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
             }
         }
@@ -116,7 +116,7 @@ final readonly class BulkRetention
 
             foreach ($clearRows as $row) {
                 if ($this->trusted(row: $row, scope: $scope)) {
-                    $this->enlist($scope, $row);
+                    $this->enlist(scope: $scope, row: $row);
                     $clearIds[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
                 }
             }
@@ -143,7 +143,7 @@ final readonly class BulkRetention
             return;
         }
 
-        $stamp = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'extension_stamp')));
+        $stamp = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'extension_stamp')));
 
         if (! is_array($stamp)) {
             throw new InvalidArgumentException('Bulk retention owner stamp is invalid.');
@@ -160,7 +160,7 @@ final readonly class BulkRetention
 
     private function assertScope(DataScope $scope): void
     {
-        $this->contexts->assert($scope, $this->connection);
+        $this->contexts->assert(scope: $scope, connection: $this->connection);
     }
 
     private function terminal(DataScope $scope, DateTimeImmutable $now): Builder

@@ -7,7 +7,7 @@ There is no implicit CRUD and no discovery of arbitrary controller methods.
 
 The local `operation-contract/1` freeze covers query, command and async command
 declarations plus HTTP/exposed-tool parity. The compiled module registry is the
-single declaration authority. `ApiProfile` and the five `api/v1` snapshot files
+single declaration authority. `ApiProfile` and the five `api/v2` snapshot files
 are deterministic code projections; account activation and actor authorization
 remain live per invocation. GraphQL is outside this contract.
 
@@ -28,28 +28,34 @@ Installed order, before the operation wildcard:
 
 ```text
 GET  /api
-GET  /api/{version}/capabilities
-GET  /api/{version}/openapi.json
-POST /api/v1/bulk-operations
-GET  /api/v1/bulk-operations/{id}
-POST /api/v1/bulk-operations/{id}/cancel
-GET  /api/v1/bulk-operations/{id}/result
-GET  /api/v1/bulk-operations/{id}/failures
-GET/POST   /api/v1/webhook-subscriptions
-PATCH      /api/v1/webhook-subscriptions/{id}
-POST       /api/v1/webhook-subscriptions/{id}/disable
-GET        /api/v1/webhook-deliveries
-GET        /api/v1/webhook-deliveries/{id}
-GET        /api/v1/webhook-deliveries/{id}/attempts
-POST       /api/v1/webhook-deliveries/{id}/replay
-POST       /api/v1/webhook-deliveries/replay
-ANY  /api/{version}/{path?}
+GET  /api/v2/capabilities
+GET  /api/v2/openapi.json
+GET  /api/v2/entities/{entity}/fields
+GET  /api/v2/entities/{entity}/search
+POST /api/v2/bulk-operations
+GET  /api/v2/bulk-operations/{id}
+POST /api/v2/bulk-operations/{id}/cancel
+GET  /api/v2/bulk-operations/{id}/result
+GET  /api/v2/bulk-operations/{id}/failures
+GET/POST   /api/v2/webhook-subscriptions
+PATCH      /api/v2/webhook-subscriptions/{id}
+POST       /api/v2/webhook-subscriptions/{id}/disable
+GET        /api/v2/webhook-deliveries
+GET        /api/v2/webhook-deliveries/{id}
+GET        /api/v2/webhook-deliveries/{id}/attempts
+POST       /api/v2/webhook-deliveries/{id}/replay
+POST       /api/v2/webhook-deliveries/replay
+GET/POST/PUT/PATCH/DELETE /api/v2/{path?}
 ```
 
-`OperationErrorBoundary` wraps only the operation wildcard. Discovery does not dispatch an
-operation. No route reads account, workspace or principal from the payload. Async
-commands answer `202` with one `Location`. Deprecation headers come only from the
-operation descriptor.
+Discovery reads compiled declarations. The host resolves the account, workspace and principal
+before invocation. Async commands answer `202` with `Location` matching `data.status_url`.
+Deprecation headers come from the operation descriptor.
+
+The two entity metadata operations check current field permissions and the owner catalogue.
+Search also checks the active mapping and backend readiness. The response has
+`Cache-Control: private, no-cache`. With an application key configured, a matching
+`If-None-Match` receives a bodyless `304` after authorization and representation checks.
 
 ## Declare operations
 
@@ -70,7 +76,7 @@ Api::operation(
     ],
     responseSchema: ['type' => 'object', 'properties' => ['id' => ['type' => 'string']]],
     rules: ['title' => ['required', 'string', 'max:100']],
-    version: 'v1',
+    version: 'v2',
     successStatus: 201,
 )
 ```
@@ -78,7 +84,7 @@ Api::operation(
 Compile with the existing `modules:compile` command. The compiler clones declarations,
 stamps manifest ownership, rejects invalid paths/versions, duplicate version-scoped operation IDs,
 and equivalent method/path templates. Equally specific overlapping routes are rejected;
-equivalent templates across methods must use the same parameter names. Old compiled resource rows rehydrate with defaults;
+equivalent templates across methods must use the same parameter names.
 `Api::entity()` and `Api::extendResource()` remain metadata and create no executable endpoint.
 A new operation handler must implement `Contracts\OperationHandler`; the API projection checks
 this before dispatch or OpenAPI export. The lower module compiler does not depend on the API package.
@@ -88,11 +94,8 @@ precedence over parameter routes. Only declared methods execute; unknown method/
 Success must carry an envelope, so 204 is not supported. Use a new operation/API version for a
 breaking request or response change. Public interface changes follow the package's SemVer policy.
 
-Handlers implement the kernel contract `CoreX\Invocation\Contracts\OperationHandler`, so a module
-declaring operations does not need this package at runtime. The former `CoreX\Operations\...`
-names of `OperationHandler`, `RequestContext`, `Principal` and `InvocationMetadata` are deprecated
-aliases of the same types and are removed in 2.0. The caller is the kernel
-`CoreX\Context\Contracts\Principal` (`principalType()`, `principalId()`), the same type access checks.
+Handlers implement `CoreX\Invocation\Contracts\OperationHandler`. The caller uses the kernel
+`CoreX\Context\Contracts\Principal` (`principalType()`, `principalId()`) for access checks.
 
 ```php
 final class CreateNoteOperation implements \CoreX\Invocation\Contracts\OperationHandler
@@ -133,8 +136,12 @@ Bind the public interfaces in the application:
 | `RequestContext` | Typed tenant, optional workspace, principal and request metadata. Never derive account or connection from request input. |
 | `RequestContextProvider` | Read the admitted typed context from an Action adapter during dispatch only; fails closed outside an operation. |
 | `OperationHandler` | Explicit Action/DTO mapping or scoped read projection. No generic write bypass. |
-| `ResponseSerializer` | Customize serialization while preserving the version's data/error/meta contract, or define an explicitly separate profile/version. |
+| `ResponseSerializer` | Serialize success with `data` and `meta` and errors as RFC 9457 Problem Details. |
 | `SchemaContributor` | Derive response data schema from the operation declaration; no parallel endpoint catalogue. |
+
+Host authentication middleware sets the trusted `corex.client_id` request attribute after
+authenticating the client. `AuthenticatedOperationContext` requires that attribute and a resolved
+principal for both HTTP and MCP.
 
 An Action adapter may inject `RequestContextProvider` to consume the **same** admitted principal/context
 that the dispatcher passed to its handler. It reads the current Laravel request afresh and is
@@ -192,10 +199,11 @@ remain the existing tenancy pipeline's responsibility. End tenancy in its establ
 ## Envelope and errors
 
 ```json
-{"data":{"id":"..."},"error":null,"meta":{"request_id":"...","api_version":"v1"}}
+{"data":{"id":"..."},"meta":{"request_id":"...","api_version":"v2"}}
 ```
 
-Errors use `data:null` and `error:{code,message,details}`. `details` is a JSON object. Responses
+Errors use `application/problem+json` with `type`, `title`, `status`, `detail`, the stable `code`
+and the registered descriptor fields. `details` is a JSON object. Error responses
 carry `X-Request-ID` and `Cache-Control: no-store`. A supplied request ID is propagated only if it
 matches `[a-zA-Z0-9_.-]{1,128}`; otherwise one is generated. It is correlation metadata, never authority.
 
@@ -210,7 +218,7 @@ matches `[a-zA-Z0-9_.-]{1,128}`; otherwise one is generated. It is correlation m
 | Other 4xx | Application HTTP rejection with its status and a safe generic message |
 | 500 | Unexpected error; safe message, original exception reported to the application's logger |
 
-Translate domain conflicts to an explicit safe `ApiError('conflict', 409, ...)` in the module handler.
+Translate domain conflicts to an `ApiError` carrying a registered error code and HTTP 409.
 Database/tenancy implementation exceptions are never exposed. A Laravel authorization exception
 marked as 404 remains 404. Authorization covers an operation capability, so handlers still enforce
 resource visibility and Action invariants. There is no automatic policy, membership or CRM rule.
@@ -224,7 +232,9 @@ $document = json_decode(file_get_contents($publishedOpenApiPath), true, 512, JSO
 ```
 
 This is a build-time catalogue, with deterministic route/method order and module/ability annotations.
-It includes data/error envelopes, schemas, version metadata and path/query/header parameters.
+It includes success and Problem Details schemas, version metadata and path/query/header parameters.
+Run `php artisan corex:operations:snapshot api/v2 --major=v2` from the composing application
+with its compiled registry. Add `--check` to verify the published files.
 The identity scheme is application-owned; add its OpenAPI security definition when building your
 profile, and generate clients from that resulting document. The discovery schema route grants no operation access and
 no principal/module access is granted by this catalogue. Don't expose the complete installed
@@ -233,8 +243,8 @@ catalogue as a tenant's authorization listing. This package does not ship a clie
 ## Tool catalogue and policy
 
 Register `CoreX\Tools\ToolsServiceProvider::class` alongside `OperationsServiceProvider` when exposing the
-optional tool surface. It binds `Contracts\ToolCatalogue` and `Contracts\ToolPolicy` only; no routes,
-migrations or network calls are installed.
+optional tool surface. Mount `CoreX\Tools\Mcp\Laravel\McpToolEndpoint` on a host POST route after
+the same trusted context middleware used for Operations. Exposed tools use the shared `OperationInvoker`.
 
 `CompiledToolCatalogue` projects explicit compiled tool declarations on every `discover()` call:
 module activation is read fresh from `ModuleRegistry`, consumer `ToolPolicy::discover()` filters the
@@ -263,12 +273,13 @@ safe `errorCode`, optional `operationKey` and `replayed`. Safe error codes inclu
 `approval_invalid`, `idempotency_conflict`, `unknown_effect` and `output_contract_failed`.
 
 Default `ReadOnlyToolExecutionGuard` allows read side-effects only. Mutations require a consumer
-`ToolExecutionGuard` binding that owns approval proof, idempotency and transactional boundaries.
+`ToolExecutionGuard` binding for approval and any required transaction boundary. Native tools use
+the guard's replay policy. Exposed tools use the operation's durable receipt and the guard returns
+the current effect callback's successful result unchanged.
 The generic adapter never interprets client hints as authority and does not provide a generic
 approval ledger.
 
-`Internal\McpToolsProjection` provides fake in-memory `mcp-tools-projection/1` transport parity
-(`MCP2025-11-25`) over the same catalogue and invoker; it installs no routes or live endpoints.
+The mounted endpoint implements MCP `2025-11-25` initialization, listing and calling tools.
 
 ## Cost admission and explicit schema setup
 
@@ -307,8 +318,8 @@ Settlement refunds the estimate minus server-observed actual cost. If counters a
 actual equals the estimate. Excess actual cost becomes debt. Repeated settlement returns
 units once; pre-handler rejection refunds fully. An unknown/crashed or expired reservation
 is abandoned without refund. Reservations expire within one hour; expiry proves no absence
-of effects. Idempotent replay pays one unit for replay admission, rather than charging the
-original handler again. HTTP `meta.cost` and tool metadata carry the same requested/actual,
+of effects. An authorized exact retry recovers the original reservation's settlement without a
+second charge. Fresh HTTP results and tool results with cost metadata carry the requested/actual,
 mode and global throttle fields. Exhaustion returns 429 with the computed `Retry-After`;
 store unavailability is an infrastructure error. Host body/rate/concurrency caps remain required.
 
@@ -370,9 +381,10 @@ remains a deployment responsibility; crypto-shredding is not promised.
 Fan-out atomically commits the webhook inbox claim and one delivery per subscription/event.
 The snapshot uses subscriptions active at first successful materialization. Network I/O is
 outside that transaction. Delivery is at-least-once, without ordering or exactly-once guarantees.
-Retries and replay preserve delivery id, event id, raw body bytes/hash and destination.
-Receivers must commit their dedup inbox and effect together and retain dedup throughout
-the retry/replay horizon. ACK loss can resend even after a successful receiver effect.
+Retries preserve the delivery ID. Authorized replay creates a new delivery ID with a reference to
+the original delivery. Both retain the event ID, raw body bytes and destination. Receivers must
+commit their event dedup inbox and effect together and retain dedup throughout the retry/replay
+horizon. A lost acknowledgement can result in another delivery attempt.
 
 Remote delivery ships disabled. Activation requires `delivery_enabled=true`, `worker_ready=true`,
 an explicitly bound host key ring, secret resolver and ext-curl. Provisioning and actual sends
@@ -410,7 +422,7 @@ needs explicit intent and audit reason. Range replay requires a subscription and
 up to 24 hours, at most 100 selections, a fixed upper bound and a continuation cursor.
 Parent idempotency returns the same selection/outcome. Changed/disabled endpoints, revoked
 permissions, removed topics and expired bodies refuse replay. A new business effect needs a
-new domain event; replay deliberately keeps the original identity.
+new domain event.
 
 Terminal webhook bodies remain seven days and metadata/attempts 30 days. Shorter PII body
 retention must shorten replay horizon with it. Active rows are never pruned. Dedup tombstones
@@ -434,11 +446,9 @@ Several earlier PG proofs are untagged and require those settings during the ful
 Real principal/workspace membership isolation is verified in the owning tenancy suite.
 From the monorepo root, `tests/Feature/OperationContractTest.php` covers real
 routes and exposed tools, `tests/Arch/ApiContractTest.php` guards the one-authority
-boundary, `corex:operations:snapshot api/v1 --fixture=tests/fixtures/public-error-contract.php --check`
-checks exact bytes, and `composer api-contract` checks intra-major compatibility. `webhooks.json`
-extends the same generator and manifest; planted topic/payload/PII/signature/id/major/cost-default
-changes must fail the compatibility gate. Current commands, input/snapshot/output hashes,
-all 16 threat-matrix rows, repaired failures and limits are recorded in the
+boundary, and `composer api-contract` checks intra-major compatibility. In the composing application,
+`php artisan corex:operations:snapshot api/v2 --major=v2 --check` checks the exact bytes of all five
+carriers, including topic and payload declarations in `webhooks.json`.
 
 ## Typed errors
 
@@ -447,4 +457,5 @@ Error constructors require `ErrorCode`; descriptors keep scoped string wire code
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
 
-Схема: набор(ы) `tenant` и `budget` (Dedicated), baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+Наборы схем новой установки — `axiomasoft/corex-operations:tenant` v3 и
+`axiomasoft/corex-operations:budget` v2 (dedicated).

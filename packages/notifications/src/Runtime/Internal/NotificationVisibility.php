@@ -21,18 +21,18 @@ final readonly class NotificationVisibility
 
     public function allows(NotificationContext $context, NotificationSubject $subject): bool
     {
-        return $this->policy->allows($context, NotificationAction::Read, $subject);
+        return $this->policy->allows(context: $context, action: NotificationAction::Read, subject: $subject);
     }
 
     public function subject(object $row): NotificationSubject
     {
         return new NotificationSubject(
-            notificationId: NotificationValue::text(NotificationValue::field($row, 'id')),
+            notificationId: NotificationValue::text(NotificationValue::field(row: $row, name: 'id')),
             recipient: new RecipientReference(
-                kind: NotificationValue::text(NotificationValue::field($row, 'recipient_kind')),
-                id: NotificationValue::text(NotificationValue::field($row, 'recipient_id')),
+                kind: NotificationValue::text(NotificationValue::field(row: $row, name: 'recipient_kind')),
+                id: NotificationValue::text(NotificationValue::field(row: $row, name: 'recipient_id')),
             ),
-            related: $this->related(NotificationValue::field($row, 'related')),
+            related: $this->related(NotificationValue::field(row: $row, name: 'related')),
         );
     }
 

@@ -55,7 +55,7 @@ final class TenantRuntimeManager implements TenancyManager
 
         $selection = $this->mapper->selection($account);
         $this->end();
-        $this->enter($account, null, $selection);
+        $this->enter(account: $account, workspace: null, selection: $selection);
     }
 
     public function setWorkspace(?WorkspaceRef $workspace): void
@@ -74,9 +74,9 @@ final class TenantRuntimeManager implements TenancyManager
             return;
         }
 
-        $selection = $this->mapper->selection($current->account, $workspace);
+        $selection = $this->mapper->selection(account: $current->account, workspace: $workspace);
         $this->end();
-        $this->enter($current->account, $workspace, $selection);
+        $this->enter(account: $current->account, workspace: $workspace, selection: $selection);
     }
 
     public function end(): void
@@ -109,14 +109,14 @@ final class TenantRuntimeManager implements TenancyManager
 
     public function runFor(AccountRef $account, ?WorkspaceRef $workspace, Closure $callback): mixed
     {
-        $selection = $this->mapper->selection($account, $workspace);
+        $selection = $this->mapper->selection(account: $account, workspace: $workspace);
         $previous = $this->frame;
         $this->frame = null;
 
         try {
             return $this->runtime->run($selection, new Purpose('corex:account'), function () use ($account, $workspace, $callback): mixed {
                 $this->container->forgetScopedInstances();
-                $this->assertProjection($account, $workspace);
+                $this->assertProjection(account: $account, workspace: $workspace);
 
                 try {
                     return $callback();
@@ -134,12 +134,12 @@ final class TenantRuntimeManager implements TenancyManager
 
     private function enter(AccountRef $account, ?WorkspaceRef $workspace, ?Selection $selection = null): void
     {
-        $selection ??= $this->mapper->selection($account, $workspace);
+        $selection ??= $this->mapper->selection(account: $account, workspace: $workspace);
         $this->frame = $this->runtime->enter($selection, new Purpose('corex:account'));
 
         try {
             $this->container->forgetScopedInstances();
-            $this->assertProjection($account, $workspace);
+            $this->assertProjection(account: $account, workspace: $workspace);
             $this->events->dispatch(new TenantContextInitialized($account->id));
         } catch (Throwable $failure) {
             $this->end();

@@ -265,7 +265,7 @@ final class LoadSchemaTest extends TestCase
         $now = '2026-09-25 10:00:00.123456+00:00';
 
         return [
-            'id' => $id, 'major' => 'v1', 'operation_id' => 'orders.import', 'submission_id' => 'submission-1',
+            'id' => $id, 'major' => 'v2', 'operation_id' => 'orders.import', 'submission_id' => 'submission-1',
             'logical_scope' => str_repeat('a', 64), 'scope' => '{}', 'actor_id' => 'actor-1', 'client_id' => 'client-1', 'contract_hash' => str_repeat('c', 64),
             'extension_stamp' => '{}', 'input_ref' => '{}', 'status' => $status, 'revision' => 0,
             'checkpoint' => '{}', 'progress' => '{}', 'attempt' => 0, 'next_attempt_at' => $now, 'created_at' => $now,
@@ -278,7 +278,7 @@ final class LoadSchemaTest extends TestCase
         $now = '2026-09-25 10:00:00.123456+00:00';
 
         return [
-            'id' => $id, 'revision' => 1, 'major' => 'v1', 'topic' => 'orders.changed', 'topic_version' => 1,
+            'id' => $id, 'revision' => 1, 'major' => 'v2', 'topic' => 'orders.changed', 'topic_version' => 1,
             'endpoint_url' => 'https://receiver.test/hook', 'status' => $status, 'max_pii_class' => 'pii-pseudonymous',
             'key_refs' => '[]', 'created_at' => $now, 'updated_at' => $now,
         ];
@@ -294,7 +294,7 @@ final class LoadSchemaTest extends TestCase
             'restore_epoch' => str_repeat('a', 64), 'effect_key' => hash('sha256', 'effect-'.$suffix),
             'scope_seal' => str_repeat('f', 64), 'event_source' => 'urn:corex:fixture', 'replay_id' => 'original',
             'id' => 'delivery-'.$suffix, 'subscription_id' => 'subscription-'.$suffix, 'subscription_revision' => 1,
-            'event_id' => 'event-'.$suffix, 'topic' => 'orders.changed', 'topic_version' => 1, 'major' => 'v1',
+            'event_id' => 'event-'.$suffix, 'topic' => 'orders.changed', 'topic_version' => 1, 'major' => 'v2',
             'endpoint_snapshot' => 'https://receiver.test/hook', 'scope' => '{}', 'body' => '{}',
             'body_hash' => str_repeat('d', 64), 'status' => 'pending', 'attempt' => 0, 'replay_count' => 0,
             'next_attempt_at' => $now, 'created_at' => $now, 'expires_at' => $now,

@@ -6,6 +6,7 @@ namespace CoreX\Operations\Tests;
 
 use CoreX\CoreServiceProvider;
 use CoreX\Operations\OperationsServiceProvider;
+use CoreX\Operations\Tests\Fixtures\TrustedClient;
 use CoreX\Webhooks\WebhooksServiceProvider;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Foundation\Application;
@@ -40,6 +41,7 @@ abstract class TestCase extends Orchestra
     /** @param Application $app */
     protected function defineEnvironment($app): void
     {
+        $app['config']->set('corex-operations.routes.middleware', [TrustedClient::class]);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('database.connections.api_schema_budget', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);

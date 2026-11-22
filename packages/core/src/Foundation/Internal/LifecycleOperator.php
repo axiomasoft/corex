@@ -34,6 +34,6 @@ final readonly class LifecycleOperator
         if (($scope->workspaceId !== null && ! in_array($ability, ['enable', 'inspect'], true)) || ! $this->gate->has($name)) {
             throw new AuthorizationException('Current account lifecycle grant required.');
         }
-        $this->gate->forUser(new ScopePrincipal($scope->principalKind, $scope->principalId))->authorize($name, [$scope, $target, $ref, $digest]);
+        $this->gate->forUser(new ScopePrincipal(kind: $scope->principalKind, id: $scope->principalId))->authorize($name, [$scope, $target, $ref, $digest]);
     }
 }

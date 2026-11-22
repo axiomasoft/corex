@@ -18,6 +18,6 @@ final class SearchFixtures
     {
         ksort($values, SORT_STRING);
 
-        return new SourceRecord($record, hash('sha256', json_encode($values, JSON_THROW_ON_ERROR)), new ProjectedValues($values));
+        return new SourceRecord(record: $record, revision: hash('sha256', json_encode($values, JSON_THROW_ON_ERROR)), values: new ProjectedValues($values));
     }
 }

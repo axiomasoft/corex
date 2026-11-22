@@ -29,7 +29,7 @@ final readonly class DigestWakeupHandler
 
     public function __invoke(DigestTick $tick): void
     {
-        $this->currentScope->assert($tick->scope, $this->connection);
+        $this->currentScope->assert(scope: $tick->scope, connection: $this->connection);
         $scopeKey = hash('sha256', json_encode($this->scopeCodec->encode($tick->scope), JSON_THROW_ON_ERROR));
         $prefix = 'notification.digest:';
 
@@ -44,7 +44,7 @@ final readonly class DigestWakeupHandler
         }
 
         $this->connection->transaction(function () use ($runId, $scopeKey, $tick): void {
-            $this->currentScope->assert($tick->scope, $this->connection);
+            $this->currentScope->assert(scope: $tick->scope, connection: $this->connection);
             $run = $this->connection->table('ntf_digest_runs')->where('id', $runId)->where('scope_key', $scopeKey)->lockForUpdate()->first();
 
             if ($run === null || $run->state !== 'frozen'
@@ -74,7 +74,7 @@ final readonly class DigestWakeupHandler
 
             // Freeze the next bounded batch atomically with this decision. A retry
             // sees the terminal run and cannot create a second continuation.
-            $this->digests->build($context, new DigestWindow(
+            $this->digests->build(context: $context, window: new DigestWindow(
                 start: $tick->window->start,
                 end: $tick->window->end,
                 period: $tick->window->period,

@@ -8,14 +8,18 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Bulk\Contracts\BulkDraftFactory;
 use CoreX\Operations\Bulk\Contracts\BulkExecutor;
 use CoreX\Operations\Bulk\Contracts\BulkOwner;
+use CoreX\Operations\Bulk\Contracts\BulkTargetResolver;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Data\BulkOwnerRef;
@@ -24,9 +28,10 @@ use CoreX\Operations\Bulk\Internal\BulkFailureReader;
 use CoreX\Operations\Bulk\Internal\BulkOperations;
 use CoreX\Operations\Bulk\Internal\BulkResultReader;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
+use CoreX\Operations\Bulk\Laravel\BulkOperationDeclarations;
 use CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar;
 use CoreX\Operations\Bulk\Laravel\SubmitBulkOperation;
-use CoreX\Operations\Definition\Contracts\OperationRegistry;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
@@ -38,8 +43,8 @@ use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use LogicException;
 use Mockery;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -87,16 +92,9 @@ final class BulkApiTest extends TestCase
     {
         BulkRouteRegistrar::register($this->app);
         $firstRow = $this->store->submit($this->definition('bulk-1', 'submission-1'));
-        $location = '/api/v1/bulk-operations/bulk-1';
-        $first = $this->api->accepted($this->scope, 'client-1', $firstRow->definition->id, $location);
         $replayedRow = $this->store->submit($this->definition('bulk-other', 'submission-1'));
-        $replay = $this->api->accepted($this->scope, 'client-1', $replayedRow->definition->id, $location);
-
-        self::assertSame(202, $first->status());
-        self::assertSame(202, $replay->status());
-        self::assertSame('/api/v1/bulk-operations/bulk-1', $first->headers->get('Location'));
-        self::assertSame('bulk-1', $first->getData(true)['operation_id']);
-        self::assertSame('bulk-1', $replay->getData(true)['operation_id']);
+        self::assertSame('bulk-1', $firstRow->definition->id);
+        self::assertSame('bulk-1', $replayedRow->definition->id);
 
         $poll = $this->api->show($this->scope, 'client-1', 'bulk-1');
         self::assertSame(200, $poll->status());
@@ -155,43 +153,63 @@ final class BulkApiTest extends TestCase
         $references->shouldReceive('enlist')->withArgs(static fn ($scope, Connection $connection): bool => $connection === $db && $connection->transactionLevel() > 0);
         $this->app->instance(ReferenceAdmission::class, $references);
 
-        $schema = ['type' => 'object'];
-        $api = Api::operation('notes.bulk-import', 'POST', '/notes/bulk-submit', SubmitBulkOperation::class, 'notes.import', $schema, $schema, successStatus: 202)
+        $input = ['type' => 'object', 'additionalProperties' => false, 'properties' => [
+            'kind' => ['type' => 'string'], 'source' => ['type' => 'string'], 'row_limit' => ['type' => 'integer'],
+        ]];
+        $api = Api::operation('notes.bulk-import', 'POST', '/notes/bulk-submit', SubmitBulkOperation::class, 'notes.import', $input, ['type' => 'object'],
+            rules: ['kind' => ['required', 'string'], 'source' => ['required', 'string'], 'row_limit' => ['required', 'integer']], successStatus: 202, version: 'v2')
             ->asBulkCommand()->idempotency('required')->effect('tenant_transactional')->cost(['base' => 2]);
         $api->bulkExecutionEnabled = true;
         $modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
-            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api]),
+            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api, ...BulkOperationDeclarations::all()]),
         ], installedPackages: []));
         $this->app->instance(ModuleRegistry::class, $modules);
-        $operation = resolve(OperationRegistry::class)->all('v1')[0];
         BulkRouteRegistrar::register($this->app);
 
-        $send = function (string $id, int $rows, ?string $key) use ($scope, $operation) {
-            $request = Request::create('/api/v1/bulk-operations', 'POST', server: ['HTTP_IDEMPOTENCY_KEY' => $key]);
-            $request->attributes->set('corex.client_id', 'client-1');
-            $request->attributes->set('corex.bulk_definition', new BulkOperationDefinition(
-                $id, 'ignored', $operation->id, 'v1', $operation->contractHash,
-                (new ArrayDataScopeCodec)->encode($scope), $scope->principalId, 'client-1',
-                JsonDocuments::capture(['point' => 'api.operation']), JsonDocuments::capture(['kind' => 'import', 'rows' => $rows]),
-            ));
-            $this->app->instance('request', $request);
-
-            return $this->app['router']->dispatch($request);
+        $send = function (int $rows, ?string $key, string $target = '/api/v2/bulk-operations') {
+            return $this->postJson($target, ['kind' => 'import', 'source' => 'inventory', 'row_limit' => $rows],
+                $key === null ? [] : ['Idempotency-Key' => $key]);
         };
 
-        self::assertSame(400, $send('no-key', 1, null)->getStatusCode());
-        self::assertSame(503, $send('no-host', 1, 'key')->getStatusCode());
+        $send(1, null)->assertUnprocessable()->assertJsonPath('code', 'operations.idempotency_key_required');
+        $send(1, 'key')->assertStatus(503);
         self::assertSame(0, $db->table('sys_api_idempotency')->count());
         self::assertSame(0, $db->table('sys_api_bulk_operations')->count());
 
+        $this->app->instance(BulkTargetResolver::class, new class implements BulkTargetResolver
+        {
+            public function operationId(RequestContext $context, JsonDocument $input): string
+            {
+                return 'notes.bulk-import';
+            }
+        });
+        $this->app->instance(BulkDraftFactory::class, new class implements BulkDraftFactory
+        {
+            public function create(OperationInvocation $invocation, DataScope $scope): BulkOperationDefinition
+            {
+                return new BulkOperationDefinition(
+                    id: bin2hex(random_bytes(12)), submissionId: 'replaced-by-service', operationId: $invocation->operation->id,
+                    major: $invocation->operation->version, contractHash: $invocation->operation->contractHash,
+                    encodedScope: (new ArrayDataScopeCodec)->encode($scope), actorId: $scope->principalId,
+                    clientId: $invocation->clientId ?? throw new LogicException('Missing trusted client.'),
+                    extensionStamp: JsonDocuments::capture(['point' => 'api.operation']), inputRef: $invocation->input,
+                );
+            }
+        });
         $this->app->instance(BulkExecutor::class, $this->owner);
         $this->app->instance(BulkOwner::class, $this->owner);
-        $first = $send('original', 1, 'key');
-        $replayed = $send('different-candidate', 1, 'key');
-        self::assertSame(202, $first->getStatusCode());
-        self::assertSame($first->getContent(), $replayed->getContent());
-        self::assertSame('/api/v1/bulk-operations/original', $first->headers->get('Location'));
-        self::assertSame(409, $send('changed', 2, 'key')->getStatusCode());
+        $first = $send(1, 'key');
+        $first->assertAccepted()->assertJsonPath('meta.replayed', false);
+        $replayed = $send(1, 'key', '/api/v2/notes/bulk-submit');
+        $replayed->assertAccepted()->assertJsonPath('meta.replayed', true)->assertJsonPath('data.operation_id', $first->json('data.operation_id'));
+        $location = (string) $first->headers->get('Location');
+        self::assertStringStartsWith('/api/v2/bulk-operations/', $location);
+        $replayed->assertHeader('Location', $location);
+        $this->getJson($location)->assertOk()->assertHeader('Retry-After', '2')
+            ->assertJsonPath('data.status', 'pending')->assertJsonPath('data.cancel_url', $location.'/cancel');
+        $send(2, 'key')->assertConflict();
+        $send(1, 'key', '/api/v1/bulk-operations')->assertNotFound();
+        $send(1, 'key', '/api/v3/bulk-operations')->assertNotFound();
         self::assertSame(1, $db->table('sys_api_idempotency')->count());
         self::assertSame(1, $db->table('sys_api_bulk_operations')->count());
     }
@@ -202,7 +220,7 @@ final class BulkApiTest extends TestCase
             id: $id,
             submissionId: $submission,
             operationId: 'notes.bulk-import',
-            major: 'v1',
+            major: 'v2',
             contractHash: hash('sha256', 'bulk-contract'),
             encodedScope: (new ArrayDataScopeCodec)->encode($this->scope),
             actorId: 'actor-1',

@@ -71,9 +71,9 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         MaterializationWindow $window,
         WriteToken $token,
     ): MaterializationReceipt {
-        $context = $this->contexts->assert($scope, $this->connection);
+        $context = $this->contexts->assert(scope: $scope, connection: $this->connection);
 
-        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef('task-series', $series->id), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'task-series', id: $series->id), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
             throw UnsupportedMaterialization::connection('Materialization is not authorized for the current actor.');
         }
 
@@ -100,7 +100,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         $store = new MaterializationStore(connection: $this->connection, receipts: $this->receipts);
 
         return $this->connection->transaction(function () use ($scope, $context, $series, $window, $token, $payloadHash, $store, $scheduler): MaterializationReceipt {
-            $this->contexts->assert($scope, $this->connection);
+            $this->contexts->assert(scope: $scope, connection: $this->connection);
             $state = $store->lockSeriesState($series->id);
             $seriesRow = $this->connection
                 ->table('corex_task_series')
@@ -151,7 +151,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 throw StaleMaterialization::restoreEpoch($series->id);
             }
 
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-recurring-tasks', 'series', ['series' => $series, 'template' => $payloadHash]);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-recurring-tasks', kind: 'series', witness: ['series' => $series, 'template' => $payloadHash]);
             $recurrenceWindow = $this->materializationWindow(
                 window: $window,
                 valueType: $decoded['set']->start->valueType,

@@ -54,7 +54,7 @@ final class SqlReferenceInventory
         if ($columns === [] && $after === null && $connection->getDriverName() === 'pgsql' && array_all($tables, static fn (array $entry): bool => $entry[0] === $connection)) {
             $proof = $app->make(DatabaseLifecyclePlans::class)->droppedSchema($scope, $owner, $names, $connection);
 
-            return new ReferencePage([], hash('sha256', $revision.$proof));
+            return new ReferencePage(blockers: [], revision: hash('sha256', $revision.$proof));
         }
 
         if ($columns === [] || array_diff($fields, $columns) !== []) {
@@ -93,7 +93,7 @@ final class SqlReferenceInventory
                 $query->whereRaw('CAST(workspace_id AS TEXT) = ?', [$scope->workspaceId]);
             }
         } elseif ($scope->workspaceId !== null) {
-            return self::next([], $revision, $index + 1, [], count($tables));
+            return self::next(blockers: [], revision: $revision, index: $index + 1, last: [], count: count($tables));
         }
 
         foreach ($unique as $column) {
@@ -152,13 +152,13 @@ final class SqlReferenceInventory
                     $blockers[] = $projection;
                 }
             } else {
-                $blockers[] = new LifecycleBlocker($owner, $table, $id, $scope, $required);
+                $blockers[] = new LifecycleBlocker(owner: $owner, resourceKind: $table, resourceId: $id, scope: $scope, requiredAction: $required);
             }
         }
 
         return $rows->count() > 64
-            ? self::next($blockers, $revision, $index, $last, count($tables), $actions)
-            : self::next($blockers, $revision, $index + 1, [], count($tables), $actions);
+            ? self::next(blockers: $blockers, revision: $revision, index: $index, last: $last, count: count($tables), actions: $actions)
+            : self::next(blockers: $blockers, revision: $revision, index: $index + 1, last: [], count: count($tables), actions: $actions);
     }
 
     /** @param list<LifecycleBlocker> $blockers
@@ -166,8 +166,8 @@ final class SqlReferenceInventory
      * @param list<CleanupAction> $actions */
     private static function next(array $blockers, string $revision, int $index, array $last, int $count, array $actions = []): ReferencePage
     {
-        $next = $index < $count ? new ReferenceCursor(json_encode([$index, $last], JSON_THROW_ON_ERROR), $revision) : null;
+        $next = $index < $count ? new ReferenceCursor(position: json_encode([$index, $last], JSON_THROW_ON_ERROR), revision: $revision) : null;
 
-        return new ReferencePage($blockers, $revision, $next, $actions);
+        return new ReferencePage(blockers: $blockers, revision: $revision, next: $next, actions: $actions);
     }
 }

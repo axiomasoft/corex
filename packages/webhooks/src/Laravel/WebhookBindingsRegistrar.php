@@ -16,6 +16,7 @@ use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
 use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
@@ -38,6 +39,7 @@ use CoreX\Webhooks\Internal\WebhookReceiptProjector;
 use CoreX\Webhooks\Internal\WebhookReplay;
 use CoreX\Webhooks\Internal\WebhookRetention;
 use CoreX\Webhooks\Internal\WebhookRetryPolicy;
+use CoreX\Webhooks\Internal\WebhookSnapshotSection;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Internal\WebhookUrlPolicy;
 use Illuminate\Container\Container;
@@ -66,6 +68,10 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
         $app->singleton(WebhookOptions::class, static fn (Application $app): WebhookOptions => WebhookOptionsParser::fromArray(
             (array) $app->make(Repository::class)->get('corex-webhooks', []),
         ));
+        $app->bind(WebhookSnapshotSection::class, static fn (Application $app): WebhookSnapshotSection => new WebhookSnapshotSection(
+            topics: $app->make(WebhookOptions::class)->topics,
+        ));
+        $app->tag([WebhookSnapshotSection::class], ContractSnapshotSection::class);
         $app->singleton(WebhookUrlPolicy::class, static fn (Application $app): WebhookUrlPolicy => new WebhookUrlPolicy(organizationDeniedCidrs: $app->make(WebhookOptions::class)->organizationDeniedCidrs));
         $app->singletonIf(WebhookEgressPolicy::class, PermitPublicEgressPolicy::class);
         $app->singleton(WebhookRetryPolicy::class, static fn (Application $app): WebhookRetryPolicy => new WebhookRetryPolicy($app->make(WebhookOptions::class)));

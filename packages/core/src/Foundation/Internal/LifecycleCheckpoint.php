@@ -57,34 +57,34 @@ final readonly class LifecycleCheckpoint
     public function __construct(object $row)
     {
         $record = get_object_vars($row);
-        $this->planId = self::text($record, 'plan_id');
-        $this->requestKey = self::text($record, 'request_key');
-        $this->state = self::text($record, 'state');
+        $this->planId = self::text(values: $record, key: 'plan_id');
+        $this->requestKey = self::text(values: $record, key: 'request_key');
+        $this->state = self::text(values: $record, key: 'state');
         $this->cleanupStarted = match ($record['cleanup_started'] ?? null) {
             true, 1, '1', 't' => true,
             false, 0, '0', 'f' => false,
             default => throw new LifecycleBlocked('Invalid cleanup checkpoint.'),
         };
-        $this->module = self::text($record, 'module');
-        $this->action = self::text($record, 'action');
-        $this->digest = self::text($record, 'digest');
-        $this->transitionResult = ($record['transition_result'] ?? null) === null ? null : self::text($record, 'transition_result');
-        $this->scope = self::map(self::document($record, 'scope'));
-        $args = self::document($record, 'arguments');
+        $this->module = self::text(values: $record, key: 'module');
+        $this->action = self::text(values: $record, key: 'action');
+        $this->digest = self::text(values: $record, key: 'digest');
+        $this->transitionResult = ($record['transition_result'] ?? null) === null ? null : self::text(values: $record, key: 'transition_result');
+        $this->scope = self::map(self::document(record: $record, field: 'scope'));
+        $args = self::document(record: $record, field: 'arguments');
         $targets = $args['targets'] ?? null;
         $cascade = $args['cascade'] ?? null;
 
         if (! is_bool($cascade) || ! is_array($targets) || ! array_is_list($targets) || $targets === []) {
             throw new LifecycleBlocked('Invalid lifecycle transition arguments.');
         }
-        $this->arguments = ['reason' => self::text($args, 'reason'), 'cascade' => $cascade,
+        $this->arguments = ['reason' => self::text(values: $args, key: 'reason'), 'cascade' => $cascade,
             'targets' => array_map(static fn (mixed $name): string => is_string($name) ? $name : throw new LifecycleBlocked('Invalid module target.'), $targets)];
-        $this->leases = self::map(self::document($record, 'leases'));
-        $this->actions = self::map(self::document($record, 'actions'));
-        $this->receipts = self::map(self::document($record, 'receipts'));
-        $this->inventory = self::document($record, 'inventory');
-        $this->cursor = self::document($record, 'cursor');
-        $blockers = self::document($record, 'blockers');
+        $this->leases = self::map(self::document(record: $record, field: 'leases'));
+        $this->actions = self::map(self::document(record: $record, field: 'actions'));
+        $this->receipts = self::map(self::document(record: $record, field: 'receipts'));
+        $this->inventory = self::document(record: $record, field: 'inventory');
+        $this->cursor = self::document(record: $record, field: 'cursor');
+        $blockers = self::document(record: $record, field: 'blockers');
 
         if (! array_is_list($blockers)) {
             throw new LifecycleBlocked('Invalid lifecycle blocker list.');
@@ -104,7 +104,7 @@ final readonly class LifecycleCheckpoint
      * @return array<array-key,mixed> */
     private static function document(array $record, string $field): array
     {
-        $value = json_decode(self::text($record, $field), true, flags: JSON_THROW_ON_ERROR);
+        $value = json_decode(self::text(values: $record, key: $field), true, flags: JSON_THROW_ON_ERROR);
 
         return is_array($value) ? $value : throw new LifecycleBlocked('Invalid lifecycle document '.$field);
     }
@@ -130,15 +130,15 @@ final readonly class LifecycleCheckpoint
     {
         $a = self::map($value);
 
-        return new CleanupAction(self::text($a, 'owner'), self::text($a, 'namespace'), self::text($a, 'resourceKind'),
-            self::text($a, 'resourceId'), self::text($a, 'version'), self::text($a, 'effectKey'));
+        return new CleanupAction(owner: self::text(values: $a, key: 'owner'), namespace: self::text(values: $a, key: 'namespace'), resourceKind: self::text(values: $a, key: 'resourceKind'),
+            resourceId: self::text(values: $a, key: 'resourceId'), version: self::text(values: $a, key: 'version'), effectKey: self::text(values: $a, key: 'effectKey'));
     }
 
     public static function lease(mixed $value): OwnerLease
     {
         $l = self::map($value);
 
-        return new OwnerLease(self::text($l, 'owner'), self::text($l, 'namespace'), self::text($l, 'revision'), self::text($l, 'token'));
+        return new OwnerLease(owner: self::text(values: $l, key: 'owner'), namespace: self::text(values: $l, key: 'namespace'), revision: self::text(values: $l, key: 'revision'), token: self::text(values: $l, key: 'token'));
     }
 
     public static function blockerScope(mixed $value): DataScope
@@ -151,8 +151,8 @@ final readonly class LifecycleCheckpoint
             throw new LifecycleBlocked('Invalid saved blocker scope.');
         }
 
-        return new DataScope(self::text($s, 'deploymentId'), self::text($s, 'accountId'), $workspace,
-            self::text($s, 'bindingId'), $generation, self::text($s, 'accountIncarnation'), self::text($s, 'restoreEpoch'),
-            self::text($s, 'principalKind'), self::text($s, 'principalId'));
+        return new DataScope(deploymentId: self::text(values: $s, key: 'deploymentId'), accountId: self::text(values: $s, key: 'accountId'), workspaceId: $workspace,
+            bindingId: self::text(values: $s, key: 'bindingId'), bindingGeneration: $generation, accountIncarnation: self::text(values: $s, key: 'accountIncarnation'), restoreEpoch: self::text(values: $s, key: 'restoreEpoch'),
+            principalKind: self::text(values: $s, key: 'principalKind'), principalId: self::text(values: $s, key: 'principalId'));
     }
 }

@@ -35,6 +35,6 @@ final class SyncIdentityToAccount implements ShouldQueue
 
     public function handle(DatabaseIdentitySyncer $syncer): void
     {
-        $syncer->syncCaptured($this->identityId, $this->scope);
+        $syncer->syncCaptured(identityId: $this->identityId, scope: $this->scope);
     }
 }

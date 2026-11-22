@@ -18,19 +18,19 @@ final class WorkQueueHandlers
     {
         foreach (['tenant' => $options->tenantJobs, 'central' => $options->centralJobs] as $mode => $jobs) {
             foreach ($jobs as $handler) {
-                $this->declare($handler, $mode);
+                $this->declare(handler: $handler, mode: $mode);
             }
         }
     }
 
     public function tenant(string $handler): void
     {
-        $this->declare($handler, 'tenant');
+        $this->declare(handler: $handler, mode: 'tenant');
     }
 
     public function central(string $handler): void
     {
-        $this->declare($handler, 'central');
+        $this->declare(handler: $handler, mode: 'central');
     }
 
     public function mode(string $handler): string

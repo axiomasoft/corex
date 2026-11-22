@@ -16,6 +16,7 @@ use App\Scenario\ScenarioClock;
 use Composer\InstalledVersions;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Context\Laravel\DatabaseScopeControl;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
@@ -96,7 +97,7 @@ switch ($mode) {
         if ($hasOwner) {
             $test->same(0, $db->table('corex_transfer_jobs')->count(), 'Capability check follows an unexpected transfer write.');
         }
-        $ping = Runtime::scoped(static fn () => Runtime::http('GET', '/api/v1/fixture-ping'));
+        $ping = Runtime::scoped(static fn () => Runtime::http('GET', '/api/v2/fixture-ping'));
         $test->same(200, $ping['status'], 'Ordinary declared Operations query must remain usable.');
         $test->check(str_contains(json_encode($ping['body'], JSON_THROW_ON_ERROR), 'ordinary-operation'), 'The ordinary operation did not invoke its installed handler.');
         $after += ['rejected' => $rejected, 'ordinary' => $ping];
@@ -109,7 +110,7 @@ switch ($mode) {
             ? Runtime::scoped(static fn () => $db->transaction(static function () use ($db): array {
                 $response = Runtime::submit('import', 'fixture-import');
                 Scenario::barrier('bulk-outer', [
-                    ...Scenario::describe($db), 'response' => $response, 'levels' => $db->transactionLevel(),
+                    ...Scenario::describe($db), 'response' => $response, 'levels' => $db->transactionLevel(), 'budget' => Runtime::budget(),
                 ]);
 
                 return $response;
@@ -157,12 +158,14 @@ switch ($mode) {
         $budget = Runtime::budget();
         $test->same(1, $db->table('sys_api_bulk_operations')->count(), 'Concurrent same-key requests created more than one Bulk operation.');
         $test->same(1, $db->table('sys_api_idempotency')->count(), 'Concurrent same-key requests created more than one owner idempotency result.');
-        $test->same(['settled', 'settled'], array_column($budget, 'state'), 'The business reservation and deliberate replay must settle separately.');
-        $charges = array_column($budget, 'charged');
-        sort($charges);
-        $operation = array_find(app(OperationRegistry::class)->all('v1'),
+        $admitted = Scenario::barrierRead('bulk-outer')['budget'];
+        $ownerReceipt = json_decode($db->table('sys_api_idempotency')->sole()->outcome_json, true, flags: JSON_THROW_ON_ERROR)['budget'];
+        $test->same(['settled'], array_column($budget, 'state'), 'The entire dedicated ledger contains one settled reservation.');
+        $test->same([$ownerReceipt['reservation_id']], array_column($budget, 'id'), 'The settlement belongs to the original tenant receipt.');
+        $test->same(array_column($admitted, 'id'), array_column($budget, 'id'), 'Concurrent replay uses the original hold.');
+        $operation = array_find(app(OperationRegistry::class)->all('v2'),
             static fn ($declaration): bool => $declaration->id === 'equipment.bulk.transfer');
-        $test->same([1_000_000, 1_000_000 * ($operation->cost['base'] ?? 1)], $charges, 'Dedicated accounting must charge business execution and replay exactly once each.');
+        $test->same([1_000_000 * ($operation->cost['base'] ?? 1)], array_column($budget, 'charged'), 'The business reservation is charged once.');
         $test->check(! hasTargets(targets('local-write', 'outstanding'), ['equipment/registry']), 'Lifecycle admission was not settled after outer commit.');
         $changed = Runtime::scoped(static fn () => Runtime::submit('import', 'fixture-import', 'equipment-alternate'));
         $test->same(409, $changed['status'], 'Same key with changed semantic input must conflict.');
@@ -170,7 +173,8 @@ switch ($mode) {
         $test->same($budget, Runtime::budget(), 'Changed input reserved or settled budget.');
         $test->same(0, $db->table('corex_transfer_jobs')->count(), 'Conflict started transfer work.');
         $test->same([1, 4], [(int) $bulk->row_limit, (int) $bulk->time_limit_seconds], 'Durable admission lost requested stricter bounds.');
-        $after += ['budget' => $budget, 'changed' => $changed];
+        Journal::record('original-business-reservation', $budget[0]);
+        $after += ['budget' => $budget, 'tenant_receipt' => $ownerReceipt, 'changed' => $changed];
 
         break;
 
@@ -262,6 +266,10 @@ switch ($mode) {
         $id = Runtime::id('import');
         $job = transferJob('import');
         $expected = ['records' => [['ordinal' => '2', 'code' => 'invalid_serial', 'path' => '/serial']], 'next' => null];
+        $priorBudget = array_intersect_key(array_last(Journal::events('original-business-reservation')), array_flip(['id', 'state', 'charged']));
+        $actualBudget = Runtime::budget();
+        $test->same([$priorBudget], $actualBudget, 'Independent worker retries preserve the complete original submission ledger before public reads.');
+        $after['worker_budget'] = $actualBudget;
         $result = Runtime::scoped(static fn () => Runtime::http('GET', Runtime::BASE.'/'.$id.'/result'));
         $failures = Runtime::scoped(static fn () => Runtime::http('GET', Runtime::BASE.'/'.$id.'/failures?limit=1'));
         $test->same(200, $result['status'], 'Authorized import owner result unavailable through normal route.');
@@ -279,7 +287,6 @@ switch ($mode) {
             $test->same($job->id, $ref['id'], 'Persisted operation linkage did not retain the same owner ref.');
         }
         $test->same(1, sink()->table('bulk_sink_equipment')->count(), 'Import produced duplicate target rows.');
-        $test->same(2, count(Runtime::budget()), 'Worker retries charged another business reservation.');
         $reads = Journal::events('import-read');
         foreach ($reads as $read) {
             $test->same([1, 4], [$read['rowLimit'], $read['seconds']], 'Source did not receive the admitted stricter limits.');
@@ -634,7 +641,7 @@ function ownerUnavailable(Closure $read): bool
         $read();
 
         return false;
-    } catch (SessionUnavailable|ExportUnavailable|ImportUnavailable|ScopeContextMismatch) {
+    } catch (SessionUnavailable|ExportUnavailable|ImportUnavailable|ScopeContextMismatch|ScopeStale) {
         return true;
     }
 }

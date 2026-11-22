@@ -21,7 +21,7 @@ final readonly class SchemaAccess
 
     public function manage(DataScope $scope, EntityHandle $entity, FieldUse $use = FieldUse::Write): void
     {
-        if (! $this->policy->authorize($scope, new RecordRef('fields.schema', $entity->value), new FieldSelection([]), $use)->allowed) {
+        if (! $this->policy->authorize(scope: $scope, record: new RecordRef(entity: 'fields.schema', id: $entity->value), fields: new FieldSelection([]), use: $use)->allowed) {
             throw new FieldFailure(CustomFieldsErrorCode::AccessDenied);
         }
     }

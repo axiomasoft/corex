@@ -33,7 +33,7 @@ final readonly class SqlMediaAttachments implements MediaAttachments
 
     public function attach(MediaContext $context, AttachmentInput $input): void
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
 
         if (! $this->policy->allows(context: $context, action: MediaAction::Attach, subject: new MediaSubject(attachment: $input))) {
             throw new MediaAccessDenied('Media attachment is denied.');
@@ -42,10 +42,10 @@ final readonly class SqlMediaAttachments implements MediaAttachments
         $this->connection->transaction(function () use ($context, $input): void {
             $scope = $this->operations->currentConversionScope();
 
-            if (! $this->records->authorize($scope, new RecordRef($input->entityHandle, $input->entityId), new FieldSelection([]), FieldUse::Write)->allowed) {
+            if (! $this->records->authorize(scope: $scope, record: new RecordRef(entity: $input->entityHandle, id: $input->entityId), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
                 throw new MediaAccessDenied('Related record access denied.');
             }
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-media', 'attachment', ['entity' => $input->entityHandle]);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-media', kind: 'attachment', witness: ['entity' => $input->entityHandle]);
             $file = $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $input->fileId)->where('account_id', $context->tenant->account->id)->lockForUpdate()->first();
 
             if ($file === null || $file->state !== 'ready') {
@@ -65,7 +65,7 @@ final readonly class SqlMediaAttachments implements MediaAttachments
 
     public function detach(MediaContext $context, AttachmentInput $input): void
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
 
         if (! $this->policy->allows(context: $context, action: MediaAction::Detach, subject: new MediaSubject(attachment: $input))) {
             throw new MediaAccessDenied('Media detachment is denied.');
@@ -74,10 +74,10 @@ final readonly class SqlMediaAttachments implements MediaAttachments
         $this->connection->transaction(function () use ($context, $input): void {
             $scope = $this->operations->currentConversionScope();
 
-            if (! $this->records->authorize($scope, new RecordRef($input->entityHandle, $input->entityId), new FieldSelection([]), FieldUse::Write)->allowed) {
+            if (! $this->records->authorize(scope: $scope, record: new RecordRef(entity: $input->entityHandle, id: $input->entityId), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
                 throw new MediaAccessDenied('Related record access denied.');
             }
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-media', 'attachment', ['entity' => $input->entityHandle]);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-media', kind: 'attachment', witness: ['entity' => $input->entityHandle]);
             $file = $this->connection->table('med_files')->where($this->operations->conversionIdentity($this->operations->currentConversionScope()))->where('id', $input->fileId)->where('account_id', $context->tenant->account->id)->lockForUpdate()->first();
 
             if ($file === null) {
@@ -99,7 +99,7 @@ final readonly class SqlMediaAttachments implements MediaAttachments
     /** @return list<AttachmentRef> */
     public function usages(MediaContext $context, string $fileId, int $limit = 50): array
     {
-        $this->blobs->assertContext($this->connection, $context);
+        $this->blobs->assertContext(connection: $this->connection, context: $context);
 
         if ($limit < 1 || $limit > 50) {
             throw new MediaOperationConflict('Media usage limit is invalid.');
@@ -114,12 +114,12 @@ final readonly class SqlMediaAttachments implements MediaAttachments
         $scope = $this->operations->currentConversionScope();
         $visible = [];
         foreach ($this->connection->table('med_relations')->where($this->operations->conversionIdentity($scope))->where('file_id', $fileId)->lazyById(100) as $row) {
-            $record = new RecordRef(Value::text($row->entity_handle), Value::text($row->entity_id));
-            $input = new AttachmentInput($fileId, $record->entity, $record->id, Value::text($row->slot));
+            $record = new RecordRef(entity: Value::text($row->entity_handle), id: Value::text($row->entity_id));
+            $input = new AttachmentInput(fileId: $fileId, entityHandle: $record->entity, entityId: $record->id, slot: Value::text($row->slot));
 
-            if ($this->records->authorize($scope, $record, new FieldSelection([]), FieldUse::Read)->allowed
-                && $this->policy->allows($context, MediaAction::Read, new MediaSubject(attachment: $input))) {
-                $visible[] = new AttachmentRef($fileId, $record->entity, $record->id, $input->slot);
+            if ($this->records->authorize(scope: $scope, record: $record, fields: new FieldSelection([]), use: FieldUse::Read)->allowed
+                && $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject(attachment: $input))) {
+                $visible[] = new AttachmentRef(fileId: $fileId, entityHandle: $record->entity, entityId: $record->id, slot: $input->slot);
 
                 if (count($visible) === $limit) {
                     break;

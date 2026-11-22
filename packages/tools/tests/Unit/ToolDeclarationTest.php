@@ -68,6 +68,7 @@ it('does not expose unannotated operations as tools (DESC-02)', function () use 
                 ability: 'notes.read',
                 requestSchema: $objectSchema(),
                 responseSchema: $objectSchema(),
+                version: 'v2',
             ),
         ]);
 
@@ -111,7 +112,7 @@ it('rejects invalid canonical namespaces and wire collisions (DESC-04)', functio
 });
 
 it('rejects duplicate tuples, foreign operation refs and invalid handlers (DESC-05)', function () use ($objectSchema): void {
-    $operation = Api::operation('notes.list', 'GET', '/notes', StubOperationHandler::class, 'notes.read', $objectSchema(), $objectSchema());
+    $operation = Api::operation('notes.list', 'GET', '/notes', StubOperationHandler::class, 'notes.read', $objectSchema(), $objectSchema(), version: 'v2');
 
     expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/dup')->title('Dup')->tablePrefix('dup')->extends([
@@ -123,7 +124,7 @@ it('rejects duplicate tuples, foreign operation refs and invalid handlers (DESC-
     expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
             $operation,
-            Api::exposeTool('foreign.list', 'v1', 'exp.read', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
+            Api::exposeTool('foreign.list', 'v2', 'exp.read', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
@@ -136,8 +137,8 @@ it('rejects duplicate tuples, foreign operation refs and invalid handlers (DESC-
 
 it('compiles exposeTool against a same-module operation without adding HTTP routes (DESC-01 expose)', function () use ($objectSchema): void {
     $manifest = ModuleManifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
-        Api::operation('notes.list', 'GET', '/notes', StubOperationHandler::class, 'notes.read', $objectSchema(), $objectSchema()),
-        Api::exposeTool('notes.list', 'v1', 'notes.list', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
+        Api::operation('notes.list', 'GET', '/notes', StubOperationHandler::class, 'notes.read', $objectSchema(), $objectSchema(), version: 'v2'),
+        Api::exposeTool('notes.list', 'v2', 'notes.list', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
     ]);
 
     $compiled = resolve(ModuleCompilation::class)->compile([$manifest], installedPackages: []);
@@ -146,6 +147,6 @@ it('compiles exposeTool against a same-module operation without adding HTTP rout
 
     expect($tools)->toHaveCount(1)
         ->and($operations)->toHaveCount(1)
-        ->and($tools[0]->operationRef)->toBe('v1:notes.list')
+        ->and($tools[0]->operationRef)->toBe('v2:notes.list')
         ->and($tools[0]->handler)->toBe(StubOperationHandler::class);
 });

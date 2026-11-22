@@ -24,6 +24,8 @@ includes:
     - vendor/pestphp/pest/extension.neon
 
 parameters:
+    parallel:
+        maximumNumberOfProcesses: 1
     tmpDir: build/phpstan-tests-lint
 
     scanFiles:

@@ -16,7 +16,7 @@ final class IndexCatalogue
     /** @return array<string,mixed> */
     public static function plan(Connection $db, DataScope $scope, FieldDefinition $field, string $slot, string $namespace): array
     {
-        $parent = self::parent($db, $namespace);
+        $parent = self::parent(db: $db, namespace: $namespace);
         $cast = match ($field->type->value) {
             'int' => 'bigint', 'decimal' => 'numeric', 'text', 'select', 'email', 'url', 'phone' => 'text',
             default => throw new SchemaConflict('index-type-unavailable'),
@@ -30,7 +30,7 @@ final class IndexCatalogue
             throw new SchemaConflict('physical-parent-role-mismatch');
         }
 
-        if ($cast !== 'text' && SchemaRows::rows($db, SchemaRows::DOCUMENTS, $scope, $field->entity->value)
+        if ($cast !== 'text' && SchemaRows::rows(db: $db, table: SchemaRows::DOCUMENTS, scope: $scope, entity: $field->entity->value)
             ->whereRaw('slots ->> CAST(? AS text) IS NOT NULL AND NOT pg_catalog.pg_input_is_valid(slots ->> CAST(? AS text), ?)', [$slot, $slot, $cast])->exists()) {
             throw new SchemaConflict('index-source-invalid');
         }
@@ -73,7 +73,7 @@ final class IndexCatalogue
     /** @param array<string,mixed> $spec */
     public static function verifyParent(Connection $db, array $spec): void
     {
-        $parent = self::parent($db, SchemaValue::text($spec['namespace']));
+        $parent = self::parent(db: $db, namespace: SchemaValue::text($spec['namespace']));
         foreach ($parent as $column => $value) {
             if (($spec[$column] ?? null) !== $value) {
                 throw new SchemaConflict('physical-parent-replaced');

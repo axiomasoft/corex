@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Internal\Http\ApiController;
 use CoreX\Operations\Internal\Http\DiscoveryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DiscoveryController::class, 'root'])->name('corex.api.discovery');
-Route::get('{version}/capabilities', [DiscoveryController::class, 'capabilities'])
-    ->where('version', 'v[1-9][0-9]*')
-    ->name('corex.api.capabilities');
-Route::get('{version}/openapi.json', [DiscoveryController::class, 'openapi'])
-    ->where('version', 'v[1-9][0-9]*')
-    ->name('corex.api.openapi');
-Route::match(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], '{version}/{path?}', ApiController::class)
-    ->where('version', 'v[1-9][0-9]*')
+Route::get('v2/capabilities', [DiscoveryController::class, 'capabilities'])->name('corex.api.capabilities');
+Route::get('v2/openapi.json', [DiscoveryController::class, 'openapi'])->name('corex.api.openapi');
+Route::match(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], 'v2/{path?}', ApiController::class)
     ->where('path', '.*')
-    ->middleware(OperationErrorBoundary::class)
+    ->fallback()
     ->name('corex.api.operation');

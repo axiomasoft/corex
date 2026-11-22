@@ -30,18 +30,25 @@ function conversionContext(): MediaContext
     );
 }
 
-function thumbnailBytes(): string
+function thumbnailBytes(string $extension = 'jpg'): string
 {
     $image = imagecreatetruecolor(100, 50);
-    imagefill($image, 0, 0, imagecolorallocate($image, 32, 64, 128));
+
+    if ($extension === 'png') {
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+        imagefill($image, 0, 0, imagecolorallocatealpha($image, 32, 64, 128, 64));
+    } else {
+        imagefill($image, 0, 0, imagecolorallocate($image, 32, 64, 128));
+    }
     ob_start();
-    imagejpeg($image, quality: 90);
+    $extension === 'png' ? imagepng($image) : imagejpeg($image, quality: 90);
     $bytes = ob_get_clean();
 
     return $bytes;
 }
 
-it('creates one bounded GD thumbnail for a file/profile/version', function (): void {
+it('creates one bounded GD thumbnail for a file/profile/version', function (string $extension, string $mime): void {
     app()->instance(MediaPolicy::class, new class implements MediaPolicy
     {
         public function allows(MediaContext $context, MediaAction $action, MediaSubject $subject): bool
@@ -51,10 +58,10 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
     });
     app()->forgetScopedInstances();
 
-    $bytes = thumbnailBytes();
+    $bytes = thumbnailBytes($extension);
     $file = resolve(MediaLibrary::class)->store(
         conversionContext(),
-        new UploadInput('conversion-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', $bytes)), 'attachment'),
+        new UploadInput('conversion-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.'.$extension, $bytes)), 'attachment'),
     );
 
     expect(resolve(MediaLibrary::class)->requestConversion(conversionContext(), $file->id, 'thumbnail'))->toBeInstanceOf(MediaConversionRef::class);
@@ -73,8 +80,19 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
         ->and(resolve(ConversionOperations::class)->inspect(conversionContext(), $conversion)->height)->toBe(50)
         ->and($stored->state)->toBe('ready')
         ->and(getimagesizefromstring($converted)[0])->toBe(100)
+        ->and(getimagesizefromstring($converted)['mime'])->toBe($mime)
         ->and($read->sha256)->toBe(hash('sha256', $converted));
-});
+
+    if ($extension === 'png') {
+        $image = imagecreatefromstring($converted);
+        expect($image)->toBeInstanceOf(GdImage::class);
+        $pixel = imagecolorsforindex($image, imagecolorat($image, 0, 0));
+        expect($pixel['alpha'])->toBe(64);
+    }
+})->with([
+    'jpeg' => ['jpg', 'image/jpeg'],
+    'png with alpha' => ['png', 'image/png'],
+]);
 
 it('purges a published conversion together with its deleting original', function (): void {
     app()->instance(MediaPolicy::class, new class implements MediaPolicy

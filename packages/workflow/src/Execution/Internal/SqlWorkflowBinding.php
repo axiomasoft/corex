@@ -42,7 +42,7 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
             throw new RuntimeException('Workflow capture requires the caller’s active owner transaction.');
         }
 
-        $trusted = $this->scopes->assert($request->scope, $connection);
+        $trusted = $this->scopes->assert(scope: $request->scope, connection: $connection);
         $this->assertContext(accountId: $request->context->account->id, workspaceId: $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
 
@@ -51,14 +51,14 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
         }
 
         $request = new TriggerRequest(
-            $trusted, $request->scope, $request->module, $request->entityHandle, $request->eventId,
-            $request->eventName, $request->subjectRef, $request->definitionRef, $request->versionRef,
-            $request->scalarSnapshot, $request->requestKey,
+            context: $trusted, scope: $request->scope, module: $request->module, entityHandle: $request->entityHandle, eventId: $request->eventId,
+            eventName: $request->eventName, subjectRef: $request->subjectRef, definitionRef: $request->definitionRef, versionRef: $request->versionRef,
+            scalarSnapshot: $request->scalarSnapshot, requestKey: $request->requestKey,
         );
         $stamp = $this->definitionStamp($request);
         $provider = $this->engine->provider($request->definition())
             ?? throw new UnsupportedWorkflowCapability('The requested workflow definition and version have no active engine.');
-        $stored = WorkflowDefinitionStamp::storedPayload([
+        $stored = WorkflowDefinitionStamp::storedPayload(businessPayload: [
             'event_id' => $request->eventId,
             'event_name' => $request->eventName,
             'entity_handle' => $request->entityHandle,
@@ -68,18 +68,18 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
             'provider_namespace' => $provider->namespace,
             'principal_kind' => $request->scope->principalKind,
             'principal_id' => $request->scope->principalId,
-        ], $stamp);
+        ], stamp: $stamp);
 
-        ReferenceWrites::enlist($connection, $request->scope, 'axiomasoft/corex-workflow', 'workflow-capture', ['package' => $request->module, 'entity' => $request->entityHandle, 'version' => $request->versionRef, 'provider' => $provider->namespace]);
+        ReferenceWrites::enlist(connection: $connection, scope: $request->scope, producer: 'axiomasoft/corex-workflow', kind: 'workflow-capture', witness: ['package' => $request->module, 'entity' => $request->entityHandle, 'version' => $request->versionRef, 'provider' => $provider->namespace]);
 
-        return $this->intents->capture($connection, $request, $provider, $stored);
+        return $this->intents->capture(connection: $connection, request: $request, provider: $provider, payload: $stored);
     }
 
     public function definitionStamp(TriggerRequest $request): ExtensionStamp
     {
         $this->assertTriggerDeclaration($request);
 
-        return WorkflowDefinitionStamp::fromRequest($request, $this->modules?->compiled()->fingerprint);
+        return WorkflowDefinitionStamp::fromRequest(request: $request, registryFingerprint: $this->modules?->compiled()->fingerprint);
     }
 
     public function signal(SignalRequest $request): SignalResult

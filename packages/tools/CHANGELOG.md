@@ -1,4 +1,8 @@
 
+## CoreX 2.0 — Mounted MCP
+
+- Expose `McpToolEndpoint` for host routes. Declared operation tools share invocation, current authorization and replay receipts with REST v2 while retaining their own schema and contract hash.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

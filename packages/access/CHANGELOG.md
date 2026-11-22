@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Metadata authorization
+
+- Resolve metadata field permissions against one verified PostgreSQL snapshot for local Access policies.
+
 ## Unreleased — Laravel identity
 
 - Moved the public adapter to `CoreX\Access\Laravel\PrincipalIdentity`. Laravel callers and the native user provider use this path.

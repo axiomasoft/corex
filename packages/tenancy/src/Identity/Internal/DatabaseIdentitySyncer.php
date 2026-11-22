@@ -75,11 +75,11 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
     public function syncToAccount(string $identityId, string $accountId): void
     {
         try {
-            $this->asService($accountId, function (DataScope $scope) use ($identityId): void {
-                ($this->application)()->make(WorkScopeRunner::class)->run($scope, fn () => $this->syncCaptured($identityId, $scope));
+            $this->asService(accountId: $accountId, work: function (DataScope $scope) use ($identityId): void {
+                ($this->application)()->make(WorkScopeRunner::class)->run($scope, fn () => $this->syncCaptured(identityId: $identityId, scope: $scope));
             });
         } catch (Throwable) {
-            $this->markFailed($identityId, $accountId);
+            $this->markFailed(identityId: $identityId, accountId: $accountId);
         }
     }
 
@@ -98,7 +98,7 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
             ->first();
 
         if ($identity === null) {
-            $this->markFailed($identityId, $accountId);
+            $this->markFailed(identityId: $identityId, accountId: $accountId);
 
             return;
         }
@@ -177,11 +177,11 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
             $id = DatabaseValue::text($accountId);
 
             try {
-                $this->asService($id, static function (DataScope $scope) use ($identityId): void {
+                $this->asService(accountId: $id, work: static function (DataScope $scope) use ($identityId): void {
                     SyncIdentityToAccount::dispatch($identityId, $scope);
                 });
             } catch (Throwable) {
-                $this->markFailed($identityId, $id);
+                $this->markFailed(identityId: $identityId, accountId: $id);
             }
         }
     }
@@ -189,8 +189,8 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
     /** @param Closure(DataScope):void $work */
     private function asService(string $accountId, Closure $work): void
     {
-        $account = $this->accounts->find($accountId, $this->centralConnection) ?? throw new ScopeContextMismatch('Account is unavailable.');
-        $this->tenancy->runFor($account, null, function () use ($work): void {
+        $account = $this->accounts->find(accountId: $accountId, connectionName: $this->centralConnection) ?? throw new ScopeContextMismatch('Account is unavailable.');
+        $this->tenancy->runFor(account: $account, workspace: null, callback: function () use ($work): void {
             $context = $this->tenancy->context() ?? throw new ScopeContextMismatch('Missing identity projection target.');
             $app = ($this->application)();
             $app->make(NamedWorkPrincipal::class)->run($context, self::SERVICE, static function () use ($context, $work, $app): void {

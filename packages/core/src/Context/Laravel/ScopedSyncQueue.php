@@ -20,7 +20,7 @@ final class ScopedSyncQueue extends SyncQueue
     {
         $prepared = new FrozenQueuePayload(parent::createPayload($job, $queue ?? '', $data));
 
-        return $this->pushFrozen(parent::push(...), $job, $prepared, $queue);
+        return $this->pushFrozen(push: parent::push(...), job: $job, payload: $prepared, queue: $queue);
     }
 
     /** Illuminate's Queue::push supports object jobs. SyncQueue's PHPDoc is narrower. */

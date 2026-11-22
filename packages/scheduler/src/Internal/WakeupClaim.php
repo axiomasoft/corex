@@ -28,12 +28,12 @@ final readonly class WakeupClaim
 
     public function proof(): StoredWorkProof
     {
-        return new StoredWorkProof(WakeupInput::PROOF_OWNER, WakeupInput::proofReference($this->id, $this->digest), $this->seal);
+        return new StoredWorkProof(owner: WakeupInput::PROOF_OWNER, reference: WakeupInput::proofReference(id: $this->id, digest: $this->digest), seal: $this->seal);
     }
 
     public function operation(): OperationKey
     {
-        return new OperationKey('wakeup:'.$this->id, $this->generation, 'wakeup:'.$this->id, $this->deadline);
+        return new OperationKey(id: 'wakeup:'.$this->id, attempt: $this->generation, effectKey: 'wakeup:'.$this->id, deadline: $this->deadline);
     }
 
     public function row(Connection $db): Builder

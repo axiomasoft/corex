@@ -72,7 +72,7 @@ final readonly class MigrationWaveOrchestrator
         Account::query()
             ->where('deleted_at', null)
             ->each(function (Account $account): void {
-                $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView($account->template_version, $account->cluster_id, $account->db_name));
+                $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView(templateVersion: $account->template_version, clusterId: $account->cluster_id, databaseName: $account->db_name));
             });
     }
 

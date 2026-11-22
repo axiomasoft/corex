@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Laravel;
 
+use CoreX\Operations\Errors\Laravel\OperationErrorBoundary;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -32,19 +33,19 @@ final class WebhookHttpRegistrar implements PackageRegistrar
             return;
         }
 
-        Route::prefix($options->routePrefix)->middleware($options->routeMiddleware)->group(self::routes(...));
+        Route::prefix($options->routePrefix)->middleware([OperationErrorBoundary::class, ...$options->routeMiddleware])->group(self::routes(...));
     }
 
     private static function routes(): void
     {
-        Route::get('v1/webhook-subscriptions', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.list');
-        Route::post('v1/webhook-subscriptions', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.create');
-        Route::patch('v1/webhook-subscriptions/{id}', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.update');
-        Route::post('v1/webhook-subscriptions/{id}/disable', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.disable');
-        Route::get('v1/webhook-deliveries', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.list');
-        Route::post('v1/webhook-deliveries/replay', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.range-replay');
-        Route::get('v1/webhook-deliveries/{id}', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.show');
-        Route::get('v1/webhook-deliveries/{id}/attempts', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.attempts');
-        Route::post('v1/webhook-deliveries/{id}/replay', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.replay');
+        Route::get('v2/webhook-subscriptions', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.list');
+        Route::post('v2/webhook-subscriptions', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.create');
+        Route::patch('v2/webhook-subscriptions/{id}', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.update');
+        Route::post('v2/webhook-subscriptions/{id}/disable', [WebhookController::class, 'forward'])->name('corex.api.webhooks.subscription.disable');
+        Route::get('v2/webhook-deliveries', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.list');
+        Route::post('v2/webhook-deliveries/replay', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.range-replay');
+        Route::get('v2/webhook-deliveries/{id}', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.show');
+        Route::get('v2/webhook-deliveries/{id}/attempts', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.attempts');
+        Route::post('v2/webhook-deliveries/{id}/replay', [WebhookController::class, 'forward'])->name('corex.api.webhooks.delivery.replay');
     }
 }

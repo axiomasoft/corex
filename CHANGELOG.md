@@ -6,15 +6,18 @@
 
 ### Added
 
+- Поставка CoreX 2.0 включает 22 split-архива, пять снимков API v2, проекцию MCP для приложений и независимые установочные сценарии Equipment Registry и FlexCRM.
 - CoreX 2.0 получает независимое сравнение контрактов, проверку установок из 20 split-архивов и автономный прототип переноса Webhooks с подписанным планом и транзакционными checkpoint. [Решение о совместимости](docs/architecture/corex-2.md).
 
 ### Removed
 
+- Удалены маршруты HTTP v1 и wildcard выбора мажора. Исторические снимки оставлены в `api/v1` для сравнения контрактов.
 - Audit 2026-10-08 (owner decision): Roave BC diff removed — `composer bc-check`, `scripts/bc-check.sh`, `scripts/bc/**` (accepted base, approved-deltas list and its plan-decision binding), the `backward-compatibility` CI job, `tests/Arch/PhpApiBcTest.php` and the `roave/backward-compatibility-check` dev dependency. Public surface stays guarded by `composer php-api` snapshots, golden php-surface + REBASELINE and package CHANGELOGs.
 - `dod-release` CI job removed (DoD preflight is bound to `plans/`).
 
 ### Changed
 
+- REST и MCP используют один `OperationInvoker`. Повтор с тем же ключом проверяет текущие права и возвращает исходный результат с прежним расчётом бюджета. REST v2 публикует ошибки RFC 9457 и typed acceptance со ссылкой на статус.
 - `DataScope` v3 передаёт логическую область, проверяемого principal и версию физической привязки. `WorkScopeRunner` проводит допуск до выбора handler. Scheduler восстанавливает исходную область каждой записи wakeup и сверяет версию handler и всё окно запуска.
 - Двадцать пакетов CoreX переходят на общую Composer-линию 2.x и наборы схем CoreX версии 2. FlexCRM сохраняет собственную версию.
 - Unify all 21 CoreX packages and Flex CRM under native Packman governance. Pin Packman runtime, devtools and testkit to the reviewed integration commit; adopt its public attributes, configuration/error contracts and composable schema facets without compatibility aliases. Preserve the redesigned package names and external engine ownership. Native contract manifests and CoreX architecture checks share one verified source tree.

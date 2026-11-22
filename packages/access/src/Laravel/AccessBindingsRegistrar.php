@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Laravel;
 
+use Closure;
 use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
 use CoreX\Access\Access\Internal\MatrixPermissions;
 use CoreX\Access\Access\Internal\PanelAccessChecker;
@@ -12,6 +13,8 @@ use CoreX\Access\Access\Internal\ScopedFieldPolicy;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
 use CoreX\Access\Internal\AccessModuleReferences;
+use CoreX\Access\Matrix\Contracts\EntityActivity;
+use CoreX\Access\Matrix\Internal\ActiveEntityFilter;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
 use CoreX\Access\Roles\DirectGrants;
@@ -52,6 +55,9 @@ final class AccessBindingsRegistrar implements PackageRegistrar
         $app->alias(ScopedFieldPolicy::class, DataScopeAuthorizer::class);
         $app->alias(ScopedFieldPolicy::class, FieldUsePolicy::class);
         $app->scoped(MatrixPermissions::class);
+        $app->when(MatrixPermissions::class)->needs(Closure::class)->give(
+            static fn (): Closure => static fn (EntityActivity $activity): bool => $activity instanceof ActiveEntityFilter,
+        );
         $app->scoped(PanelAccessChecker::class);
         $app->alias(PanelAccessChecker::class, AccessChecker::class);
         $app->alias(PanelAccessChecker::class, ScopeResolver::class);

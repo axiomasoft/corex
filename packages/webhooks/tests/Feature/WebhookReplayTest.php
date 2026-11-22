@@ -284,7 +284,7 @@ final class WebhookReplayTest extends TestCase
     private function seedSubscription(string $id, string $status = 'active', int $revision = 0): void
     {
         $this->connection->table('sys_api_webhook_subscriptions')->insert([
-            'id' => $id, 'revision' => $revision, 'major' => 'v1', 'topic' => 'orders.placed', 'topic_version' => 1,
+            'id' => $id, 'revision' => $revision, 'major' => 'v2', 'topic' => 'orders.placed', 'topic_version' => 1,
             'endpoint_url' => 'https://hooks.example/receiver', 'status' => $status, 'max_pii_class' => 'personal',
             'key_refs' => '["current"]', 'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
         ]);
@@ -307,7 +307,7 @@ final class WebhookReplayTest extends TestCase
         $body = JsonCanonical::encode(['event_id' => $id, 'data' => ['id' => 'order-1']]);
         $row = [
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => $subscriptionRevision,
-            'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
+            'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v2',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
             'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope)),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => $status, 'attempt' => $attempt,
@@ -330,7 +330,7 @@ final class WebhookReplayTest extends TestCase
             MessagingFixtures::contracts([
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]),
-            [new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
+            [new WebhookTopic('orders.placed', 1, 'v2', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
             ['orders.placed' => new ReplayProjector],
         );
     }

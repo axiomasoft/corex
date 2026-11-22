@@ -61,7 +61,7 @@ final readonly class DatabasePollPubSub implements PubSub
         $connection = $this->connections->connection($this->connection);
 
         $connection->transaction(function () use ($channel, $payload, $connection): void {
-            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex', 'pubsub-message', ['channel' => $channel]);
+            ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex', kind: 'pubsub-message', witness: ['channel' => $channel]);
             $connection->select(
                 query: 'SELECT pg_advisory_xact_lock(hashtext(?))',
                 bindings: ['corex-pubsub:'.$channel],
@@ -165,7 +165,7 @@ final readonly class DatabasePollPubSub implements PubSub
         int $position,
     ): void {
         $connection->transaction(function () use ($connection, $channel, $subscriber, $cursorsTable, $position): void {
-            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex', 'pubsub-cursor', ['channel' => $channel, 'subscriber' => $subscriber]);
+            ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex', kind: 'pubsub-cursor', witness: ['channel' => $channel, 'subscriber' => $subscriber]);
             $connection->table($cursorsTable)->updateOrInsert(['channel' => $channel, 'subscriber' => $subscriber], ['position' => $position, 'updated_at' => $this->clock->now()]);
         });
     }

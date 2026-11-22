@@ -55,8 +55,8 @@ final readonly class ArrayDataScopeCodec implements DataScopeCodec
         }
 
         try {
-            return new DataScope($payload['deployment_id'], $payload['account_id'], $payload['workspace_id'], $payload['binding_id'],
-                $payload['binding_generation'], $payload['account_incarnation'], $payload['restore_epoch'], $payload['principal_kind'], $payload['principal_id']);
+            return new DataScope(deploymentId: $payload['deployment_id'], accountId: $payload['account_id'], workspaceId: $payload['workspace_id'], bindingId: $payload['binding_id'],
+                bindingGeneration: $payload['binding_generation'], accountIncarnation: $payload['account_incarnation'], restoreEpoch: $payload['restore_epoch'], principalKind: $payload['principal_kind'], principalId: $payload['principal_id']);
         } catch (InvalidArgumentException) {
             throw InvalidScopePayload::missing('scope');
         }

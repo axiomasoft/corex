@@ -56,33 +56,33 @@ final readonly class DatabaseExportRunner implements ExportRunner
     #[Override]
     public function seal(DataScope $scope, string $jobId, ExportManifest $draft, ExportCursor $after): ExportManifest
     {
-        $this->runtime?->assertCurrent($this->connection, $scope);
+        $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
         $this->runtime?->assertTransfer($jobId);
         $this->runtime?->assertExport(json_encode([$draft, $after], JSON_THROW_ON_ERROR));
         $this->assertCaptureAccess(scope: $scope, manifest: $draft);
-        $this->assertJobScope($jobId, $scope);
+        $this->assertJobScope(jobId: $jobId, scope: $scope);
 
         if ($draft->snapshotMode !== 'coherent' || $this->connection->transactionLevel() !== 0) {
             throw new ExportUnavailable('Coherent capture requires an independent owner transaction.');
         }
 
-        $this->prepareCapture($scope, $jobId, $draft);
+        $this->prepareCapture(scope: $scope, jobId: $jobId, draft: $draft);
         $guard = $this->guard ?? ExecutionGuard::production($this->limits);
 
         return $this->connection->transaction(function () use ($scope, $jobId, $draft, $after, $guard): ExportManifest {
             if ($this->connection->getDriverName() === 'pgsql') {
                 $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ');
             }
-            $this->runtime?->assertCurrent($this->connection, $scope);
+            $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
             $this->assertCaptureAccess(scope: $scope, manifest: $draft);
             $existing = $this->connection->table('corex_export_manifests')->where('id', $draft->id)->where('job_id', $jobId)
                 ->lockForUpdate()->first() ?? throw new ExportUnavailable('The export capture is unavailable.');
 
-            if (in_array(Value::field($existing, 'state'), ['sealed', 'published'], true)) {
+            if (in_array(Value::field(row: $existing, name: 'state'), ['sealed', 'published'], true)) {
                 return $this->storedManifest($existing);
             }
 
-            $this->references?->enlist($scope, $this->connection, JsonDocuments::map($draft->roster));
+            $this->references?->enlist(scope: $scope, connection: $this->connection, stamp: JsonDocuments::map($draft->roster));
             $parts = [];
             $cursor = $after;
             $partNumber = 0;
@@ -107,7 +107,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
                     throw new ExportUnavailable('Export capture is outside its bounded snapshot.');
                 }
                 foreach ($page->rows as $record) {
-                    $this->authorizeRecord($scope, $record->entity, $record->externalId, array_keys($record->values));
+                    $this->authorizeRecord(scope: $scope, entity: $record->entity, id: $record->externalId, fields: array_keys($record->values));
                 }
                 $this->assertBudget(guard: $guard, manifest: $draft);
 
@@ -115,12 +115,12 @@ final readonly class DatabaseExportRunner implements ExportRunner
                     throw new ExportUnavailable('Export capture was cancelled.');
                 }
 
-                $parts[] = $this->stagePart($scope, $jobId, $draft, (string) $partNumber, $page->rows);
+                $parts[] = $this->stagePart(scope: $scope, jobId: $jobId, manifest: $draft, number: (string) $partNumber, records: $page->rows);
                 $cursor = $page->next ?? $cursor;
                 $partNumber++;
             } while (! $page->complete);
             $this->assertBudget(guard: $guard, manifest: $draft);
-            $this->assertCaptureAccess($scope, $draft);
+            $this->assertCaptureAccess(scope: $scope, manifest: $draft);
 
             $partsHash = hash('sha256', implode("\n", array_map(
                 static fn (ExportPart $part): string => "{$part->number}:{$part->sha256}:{$part->byteLength}",
@@ -160,28 +160,28 @@ final readonly class DatabaseExportRunner implements ExportRunner
             if ($this->connection->getDriverName() === 'pgsql') {
                 $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY');
             }
-            $this->runtime?->assertCurrent($this->connection, $scope);
-            $this->assertEmitAccess($scope, $manifest, $cursor);
+            $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
+            $this->assertEmitAccess(scope: $scope, manifest: $manifest, cursor: $cursor);
             $jobId = $this->connection->table('corex_export_manifests')->where('id', $manifest->id)->value('job_id');
 
             if (! is_string($jobId)) {
                 throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
             }
 
-            $this->assertJobScope($jobId, $scope);
-            $verify = new SealedExportParts($this->connection, $this->storage, $this->authorizer, $this->schema);
-            $stored = $verify->manifest($scope, $jobId, published: false);
+            $this->assertJobScope(jobId: $jobId, scope: $scope);
+            $verify = new SealedExportParts(connection: $this->connection, storage: $this->storage, authorizer: $this->authorizer, schema: $this->schema);
+            $stored = $verify->manifest(scope: $scope, jobId: $jobId, published: false);
             $part = $this->connection->table('corex_export_parts')->where('manifest_id', $manifest->id)
                 ->where('part_no', $cursor->partNumber)->first();
 
-            if ($part === null || $cursor->rowOrdinal !== '0' || Value::field($stored, 'id') !== $manifest->id
-                || Value::field($stored, 'parts_hash') !== $manifest->partsHash || Value::field($stored, 'schema_hash') !== $manifest->schemaHash) {
+            if ($part === null || $cursor->rowOrdinal !== '0' || Value::field(row: $stored, name: 'id') !== $manifest->id
+                || Value::field(row: $stored, name: 'parts_hash') !== $manifest->partsHash || Value::field(row: $stored, name: 'schema_hash') !== $manifest->schemaHash) {
                 throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
             }
 
-            $bytes = $verify->verifyBytes($scope, $part);
-            $this->assertEmitAccess($scope, $manifest, $cursor);
-            $verify->assertSchema($scope, $stored);
+            $bytes = $verify->verifyBytes(scope: $scope, part: $part);
+            $this->assertEmitAccess(scope: $scope, manifest: $manifest, cursor: $cursor);
+            $verify->assertSchema(scope: $scope, manifest: $stored);
 
             return $bytes;
         });
@@ -191,7 +191,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
     private function authorizeRecord(DataScope $scope, string $entity, string $id, array $fields): void
     {
         try {
-            $decision = $this->authorizer->authorize($scope, new RecordRef($entity, $id), new FieldSelection($fields), FieldUse::Export);
+            $decision = $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: $entity, id: $id), fields: new FieldSelection($fields), use: FieldUse::Export);
         } catch (InvalidArgumentException $exception) {
             throw new ExportUnavailable('The export record cannot be authorized.', previous: $exception);
         }
@@ -215,7 +215,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
         $disk = $this->storage->disk();
 
         $effectKey = hash('sha256', json_encode(['export-part/1', $manifest->id, $number], JSON_THROW_ON_ERROR));
-        $previous = $this->references?->inspect($scope, 'export-part', $effectKey, $jobId, $hash);
+        $previous = $this->references?->inspect(scope: $scope, namespace: 'export-part', key: $effectKey, ownerRef: $jobId, digest: $hash);
         $ticket = $previous?->ticket;
 
         if (! $disk->exists($ref)) {
@@ -224,9 +224,9 @@ final readonly class DatabaseExportRunner implements ExportRunner
             }
 
             if ($ticket !== null) {
-                $this->references->observe($ticket, ProviderObservationKind::Absent, $effectKey);
+                $this->references->observe(ticket: $ticket, kind: ProviderObservationKind::Absent, reference: $effectKey);
             }
-            $ticket = $this->references?->reserve($scope, 'export-part', $effectKey, $jobId, $hash, JsonDocuments::map($manifest->roster), $this->limits->maxRuntimeSeconds, $previous);
+            $ticket = $this->references?->reserve(scope: $scope, namespace: 'export-part', key: $effectKey, ownerRef: $jobId, digest: $hash, stamp: JsonDocuments::map($manifest->roster), seconds: $this->limits->maxRuntimeSeconds, previous: $previous);
 
             if ($disk->put($ref, $bytes) !== true) {
                 throw new ExportUnavailable('Immutable export part could not be persisted.');
@@ -240,7 +240,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
         }
 
         if ($ticket !== null) {
-            $this->references?->observe($ticket, ProviderObservationKind::Confirmed, $effectKey);
+            $this->references?->observe(ticket: $ticket, kind: ProviderObservationKind::Confirmed, reference: $effectKey);
         }
         $part = new ExportPart(number: $number, immutableRef: $ref, sha256: $hash, byteLength: strlen($bytes), rowCounts: ['records' => count($records)]);
         $this->connection->table('corex_export_parts')->updateOrInsert(
@@ -276,7 +276,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
             throw new ExportUnavailable('The export job is unavailable.');
         }
 
-        SessionIdentity::assertScope($job, $scope);
+        SessionIdentity::assertScope(job: $job, scope: $scope);
     }
 
     /** @param list<CanonicalRecord> $records */
@@ -291,34 +291,34 @@ final readonly class DatabaseExportRunner implements ExportRunner
     {
         if (! $this->storage->capabilities()->export
             || ! hash_equals($scope->restoreEpoch, $manifest->restoreEpoch)
-            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.manifest', $manifest->id), new FieldSelection([]), FieldUse::Export)->allowed) {
+            || ! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'import-export.manifest', id: $manifest->id), fields: new FieldSelection([]), use: FieldUse::Export)->allowed) {
             throw new ExportUnavailable('Export capture is unavailable under the current authority.');
         }
-        $this->schema?->assertCurrent($scope, $manifest->schemaHash, $manifest->roster);
+        $this->schema?->assertCurrent(scope: $scope, expected: $manifest->schemaHash, roster: $manifest->roster);
     }
 
     private function prepareCapture(DataScope $scope, string $jobId, ExportManifest $draft): void
     {
         $this->connection->transaction(function () use ($scope, $jobId, $draft): void {
-            $this->runtime?->assertCurrent($this->connection, $scope);
-            $this->assertJobScope($jobId, $scope);
+            $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
+            $this->assertJobScope(jobId: $jobId, scope: $scope);
             $job = $this->connection->table('corex_transfer_jobs')->where('id', $jobId)->lockForUpdate()->first();
 
-            if ($job === null || Value::field($job, 'mode') !== 'export' || Value::field($job, 'schema_hash') !== $draft->schemaHash) {
+            if ($job === null || Value::field(row: $job, name: 'mode') !== 'export' || Value::field(row: $job, name: 'schema_hash') !== $draft->schemaHash) {
                 throw new ExportUnavailable('Export capture does not match its job.');
             }
             $existing = $this->connection->table('corex_export_manifests')->where('job_id', $jobId)->orWhere('id', $draft->id)->first();
             $attempt = hash('sha256', json_encode([$jobId, $draft], JSON_THROW_ON_ERROR));
 
             if ($existing !== null) {
-                if (Value::field($existing, 'job_id') !== $jobId || Value::field($existing, 'id') !== $draft->id || Value::field($existing, 'capture_attempt') !== $attempt
-                    || ! in_array(Value::field($existing, 'state'), ['capturing', 'sealed', 'published'], true)) {
+                if (Value::field(row: $existing, name: 'job_id') !== $jobId || Value::field(row: $existing, name: 'id') !== $draft->id || Value::field(row: $existing, name: 'capture_attempt') !== $attempt
+                    || ! in_array(Value::field(row: $existing, name: 'state'), ['capturing', 'sealed', 'published'], true)) {
                     throw new ExportUnavailable('Export capture identity has changed.');
                 }
 
                 return;
             }
-            $this->references?->enlist($scope, $this->connection, JsonDocuments::map($draft->roster));
+            $this->references?->enlist(scope: $scope, connection: $this->connection, stamp: JsonDocuments::map($draft->roster));
             $this->connection->table('corex_export_manifests')->insert([
                 'id' => $draft->id, 'job_id' => $jobId, 'capture_attempt' => $attempt, 'schema_hash' => $draft->schemaHash,
                 'restore_epoch' => $draft->restoreEpoch, 'roster' => json_encode(JsonDocuments::map($draft->roster), JSON_THROW_ON_ERROR),
@@ -331,7 +331,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
     {
         if (! hash_equals($scope->restoreEpoch, $manifest->restoreEpoch)
             || ! hash_equals($cursor->manifestHash, $manifest->partsHash)
-            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.manifest', $manifest->id), new FieldSelection([]), FieldUse::Export)->allowed) {
+            || ! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'import-export.manifest', id: $manifest->id), fields: new FieldSelection([]), use: FieldUse::Export)->allowed) {
             throw new ExportUnavailable('Export output is denied by the current authority.');
         }
     }

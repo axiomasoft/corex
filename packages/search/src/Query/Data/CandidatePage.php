@@ -14,7 +14,7 @@ final readonly class CandidatePage
     /** @param list<Candidate> $candidates */
     public function __construct(public array $candidates, public ?string $nextPosition)
     {
-        ProjectionInput::objects($candidates, Candidate::class);
+        ProjectionInput::objects(items: $candidates, class: Candidate::class);
 
         if ($nextPosition !== null && ($nextPosition === '' || strlen($nextPosition) > 8192)) {
             throw new InvalidArgumentException('Invalid backend search position.');

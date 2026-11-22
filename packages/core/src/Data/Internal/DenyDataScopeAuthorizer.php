@@ -21,7 +21,7 @@ final class DenyDataScopeAuthorizer implements DataScopeAuthorizer, FieldUsePoli
 {
     public function authorize(DataScope $scope, RecordRef $record, FieldSelection $fields, FieldUse $use): DataScopeAccessDecision
     {
-        return new DataScopeAccessDecision(false, 'deny.default');
+        return new DataScopeAccessDecision(allowed: false, reasonCode: 'deny.default');
     }
 
     public function plan(DataScope $scope, EntityHandle $entity, FieldUseRequest $request): FieldUsePlan

@@ -166,11 +166,11 @@ final class Effects implements ExportSchemaWitness, ExportSource
 
     public static function invocation(): OperationInvocation
     {
-        $op = new Operation(self::MEDIA, 'fixture.media.charge', 'v1', 'POST', '/fixture/media/charge', 'media.charge',
+        $op = new Operation(self::MEDIA, 'fixture.media.charge', 'v2', 'POST', '/fixture/media/charge', 'media.charge',
             Charge::class, JsonDocuments::capture([]), JsonDocuments::capture([]), [], 200, OperationMode::Command,
             idempotency: IdempotencyRequirement::Required, contractHash: hash('sha256', 'fixture.media.charge/1'),
             effectMode: 'tenant_transactional', cost: ['base' => 5, 'side_effect' => 0]);
-        $context = ResolvedContexts::make(app(TenantContextResolver::class)->current(), auth()->user(), new InvocationMetadata('owner-effects', 'v1', $op->id, 'POST'));
+        $context = ResolvedContexts::make(app(TenantContextResolver::class)->current(), auth()->user(), new InvocationMetadata('owner-effects', 'v2', $op->id, 'POST'));
 
         return new OperationInvocation($op, $context, JsonDocuments::capture([]), [], 'owner-effects-charge');
     }
@@ -204,7 +204,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
     public static function knownReferences(DataScope $scope): array
     {
         $stamp = ['owners' => [self::MODULE]];
-        $operation = app(BulkOperationStore::class)->submit(new BulkOperationDefinition(self::BULK, self::BULK, 'fixture.media.export', 'v1',
+        $operation = app(BulkOperationStore::class)->submit(new BulkOperationDefinition(self::BULK, self::BULK, 'fixture.media.export', 'v2',
             hash('sha256', 'fixture.media.export/1'), app(DataScopeCodec::class)->encode($scope), $scope->principalId,
             'fixture', JsonDocuments::capture($stamp), JsonDocuments::capture(['kind' => 'export', 'record' => Scenario::RECORD])));
         $ref = new TransferRef(self::TRANSFER);

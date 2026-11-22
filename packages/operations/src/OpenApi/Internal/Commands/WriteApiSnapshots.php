@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\OpenApi\Internal\Commands;
 
-use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
@@ -17,13 +16,13 @@ use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use RuntimeException;
 
-/** @internal Writes the installed-code v1 contract snapshot. It does not accept tenant state. */
+/** @internal Writes the installed-code v2 contract snapshot. */
 #[Internal]
 final class WriteApiSnapshots extends Command
 {
-    protected $signature = 'corex:operations:snapshot {directory : Destination for the v1 JSON carriers} {--check : Compare without writing} {--fixture= : P12 public-error contract PHP file} {--major=v1}';
+    protected $signature = 'corex:operations:snapshot {directory : Destination for the v2 JSON carriers} {--check : Compare without writing} {--major=v2 : Required snapshot major}';
 
-    protected $description = 'Write or check the deterministic v1 API contract snapshot';
+    protected $description = 'Write or check the deterministic v2 API contract snapshot';
 
     public function handle(
         OperationRegistry $operations,
@@ -33,6 +32,12 @@ final class WriteApiSnapshots extends Command
         ModuleRegistry $modules,
         ProblemRegistry $problems,
     ): int {
+        if ($this->option('major') !== 'v2') {
+            $this->error('Only the v2 snapshot can be generated.');
+
+            return self::INVALID;
+        }
+
         $sections = [];
 
         foreach ($this->laravel->tagged(ContractSnapshotSection::class) as $section) {
@@ -43,21 +48,29 @@ final class WriteApiSnapshots extends Command
             $sections[] = $section;
         }
 
-        $builder = new ContractSnapshotBuilder(operations: $operations, openApi: $openApi, profile: $profiles->make(registry: $modules->compiled(), options: $options), problems: $problems, sections: $sections);
+        $builder = new ContractSnapshotBuilder(operations: $operations, openApi: $openApi, profile: $profiles->make(registry: $modules->compiled(), options: $options), problems: $problems, serverUrl: $options->publicBaseUri(), sections: $sections);
 
         $directory = $this->argument('directory');
-        $major = $this->option('major');
 
-        if (! is_string($directory) || $directory === '' || ! is_string($major) || $major === '') {
-            throw new RuntimeException('Snapshot directory and major are required.');
+        if (! is_string($directory) || $directory === '') {
+            throw new RuntimeException('Snapshot directory is required.');
         }
 
-        $fixture = $this->option('fixture');
-        $contracts = $this->contracts(is_string($fixture) ? $fixture : null);
-        $documents = $builder->documents(errorContracts: $contracts, major: $major);
-        $paths = $this->paths(directory: $directory, files: $builder->files());
+        $documents = $builder->documents();
+        $paths = $this->paths(directory: $directory, files: ContractSnapshotBuilder::FILES);
 
         if ($this->option('check') === true) {
+            if (! is_dir($directory)) {
+                $this->error('Snapshot directory is missing.');
+
+                return 1;
+            }
+
+            if (! $this->hasOnlyCarriers(directory: $directory, files: ContractSnapshotBuilder::FILES)) {
+                $this->error('Snapshot directory contains unexpected entries.');
+
+                return 1;
+            }
             foreach ($documents as $name => $bytes) {
                 $current = is_file($paths[$name]) ? file_get_contents($paths[$name]) : false;
 
@@ -75,7 +88,9 @@ final class WriteApiSnapshots extends Command
             throw new RuntimeException('Snapshot directory cannot be created.');
         }
 
-        $this->assertClean(directory: $directory, files: $builder->files());
+        if (! $this->hasOnlyCarriers(directory: $directory, files: ContractSnapshotBuilder::FILES)) {
+            throw new RuntimeException('Snapshot directory contains unexpected entries.');
+        }
         $temporary = [];
 
         try {
@@ -105,22 +120,6 @@ final class WriteApiSnapshots extends Command
         return 0;
     }
 
-    /** @return list<array<string, mixed>> */
-    private function contracts(?string $fixture): array
-    {
-        if ($fixture === null || $fixture === '') {
-            throw new RuntimeException('P12 error fixture is required.');
-        }
-
-        $loaded = require $fixture;
-
-        if (! is_array($loaded) || ! is_array($loaded['contracts'] ?? null)) {
-            throw new RuntimeException('P12 error fixture is unreadable.');
-        }
-
-        return JsonDocuments::maps(JsonDocuments::capture($loaded['contracts']));
-    }
-
     /** @param list<string> $files
      * @return array<string, string> */
     private function paths(string $directory, array $files): array
@@ -135,20 +134,10 @@ final class WriteApiSnapshots extends Command
     }
 
     /** @param list<string> $files */
-    private function assertClean(string $directory, array $files): void
+    private function hasOnlyCarriers(string $directory, array $files): bool
     {
-        $allowed = array_flip($files);
-
         $entries = scandir($directory);
 
-        foreach ($entries === false ? [] : $entries as $entry) {
-            if ($entry === '.' || $entry === '..') {
-                continue;
-            }
-
-            if (! isset($allowed[$entry])) {
-                throw new RuntimeException('Snapshot directory is dirty.');
-            }
-        }
+        return $entries !== false && array_diff($entries, ['.', '..', ...$files]) === [];
     }
 }

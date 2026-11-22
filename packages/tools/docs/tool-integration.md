@@ -2,8 +2,8 @@
 
 This document binds **selected P3–P7 producer contributions** to compiled `Api::tool` declarations
 and records the **external control-plane ownership map** for R08. It is a qualification artifact
-for `axiomasoft/corex-operations` tool discovery and guarded invocation; it does not install MCP servers, central
-identity writers, or tenant auto-exposure for control-plane operations.
+for tool discovery and guarded invocation. A host can mount the CoreX MCP endpoint for the
+tool declarations it approves.
 
 ## External control-plane tools (R08)
 
@@ -64,15 +64,17 @@ Disjoint from archive; proves install optionality without every unselected sibli
   from P8.4; default `ReadOnlyToolExecutionGuard` admits reads only.
 - **Missing producer** or unselected contract → tool unavailable; no inference from convenient
   CRUD, UI, recipients, CRM booking defaults, or RUB/FX fallbacks.
-- **Transport/live/central proof** (MCP routes, PAT/OAuth, fleet DNS/TLS/IAM) belongs to P9/P10/P11
-  owners; generic parity here does not claim deployed control-plane completion.
+- **Deployment** (credential validation, fleet DNS/TLS/IAM and control-plane operations) stays with
+  the host and corresponding control-plane owners.
 
 ## Cold install and transport parity
 
 - `delivery/tool-install-qualification-20260915/` archives `axiomasoft/corex`, `axiomasoft/corex`, and
   `axiomasoft/corex-operations` as immutable ZIP dists for two neutral consumers (`verify-installed.py`).
-- `Internal\McpToolsProjection` implements fake in-memory `mcp-tools-projection/1`
-  (`MCP2025-11-25`) over the same `ToolCatalogue` and `ToolInvoker` contracts.
+- Mount `CoreX\Tools\Mcp\Laravel\McpToolEndpoint` at `POST /mcp` behind the host's
+  authentication middleware. For MCP `2025-11-25`, it uses the same `ToolCatalogue` and
+  `ToolInvoker` as direct calls. Exposed operations share current authorization and durable receipts
+  with `/api/v2`. An exposed tool's guard returns the current effect callback's committed result.
 
 ## Qualification tests
 
@@ -80,4 +82,4 @@ Disjoint from archive; proves install optionality without every unselected sibli
 the fixtures above using neutral `ArchiveToolModule` and `LabToolModule` wrappers.
 
 `packages/tools/tests/Feature/InstalledToolContractTest.php` exercises INST-02–INST-05 cold
-consumer policy, MCP projection parity, provider isolation, and archive/lab cohort optionality.
+consumer policy, mounted MCP parity, provider isolation, and archive/lab cohort optionality.

@@ -769,6 +769,24 @@
                             "optional": true,
                             "default": "new \\CoreX\\Data\\Data\\JsonDocument('[]')",
                             "flags": 1
+                        },
+                        {
+                            "name": "accepted",
+                            "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
+                        },
+                        {
+                            "name": "problem",
+                            "type": "?CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -862,6 +880,146 @@
                     "value": "'tools.unknown_effect'"
                 }
             ]
+        },
+        "CoreX\\Tools\\Mcp\\Laravel\\McpToolEndpoint": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "contexts",
+                            "type": "CoreX\\Operations\\Invocation\\Laravel\\AuthenticatedOperationContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "catalogue",
+                            "type": "CoreX\\Tools\\Contracts\\ToolCatalogue",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "invoker",
+                            "type": "CoreX\\Tools\\Contracts\\ToolInvoker",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "operations",
+                            "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "clients",
+                            "type": "CoreX\\Operations\\Authorization\\Contracts\\ClientScopeAuthorizer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "actions",
+                            "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "errors",
+                            "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "serializer",
+                            "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "problems",
+                            "type": "Packman\\Errors\\Contracts\\ProblemRegistry",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "projection",
+                            "type": "CoreX\\Operations\\Errors\\Laravel\\ProblemProjection",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "__invoke": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Illuminate\\Http\\JsonResponse",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tools\\ToolsServiceProvider": {
             "kind": "class",

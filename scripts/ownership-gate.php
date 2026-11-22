@@ -14,6 +14,9 @@ const RX_ENV = "/\\benv\\(\\s*['\"]([A-Z0-9_]+)['\"]/";
 const RX_TABLE = "/Schema::(?:connection\\([^)]*\\)->)?create\\(\\s*['\"]([a-z0-9_]+)['\"]/";
 const RX_NS = '/^\s*namespace\s+([\w\\\\]+)\s*[;{]/m';
 
+require_once __DIR__.'/support/cli-arguments.php';
+
+$argv = \CoreX\Scripts\cliArguments();
 $root = dirname(__DIR__);
 $baselinePath = $root.'/scripts/ownership-gate-baseline.json';
 

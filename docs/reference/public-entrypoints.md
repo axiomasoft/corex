@@ -4,6 +4,8 @@ This catalogue records reviewed methods whose legitimate callers lie outside the
 
 `scripts/quality/public-entrypoints.json` binds each exact method, source file and evidence file to SHA-256 hashes. Changes require checking the invocation path again; `unused-public.php --report` only reports facts and never refreshes these records. Framework roots retain direct registration or upstream dispatch evidence. The table below describes the intended external API/SPI calls.
 
+The two scope refusals are concrete, final errors. A logical context mismatch projects core.scope_context_mismatch as authorization. A stale physical binding projects core.scope_stale as conflict. Both are nonretryable and use safe problem descriptors. A worker that performs the same refusal handling for both cases catches both concrete types.
+
 | Exact method | Invocation contract |
 |---|---|
 | `CoreX\Access\Laravel\PrincipalIdentity::fromPrincipal` | Host access adapters convert a trusted CoreX Principal into the Laravel-compatible identity used by native authorization. |
@@ -15,7 +17,7 @@ This catalogue records reviewed methods whose legitimate callers lie outside the
 | `CoreX\Access\Laravel\PrincipalIdentity::setRememberToken` | Laravel session authentication writes a remember token through Authenticatable. |
 | `CoreX\Access\Enums\Scope::weight` | Host native role-matrix tools compare Scope values using the documented none→own→department→workspace→account ordering. |
 | `CoreX\Audit\Laravel\HasAuditLog::bootHasAuditLog` | Eloquent boots this trait on consumer models and registers the audit observer before model lifecycle events are emitted. |
-| `CoreX\Context\Exceptions\ScopeContextMismatch::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
+| `CoreX\Context\Exceptions\ScopeContextMismatch::errorDescriptor` | Context mismatch is a nonretryable authorization failure. The registry projects core.scope_context_mismatch and keeps the diagnostic message private. |
 | `CoreX\CustomFields\Errors\Exceptions\FieldFailure::errorDescriptor` | Laravel error adapters obtain the stable code, category and retryability through DescribesError. |
 | `CoreX\Data\Exceptions\InvalidScopePayload::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Departments\Exceptions\CrossWorkspaceMoveException::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
@@ -43,11 +45,9 @@ This catalogue records reviewed methods whose legitimate callers lie outside the
 | `CoreX\Messaging\PHPStan\Rules\DurablePayloadRule::getNodeType` | PHPStan resolves this registered Rule extension; getNodeType selects the syntax node and processNode emits durable-payload diagnostics. |
 | `CoreX\Messaging\PHPStan\Rules\DurablePayloadRule::processNode` | PHPStan resolves this registered Rule extension; getNodeType selects the syntax node and processNode emits durable-payload diagnostics. |
 | `CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver::reconcile` | Host delivery reconciliation calls NotificationChannelDriver::reconcile after an uncertain provider acknowledgement to recover the delivery outcome. |
-| `CoreX\Notifications\Delivery\Internal\InAppChannelDriver::reconcile` through `CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver::reconcile` | Host delivery reconciliation calls NotificationChannelDriver::reconcile after an uncertain provider acknowledgement to recover the delivery outcome. |
 | `CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable::errorDescriptor` through `Packman\Errors\Contracts\DescribesError::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
-| `CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar::register` | Laravel host composition registers this provider/registrar and invokes its register hook to install the package bindings and routes. |
 | `CoreX\Operations\Cost\Exceptions\BudgetRateLimited::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Operations\Definition\Contracts\OperationDefinitionValidator::validateRoutePair` | Host tooling validates two independently supplied operation declarations for conflicting routes before publishing their API catalogue. |
@@ -118,4 +118,3 @@ This catalogue records reviewed methods whose legitimate callers lie outside the
 | `CoreX\Webhooks\Contracts\WebhookDeliveryStore::forEvent` | Host webhook audit/replay tooling obtains existing delivery references for an event through WebhookDeliveryStore, preserving repository ownership. |
 | `CoreX\Webhooks\Internal\SqlWebhookDeliveryStore::forEvent` through `CoreX\Webhooks\Contracts\WebhookDeliveryStore::forEvent` | Host webhook audit/replay tooling obtains existing delivery references for an event through WebhookDeliveryStore, preserving repository ownership. |
 | `CoreX\Workflow\Contracts\EngineAdapter::start` | A host workflow dispatcher starts a durable intent through EngineAdapter; the stock unavailable adapter rejects execution until an engine is configured. |
-| `CoreX\Workflow\Internal\UnavailableEngineAdapter::start` through `CoreX\Workflow\Contracts\EngineAdapter::start` | A host workflow dispatcher starts a durable intent through EngineAdapter; the stock unavailable adapter rejects execution until an engine is configured. |

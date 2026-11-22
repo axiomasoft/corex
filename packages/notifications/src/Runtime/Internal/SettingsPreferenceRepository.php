@@ -33,7 +33,7 @@ final readonly class SettingsPreferenceRepository implements PreferenceRepositor
     public function get(NotificationContext $context, string $eventType): NotificationPreference
     {
         $scope = $this->scopes->of($context);
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
         $recipient = $this->recipient($scope);
         $state = $this->connection->table('ntf_recipient_state')
             ->where($recipient)
@@ -49,8 +49,8 @@ final readonly class SettingsPreferenceRepository implements PreferenceRepositor
         $recipient = $this->recipient($scope);
 
         return $this->connection->transaction(function () use ($scope, $recipient, $input): NotificationPreference {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-notifications', 'preference', ['recipient' => $recipient, 'preference' => $input]);
-            $this->current->assert($scope, $this->connection);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-notifications', kind: 'preference', witness: ['recipient' => $recipient, 'preference' => $input]);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $this->connection->table('ntf_recipient_state')->insertOrIgnore($recipient + ['preference_revision' => '1']);
             $state = $this->connection->table('ntf_recipient_state')->where($recipient)->lockForUpdate()->firstOrFail();
             $version = NotificationValue::text($state->preference_revision);

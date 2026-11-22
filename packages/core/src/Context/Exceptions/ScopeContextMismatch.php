@@ -11,7 +11,7 @@ use Packman\Errors\Enums\ErrorCategory;
 use Packman\Errors\Exceptions\CodedException;
 
 #[Api(since: '1.0')]
-class ScopeContextMismatch extends CodedException
+final class ScopeContextMismatch extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {

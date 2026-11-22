@@ -65,7 +65,7 @@ final readonly class BulkOperationDefinition
             throw new InvalidArgumentException('A declared bulk kind is required.');
         }
 
-        return new BulkContext($scope, $this->id, $kind, $this->contractHash, $key ?? new OperationKey($this->id, 1), $this->clientId, $this->inputRef, $this->extensionStamp);
+        return new BulkContext(scope: $scope, operationRef: $this->id, kind: $kind, contractFingerprint: $this->contractHash, key: $key ?? new OperationKey(id: $this->id, attempt: 1), clientId: $this->clientId, inputRef: $this->inputRef, extensionStamp: $this->extensionStamp);
     }
 
     private static function assertString(string $value, string $name, int $maximum): void

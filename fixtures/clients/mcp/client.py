@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
-import urllib.request
+from urllib.request import Request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from http_contract import open_request, snapshots
 
 RESOURCE_IDS = (
     "note:uuid:01900000-0000-7000-8000-000000000001",
@@ -19,41 +21,32 @@ IDEMPOTENCY_KEYS = ("idem-uuidv7", "idem-uuid", "idem-ulid", "idem-integer")
 SEMANTIC_ERROR_KEYS = ("code", "category", "path", "retryable", "details")
 
 
-def sha256(payload: bytes) -> str:
-    return hashlib.sha256(payload).hexdigest()
-
-
-def graphql_artifacts(directory: Path) -> list[str]:
-    return sorted(path.name for path in directory.iterdir() if path.suffix in {".graphql", ".gql"})
-
-
 def load_snapshots(directory: Path) -> dict:
-    artifacts = graphql_artifacts(directory)
-    if artifacts:
-        raise SystemExit(f"graphql artifact refused: {', '.join(artifacts)}")
-    manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
-    digests = {}
-    for name, expected in manifest["files"].items():
-        actual = sha256((directory / name).read_bytes())
-        if actual != expected:
-            raise SystemExit(f"stale snapshot digest: {name}")
-        digests[name] = actual
-    operations = json.loads((directory / "operations.json").read_text(encoding="utf-8"))
-    command = next(item for item in operations if item["id"] == "notes.create")
-    return {"digests": digests, "command": command}
+    manifest, documents = snapshots(directory)
+    command = next(item for item in documents["operations.json"] if item["id"] == "notes.create")
+    if command["version"] != "v2":
+        raise SystemExit("tool target must use operation major v2")
+    return {"digests": manifest["files"], "command": command}
 
 
-def rpc(base: str, method: str, params: dict, request_id: int) -> dict:
+def rpc(base: str, method: str, params: dict, request_id: int | None) -> dict:
     payload = json.dumps(
-        {"jsonrpc": "2.0", "id": request_id, "method": method, "params": params},
+        {"jsonrpc": "2.0", "method": method, "params": params, **({"id": request_id} if request_id is not None else {})},
         sort_keys=True,
         separators=(",", ":"),
     ).encode()
-    request = urllib.request.Request(base.rstrip("/") + "/mcp", data=payload, method="POST")
+    request = Request(base.rstrip("/") + "/mcp", data=payload, method="POST")
     request.add_header("content-type", "application/json")
     request.add_header("accept", "application/json")
-    with urllib.request.urlopen(request) as response:
-        body = json.loads(response.read())
+    with open_request(request) as response:
+        raw = response.read()
+        if request_id is None:
+            if response.status != 202 or raw:
+                raise SystemExit("initialization notification must be accepted without a body")
+            return {}
+        body = json.loads(raw)
+    if body.get("jsonrpc") != "2.0" or body.get("id") != request_id:
+        raise SystemExit("MCP response does not match the JSON-RPC request")
     if body.get("error"):
         raise SystemExit(f"mcp protocol error: {body['error']}")
     return body["result"]
@@ -70,10 +63,18 @@ def semantic_content(result: dict) -> dict:
 
 def run(base: str, contract: dict, mode: str) -> dict:
     command = contract["command"]
-    listed = rpc(base, "tools/list", {}, 1)
-    tool = next((item for item in listed["tools"] if item["name"] == command["id"]), None)
-    if tool is None or tool.get("contractHash") != command["contract_hash"]:
-        raise SystemExit("published tool schema does not match operations.json")
+    initialized = rpc(base, "initialize", {"protocolVersion": "2025-11-25", "capabilities": {}}, 1)
+    if initialized.get("protocolVersion") != "2025-11-25":
+        raise SystemExit("MCP protocol version drifted")
+    rpc(base, "notifications/initialized", {}, None)
+    listed = rpc(base, "tools/list", {}, 2)
+    tool = next((item for item in listed["tools"] if item.get("operationRef") == "v2:" + command["id"]), None)
+    if (tool is None or tool.get("toolVersion") != "v2"
+            or tool.get("operationContractHash") != command["contract_hash"]
+            or tool.get("contractHash") in {None, command["contract_hash"]}
+            or tool.get("inputSchema") != command["request_schema"]
+            or tool.get("outputSchema") != command["response_schema"]):
+        raise SystemExit("published tool does not match the compiled v2 operation contract")
     calls = []
     for resource_id, key in zip(RESOURCE_IDS, IDEMPOTENCY_KEYS, strict=True):
         if mode == "policy" and key not in {"idem-uuidv7", "idem-uuid"}:
@@ -82,14 +83,14 @@ def run(base: str, contract: dict, mode: str) -> dict:
             base,
             "tools/call",
             {
-                "name": command["id"],
+                "name": tool["name"],
                 "arguments": {"resource_id": resource_id, "title": "equipment"},
                 "operationKey": key,
             },
-            2,
+            3 + len(calls),
         )
         calls.append({"key": key, "is_error": bool(result.get("isError")), "content": semantic_content(result)})
-    return {"tool": command["id"], "contract_hash": command["contract_hash"], "calls": calls, "digests": contract["digests"]}
+    return {"tool": tool["name"], "contract_hash": command["contract_hash"], "calls": calls, "digests": contract["digests"]}
 
 
 def main() -> None:

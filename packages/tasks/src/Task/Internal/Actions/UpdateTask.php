@@ -51,7 +51,7 @@ final readonly class UpdateTask implements UpdateTaskCommand
 
     private function update(UpdateTaskData $data, TenantContext $context, Connection $connection): TaskReference
     {
-        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-update', ['task' => $data->taskId]);
+        ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex-tasks', kind: 'task-update', witness: ['task' => $data->taskId]);
         $this->validateProvidedFields($data);
         $connectionName = $connection->getName();
 

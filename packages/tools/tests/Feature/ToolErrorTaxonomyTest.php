@@ -7,6 +7,7 @@ namespace CoreX\Tools\Tests\Feature;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Cost\Exceptions\BudgetRateLimited;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
@@ -43,7 +44,6 @@ use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 final class ToolErrorTaxonomyTest extends TestCase
 {
@@ -63,8 +63,8 @@ final class ToolErrorTaxonomyTest extends TestCase
         $compiled = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::tool('notes.read', CountingHandler::class, 'notes.read', $schema, $schema, 'read', 'read-only')->titled('Read', 'Read'),
-                Api::operation('notes.read', 'POST', '/notes', CountingHandler::class, 'notes.read', $schema, $schema),
-                Api::exposeTool('notes.read', 'v1', 'notes.exposed', 'v1', 'read', 'read-only', $schema, $schema, ['name' => 'name'])->titled('Exposed', 'Exposed'),
+                Api::operation('notes.read', 'POST', '/notes', CountingHandler::class, 'notes.read', $schema, $schema, version: 'v2'),
+                Api::exposeTool('notes.read', 'v2', 'notes.exposed', 'v1', 'read', 'read-only', $schema, $schema, ['name' => 'name'])->titled('Exposed', 'Exposed'),
             ]),
         ], installedPackages: []);
         $this->modules = new CatalogueModuleFixture($compiled);
@@ -177,7 +177,7 @@ final class ToolErrorTaxonomyTest extends TestCase
     public static function operationErrors(): iterable
     {
         yield 'registered operations code unchanged' => [false];
-        yield 'rate limit translated' => [true];
+        yield 'registered budget rate limit unchanged' => [true];
     }
 
     #[DataProvider('operationErrors')]
@@ -185,11 +185,11 @@ final class ToolErrorTaxonomyTest extends TestCase
     {
         $operations = $this->createMock(OperationInvoker::class);
         $operations->expects(self::once())->method('invoke')->willThrowException($rateLimited
-            ? new TooManyRequestsHttpException
+            ? new BudgetRateLimited(7)
             : new ApiError(OperationsErrorCode::Forbidden, 403, 'Forbidden.'));
         $this->app->instance(OperationInvoker::class, $operations);
         $result = resolve(ToolInvoker::class)->invoke($this->context, $this->makeToolCall('notes.exposed'));
-        $expected = $rateLimited ? ToolsErrorCode::RateLimited->value : OperationsErrorCode::Forbidden->value;
+        $expected = $rateLimited ? OperationsErrorCode::BudgetRateLimited->value : OperationsErrorCode::Forbidden->value;
         self::assertSame($expected, $result->errorCode);
         self::assertSame($expected, resolve(ProblemRegistry::class)->fromWire($result->errorCode)->code->value());
         self::assertSame(ToolOutcome::NotExecuted, $result->outcome);

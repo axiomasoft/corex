@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Operations\Bulk\Laravel;
 
 use CoreX\Operations\Bulk\Data\BulkOptions;
-use Illuminate\Contracts\Config\Repository;
+use CoreX\Operations\Errors\Laravel\OperationErrorBoundary;
+use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Override;
@@ -32,18 +33,21 @@ final class BulkHttpRegistrar implements PackageRegistrar
 
     public function registerRoutes(Application $app): void
     {
-        $configured = $app->make(Repository::class)->get('corex-operations.routes.prefix', 'api');
-        $prefix = is_string($configured) ? $configured : 'api';
+        $options = $app->make(ApiOptions::class);
 
-        Route::prefix($prefix)->group(self::routes(...));
+        if ($options->routesEnabled && ! Route::has('corex.api.bulk.submit')) {
+            Route::prefix($options->routePrefix)
+                ->middleware([OperationErrorBoundary::class, ...$options->routeMiddleware])
+                ->group(self::routes(...));
+        }
     }
 
     private static function routes(): void
     {
-        Route::post('v1/bulk-operations', [BulkRouteRegistrar::class, 'submit'])->name('corex.api.bulk.submit');
-        Route::get('v1/bulk-operations/{id}', [BulkRouteRegistrar::class, 'show'])->name('corex.api.bulk.show');
-        Route::post('v1/bulk-operations/{id}/cancel', [BulkRouteRegistrar::class, 'cancel'])->name('corex.api.bulk.cancel');
-        Route::get('v1/bulk-operations/{id}/result', [BulkRouteRegistrar::class, 'result'])->name('corex.api.bulk.result');
-        Route::get('v1/bulk-operations/{id}/failures', [BulkRouteRegistrar::class, 'failures'])->name('corex.api.bulk.failures');
+        Route::post('v2/bulk-operations', [BulkRouteRegistrar::class, 'submit'])->name('corex.api.bulk.submit');
+        Route::get('v2/bulk-operations/{id}', [BulkRouteRegistrar::class, 'show'])->name('corex.api.bulk.show');
+        Route::post('v2/bulk-operations/{id}/cancel', [BulkRouteRegistrar::class, 'cancel'])->name('corex.api.bulk.cancel');
+        Route::get('v2/bulk-operations/{id}/result', [BulkRouteRegistrar::class, 'result'])->name('corex.api.bulk.result');
+        Route::get('v2/bulk-operations/{id}/failures', [BulkRouteRegistrar::class, 'failures'])->name('corex.api.bulk.failures');
     }
 }

@@ -31,7 +31,7 @@ final readonly class IndexTarget
             ScopeIdentity::opaque($allocationId);
         }
 
-        if ($generation < 1 || $uid !== self::uidFor($scope, $entity, $backend, $cluster, $generation, $allocationId)
+        if ($generation < 1 || $uid !== self::uidFor(scope: $scope, entity: $entity, backend: $backend, cluster: $cluster, generation: $generation, allocationId: $allocationId)
             || preg_match('/\A[a-f0-9]{64}\z/D', $mappingDigest) !== 1) {
             throw new InvalidArgumentException('Invalid index namespace.');
         }

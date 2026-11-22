@@ -16,6 +16,13 @@ use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
+use CoreX\Operations\Cost\Contracts\BudgetExecution;
+use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
+use CoreX\Operations\Cost\Data\BudgetAttempt;
+use CoreX\Operations\Cost\Data\BudgetInvocationResult;
+use CoreX\Operations\Cost\Data\BudgetReceipt;
+use CoreX\Operations\Cost\Internal\BudgetAdmission;
+use CoreX\Operations\Cost\Internal\SqlOperationBudget;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
@@ -23,7 +30,6 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\OperationsServiceProvider;
@@ -35,14 +41,15 @@ use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
-use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
-use CoreX\Tools\Internal\ToolDescriptorFactory;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
+use CoreX\Tools\Mcp\Laravel\McpToolEndpoint;
 use CoreX\Tools\ToolsServiceProvider;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Filesystem\Filesystem;
@@ -50,12 +57,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
+use Packman\Config\Data\SecretRef;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use PDO;
+use PDOException;
+use PHPUnit\Framework\Attributes\TestWith;
+use Psr\Clock\ClockInterface;
+use RuntimeException;
 
 require_once dirname(__DIR__, 4).'/tests/Support/WorkScopeFixture.php';
 
@@ -63,6 +76,7 @@ final class ToolIdempotentInvocationTest extends TestCase
 {
     protected function defineEnvironment($app): void
     {
+        $app['config']->set('corex-operations.routes.middleware', [TrustedTransportClient::class]);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('database.connections.api_schema_budget', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
@@ -96,6 +110,17 @@ final class ToolIdempotentInvocationTest extends TestCase
     {
         parent::setUp();
         $this->connection = DB::connection('sqlite');
+        $this->prepareTenantStorage();
+        $this->tenants = new ContextFixture;
+        $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
+        $this->principal = new IdentityFixture;
+        $this->authorizer = new ToolIdempotentInvocationReplayAuthorizerFixture;
+        $this->operationAuthorizer = new ToolIdempotentInvocationOperationAuthorizerFixture;
+        $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([], installedPackages: []));
+    }
+
+    private function prepareTenantStorage(): void
+    {
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
         resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
@@ -103,12 +128,6 @@ final class ToolIdempotentInvocationTest extends TestCase
             $table->id();
             $table->string('value');
         });
-        $this->tenants = new ContextFixture;
-        $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-        $this->principal = new IdentityFixture;
-        $this->authorizer = new ToolIdempotentInvocationReplayAuthorizerFixture;
-        $this->operationAuthorizer = new ToolIdempotentInvocationOperationAuthorizerFixture;
-        $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([], installedPackages: []));
     }
 
     protected function tearDown(): void
@@ -119,6 +138,232 @@ final class ToolIdempotentInvocationTest extends TestCase
     }
 
     public function test_http_key_and_exposed_tool_operation_key_share_one_effect(): void
+    {
+        $guard = $this->mountTransport();
+        $headers = ['Authorization' => 'Bearer test-transport-credential'];
+        $missing = $this->postJson('/api/v2/notes', ['name' => 'alpha'], $headers);
+        $missing->assertUnprocessable()->assertJsonPath('code', 'operations.idempotency_key_required');
+        self::assertSame(0, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
+
+        $rpc = ['jsonrpc' => '2.0', 'id' => 1];
+        $catalogue = $this->postJson('/mcp', [...$rpc, 'method' => 'tools/list'], $headers);
+        $catalogue->assertOk()->assertJsonPath('result.tools.0.operationRef', 'v2:notes.create');
+        $name = $catalogue->json('result.tools.0.name');
+        self::assertIsString($name);
+
+        $http = $this->postJson('/api/v2/notes', ['name' => 'alpha'], [...$headers, 'Idempotency-Key' => 'shared-key']);
+        $http->assertOk()->assertJsonPath('meta.replayed', false);
+        $this->authorizer->removeSecret = true;
+        $call = [...$rpc, 'method' => 'tools/call',
+            'params' => ['name' => $name, 'arguments' => ['label' => 'alpha'], 'operationKey' => 'shared-key']];
+        $replay = $this->postJson('/mcp', $call, $headers);
+        $replay->assertOk()->assertJsonPath('result.outcome', 'completed')->assertJsonPath('result.replayed', true)
+            ->assertJsonPath('result.structuredContent.name', 'alpha')->assertJsonMissingPath('result.structuredContent.secret');
+
+        $spoof = $call;
+        $spoof['params']['client_id'] = 'client-1';
+        $this->postJson('/mcp', $spoof)->assertUnauthorized();
+        $this->postJson('/mcp', $spoof, $headers)->assertOk()->assertJsonPath('error.code', -32602);
+
+        $invalidName = str_repeat('x', 13);
+        $invalid = $this->postJson('/api/v2/notes', ['name' => $invalidName], [...$headers, 'Idempotency-Key' => 'invalid'])
+            ->assertUnprocessable()->assertJsonPath('path', '/name');
+        $call['params']['arguments']['label'] = $invalidName;
+        $this->postJson('/mcp', $call, $headers)->assertOk()->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', $invalid->json('code'))
+            ->assertJsonPath('result.structuredContent.status', 422)
+            ->assertJsonPath('result.structuredContent.path', $invalid->json('path'));
+        $call['params']['arguments']['label'] = 'changed';
+        $this->postJson('/mcp', $call, $headers)->assertOk()->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', 'operations.idempotency_conflict')
+            ->assertJsonPath('result.structuredContent.status', 409);
+
+        $call['params']['arguments']['label'] = 'alpha';
+        $this->authorizer->deny = true;
+        $guard->storedReplay = new ToolResult(
+            outcome: ToolOutcome::Committed,
+            structuredData: JsonObjectFactory::fromArray(['name' => 'alpha', 'secret' => 'protected']),
+            errorCode: null,
+            operationKey: 'shared-key',
+            replayed: true,
+        );
+        foreach ([false, true] as $callBeforeReplay) {
+            $guard->callBeforeReplay = $callBeforeReplay;
+            $this->postJson('/mcp', $call, $headers)->assertOk()
+                ->assertJsonPath('result.isError', true)
+                ->assertJsonPath('result.structuredContent.code', ToolsErrorCode::InternalError->value)
+                ->assertJsonMissingPath('result.structuredContent.secret');
+        }
+        $guard->storedReplay = null;
+        $this->postJson('/mcp', $call, $headers)->assertOk()
+            ->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', OperationsErrorCode::Forbidden->value)
+            ->assertJsonMissingPath('result.structuredContent.secret');
+        self::assertSame(1, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
+        self::assertSame(1, $this->connection->table('sys_api_idempotency')->count());
+    }
+
+    public function test_exposed_tool_enforces_its_narrower_argument_schema_without_effects_or_receipts(): void
+    {
+        $this->mountTransport();
+        $headers = ['Authorization' => 'Bearer test-transport-credential'];
+        $call = ['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/call',
+            'params' => ['name' => 'notes_create__v1', 'arguments' => ['label' => 'beta']]];
+
+        $this->postJson('/mcp', $call, $headers)->assertOk()->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', OperationsErrorCode::IdempotencyKeyRequired->value)
+            ->assertJsonPath('result.structuredContent.status', 422);
+        $call['params']['operationKey'] = 'tool-only-invalid';
+        $this->postJson('/mcp', $call, $headers)->assertOk()->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', ToolsErrorCode::InputInvalid->value)
+            ->assertJsonPath('result.structuredContent.status', 422);
+        self::assertSame(0, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(0, $this->connection->table('idempotent_effects')->count());
+        self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
+
+        $this->postJson('/api/v2/notes', ['name' => 'beta'], [...$headers, 'Idempotency-Key' => 'tool-only-invalid'])
+            ->assertOk()->assertJsonPath('data.name', 'beta');
+        $call['params']['arguments']['label'] = 'alpha';
+        $call['params']['operationKey'] = 'valid-in-both';
+        $this->postJson('/mcp', $call, $headers)->assertOk()->assertJsonPath('result.outcome', 'completed')
+            ->assertJsonPath('result.structuredContent.name', 'alpha');
+        self::assertSame(2, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(2, $this->connection->table('sys_api_idempotency')->count());
+    }
+
+    #[TestWith([false], 'operation transaction')]
+    #[TestWith([true], 'outer host transaction')]
+    public function test_mcp_keeps_a_committed_effect_unknown_until_same_key_settlement_recovery(bool $outerTransaction): void
+    {
+        $guard = $this->mountTransport();
+        $guard->connection = $outerTransaction ? $this->connection : null;
+        $recovered = [];
+        $budget = $this->createMock(BudgetExecution::class);
+        $budget->expects(self::once())->method('invokeTransactional')->willReturnCallback(
+            static fn (OperationInvocation $invocation, Closure $effect, BudgetAttempt $attempt): BudgetInvocationResult => new BudgetInvocationResult(
+                result: $effect(static function (): void {}),
+                receipt: new BudgetReceipt(reservationId: $attempt->reservationId, actualUnits: 2),
+            ),
+        );
+        $budget->expects(self::exactly(2))->method('recover')->willReturnCallback(static function (BudgetReceipt $receipt) use (&$recovered): void {
+            $recovered[] = $receipt;
+
+            if (count($recovered) === 1) {
+                throw new RuntimeException('Fixture lost the settlement acknowledgement after the tenant commit.');
+            }
+        });
+        $this->app->instance(BudgetExecution::class, $budget);
+
+        $headers = ['Authorization' => 'Bearer test-transport-credential'];
+        $call = ['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/call',
+            'params' => ['name' => 'notes_create__v1', 'arguments' => ['label' => 'alpha'], 'operationKey' => 'settlement-key']];
+        $this->postJson('/mcp', $call, $headers)->assertOk()
+            ->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', OperationsErrorCode::ReconciliationRequired->value)
+            ->assertJsonPath('result.structuredContent.status', 409)
+            ->assertJsonPath('result.structuredContent.retryable', false)
+            ->assertJsonPath('result.outcome', 'unknown');
+        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
+        self::assertSame('completed', $this->connection->table('sys_api_idempotency')->value('state'));
+
+        $this->postJson('/mcp', $call, $headers)->assertOk()
+            ->assertJsonPath('result.outcome', 'completed')->assertJsonPath('result.replayed', true)
+            ->assertJsonPath('result.structuredContent.name', 'alpha');
+        self::assertEquals($recovered[0], $recovered[1]);
+        self::assertSame(1, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
+        self::assertSame(1, $this->connection->table('sys_api_idempotency')->count());
+    }
+
+    public function test_mcp_recovers_the_same_receipt_after_the_host_loses_native_commit_acknowledgement(): void
+    {
+        $pdo = new class('sqlite::memory:') extends PDO
+        {
+            public bool $failNextBegin = false;
+
+            public bool $loseNextCommitAcknowledgement = false;
+
+            public function exec(string $statement): int|false
+            {
+                if ($this->failNextBegin && str_starts_with($statement, 'BEGIN ')) {
+                    $this->failNextBegin = false;
+
+                    throw new PDOException('Fixture native BEGIN failed.');
+                }
+
+                return parent::exec($statement);
+            }
+
+            public function commit(): bool
+            {
+                $committed = parent::commit();
+
+                if ($committed && $this->loseNextCommitAcknowledgement) {
+                    $this->loseNextCommitAcknowledgement = false;
+
+                    throw new PDOException('Fixture lost the native COMMIT acknowledgement.');
+                }
+
+                return $committed;
+            }
+        };
+        $this->connection->setPdo($pdo);
+        $this->prepareTenantStorage();
+        $guard = $this->mountTransport();
+        $guard->connection = $this->connection;
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
+        $budget = resolve(ApiSchemaConnections::class)->budget();
+        $this->app->instance(BudgetExecution::class, new BudgetAdmission(
+            budget: new SqlOperationBudget(
+                connection: $budget,
+                clock: resolve(ClockInterface::class),
+                scopeHmacSecret: new SecretRef('fixture-commit-ack'),
+            ),
+            estimator: resolve(OperationCostEstimator::class),
+            installationId: 'test-installation',
+            exceptions: resolve(ExceptionHandler::class),
+        ));
+        $headers = ['Authorization' => 'Bearer test-transport-credential'];
+        $call = ['jsonrpc' => '2.0', 'id' => 1, 'method' => 'tools/call',
+            'params' => ['name' => 'notes_create__v1', 'arguments' => ['label' => 'alpha'], 'operationKey' => 'native-commit-key']];
+
+        $pdo->failNextBegin = true;
+        $this->postJson('/mcp', $call, $headers)->assertStatus(500)
+            ->assertJsonPath('code', 'core.internal_error')
+            ->assertDontSee('Fixture native BEGIN failed.');
+        self::assertSame(0, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
+        self::assertSame(0, $budget->table('sys_api_budget_reservations')->count());
+
+        $pdo->loseNextCommitAcknowledgement = true;
+        $this->postJson('/mcp', $call, $headers)->assertOk()
+            ->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', OperationsErrorCode::ReconciliationRequired->value)
+            ->assertJsonPath('result.structuredContent.status', 409)
+            ->assertJsonPath('result.structuredContent.retryable', false)
+            ->assertJsonPath('result.outcome', 'unknown')
+            ->assertDontSee('Fixture lost the native COMMIT acknowledgement.');
+        self::assertFalse($pdo->inTransaction());
+        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
+        self::assertSame('completed', $this->connection->table('sys_api_idempotency')->value('state'));
+        $hold = $budget->table('sys_api_budget_reservations')->sole();
+        self::assertSame('held', $hold->state);
+
+        $this->postJson('/mcp', $call, $headers)->assertOk()
+            ->assertJsonPath('result.outcome', 'completed')->assertJsonPath('result.replayed', true)
+            ->assertJsonPath('result.structuredContent.name', 'alpha');
+        $settlement = $budget->table('sys_api_budget_reservations')->sole();
+        self::assertSame($hold->id, $settlement->id);
+        self::assertSame('settled', $settlement->state);
+        self::assertSame($hold->estimate, $settlement->charged);
+        self::assertSame(1, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
+        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
+        self::assertSame(1, $this->connection->table('sys_api_idempotency')->count());
+    }
+
+    private function mountTransport(): ToolIdempotentInvocationGuard
     {
         // Install the same declaring module that owns the HTTP and tool operation.
         $files = new Filesystem;
@@ -134,11 +379,13 @@ final class ToolIdempotentInvocationTest extends TestCase
         $files->put($fixture.'/vendor/composer/installed.json', json_encode($catalogue, JSON_THROW_ON_ERROR));
         $this->app->setBasePath($fixture);
         $schema = ['type' => 'object'];
+        $toolInput = ['type' => 'object', 'additionalProperties' => false, 'required' => ['label'],
+            'properties' => ['label' => ['type' => 'string', 'enum' => ['alpha', 'changed']]]];
         $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.create', 'POST', '/notes', ToolIdempotentInvocationIdempotentHttpHandler::class, 'notes.write', $schema, $schema, ['name' => ['required', 'string']])
+                Api::operation('notes.create', 'POST', '/notes', ToolIdempotentInvocationIdempotentHttpHandler::class, 'notes.write', $schema, $schema, ['name' => ['required', 'string', 'max:12']], version: 'v2')
                     ->asCommand()->idempotency('required')->effect('tenant_transactional'),
-                Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'write', 'domain-key', $schema, $schema, ['name' => 'name']),
+                Api::exposeTool('notes.create', 'v2', 'notes.create', 'v1', 'write', 'domain-key', $toolInput, $schema, ['label' => 'name']),
             ]),
         ], installedPackages: []);
         $modules = new ModuleFixture($registry);
@@ -173,52 +420,13 @@ final class ToolIdempotentInvocationTest extends TestCase
                 return true;
             }
         });
-        $this->app->instance(ToolExecutionGuard::class, new class implements ToolExecutionGuard
-        {
-            public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
-            {
-                return $effect();
-            }
-        });
+        $guard = new ToolIdempotentInvocationGuard;
+
+        $this->app->instance(ToolExecutionGuard::class, $guard);
         ToolIdempotentInvocationIdempotentHttpHandler::$calls = 0;
-        $request = static fn (?string $key): Request => Request::create(
-            '/api/v1/notes',
-            'POST',
-            server: array_filter(['CONTENT_TYPE' => 'application/json', 'HTTP_IDEMPOTENCY_KEY' => $key]),
-            content: '{"name":"alpha"}',
-        );
-        $dispatcher = $this->app->make(OperationDispatcher::class);
-        $missing = $dispatcher->dispatch($request(null), 'v1', 'notes');
-        self::assertSame(422, $missing->getStatusCode());
-        self::assertSame(0, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
-        self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
+        $this->app['router']->post('/mcp', McpToolEndpoint::class)->middleware(TrustedTransportClient::class);
 
-        $http = $dispatcher->dispatch($request('shared-key'), 'v1', 'notes');
-        $httpReplay = $dispatcher->dispatch($request('shared-key'), 'v1', 'notes');
-        $this->authorizer->removeSecret = true;
-        $toolDeclaration = collect($registry->api)->first(
-            static fn (Api $api): bool => $api->mode === 'tool' && $api->toolCode === 'notes.create',
-        );
-        self::assertInstanceOf(Api::class, $toolDeclaration);
-        $tool = $this->app->make(ToolInvoker::class)->invoke(
-            $this->invocation()->context,
-            new ToolCall(
-                code: 'notes.create',
-                toolVersion: 'v1',
-                expectedContractHash: ToolDescriptorFactory::fromDeclaration($toolDeclaration)->contractHash,
-                arguments: JsonObjectFactory::fromArray(['name' => 'alpha']),
-                requestId: 'tool-request',
-                operationKey: 'shared-key',
-            ),
-        );
-
-        self::assertSame(200, $http->getStatusCode());
-        self::assertSame(200, $httpReplay->getStatusCode());
-        self::assertSame(ToolOutcome::Committed, $tool->outcome);
-        self::assertTrue($tool->replayed);
-        self::assertSame(['name' => 'alpha'], json_decode((string) $tool->structuredData?->canonicalJson, true, flags: JSON_THROW_ON_ERROR));
-        self::assertSame(1, ToolIdempotentInvocationIdempotentHttpHandler::$calls);
-        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
+        return $guard;
     }
 
     private function invocation(
@@ -233,7 +441,7 @@ final class ToolIdempotentInvocationTest extends TestCase
             context: ResolvedContexts::make(
                 tenantContext: $this->tenants->current(),
                 authenticatedPrincipal: $this->principal,
-                requestMetadata: new InvocationMetadata($requestId, 'v1', 'notes.create', $method),
+                requestMetadata: new InvocationMetadata($requestId, 'v2', 'notes.create', $method),
             ),
             input: JsonDocuments::capture($input),
             parameters: ['parent' => 'root'],
@@ -249,7 +457,7 @@ final class ToolIdempotentInvocationTest extends TestCase
         return new Operation(
             module: 'example/notes',
             id: 'notes.create',
-            version: 'v1',
+            version: 'v2',
             method: 'POST',
             path: '/notes',
             ability: 'notes.write',
@@ -263,6 +471,40 @@ final class ToolIdempotentInvocationTest extends TestCase
             contractHash: $contractHash ?? hash('sha256', 'notes.create/v1'),
             effectMode: $effectMode,
         );
+    }
+}
+
+final class ToolIdempotentInvocationGuard implements ToolExecutionGuard
+{
+    public ?Connection $connection = null;
+
+    public ?ToolResult $storedReplay = null;
+
+    public bool $callBeforeReplay = false;
+
+    public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
+    {
+        if ($this->storedReplay === null) {
+            return $this->connection === null ? $effect() : $this->connection->transaction($effect);
+        }
+
+        if ($this->callBeforeReplay) {
+            $effect();
+        }
+
+        return $this->storedReplay;
+    }
+}
+
+final class TrustedTransportClient
+{
+    public function handle(Request $request, Closure $next): mixed
+    {
+        if ($request->bearerToken() === 'test-transport-credential') {
+            $request->attributes->set('corex.client_id', 'client-1');
+        }
+
+        return $next($request);
     }
 }
 

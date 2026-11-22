@@ -6,6 +6,7 @@ namespace CoreX\ImportExport\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Data\DataScope;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
 use Illuminate\Database\ConnectionInterface;
@@ -19,7 +20,7 @@ final readonly class SessionRuntime
 
     public function forTransfer(string $transferId, ?string $exportRequest = null): self
     {
-        return new self($this->current, $transferId, $exportRequest);
+        return new self(current: $this->current, transferId: $transferId, exportRequest: $exportRequest);
     }
 
     public function assertTransfer(string $transferId): void
@@ -39,8 +40,8 @@ final readonly class SessionRuntime
     public function assertCurrent(ConnectionInterface $connection, DataScope $scope): void
     {
         try {
-            $this->current->assert($scope, $connection);
-        } catch (ScopeContextMismatch $exception) {
+            $this->current->assert(scope: $scope, connection: $connection);
+        } catch (ScopeContextMismatch|ScopeStale $exception) {
             throw new SessionUnavailable('The transfer session does not belong to the active tenant connection.', previous: $exception);
         }
     }

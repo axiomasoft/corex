@@ -7,6 +7,7 @@ namespace CoreX\Messaging\Internal\Commands;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\OutboxRelay;
@@ -74,7 +75,7 @@ final class RelayOutbox extends Command
                 try {
                     try {
                         $envelope = $message->envelope;
-                        $failure = $runner->runStored($envelope->scope, $envelope->workProof(), function () use ($envelope, $relay, $message): ?Throwable {
+                        $failure = $runner->runStored(scope: $envelope->scope, proof: $envelope->workProof(), work: function () use ($envelope, $relay, $message): ?Throwable {
                             $contract = $this->laravel->make(MessageContractRegistry::class)->get($envelope->name, $envelope->contractVersion);
                             $contract->validateFact($envelope);
                             $relay->assertClaim($message);
@@ -95,8 +96,8 @@ final class RelayOutbox extends Command
                         $published++;
                     } catch (OutboxLeaseLost $lost) {
                         throw $lost;
-                    } catch (InvalidMessage|UnknownMessageContract|ScopeContextMismatch $error) {
-                        $relay->quarantine($message, $error);
+                    } catch (InvalidMessage|UnknownMessageContract|ScopeContextMismatch|ScopeStale $error) {
+                        $relay->quarantine(message: $message, error: $error);
                     } catch (Throwable $error) {
                         $relay->releaseWithBackoff(message: $message, error: $error);
                         $deferred++;

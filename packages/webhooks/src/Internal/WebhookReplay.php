@@ -63,7 +63,7 @@ final readonly class WebhookReplay
         $this->assertScope($scope);
 
         return $this->connection->transaction(function () use ($scope, $deliveryId, $explicit, $auditReason): array {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'replay', ['delivery' => $deliveryId]);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-webhooks', kind: 'replay', witness: ['delivery' => $deliveryId]);
             $this->assertScope($scope);
             $row = $this->scopedDeliveries($scope)->where('id', $deliveryId)->lockForUpdate()->first();
 
@@ -109,7 +109,7 @@ final readonly class WebhookReplay
                 registry: $registry,
                 accountId: $scope->accountId,
                 workspaceId: $scope->workspaceId,
-                apiMajor: 'v1',
+                apiMajor: 'v2',
                 operationId: 'webhook-deliveries.range-replay',
                 filters: $filters,
                 fields: self::RangeFields,
@@ -165,7 +165,7 @@ final readonly class WebhookReplay
             registry: $registry,
             accountId: $scope->accountId,
             workspaceId: $scope->workspaceId,
-            apiMajor: 'v1',
+            apiMajor: 'v2',
             operationId: 'webhook-deliveries.range-replay',
             filters: $filters,
             fields: self::RangeFields,
@@ -235,17 +235,17 @@ final readonly class WebhookReplay
             throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
         }
 
-        if (! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'body_hash')), hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'body'))))) {
+        if (! hash_equals(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body_hash')), hash('sha256', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body'))))) {
             throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook replay body no longer matches its receipt.', category: ErrorCategory::Conflict);
         }
 
-        $original = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+        $original = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
 
-        if (DatabaseValue::field($row, 'replay_of') !== null) {
+        if (DatabaseValue::field(row: $row, name: 'replay_of') !== null) {
             throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Replay requires the original webhook delivery.', category: ErrorCategory::Conflict);
         }
 
-        $attempt = DatabaseValue::integer(DatabaseValue::field($row, 'replay_count'));
+        $attempt = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count'));
         $changed = $this->scopedDeliveries($scope)->where('id', $original)->where('status', $status)
             ->where('replay_count', $attempt)->whereNull('lease_owner')
             ->update(['replay_count' => $attempt + 1]);
@@ -255,40 +255,40 @@ final readonly class WebhookReplay
         }
 
         $id = (string) Str::uuid7();
-        $subscriptionId = DatabaseValue::text(DatabaseValue::field($row, 'subscription_id'));
-        $source = DatabaseValue::text(DatabaseValue::field($row, 'event_source'));
-        $event = DatabaseValue::text(DatabaseValue::field($row, 'event_id'));
-        $key = WebhookWork::key($scope, $subscriptionId, $source, $event, $id);
+        $subscriptionId = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'subscription_id'));
+        $source = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'event_source'));
+        $event = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'event_id'));
+        $key = WebhookWork::key(scope: $scope, subscription: $subscriptionId, source: $source, event: $event, replay: $id);
         $digest = WebhookWork::digest(
-            DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot')), DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
-            DatabaseValue::text(DatabaseValue::field($row, 'topic')), DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')), DatabaseValue::integer(DatabaseValue::field($row, 'subscription_revision')), DatabaseValue::text(DatabaseValue::field($row, 'major')),
+            endpoint: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'endpoint_snapshot')), bodyHash: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body_hash')),
+            topic: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'topic')), version: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'topic_version')), subscriptionRevision: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'subscription_revision')), major: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'major')),
         );
-        $proof = $this->issuer->issue($scope, WebhookWork::Owner, WebhookWork::reference($id, $key, $digest));
+        $proof = $this->issuer->issue(scope: $scope, owner: WebhookWork::Owner, reference: WebhookWork::reference(id: $id, key: $key, digest: $digest));
         $this->connection->table('sys_api_webhook_deliveries')->insert([
             ...WebhookDeliveryScope::logical($scope),
             ...WebhookDeliveryScope::fence($scope),
             'id' => $id,
             'subscription_id' => $subscriptionId,
-            'subscription_revision' => DatabaseValue::field($row, 'subscription_revision'),
+            'subscription_revision' => DatabaseValue::field(row: $row, name: 'subscription_revision'),
             'event_id' => $event,
             'event_source' => $source,
             'replay_id' => $id,
             'replay_of' => $original,
             'effect_key' => $key,
             'scope_seal' => $proof->seal,
-            'topic' => DatabaseValue::field($row, 'topic'),
-            'topic_version' => DatabaseValue::field($row, 'topic_version'),
-            'major' => DatabaseValue::field($row, 'major'),
-            'endpoint_snapshot' => DatabaseValue::field($row, 'endpoint_snapshot'),
+            'topic' => DatabaseValue::field(row: $row, name: 'topic'),
+            'topic_version' => DatabaseValue::field(row: $row, name: 'topic_version'),
+            'major' => DatabaseValue::field(row: $row, name: 'major'),
+            'endpoint_snapshot' => DatabaseValue::field(row: $row, name: 'endpoint_snapshot'),
             'scope' => JsonCanonical::encode($this->scopes->encode($scope)),
-            'body' => DatabaseValue::field($row, 'body'),
-            'body_hash' => DatabaseValue::field($row, 'body_hash'),
+            'body' => DatabaseValue::field(row: $row, name: 'body'),
+            'body_hash' => DatabaseValue::field(row: $row, name: 'body_hash'),
             'status' => 'pending',
             'attempt' => 0,
             'replay_count' => 0,
             'next_attempt_at' => $now,
             'created_at' => $now,
-            'expires_at' => DatabaseValue::field($row, 'expires_at'),
+            'expires_at' => DatabaseValue::field(row: $row, name: 'expires_at'),
         ]);
 
         $context = [
@@ -315,7 +315,7 @@ final readonly class WebhookReplay
 
         return [
             'attempt' => 0,
-            'body_hash' => DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
+            'body_hash' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body_hash')),
             'id' => $id,
             'replay_of' => $original,
             'replay_count' => $attempt + 1,
@@ -349,12 +349,14 @@ final readonly class WebhookReplay
 
     private function assertScope(DataScope $scope): void
     {
-        $this->contexts->assert($scope, $this->connection);
+        $this->contexts->assert(scope: $scope, connection: $this->connection);
     }
 
     private function scopedDeliveries(DataScope $scope): Builder
     {
-        return WebhookDeliveryScope::constrain($this->connection->table('sys_api_webhook_deliveries'), $scope);
+        return WebhookDeliveryScope::constrain(
+            query: $this->connection->table('sys_api_webhook_deliveries')->where('major', 'v2'), scope: $scope,
+        );
     }
 
     private static function rangeOrdering(): OrderingRegistry
@@ -362,7 +364,7 @@ final readonly class WebhookReplay
         return OrderingFactory::fromOperations([new Operation(
             module: 'axiomasoft/corex-operations',
             id: 'webhook-deliveries.range-replay',
-            version: 'v1',
+            version: 'v2',
             method: 'POST',
             path: '/webhook-deliveries/replay',
             ability: 'webhooks.replay',

@@ -35,7 +35,7 @@ FlexStore) без переписывания фундамента. Моноре�
 | `flex/crm` | Продукт FlexCRM поверх CoreX | [flex-crm](products/flex-crm/README.md) |
 
 Перед установкой настройте [канал зависимостей экосистемы](docs/architecture/ecosystem-dependencies.md).
-Текущий development-снимок устанавливается как `composer require 'axiomasoft/corex:^1.0@dev'`. Конфигурация публикуется командой
+Для канала CoreX 2.0 используйте `composer require 'axiomasoft/corex:^2.0'`. Конфигурация публикуется командой
 `php artisan vendor:publish --tag=corex-config`; параметры модульного runtime Packman находятся в `config/modules.php`. Для пакетов используются собственные config-ключи и publish-теги из их README.
 
 Схема пакетов устанавливается из зарегистрированных наборов:
@@ -68,13 +68,22 @@ php artisan packman:schema:status --scope=tenant
 
 ```bash
 scripts/php84 --check
-scripts/php84 composer install
-scripts/php84 composer test        # Pest + Orchestra Testbench (sqlite :memory:)
-scripts/php84 composer analyse     # PHPStan (larastan)
-scripts/php84 composer lint        # Pint
+scripts/test-bounded -- scripts/php84 composer install
+scripts/test-bounded -- scripts/php84 composer test        # Pest + Orchestra Testbench (sqlite :memory:)
+scripts/test-bounded -- scripts/php84 composer analyse     # PHPStan (larastan)
+scripts/test-bounded -- scripts/php84 composer lint        # Pint
 ```
 
-Обёртка `scripts/php84` выбирает PHP 8.4 для Composer и дочерних команд. Для локального PostgreSQL используйте `PGSQL_PORT=5434 scripts/php84 composer test:pg`.
+Обёртка `scripts/php84` выбирает PHP 8.4 для Composer и дочерних команд. Для локального PostgreSQL используйте `PGSQL_PORT=5434 scripts/test-bounded -- scripts/php84 composer test:pg`.
+
+Ресурсоёмкие локальные прогоны на Linux с systemd запускайте через `scripts/test-bounded`.
+Например, `scripts/test-bounded -- scripts/php84 composer test:hermetic`.
+Обёртка запускает один прогон за раз, ограничивает всё дерево процессов 2 ГиБ RAM и одним CPU
+и использует дисковый каталог `/var/tmp`. Выберите другой существующий дисковый каталог через
+`--scratch`. Для запуска нужны как минимум 6 ГиБ доступной RAM и 3 ГиБ на диске.
+При устойчивом дефиците памяти, снижении резерва RAM ниже 4 ГиБ или свободного места ниже
+1 ГиБ обёртка остановит свой прогон с кодом 75.
+Для `PGDATA` тестовых контейнеров используйте дисковый том и отдельный лимит памяти контейнера.
 
 Пакеты — чистые библиотеки; тест-харнес и инструменты качества живут в корне монорепо.
 

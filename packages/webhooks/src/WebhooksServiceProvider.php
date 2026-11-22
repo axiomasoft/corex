@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks;
 
-use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Webhooks\Internal\Commands\DeliverWebhooks;
 use CoreX\Webhooks\Internal\Commands\PruneWebhooks;
-use CoreX\Webhooks\Internal\WebhookSnapshotSection;
 use CoreX\Webhooks\Internal\WebhooksSchemaSets;
 use CoreX\Webhooks\Laravel\WebhookBindingsRegistrar;
 use Illuminate\Console\Events\ArtisanStarting;
@@ -34,7 +32,6 @@ final class WebhooksServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-webhooks.php', 'corex-webhooks');
         (new WebhookBindingsRegistrar)->register($this->app);
-        $this->app->tag([WebhookSnapshotSection::class], ContractSnapshotSection::class);
     }
 
     public function boot(): void

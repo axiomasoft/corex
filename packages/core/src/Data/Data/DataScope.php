@@ -23,8 +23,8 @@ final readonly class DataScope implements DurablePayload
         public string $principalKind,
         public string $principalId,
     ) {
-        ScopeIdentity::physical($deploymentId, $bindingId, $bindingGeneration, $accountIncarnation, $restoreEpoch);
-        ScopeIdentity::principal($principalKind, $principalId);
+        ScopeIdentity::physical(deployment: $deploymentId, binding: $bindingId, generation: $bindingGeneration, incarnation: $accountIncarnation, epoch: $restoreEpoch);
+        ScopeIdentity::principal(kind: $principalKind, id: $principalId);
         ScopeIdentity::opaque($accountId);
 
         if ($workspaceId !== null) {

@@ -80,7 +80,7 @@ final readonly class DatabaseSettingsRepository implements SettingsRepository
 
         $db = $this->db();
         $db->transaction(function () use ($db, $namespace, $key, $scopeType, $scopeId, $encoded, $value, $sensitive): void {
-            ReferenceWrites::enlist($db, ReferenceWrites::current(), 'axiomasoft/corex', 'setting', [
+            ReferenceWrites::enlist(connection: $db, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex', kind: 'setting', witness: [
                 'namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId, 'value' => $value,
             ]);
             $old = $this->find(namespace: $namespace, key: $key, scopeType: $scopeType, scopeId: $scopeId);
@@ -118,8 +118,8 @@ final readonly class DatabaseSettingsRepository implements SettingsRepository
 
         $db = $this->db();
         $db->transaction(function () use ($db, $namespace, $key, $scopeType, $scopeId): void {
-            ReferenceWrites::enlist($db, ReferenceWrites::current(), 'axiomasoft/corex', 'setting-delete',
-                ['namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId]);
+            ReferenceWrites::enlist(connection: $db, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex', kind: 'setting-delete',
+                witness: ['namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId]);
             Setting::on($this->connection)
                 ->where('namespace', $namespace)
                 ->where('key', $key)

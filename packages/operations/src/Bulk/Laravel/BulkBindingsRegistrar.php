@@ -40,7 +40,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
         $options = BulkOptionsParser::fromArray((array) $app->make(Repository::class)->get('corex-operations.bulk', []));
 
         $app->scoped(OperationsModuleReferences::class, static fn (Application $app): OperationsModuleReferences => new OperationsModuleReferences(
-            $app->make(ApiSchemaConnections::class), $app->make(CurrentWorkScope::class),
+            connections: $app->make(ApiSchemaConnections::class), current: $app->make(CurrentWorkScope::class),
         ));
         $app->tag([OperationsModuleReferences::class], ModuleReferences::class);
 
@@ -72,8 +72,8 @@ final class BulkBindingsRegistrar implements PackageRegistrar
             admission: $app->make(ReferenceAdmission::class),
         ));
         $app->scoped(SubmitBulkOperation::class, static fn (Application $app): SubmitBulkOperation => new SubmitBulkOperation(
-            $app, $app->make(BulkOperationStore::class), $app->make(ApiSchemaConnections::class),
-            $app->make(BulkOptions::class), self::submissionSecret($app), $app->make(ReferenceAdmission::class),
+            app: $app, store: $app->make(BulkOperationStore::class), connections: $app->make(ApiSchemaConnections::class),
+            limits: $app->make(BulkOptions::class), secret: self::submissionSecret($app), admission: $app->make(ReferenceAdmission::class),
         ));
         $app->scoped(BulkWorker::class, static fn (Application $app): BulkWorker => new BulkWorker(
             store: $app->make(BulkOperationStore::class),

@@ -13,9 +13,10 @@ class AttributeRenameTest(unittest.TestCase):
     def test_only_reclaimed_namespace_tokens_pass(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'scripts').mkdir()
-            for name in ('rename-completeness-gate.php', 'rename-completeness.json'):
-                shutil.copyfile(ROOT / 'scripts' / name, root / 'scripts' / name)
+            for name in ('rename-completeness-gate.php', 'rename-completeness.json', 'support/cli-arguments.php'):
+                target = root / 'scripts' / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / 'scripts' / name, target)
             subprocess.run(['git', 'init', '-q', str(root)], check=True)
             fixture = root / 'probe.php'
             retired_root = 'CoreX' + '\\Attributes'

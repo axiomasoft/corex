@@ -49,7 +49,7 @@ final readonly class WebhookManagement
     {
         $this->assertScope($scope);
 
-        $rows = $this->connection->table('sys_api_webhook_subscriptions')->oldest()
+        $rows = $this->connection->table('sys_api_webhook_subscriptions')->where('major', 'v2')->oldest()
             ->orderBy('id')
             ->get()
             ->map(fn (object $row): array => $this->subscriptionRow($row))
@@ -96,7 +96,7 @@ final readonly class WebhookManagement
                 registry: $registry,
                 accountId: $scope->accountId,
                 workspaceId: $scope->workspaceId,
-                apiMajor: 'v1',
+                apiMajor: 'v2',
                 operationId: 'webhook-deliveries.list',
                 filters: $cursorFilters,
                 fields: self::DeliveryFields,
@@ -124,7 +124,7 @@ final readonly class WebhookManagement
             registry: $registry,
             accountId: $scope->accountId,
             workspaceId: $scope->workspaceId,
-            apiMajor: 'v1',
+            apiMajor: 'v2',
             operationId: 'webhook-deliveries.list',
             filters: $cursorFilters,
             fields: self::DeliveryFields,
@@ -174,7 +174,7 @@ final readonly class WebhookManagement
         return OrderingFactory::fromOperations([new Operation(
             module: 'axiomasoft/corex-operations',
             id: 'webhook-deliveries.list',
-            version: 'v1',
+            version: 'v2',
             method: 'GET',
             path: '/webhook-deliveries',
             ability: 'webhooks.manage',
@@ -198,12 +198,14 @@ final readonly class WebhookManagement
 
     private function scopedDeliveries(DataScope $scope): Builder
     {
-        return WebhookDeliveryScope::constrain($this->connection->table('sys_api_webhook_deliveries'), $scope);
+        return WebhookDeliveryScope::constrain(
+            query: $this->connection->table('sys_api_webhook_deliveries')->where('major', 'v2'), scope: $scope,
+        );
     }
 
     private function assertScope(DataScope $scope): void
     {
-        $this->contexts->assert($scope, $this->connection);
+        $this->contexts->assert(scope: $scope, connection: $this->connection);
     }
 
     private function assertClient(string $clientId): void

@@ -88,15 +88,15 @@ final readonly class JsonCloudEventCodec implements CloudEventCodec
     #[Override]
     public function decode(string $json): MessageEnvelope
     {
-        [$message,$schema] = self::parse($json, $this->scopes);
-        self::validate($message, $schema, $this->contracts);
+        [$message,$schema] = self::parse(json: $json, scopes: $this->scopes);
+        self::validate(message: $message, schema: $schema, registry: $this->contracts);
 
         return $message;
     }
 
     public static function validate(MessageEnvelope $message, ?string $schema, MessageContractRegistry $registry): void
     {
-        $contract = $registry->get($message->name, $message->contractVersion);
+        $contract = $registry->get(name: $message->name, version: $message->contractVersion);
 
         if ($schema !== $contract->dataSchema) {
             throw InvalidMessage::identity('CloudEvent data schema');
@@ -180,7 +180,7 @@ final readonly class JsonCloudEventCodec implements CloudEventCodec
             occurredAt: self::time($attributes['time']), scope: $decodedScope,
             payload: MessagePayload::fromJson(self::json($attributes['data'])), piiClass: $pii,
             subject: $subject, correlationId: $attributes['corexcorrelation'],
-            causationId: self::optionalString(attributes: $attributes, key: 'corexcausation'), metadata: $metadata, seal: self::optionalString($attributes, 'corexproof'),
+            causationId: self::optionalString(attributes: $attributes, key: 'corexcausation'), metadata: $metadata, seal: self::optionalString(attributes: $attributes, key: 'corexproof'),
         );
 
         return [$message, $schema];
@@ -202,7 +202,7 @@ final readonly class JsonCloudEventCodec implements CloudEventCodec
             throw InvalidMessage::identity('CloudEvent subject');
         }
 
-        return new RecordRef($subject['entity'], $subject['id']);
+        return new RecordRef(entity: $subject['entity'], id: $subject['id']);
     }
 
     /** @return array<string, mixed> */

@@ -42,7 +42,7 @@ final class ReferenceWrites
 
     public static function cleanupLease(DataScope $scope, CleanupAction $action, string $owner): OwnerLease
     {
-        self::assertCleanup($scope, $action);
+        self::assertCleanup(scope: $scope, action: $action);
 
         return ApplicationLocator::current()->make(LifecycleFrame::class)->leases[$owner]
             ?? throw new LifecycleBlocked('Confirmed plan lacks the required external owner lease.');
@@ -58,7 +58,7 @@ final class ReferenceWrites
     /** @param array<string,mixed> $witness */
     public static function enlist(ConnectionInterface $connection, DataScope $scope, string $producer, string $kind, array $witness = []): void
     {
-        $refs = self::targets($scope, $producer, $kind, $witness);
+        $refs = self::targets(scope: $scope, producer: $producer, kind: $kind, witness: $witness);
         ApplicationLocator::current()->make(ReferenceAdmission::class)->enlist($scope, $connection, new ModuleRef($producer), ...$refs);
     }
 
@@ -66,7 +66,7 @@ final class ReferenceWrites
     {
         $scope = ReferenceWrites::current();
         $producer = new ModuleRef('axiomasoft/corex');
-        $refs = ReferenceWrites::targets($scope, $producer->package, 'feature-default', ['package' => $def->module, 'payload' => $def->payload]);
+        $refs = ReferenceWrites::targets(scope: $scope, producer: $producer->package, kind: 'feature-default', witness: ['package' => $def->module, 'payload' => $def->payload]);
         $app = ApplicationLocator::current();
         $admission = $app->make(ReferenceAdmission::class);
         $native = $app->make(LifecycleFrame::class)->admitManifestDefault;
@@ -86,7 +86,7 @@ final class ReferenceWrites
 
     public static function reserveEffect(DataScope $scope, ProviderAttempt $attempt, string $producer, ProviderEffectLedger $ledger): AdmissionTicket
     {
-        $ticket = self::reserve($scope, $attempt, $producer, 'provider-send', ['provider' => $attempt->effect->providerNamespace, 'owner_ref' => $attempt->ownerRef, 'effect_key' => $attempt->effect->effectKey]);
+        $ticket = self::reserve(scope: $scope, attempt: $attempt, producer: $producer, kind: 'provider-send', witness: ['provider' => $attempt->effect->providerNamespace, 'owner_ref' => $attempt->ownerRef, 'effect_key' => $attempt->effect->effectKey]);
         $prior = $ledger->inspect($attempt->effect);
 
         if ($prior === null || $prior->ticket->id !== $ticket->id || $prior->ownerRef !== $attempt->ownerRef
@@ -101,7 +101,7 @@ final class ReferenceWrites
     /** @param array<string,mixed> $witness */
     public static function reserve(DataScope $scope, ProviderAttempt $attempt, string $producer, string $kind, array $witness): AdmissionTicket
     {
-        $refs = self::targets($scope, $producer, $kind, $witness);
+        $refs = self::targets(scope: $scope, producer: $producer, kind: $kind, witness: $witness);
 
         return ApplicationLocator::current()->make(ReferenceAdmission::class)->reserve($scope, $attempt, new ModuleRef($producer), ...$refs);
     }
@@ -135,7 +135,7 @@ final class ReferenceWrites
 
             if ($key === 'entity' && is_string($value)) {
                 $registry = $app->make(ModuleRegistry::class);
-                $entity = self::entityOwner($registry, $value);
+                $entity = self::entityOwner(registry: $registry, handle: $value);
 
                 if ($entity !== null) {
                     $refs[] = new ModuleRef($entity);

@@ -5,8 +5,10 @@ declare(strict_types=1);
 
 namespace CoreX\Quality\UnusedPublic;
 
+use Closure;
 use DateTimeImmutable;
 use FilesystemIterator;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Orchestra\Testbench\TestCase;
@@ -19,13 +21,17 @@ use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use Psr\Container\ContainerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use SplFileInfo;
 use Throwable;
 
+use function CoreX\Scripts\cliArguments;
+
 require dirname(__DIR__, 2).'/vendor/autoload.php';
+require dirname(__DIR__).'/support/cli-arguments.php';
 ini_set('memory_limit', '1G');
 
 // Declaration/reference analysis follows typed receivers, inherited contracts,
@@ -51,6 +57,14 @@ final readonly class MethodDeclaration
 
 final class UsageScanner
 {
+    private const CONTAINERS = [
+        \Illuminate\Contracts\Container\Container::class,
+        Container::class,
+        \Illuminate\Contracts\Foundation\Application::class,
+        Application::class,
+        ContainerInterface::class,
+    ];
+
     /** @var array<string, array{node: Stmt\ClassLike, parents: list<string>, properties: array<string, list<string>>, methods: array<string, MethodDeclaration>}> */
     private array $classes = [];
 
@@ -182,6 +196,7 @@ final class UsageScanner
         // registrar composition out of CoreX. Vendor declarations provide call
         // evidence, but only packages/products below src are audited as exports.
         $roots = ['tests', 'config', 'scripts', 'vendor/axiomasoft/packman/packages/core/src'];
+        $files[] = 'vendor/laravel/framework/src/Illuminate/Container/Container.php';
         foreach (['packages', 'products'] as $container) {
             $packages = glob($this->root.'/'.$container.'/*', GLOB_ONLYDIR);
             foreach ($packages === false ? [] : $packages as $package) {
@@ -372,6 +387,10 @@ final class UsageScanner
      */
     private function expression(Node $node, ?string $class, array $variables): array
     {
+        if ($node instanceof Expr\BinaryOp\Coalesce && $node->right instanceof Expr\Throw_) {
+            return $this->expression($node->left, $class, $variables);
+        }
+
         if ($node instanceof Expr\Variable && is_string($node->name)) {
             return $node->name === 'this' && $class !== null ? [$class] : ($variables[$node->name] ?? []);
         }
@@ -452,11 +471,17 @@ final class UsageScanner
             }
         }
 
+        if ($node instanceof Expr\FuncCall && ! $node->isFirstClassCallable() && $node->name instanceof Expr\PropertyFetch
+            && $node->name->var instanceof Expr\Variable && $node->name->var->name === 'this'
+            && $node->name->name instanceof Node\Identifier && $class !== null) {
+            return $this->closurePropertyResult($class, $node->name->name->toString());
+        }
+
         if (($node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall) && $node->name instanceof Node\Identifier) {
             if (! $node instanceof Expr\StaticCall && in_array(strtolower($node->name->toString()), ['make', 'makewith', 'get', 'tagged'], true) && isset($node->args[0]) && $node->args[0] instanceof Node\Arg) {
                 $container = $this->expression($node->var, $class, $variables);
 
-                if (array_any($container, static fn (string $type): bool => in_array($type, ['Illuminate\\Contracts\\Container\\Container', 'Illuminate\\Container\\Container', \Illuminate\Contracts\Foundation\Application::class, Application::class, 'Psr\\Container\\ContainerInterface'], true))) {
+                if (array_intersect($container, self::CONTAINERS) !== []) {
                     return $this->classArgument($node->args[0]->value, $class, $variables);
                 }
             }
@@ -474,6 +499,34 @@ final class UsageScanner
             }
 
             return array_values(array_unique($types));
+        }
+
+        return [];
+    }
+
+    /** @return list<string> */
+    private function closurePropertyResult(string $class, string $property): array
+    {
+        foreach ($this->relatives($class) as $owner) {
+            $doc = $this->propertyDocs[$owner][$property] ?? null;
+
+            if ($doc === null) {
+                continue;
+            }
+
+            // Stop at the declaring property, even if an ancestor has a richer annotation.
+            if (($this->classes[$owner]['properties'][$property] ?? []) !== [Closure::class]) {
+                return [];
+            }
+            $tag = $doc['parameter'] === null ? '@var' : '@param';
+            $parameter = $doc['parameter'] === null ? '(?=\s|$)' : '\s+\$'.preg_quote($doc['parameter'], '~').'\b';
+            $pattern = '~'.preg_quote($tag, '~').'\s+\\\\?Closure\([^()\r\n]*\):\s*\??([A-Za-z_\\\\][A-Za-z0-9_\\\\]*)'.$parameter.'~';
+
+            if (preg_match($pattern, $doc['doc'], $match) !== 1) {
+                return [];
+            }
+
+            return $this->docTypes('@return '.$match[1], 'return', $doc['source'], $owner);
         }
 
         return [];
@@ -528,6 +581,44 @@ final class UsageScanner
                 continue;
             }
 
+            if ($node instanceof Expr\Ternary && $node->cond instanceof Expr\Instanceof_
+                && $node->cond->expr instanceof Expr\Variable && is_string($node->cond->expr->name)
+                && $node->cond->class instanceof Name && $node->if !== null) {
+                $this->visit([$node->cond], $file, $class, $variables);
+                $positive = $variables;
+                $positive[$node->cond->expr->name] = $this->type($node->cond->class, $class);
+                $this->visit([$node->if], $file, $class, $positive);
+                $negative = $variables;
+                $this->visit([$node->else], $file, $class, $negative);
+
+                continue;
+            }
+
+            if ($node instanceof Stmt\If_ && $node->elseifs === [] && $node->else === null) {
+                $negated = $node->cond instanceof Expr\BooleanNot;
+                $condition = $negated ? $node->cond->expr : $node->cond;
+
+                if ($condition instanceof Expr\Instanceof_ && $condition->expr instanceof Expr\Variable
+                    && is_string($condition->expr->name) && $condition->class instanceof Name) {
+                    $this->visit([$node->cond], $file, $class, $variables);
+                    $branch = $variables;
+                    $name = $condition->expr->name;
+                    $types = $this->type($condition->class, $class);
+
+                    if (! $negated) {
+                        $branch[$name] = $types;
+                    }
+                    $this->visit(array_values($node->stmts), $file, $class, $branch);
+
+                    if ($negated && count($node->stmts) === 1 && $node->stmts[0] instanceof Stmt\Expression
+                        && $node->stmts[0]->expr instanceof Expr\Throw_) {
+                        $variables[$name] = $types;
+                    }
+
+                    continue;
+                }
+            }
+
             if ($node instanceof Expr\Assign && $node->var instanceof Expr\Variable && is_string($node->var->name)) {
                 $inferred = $this->expression($node->expr, $class, $variables);
 
@@ -555,7 +646,7 @@ final class UsageScanner
                     $receivers = $node instanceof Expr\StaticCall ? ($node->class instanceof Name ? $this->type($node->class, $class) : $this->expression($node->class, $class, $variables)) : $this->expression($node->var, $class, $variables);
                     $this->invoke($receivers, $node->name->toString(), $file, $node->getStartLine());
 
-                    if (array_any($receivers, static fn (string $type): bool => in_array($type, ['Illuminate\\Contracts\\Container\\Container', 'Illuminate\\Container\\Container', \Illuminate\Contracts\Foundation\Application::class, Application::class, 'Psr\\Container\\ContainerInterface'], true))) {
+                    if (array_intersect($receivers, self::CONTAINERS) !== []) {
                         if (in_array(strtolower($node->name->toString()), ['make', 'makewith', 'get', 'tagged'], true)) {
                             $this->invoke($this->expression($node, $class, $variables), '__construct', $file, $node->getStartLine());
                         } elseif (in_array(strtolower($node->name->toString()), ['bind', 'singleton', 'scoped'], true)) {
@@ -615,9 +706,9 @@ final class UsageScanner
 
             if (in_array(strtolower($name), ['self', 'static'], true) && $class !== null) {
                 $types[] = $class;
-            } elseif (isset($this->classes[$name])) {
+            } elseif (isset($this->classes[$name]) || in_array($name, self::CONTAINERS, true)) {
                 $types[] = $name;
-            } elseif (isset($this->classes[$resolved])) {
+            } elseif (isset($this->classes[$resolved]) || in_array($resolved, self::CONTAINERS, true)) {
                 $types[] = $resolved;
             }
         }
@@ -728,7 +819,7 @@ final class UsageScanner
 
 try {
     $options = [];
-    foreach (array_slice($argv, 1) as $argument) {
+    foreach (array_slice(cliArguments(), 1) as $argument) {
         if (in_array($argument, ['--check', '--report'], true) && ! isset($options[$argument])) {
             $options[$argument] = true;
         } elseif (str_starts_with($argument, '--root=') && ! isset($options['root'])) {

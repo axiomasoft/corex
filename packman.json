@@ -157,6 +157,7 @@
                 "Internal",
                 "Invocation",
                 "Laravel",
+                "Metadata",
                 "OpenApi",
                 "Pagination",
                 "Testing",
@@ -346,7 +347,8 @@
                 "Contracts",
                 "Data",
                 "Errors",
-                "Internal"
+                "Internal",
+                "Mcp"
             ]
         },
         {

@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Field metadata and DDL
+
+- Expose field descriptions filtered by the current effective schema and field policy. Run concurrent index DDL in an attested direct PostgreSQL writer session.
+
 ## Unreleased — Search projection
 
 - Expose a structural projection catalogue with stable field IDs, the effective revision, its mapping digest, and typed use and operator capabilities. The authorized field catalogue still supplies field descriptions for application clients.

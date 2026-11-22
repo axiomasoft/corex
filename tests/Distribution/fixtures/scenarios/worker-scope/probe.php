@@ -12,7 +12,7 @@ use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkScopeRunner;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
@@ -89,7 +89,7 @@ if (! $cloud) {
             $runner->run($stale, static fn (): never => throw new RuntimeException('Stale boxed work reached its handler.'));
 
             throw new RuntimeException('Stale boxed work was accepted.');
-        } catch (ScopeContextMismatch) {
+        } catch (ScopeStale) {
             $proof->check(true, 'Stale boxed epoch denied');
         }
 

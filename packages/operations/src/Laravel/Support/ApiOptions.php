@@ -49,7 +49,7 @@ final readonly class ApiOptions
         $idempotency = self::array($config['idempotency'] ?? []);
         $cursor = self::array($config['cursor'] ?? []);
         $versions = self::versions(violations: $violations, value: $config['versions'] ?? null);
-        $defaultMajor = self::nonEmpty(violations: $violations, path: 'default_major', value: $config['default_major'] ?? 'v1');
+        $defaultMajor = self::nonEmpty(violations: $violations, path: 'default_major', value: $config['default_major'] ?? 'v2');
         $declared = array_map(static fn (ApiVersion $version): string => $version->major, $versions);
         $default = null;
 
@@ -59,7 +59,7 @@ final readonly class ApiOptions
             }
         }
 
-        if (! in_array($defaultMajor, $declared, true) || ! $default instanceof ApiVersion || $default->status !== ApiVersionStatus::Stable) {
+        if ($defaultMajor !== 'v2' || $declared !== ['v2'] || ! $default instanceof ApiVersion || $default->status !== ApiVersionStatus::Stable) {
             $violations->add(path: 'default_major', message: 'must name a declared stable major');
         }
 
@@ -139,6 +139,11 @@ final readonly class ApiOptions
         ];
     }
 
+    public function publicBaseUri(): string
+    {
+        return '/'.trim(trim($this->routePrefix, '/').'/v2', '/');
+    }
+
     public function defaultVersion(): ApiVersion
     {
         foreach ($this->versions as $version) {
@@ -162,7 +167,7 @@ final readonly class ApiOptions
     private static function versions(ConfigurationValidator $violations, mixed $value): array
     {
         if ($value === null) {
-            return [new ApiVersion(major: 'v1', status: ApiVersionStatus::Stable, supportedThrough: null)];
+            return [new ApiVersion(major: 'v2', status: ApiVersionStatus::Stable, supportedThrough: null)];
         }
 
         if (! is_array($value) || $value === []) {

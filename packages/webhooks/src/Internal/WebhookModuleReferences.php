@@ -28,14 +28,14 @@ final readonly class WebhookModuleReferences implements ModuleReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'sys_api_webhook_subscriptions' => [$tenant, ['topic', 'topic_version']],
             'sys_api_webhook_deliveries' => [$tenant, ['topic', 'topic_version', 'provider_ticket', 'effect_key', 'status'], fn (array $row, string $id): LifecycleBlocker => new LifecycleBlocker(
-                $this->owner(), 'sys_api_webhook_deliveries', $id, $scope, in_array($row['status'], ['succeeded', 'dead', 'quarantined'], true) ? 'retain-original-receipt' : 'reconcile-original-webhook',
+                owner: $this->owner(), resourceKind: 'sys_api_webhook_deliveries', resourceId: $id, scope: $scope, requiredAction: in_array($row['status'], ['succeeded', 'dead', 'quarantined'], true) ? 'retain-original-receipt' : 'reconcile-original-webhook',
             )],
             'sys_api_webhook_attempts' => [$tenant, []],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

@@ -62,6 +62,6 @@ final readonly class QueuedAuditLogger implements AuditLogger
         $current = $this->tenantContext->current();
         $scope = $this->scopes->forCurrentPrincipal($current);
         $entry = $entry->withSnapshot(occurredAt: $this->clock->now(), workspaceId: $current->workspace?->id);
-        $this->bus->dispatch(new RecordAuditEntry($entry, $scope));
+        $this->bus->dispatch(new RecordAuditEntry(entry: $entry, scope: $scope));
     }
 }

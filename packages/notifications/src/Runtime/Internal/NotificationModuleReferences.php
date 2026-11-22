@@ -33,16 +33,16 @@ final readonly class NotificationModuleReferences implements ModuleTableReferenc
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'ntf_notifications' => [$tenant, ['source']],
             'ntf_deliveries' => [$tenant, ['channel', 'template_version', 'driver_version', 'provider_ticket', 'state'], fn (array $row, string $id): LifecycleBlocker => new LifecycleBlocker(
-                $this->owner(), 'ntf_deliveries', $id, $scope, in_array($row['state'], ['completed', 'permanently-failed', 'exhausted', 'quarantined'], true) ? 'retain-original-receipt' : 'reconcile-original-delivery',
+                owner: $this->owner(), resourceKind: 'ntf_deliveries', resourceId: $id, scope: $scope, requiredAction: in_array($row['state'], ['completed', 'permanently-failed', 'exhausted', 'quarantined'], true) ? 'retain-original-receipt' : 'reconcile-original-delivery',
             )],
             'ntf_recipient_state' => [$tenant, ['kind']],
             'ntf_digest_runs' => [$tenant, ['state']],
             'ntf_digest_items' => [$tenant, ['channel']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

@@ -12,6 +12,8 @@ includes:
     - vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
+    parallel:
+        maximumNumberOfProcesses: 1
     packmanModules:
         systemTableNamespaces:
             - CoreX\

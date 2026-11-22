@@ -120,7 +120,8 @@
                 "Contracts",
                 "Data",
                 "Errors",
-                "Internal"
+                "Internal",
+                "Mcp"
             ]
         }
     }

@@ -55,9 +55,9 @@ final readonly class Submission
                 }
                 $checked[$key] = $value;
             }
-            $documents[] = new IndexDocument(new RecordRef($target->entity->value, Value::text($entry['id'])), new ProjectedValues($checked));
+            $documents[] = new IndexDocument(record: new RecordRef(entity: $target->entity->value, id: Value::text($entry['id'])), values: new ProjectedValues($checked));
         }
-        $batch = new IndexBatch($target, Value::text($row->submission_id), IndexAction::from(Value::text($row->action)), $documents);
+        $batch = new IndexBatch(target: $target, submissionId: Value::text($row->submission_id), action: IndexAction::from(Value::text($row->action)), documents: $documents);
 
         if ($row->batch_digest !== self::digest($batch) || $row->uid !== $target->uid || $row->deployment_id !== $target->scope->deploymentId
             || $row->binding_id !== $target->scope->bindingId || Value::integer($row->binding_generation) !== $target->scope->bindingGeneration
@@ -65,7 +65,7 @@ final readonly class Submission
             throw new LogicException('Index submission differs from its immutable namespace.');
         }
 
-        return new self($batch, $row);
+        return new self(batch: $batch, row: $row);
     }
 
     public function effect(): ProviderEffectRef
@@ -77,7 +77,7 @@ final readonly class Submission
     {
         $t = $batch->target;
 
-        return new ProviderEffectRef($t->scope->accountId, $t->scope->accountIncarnation, $t->scope->workspaceId,
-            self::OWNER, hash('sha256', $t->backend.'|'.$t->cluster.'|'.$t->uid), $batch->submissionId);
+        return new ProviderEffectRef(accountId: $t->scope->accountId, accountIncarnation: $t->scope->accountIncarnation, workspaceId: $t->scope->workspaceId,
+            owner: self::OWNER, providerNamespace: hash('sha256', $t->backend.'|'.$t->cluster.'|'.$t->uid), effectKey: $batch->submissionId);
     }
 }

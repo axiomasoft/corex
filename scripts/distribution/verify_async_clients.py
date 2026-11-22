@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[2]
-SNAPSHOTS = ROOT / "api" / "v1"
+SNAPSHOTS = ROOT / "api" / "v2"
 BULK_CLIENT = ROOT / "fixtures" / "clients" / "bulk" / "client.py"
 WEBHOOK_CLIENT = ROOT / "fixtures" / "clients" / "webhook" / "client.py"
 RECEIPT = ROOT / "build" / "distribution" / "async-client-receipt.json"
@@ -24,6 +24,7 @@ TOPIC = "equipment.maintenance"
 SECRET = "whsec_" + base64.b64encode(b"synthetic-webhook-key-material!!").decode("ascii")
 BODY = b'{"data":{"serial":"A"},"event_id":"evt-1","type":"equipment.maintenance"}'
 DELIVERY_ID = "delivery-1"
+BULK_PATH = "/api/v2/bulk-operations"
 
 
 def load_module(path: Path, name: str):
@@ -80,7 +81,7 @@ class BulkHandler(BaseHTTPRequestHandler):
         if path == "/__fixture/effects":
             self.respond(200, {"effects": self.state.effects})
             return
-        if path == "/bulk-operations" and self.command == "POST":
+        if path == BULK_PATH and self.command == "POST":
             self.respond(202, self.submit())
             return
         operation_id, action = split_bulk_path(path)
@@ -92,7 +93,7 @@ class BulkHandler(BaseHTTPRequestHandler):
             self.respond(200, self.show(operation))
             return
         if action == "cancel" and self.command == "POST":
-            self.respond(202, self.cancel(operation))
+            self.respond(200, self.cancel(operation))
             return
         if action == "result" and self.command == "GET":
             if operation["status"] != "completed":
@@ -109,6 +110,8 @@ class BulkHandler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0"))
         body = json.loads(self.rfile.read(length).decode())
         key = self.headers.get("Idempotency-Key")
+        if not key or body.get("kind") != "import" or body.get("source") not in {"import", "cancel-demo"}:
+            raise ValueError("expected a keyed logical bulk import")
         with self.state.lock:
             if key in self.state.by_key:
                 operation = self.state.operations[self.state.by_key[key]]
@@ -117,16 +120,16 @@ class BulkHandler(BaseHTTPRequestHandler):
                 operation_id = f"bulk-{self.state.sequence}"
                 operation = {
                     "id": operation_id,
-                    "kind": body["kind"],
+                    "kind": body["source"],
                     "status": "pending",
                     "polls": 0,
-                    "status_url": f"/bulk-operations/{operation_id}?track=opaque",
+                    "status_url": f"{BULK_PATH}/{operation_id}?track=opaque",
                     "completed_rows": [],
                     "failures": [],
                 }
                 self.state.operations[operation_id] = operation
                 self.state.by_key[key] = operation_id
-        payload = {"operation_id": operation["id"], "status": operation["status"], "status_url": operation["status_url"]}
+        payload = {"operation_id": operation["id"], "status_url": operation["status_url"]}
         return payload
 
     def show(self, operation: dict) -> dict:
@@ -147,11 +150,11 @@ class BulkHandler(BaseHTTPRequestHandler):
                 "operation_id": operation["id"],
                 "status": operation["status"],
                 "has_failures": bool(operation["failures"]),
-                "cancel_url": f"/bulk-operations/{operation['id']}/cancel",
+                "cancel_url": f"{BULK_PATH}/{operation['id']}/cancel",
             }
             if operation["status"] == "completed":
-                payload["result_url"] = f"/bulk-operations/{operation['id']}/result?part=sealed"
-                payload["failures_url"] = f"/bulk-operations/{operation['id']}/failures?page=1"
+                payload["result_url"] = f"{BULK_PATH}/{operation['id']}/result?part=sealed"
+                payload["failures_url"] = f"{BULK_PATH}/{operation['id']}/failures?page=1"
         if payload["status"] not in {"completed", "cancelled", "failed", "expired"}:
             payload["retry_after"] = "0"
         return payload
@@ -163,10 +166,22 @@ class BulkHandler(BaseHTTPRequestHandler):
             return {"operation_id": operation["id"], "status": operation["status"]}
 
     def respond(self, status: int, payload: dict) -> None:
-        body = json.dumps(payload).encode()
+        meta = {"request_id": "req-fixture", "correlation_id": "corr-fixture", "api_version": "v2"}
+        if self.path == "/__fixture/effects":
+            document = payload
+        elif status < 400:
+            document = {"data": payload, "meta": meta}
+        else:
+            code = "operations." + payload["code"]
+            document = {"type": "urn:corex:problem:" + code, "title": code, "detail": code, "status": status,
+                        "category": "not_found" if status == 404 else "conflict", "retryable": False,
+                        "code": code, "path": None, "details": {}, **meta}
+        body = json.dumps(document).encode()
         self.send_response(status)
-        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Type", "application/problem+json" if status >= 400 else "application/json")
         self.send_header("Content-Length", str(len(body)))
+        self.send_header("X-Request-ID", meta["request_id"])
+        self.send_header("Cache-Control", "no-store")
         if "status_url" in payload:
             self.send_header("Location", payload["status_url"])
         if payload.get("retry_after") is not None:
@@ -176,7 +191,7 @@ class BulkHandler(BaseHTTPRequestHandler):
 
 
 def split_bulk_path(path: str) -> tuple[str | None, str]:
-    prefix = "/bulk-operations/"
+    prefix = BULK_PATH + "/"
     if not path.startswith(prefix):
         return None, ""
     operation_id, _, action = path[len(prefix):].partition("/")
@@ -225,11 +240,12 @@ def deliver(snapshots: Path, state: Path, report: Path, *, delivery_id: str, tim
     return json.loads(report.read_text(encoding="utf-8"))
 
 
-def overlay_snapshots(directory: Path) -> None:
+def overlay_snapshots(snapshots: Path, directory: Path) -> None:
     for name in ("manifest.json", "openapi.json", "operations.json", "errors.json", "webhooks.json"):
-        shutil.copy(SNAPSHOTS / name, directory / name)
+        shutil.copy(snapshots / name, directory / name)
     webhooks = json.loads((directory / "webhooks.json").read_text(encoding="utf-8"))
-    webhooks["topics"] = [TOPIC]
+    webhooks["topics"] = [{"name": TOPIC, "major": "v2", "version": 1, "pii_class": "none",
+                          "payload": {"type": "object", "properties": {"serial": {"type": "string"}}, "required": ["serial"]}}]
     encoded = json.dumps(webhooks, indent=4).encode()
     (directory / "webhooks.json").write_bytes(encoded + b"\n")
     manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
@@ -242,16 +258,13 @@ def signed(snapshots: Path, delivery_id: str, timestamp: int) -> str:
     return WEBHOOK.sign(SECRET, contract["webhooks"]["rotation"], delivery_id, str(timestamp), BODY)
 
 
-def prove(snapshots: Path = SNAPSHOTS) -> dict:
-    forbidden = {path.name: source_forbidden(path) for path in (BULK_CLIENT, WEBHOOK_CLIENT)}
-    if any(forbidden.values()):
-        raise SystemExit(f"client imports a forbidden surface: {forbidden}")
+def prove_bulk(snapshots: Path, report: Path) -> tuple[dict, dict]:
     server, base = serve()
     try:
-        bulk = run_client(BULK_CLIENT, snapshots, "--base", base, "--report", "/tmp/p17-bulk-report.json")
+        bulk = run_client(BULK_CLIENT, snapshots, "--base", base, "--report", str(report))
         if bulk.returncode != 0:
             raise SystemExit(bulk.stderr or bulk.stdout)
-        bulk_report = json.loads(Path("/tmp/p17-bulk-report.json").read_text(encoding="utf-8"))
+        bulk_report = json.loads(report.read_text(encoding="utf-8"))
         if bulk_report["import"]["status_url"].split("?", 1)[1] != "track=opaque":
             raise SystemExit("bulk client did not forward the opaque status URL")
         if bulk_report["import"]["failures"]["items"] != [{"code": "missing-serial", "ordinal": 1}]:
@@ -259,11 +272,20 @@ def prove(snapshots: Path = SNAPSHOTS) -> dict:
         effects = json.loads(urlopen(base + "/__fixture/effects").read())["effects"]
         if effects != {"import": 1, "cancel-demo": 1}:
             raise SystemExit(f"cancellation changed completed effects: {effects}")
+        return bulk_report, effects
     finally:
         server.shutdown()
+        server.server_close()
 
+
+def prove(snapshots: Path = SNAPSHOTS) -> dict:
+    forbidden = {path.name: source_forbidden(path) for path in (BULK_CLIENT, WEBHOOK_CLIENT)}
+    if any(forbidden.values()):
+        raise SystemExit(f"client imports a forbidden surface: {forbidden}")
+    committed = WEBHOOK.load_snapshots(snapshots)
     with tempfile.TemporaryDirectory() as directory:
         target = Path(directory)
+        bulk_report, effects = prove_bulk(snapshots, target / "bulk-report.json")
         mismatched = target / "mismatch"
         mismatched.mkdir()
         for name in ("manifest.json", "openapi.json", "operations.json", "errors.json", "webhooks.json"):
@@ -302,7 +324,7 @@ def prove(snapshots: Path = SNAPSHOTS) -> dict:
 
         overlay = target / "overlay"
         overlay.mkdir()
-        overlay_snapshots(overlay)
+        overlay_snapshots(snapshots, overlay)
         state = target / "state.json"
         report = target / "report.json"
         first = deliver(overlay, state, report, delivery_id=DELIVERY_ID, timestamp=stamp, now=stamp, signature=signed(overlay, DELIVERY_ID, stamp))
@@ -329,7 +351,7 @@ def prove(snapshots: Path = SNAPSHOTS) -> dict:
         "snapshots": bulk_report["digests"],
         "bulk": {"import_effect": effects["import"], "cancel_effect": effects["cancel-demo"], "cancel_status": bulk_report["cancel"]["status"]},
         "webhook": {
-            "committed_topics": [],
+            "committed_topics": sorted(committed["topics"]),
             "undeclared_topic": undeclared["outcome"],
             "tamper": tampered["outcome"],
             "duplicate_effects": duplicate["effects"],

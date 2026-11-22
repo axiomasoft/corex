@@ -1,0 +1,1159 @@
+[
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "4f1f0d38bdec4665ff38f27895a7b55a222b175ea6b0ebcb2c14474e2b57800c",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "bulk-operations.cancel",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/bulk-operations/{id}/cancel",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "properties": {
+                "operation_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "pending",
+                        "running",
+                        "cancelling",
+                        "cancelled",
+                        "completed",
+                        "failed",
+                        "expired"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "operation_id",
+                "status"
+            ],
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "5798fb0a511d6115ef23d2adada687992332edb6ce93861ac7811214a014154b",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "bulk-operations.failures",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/bulk-operations/{id}/failures",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "after": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "e8b7ab1b55621d3f4498d23eb6c8bed6981c6ba8ad72ec475d33fe7f08f645a0",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "bulk-operations.result",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/bulk-operations/{id}/result",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "d12f86034c895af43c9d31543268bdba474fd6870ebdc0c5bc962d8ce507fada",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "bulk-operations.show",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/bulk-operations/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "properties": {
+                "cancel_url": {
+                    "format": "uri-reference",
+                    "type": "string"
+                },
+                "failures_url": {
+                    "format": "uri-reference",
+                    "type": "string"
+                },
+                "has_failures": {
+                    "type": "boolean"
+                },
+                "operation_id": {
+                    "type": "string"
+                },
+                "progress": {
+                    "oneOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "maxItems": 0,
+                            "type": "array"
+                        }
+                    ]
+                },
+                "result_url": {
+                    "format": "uri-reference",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "pending",
+                        "running",
+                        "cancelling",
+                        "cancelled",
+                        "completed",
+                        "failed",
+                        "expired"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "operation_id",
+                "status"
+            ],
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "08cd27edc9cbb82cc8b5a45eeee94732ef52b609e4cb705868f9e2253321d892",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "bulk-operations.submit",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "bulk_command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/bulk-operations",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "kind": {
+                    "type": "string"
+                },
+                "row_limit": {
+                    "type": "integer"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "time_limit_seconds": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "kind",
+                "source"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "properties": {
+                "operation_id": {
+                    "type": "string"
+                },
+                "status_url": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "operation_id",
+                "status_url"
+            ],
+            "type": "object"
+        },
+        "success_status": 202,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "fields.describe",
+        "capabilities": [],
+        "contract_hash": "17267e19db87f089ca36eacee2de358b40b0244ecc2a43fafe506c2dfabc49bf",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "fields.describe",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/entities/{entity}/fields",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "required_scopes": [],
+        "response_schema": {
+            "properties": {
+                "capabilities": {
+                    "type": "object"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "fields": {
+                    "items": {
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "operators": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "uses": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "type",
+                            "uses"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "schema_revision": {
+                    "type": "string"
+                },
+                "version": {
+                    "const": "v2",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "version",
+                "entity",
+                "schema_revision",
+                "capabilities",
+                "fields"
+            ],
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "notes.write",
+        "capabilities": [
+            "operations.resource_policy.v2"
+        ],
+        "contract_hash": "00f0076246525e6f409de2d9ebba718b4b589e9cb0cb734e4a063977bad6e481",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 2,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "notes.create",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/notes",
+        "read_fields": [
+            "/id",
+            "/resource_id",
+            "/title",
+            "/private_label"
+        ],
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "resource_id": {
+                    "maxLength": 128,
+                    "type": "string"
+                },
+                "title": {
+                    "maxLength": 80,
+                    "minLength": 1,
+                    "type": "string"
+                }
+            },
+            "required": [
+                "resource_id",
+                "title"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [],
+        "response_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "private_label": {
+                    "type": "string"
+                },
+                "resource_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "resource_id",
+                "title"
+            ],
+            "type": "object"
+        },
+        "success_status": 201,
+        "version": "v2",
+        "write_fields": [
+            "/resource_id",
+            "/title"
+        ]
+    },
+    {
+        "ability": "search.describe",
+        "capabilities": [],
+        "contract_hash": "355ea45751d44c4da704be49ded8e08a2cdcb51cc9ed6131fa2b03f8d98d545e",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "search.describe",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/entities/{entity}/search",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "required_scopes": [],
+        "response_schema": {
+            "properties": {
+                "capabilities": {
+                    "type": "object"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "fields": {
+                    "items": {
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "operators": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "uses": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "type",
+                            "uses"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "schema_revision": {
+                    "type": "string"
+                },
+                "version": {
+                    "const": "v2",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "version",
+                "entity",
+                "schema_revision",
+                "capabilities",
+                "fields"
+            ],
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "66d6a5d6fe1b1793d4e8a8c3cb22f0e70744b7d9c2f099e801e18292e7a98220",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-deliveries.attempts",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-deliveries/{id}/attempts",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "c42dcb90c55bc21f219af18136f2e20e7526316e183a15cd0a18c04d2ac2f09e",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-deliveries.list",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-deliveries",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "cursor": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "subscription_id": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.replay",
+        "capabilities": [],
+        "contract_hash": "fd51fd6774bce7148f53ee5248b1659532a77a0db41a11cf071d7621635f1224",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-deliveries.range-replay",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-deliveries/replay",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "audit_reason": {
+                    "type": "string"
+                },
+                "cursor": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "max": {
+                    "type": "integer"
+                },
+                "subscription_id": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "subscription_id",
+                "from",
+                "to",
+                "max",
+                "audit_reason"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.replay"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.replay",
+        "capabilities": [],
+        "contract_hash": "b41bada590e361be4ea6815a5d5c33d1a55ab2213c3e710ca24487944f5da344",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-deliveries.replay",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-deliveries/{id}/replay",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "audit_reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "audit_reason"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.replay"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "70b139e6c6d83a08a7fb185ee5beda2d44786d8ebc4aa5f8cca97ca08157655e",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-deliveries.show",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-deliveries/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "046e359734dc45ea8241d4465f273b2aadefa5c25b787f1db4b321c524031fdd",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-subscriptions.create",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-subscriptions",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "endpoint_url": {
+                    "type": "string"
+                },
+                "key_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "topic_version": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "topic",
+                "topic_version",
+                "endpoint_url",
+                "key_refs"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 201,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "20178a07cda0bff9a54daa43483ae15f1fa482d007c73dffa17c37c82ee53a78",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-subscriptions.disable",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-subscriptions/{id}/disable",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "expected_revision": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "expected_revision"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "c60c241efce8d08b7ffb544aa0e5c06d708258a2a29ab82bd7d0e397df3050d1",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-subscriptions.list",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-subscriptions",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "required": [],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "1c3ce6555d2abae0682c392797b7c70d7dc37085ac8a5f0e75710162efc76048",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-subscriptions.update",
+        "idempotency": "required",
+        "method": "PATCH",
+        "mode": "command",
+        "module": "laravel/laravel",
+        "pagination": null,
+        "path": "/webhook-subscriptions/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "additionalProperties": false,
+            "properties": {
+                "endpoint_url": {
+                    "type": "string"
+                },
+                "expected_revision": {
+                    "type": "integer"
+                },
+                "key_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "expected_revision",
+                "endpoint_url",
+                "key_refs"
+            ],
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v2",
+        "write_fields": null
+    }
+]

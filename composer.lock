@@ -648,7 +648,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "79e6a8cd8e841a02f83dcbc48837b0b240dbd9bf"
+                "reference": "39f2ecdba4600bb570fd0e4b983bfc1f5db7a317"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -715,6 +715,7 @@
                         "Internal",
                         "Invocation",
                         "Laravel",
+                        "Metadata",
                         "OpenApi",
                         "Pagination",
                         "Testing",
@@ -9296,7 +9297,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "4a34584e49fd3c6a21664f537bbf6ca425a63b72"
+                "reference": "cdf2dbaf661411a8bd200771d1727d443717137e"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -9361,7 +9362,8 @@
                         "Contracts",
                         "Data",
                         "Errors",
-                        "Internal"
+                        "Internal",
+                        "Mcp"
                     ]
                 }
             },
@@ -16865,5 +16867,5 @@
         "php": "^8.4"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

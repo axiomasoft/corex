@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__.'/../Support/Messaging.php';
 
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\BrokerDeliverySource;
@@ -12,12 +13,14 @@ use CoreX\Messaging\Contracts\BrokerReceiver;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\Inbox;
+use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Data\ConsumerId;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\BrokerReceipt;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Testing\Fixtures\RecordingPublisher;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\ConnectionInterface;
@@ -190,8 +193,16 @@ it('partitions concurrent relay leases without overlap or blocking', function ()
     DB::connection('dg_relay_a')->rollBack();
 })->group('pg');
 
-it('rolls back outbox rows with the business transaction and commits both on success', function (): void {
-    $outbox = resolve(Outbox::class);
+it('rolls back outbox rows with the business transaction and commits both on success', function (bool $consumerFixture): void {
+    $outbox = $consumerFixture
+        ? MessagingFixtures::outbox(
+            current: resolve(CurrentWorkScope::class),
+            issuer: resolve(StoredWorkIssuer::class),
+            contracts: resolve(MessageContractRegistry::class),
+            clock: resolve(ClockInterface::class),
+            scopes: resolve(DataScopeCodec::class),
+        )
+        : resolve(Outbox::class);
     $messageId = '01932f5a-0000-7000-8000-000000000103';
 
     try {
@@ -225,7 +236,7 @@ it('rolls back outbox rows with the business transaction and commits both on suc
 
     expect(DB::table('dg_business_effects')->count())->toBe(1)
         ->and(DB::table('sys_outbox_messages')->count())->toBe(1);
-})->group('pg');
+})->with(['container binding' => false, 'consumer fixture factory' => true])->group('pg');
 
 it('hands off durably to a restarted consumer and rejects lossy publishers before markPublished', function (): void {
     $durablePublisher = new class implements DurableMessagePublisher

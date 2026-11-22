@@ -29,14 +29,14 @@ final class ConvertMedia implements ShouldQueue
 
     public function handle(MediaOperationStore $operations, StoredWorkRunner $runner, Application $app): void
     {
-        $origin = $operations->conversionOrigin($this->fileId, $this->profileKey, $this->operationKey);
+        $origin = $operations->conversionOrigin(fileId: $this->fileId, profileKey: $this->profileKey, operationKey: $this->operationKey);
 
         if ($origin === null) {
             return;
         }
 
         [$scope, $proof] = $origin;
-        $runner->runStored($scope, $proof, fn () => $app->make(ConversionCoordinator::class)->process(
+        $runner->runStored(scope: $scope, proof: $proof, work: fn () => $app->make(ConversionCoordinator::class)->process(
             fileId: $this->fileId, profileKey: $this->profileKey, operationKey: $this->operationKey,
         ));
     }

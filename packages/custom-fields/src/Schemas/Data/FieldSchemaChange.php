@@ -20,7 +20,7 @@ final readonly class FieldSchemaChange
 
     public static function add(FieldDefinition $definition): self
     {
-        return new self($definition->entity, 'add', $definition->id, $definition);
+        return new self(entity: $definition->entity, kind: 'add', field: $definition->id, definition: $definition);
     }
 
     public static function rename(EntityHandle $entity, FieldId $field, string $machineKey): self
@@ -29,7 +29,7 @@ final readonly class FieldSchemaChange
             throw new InvalidArgumentException('Invalid field key.');
         }
 
-        return new self($entity, 'rename', $field, machineKey: $machineKey);
+        return new self(entity: $entity, kind: 'rename', field: $field, machineKey: $machineKey);
     }
 
     public static function revise(FieldDefinition $definition, ?string $converterId = null, ?int $converterVersion = null): self
@@ -38,12 +38,12 @@ final readonly class FieldSchemaChange
             throw new InvalidArgumentException('Invalid converter identity.');
         }
 
-        return new self($definition->entity, 'revise', $definition->id, $definition, converterId: $converterId, converterVersion: $converterVersion);
+        return new self(entity: $definition->entity, kind: 'revise', field: $definition->id, definition: $definition, converterId: $converterId, converterVersion: $converterVersion);
     }
 
     public static function retire(EntityHandle $entity, FieldId $field): self
     {
-        return new self($entity, 'retire', $field);
+        return new self(entity: $entity, kind: 'retire', field: $field);
     }
 
     /** @return ChangeRow */
@@ -66,9 +66,9 @@ final readonly class FieldSchemaChange
 
         return match ($row['kind']) {
             'add' => self::add($definition ?? throw new InvalidArgumentException('Missing definition.')),
-            'revise' => self::revise($definition ?? throw new InvalidArgumentException('Missing definition.'), $row['converter_id'], $row['converter_version']),
-            'rename' => self::rename($entity, $field, $row['machine_key'] ?? throw new InvalidArgumentException('Missing key.')),
-            'retire' => self::retire($entity, $field),
+            'revise' => self::revise(definition: $definition ?? throw new InvalidArgumentException('Missing definition.'), converterId: $row['converter_id'], converterVersion: $row['converter_version']),
+            'rename' => self::rename(entity: $entity, field: $field, machineKey: $row['machine_key'] ?? throw new InvalidArgumentException('Missing key.')),
+            'retire' => self::retire(entity: $entity, field: $field),
             default => throw new InvalidArgumentException('Unknown schema operation.'),
         };
     }

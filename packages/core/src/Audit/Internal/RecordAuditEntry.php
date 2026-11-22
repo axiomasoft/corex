@@ -42,7 +42,7 @@ final class RecordAuditEntry implements ShouldQueueAfterCommit
     public function handle(ClockInterface $clock, CurrentWorkScope $work): void
     {
         $model = new AuditLog;
-        $work->assert($this->scope, $model->getConnection());
+        $work->assert(scope: $this->scope, connection: $model->getConnection());
         $model->newQuery()->create([
             'occurred_at' => $this->entry->occurredAt ?? $clock->now(),
             'actor_type' => $this->entry->actorType,

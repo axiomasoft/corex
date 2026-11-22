@@ -10,7 +10,8 @@ use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
-use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
+use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Packman\Attributes\Spi;
@@ -19,21 +20,20 @@ use Packman\Attributes\SpiKind;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class WebhookController
 {
-    public function forward(Request $request, OperationDispatcher $dispatcher, OperationRegistry $operations): JsonResponse
+    public function forward(Request $request, HttpOperationDispatcher $dispatcher, OperationRegistry $operations, ApiOptions $options): JsonResponse
     {
         $path = ltrim($request->path(), '/');
-        $marker = 'v1/';
-        $offset = str_starts_with($path, $marker) ? 0 : strpos($path, '/'.$marker);
+        $prefix = ltrim($options->publicBaseUri(), '/').'/';
 
-        if ($offset === false) {
+        if (! str_starts_with($path, $prefix)) {
             throw new ApiError(errorCode: OperationsErrorCode::OperationNotFound, status: 404, message: 'Operation not found.');
         }
 
-        $relative = substr($path, $offset + strlen($marker) + ($offset === 0 ? 0 : 1));
-        [$operation] = $operations->match(version: 'v1', method: $request->method(), path: '/'.$relative);
+        $relative = substr($path, strlen($prefix));
+        [$operation] = $operations->match(version: 'v2', method: $request->method(), path: '/'.$relative);
         self::assertOperationContract($operation);
 
-        return $dispatcher->dispatch(request: $request, version: 'v1', path: $relative);
+        return $dispatcher->dispatch(request: $request, version: 'v2', path: $relative);
     }
 
     public static function assertOperationContract(Operation $operation): void

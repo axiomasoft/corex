@@ -306,8 +306,12 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
             $proof->same(['settled', $receipt['actual_units'] * 1000000], [$hold->state, (int) $hold->charged], 'One charge settled against the original dedicated hold');
             $proof->same(1, $observer->table('scenario_charged_effects')->count(), 'Replay did not perform another tenant effect');
             $proof->same($original['owner_digest'], hash('sha256', $observer->table('sys_api_idempotency')->sole()->outcome_json), 'Tenant budget receipt remains immutable');
-            $replay = $budget->table('sys_api_budget_reservations')->where('id', '<>', $receipt['reservation_id'])->sole();
-            $proof->same(['settled', 1000000], [$replay->state, (int) $replay->charged], 'Dedicated owner accounts separately for the documented replay fee');
+            $reservations = $budget->table('sys_api_budget_reservations')->orderBy('id')->get()->all();
+            $proof->same([$receipt['reservation_id']], array_column($reservations, 'id'), 'The whole dedicated ledger contains only the original hold');
+            $again = app(OperationInvoker::class)->invoke(Effects::invocation());
+            $proof->same(true, $again->replayed, 'A settled receipt remains replayable');
+            $proof->same(json_encode($reservations), json_encode($budget->table('sys_api_budget_reservations')->orderBy('id')->get()->all()), 'Settled replay leaves the entire dedicated ledger unchanged');
+            $proof->same(1, $observer->table('scenario_charged_effects')->count(), 'Settled replay does not enter the tenant handler');
             $ledger = app(ProviderEffectLedger::class);
             $effect = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, 'axiomasoft/corex-operations', 'budget-reservation', $hold->id);
             $evidence = $ledger->inspect($effect);
@@ -315,7 +319,7 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
             $proof->same($hold->id, $evidence->observation->reference, 'Provider receipt retains the exact reservation key');
             $foreign = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, $effect->owner, 'foreign-reservation', $hold->id);
             $proof->same(null, $ledger->inspect($foreign), 'The same receipt key is unknown in another owner namespace');
-            $after = ['original' => $hold, 'replay_fee' => $replay, 'scope' => $scope, 'provider_effect' => $evidence];
+            $after = ['original' => $hold, 'reservations' => $reservations, 'receipt' => $receipt, 'scope' => $scope, 'provider_effect' => $evidence];
 
             break;
 

@@ -40,9 +40,9 @@ final readonly class SqlDatasetImporter implements DatasetImporter
     #[Override]
     public function publish(DataScope $scope, DatasetCandidate $candidate, DatasetGeneration $expected): DatasetReceipt
     {
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
 
-        if (! $this->authorizer->authorize($scope, new RecordRef('reference-publish', $candidate->manifest->snapshotId), new FieldSelection([]), FieldUse::Write)->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'reference-publish', id: $candidate->manifest->snapshotId), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
             throw new AccessDeniedException('Reference dataset publication is not authorized.');
         }
 
@@ -63,8 +63,8 @@ final readonly class SqlDatasetImporter implements DatasetImporter
         $snapshotId = $candidate->manifest->snapshotId;
 
         return $this->connection->transaction(function () use ($scope, $datasetKey, $snapshotId, $candidate, $expected, $parsed): DatasetReceipt {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-intl', 'dataset-publish', ['dataset' => $datasetKey, 'snapshot' => $snapshotId]);
-            $this->current->assert($scope, $this->connection);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-intl', kind: 'dataset-publish', witness: ['dataset' => $datasetKey, 'snapshot' => $snapshotId]);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $current = $this->connection->table('corex_reference_current')
                 ->where('dataset_key', $datasetKey)
                 ->lockForUpdate()

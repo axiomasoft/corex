@@ -45,14 +45,17 @@ const ERROR_KEYS = ['category', 'code', 'detail_keys', 'owner', 'path', 'retryab
 const SCHEMA_KEYS = [
     'type', 'properties', 'required', 'items', 'enum', 'nullable',
     'additionalProperties', 'format', 'description', '$ref', 'oneOf', 'anyOf', 'allOf',
+    'const', 'minLength', 'maxLength', 'minimum', 'maximum', 'minItems', 'maxItems', 'pattern',
 ];
 const PAGINATION_KEYS = ['ordering', 'direction', 'fields', 'types', 'unique', 'envelope', 'cursor'];
 const DEPRECATION_KEYS = ['id', 'deprecatedAt', 'sunsetAt', 'successor', 'migrationUri'];
 const OPENAPI_KEYS = ['info', 'openapi', 'paths', 'servers'];
 const MANIFEST_KEYS = ['contract_fingerprint', 'files', 'major', 'registry_fingerprint', 'schema'];
 
+require_once __DIR__.'/support/cli-arguments.php';
+
 $repoRoot = dirname(__DIR__);
-$options = parseArguments($argv, $repoRoot);
+$options = parseArguments(\CoreX\Scripts\cliArguments(), $repoRoot);
 
 if ($options['error'] !== null) {
     fwrite(STDERR, $options['error']."\n");
@@ -88,8 +91,8 @@ exit(EXIT_OK);
  */
 function parseArguments(array $argv, string $repoRoot): array
 {
-    $baseline = $repoRoot.'/api/v1';
-    $candidate = $repoRoot.'/api/v1';
+    $baseline = $repoRoot.'/api/v2';
+    $candidate = $repoRoot.'/api/v2';
     $index = 1;
 
     while ($index < count($argv)) {
@@ -176,6 +179,14 @@ function loadSnapshot(string $directory): array
         throw new RuntimeException('unknown-schema manifest.json /schema');
     }
 
+    if (! in_array($files['manifest.json']['major'] ?? null, ['v1', 'v2'], true)) {
+        throw new RuntimeException('unknown-schema manifest.json /major');
+    }
+
+    if ($files['manifest.json']['major'] === 'v2' || basename($directory) === 'v2') {
+        assertV2Manifest($files['manifest.json'], $entries, $directory);
+    }
+
     $validatedFiles = [];
     foreach ($files as $name => $value) {
         if ($value !== null && ! is_array($value)) {
@@ -185,6 +196,52 @@ function loadSnapshot(string $directory): array
     }
 
     return ['files' => $validatedFiles, 'directory' => $directory];
+}
+
+/**
+ * @param  array<array-key, mixed>  $manifest
+ * @param  list<string>  $entries
+ */
+function assertV2Manifest(array $manifest, array $entries, string $directory): void
+{
+    if (($manifest['major'] ?? null) !== 'v2') {
+        throw new RuntimeException('unknown-schema manifest.json /major');
+    }
+
+    $expected = SNAPSHOT_FILES;
+    sort($expected);
+
+    if ($entries !== $expected) {
+        throw new RuntimeException('snapshot-file-set manifest.json /files');
+    }
+
+    $payloads = array_values(array_diff($expected, ['manifest.json']));
+    $digests = $manifest['files'] ?? null;
+
+    if (! is_array($digests)) {
+        throw new RuntimeException('unknown-schema manifest.json /files');
+    }
+
+    $digestKeys = array_keys($digests);
+    sort($digestKeys);
+
+    if ($digestKeys !== $payloads) {
+        throw new RuntimeException('snapshot-file-set manifest.json /files');
+    }
+
+    foreach ($payloads as $name) {
+        $digest = hash_file('sha256', $directory.'/'.$name);
+
+        if ($digest === false || $digests[$name] !== $digest) {
+            throw new RuntimeException('snapshot-digest manifest.json /files/'.escapePointer($name));
+        }
+    }
+
+    foreach (['contract_fingerprint', 'registry_fingerprint'] as $key) {
+        if (! is_string($manifest[$key] ?? null) || preg_match('/\A[a-f0-9]{64}\z/', $manifest[$key]) !== 1) {
+            throw new RuntimeException('unknown-schema manifest.json /'.$key);
+        }
+    }
 }
 
 function assertKnownDocument(mixed $document, string $subject, string $pointer): void
@@ -266,6 +323,26 @@ function assertOperationShape(array $operation, string $subject, string $pointer
 function assertSchema(array $schema, string $subject, string $pointer): void
 {
     assertKnownKeys($schema, SCHEMA_KEYS, $subject, $pointer);
+
+    foreach (['oneOf', 'anyOf', 'allOf'] as $composition) {
+        if (! array_key_exists($composition, $schema)) {
+            continue;
+        }
+
+        $members = $schema[$composition];
+
+        if (! is_array($members) || ! array_is_list($members) || $members === []) {
+            throw new RuntimeException('unknown-schema '.$subject.' '.$pointer.'/'.$composition);
+        }
+
+        foreach ($members as $index => $member) {
+            if (! is_array($member)) {
+                throw new RuntimeException('unknown-schema '.$subject.' '.$pointer.'/'.$composition.'/'.$index);
+            }
+
+            assertSchema($member, $subject, $pointer.'/'.$composition.'/'.$index);
+        }
+    }
 
     $properties = $schema['properties'] ?? [];
 
@@ -413,6 +490,12 @@ function compareSchema(string $subject, array $baseline, array $candidate, strin
 {
     $violations = [];
 
+    foreach (['const', 'minLength', 'maxLength', 'minimum', 'maximum', 'minItems', 'maxItems', 'pattern', 'oneOf', 'anyOf', 'allOf'] as $key) {
+        if (array_key_exists($key, $baseline) !== array_key_exists($key, $candidate) || ($baseline[$key] ?? null) !== ($candidate[$key] ?? null)) {
+            $violations[] = 'schema-constraint-change '.$subject.' '.$pointer.'/'.$key;
+        }
+    }
+
     if (array_key_exists('type', $baseline) && $baseline['type'] !== ($candidate['type'] ?? null)) {
         $violations[] = 'type-change '.$subject.' '.$pointer.'/type';
     }
@@ -509,6 +592,11 @@ function escapePointer(string $segment): string
 function decodeSnapshotFile(string $directory, string $name): mixed
 {
     $path = rtrim($directory, '/').'/'.$name;
+
+    if (! is_file($path)) {
+        throw new RuntimeException('unknown-schema '.$name.' /'.$name);
+    }
+
     $decoded = json_decode((string) file_get_contents($path), true);
 
     if (json_last_error() !== JSON_ERROR_NONE) {

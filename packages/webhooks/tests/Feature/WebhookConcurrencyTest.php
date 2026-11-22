@@ -157,14 +157,14 @@ final class WebhookConcurrencyTest extends TestCase
     private function seedDelivery(Connection $connection, DateTimeImmutable $now): void
     {
         $connection->table('sys_api_webhook_subscriptions')->insert([
-            'id' => 'subscription-pg', 'revision' => 0, 'major' => 'v1', 'topic' => 'orders.placed',
+            'id' => 'subscription-pg', 'revision' => 0, 'major' => 'v2', 'topic' => 'orders.placed',
             'topic_version' => 1, 'endpoint_url' => 'https://hooks.example/receiver', 'status' => 'active',
             'max_pii_class' => 'personal', 'key_refs' => '["current"]', 'created_at' => $now, 'updated_at' => $now,
         ]);
         $body = JsonCanonical::encode(['event_id' => 'event-pg', 'data' => ['id' => 'order-1']]);
         $connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($this->scope($connection), [
             'id' => 'delivery-pg', 'subscription_id' => 'subscription-pg', 'subscription_revision' => 0,
-            'event_id' => 'event-pg', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
+            'event_id' => 'event-pg', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v2',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
             'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope($connection))), 'body' => $body,
             'body_hash' => hash('sha256', $body), 'status' => 'pending', 'attempt' => 0, 'replay_count' => 0,

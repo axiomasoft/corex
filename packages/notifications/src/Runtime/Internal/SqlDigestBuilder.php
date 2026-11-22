@@ -56,7 +56,7 @@ final readonly class SqlDigestBuilder implements DigestBuilder
             throw new NotificationAccessDenied('Digest building requires an authenticated recipient.');
         }
         $scope = $this->scopes->forCurrentPrincipal($context->tenant);
-        $this->currentScope->assert($scope, $this->connection);
+        $this->currentScope->assert(scope: $scope, connection: $this->connection);
 
         if ($scope->principalKind !== $context->actorKind || $scope->principalId !== $context->actorId) {
             throw new NotificationAccessDenied('Digest building requires the active recipient.');
@@ -67,8 +67,8 @@ final readonly class SqlDigestBuilder implements DigestBuilder
         $scopeKey = hash('sha256', $encodedScope);
 
         return $this->connection->transaction(function () use ($scope, $encodedScope, $scopeKey, $recipient, $window): ?DigestRef {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-notifications', 'digest', ['recipient' => $recipient, 'window' => $window]);
-            $this->currentScope->assert($scope, $this->connection);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-notifications', kind: 'digest', witness: ['recipient' => $recipient, 'window' => $window]);
+            $this->currentScope->assert(scope: $scope, connection: $this->connection);
             $logical = NotificationScope::logical($scope);
             $recipientIdentity = [...$logical, 'kind' => $recipient->kind, 'id' => $recipient->id];
             $this->connection->table('ntf_recipient_state')->insertOrIgnore($recipientIdentity + ['preference_revision' => '1']);
@@ -106,7 +106,7 @@ final readonly class SqlDigestBuilder implements DigestBuilder
             }
             $ids = NotificationValue::strings($items->pluck('id')->all());
             $runId = (string) Str::uuid7();
-            $proof = $this->issuer->issue($scope, DigestRunIdentity::Owner, DigestRunIdentity::reference($runId, $window->start, $window->end, $window->period));
+            $proof = $this->issuer->issue(scope: $scope, owner: DigestRunIdentity::Owner, reference: DigestRunIdentity::reference(runId: $runId, start: $window->start, end: $window->end, period: $window->period));
             $batchSequence = $runs->isEmpty() ? 0 : NotificationValue::integer($runs->first()->batch_seq) + 1;
             $this->connection->table('ntf_digest_runs')->insert([...$logical, 'id' => $runId, 'scope_key' => $scopeKey, 'scope' => $encodedScope, 'scope_seal' => $proof->seal, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => DigestRunIdentity::timestamp($window->start), 'period_end' => DigestRunIdentity::timestamp($window->end), 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => $this->clock->now()]);
             foreach ($ids as $id) {

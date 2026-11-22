@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Enums\FieldUse;
@@ -55,7 +56,7 @@ final readonly class ScenarioJob implements ShouldQueue
 
             try {
                 ($ledger->retained ?? throw new RuntimeException('Missing retained A driver.'))->target($scope, $entity, hash('sha256', 'queue-retained-target'));
-            } catch (ScopeContextMismatch $error) {
+            } catch (ScopeContextMismatch|ScopeStale $error) {
                 if (! str_contains($error->getMessage(), 'connection')) {
                     throw $error;
                 }
@@ -131,7 +132,7 @@ final readonly class ScenarioJob implements ShouldQueue
                     $ledger->retainedB->target($scope, ScenarioSearchSchema::entity(), hash('sha256', 'queue-retained-target'));
 
                     throw new RuntimeException('A retained B driver executed after restoring A.');
-                } catch (ScopeContextMismatch $error) {
+                } catch (ScopeContextMismatch|ScopeStale $error) {
                     if (! str_contains($error->getMessage(), 'connection')) {
                         throw $error;
                     }

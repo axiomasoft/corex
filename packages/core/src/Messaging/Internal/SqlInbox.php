@@ -32,14 +32,14 @@ final readonly class SqlInbox implements Inbox
         if ($connection->transactionLevel() < 1) {
             throw InboxRefused::outsideTransaction($consumer->name);
         }
-        $this->current->assert($message->scope, $connection);
-        $contract = $this->contracts->get($message->name, $message->contractVersion);
+        $this->current->assert(scope: $message->scope, connection: $connection);
+        $contract = $this->contracts->get(name: $message->name, version: $message->contractVersion);
 
         if (! $contract->maxPiiClass->permits($message->piiClass)) {
             throw new InboxRefused('Message exceeds the registered PII class.');
         }
         $contract->validateFact($message);
-        ReferenceWrites::enlist($connection, $message->scope, 'axiomasoft/corex', 'inbox', ['package' => $contract->owner, 'subject' => $message->subjectData(), 'consumer' => $consumer->name]);
+        ReferenceWrites::enlist(connection: $connection, scope: $message->scope, producer: 'axiomasoft/corex', kind: 'inbox', witness: ['package' => $contract->owner, 'subject' => $message->subjectData(), 'consumer' => $consumer->name]);
         $key = [...MessageReceiptIdentity::logical($message->scope), 'consumer' => $consumer->name, 'source' => $message->source, 'message_id' => $message->messageId];
         $digest = $message->digest();
         $inserted = $connection->table($this->table)->insertOrIgnoreReturning([

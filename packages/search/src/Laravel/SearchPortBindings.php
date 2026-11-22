@@ -28,11 +28,13 @@ use CoreX\Search\Query\Contracts\CandidateDriver;
 use CoreX\Search\Query\Contracts\LiveCandidateDriver;
 use CoreX\Search\Query\Contracts\Search;
 use CoreX\Search\Query\Contracts\SearchDriverRegistry;
+use CoreX\Search\Query\Contracts\SearchMetadata;
 use CoreX\Search\Query\Data\SearchQuery;
 use CoreX\Search\Query\Internal\AuthorizedHydrator;
 use CoreX\Search\Query\Internal\AuthorizedSearch;
 use CoreX\Search\Query\Internal\QuerySession;
 use CoreX\Search\Query\Internal\SearchCursor;
+use CoreX\Search\Query\Internal\SearchMetadataReader;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use LogicException;
@@ -77,9 +79,24 @@ final class SearchPortBindings
 
             return new CompositeProjection($parts);
         });
+        $app->bind(SearchMetadata::class, static function (Application $app): SearchMetadata {
+            $options = $app->make(SearchOptions::class);
+
+            return new SearchMetadataReader(
+                runner: $app->make(WorkScopeRunner::class),
+                current: $app->make(CurrentWorkScope::class),
+                policy: $app->make(FieldUsePolicy::class),
+                backend: $options->driver,
+                cluster: $options->cluster,
+                driver: static fn (): CandidateDriver => self::selected($app),
+                projection: $app->make(SearchProjectionContributor::class),
+                generations: $app->make(ActiveGenerations::class),
+                index: static fn (): IndexDriver => $app->make(IndexDriver::class),
+            );
+        });
         $app->bind(Search::class, static fn (Application $app): Search => new AuthorizedSearch(
-            $app->make(WorkScopeRunner::class), $app->make(CurrentWorkScope::class),
-            static fn (DataScope $scope, SearchQuery $query): QuerySession => self::session($app, $scope, $query),
+            runner: $app->make(WorkScopeRunner::class), current: $app->make(CurrentWorkScope::class),
+            session: static fn (DataScope $scope, SearchQuery $query): QuerySession => self::session(app: $app, scope: $scope, query: $query),
         ));
     }
 
@@ -95,9 +112,9 @@ final class SearchPortBindings
         $projection = $app->make(SearchProjectionContributor::class);
 
         return new QuerySession(
-            context: new ProjectionContext($scope, $query->entity), query: $query, driver: $driver,
+            context: new ProjectionContext(scope: $scope, entity: $query->entity), query: $query, driver: $driver,
             policy: $app->make(FieldUsePolicy::class), projection: $projection,
-            hydrator: new AuthorizedHydrator($app->make(SearchSource::class), $projection, $app->make(DataScopeAuthorizer::class)),
+            hydrator: new AuthorizedHydrator(source: $app->make(SearchSource::class), projection: $projection, authorization: $app->make(DataScopeAuthorizer::class)),
             current: $app->make(CurrentWorkScope::class), generations: $driver instanceof LiveCandidateDriver ? null : $app->make(ActiveGenerations::class),
             cursor: $cursor, backend: $options->driver, cluster: $options->cluster, budget: $options->scanBudget,
         );

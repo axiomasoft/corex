@@ -26,6 +26,7 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Data/Contracts/DataScopeAuthorizer.php',
     'packages/core/src/Data/Contracts/DataScopeCodec.php',
     'packages/core/src/Data/Contracts/FieldUsePolicy.php',
+    'packages/core/src/Data/Contracts/FieldUseSnapshot.php',
     'packages/core/src/Messaging/Contracts/DurablePayload.php',
     'packages/core/src/Data/Data/DataScopeAccessDecision.php',
     'packages/core/src/Data/Data/EntityHandle.php',

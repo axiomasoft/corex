@@ -27,9 +27,9 @@ final readonly class TransferModuleReferences implements ModuleReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'corex_transfer_jobs' => [$tenant, ['source_hash', 'mapping_hash', 'state']],
             'corex_transfer_rows' => [$tenant, ['job_id']],
             'corex_transfer_refs' => [$tenant, ['entity', 'job_id', 'state']],
@@ -37,6 +37,6 @@ final readonly class TransferModuleReferences implements ModuleReferences
             'corex_export_manifests' => [$tenant, ['job_id', 'state']],
             'corex_export_parts' => [$tenant, ['state']],
             'corex_transfer_steps' => [$tenant, ['job_id']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

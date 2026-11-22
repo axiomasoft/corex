@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Operations\Definition\Laravel;
 
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
+use CoreX\Operations\Definition\Internal\OperationRegistry as CompiledOperations;
 use CoreX\Operations\Errors\Contracts\ErrorMapping;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Invocation\Contracts\EffectiveCapabilities;
-use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
 use CoreX\Operations\Invocation\Internal\CapabilityResolver;
 use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments;
 use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
@@ -28,7 +28,7 @@ final class OperationPortBindings
         $app->bind(EffectiveCapabilities::class, static fn (Application $app): EffectiveCapabilities => $app->make(CapabilityResolver::class));
         $app->bind(ApiProfiles::class, static fn (Application $app): ApiProfiles => $app->make(ApiProfileFactory::class));
         $app->bind(ErrorMapping::class, static fn (Application $app): ErrorMapping => $app->make(ErrorMapper::class));
-        $app->scoped(OperationRegistry::class, \CoreX\Operations\Definition\Internal\OperationRegistry::class);
-        $app->scoped(OperationDispatcher::class, \CoreX\Operations\Invocation\Internal\OperationDispatcher::class);
+        $app->scoped(OperationRegistry::class, CompiledOperations::class);
+
     }
 }

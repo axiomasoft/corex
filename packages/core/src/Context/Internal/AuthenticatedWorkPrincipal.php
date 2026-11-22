@@ -27,7 +27,7 @@ final readonly class AuthenticatedWorkPrincipal implements WorkPrincipalAuthorit
             throw new ScopeContextMismatch('An authenticated work principal is required.');
         }
 
-        return new ScopePrincipal($user->principalType()->value, $user->principalId());
+        return new ScopePrincipal(kind: $user->principalType()->value, id: $user->principalId());
     }
 
     public function run(DataScope $scope, TenantContext $context, bool $durable, Closure $work): mixed

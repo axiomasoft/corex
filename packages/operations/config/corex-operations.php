@@ -13,10 +13,10 @@ return [
     ],
 
     'versions' => [
-        ['major' => 'v1', 'status' => 'stable', 'supported_through' => null],
+        ['major' => 'v2', 'status' => 'stable', 'supported_through' => null],
     ],
 
-    'default_major' => 'v1',
+    'default_major' => 'v2',
     'product' => 'corex',
     'build' => 'dev',
 

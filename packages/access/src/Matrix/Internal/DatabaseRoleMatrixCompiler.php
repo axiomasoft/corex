@@ -35,7 +35,7 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
         }
 
         $connection->transaction(function () use ($roleId, $connection): void {
-            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-access', 'compile-role', ['role' => $roleId]);
+            ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex-access', kind: 'compile-role', witness: ['role' => $roleId]);
             RoleMatrixData::role($roleId);
             RoleMatrixData::matrix($roleId);
 

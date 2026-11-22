@@ -463,12 +463,10 @@ def run(command: list[str], cwd: Path, env: dict[str, str]) -> subprocess.Comple
 
 
 def composer_command(*args: str) -> list[str]:
-    """Run Composer on PHP 8.4. PHP 8.5 rejects this Composer phar; the app still boots on the cell interpreter."""
     composer = shutil.which("composer")
     if composer is None:
         raise ProfileError("missing package: composer")
-    php = shutil.which("php8.4")
-    return [php, composer, *args] if php else [composer, *args]
+    return ["php", composer, *args]
 
 
 def assert_cohort_platform(consumer: Path, version: tuple[int, int, int], cell_id: str) -> None:
@@ -565,7 +563,10 @@ def psql(settings: dict[str, str], database: str, statement: str) -> str:
 
 @contextmanager
 def isolated_scenario_databases(profile: dict, expected_major: int | None):
-    if profile["database"] != "postgres-isolated":
+    database_kind = profile["database"]
+    if database_kind == "postgres-two":
+        profile = {**profile, "database_roles": ["a", "b"], "default_database": "a"}
+    elif database_kind != "postgres-isolated":
         if expected_major is not None:
             raise ProfileError("this scenario does not declare an isolated PostgreSQL profile")
         yield {}
@@ -606,35 +607,6 @@ def isolated_scenario_databases(profile: dict, expected_major: int | None):
             raise ProfileError("isolated PostgreSQL cleanup failed: " + " | ".join(failures))
 
 
-def ensure_databases(names: tuple[str, ...]) -> None:
-    settings = postgres_settings()
-    ready = subprocess.run(
-        ("pg_isready", "-h", settings["host"], "-p", settings["port"], "-U", settings["user"]),
-        text=True, capture_output=True, check=False,
-    )
-    if ready.returncode != 0:
-        raise ProfileError("modular-multi: postgres is not ready")
-    env = os.environ.copy()
-    env["PGPASSWORD"] = settings["password"]
-    for name in names:
-        if not re.fullmatch(r"[a-z0-9_]+_test", name):
-            raise ProfileError(f"modular-multi: {name}")
-        exists = subprocess.run(
-            ("psql", "-h", settings["host"], "-p", settings["port"], "-U", settings["user"], "-d", "postgres",
-             "-Atqc", f"SELECT 1 FROM pg_database WHERE datname='{name}'"),
-            text=True, capture_output=True, check=False, env=env,
-        )
-        if exists.stdout.strip() == "1":
-            continue
-        created = subprocess.run(
-            ("psql", "-h", settings["host"], "-p", settings["port"], "-U", settings["user"], "-d", "postgres",
-             "-c", f'CREATE DATABASE "{name}" OWNER "{settings["user"]}"'),
-            text=True, capture_output=True, check=False, env=env,
-        )
-        if created.returncode != 0:
-            raise ProfileError(f"modular-multi: {created.stderr.strip() or name}")
-
-
 def set_env(text: str, key: str, value: str) -> str:
     pattern = re.compile(rf"^{re.escape(key)}=.*$", re.M)
     if pattern.search(text):
@@ -647,20 +619,9 @@ def configure_database(consumer: Path, profile: dict, cell_id: str, isolated: di
     text = env_path.read_text(encoding="utf-8") if env_path.exists() else ""
     extra: dict[str, str] = {}
     if profile.get("database") in {"postgres-two", "postgres-isolated"}:
-        if profile["database"] == "postgres-two":
-            names = ("corex_p176_tenant_a_test", "corex_p176_tenant_b_test")
-            ensure_databases(names)
-            settings = postgres_settings()
-            extra = {
-                "COREX_PG_DATABASES": ",".join(names),
-                "PGSQL_HOST": settings["host"], "PGSQL_PORT": settings["port"],
-                "PGSQL_USERNAME": settings["user"], "PGSQL_PASSWORD": settings["password"],
-                "COREX_SCENARIO_DB_DEFAULT": names[0],
-            }
-        elif not isolated:
+        if not isolated:
             raise ProfileError(f"{cell_id}: isolated PostgreSQL databases were not provisioned")
-        else:
-            extra = isolated
+        extra = isolated
         for key, value in (
             ("DB_CONNECTION", "pgsql"),
             ("DB_HOST", extra["PGSQL_HOST"]),
@@ -684,7 +645,7 @@ def configure_database(consumer: Path, profile: dict, cell_id: str, isolated: di
     return extra
 
 
-def locked_summary(payload: dict) -> list[str]:
+def locked_summary(payload: dict, *, product: dict | None = None) -> list[str]:
     rows = payload.get("locked")
     if not isinstance(rows, list):
         raise ProfileError("Composer show --locked did not return the locked package list")
@@ -693,8 +654,15 @@ def locked_summary(payload: dict) -> list[str]:
         if not isinstance(row, dict) or not isinstance(row.get("name"), str) or not isinstance(row.get("version"), str):
             raise ProfileError("Composer show --locked returned invalid package metadata")
         name = row["name"]
+        version = row["version"]
+        if product is not None and name == product["name"]:
+            locked_version = product["version"]
+            reference = product["dist"]["reference"][:7]
+            if version not in {locked_version, f"{locked_version} {reference}"}:
+                raise ProfileError(f"Composer show --locked disagrees with the verified {name} version and reference")
+            version = locked_version
         if is_corex_package(name) or name in {"flex/crm", "laravel/framework", "illuminate/support"}:
-            names.append(f"{name}:{row['version']}")
+            names.append(f"{name}:{version}")
     return sorted(names)
 
 
@@ -709,6 +677,7 @@ def install_app(
     *,
     isolated: dict[str, str] | None = None,
     host_overlays: tuple[Path, ...] = (),
+    host_components: tuple[tuple[Path, Path], ...] = (),
 ) -> tuple[Path, dict[str, str], list[str]]:
     laravel = cell["laravel"] or 13
     home = root / "home"
@@ -726,13 +695,15 @@ def install_app(
     packages = list(cell["packages"])
     write_consumer(consumer, packages, laravel, repository, ".".join(map(str, binary["version"])), candidate_version)
     prerequisites = reviewed_prerequisites(consumer, profile.get("prerequisites", []), workspace)
+    host_require = profile.get("host_require", {})
+    add_host_requirements(consumer, host_require)
     extension = profile.get("extension_fixture")
     if extension is not None:
         install_extension_source(consumer, workspace, extension)
         fixture_require = load_json(consumer / "scenario-extension/composer.json").get("require", {})
         packages.extend(name for name in fixture_require if is_corex_package(name) and name not in packages)
     if profile.get("product") == "flex/crm":
-        shutil.copytree(workspace / "products/flex-crm", consumer / "flex-crm", ignore=shutil.ignore_patterns("vendor", "composer.lock"))
+        copy_committed_fixture(workspace, Path("products/flex-crm"), consumer / "flex-crm")
         manifest = load_json(consumer / "composer.json")
         manifest["require"]["flex/crm"] = "^1.0@dev"
         manifest["repositories"].append({
@@ -754,8 +725,11 @@ def install_app(
         fail_command(cell["id"], validated)
     assert_dist_install(consumer, repository, packages, workspace)
     assert_prerequisites(consumer, prerequisites)
+    assert_host_requirements(consumer, host_require)
     if extension is not None:
         assert_fixture_extension(consumer, extension)
+    if profile.get("product") == "flex/crm":
+        assert_fixture_product(consumer)
     example = consumer / ".env.example"
     env_file = consumer / ".env"
     if not env_file.exists() and example.exists():
@@ -763,7 +737,11 @@ def install_app(
     runtime = {**env, **configure_database(consumer, profile, cell["id"], isolated or {})}
     if bridge := profile.get("search_custom_fields"):
         runtime.update({"COREX_SCENARIO_FIELDS_BRIDGE": bridge, "COREX_SEARCH_CUSTOM_FIELDS_ENABLED": "true" if bridge == "enabled" else "false"})
+    for source, target in host_components:
+        copy_committed_fixture(workspace, source, consumer / target)
     for overlay in host_overlays:
+        if any((overlay / target).exists() for _, target in host_components):
+            raise ProfileError("scenario host overlay shadows a committed host component")
         shutil.copytree(overlay, consumer, dirs_exist_ok=True)
     if tasks_workflow := profile.get("tasks_workflow"):
         runtime["COREX_SCENARIO_TASKS_WORKFLOW"] = tasks_workflow
@@ -808,18 +786,56 @@ def fixture_package_name(specification: dict) -> str:
     return "equipment/registry" if specification.get("kind") == "equipment" else f"thirdparty/{specification['id']}"
 
 
-def install_extension_source(consumer: Path, workspace: Path, specification: dict) -> None:
-    source = extension_source(specification)
+def add_host_requirements(consumer: Path, requirements: dict) -> None:
+    if not isinstance(requirements, dict) or set(requirements) - {"opis/json-schema"} or any(
+        not isinstance(pin, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", pin)
+        for pin in requirements.values()
+    ):
+        raise ProfileError("unknown or unpinned optional host dependency")
+    if requirements:
+        path = consumer / "composer.json"
+        manifest = load_json(path)
+        manifest["require"].update(requirements)
+        path.write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8")
+
+
+def assert_host_requirements(consumer: Path, requirements: dict) -> dict:
+    if not requirements:
+        return {}
+    locked = {row["name"]: row for row in load_json(consumer / "composer.lock")["packages"]}
+    actual = {row["name"]: row for row in load_json(consumer / "vendor/composer/installed.json")["packages"]}
+    proof = {}
+    for name, pin in requirements.items():
+        lock = locked.get(name, {})
+        installed = actual.get(name, {})
+        dist = lock.get("dist", {})
+        if (str(lock.get("version", "")).removeprefix("v") != pin or installed.get("version") != lock["version"]
+                or installed.get("installation-source") != "dist" or installed.get("dist") != dist
+                or dist.get("type") != "zip" or not str(dist.get("url", "")).startswith("https://")
+                or not re.fullmatch(r"[a-f0-9]{40}", str(dist.get("reference", "")))):
+            raise ProfileError(f"{name}: optional host dependency did not resolve to the pinned release dist")
+        origin = consumer / "vendor/composer" / installed["install-path"]
+        if not origin.is_dir() or origin.is_symlink() or not origin.resolve().is_relative_to((consumer / "vendor").resolve()):
+            raise ProfileError(f"{name}: host dependency escaped installed vendor")
+        proof[name] = {"version": lock["version"], "dist": dist, "tree_sha256": fixture_tree_digest(origin)}
+    return proof
+
+
+def copy_committed_fixture(workspace: Path, source: Path, target: Path) -> None:
     snapshot = subprocess.run(
         ["git", "archive", "--format=tar", f"HEAD:{source.as_posix()}"],
         cwd=workspace, check=True, capture_output=True,
     )
-    target = consumer / "scenario-extension"
-    target.mkdir()
+    target.mkdir(parents=True)
     with tarfile.open(fileobj=io.BytesIO(snapshot.stdout)) as archive:
         if any(not (entry.isfile() or entry.isdir()) for entry in archive.getmembers()):
-            raise ProfileError("installed extension fixture contains a symbolic link or special file")
+            raise ProfileError("committed fixture contains a symbolic link or special file")
         archive.extractall(target, filter="data")
+
+
+def install_extension_source(consumer: Path, workspace: Path, specification: dict) -> None:
+    target = consumer / "scenario-extension"
+    copy_committed_fixture(workspace, extension_source(specification), target)
     package = load_json(target / "composer.json")
     name = fixture_package_name(specification)
     if package["name"] != name:
@@ -859,6 +875,25 @@ def assert_fixture_extension(consumer: Path, specification: dict) -> dict:
     if installed.is_symlink() or fixture_tree_digest(installed) != expected:
         raise ProfileError("installed extension fixture does not match the committed source copy")
     return {"name": name, "version": locked["version"], "source_sha256": expected}
+
+
+def assert_fixture_product(consumer: Path) -> dict:
+    name = "flex/crm"
+    locked = next((row for row in load_json(consumer / "composer.lock")["packages"] if row["name"] == name), {})
+    installed = next((row for row in load_json(consumer / "vendor/composer/installed.json")["packages"] if row["name"] == name), {})
+    dist = locked.get("dist", {})
+    if (locked.get("version") != "1.0.x-dev" or installed.get("version") != locked["version"]
+            or dist.get("type") != "path" or dist.get("url") != "flex-crm" or installed.get("dist") != dist
+            or not re.fullmatch(r"[a-f0-9]{40}", str(dist.get("reference", "")))):
+        raise ProfileError("installed FlexCRM must match the locked relative source distribution")
+    source = consumer / "flex-crm"
+    target = consumer / "vendor" / name
+    expected, actual = fixture_tree_digest(source), fixture_tree_digest(target)
+    if target.is_symlink() or actual != expected:
+        raise ProfileError("installed FlexCRM does not match the committed source copy")
+    return {"name": name, "version": locked["version"], "dist": dist,
+            "source_sha256": expected, "installed_sha256": actual,
+            "composer_sha256": hashlib.sha256((source / "composer.json").read_bytes()).hexdigest()}
 
 
 def reviewed_prerequisites(consumer: Path, names: list[str], workspace: Path) -> dict:
@@ -924,8 +959,8 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
     binary = interpreter_for(cell["php"], available)
     profile = profile or {"id": cell["id"], "database": "sqlite-single", "http": True}
     prefix = "corex-profile-" + cell["id"].replace("/", "-") + "-"
-    with tempfile.TemporaryDirectory(prefix=prefix) as temporary:
-        consumer, runtime, packages = install_app(Path(temporary), cell, profile, repository, workspace, binary, candidate_version)
+    with tempfile.TemporaryDirectory(prefix=prefix) as temporary, isolated_scenario_databases(profile, None) as isolated:
+        consumer, runtime, packages = install_app(Path(temporary), cell, profile, repository, workspace, binary, candidate_version, isolated=isolated)
         report = boot_app(consumer, runtime, cell["id"])
         assert_providers(consumer, report, cell["id"])
         initial_dist = assert_dist_install(consumer, repository, packages, workspace)
@@ -948,13 +983,14 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
         show = run(composer_command("show", "--locked", "--format=json"), consumer, runtime)
         if show.returncode != 0:
             fail_command(cell["id"], show)
-        shown = locked_summary(json.loads(show.stdout))
+        product = assert_fixture_product(consumer) if profile.get("product") == "flex/crm" else None
+        shown = locked_summary(json.loads(show.stdout), product=product)
         if [entry for entry in shown if is_corex_package(entry.split(":", 1)[0])] != dist["installed"]:
             raise ProfileError(f"{cell['id']}: Composer show --locked differs from the installed CoreX closure")
         framework = f"laravel/framework:v{cell['laravel'] or 13}."
         if not any(entry.startswith(framework) for entry in shown):
             raise ProfileError(f"{cell['id']}: Composer show --locked is missing the expected Laravel framework")
-        if profile.get("product") == "flex/crm" and "flex/crm:1.0.x-dev" not in shown:
+        if product is not None and shown.count("flex/crm:1.0.x-dev") != 1:
             raise ProfileError(f"{cell['id']}: independent FlexCRM version line changed")
         cohort_installed = sorted(name for name in report["packages"] if is_corex_package(name))
         return {

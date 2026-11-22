@@ -65,10 +65,10 @@ final class QuerySession
 
     public function run(): SearchPage
     {
-        $this->identity = SearchCursor::identity($this->context->scope, $this->query);
+        $this->identity = SearchCursor::identity(scope: $this->context->scope, query: $this->query);
 
         if ($this->query->cursor !== null) {
-            $this->continuation = $this->cursor->decode($this->identity, $this->query->cursor);
+            $this->continuation = $this->cursor->decode(identity: $this->identity, cursor: $this->query->cursor);
         }
 
         for ($attempt = 0; ; $attempt++) {
@@ -78,10 +78,10 @@ final class QuerySession
 
                 if ($exactRequest) {
                     $admission = $this->plan();
-                    $admission->verifyLowering($this->driver->capabilities(), $this->query);
+                    $admission->verifyLowering(capabilities: $this->driver->capabilities(), query: $this->query);
 
                     if ($this->continuation !== null) {
-                        $this->position(SearchNamespace::generation($this->target($admission->mapping)), $admission->witness);
+                        $this->position(generation: SearchNamespace::generation($this->target($admission->mapping)), witness: $admission->witness);
                     }
                 }
                 $this->produced = null;
@@ -111,7 +111,7 @@ final class QuerySession
         if ($this->binding !== $this->binding($plan)) {
             throw SearchWitnessChanged::changed();
         }
-        $live = $this->hydrator->hydrate($this->context, $plan, $this->query, $this->returned->candidates);
+        $live = $this->hydrator->hydrate(context: $this->context, plan: $plan, query: $this->query, candidates: $this->returned->candidates);
 
         if ($live->fingerprint() !== $this->returned->fingerprint() || $this->binding !== $this->binding($this->plan())) {
             throw SearchWitnessChanged::changed();
@@ -128,7 +128,7 @@ final class QuerySession
             throw GenerationChanged::changed();
         }
 
-        return SearchPlan::compile($this->context, $this->query, $schema, $this->policy);
+        return SearchPlan::compile(context: $this->context, query: $this->query, schema: $schema, policy: $this->policy);
     }
 
     private function target(string $mapping): IndexTarget
@@ -136,7 +136,7 @@ final class QuerySession
         $context = $this->context;
         $target = $this->driver instanceof LiveCandidateDriver
             ? $this->driver->target($context->scope, $context->entity, $mapping)
-            : $this->generations?->active($context->scope, $context->entity);
+            : $this->generations?->active(scope: $context->scope, entity: $context->entity);
 
         if ($target === null || SearchNamespace::scope($target->scope) !== SearchNamespace::scope($context->scope)
             || $target->backend !== $this->backend || $target->cluster !== $this->cluster || $target->entity->value !== $context->entity->value
@@ -155,11 +155,11 @@ final class QuerySession
     private function scan(bool $exact): SearchPage
     {
         $plan = $this->plan();
-        $plan->verifyLowering($this->driver->capabilities(), $this->query);
+        $plan->verifyLowering(capabilities: $this->driver->capabilities(), query: $this->query);
         $target = $this->target($plan->mapping);
         $generation = SearchNamespace::generation($target);
         $this->binding = $plan->witness.$generation;
-        $position = $this->position($generation, $plan->witness);
+        $position = $this->position(generation: $generation, witness: $plan->witness);
         $hits = [];
         $revisions = [];
         $confirmed = [];
@@ -167,7 +167,7 @@ final class QuerySession
         $positions = [];
         do {
             $limit = min($this->remaining, $this->query->limit - count($hits));
-            $page = $this->driver->candidates($this->request($target, $plan, $plan->recordIds, $position, $limit));
+            $page = $this->driver->candidates($this->request(target: $target, plan: $plan, corpus: $plan->recordIds, position: $position, limit: $limit));
             $size = count($page->candidates);
 
             if ($size > $limit || ($page->nextPosition !== null && ($size === 0 || $page->nextPosition === $position || isset($positions[$page->nextPosition])))) {
@@ -185,7 +185,7 @@ final class QuerySession
                 }
                 $seen[$ref->id] = true;
             }
-            $loaded = $this->hydrator->hydrate($this->context, $plan, $this->query, $page->candidates);
+            $loaded = $this->hydrator->hydrate(context: $this->context, plan: $plan, query: $this->query, candidates: $page->candidates);
             array_push($hits, ...$loaded->hits);
             $revisions += $loaded->revisions;
             array_push($confirmed, ...$loaded->candidates);
@@ -196,11 +196,11 @@ final class QuerySession
             }
         } while ($position !== null && $this->remaining > 0 && count($hits) < $this->query->limit);
 
-        $stats = $this->statistics($exact, $target, $plan);
-        $this->returned = new LoadedHits($hits, $revisions, $confirmed);
+        $stats = $this->statistics(exact: $exact, target: $target, plan: $plan);
+        $this->returned = new LoadedHits(hits: $hits, revisions: $revisions, candidates: $confirmed);
 
-        return $this->produced = new SearchPage($hits, $position === null ? null : $this->cursor->encode($this->identity, $plan->mapping, $generation, $plan->witness, $position),
-            new SearchCount($this->query->count, $stats->count), new SearchFacets($this->query->facets !== [], $stats->facets));
+        return $this->produced = new SearchPage(hits: $hits, cursor: $position === null ? null : $this->cursor->encode(identity: $this->identity, mapping: $plan->mapping, generation: $generation, witness: $plan->witness, position: $position),
+            count: new SearchCount(requested: $this->query->count, value: $stats->count), facets: new SearchFacets(requested: $this->query->facets !== [], values: $stats->facets));
     }
 
     private function position(string $generation, string $witness): ?string
@@ -225,35 +225,35 @@ final class QuerySession
     {
         $q = $this->query;
 
-        return new CandidateRequest($this->context->scope, $target, $q->text, array_map($plan->physicalField(...), $q->searchFields),
-            array_map(static fn (SearchFilter $filter): SearchFilter => new SearchFilter($plan->physicalField($filter->field), $filter->values), $plan->filters),
-            array_map(static fn (SearchSort $sort): SearchSort => new SearchSort($plan->physicalField($sort->field), $sort->descending), $q->sort),
-            $corpus, $position, $limit);
+        return new CandidateRequest(scope: $this->context->scope, generation: $target, text: $q->text, searchFields: array_map($plan->physicalField(...), $q->searchFields),
+            filters: array_map(static fn (SearchFilter $filter): SearchFilter => new SearchFilter(field: $plan->physicalField($filter->field), values: $filter->values), $plan->filters),
+            sort: array_map(static fn (SearchSort $sort): SearchSort => new SearchSort(field: $plan->physicalField($sort->field), descending: $sort->descending), $q->sort),
+            recordIds: $corpus, position: $position, limit: $limit);
     }
 
     private function statistics(bool $exact, IndexTarget $target, SearchPlan $plan): SearchStatistics
     {
         if (! $exact || ! $this->driver instanceof ExactCandidateDriver) {
-            return new SearchStatistics(null, null);
+            return new SearchStatistics(count: null, facets: null);
         }
         $count = null;
 
         if ($this->query->count) {
-            $request = $this->request($target, $plan, $plan->aggregateCorpus(''), null, 1);
+            $request = $this->request(target: $target, plan: $plan, corpus: $plan->aggregateCorpus(''), position: null, limit: 1);
             $count = $this->driver->statistics($request, true, [])->count;
         }
         $facets = [];
         foreach ($this->query->facets as $field) {
-            $request = $this->request($target, $plan, $plan->aggregateCorpus($field), null, 1);
+            $request = $this->request(target: $target, plan: $plan, corpus: $plan->aggregateCorpus($field), position: null, limit: 1);
             $physical = $plan->physicalField($field);
             $stats = $this->driver->statistics($request, false, [$physical]);
 
             if (! isset($stats->facets[$physical])) {
-                return new SearchStatistics($count, null);
+                return new SearchStatistics(count: $count, facets: null);
             }
             $facets[$field] = $stats->facets[$physical];
         }
 
-        return new SearchStatistics($count, $facets === [] ? null : $facets);
+        return new SearchStatistics(count: $count, facets: $facets === [] ? null : $facets);
     }
 }

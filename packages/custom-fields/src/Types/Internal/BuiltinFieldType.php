@@ -50,7 +50,7 @@ final readonly class BuiltinFieldType implements FieldType
             $uses[] = FieldUse::Aggregate;
         }
 
-        return new FieldTypeDescriptor($this->type->value, 1, new JsonFieldCodec, $uses, multiple: $this->type->value === 'multiselect');
+        return new FieldTypeDescriptor(codecId: $this->type->value, codecVersion: 1, codec: new JsonFieldCodec, uses: $uses, multiple: $this->type->value === 'multiselect');
     }
 
     public function operators(FieldDefinition $field): FieldOperatorSet
@@ -103,7 +103,7 @@ final readonly class BuiltinFieldType implements FieldType
             if ($this->type->value === 'json') {
                 return new FieldValue($input->document);
             }
-            $map = array_map(fn (mixed $translation): mixed => $this->scalar($translation, $field), $translations);
+            $map = array_map(fn (mixed $translation): mixed => $this->scalar(value: $translation, field: $field), $translations);
 
             return new FieldValue(new JsonDocument(FieldJson::encode((object) $map)));
         }
@@ -113,7 +113,7 @@ final readonly class BuiltinFieldType implements FieldType
             return new FieldValue($input->document);
         }
 
-        return new FieldValue(new JsonDocument(FieldJson::encode($this->scalar($value, $field))));
+        return new FieldValue(new JsonDocument(FieldJson::encode($this->scalar(value: $value, field: $field))));
     }
 
     /** @return null|bool|int|float|string|array<array-key,mixed>|stdClass */
@@ -122,14 +122,14 @@ final readonly class BuiltinFieldType implements FieldType
         $limits = $field->constraints;
 
         return match ($this->type->value) {
-            'text', 'url', 'email', 'phone', 'date', 'datetime', 'select' => $this->text($value, $limits),
-            'decimal' => $this->decimal($this->string($value), $limits),
+            'text', 'url', 'email', 'phone', 'date', 'datetime', 'select' => $this->text(input: $value, limits: $limits),
+            'decimal' => $this->decimal(value: $this->string($value), limits: $limits),
             'int' => is_int($value) && $value >= ($limits['min'] ?? PHP_INT_MIN) && $value <= ($limits['max'] ?? PHP_INT_MAX)
                 ? $value : throw new InvalidArgumentException('Invalid field integer.'),
             'bool' => is_bool($value) ? $value : throw new InvalidArgumentException('Invalid field boolean.'),
-            'money' => $this->money($value, $limits),
-            'reference', 'file' => $this->reference($value, $limits),
-            'multiselect' => $this->choices($value, $limits),
+            'money' => $this->money(value: $value, limits: $limits),
+            'reference', 'file' => $this->reference(value: $value, limits: $limits),
+            'multiselect' => $this->choices(value: $value, limits: $limits),
             'json' => is_scalar($value) || $value === null || is_array($value) || $value instanceof stdClass ? $value : throw new InvalidArgumentException('Invalid JSON value.'),
             default => throw new InvalidArgumentException('Unknown field type.'),
         };
@@ -151,7 +151,7 @@ final readonly class BuiltinFieldType implements FieldType
             'phone' => preg_match('/\A\+[1-9][0-9]{5,14}\z/D', $value) === 1,
             'date' => $this->validDay($value),
             'datetime' => preg_match('/\A\d{4}-\d\d-\d\dT(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,6})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)\z/D', $value) === 1 && $this->validDay(substr($value, 0, 10)),
-            'select' => $this->choice($value, $limits),
+            'select' => $this->choice(value: $value, limits: $limits),
             default => true,
         };
 
@@ -175,7 +175,7 @@ final readonly class BuiltinFieldType implements FieldType
             throw new InvalidArgumentException('Invalid currency.');
         }
 
-        return ['amount' => $this->decimal($this->string($value->amount ?? null), $limits), 'currency' => $currency];
+        return ['amount' => $this->decimal(value: $this->string($value->amount ?? null), limits: $limits), 'currency' => $currency];
     }
 
     /** @param array<string,mixed> $limits
@@ -185,7 +185,7 @@ final readonly class BuiltinFieldType implements FieldType
         if (! $value instanceof stdClass || count(get_object_vars($value)) !== 2) {
             throw new InvalidArgumentException('Invalid reference.');
         }
-        $ref = new RecordRef($this->string($value->entity ?? null), $this->string($value->id ?? null));
+        $ref = new RecordRef(entity: $this->string($value->entity ?? null), id: $this->string($value->id ?? null));
 
         if (isset($limits['target']) && $ref->entity !== $limits['target']) {
             throw new InvalidArgumentException('Invalid reference target.');
@@ -205,7 +205,7 @@ final readonly class BuiltinFieldType implements FieldType
         foreach ($value as $item) {
             $choice = $this->string($item);
 
-            if (! $this->choice($choice, $limits) || in_array($choice, $choices, true)) {
+            if (! $this->choice(value: $choice, limits: $limits) || in_array($choice, $choices, true)) {
                 throw new InvalidArgumentException('Invalid field choice.');
             }
             $choices[] = $choice;
@@ -261,7 +261,7 @@ final readonly class BuiltinFieldType implements FieldType
                 if (! is_int($limit) && ! is_string($limit)) {
                     throw new InvalidArgumentException('Invalid decimal bound.');
                 }
-                $cmp = $this->compareDecimal($decimal, $this->decimal((string) $limit, []));
+                $cmp = $this->compareDecimal(a: $decimal, b: $this->decimal(value: (string) $limit, limits: []));
 
                 if (($bound === 'min' && $cmp < 0) || ($bound === 'max' && $cmp > 0)) {
                     throw new InvalidArgumentException('Decimal exceeds field bounds.');

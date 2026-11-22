@@ -1,0 +1,1783 @@
+[
+    {
+        "category": "conflict",
+        "code": "azguard.ambiguous_panel",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.change_cancelled",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.conflicting_panel",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "azguard.consistency",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "validation",
+        "code": "azguard.context_not_accepted",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.context_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "rate_limit",
+        "code": "azguard.decision_set_too_large",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.default_panel_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.definition",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.directory_scan_limit",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.duplicate_panel",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.duplicate_permission",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.duplicate_policy_binding",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.duplicate_role",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_change_fields",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_configuration",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_context",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_identity",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_panel_id",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_permission_key",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_policy_structure",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_role_key",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.invalid_source_contribution",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "azguard.missing_permission_check",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "azguard.panel_not_resolved",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "azguard.panel_not_writable",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "azguard.permission_not_grantable",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.plugin_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.prefix_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "azguard.recursion_detected",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.registry_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "azguard.role_not_grantable",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.stale_selection",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.storage_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.subject_not_accepted",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.tenant_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "azguard.tenant_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "azguard.unknown_panel",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "azguard.unknown_permission",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "azguard.unknown_role",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "azguard.unknown_source",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "azguard.unsupported_direct_write",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "azguard.visibility_not_supported",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "azguard.writer_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/azguard",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "core.central_context_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.cross_workspace_move_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.department_cycle_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "core.impersonation_restricted_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.inbox_refused",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "core.internal_error",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "core.invalid_message",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "core.invalid_scope_payload",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.lifecycle_blocked",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.lifecycle_plan_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.outbox_lease_lost",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.outbox_refused",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "core.scope_authority_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "authorization",
+        "code": "core.scope_context_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.scope_stale",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "core.setting_value_too_large_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "core.storage_capability_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "core.storage_operation_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "validation",
+        "code": "core.unknown_message_contract",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "core.unsupported_scope_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "access.exact_visibility_unavailable",
+        "detail_keys": [
+            "reason",
+            "component"
+        ],
+        "owner": "axiomasoft/corex-access",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "access.scope_capability_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-access",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "operations.access_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "operations.account_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authentication",
+        "code": "operations.authentication_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "rate_limit",
+        "code": "operations.budget_rate_limited",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "operations.budget_store_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "operations.bulk_not_ready",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "conflict",
+        "code": "operations.bulk_reconciliation_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "operations.bulk_result_expired",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "operations.capability_unavailable",
+        "detail_keys": [
+            "reason"
+        ],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "operations.catalogue_limit",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "operations.conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "operations.context_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.cursor_invalid",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "operations.forbidden",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "operations.idempotency_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "operations.idempotency_contract_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "operations.idempotency_in_progress",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "validation",
+        "code": "operations.idempotency_key_forbidden",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.idempotency_key_invalid",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.idempotency_key_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.idempotency_not_supported",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.input_envelope_invalid",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.invalid_request",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "operations.module_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "operations.not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "operations.operation_not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "operations.operation_unsupported",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.ordering_version_unsupported",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "rate_limit",
+        "code": "operations.rate_limited",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "operations.reconciliation_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.request_rejected",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "operations.resource_not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "operations.scope_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.undeclared_fields",
+        "detail_keys": [
+            "fields"
+        ],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.unknown_message_contract",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.unsupported_media_type",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.validation_failed",
+        "detail_keys": [
+            "*"
+        ],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenancy.central_protocol_violation",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tenancy.central_unauthorized",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "tenancy.central_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "conflict",
+        "code": "tenancy.claim_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "tenancy.claim_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "unavailable",
+        "code": "tenancy.context_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tenancy.credential_issuance_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tenancy.domain_trust_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "tenancy.domain_trust_disabled",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenancy.inbox_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenancy.invitation_not_acceptable_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tenancy.no_default_workspace_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authentication",
+        "code": "tenancy.oidc_authentication_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenancy.pair_store_violation",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tenancy.projection_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "tenancy.revoke_uncertain",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "internal",
+        "code": "tenancy.template_integrity_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tenancy.tenant_could_not_be_identified_by_host_exception",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tenancy",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tools.approval_invalid",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tools.approval_required",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tools.forbidden",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tools.idempotency_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "tools.input_invalid",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tools.internal_error",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tools.output_contract_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "rate_limit",
+        "code": "tools.rate_limited",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "validation",
+        "code": "tools.schema_limit",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "tools.schema_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "conflict",
+        "code": "tools.tool_revision_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tools.tool_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tools.unknown_effect",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-tools",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "webhooks.unknown_message_contract",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "webhooks.unknown_message_schema",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "webhooks.webhook_egress_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "webhooks.webhook_endpoint_changed",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "webhooks.webhook_payload_too_large",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "webhooks.webhook_replay_expired",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "webhooks.webhook_secret_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "webhooks.webhook_sensitive_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "webhooks.webhook_subscription_cap",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.duplicate_code",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.duplicate_type",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.foreign_prefix",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.internal_error",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.invalid_configuration",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.invalid_definition",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "packman.invalid_scope_payload",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.invalid_status",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.registry_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.schema_duplicate_migration",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.schema_duplicate_set",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.schema_invalid_set",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "packman.schema_unknown_set",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "packman.schema_unsupported_driver",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "packman.scope_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.unknown_code",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "packman.unsupported_scope",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.compilation_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.enable_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "modules.entity_not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.has_enabled_dependents",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "modules.invalid_manifest",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "modules.invalid_registry_point",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.invalid_state_transition",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.missing_dependency",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "modules.module_not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.registry_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "modules.registry_input_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.stale_registry_revision",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.upgrade_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "plugins.invalid_graph",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-plugins",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "plugins.missing_extension",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-plugins",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "plugins.registry_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-plugins",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "plugins.unsupported_contribution",
+        "detail_keys": [
+            "kind",
+            "key",
+            "reason"
+        ],
+        "owner": "axiomasoft/packman-plugins",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.ambiguous_capability",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.archive_unverified",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.binding_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.composition_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.concurrent_entry",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "authorization",
+        "code": "tenant.denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.dependency_cycle",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenant.diagnostic_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.duplicate_implementation",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.exclusive_slot_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenant.facility_configuration",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenant.frame_leak",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.idempotency_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.identity_encoding_unsupported",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.incompatible_spi",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "tenant.invalid_frame_token",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "tenant.invalid_reference",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "tenant.invalid_stage_order",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tenant.missing",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "tenant.missing_dependency",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenant.observer_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.open_resource",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "unavailable",
+        "code": "tenant.operation_unknown",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tenant.original_operation_missing",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.recovery_unsupported",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.replacement_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.replacement_incompatible",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tenant.replacement_target_missing",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.resource_quarantined",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenant.restore_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tenant.retention_history_missing",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "tenant.runtime_poisoned",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "tenant.selection_lost",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.stale_handle",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.stale_incarnation",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.stale_route",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "internal",
+        "code": "tenant.switch_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "tenant.transition_in_progress",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "unavailable",
+        "code": "tenant.unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": true
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.unsupported_capability",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.unsupported_extension",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.unsupported_profile",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "tenant.unsupported_version",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "authorization",
+        "code": "tenant.untrusted_producer",
+        "detail_keys": [],
+        "owner": "axiomasoft/tenant",
+        "path": null,
+        "retryable": false
+    }
+]

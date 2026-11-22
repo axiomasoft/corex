@@ -18,7 +18,13 @@ use Symfony\Component\Process\Process;
 
 uses(SchemaPgTestCase::class)->group('pg');
 
-it('creates and verifies one owned concurrent index and reuses a fresh connection for the next phase', function (): void {
+it('creates and verifies one owned concurrent index and reuses a fresh connection for the next phase', function (string $connection): void {
+    if ($connection !== 'pgsql') {
+        $connections = config('database.connections');
+        config(['database.connections' => [...$connections, $connection => $connections['pgsql']]]);
+        DB::setDefaultConnection($connection);
+    }
+
     $op = $this->admit(FieldSchemaChange::add($this->field('hours', 'int', index: 'expression_btree')));
     $this->step();
     $before = DB::connection();
@@ -29,7 +35,7 @@ it('creates and verifies one owned concurrent index and reuses a fresh connectio
     $receipt = json_decode(DB::table('sys_attribute_schema_operations')->where('id', $op->id)->value('ddl_receipt'), true, flags: JSON_THROW_ON_ERROR);
     $catalog = DB::selectOne('SELECT indrelid::text AS parent_oid,indisvalid,indisready FROM pg_index WHERE indexrelid=?::oid', [$receipt['oid']]);
     expect($receipt['parent_oid'])->toBe($catalog->parent_oid)->and($catalog->indisvalid)->toBeTrue()->and($catalog->indisready)->toBeTrue();
-});
+})->with(['pgsql', 'schema.direct']);
 
 it('repairs the observed invalid object after another session stops the concurrent builder', function (): void {
     $op = $this->admit(FieldSchemaChange::add($this->field('volume', 'decimal', index: 'expression_btree')));

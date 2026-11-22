@@ -39,9 +39,9 @@ use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -96,7 +96,7 @@ final class CostInvocationTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_budget_denial_rolls_back_unstarted_idempotency_and_replay_charges_base_only(): void
+    public function test_budget_denial_rolls_back_unstarted_idempotency_and_replay_reuses_original_settlement(): void
     {
         $budget = new RecordingOperationBudget;
         $admission = $this->admission($budget);
@@ -148,9 +148,8 @@ final class CostInvocationTest extends TestCase
         self::assertSame(1, CostInvocationHandler::$calls);
         self::assertFalse($fresh->replayed);
         self::assertTrue($replay->replayed);
-        self::assertSame([5, 1], array_map(static fn (EstimatedCost $cost): int => $cost->units, $budget->costs));
-        self::assertSame(1, JsonDocuments::map($replay->metadata)['cost']['requested']);
-        self::assertSame(1, JsonDocuments::map($replay->metadata)['cost']['actual']);
+        self::assertSame([5], array_map(static fn (EstimatedCost $cost): int => $cost->units, $budget->costs));
+        self::assertArrayNotHasKey('cost', JsonDocuments::map($replay->metadata));
         self::assertSame(1, $connection->table('sys_api_idempotency')->count());
     }
 
@@ -204,7 +203,7 @@ final class CostInvocationTest extends TestCase
         $schema = $this->schema();
         $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema),
+                Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema, version: 'v2'),
             ]),
         ], installedPackages: []);
         $modules = new ModuleFixture($registry);
@@ -213,17 +212,22 @@ final class CostInvocationTest extends TestCase
         $this->app->instance(TenancyManager::class, $this->tenants);
         $this->app->instance(PrincipalResolver::class, $this->principal);
         $this->app->instance(OperationAuthorizer::class, $this->operationAuthorizer());
-        $request = static fn (): Request => Request::create('/api/v1/notes', 'GET');
+        $request = static function (): Request {
+            $request = Request::create('/api/v2/notes', 'GET');
+            $request->attributes->set('corex.client_id', 'client-1');
+
+            return $request;
+        };
 
         $this->app->instance(OperationInvoker::class, new ThrowingOperationInvoker(
             new TooManyRequestsHttpException(7, 'Budget exhausted.'),
         ));
-        $limited = $this->app->make(OperationDispatcher::class)->dispatch($request(), 'v1', 'notes');
+        $limited = $this->app->make(HttpOperationDispatcher::class)->dispatch($request(), 'v2', 'notes');
 
         $this->app->instance(OperationInvoker::class, new ThrowingOperationInvoker(
             new BudgetStoreUnavailable('Budget store unavailable.'),
         ));
-        $unavailable = $this->app->make(OperationDispatcher::class)->dispatch($request(), 'v1', 'notes');
+        $unavailable = $this->app->make(HttpOperationDispatcher::class)->dispatch($request(), 'v2', 'notes');
 
         self::assertSame(429, $limited->getStatusCode());
         self::assertSame('operations.rate_limited', $limited->getData(true)['code']);
@@ -305,7 +309,7 @@ final class CostInvocationTest extends TestCase
             $second = $this->transactionalCostInvoker($retry, $admission, $clock);
             self::assertTrue($second->invoke($invocation)->replayed);
             self::assertSame('settled', $observer->table('sys_api_budget_reservations')->where('id', $receipt->reservationId)->value('state'));
-            self::assertSame(2, $observer->table('sys_api_budget_reservations')->count());
+            self::assertSame(1, $observer->table('sys_api_budget_reservations')->count());
             self::assertSame(1, $retry->table('cost_receipt_effects')->count());
 
             $tenant->unprepared(<<<'SQL'
@@ -338,7 +342,7 @@ final class CostInvocationTest extends TestCase
             self::assertFalse($second->invoke($uncommitted)->replayed);
             self::assertSame(1, $retry->table('cost_receipt_effects')->where('name', 'retry')->count());
             self::assertSame('settled', $observer->table('sys_api_budget_reservations')->where('id', $retained->id)->value('state'));
-            self::assertSame(3, $observer->table('sys_api_budget_reservations')->count());
+            self::assertSame(2, $observer->table('sys_api_budget_reservations')->count());
             self::assertSame($balances, $observer->table('sys_api_budget_buckets')->orderBy('key')->pluck('available')->all());
 
             $failed = new OperationInvocation($operation, $invocation->context, JsonDocuments::capture(['name' => 'rollback']), [], 'rollback-cost');
@@ -416,7 +420,7 @@ final class CostInvocationTest extends TestCase
         return new Operation(
             module: 'example/notes',
             id: 'notes.create',
-            version: 'v1',
+            version: 'v2',
             method: 'POST',
             path: '/notes',
             ability: 'notes.write',
@@ -451,7 +455,7 @@ final class CostInvocationTest extends TestCase
         return ResolvedContexts::make(
             $this->tenants->current(),
             $this->principal,
-            new InvocationMetadata('request-1', 'v1', 'notes.create', 'POST'),
+            new InvocationMetadata('request-1', 'v2', 'notes.create', 'POST'),
         );
     }
 

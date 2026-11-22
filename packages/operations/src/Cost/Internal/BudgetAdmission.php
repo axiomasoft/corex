@@ -70,13 +70,13 @@ final readonly class BudgetAdmission implements BudgetExecution
     /** @param Closure(Closure():void):OperationResult $effect */
     public function invoke(OperationInvocation $invocation, Closure $effect): OperationResult
     {
-        return $this->run($invocation, $effect, null)->result;
+        return $this->run(invocation: $invocation, effect: $effect, attempt: null)->result;
     }
 
     /** @param Closure(Closure():void):OperationResult $effect */
     public function invokeTransactional(OperationInvocation $invocation, Closure $effect, BudgetAttempt $attempt): BudgetInvocationResult
     {
-        return $this->run($invocation, $effect, $attempt);
+        return $this->run(invocation: $invocation, effect: $effect, attempt: $attempt);
     }
 
     /** @param Closure(Closure():void):OperationResult $effect */
@@ -107,8 +107,8 @@ final readonly class BudgetAdmission implements BudgetExecution
         }
 
         return new BudgetInvocationResult(
-            $this->withMetadata(result: $result, reservation: $reservation, estimate: $estimate, actual: $actual),
-            $pending === null ? null : new BudgetReceipt($pending->reservationId, $actual->units),
+            result: $this->withMetadata(result: $result, reservation: $reservation, estimate: $estimate, actual: $actual),
+            receipt: $pending === null ? null : new BudgetReceipt(reservationId: $pending->reservationId, actualUnits: $actual->units),
         );
     }
 
@@ -125,19 +125,6 @@ final readonly class BudgetAdmission implements BudgetExecution
         }
     }
 
-    public function replay(OperationInvocation $invocation, OperationResult $result): OperationResult
-    {
-        $estimate = new EstimatedCost(
-            units: 1,
-            recipeHash: hash('sha256', 'corex-operation-replay/1'),
-        );
-        $reservation = $this->reserve(invocation: $invocation, estimate: $estimate);
-        $actual = new ActualCost($estimate->units);
-        $this->settleWithoutChangingOutcome(reservation: $reservation, actual: $actual);
-
-        return $this->withMetadata(result: $result, reservation: $reservation, estimate: $estimate, actual: $actual);
-    }
-
     private function withMetadata(
         OperationResult $result,
         BudgetReservation $reservation,
@@ -148,6 +135,8 @@ final readonly class BudgetAdmission implements BudgetExecution
             data: JsonDocuments::capture(JsonDocuments::array($result->data)),
             replayed: $result->replayed,
             metadata: JsonDocuments::capture([...JsonDocuments::map($result->metadata), 'cost' => $this->metadata(reservation: $reservation, estimate: $estimate, actual: $actual)]),
+            accepted: $result->accepted,
+            privateWitness: $result->privateWitness,
         );
     }
 
@@ -164,12 +153,12 @@ final readonly class BudgetAdmission implements BudgetExecution
             );
 
             if ($this->references !== null && $this->budget instanceof SqlOperationBudget) {
-                return $this->reserveAdmitted($invocation, $scope, $estimate, $reservationId ?? bin2hex(random_bytes(32)), $this->budget);
+                return $this->reserveAdmitted(invocation: $invocation, scope: $scope, estimate: $estimate, id: $reservationId ?? bin2hex(random_bytes(32)), budget: $this->budget);
             }
 
             return $reservationId !== null && $this->budget instanceof DurableOperationBudget
                 ? $this->budget->reserveAttempt($scope, $estimate, $reservationId)
-                : $this->budget->reserve($scope, $estimate);
+                : $this->budget->reserve(scope: $scope, cost: $estimate);
         } catch (HttpExceptionInterface $error) {
             if ($error->getStatusCode() === 429) {
                 $retryAfter = $error->getHeaders()['Retry-After'] ?? null;
@@ -194,7 +183,7 @@ final readonly class BudgetAdmission implements BudgetExecution
         $ticket = $references->admit($invocation, $budget, $scope, $estimate, $id);
 
         try {
-            $hold = $budget->reserveAttempt($scope, $estimate, $id);
+            $hold = $budget->reserveAttempt(scope: $scope, cost: $estimate, reservationId: $id);
         } catch (HttpExceptionInterface $refused) {
             if ($refused->getStatusCode() === 429) {
                 $references->record($ticket, ProviderObservationKind::Absent, $id);

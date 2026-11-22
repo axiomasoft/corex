@@ -16,7 +16,7 @@ final readonly class WorkQueueHandler
 
     public function fire(Job $job, mixed $data): void
     {
-        $this->boundary->invoke($job, static function (object $handler, string $method) use ($job, $data): mixed {
+        $this->boundary->invoke(job: $job, callback: static function (object $handler, string $method) use ($job, $data): mixed {
             $call = [$handler, $method];
 
             if (! is_callable($call)) {
@@ -29,7 +29,7 @@ final readonly class WorkQueueHandler
 
     public function failed(mixed $data, Throwable $error, string $uuid, Job $job): void
     {
-        $this->boundary->invoke($job, static function (object $handler) use ($data, $error, $uuid, $job): void {
+        $this->boundary->invoke(job: $job, callback: static function (object $handler) use ($data, $error, $uuid, $job): void {
             if (method_exists($handler, 'failed')) {
                 $handler->failed($data, $error, $uuid, $job);
             }

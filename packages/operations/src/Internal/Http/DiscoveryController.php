@@ -24,13 +24,14 @@ final readonly class DiscoveryController
     public function root(): JsonResponse
     {
         $version = $this->options->defaultMajor;
+        $base = $this->options->publicBaseUri();
 
         return new JsonResponse([
             'build' => $this->options->build,
             'default_major' => $version,
             'links' => [
-                'capabilities' => '/'.$this->options->routePrefix.'/'.$version.'/capabilities',
-                'openapi' => '/'.$this->options->routePrefix.'/'.$version.'/openapi.json',
+                'capabilities' => $base.'/capabilities',
+                'openapi' => $base.'/openapi.json',
             ],
             'product' => $this->options->product,
             'versions' => array_map(
@@ -48,10 +49,8 @@ final readonly class DiscoveryController
         ]);
     }
 
-    public function openapi(Request $request): JsonResponse
+    public function openapi(): JsonResponse
     {
-        $version = $request->route('version');
-
-        return new JsonResponse($this->openApi->document(is_string($version) ? $version : $this->options->defaultMajor));
+        return new JsonResponse($this->openApi->document(version: 'v2', serverUrl: $this->options->publicBaseUri()));
     }
 }

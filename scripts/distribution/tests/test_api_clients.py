@@ -18,11 +18,12 @@ SPEC.loader.exec_module(MODULE)
 class ApiClientTest(unittest.TestCase):
     def test_committed_snapshots_match_the_manifest(self) -> None:
         contract = MODULE.REST.load_snapshots(MODULE.SNAPSHOTS)
+        self.assertEqual("v2", contract["manifest"]["major"])
         self.assertIn("operations.json", contract["digests"])
         self.assertEqual(contract["digests"]["operations.json"], contract["manifest"]["files"]["operations.json"])
 
     def test_unexpected_field_and_opaque_cursor_are_closed(self) -> None:
-        self.assertEqual(MODULE.REST.unexpected_fields({"data": {}, "error": None, "meta": {}, "extra": 1}), ["extra"])
+        self.assertEqual(MODULE.REST.unexpected_fields({"data": {}, "meta": {}, "extra": 1}), ["extra"])
         self.assertEqual(MODULE.REST.forward_cursor("http://127.0.0.1:9", MODULE.CURSOR), "http://127.0.0.1:9" + MODULE.CURSOR)
         with self.assertRaises(SystemExit):
             MODULE.REST.forward_cursor("http://127.0.0.1:9", "http://example.test/next")
@@ -32,7 +33,7 @@ class ApiClientTest(unittest.TestCase):
         self.assertEqual(MODULE.source_forbidden(MODULE.MCP_CLIENT), [])
 
     def test_raw_cursor_is_not_decoded(self) -> None:
-        self.assertEqual(MODULE.raw_query_value("cursor=v1.opaque%2Etoken", "cursor"), "v1.opaque%2Etoken")
+        self.assertEqual(MODULE.raw_query_value(f"cursor={MODULE.CURSOR_TOKEN}", "cursor"), MODULE.CURSOR_TOKEN)
         self.assertIsNone(MODULE.raw_query_value("", "cursor"))
 
 

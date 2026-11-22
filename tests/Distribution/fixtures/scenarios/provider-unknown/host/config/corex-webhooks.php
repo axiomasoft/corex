@@ -11,7 +11,7 @@ return [
     'topics' => [[
         'name' => 'fixture.recordchanged',
         'version' => 1,
-        'major' => 'v1',
+        'major' => 'v2',
         'schema' => ['record' => 'string'],
         'pii_class' => 'none',
         'projector_service' => 'fixture.webhooks',

@@ -145,7 +145,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
 
     public function assertClaim(LeasedMessage $message): void
     {
-        $this->current->assert($message->envelope->scope, $this->connection);
+        $this->current->assert(scope: $message->envelope->scope, connection: $this->connection);
 
         if (! $this->claimRow($message)->exists()) {
             throw OutboxLeaseLost::superseded($message->envelope->messageId);
@@ -163,7 +163,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     #[Override]
     public function markPublished(LeasedMessage $message): void
     {
-        $this->current->assert($message->envelope->scope, $this->connection);
+        $this->current->assert(scope: $message->envelope->scope, connection: $this->connection);
         $now = $this->clock->now();
 
         $changed = $this->claimRow($message)

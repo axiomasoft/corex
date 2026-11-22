@@ -203,7 +203,7 @@ final class WebhookFanoutTest extends TestCase
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $schema = ['id' => 'string'];
-        $topic = new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
+        $topic = new WebhookTopic('orders.placed', 1, 'v2', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
         $contracts = MessagingFixtures::contracts([
             new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks', 'https://schemas.example.test/orders/v1.json'),
         ]);
@@ -218,7 +218,7 @@ final class WebhookFanoutTest extends TestCase
     private function subscribe(string $id, string $connection = 'api_tenant'): void
     {
         $now = $this->clock->now();
-        $subscription = new WebhookSubscription($id, 0, 'v1', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $now, $now);
+        $subscription = new WebhookSubscription($id, 0, 'v2', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $now, $now);
         DB::connection($connection)->table('sys_api_webhook_subscriptions')->insert([
             'id' => $subscription->id,
             'revision' => 0,

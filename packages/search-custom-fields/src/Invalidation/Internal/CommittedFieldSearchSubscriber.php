@@ -27,7 +27,7 @@ final readonly class CommittedFieldSearchSubscriber implements FieldSearchSubscr
 
     public function consume(string $restrictedRef): BrokerReceipt
     {
-        return $this->broker->consume(new ConsumerId(self::CONSUMER, 2), $restrictedRef, $this->apply(...));
+        return $this->broker->consume(consumer: new ConsumerId(name: self::CONSUMER, version: 2), restrictedRef: $restrictedRef, apply: $this->apply(...));
     }
 
     private function apply(ConnectionInterface $writer, MessageEnvelope $event): void

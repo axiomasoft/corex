@@ -27,6 +27,7 @@ use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Context\Exceptions\ScopeAuthorityUnavailable;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Foundation\Data\ModuleRef;
@@ -66,7 +67,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             throw new ScopeContextMismatch('Provider sends and receipt projections require their dedicated authority.');
         }
 
-        return $this->issue($scope, $key, $kind, null);
+        return $this->issue(scope: $scope, key: $key, kind: $kind, attempt: null);
     }
 
     /**
@@ -129,16 +130,16 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
                     $active->update(['state' => 'reconciled', 'evidence' => 'previous-lifecycle-session-ended']);
                 }
                 $last = $attempts->max('attempt');
-                $attempt = $last === null ? 1 : $this->number(['attempt' => $last], 'attempt') + 1;
+                $attempt = $last === null ? 1 : $this->number(row: ['attempt' => $last], key: 'attempt') + 1;
 
-                return $this->issue($scope, new OperationKey($identity, $attempt), AdmissionKind::LocalWrite, null, transaction: $control);
+                return $this->issue(scope: $scope, key: new OperationKey(id: $identity, attempt: $attempt), kind: AdmissionKind::LocalWrite, attempt: null, transaction: $control);
             });
 
             try {
                 return $work($verify);
             } finally {
                 $verify();
-                $this->settle($ticket, new AttemptEvidence('reconciled', $ticket->id));
+                $this->settle(ticket: $ticket, evidence: new AttemptEvidence(outcome: 'reconciled', reference: $ticket->id));
             }
         } finally {
             if ($lock !== null) {
@@ -153,7 +154,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
 
     public function reserve(DataScope $scope, ProviderAttempt $attempt): AdmissionTicket
     {
-        return $this->reserveTargets($scope, $attempt, []);
+        return $this->reserveTargets(scope: $scope, attempt: $attempt, targets: []);
     }
 
     /** @param list<string> $targets */
@@ -166,13 +167,13 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             throw new ScopeContextMismatch('Provider effect belongs to another logical owner.');
         }
 
-        return $this->issue($scope, new OperationKey($effect->identity(), $attempt->attempt, $effect->effectKey, $attempt->deadline), AdmissionKind::ProviderSend, $attempt, targets: $targets);
+        return $this->issue(scope: $scope, key: new OperationKey(id: $effect->identity(), attempt: $attempt->attempt, effectKey: $effect->effectKey, deadline: $attempt->deadline), kind: AdmissionKind::ProviderSend, attempt: $attempt, targets: $targets);
     }
 
     /** A receipt ticket can only be installed by the registered recovery dispatcher. */
     public function receiptTicket(AdmissionTicket $provider): AdmissionTicket
     {
-        return $this->issue($provider->scope, new OperationKey((string) Str::uuid7(), 1, $provider->id), AdmissionKind::ReceiptProjection, null, $provider);
+        return $this->issue(scope: $provider->scope, key: new OperationKey(id: (string) Str::uuid7(), attempt: 1, effectKey: $provider->id), kind: AdmissionKind::ReceiptProjection, attempt: null, provider: $provider);
     }
 
     /** @param list<string> $targets */
@@ -186,8 +187,8 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             $binding->assertScope($scope);
 
             if ($provider !== null) {
-                $linked = $this->ticketRow($control, $provider)->lockForUpdate()->first();
-                $this->verifyTicket($provider, $linked);
+                $linked = $this->ticketRow(control: $control, ticket: $provider)->lockForUpdate()->first();
+                $this->verifyTicket(ticket: $provider, row: $linked);
 
                 if ($linked === null || $linked->provider_identity === null || $linked->state === 'isolated' || $binding->mode === 'closed') {
                     throw new ScopeContextMismatch('Provider receipt recovery is unavailable.');
@@ -208,7 +209,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
                     $prior->state !== 'reconciled' || $prior->observation_kind !== ProviderObservationKind::Absent->value
                     || $prior->effect_digest !== $attempt->digest || $prior->owner_ref !== $attempt->ownerRef
                     || $this->singleInstanceReference($prior->single_instance_reference) !== $attempt->singleInstanceReference
-                    || $this->number(get_object_vars($prior), 'attempt') >= $attempt->attempt
+                    || $this->number(row: get_object_vars($prior), key: 'attempt') >= $attempt->attempt
                 ))) {
                     throw new ScopeContextMismatch('Provider send is expired, conflicting or requires reconciliation.');
                 }
@@ -228,7 +229,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
                 'single_instance_reference' => $attempt->singleInstanceReference ?? false,
             ]);
 
-            return new AdmissionTicket($id, $scope, $binding->controlRevision, $key, $kind);
+            return new AdmissionTicket(id: $id, scope: $scope, controlRevision: $binding->controlRevision, key: $key, kind: $kind);
         });
     }
 
@@ -248,7 +249,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             if ($actor->accountId !== $effect->accountId || $actor->accountIncarnation !== $effect->accountIncarnation || $actor->workspaceId !== $effect->workspaceId) {
                 throw new ScopeContextMismatch('Provider journal access denied.');
             }
-        } catch (ScopeContextMismatch|CentralContextException $denied) {
+        } catch (ScopeContextMismatch|ScopeStale|CentralContextException $denied) {
             ($this->recoveryAuthority() ?? throw $denied)->authorize($effect);
             $actor = null;
         }
@@ -258,15 +259,15 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             return null;
         }
         $data = get_object_vars($row);
-        $scope = json_decode($this->text($data, 'scope'), true, flags: JSON_THROW_ON_ERROR);
+        $scope = json_decode($this->text(row: $data, key: 'scope'), true, flags: JSON_THROW_ON_ERROR);
 
         if (! is_array($scope)) {
             throw new ScopeAuthorityUnavailable('Invalid provider scope.');
         }
         /** @var array<string,mixed> $scope */
-        $ticket = new AdmissionTicket($this->text($data, 'ticket_id'), $this->codec->decode($scope),
-            $this->number($data, 'control_revision'), new OperationKey($this->text($data, 'operation_id'),
-                $this->number($data, 'attempt'), $this->text($data, 'effect_key'), new DateTimeImmutable($this->text($data, 'deadline'))), AdmissionKind::ProviderSend);
+        $ticket = new AdmissionTicket(id: $this->text(row: $data, key: 'ticket_id'), scope: $this->codec->decode($scope),
+            controlRevision: $this->number(row: $data, key: 'control_revision'), key: new OperationKey(id: $this->text(row: $data, key: 'operation_id'),
+                attempt: $this->number(row: $data, key: 'attempt'), effectKey: $this->text(row: $data, key: 'effect_key'), deadline: new DateTimeImmutable($this->text(row: $data, key: 'deadline'))), kind: AdmissionKind::ProviderSend);
 
         if ($actor !== null && get_object_vars($actor) !== get_object_vars($ticket->scope)) {
             $recovery = $this->recoveryAuthority();
@@ -277,10 +278,10 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             $recovery->authorize($effect);
         }
         $observation = $row->observation_kind === null ? null : new ProviderObservation(
-            ProviderObservationKind::from($this->text($data, 'observation_kind')), $this->text($data, 'observation_ref'), $this->text($data, 'observer'));
+            kind: ProviderObservationKind::from($this->text(row: $data, key: 'observation_kind')), reference: $this->text(row: $data, key: 'observation_ref'), observer: $this->text(row: $data, key: 'observer'));
 
-        return new ProviderEffectStatus($effect, $ticket, $observation, $this->text($data, 'state'), $this->text($data, 'owner_ref'), $this->text($data, 'claim_token'), $this->text($data, 'effect_digest'),
-            $row->first_provider_ref === null ? null : $this->text($data, 'first_provider_ref'));
+        return new ProviderEffectStatus(effect: $effect, ticket: $ticket, observation: $observation, state: $this->text(row: $data, key: 'state'), ownerRef: $this->text(row: $data, key: 'owner_ref'), claimToken: $this->text(row: $data, key: 'claim_token'), digest: $this->text(row: $data, key: 'effect_digest'),
+            firstProviderRef: $row->first_provider_ref === null ? null : $this->text(row: $data, key: 'first_provider_ref'));
     }
 
     public function observe(AdmissionTicket $ticket, ProviderObservation $observation): void
@@ -289,9 +290,9 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
         $control = $this->independent();
         $control->transaction(function () use ($control, $ticket, $observation): void {
             $this->route($ticket->scope->accountId)->lockForUpdate()->first();
-            $query = $this->ticketRow($control, $ticket);
+            $query = $this->ticketRow(control: $control, ticket: $ticket);
             $row = $query->lockForUpdate()->first();
-            $this->verifyTicket($ticket, $row);
+            $this->verifyTicket(ticket: $ticket, row: $row);
 
             if ($row === null || $row->provider_identity === null) {
                 throw new ScopeContextMismatch('Provider observation requires a reserved effect.');
@@ -340,8 +341,8 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
     /** An active verified sender, or an independently authenticated recovery operator. */
     private function authorizeProvider(AdmissionTicket $ticket): void
     {
-        $row = $this->ticketRow($this->connection(), $ticket)->first();
-        $this->verifyTicket($ticket, $row);
+        $row = $this->ticketRow(control: $this->connection(), ticket: $ticket)->first();
+        $this->verifyTicket(ticket: $ticket, row: $row);
 
         if ($ticket->kind !== AdmissionKind::ProviderSend || $row === null || ! is_string($row->provider_owner)
             || ! is_string($row->provider_namespace) || ! is_string($row->effect_key)) {
@@ -350,9 +351,9 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
 
         try {
             ApplicationLocator::current()->make(CurrentWorkScope::class)->assert($ticket->scope);
-        } catch (ScopeContextMismatch|CentralContextException $denied) {
-            ($this->recoveryAuthority() ?? throw $denied)->authorize(new ProviderEffectRef($ticket->scope->accountId,
-                $ticket->scope->accountIncarnation, $ticket->scope->workspaceId, $row->provider_owner, $row->provider_namespace, $row->effect_key));
+        } catch (ScopeContextMismatch|ScopeStale|CentralContextException $denied) {
+            ($this->recoveryAuthority() ?? throw $denied)->authorize(new ProviderEffectRef(accountId: $ticket->scope->accountId,
+                accountIncarnation: $ticket->scope->accountIncarnation, workspaceId: $ticket->scope->workspaceId, owner: $row->provider_owner, providerNamespace: $row->provider_namespace, effectKey: $row->effect_key));
         }
     }
 
@@ -398,9 +399,9 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
         }
         $control = $this->independent();
         $control->transaction(function () use ($ticket, $evidence, $control): void {
-            $query = $this->ticketRow($control, $ticket);
+            $query = $this->ticketRow(control: $control, ticket: $ticket);
             $row = $query->lockForUpdate()->first();
-            $this->verifyTicket($ticket, $row);
+            $this->verifyTicket(ticket: $ticket, row: $row);
 
             if ($row === null) {
                 throw new ScopeContextMismatch('Admission ticket is unknown.');
@@ -416,8 +417,8 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             if ($row->provider_identity !== null && $evidence->outcome === 'isolated') {
                 $data = get_object_vars($row);
                 ($this->recoveryAuthority() ?? throw new ScopeContextMismatch('Operator isolation requires independent authorization.'))->authorize(
-                    new ProviderEffectRef($ticket->scope->accountId, $ticket->scope->accountIncarnation, $ticket->scope->workspaceId,
-                        $this->text($data, 'provider_owner'), $this->text($data, 'provider_namespace'), $this->text($data, 'effect_key')),
+                    new ProviderEffectRef(accountId: $ticket->scope->accountId, accountIncarnation: $ticket->scope->accountIncarnation, workspaceId: $ticket->scope->workspaceId,
+                        owner: $this->text(row: $data, key: 'provider_owner'), providerNamespace: $this->text(row: $data, key: 'provider_namespace'), effectKey: $this->text(row: $data, key: 'effect_key')),
                 );
             }
 
@@ -440,9 +441,9 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             $route = $this->route($ticket->scope->accountId)->lockForUpdate()->first();
             $binding = $this->binding($route);
             $binding->assertScope($ticket->scope);
-            $query = $this->ticketRow($db, $ticket);
+            $query = $this->ticketRow(control: $db, ticket: $ticket);
             $row = $query->lockForUpdate()->first();
-            $this->verifyTicket($ticket, $row);
+            $this->verifyTicket(ticket: $ticket, row: $row);
 
             if ($row === null || $row->state !== 'outstanding' || $ticket->kind !== AdmissionKind::LocalWrite) {
                 throw new ScopeContextMismatch('A live local transaction ticket is required.');
@@ -518,7 +519,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             $targets = $this->targets($row);
 
             if (in_array($target->package, $targets, true) || ($targets === [] && $row->kind === AdmissionKind::ProviderSend->value)) {
-                $ids[] = $this->text(get_object_vars($row), 'ticket_id');
+                $ids[] = $this->text(row: get_object_vars($row), key: 'ticket_id');
             }
         }
 
@@ -531,7 +532,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
         if ($row === null || ! property_exists($row, 'module_closures')) {
             throw new ScopeAuthorityUnavailable('The independent lifecycle schema is unavailable.');
         }
-        $map = $row->module_closures === null ? [] : json_decode($this->text(get_object_vars($row), 'module_closures'), true, flags: JSON_THROW_ON_ERROR);
+        $map = $row->module_closures === null ? [] : json_decode($this->text(row: get_object_vars($row), key: 'module_closures'), true, flags: JSON_THROW_ON_ERROR);
 
         if (! is_array($map) || ! array_all($map, static fn (mixed $value): bool => is_string($value)) || ! array_all(array_keys($map), static fn (mixed $value): bool => is_string($value))) {
             throw new ScopeAuthorityUnavailable('Unreadable lifecycle closure.');
@@ -550,7 +551,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
     /** @return list<string> */
     private function targets(object $row): array
     {
-        $targets = (get_object_vars($row)['module_targets'] ?? null) === null ? [] : json_decode($this->text(get_object_vars($row), 'module_targets'), true, flags: JSON_THROW_ON_ERROR);
+        $targets = (get_object_vars($row)['module_targets'] ?? null) === null ? [] : json_decode($this->text(row: get_object_vars($row), key: 'module_targets'), true, flags: JSON_THROW_ON_ERROR);
 
         if (! is_array($targets) || ! array_is_list($targets) || ! array_all($targets, static fn (mixed $value): bool => is_string($value))) {
             throw new ScopeAuthorityUnavailable('Unreadable reference ticket.');
@@ -561,12 +562,12 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
 
     public function close(string $accountId, int $expectedRevision): int
     {
-        return $this->transition($accountId, $expectedRevision, 'open', static fn (): array => ['mode' => 'closing']);
+        return $this->transition(accountId: $accountId, expectedRevision: $expectedRevision, mode: 'open', change: static fn (): array => ['mode' => 'closing']);
     }
 
     public function drain(string $accountId, int $expectedRevision): int
     {
-        return $this->transition($accountId, $expectedRevision, 'closing', function () use ($accountId): array {
+        return $this->transition(accountId: $accountId, expectedRevision: $expectedRevision, mode: 'closing', change: function () use ($accountId): array {
             $this->assertDrained($accountId);
 
             return ['mode' => 'closed'];
@@ -584,7 +585,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
     /** @param Closure(PhysicalBinding):bool $verify Verifies the new physical owner, schema and isolation before reopening. */
     public function reopen(string $accountId, int $expectedRevision, PhysicalBinding $binding, Closure $verify): int
     {
-        return $this->transition($accountId, $expectedRevision, 'closed', function (PhysicalBinding $old) use ($binding, $verify, $accountId): array {
+        return $this->transition(accountId: $accountId, expectedRevision: $expectedRevision, mode: 'closed', change: function (PhysicalBinding $old) use ($binding, $verify, $accountId): array {
             $this->assertDrained($accountId);
             $history = $this->route($accountId)->value('used_epochs');
             $used = is_string($history) ? json_decode($history, true, flags: JSON_THROW_ON_ERROR) : null;
@@ -669,8 +670,8 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
         }
         $raw = get_object_vars($row);
 
-        return new PhysicalBinding($this->text($raw, 'deployment_id'), $this->text($raw, 'binding_id'), $this->number($raw, 'binding_generation'),
-            $this->text($raw, 'account_incarnation'), $this->text($raw, 'restore_epoch'), $this->text($raw, 'mode'), $this->number($raw, 'control_revision'));
+        return new PhysicalBinding(deploymentId: $this->text(row: $raw, key: 'deployment_id'), bindingId: $this->text(row: $raw, key: 'binding_id'), bindingGeneration: $this->number(row: $raw, key: 'binding_generation'),
+            accountIncarnation: $this->text(row: $raw, key: 'account_incarnation'), restoreEpoch: $this->text(row: $raw, key: 'restore_epoch'), mode: $this->text(row: $raw, key: 'mode'), controlRevision: $this->number(row: $raw, key: 'control_revision'));
     }
 
     /** @param array<array-key,mixed> $row */

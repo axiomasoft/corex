@@ -119,7 +119,7 @@ final readonly class MessageEnvelope implements DurablePayload
 
     public function workProof(): StoredWorkProof
     {
-        return new StoredWorkProof(self::PROOF_OWNER, $this->digest(), $this->seal ?? throw InvalidMessage::identity('missing stored work provenance'));
+        return new StoredWorkProof(owner: self::PROOF_OWNER, reference: $this->digest(), seal: $this->seal ?? throw InvalidMessage::identity('missing stored work provenance'));
     }
 
     private static function assertOpaque(string $value, string $name): void

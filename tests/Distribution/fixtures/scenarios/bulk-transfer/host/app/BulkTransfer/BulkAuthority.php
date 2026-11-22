@@ -35,7 +35,8 @@ final readonly class BulkAuthority implements ClientScopeAuthorizer, DataScopeAu
     public function allows(Operation $operation, RequestContext $context): bool
     {
         $declared = match ($operation->module) {
-            BulkDeclaration::MODULE => in_array($operation->id, ['fixture.bulk', 'fixture.ping'], true),
+            BulkDeclaration::MODULE => in_array($operation->id, ['fixture.bulk', 'fixture.ping', 'bulk-operations.submit', 'bulk-operations.show',
+                'bulk-operations.cancel', 'bulk-operations.result', 'bulk-operations.failures'], true),
             'equipment/registry' => $operation->id === 'equipment.bulk.transfer',
             default => false,
         };

@@ -35,11 +35,11 @@ final class SchemaImage
             throw new SchemaConflict('invalid-definition-nullability');
         }
 
-        return new FieldDefinition(new FieldId(SchemaValue::text($data['id'])), new EntityHandle(SchemaValue::text($data['entity'])),
-            SchemaValue::text($data['machine_key']), new FieldTypeId(SchemaValue::text($data['type'])), SchemaValue::text($data['owner']),
-            SchemaValue::integer($data['codec_version']), SchemaValue::integer($data['revision']), $nullable,
-            self::metadata($data['constraints']), array_map(FieldUse::from(...), SchemaValue::strings($data['uses'])),
-            self::metadata($data['presentation']), SchemaValue::text($data['index_policy']), SchemaValue::text($data['localization_policy']), SchemaValue::text($data['lifecycle']));
+        return new FieldDefinition(id: new FieldId(SchemaValue::text($data['id'])), entity: new EntityHandle(SchemaValue::text($data['entity'])),
+            machineKey: SchemaValue::text($data['machine_key']), type: new FieldTypeId(SchemaValue::text($data['type'])), owner: SchemaValue::text($data['owner']),
+            codecVersion: SchemaValue::integer($data['codec_version']), revision: SchemaValue::integer($data['revision']), nullable: $nullable,
+            constraints: self::metadata($data['constraints']), uses: array_map(FieldUse::from(...), SchemaValue::strings($data['uses'])),
+            presentation: self::metadata($data['presentation']), indexPolicy: SchemaValue::text($data['index_policy']), localizationPolicy: SchemaValue::text($data['localization_policy']), lifecycle: SchemaValue::text($data['lifecycle']));
     }
 
     /** @return FieldMetadata */
@@ -60,7 +60,7 @@ final class SchemaImage
     {
         if (is_array($entry) && $depth < 8) {
             foreach ($entry as $value) {
-                self::checkJson($value, $depth + 1);
+                self::checkJson(entry: $value, depth: $depth + 1);
             }
         } elseif ($entry !== null && ! is_scalar($entry)) {
             throw new SchemaConflict('invalid-definition-metadata');

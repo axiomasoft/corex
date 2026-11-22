@@ -29,7 +29,7 @@ final readonly class DatabaseTaskOperationReceipts implements TaskOperationRecei
     #[Override]
     public function find(ConnectionInterface $connection, TaskOperationIdentity $identity): ?TaskOperationReceipt
     {
-        $this->workScope->assert($identity->scope, $connection);
+        $this->workScope->assert(scope: $identity->scope, connection: $connection);
 
         $query = $connection->table('corex_task_operations')->useWritePdo()->where($this->key($identity));
 
@@ -68,8 +68,8 @@ final readonly class DatabaseTaskOperationReceipts implements TaskOperationRecei
             throw new LogicException('Task operation receipts require the active owner transaction and its original fence.');
         }
 
-        $this->workScope->assert($identity->scope, $connection);
-        ReferenceWrites::enlist($connection, $identity->scope, 'axiomasoft/corex-tasks', 'task-receipt', ['kind' => $identity->kind]);
+        $this->workScope->assert(scope: $identity->scope, connection: $connection);
+        ReferenceWrites::enlist(connection: $connection, scope: $identity->scope, producer: 'axiomasoft/corex-tasks', kind: 'task-receipt', witness: ['kind' => $identity->kind]);
         $fence = $receipt->originalFence;
 
         try {

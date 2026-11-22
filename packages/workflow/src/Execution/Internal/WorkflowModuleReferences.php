@@ -33,12 +33,12 @@ final readonly class WorkflowModuleReferences implements ModuleTableReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'sys_workflow_intents' => [$tenant, ['module', 'definition_ref', 'version_ref', 'kind', 'provider_ticket', 'effect_key', 'state'], fn (array $row, string $id): LifecycleBlocker => new LifecycleBlocker(
-                $this->owner(), 'sys_workflow_intents', $id, $scope, in_array($row['state'], ['confirmed', 'failed', 'quarantined'], true) ? 'retain-original-receipt' : 'reconcile-original-engine-attempt',
+                owner: $this->owner(), resourceKind: 'sys_workflow_intents', resourceId: $id, scope: $scope, requiredAction: in_array($row['state'], ['confirmed', 'failed', 'quarantined'], true) ? 'retain-original-receipt' : 'reconcile-original-engine-attempt',
             )],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

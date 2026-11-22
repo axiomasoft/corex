@@ -26,22 +26,22 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
 
     public function snapshot(DataScope $scope, EntityHandle $entity): FieldSchemaSnapshot
     {
-        return $this->runner->run($scope, function () use ($scope, $entity): FieldSchemaSnapshot {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $entity): FieldSchemaSnapshot {
             $db = $this->database->connection();
 
             return $db->transaction(function () use ($db, $scope, $entity): FieldSchemaSnapshot {
-                $schema = $this->heads->effective($db, $scope, $entity)->schema;
+                $schema = $this->heads->effective(db: $db, scope: $scope, entity: $entity)->schema;
                 $fields = [];
                 $operators = [];
                 foreach ($schema->fields as $id => $field) {
                     $uses = [];
-                    $resolved = $this->types->resolve($field->type, $field->codecVersion);
+                    $resolved = $this->types->resolve(type: $field->type, version: $field->codecVersion);
                     $type = $resolved->definition();
                     foreach ($field->uses as $use) {
                         if (! $field->permits($use, $type)) {
                             continue;
                         }
-                        $grant = $this->policy->plan($scope, $entity, new FieldUseRequest(new FieldSelection([$id]), $use));
+                        $grant = $this->policy->plan(scope: $scope, entity: $entity, request: new FieldUseRequest(fields: new FieldSelection([$id]), use: $use));
 
                         if ($grant->kind === FieldUsePlanKind::Unconditional || ($grant->kind === FieldUsePlanKind::ScopedPredicate && $grant->recordIds !== [])) {
                             $uses[] = $use->value;
@@ -59,7 +59,7 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
                     }
                 }
 
-                return new FieldSchemaSnapshot($entity, $schema->revision, $schema->mappingDigest, $fields, $operators);
+                return new FieldSchemaSnapshot(entity: $entity, revision: $schema->revision, mappingDigest: $schema->mappingDigest, fields: $fields, operators: $operators);
             });
         });
     }

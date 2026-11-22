@@ -19,7 +19,7 @@ uses(TestCase::class);
 
 $schema = static fn (): array => ['type' => 'object', 'additionalProperties' => false];
 
-$operation = (static fn (string $method = 'GET', string $id = 'notes.list'): Api => Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema()));
+$operation = (static fn (string $method = 'GET', string $id = 'notes.list'): Api => Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema(), version: 'v2'));
 
 $compile = static function (Api $api): Api {
     $compiled = resolve(ModuleCompilation::class)->compile([

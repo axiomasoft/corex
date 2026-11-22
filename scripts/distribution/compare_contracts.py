@@ -204,10 +204,15 @@ def compare_php(base, candidate, output):
 
 def documents(revision):
     """Yield category, subject, value, and source for non-PHP contracts."""
+    majors = [int(path.split("/")[1][1:]) for path in revision.matching(r"api/v[0-9]+/openapi\.json")]
+    active_stem = f"api/v{max(majors)}" if majors else None
     for path in revision.matching(r"api/v[0-9]+/[^/]+\.json"):
         stem = path.rsplit("/", 1)[0]
         filename = path.rsplit("/", 1)[1]
         snapshot = revision.document(path)
+        if stem != active_stem:
+            # Keep archived carrier digests while comparing the installed HTTP surface.
+            continue
         if filename == "manifest.json":
             # The manifest hashes the individual carriers that are compared below.
             continue

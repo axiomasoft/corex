@@ -45,9 +45,9 @@ final readonly class CompleteTask implements CompleteTaskCommand
 
     private function complete(CompleteTaskData $data, TenantContext $context, Connection $connection): TaskReference
     {
-        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-complete', ['task' => $data->taskId]);
-        $scope = $this->completion->scope($context, $connection);
-        $task = $this->completion->lockTask($data->taskId, $scope, $connection);
+        ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex-tasks', kind: 'task-complete', witness: ['task' => $data->taskId]);
+        $scope = $this->completion->scope(context: $context, connection: $connection);
+        $task = $this->completion->lockTask(taskId: $data->taskId, scope: $scope, connection: $connection);
 
         if (! $this->completion->apply(task: $task, data: $data, context: $context, scope: $scope, connection: $connection)) {
             return TaskReferenceFactory::fromTask($task);

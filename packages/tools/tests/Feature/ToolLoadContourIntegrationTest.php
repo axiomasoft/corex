@@ -17,8 +17,8 @@ use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\Laravel\InvocationFixtures;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
@@ -108,21 +108,22 @@ final class ToolLoadContourIntegrationTest extends TestCase
                 return $operation->ability === 'notes.read';
             }
         });
-        $request = Request::create('/chosen/v1/notes', 'POST', server: [
+        $request = Request::create('/chosen/v2/notes', 'POST', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_X_REQUEST_ID' => 'request-123',
         ], content: '{"title":"Hello"}');
-        $http = $this->app->make(OperationDispatcher::class)->dispatch($request, 'v1', 'notes');
+        $request->attributes->set('corex.client_id', 'client-1');
+        $http = $this->app->make(HttpOperationDispatcher::class)->dispatch($request, 'v2', 'notes');
         $declaration = collect($this->modules->registry->api)->first(
             static fn (Api $api): bool => $api->toolCode === 'notes.create',
         );
         $descriptor = ToolDescriptorFactory::fromDeclaration($declaration);
         $tool = $this->app->make(ToolInvoker::class)->invoke(
-            ResolvedContexts::make($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v1', 'notes.create', 'POST')),
+            ResolvedContexts::make($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v2', 'notes.create', 'POST')),
             new ToolCall('notes.create', 'v1', $descriptor->contractHash, new JsonObject(JsonCanonical::encode(['title' => 'Hello'])), 'request-123'),
         );
         $operation = array_values(array_filter(
-            new OperationRegistry($this->modules)->all('v1'),
+            new OperationRegistry($this->modules)->all('v2'),
             static fn (Operation $candidate): bool => $candidate->id === 'notes.create',
         ))[0];
         $estimator = InvocationFixtures::declaredCosts();

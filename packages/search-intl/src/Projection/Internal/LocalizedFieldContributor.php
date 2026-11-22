@@ -37,7 +37,7 @@ final readonly class LocalizedFieldContributor implements SearchProjectionContri
 
         foreach ($shapes as $id => [$binding, $locale, $physical]) {
             $fields[] = new ProjectionField(
-                $id, FieldType::Text, $binding->uses,
+                id: $id, type: FieldType::Text, uses: $binding->uses,
                 physicalId: $physical, authorizationField: $binding->fieldId, predicateRequiresRead: true,
             );
             $uses = array_column($binding->uses, 'value');
@@ -48,7 +48,7 @@ final readonly class LocalizedFieldContributor implements SearchProjectionContri
             ];
         }
 
-        return new ProjectionFields($fields, hash('sha256', json_encode(['corex.search-intl.projection.v1', $metadata], JSON_THROW_ON_ERROR)));
+        return new ProjectionFields(fields: $fields, revision: hash('sha256', json_encode(['corex.search-intl.projection.v1', $metadata], JSON_THROW_ON_ERROR)));
     }
 
     public function project(ProjectionContext $context, RecordRef $record, ProjectionSelection $selection): ProjectedValues
@@ -66,12 +66,12 @@ final readonly class LocalizedFieldContributor implements SearchProjectionContri
             }
 
             if (! array_key_exists($binding->fieldId, $texts)) {
-                $texts[$binding->fieldId] = $this->source->load($context, $binding, $record);
+                $texts[$binding->fieldId] = $this->source->load(context: $context, field: $binding, record: $record);
             }
             $text = $texts[$binding->fieldId];
 
             if ($text !== null && $text->declaredField === $binding->declaredField && $text->schemaHash === $binding->schemaHash) {
-                $value = $this->projector->project($text, $locale);
+                $value = $this->projector->project(text: $text, locale: $locale);
 
                 if ($value !== null) {
                     $values[$id] = $value;

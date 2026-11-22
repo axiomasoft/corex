@@ -34,7 +34,7 @@ final readonly class GuardedModuleLifecycle implements ModuleLifecycle
 
             return;
         }
-        $this->engine()->activate($this->inner, $this, $module, 'enable', $edition, $cascade);
+        $this->engine()->activate(inner: $this->inner, guard: $this, module: $module, method: 'enable', edition: $edition, cascade: $cascade);
     }
 
     public function disable(string $module, DisableReason $reason, bool $cascade = false): void
@@ -54,12 +54,12 @@ final readonly class GuardedModuleLifecycle implements ModuleLifecycle
         }
         $engine = $this->engine();
 
-        if ($engine->consumeTransition($module, 'disable', [$reason->value, $cascade])) {
+        if ($engine->consumeTransition(module: $module, method: 'disable', arguments: [$reason->value, $cascade])) {
             $frame->invoke($this, 'disable', [$module, $reason, $cascade], fn () => $this->inner->disable($module, $reason, $cascade));
 
             return;
         }
-        $engine->direct($module, LifecycleAction::Disable, $reason, $cascade);
+        $engine->direct(module: $module, action: LifecycleAction::Disable, reason: $reason, cascade: $cascade);
     }
 
     public function uninstall(string $module, bool $keepData = true): void
@@ -79,14 +79,14 @@ final readonly class GuardedModuleLifecycle implements ModuleLifecycle
         }
         $engine = $this->engine();
 
-        if ($engine->consumeTransition($module, 'uninstall', [$keepData])) {
+        if ($engine->consumeTransition(module: $module, method: 'uninstall', arguments: [$keepData])) {
             $frame->invoke($this, 'uninstall', [$module, $keepData], fn () => $this->inner->uninstall($module, $keepData));
 
             return;
         }
 
         if ($keepData) {
-            $engine->direct($module, LifecycleAction::Detach);
+            $engine->direct(module: $module, action: LifecycleAction::Detach);
 
             return;
         }
@@ -95,7 +95,7 @@ final readonly class GuardedModuleLifecycle implements ModuleLifecycle
             throw new LifecycleBlocked('Purge requires scoped plan and digest confirmation.');
         }
         $approval = $this->app->make(LifecycleConfirmation::class);
-        $engine->confirmedPurge($module, $approval);
+        $engine->confirmedPurge(module: $module, approval: $approval);
     }
 
     public function upgrade(string $module): void
@@ -113,7 +113,7 @@ final readonly class GuardedModuleLifecycle implements ModuleLifecycle
 
             return;
         }
-        $this->engine()->activate($this->inner, $this, $module, 'upgrade');
+        $this->engine()->activate(inner: $this->inner, guard: $this, module: $module, method: 'upgrade');
     }
 
     public function repair(string $module): void
@@ -131,7 +131,7 @@ final readonly class GuardedModuleLifecycle implements ModuleLifecycle
 
             return;
         }
-        $this->engine()->activate($this->inner, $this, $module, 'repair');
+        $this->engine()->activate(inner: $this->inner, guard: $this, module: $module, method: 'repair');
     }
 
     public function status(string $module): ModuleStatus

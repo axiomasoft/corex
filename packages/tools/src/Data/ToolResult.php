@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tools\Data;
 
 use CoreX\Data\Data\JsonDocument;
+use CoreX\Operations\Invocation\Data\AcceptedOperation;
 use CoreX\Operations\Validation\Data\JsonObject;
 use Packman\Attributes\Api;
 
@@ -13,5 +14,5 @@ use Packman\Attributes\Api;
 final readonly class ToolResult
 {
     /** Immutable JSON value. */
-    public function __construct(public ToolOutcome $outcome, public ?JsonObject $structuredData, public ?string $errorCode, public ?string $operationKey, public bool $replayed, public JsonDocument $metadata = new JsonDocument('[]')) {}
+    public function __construct(public ToolOutcome $outcome, public ?JsonObject $structuredData, public ?string $errorCode, public ?string $operationKey, public bool $replayed, public JsonDocument $metadata = new JsonDocument('[]'), public ?AcceptedOperation $accepted = null, public ?JsonDocument $problem = null) {}
 }

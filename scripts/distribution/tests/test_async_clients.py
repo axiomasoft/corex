@@ -21,13 +21,14 @@ class AsyncClientTest(unittest.TestCase):
         self.assertEqual(MODULE.source_forbidden(MODULE.WEBHOOK_CLIENT), [])
 
     def test_opaque_bulk_path_stays_local(self) -> None:
-        self.assertEqual(MODULE.BULK.forward_path("http://127.0.0.1:9", "/bulk-operations/bulk-1?track=opaque"), "http://127.0.0.1:9/bulk-operations/bulk-1?track=opaque")
+        path = MODULE.BULK_PATH + "/bulk-1?track=opaque"
+        self.assertEqual(MODULE.BULK.forward_path("http://127.0.0.1:9", path), "http://127.0.0.1:9" + path)
         with self.assertRaises(SystemExit):
             MODULE.BULK.forward_path("http://127.0.0.1:9", "http://example.test/result")
 
-    def test_signature_uses_exact_bytes_and_committed_topics_are_empty(self) -> None:
+    def test_signature_uses_exact_bytes_and_unpublished_topic_is_absent(self) -> None:
         contract = MODULE.WEBHOOK.load_snapshots(MODULE.SNAPSHOTS)
-        self.assertEqual(contract["topics"], [])
+        self.assertNotIn(MODULE.TOPIC, contract["topics"])
         signature = MODULE.WEBHOOK.sign(MODULE.SECRET, contract["webhooks"]["rotation"], "delivery-1", "1700000000", MODULE.BODY)
         self.assertTrue(MODULE.WEBHOOK.signature_matches(MODULE.SECRET, contract["webhooks"]["rotation"], "delivery-1", "1700000000", MODULE.BODY, signature))
         self.assertFalse(MODULE.WEBHOOK.signature_matches(MODULE.SECRET, contract["webhooks"]["rotation"], "delivery-1", "1700000000", MODULE.BODY + b" ", signature))

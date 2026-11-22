@@ -18,8 +18,29 @@ use CoreX\Context\Exceptions\ScopeAuthorityUnavailable;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Context\Laravel\DatabaseScopeControl;
+use CoreX\Context\Laravel\ScopeControlSchema;
 use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Support\Facades\DB;
+
+it('upgrades the independent control store without discarding a route or ticket', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    $owner = app(DatabaseScopeControl::class);
+    $control = DB::connection('work-scope-control');
+    $schema = $control->getSchemaBuilder();
+    $ticket = $owner->acquire($scope, new OperationKey('before-lifecycle', 1), AdmissionKind::LocalWrite);
+    $schema->dropColumns('corex_scope_routes', ['module_closures']);
+    $schema->dropColumns('corex_scope_tickets', ['module_targets']);
+
+    ScopeControlSchema::upgradeLifecycle($control);
+    ScopeControlSchema::upgradeLifecycle($control);
+
+    expect($schema->hasColumn('corex_scope_routes', 'module_closures'))->toBeTrue()
+        ->and($schema->hasColumn('corex_scope_tickets', 'module_targets'))->toBeTrue()
+        ->and($control->table('corex_scope_routes')->where('account_id', $scope->accountId)->value('restore_epoch'))->toBe($scope->restoreEpoch)
+        ->and($control->table('corex_scope_tickets')->where('ticket_id', $ticket->id)->value('operation_id'))->toBe('before-lifecycle');
+
+    $owner->settle($ticket, new AttemptEvidence('rolled-back', 'fixture-complete'));
+});
 
 it('drains an in-flight provider attempt before reopening a restored binding', function (): void {
     $fixture = WorkScopeFixture::install(app());

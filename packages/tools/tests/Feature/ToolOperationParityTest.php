@@ -14,8 +14,8 @@ use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
@@ -68,8 +68,8 @@ final class ToolOperationParityTest extends TestCase
         $schema = $this->schema(['title' => ['type' => 'string'], 'id' => ['type' => 'string'], 'actor' => ['type' => 'string'], 'account' => ['type' => 'string'], 'workspace' => ['type' => ['string', 'null']]]);
         $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']]),
-                Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'read', 'read-only', $schema, $schema, ['title' => 'title']),
+                Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']], version: 'v2'),
+                Api::exposeTool('notes.create', 'v2', 'notes.create', 'v1', 'read', 'read-only', $schema, $schema, ['title' => 'title']),
             ]),
         ], installedPackages: []));
         $this->tenants = new ContextFixture;
@@ -103,8 +103,9 @@ final class ToolOperationParityTest extends TestCase
     public function test_http_and_exposed_tool_share_one_handler_call(): void
     {
         $this->allow();
-        $request = Request::create('/chosen/v1/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_REQUEST_ID' => 'request-123'], content: '{"title":"Hello"}');
-        $http = $this->app->make(OperationDispatcher::class)->dispatch($request, 'v1', 'notes');
+        $request = Request::create('/chosen/v2/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_REQUEST_ID' => 'request-123'], content: '{"title":"Hello"}');
+        $request->attributes->set('corex.client_id', 'client-1');
+        $http = $this->app->make(HttpOperationDispatcher::class)->dispatch($request, 'v2', 'notes');
         $tool = $this->app->make(ToolInvoker::class)->invoke($this->context(), $this->toolCall());
 
         self::assertSame(200, $http->getStatusCode());
@@ -130,7 +131,7 @@ final class ToolOperationParityTest extends TestCase
 
     private function context(): RequestContext
     {
-        return ResolvedContexts::make($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v1', 'notes.create', 'POST'));
+        return ResolvedContexts::make($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v2', 'notes.create', 'POST'));
     }
 
     private function toolCall(): ToolCall

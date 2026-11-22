@@ -7,8 +7,10 @@ namespace Flex\Crm;
 use Flex\Crm\Activity\Models\Activity;
 use Flex\Crm\ApiShared\CrmSchemas;
 use Flex\Crm\Company\Api\CreateCompanyOperation;
+use Flex\Crm\Company\Api\DeleteCompanyOperation;
 use Flex\Crm\Company\Api\ListCompaniesOperation;
 use Flex\Crm\Company\Api\ShowCompanyOperation;
+use Flex\Crm\Company\Api\UpdateCompanyOperation;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Contact\Api\CreateContactCompanyOperation;
 use Flex\Crm\Contact\Api\CreateContactOperation;
@@ -56,35 +58,53 @@ final class CrmModule extends ModuleDefinition implements WithSchema
             Api::operation(
                 id: 'crm.company.list', method: 'GET', path: '/companies', handler: ListCompaniesOperation::class, ability: 'crm.company.view',
                 requestSchema: CrmSchemas::listInput(), responseSchema: CrmSchemas::listing(company: true),
-                rules: ['limit' => ['sometimes', 'integer', 'min:1', 'max:100']],
+                rules: ['limit' => ['sometimes', 'integer', 'min:1', 'max:100']], version: 'v2',
             ),
             Api::operation(
                 id: 'crm.company.show', method: 'GET', path: '/companies/{companyId}', handler: ShowCompanyOperation::class, ability: 'crm.company.view',
-                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: CrmSchemas::record(company: true),
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: CrmSchemas::record(company: true), version: 'v2',
             ),
             Api::operation(
                 id: 'crm.company.create', method: 'POST', path: '/companies', handler: CreateCompanyOperation::class, ability: 'crm.company.create',
                 requestSchema: CrmSchemas::record(company: true, request: true), responseSchema: CrmSchemas::record(company: true),
-                rules: self::companyRules(), successStatus: 201,
+                rules: self::companyRules(), version: 'v2', successStatus: 201,
             ),
+            Api::operation(
+                id: 'crm.company.update', method: 'PATCH', path: '/companies/{companyId}', handler: UpdateCompanyOperation::class, ability: 'crm.company.update',
+                requestSchema: CrmSchemas::companyUpdate(), responseSchema: CrmSchemas::record(company: true),
+                rules: [
+                    'name' => ['sometimes', 'required', 'string', 'max:255'],
+                    'legal_name' => ['sometimes', 'nullable', 'string', 'max:255'],
+                    'domain' => ['sometimes', 'nullable', 'string', 'max:190'],
+                ],
+                version: 'v2',
+            )->fields(
+                read: array_map(static fn (string $field): string => '/'.$field, array_keys(CrmSchemas::record(company: true)['properties'])),
+                write: ['/name', '/legal_name', '/domain'],
+            )->idempotency('required')->effect('tenant_transactional'),
+            Api::operation(
+                id: 'crm.company.delete', method: 'DELETE', path: '/companies/{companyId}', handler: DeleteCompanyOperation::class, ability: 'crm.company.delete',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: CrmSchemas::companyDeleted(),
+                version: 'v2',
+            )->idempotency('required')->effect('tenant_transactional'),
             Api::operation(
                 id: 'crm.contact.list', method: 'GET', path: '/contacts', handler: ListContactsOperation::class, ability: 'crm.contact.view',
                 requestSchema: CrmSchemas::listInput(), responseSchema: CrmSchemas::listing(company: false),
-                rules: ['limit' => ['sometimes', 'integer', 'min:1', 'max:100']],
+                rules: ['limit' => ['sometimes', 'integer', 'min:1', 'max:100']], version: 'v2',
             ),
             Api::operation(
                 id: 'crm.contact.show', method: 'GET', path: '/contacts/{contactId}', handler: ShowContactOperation::class, ability: 'crm.contact.view',
-                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: CrmSchemas::record(company: false),
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: CrmSchemas::record(company: false), version: 'v2',
             ),
             Api::operation(
                 id: 'crm.contact.create', method: 'POST', path: '/contacts', handler: CreateContactOperation::class, ability: 'crm.contact.create',
                 requestSchema: CrmSchemas::record(company: false, request: true), responseSchema: CrmSchemas::record(company: false),
-                rules: self::contactRules(), successStatus: 201,
+                rules: self::contactRules(), version: 'v2', successStatus: 201,
             ),
             Api::operation(
                 id: 'crm.contact.company.create', method: 'POST', path: '/contacts/{contactId}/companies', handler: CreateContactCompanyOperation::class, ability: 'crm.contact.associate',
                 requestSchema: CrmSchemas::association(request: true), responseSchema: CrmSchemas::association(),
-                rules: ['company_id' => ['required', 'string'], 'label' => ['nullable', 'string', 'max:64'], 'is_primary' => ['sometimes', 'boolean:strict']], successStatus: 201,
+                rules: ['company_id' => ['required', 'string'], 'label' => ['nullable', 'string', 'max:64'], 'is_primary' => ['sometimes', 'boolean:strict']], version: 'v2', successStatus: 201,
             ),
         ]);
     }

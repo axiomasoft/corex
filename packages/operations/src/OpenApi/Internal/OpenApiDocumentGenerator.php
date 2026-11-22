@@ -7,6 +7,7 @@ namespace CoreX\Operations\OpenApi\Internal;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
+use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
@@ -67,10 +68,49 @@ final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
                     'type' => 'string', 'pattern' => '^[a-zA-Z0-9_.-]{1,128}$',
                 ]],
             ];
+
+            if ($operation->idempotency !== IdempotencyRequirement::Forbidden) {
+                $parameters[] = [
+                    'name' => 'Idempotency-Key', 'in' => 'header',
+                    'required' => $operation->idempotency === IdempotencyRequirement::Required,
+                    'description' => 'Send one opaque value of 1 to 255 bytes. Reuse it when retrying the same operation.',
+                    'schema' => ['type' => 'string', 'minLength' => 1, 'maxLength' => 255],
+                ];
+            }
+
             preg_match_all('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', $operation->path, $matches);
 
             foreach ($matches[1] as $name) {
                 $parameters[] = ['name' => $name, 'in' => 'path', 'required' => true, 'schema' => ['type' => 'string']];
+            }
+
+            $success = ['description' => 'Success', 'content' => ['application/json' => ['schema' => [
+                'type' => 'object', 'required' => ['data', 'meta'], 'properties' => [
+                    'data' => $this->schemas->response($operation), 'meta' => $meta,
+                ],
+            ]]]];
+            $responses = [$operation->successStatus => $success];
+            $failure = ['description' => 'API error', 'content' => ['application/problem+json' => ['schema' => $problem]]];
+            foreach ([401, 403, 404, 409, 415, 422, 429, 500, 503] as $status) {
+                $responses[$status] = $failure;
+            }
+            $responses[429]['headers'] = ['Retry-After' => ['schema' => ['type' => 'integer', 'minimum' => 1]]];
+
+            if ($operation->id === 'bulk-operations.cancel' || $operation->successStatus === 202) {
+                $responses[202] = [...$success, 'headers' => [
+                    'Location' => ['required' => true, 'schema' => ['type' => 'string', 'format' => 'uri-reference']],
+                ]];
+            }
+
+            if (in_array($operation->id, ['fields.describe', 'search.describe'], true)) {
+                $etag = ['schema' => ['type' => 'string']];
+                $parameters[] = ['name' => 'If-None-Match', 'in' => 'header', 'schema' => ['type' => 'string']];
+                $responses[200] = [...$success, 'headers' => ['ETag' => $etag]];
+                $responses[304] = ['description' => 'Authorized metadata is unchanged', 'headers' => ['ETag' => $etag]];
+            }
+
+            if (in_array($operation->id, ['bulk-operations.result', 'bulk-operations.failures'], true)) {
+                $responses[410] = ['description' => 'Result has expired', 'content' => $failure['content']];
             }
 
             $entry = [
@@ -78,21 +118,8 @@ final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
                 'x-packman-module' => $operation->module,
                 'x-corex-ability' => $operation->ability,
                 'x-corex-authentication-required' => true,
-                'parameters' => $parameters,
-                'responses' => [
-                    $operation->successStatus => ['description' => 'Success', 'content' => ['application/json' => ['schema' => [
-                        'type' => 'object', 'required' => ['data', 'meta'], 'properties' => [
-                            'data' => $this->schemas->response($operation), 'meta' => $meta,
-                        ],
-                    ]]]],
-                ],
+                'responses' => $responses,
             ];
-
-            foreach ([401, 403, 404, 409, 415, 422, 500] as $status) {
-                $entry['responses'][$status] = ['description' => 'API error', 'content' => [
-                    'application/problem+json' => ['schema' => $problem],
-                ]];
-            }
 
             if ($operation->method === 'GET') {
                 $requestSchema = JsonDocuments::map($operation->requestSchema);
@@ -104,7 +131,7 @@ final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
                 }
 
                 foreach ($properties as $name => $schema) {
-                    $entry['parameters'][] = [
+                    $parameters[] = [
                         'name' => $name, 'in' => 'query',
                         'required' => in_array($name, $required, true),
                         'schema' => $schema,
@@ -114,6 +141,7 @@ final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
                 $entry['requestBody'] = ['required' => true, 'content' => ['application/json' => ['schema' => JsonDocuments::map($operation->requestSchema)]]];
             }
 
+            $entry['parameters'] = $parameters;
             $paths[$operation->path][strtolower($operation->method)] = $entry;
         }
 

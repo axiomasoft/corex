@@ -29,9 +29,9 @@ final class ManageLifecycle extends Command
         $target = $this->argument('target');
         $value = (string) $this->argument('argument');
         $result = match ($this->argument('operation')) {
-            'plan' => $plans->plan($scope, new ModuleId($target), LifecycleAction::from($value)),
-            'inspect' => $plans->inspect($scope, new LifecyclePlanRef($target)),
-            'apply' => $plans->apply($scope, new LifecyclePlanRef($target), new PlanDigest($value)),
+            'plan' => $plans->plan(scope: $scope, module: new ModuleId($target), action: LifecycleAction::from($value)),
+            'inspect' => $plans->inspect(scope: $scope, ref: new LifecyclePlanRef($target)),
+            'apply' => $plans->apply(scope: $scope, ref: new LifecyclePlanRef($target), digest: new PlanDigest($value)),
             default => throw new InvalidArgumentException('Expected plan, inspect or apply.'),
         };
         $this->line(json_encode($result, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));

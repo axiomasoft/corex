@@ -34,7 +34,7 @@ final readonly class InboxRetention
         }
 
         return $this->connection->transaction(function () use ($scope, $consumer, $source, $messageIds): int {
-            $this->current->assert($scope, $this->connection);
+            $this->current->assert(scope: $scope, connection: $this->connection);
 
             return $this->connection->table($this->table)->where(MessageReceiptIdentity::logical($scope))
                 ->where('source', $source)->where('consumer', $consumer->name)

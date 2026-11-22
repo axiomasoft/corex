@@ -44,20 +44,20 @@ final class IndexBindings
         $app->tag(SearchModuleReferences::class, ModuleReferences::class);
 
         $app->scoped(LaneStore::class, static fn (Application $app): LaneStore => new LaneStore(
-            $app->make(DatabaseManager::class), $app->make(CurrentWorkScope::class),
-            $app->make(SearchOptions::class)->driver,
-            $app->make(SearchOptions::class)->cluster));
+            database: $app->make(DatabaseManager::class), current: $app->make(CurrentWorkScope::class),
+            backend: $app->make(SearchOptions::class)->driver,
+            cluster: $app->make(SearchOptions::class)->cluster));
         $app->alias(LaneStore::class, ActiveGenerations::class);
         $app->scoped(IndexLookupAccess::class, VerifiedIndexLookup::class);
         $app->scoped(SearchInvalidations::class, DirtyJournal::class);
         $app->scoped(SearchMappingInvalidations::class, static fn (Application $app): MappingJournal => new MappingJournal(
-            $app->make(LaneStore::class), static fn (): SearchProjectionContributor => $app->make(SearchProjectionContributor::class)));
+            store: $app->make(LaneStore::class), projection: static fn (): SearchProjectionContributor => $app->make(SearchProjectionContributor::class)));
         $app->scoped(IndexWorker::class, static fn (Application $app): GenerationWorker => new GenerationWorker(
-            $app->make(LaneStore::class), static fn (): IndexProjection => $app->make(IndexProjection::class), static fn (): IndexDriver => $app->make(IndexDriver::class),
-            $app->make(ProviderEffectLedger::class), $app->make(ScopeAdmission::class), $app->make(ClockInterface::class)));
+            store: $app->make(LaneStore::class), projection: static fn (): IndexProjection => $app->make(IndexProjection::class), driver: static fn (): IndexDriver => $app->make(IndexDriver::class),
+            effects: $app->make(ProviderEffectLedger::class), admission: $app->make(ScopeAdmission::class), clock: $app->make(ClockInterface::class)));
         $app->scoped(RebuildJournal::class, static fn (Application $app): RebuildJournal => new RebuildJournal(
-            $app->make(LaneStore::class), static fn (): IndexProjection => $app->make(IndexProjection::class), static fn (): IndexDriver => $app->make(IndexDriver::class),
-            $app->make(ClockInterface::class), $app->make(SearchOptions::class)->retentionSeconds));
+            store: $app->make(LaneStore::class), projection: static fn (): IndexProjection => $app->make(IndexProjection::class), driver: static fn (): IndexDriver => $app->make(IndexDriver::class),
+            clock: $app->make(ClockInterface::class), retentionSeconds: $app->make(SearchOptions::class)->retentionSeconds));
         $app->alias(RebuildJournal::class, RebuildWorker::class);
         $app->alias(RebuildJournal::class, SearchRebuilds::class);
         $app->tag(IndexReceiptProjector::class, ProviderReceiptProjector::class);

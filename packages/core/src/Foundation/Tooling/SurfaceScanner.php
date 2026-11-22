@@ -788,7 +788,7 @@ final class SurfaceScanner
             } elseif ($tag->value instanceof Doc\PhpDoc\TemplateTagValueNode) {
                 $aliases[$tag->value->name] = $tag->value->bound ?? new Doc\Type\IdentifierTypeNode('mixed');
             } elseif ($tag->value instanceof Doc\PhpDoc\TypeAliasImportTagValueNode) {
-                $source = $this->lookup($type->resolve($tag->value->importedFrom->name));
+                $source = $this->lookup($type->resolve((string) $tag->value->importedFrom));
 
                 if ($source !== null && $source->name !== $type->name && ! isset($this->resolving['alias:'.$source->name])) {
                     $this->resolving['alias:'.$source->name] = true;
@@ -903,7 +903,7 @@ final class SurfaceScanner
             } elseif (is_array($value)) {
                 foreach ($value as $i => $child) {
                     if ($child instanceof Doc\Node) {
-                        $bound = $node instanceof Doc\Type\GenericTypeNode && $node->type->name === 'class-string' && $key === 'genericTypes';
+                        $bound = $node instanceof Doc\Type\GenericTypeNode && (string) $node->type === 'class-string' && $key === 'genericTypes';
                         $this->walkDoc(type: $type, node: $child, path: $path.($bound ? '.class-string' : '').'.'.$key.'.'.$i, aliases: $aliases, visiting: $visiting, line: $line);
                     }
                 }

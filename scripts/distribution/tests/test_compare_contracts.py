@@ -198,6 +198,18 @@ class CompareContractsTest(unittest.TestCase):
         self.assertEqual(["composer-2"], stale["stale_decisions"])
         self.assertEqual(1, stale["unexplained"])
 
+    def test_frozen_v1_bytes_do_not_count_as_candidate_runtime_routes(self):
+        v1 = "api/v1/openapi.json"
+        self.write_json(v1, {"paths": {"/things": {"get": {"operationId": "list"}}}})
+        base = self.commit("Publish v1")
+        self.write_json("api/v2/openapi.json", {"paths": {"/things": {"get": {"operationId": "list"}}}})
+        report = self.compare(base, self.commit("Publish v2 and keep frozen v1"), expected_exit=1)
+        self.assertEqual(report["base_digests"][v1], report["candidate_digests"][v1])
+        self.assertEqual(
+            {("removed", "api/v1/GET/~1things", True), ("added", "api/v2/GET/~1things", False)},
+            {(row["kind"], row["subject"], row["breaking"]) for row in report["changes"]},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

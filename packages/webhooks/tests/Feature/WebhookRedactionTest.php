@@ -59,14 +59,14 @@ final class WebhookRedactionTest extends TestCase
     private function seedFixture(Connection $connection, DataScope $scope, DateTimeImmutable $now): void
     {
         $connection->table('sys_api_webhook_subscriptions')->insert([
-            'id' => 'subscription-redacted', 'revision' => 0, 'major' => 'v1', 'topic' => 'orders.placed',
+            'id' => 'subscription-redacted', 'revision' => 0, 'major' => 'v2', 'topic' => 'orders.placed',
             'topic_version' => 1, 'endpoint_url' => 'https://hooks.example/receiver?token=private', 'status' => 'active',
             'max_pii_class' => 'personal', 'key_refs' => '["whsec_ref"]', 'created_at' => $now, 'updated_at' => $now,
         ]);
         $body = JsonCanonical::encode(['secret' => 'payload-secret']);
         $connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($scope, [
             'id' => 'delivery-redacted', 'subscription_id' => 'subscription-redacted', 'subscription_revision' => 0,
-            'event_id' => 'event-redacted', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
+            'event_id' => 'event-redacted', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v2',
             'endpoint_snapshot' => 'https://hooks.example/receiver?token=private',
             'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($scope)),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => 'dead', 'attempt' => 1,

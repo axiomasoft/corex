@@ -37,7 +37,7 @@ final readonly class FieldProjectionContributor implements ProjectionSnapshotCap
 
     public function describe(ProjectionContext $context): ProjectionFields
     {
-        $schema = $this->catalogue->snapshot($context->scope, $context->entity);
+        $schema = $this->catalogue->snapshot(scope: $context->scope, entity: $context->entity);
         $descriptors = [];
         $operatorWitness = [];
         foreach ($schema->fields as $id => $field) {
@@ -52,7 +52,7 @@ final readonly class FieldProjectionContributor implements ProjectionSnapshotCap
             foreach ($field->uses as $use) {
                 if ($use === FieldUse::Filter && $operators !== null) {
                     if (in_array(FieldOperator::Eq, $operators->operators, true) || in_array(FieldOperator::In, $operators->operators, true)) {
-                        $filter = new FieldProjectionFilter($this->visibleCatalogue, $this->filters, $context, $schema, $field->id);
+                        $filter = new FieldProjectionFilter(catalogue: $this->visibleCatalogue, filter: $this->filters, context: $context, expected: $schema, field: $field->id);
                         $uses[] = $use;
                     }
 
@@ -64,7 +64,7 @@ final readonly class FieldProjectionContributor implements ProjectionSnapshotCap
                     $uses[] = $use;
                 }
             }
-            $descriptors[] = new ProjectionField($id, $type, $uses, filter: $filter, predicateRequiresRead: true);
+            $descriptors[] = new ProjectionField(id: $id, type: $type, uses: $uses, filter: $filter, predicateRequiresRead: true);
 
             if ($filter !== null && $operators !== null) {
                 $names = array_column($operators->operators, 'value');
@@ -74,7 +74,7 @@ final readonly class FieldProjectionContributor implements ProjectionSnapshotCap
         }
         ksort($operatorWitness, SORT_STRING);
 
-        return new ProjectionFields($descriptors, hash('sha256', json_encode([
+        return new ProjectionFields(fields: $descriptors, revision: hash('sha256', json_encode([
             'corex.search.custom-fields.v1', $schema->revision->value, $schema->mappingDigest, $operatorWitness,
         ], JSON_THROW_ON_ERROR)));
     }
@@ -85,7 +85,7 @@ final readonly class FieldProjectionContributor implements ProjectionSnapshotCap
             throw SearchWitnessChanged::changed();
         }
 
-        $schema = $this->catalogue->snapshot($context->scope, $context->entity);
+        $schema = $this->catalogue->snapshot(scope: $context->scope, entity: $context->entity);
         $selected = [];
         foreach ($selection->fields as $id) {
             $field = $schema->fields[$id] ?? null;
@@ -99,7 +99,7 @@ final readonly class FieldProjectionContributor implements ProjectionSnapshotCap
             return new ProjectedValues([]);
         }
 
-        $snapshot = $this->values->readMany($context->scope, new RecordSelection([$record]), new FieldSelection($selected))->items[0] ?? null;
+        $snapshot = $this->values->readMany(scope: $context->scope, records: new RecordSelection([$record]), selection: new FieldSelection($selected))->items[0] ?? null;
 
         if ($snapshot === null) {
             return new ProjectedValues([]);

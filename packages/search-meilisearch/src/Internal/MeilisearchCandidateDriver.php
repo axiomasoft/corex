@@ -35,7 +35,7 @@ final readonly class MeilisearchCandidateDriver implements CandidateDriver
     {
         $this->current->assert($request->scope);
         $target = $request->generation;
-        $stamp = MeilisearchNamespace::fingerprint($target, $this->cluster);
+        $stamp = MeilisearchNamespace::fingerprint(target: $target, cluster: $this->cluster);
 
         if (get_object_vars($target->scope) !== get_object_vars($request->scope)
             || $request->filters !== [] || $request->sort !== []
@@ -45,7 +45,7 @@ final readonly class MeilisearchCandidateDriver implements CandidateDriver
         }
 
         if ($request->recordIds === []) {
-            return new CandidatePage([], null);
+            return new CandidatePage(candidates: [], nextPosition: null);
         }
         $filter = [MeilisearchNamespace::Stamp.' = "'.$stamp.'"'];
 
@@ -55,7 +55,7 @@ final readonly class MeilisearchCandidateDriver implements CandidateDriver
         }
 
         if ($request->recordIds !== null) {
-            $keys = array_map(static fn (string $id): string => $target->documentId(new RecordRef($target->entity->value, $id)), $request->recordIds);
+            $keys = array_map(static fn (string $id): string => $target->documentId(new RecordRef(entity: $target->entity->value, id: $id)), $request->recordIds);
             $filter[] = 'id IN '.json_encode($keys, JSON_THROW_ON_ERROR);
         }
         $parameters = [
@@ -79,7 +79,7 @@ final readonly class MeilisearchCandidateDriver implements CandidateDriver
         foreach ($hits as $hit) {
             $id = MeilisearchNamespace::recordId($hit[MeilisearchNamespace::Order] ?? null);
             $key = MeilisearchNamespace::order($id);
-            $record = new RecordRef($target->entity->value, $id);
+            $record = new RecordRef(entity: $target->entity->value, id: $id);
             $documentId = $hit['id'] ?? null;
 
             if (strcmp($key, $last ?? $request->position ?? '') <= 0 || ! is_string($documentId)
@@ -87,11 +87,11 @@ final readonly class MeilisearchCandidateDriver implements CandidateDriver
                 throw SearchFeatureUnavailable::unsupported();
             }
             $last = $key;
-            $digests = $request->text === null ? null : $this->textWitnesses($hit, $request->searchFields);
-            $candidates[] = new Candidate($target, $record, $documentId, $digests);
+            $digests = $request->text === null ? null : $this->textWitnesses(hit: $hit, fields: $request->searchFields);
+            $candidates[] = new Candidate(generation: $target, record: $record, documentId: $documentId, textWitnesses: $digests);
         }
 
-        return new CandidatePage($candidates, count($hits) === $request->limit ? $last : null);
+        return new CandidatePage(candidates: $candidates, nextPosition: count($hits) === $request->limit ? $last : null);
     }
 
     /** @param array<array-key,mixed> $hit

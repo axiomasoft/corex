@@ -27,13 +27,13 @@ final readonly class DatabaseReferenceAdmission implements ReferenceAdmission
         if ($connection->transactionLevel() < 1) {
             throw new LifecycleBlocked('Reference admission requires the owning transaction.');
         }
-        $this->current->assert($scope, $connection);
+        $this->current->assert(scope: $scope, connection: $connection);
         $ticket = ($this->ticketFor)($scope, $connection) ?? throw new LifecycleBlocked('No verified transaction ticket.');
-        $this->control->enlistTargets($ticket, $this->catalogue->packages($target, ...$also));
+        $this->control->enlistTargets(ticket: $ticket, targets: $this->catalogue->packages($target, ...$also));
     }
 
     public function reserve(DataScope $scope, ProviderAttempt $attempt, ModuleRef $target, ModuleRef ...$also): AdmissionTicket
     {
-        return $this->control->reserveTargets($scope, $attempt, $this->catalogue->packages($target, ...$also));
+        return $this->control->reserveTargets(scope: $scope, attempt: $attempt, targets: $this->catalogue->packages($target, ...$also));
     }
 }

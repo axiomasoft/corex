@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Run one local CoreX test command with kernel resource limits."""
+
+import argparse
+import fcntl
+import os
+from pathlib import Path
+import shutil
+import signal
+import subprocess
+import sys
+from uuid import uuid4
+
+
+MIB = 1024**2
+GIB = 1024 * MIB
+CGROUPS = Path("/sys/fs/cgroup")
+
+
+def available_memory() -> int:
+    for line in Path("/proc/meminfo").read_text().splitlines():
+        if line.startswith("MemAvailable:"):
+            return int(line.split()[1]) * 1024
+    raise RuntimeError("cannot measure available host memory")
+
+
+def allowed_scratch(path: Path) -> Path:
+    path = path.resolve(strict=True)
+    filesystem = subprocess.check_output(["stat", "-f", "-c", "%T", str(path)], text=True).strip()
+    if not path.is_dir() or filesystem in {"tmpfs", "ramfs", "hugetlbfs"}:
+        raise RuntimeError(f"use an existing disk-backed scratch directory: {path}")
+    return path
+
+
+def check_reserve(path: Path, memory: int, disk: int) -> None:
+    if available_memory() < memory or shutil.disk_usage(path).free < disk:
+        raise RuntimeError(f"host reserve below {memory // GIB} GiB RAM or {disk // GIB} GiB disk")
+
+
+def stop_scope(unit: str) -> None:
+    if current_group(unit) is not None:
+        result = subprocess.run(["systemctl", "--user", "stop", unit], check=False, timeout=20, capture_output=True)
+        if result.returncode and current_group(unit) is not None:
+            raise RuntimeError(f"cannot stop test scope {unit}")
+
+
+def current_group(unit: str) -> Path | None:
+    result = subprocess.run(["systemctl", "--user", "show", "--property=ControlGroup", "--value", unit],
+                            capture_output=True, text=True, timeout=5, check=False)
+    relative = result.stdout.strip()
+    return CGROUPS / relative.lstrip("/") if relative.startswith("/") else None
+
+
+def pressure(group: Path) -> bool:
+    try:
+        rows = (group / "memory.pressure").read_text().splitlines()
+    except FileNotFoundError:
+        return False
+    for row in rows:
+        if row.startswith("full "):
+            return float(row.split()[1].removeprefix("avg10=")) >= 25
+    return False
+
+
+def interrupt(_signum, _frame) -> None:
+    raise KeyboardInterrupt
+
+
+def run(args, command: list[str]) -> int:
+    scratch = allowed_scratch(args.scratch)
+    check_reserve(scratch, 6 * GIB, 3 * GIB)
+    runtime = Path(os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}"))
+    if runtime.stat().st_uid != os.getuid():
+        raise RuntimeError("local test lock directory is not owned by this user")
+
+    with (runtime / "corex-tests.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        active = subprocess.check_output(
+            ["systemctl", "--user", "list-units", "corex-tests-*.scope", "--state=active,activating,deactivating",
+             "--no-legend", "--plain"], text=True, timeout=5,
+        )
+        if active.strip():
+            raise RuntimeError("an earlier CoreX test scope is still active")
+        unit = f"corex-tests-{uuid4().hex}.scope"
+        limit = args.memory_mib * MIB
+        launch = ["systemd-run", "--user", "--scope", "--quiet", f"--unit={unit}",
+                  "-p", f"MemoryMax={limit}", "-p", f"MemoryHigh={limit * 3 // 4}",
+                  "-p", "MemorySwapMax=0", "-p", "CPUQuota=100%", "-p", "TasksMax=80",
+                  "-p", "OOMPolicy=kill", "--", "nice", "-n", "10", "ionice", "-c", "3", *command]
+        env = dict(os.environ, TMPDIR=str(scratch), COREX_RESOURCE_UNIT=unit,
+                   COMPOSER_MAX_PARALLEL_HTTP="2", COMPOSER_MAX_PARALLEL_PROCESSES="2")
+        print(f"CoreX {unit} | {args.memory_mib} MiB RAM | 1 CPU | 80 tasks | {scratch}", file=sys.stderr)
+        process = subprocess.Popen(launch, env=env)
+        group = None
+        peak = 0
+        low = 0
+        stalled = 0
+
+        try:
+            while True:
+                try:
+                    status = process.wait(timeout=1)
+                    break
+                except subprocess.TimeoutExpired:
+                    if group is None:
+                        group = current_group(unit)
+                    if group is not None:
+                        try:
+                            peak = max(peak, int((group / "memory.peak").read_text()))
+                        except FileNotFoundError:
+                            pass  # The command may have just finished and removed the scope.
+                        stalled = stalled + 1 if pressure(group) else 0
+                    low = low + 1 if available_memory() < 4 * GIB or shutil.disk_usage(scratch).free < GIB else 0
+                    if low >= 3 or stalled >= 3:
+                        reason = "host reserve" if low >= 3 else "sustained cgroup memory pressure"
+                        print(f"CoreX stopped for {reason}; peak {peak / MIB:.1f} MiB", file=sys.stderr)
+                        stop_scope(unit)
+                        process.wait(timeout=20)
+                        return 75
+        finally:
+            stop_scope(unit)
+
+        print(f"CoreX exit {status}, sampled cgroup peak {peak / MIB:.1f} MiB", file=sys.stderr)
+        return status if status >= 0 else 128 - status
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--scratch", type=Path, default=Path("/var/tmp"))
+    parser.add_argument("--memory-mib", type=int, default=2048, metavar="64..2048")
+    parser.add_argument("command", nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+    command = args.command[1:] if args.command[:1] == ["--"] else args.command
+    if not command:
+        parser.error("provide a test command after --")
+    if not 64 <= args.memory_mib <= 2048:
+        parser.error("--memory-mib must be between 64 and 2048")
+    signal.signal(signal.SIGTERM, interrupt)
+    signal.signal(signal.SIGHUP, interrupt)
+    try:
+        return run(args, command)
+    except BlockingIOError:
+        print("CoreX already has a local bounded test run", file=sys.stderr)
+        return 75
+    except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+        print(f"CoreX resource guard: {error}", file=sys.stderr)
+        return 75
+    except KeyboardInterrupt:
+        return 130
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

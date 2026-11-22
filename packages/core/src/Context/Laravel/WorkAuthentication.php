@@ -32,7 +32,7 @@ final readonly class WorkAuthentication
         $userResolver = $request->getUserResolver();
         $priorDriver = $this->app->resolved('auth.driver') ? $this->app->make('auth.driver') : null;
         $guard = new RequestGuard(static fn (): ?Authenticatable => $principal, $request, $provider);
-        $manager = new WorkAuthManager($this->app, $guard);
+        $manager = new WorkAuthManager(app: $this->app, activeGuard: $guard);
 
         try {
             $request->setUserResolver(static fn (): ?Authenticatable => $principal);

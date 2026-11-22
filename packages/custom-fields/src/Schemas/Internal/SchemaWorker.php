@@ -43,7 +43,7 @@ final readonly class SchemaWorker
         if ($sweep->principalKind !== 'service') {
             throw new FieldFailure(CustomFieldsErrorCode::AccessDenied);
         }
-        $row = $this->runner->run($sweep, fn (): ?stdClass => $this->claim($sweep));
+        $row = $this->runner->run(scope: $sweep, work: fn (): ?stdClass => $this->claim($sweep));
 
         if ($row === null) {
             return false;
@@ -56,27 +56,27 @@ final readonly class SchemaWorker
             if (SchemaRows::logical($sweep) !== SchemaRows::logical($scope) || SchemaRows::fence($sweep) !== SchemaRows::fence($scope)) {
                 throw new ScopeContextMismatch('Claimed field schema work changed its physical or logical owner.');
             }
-            $proof = new StoredWorkProof(SchemaJournal::OWNER, SchemaJournal::proofReference($row), SchemaValue::text($row->scope_seal));
-            $key = new OperationKey(SchemaValue::text($row->id), SchemaValue::integer($row->generation), SchemaValue::text($row->claim_token),
-                new DateTimeImmutable(SchemaValue::text($row->lease_until)));
-            $this->stored->runStored($scope, $proof, function () use ($scope, $row, &$pinned): void {
+            $proof = new StoredWorkProof(owner: SchemaJournal::OWNER, reference: SchemaJournal::proofReference($row), seal: SchemaValue::text($row->scope_seal));
+            $key = new OperationKey(id: SchemaValue::text($row->id), attempt: SchemaValue::integer($row->generation), effectKey: SchemaValue::text($row->claim_token),
+                deadline: new DateTimeImmutable(SchemaValue::text($row->lease_until)));
+            $this->stored->runStored(scope: $scope, proof: $proof, work: function () use ($scope, $row, &$pinned): void {
                 $steps = ($this->steps)();
 
                 if (in_array($row->phase, ['index', 'contract'], true) || $row->cancel_requested === true) {
                     $pinned = $this->database->connection();
                 }
                 $steps->run($scope, $row);
-            }, $key);
+            }, attempt: $key);
         } catch (SchemaClaimLost) {
             // Reclamation can lawfully win while the old server completes CIC.
         } catch (SchemaLockBusy) {
-            $this->report($sweep, $row, SchemaValue::text($row->state), []);
+            $this->report(sweep: $sweep, row: $row, state: SchemaValue::text($row->state), blockers: []);
         } catch (SchemaConflict $conflict) {
-            $this->report($sweep, $row, 'blocked', [$conflict->getMessage()]);
+            $this->report(sweep: $sweep, row: $row, state: 'blocked', blockers: [$conflict->getMessage()]);
         } catch (ScopeContextMismatch|ScopeStale|FieldFailure $failure) {
-            $this->report($sweep, $row, 'blocked', ['work-scope-or-capability-unavailable']);
+            $this->report(sweep: $sweep, row: $row, state: 'blocked', blockers: ['work-scope-or-capability-unavailable']);
         } catch (QueryException $failure) {
-            $this->report($sweep, $row, 'failed', ['postgresql-'.$failure->getCode()]);
+            $this->report(sweep: $sweep, row: $row, state: 'failed', blockers: ['postgresql-'.$failure->getCode()]);
         } finally {
             // The command owns this connection. Release only the same cached instance, after Core restores the outer frame.
             if ($pinned !== null) {
@@ -96,12 +96,12 @@ final readonly class SchemaWorker
     /** @param list<string> $blockers */
     private function report(DataScope $sweep, stdClass $row, string $state, array $blockers): void
     {
-        $this->runner->run($sweep, function () use ($sweep, $row, $state, $blockers): void {
+        $this->runner->run(scope: $sweep, work: function () use ($sweep, $row, $state, $blockers): void {
             $db = $this->database->connection();
-            $this->current->assert($sweep, $db);
+            $this->current->assert(scope: $sweep, connection: $db);
 
             try {
-                $db->transaction(fn () => $this->journal->advance($db, $sweep, $row, $state, SchemaValue::text($row->phase), ['blockers' => SchemaRows::json($blockers)]));
+                $db->transaction(fn () => $this->journal->advance(db: $db, scope: $sweep, claim: $row, state: $state, phase: SchemaValue::text($row->phase), values: ['blockers' => SchemaRows::json($blockers)]));
             } catch (SchemaClaimLost) {
                 // The original token can never overwrite a successor's admission or receipt.
             }
@@ -111,7 +111,7 @@ final readonly class SchemaWorker
     private function claim(DataScope $sweep): ?stdClass
     {
         $db = $this->database->connection();
-        $this->current->assert($sweep, $db);
+        $this->current->assert(scope: $sweep, connection: $db);
 
         if ($db->getDriverName() !== 'pgsql' || $db->transactionLevel() !== 0) {
             throw new RuntimeException('A PostgreSQL field worker requires an independent, verified tenant connection.');

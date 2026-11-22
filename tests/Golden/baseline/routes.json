@@ -13,7 +13,7 @@
             "POST"
         ],
         "name": "corex.api.bulk.submit",
-        "uri": "api/v1/bulk-operations"
+        "uri": "api/v2/bulk-operations"
     },
     {
         "action": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar@show",
@@ -21,7 +21,7 @@
             "GET"
         ],
         "name": "corex.api.bulk.show",
-        "uri": "api/v1/bulk-operations/{id}"
+        "uri": "api/v2/bulk-operations/{id}"
     },
     {
         "action": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar@cancel",
@@ -29,7 +29,7 @@
             "POST"
         ],
         "name": "corex.api.bulk.cancel",
-        "uri": "api/v1/bulk-operations/{id}/cancel"
+        "uri": "api/v2/bulk-operations/{id}/cancel"
     },
     {
         "action": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar@failures",
@@ -37,7 +37,7 @@
             "GET"
         ],
         "name": "corex.api.bulk.failures",
-        "uri": "api/v1/bulk-operations/{id}/failures"
+        "uri": "api/v2/bulk-operations/{id}/failures"
     },
     {
         "action": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar@result",
@@ -45,79 +45,7 @@
             "GET"
         ],
         "name": "corex.api.bulk.result",
-        "uri": "api/v1/bulk-operations/{id}/result"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "GET"
-        ],
-        "name": "corex.api.webhooks.delivery.list",
-        "uri": "api/v1/webhook-deliveries"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "POST"
-        ],
-        "name": "corex.api.webhooks.delivery.range-replay",
-        "uri": "api/v1/webhook-deliveries/replay"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "GET"
-        ],
-        "name": "corex.api.webhooks.delivery.show",
-        "uri": "api/v1/webhook-deliveries/{id}"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "GET"
-        ],
-        "name": "corex.api.webhooks.delivery.attempts",
-        "uri": "api/v1/webhook-deliveries/{id}/attempts"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "POST"
-        ],
-        "name": "corex.api.webhooks.delivery.replay",
-        "uri": "api/v1/webhook-deliveries/{id}/replay"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "GET"
-        ],
-        "name": "corex.api.webhooks.subscription.list",
-        "uri": "api/v1/webhook-subscriptions"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "POST"
-        ],
-        "name": "corex.api.webhooks.subscription.create",
-        "uri": "api/v1/webhook-subscriptions"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "PATCH"
-        ],
-        "name": "corex.api.webhooks.subscription.update",
-        "uri": "api/v1/webhook-subscriptions/{id}"
-    },
-    {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
-        "methods": [
-            "POST"
-        ],
-        "name": "corex.api.webhooks.subscription.disable",
-        "uri": "api/v1/webhook-subscriptions/{id}/disable"
+        "uri": "api/v2/bulk-operations/{id}/result"
     },
     {
         "action": "CoreX\\Operations\\Internal\\Http\\DiscoveryController@capabilities",
@@ -125,7 +53,7 @@
             "GET"
         ],
         "name": "corex.api.capabilities",
-        "uri": "api/{version}/capabilities"
+        "uri": "api/v2/capabilities"
     },
     {
         "action": "CoreX\\Operations\\Internal\\Http\\DiscoveryController@openapi",
@@ -133,7 +61,79 @@
             "GET"
         ],
         "name": "corex.api.openapi",
-        "uri": "api/{version}/openapi.json"
+        "uri": "api/v2/openapi.json"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "GET"
+        ],
+        "name": "corex.api.webhooks.delivery.list",
+        "uri": "api/v2/webhook-deliveries"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "POST"
+        ],
+        "name": "corex.api.webhooks.delivery.range-replay",
+        "uri": "api/v2/webhook-deliveries/replay"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "GET"
+        ],
+        "name": "corex.api.webhooks.delivery.show",
+        "uri": "api/v2/webhook-deliveries/{id}"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "GET"
+        ],
+        "name": "corex.api.webhooks.delivery.attempts",
+        "uri": "api/v2/webhook-deliveries/{id}/attempts"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "POST"
+        ],
+        "name": "corex.api.webhooks.delivery.replay",
+        "uri": "api/v2/webhook-deliveries/{id}/replay"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "GET"
+        ],
+        "name": "corex.api.webhooks.subscription.list",
+        "uri": "api/v2/webhook-subscriptions"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "POST"
+        ],
+        "name": "corex.api.webhooks.subscription.create",
+        "uri": "api/v2/webhook-subscriptions"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "PATCH"
+        ],
+        "name": "corex.api.webhooks.subscription.update",
+        "uri": "api/v2/webhook-subscriptions/{id}"
+    },
+    {
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
+        "methods": [
+            "POST"
+        ],
+        "name": "corex.api.webhooks.subscription.disable",
+        "uri": "api/v2/webhook-subscriptions/{id}/disable"
     },
     {
         "action": "CoreX\\Operations\\Internal\\Http\\ApiController",
@@ -145,6 +145,6 @@
             "DELETE"
         ],
         "name": "corex.api.operation",
-        "uri": "api/{version}/{path?}"
+        "uri": "api/v2/{path?}"
     }
 ]

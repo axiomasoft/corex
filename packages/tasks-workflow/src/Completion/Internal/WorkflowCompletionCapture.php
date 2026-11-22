@@ -37,7 +37,7 @@ final readonly class WorkflowCompletionCapture implements TaskCompletionCapture
             throw new LogicException('Task workflow completion requires the active Task owner transaction.');
         }
 
-        $context = $this->scopes->assert($candidate->scope, $connection);
+        $context = $this->scopes->assert(scope: $candidate->scope, connection: $connection);
 
         if (! $this->modules->isActive(TaskCompletionTrigger::MODULE, $context)) {
             throw new LogicException('Task workflow completion requires the active Tasks module.');
@@ -46,7 +46,7 @@ final readonly class WorkflowCompletionCapture implements TaskCompletionCapture
         TaskCompletionTrigger::assertDeclared($this->modules);
 
         $taskRef = 'task:'.$candidate->taskId;
-        $result = $this->workflow->capture(new TriggerRequest(
+        $result = $this->workflow->capture(request: new TriggerRequest(
             context: $context,
             scope: $candidate->scope,
             module: TaskCompletionTrigger::MODULE,
@@ -58,11 +58,11 @@ final readonly class WorkflowCompletionCapture implements TaskCompletionCapture
             versionRef: $this->versionRef,
             scalarSnapshot: JsonDocuments::capture(['taskId' => $candidate->taskId, 'status' => $candidate->status->value]),
             requestKey: $candidate->requestKey,
-        ), $connection);
+        ), connection: $connection);
 
         return match ($result->status) {
-            CaptureStatus::Created => new TaskCompletionAdmission(TaskCompletionAdmissionStatus::Created, $result->intentRef, $result->digest, $this->versionRef),
-            CaptureStatus::Existing => new TaskCompletionAdmission(TaskCompletionAdmissionStatus::Existing, $result->intentRef, $result->digest, $this->versionRef),
+            CaptureStatus::Created => new TaskCompletionAdmission(status: TaskCompletionAdmissionStatus::Created, intentRef: $result->intentRef, digest: $result->digest, versionRef: $this->versionRef),
+            CaptureStatus::Existing => new TaskCompletionAdmission(status: TaskCompletionAdmissionStatus::Existing, intentRef: $result->intentRef, digest: $result->digest, versionRef: $this->versionRef),
             CaptureStatus::Conflict => new TaskCompletionAdmission(TaskCompletionAdmissionStatus::Conflict),
         };
     }

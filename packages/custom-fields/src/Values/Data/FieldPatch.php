@@ -19,7 +19,7 @@ final readonly class FieldPatch
     /** @param non-empty-list<SetField|RemoveField> $operations */
     public function __construct(public array $operations, public SchemaRevision $expectedSchema, public DocumentRevision $expectedDocument)
     {
-        FieldList::check($operations, [SetField::class, RemoveField::class], 1);
+        FieldList::check(values: $operations, classes: [SetField::class, RemoveField::class], min: 1);
         $seen = [];
         foreach ($operations as $op) {
             if (isset($seen[$op->field->value])) {
@@ -40,6 +40,6 @@ final readonly class FieldPatch
         $digest = hash('sha256', FieldJson::encode(['corex.fields.write.v2', DataScope::VERSION, get_object_vars($scope),
             $record->entity, $record->id, $this->expectedSchema->value, $this->expectedDocument->value, $ops]));
 
-        return new WriteToken($operationKey, $digest, $this->expectedDocument->value);
+        return new WriteToken(operationKey: $operationKey, payloadHash: $digest, expectedRecordVersion: $this->expectedDocument->value);
     }
 }

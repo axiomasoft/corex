@@ -39,7 +39,7 @@ final readonly class LaneStore implements ActiveGenerations
             throw new LogicException('Search maintenance requires a service principal.');
         }
         $db = $this->database->connection();
-        $this->current->assert($scope, $db);
+        $this->current->assert(scope: $scope, connection: $db);
 
         return $db;
     }
@@ -66,11 +66,11 @@ final readonly class LaneStore implements ActiveGenerations
 
     public function lane(ConnectionInterface $db, DataScope $scope, EntityHandle $entity, bool $create = false): stdClass
     {
-        $this->current->assert($scope, $db);
-        $identity = $this->laneIdentity($scope, $entity);
+        $this->current->assert(scope: $scope, connection: $db);
+        $identity = $this->laneIdentity(scope: $scope, entity: $entity);
 
         if ($create) {
-            ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-search', 'search-lane', ['entity' => $entity->value, 'backend' => $this->backend]);
+            ReferenceWrites::enlist(connection: $db, scope: $scope, producer: 'axiomasoft/corex-search', kind: 'search-lane', witness: ['entity' => $entity->value, 'backend' => $this->backend]);
             $db->table(self::LANES)->insertOrIgnore($identity);
         }
 
@@ -79,7 +79,7 @@ final readonly class LaneStore implements ActiveGenerations
 
     public function refLane(ConnectionInterface $db, DataScope $scope, string $ref): stdClass
     {
-        $this->current->assert($scope, $db);
+        $this->current->assert(scope: $scope, connection: $db);
 
         return $db->table(self::LANES)->where($this->identity($scope))->whereIn('lane_key',
             $db->table(self::RUNS)->select('lane_key')->where('rebuild_id', $ref))->lockForUpdate()->firstOrFail();
@@ -92,19 +92,19 @@ final readonly class LaneStore implements ActiveGenerations
 
     public function target(DataScope $scope, EntityHandle $entity, stdClass $generation): IndexTarget
     {
-        return new IndexTarget($scope, $entity, $this->backend, $this->cluster, Value::integer($generation->generation),
-            Value::text($generation->uid), Value::text($generation->mapping_digest), Value::text($generation->allocation_id));
+        return new IndexTarget(scope: $scope, entity: $entity, backend: $this->backend, cluster: $this->cluster, generation: Value::integer($generation->generation),
+            uid: Value::text($generation->uid), mappingDigest: Value::text($generation->mapping_digest), allocationId: Value::text($generation->allocation_id));
     }
 
     public function active(DataScope $scope, EntityHandle $entity): ?IndexTarget
     {
         $db = $this->db($scope);
-        $identity = $this->laneIdentity($scope, $entity);
+        $identity = $this->laneIdentity(scope: $scope, entity: $entity);
         $active = $db->table(self::LANES)->select('active_generation')->where($identity);
         $gen = $db->table(self::GENERATIONS)->useWritePdo()->where('lane_key', $identity['lane_key'])->where('cluster', $this->cluster)
             ->where('state', 'active')->whereIn('generation', $active)->first();
 
-        return $gen === null ? null : $this->target($scope, $entity, $gen);
+        return $gen === null ? null : $this->target(scope: $scope, entity: $entity, generation: $gen);
     }
 
     public static function one(int $count): void

@@ -78,8 +78,8 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         return $this->connection->transaction(function () use ($scope, $worker): ?WebhookDelivery {
             $this->assertScope($scope);
             $now = $this->clock->now();
-            $this->recoverExpired($scope, $now);
-            $this->retireExpired($scope, $now);
+            $this->recoverExpired(scope: $scope, now: $now);
+            $this->retireExpired(scope: $scope, now: $now);
             $query = $this->scoped($scope)
                 ->whereIn('status', ['pending', 'retry'])
                 ->where('next_attempt_at', '<=', $now)
@@ -194,7 +194,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 ->where('revision', $delivery->subscriptionRevision)->lockForUpdate()->first();
 
             if ($subscription === null) {
-                $this->rejectClaim($delivery, WebhookFailureReason::EndpointChanged, $now);
+                $this->rejectClaim(delivery: $delivery, error: WebhookFailureReason::EndpointChanged, now: $now);
 
                 return false;
             }
@@ -222,16 +222,16 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
     public function claimPrecededSend(ProviderEffectStatus $status): bool
     {
         ($this->receiptRecovery)()->assertReceipt($status, $this->connection);
-        $row = $this->providerQuery($status, false)->first();
+        $row = $this->providerQuery(status: $status, linked: false)->first();
 
-        if ($row === null || DatabaseValue::field($row, 'provider_ticket') === $status->ticket->id || DatabaseValue::field($row, 'claim_token') === $status->claimToken
-            || ! in_array(DatabaseValue::field($row, 'status'), ['claimed', 'retry', 'dead', 'quarantined'], true)) {
+        if ($row === null || DatabaseValue::field(row: $row, name: 'provider_ticket') === $status->ticket->id || DatabaseValue::field(row: $row, name: 'claim_token') === $status->claimToken
+            || ! in_array(DatabaseValue::field(row: $row, name: 'status'), ['claimed', 'retry', 'dead', 'quarantined'], true)) {
             return false;
         }
         $delivery = $this->delivery($row);
 
         return hash_equals($status->digest, WebhookWork::deliveryDigest($delivery))
-            && WebhookWork::effect($status->ticket->scope, $delivery)->identity() === $status->effect->identity();
+            && WebhookWork::effect(scope: $status->ticket->scope, delivery: $delivery)->identity() === $status->effect->identity();
     }
 
     public function providerDelivery(ProviderEffectStatus $status): ?WebhookDelivery
@@ -245,7 +245,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         $delivery = $this->delivery($row);
 
         return hash_equals($status->digest, WebhookWork::deliveryDigest($delivery))
-            && WebhookWork::effect($status->ticket->scope, $delivery)->identity() === $status->effect->identity() ? $delivery : null;
+            && WebhookWork::effect(scope: $status->ticket->scope, delivery: $delivery)->identity() === $status->effect->identity() ? $delivery : null;
     }
 
     public function project(ProviderEffectStatus $status): ?string
@@ -269,7 +269,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             }
             $now = $this->clock->now();
             $retryAt = $now->add(new DateInterval('PT5S'));
-            $failure = $this->retry->budgetFailure($delivery, $retryAt);
+            $failure = $this->retry->budgetFailure(delivery: $delivery, instant: $retryAt);
             $next = match ($observation->kind) {
                 ProviderObservationKind::Accepted, ProviderObservationKind::Confirmed => 'succeeded',
                 ProviderObservationKind::Permanent => 'dead',
@@ -389,12 +389,12 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
     private function assertScope(DataScope $scope): void
     {
-        $this->contexts->assert($scope, $this->connection);
+        $this->contexts->assert(scope: $scope, connection: $this->connection);
     }
 
     private function scoped(DataScope $scope): Builder
     {
-        return WebhookDeliveryScope::constrain($this->connection->table(self::Table), $scope);
+        return WebhookDeliveryScope::constrain(query: $this->connection->table(self::Table), scope: $scope);
     }
 
     private function retireExpired(DataScope $scope, DateTimeImmutable $now): void
@@ -409,9 +409,9 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         $this->lockClaimQuery($query);
 
         foreach ($query->get() as $row) {
-            $reason = DatabaseValue::integer(DatabaseValue::field($row, 'attempt')) >= $this->retry->maxAttempts()
+            $reason = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')) >= $this->retry->maxAttempts()
                 ? WebhookFailureReason::RetryExhausted : WebhookFailureReason::RetryHorizonExhausted;
-            $this->scoped($scope)->where('id', DatabaseValue::field($row, 'id'))->where('status', DatabaseValue::field($row, 'status'))->update([
+            $this->scoped($scope)->where('id', DatabaseValue::field(row: $row, name: 'id'))->where('status', DatabaseValue::field(row: $row, name: 'status'))->update([
                 'status' => 'dead', 'finished_at' => $now, 'last_error' => $reason->value,
             ]);
         }
@@ -600,14 +600,14 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             createdAt: $this->instant(DatabaseValue::field(row: $row, name: 'created_at')),
             finishedAt: DatabaseValue::field(row: $row, name: 'finished_at') !== null ? $this->instant(DatabaseValue::field(row: $row, name: 'finished_at')) : null,
             expiresAt: $this->instant(DatabaseValue::field(row: $row, name: 'expires_at')),
-            effectKey: DatabaseValue::text(DatabaseValue::field($row, 'effect_key')),
-            scopeSeal: DatabaseValue::text(DatabaseValue::field($row, 'scope_seal')),
-            claimToken: DatabaseValue::field($row, 'claim_token') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'claim_token')),
-            providerTicket: DatabaseValue::field($row, 'provider_ticket') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'provider_ticket')),
-            providerRef: DatabaseValue::field($row, 'provider_ref') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'provider_ref')),
-            replayOf: DatabaseValue::field($row, 'replay_of') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'replay_of')),
-            eventSource: DatabaseValue::text(DatabaseValue::field($row, 'event_source')),
-            replayId: DatabaseValue::text(DatabaseValue::field($row, 'replay_id')),
+            effectKey: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'effect_key')),
+            scopeSeal: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'scope_seal')),
+            claimToken: DatabaseValue::field(row: $row, name: 'claim_token') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'claim_token')),
+            providerTicket: DatabaseValue::field(row: $row, name: 'provider_ticket') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'provider_ticket')),
+            providerRef: DatabaseValue::field(row: $row, name: 'provider_ref') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'provider_ref')),
+            replayOf: DatabaseValue::field(row: $row, name: 'replay_of') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'replay_of')),
+            eventSource: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'event_source')),
+            replayId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'replay_id')),
             lastError: DatabaseValue::field(row: $row, name: 'last_error') !== null ? DatabaseValue::text(DatabaseValue::field(row: $row, name: 'last_error')) : null,
         );
     }

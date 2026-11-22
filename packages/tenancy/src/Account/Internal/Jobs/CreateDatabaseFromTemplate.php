@@ -49,7 +49,7 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
             return true;
         }
 
-        $resources->provision($this->account, $this->params);
+        $resources->provision(account: $this->account, params: $this->params);
 
         return true;
     }

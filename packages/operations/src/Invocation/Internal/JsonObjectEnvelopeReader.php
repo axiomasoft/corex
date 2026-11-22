@@ -6,8 +6,9 @@ namespace CoreX\Operations\Invocation\Internal;
 
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use Illuminate\Http\Request;
-use JsonException;
+use InvalidArgumentException;
 use Override;
 use Packman\Attributes\Internal;
 
@@ -28,8 +29,8 @@ final class JsonObjectEnvelopeReader implements InputEnvelopeReader
 
         try {
             $body = $request->getContent();
-            $input = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
+            $input = JsonCanonical::decode(json: $body);
+        } catch (InvalidArgumentException) {
             throw new ApiError(errorCode: OperationsErrorCode::InputEnvelopeInvalid, status: 422, message: 'Malformed JSON body.');
         }
 

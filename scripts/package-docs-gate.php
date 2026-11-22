@@ -53,7 +53,9 @@ $repoRoot = dirname(__DIR__);
 // The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
 ini_set('memory_limit', '1G');
 require $repoRoot.'/vendor/autoload.php';
-$argvList = array_slice($argv, 1);
+require_once __DIR__.'/support/cli-arguments.php';
+
+$argvList = array_slice(\CoreX\Scripts\cliArguments(), 1);
 $wantJson = in_array('--json', $argvList, true);
 $pristine = in_array('--pristine', $argvList, true);
 

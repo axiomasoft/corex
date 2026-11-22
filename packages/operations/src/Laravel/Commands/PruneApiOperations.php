@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Operations\Bulk\Internal\BulkRetention;
 use CoreX\Operations\Cost\Internal\BudgetRetention;
 use Illuminate\Console\Command;
@@ -44,7 +45,7 @@ final class PruneApiOperations extends Command
 
         try {
             $scope = $this->laravel->make(DataScopeFactory::class)->forCurrentPrincipal($this->laravel->make(TenantContextResolver::class)->current());
-        } catch (CentralContextException|ScopeContextMismatch) {
+        } catch (CentralContextException|ScopeContextMismatch|ScopeStale) {
             $this->components->warn('No trusted tenant scope is active.');
             $this->components->info("Budget retention: abandoned {$abandoned}, pruned {$reservations}, idle buckets {$buckets}.");
 

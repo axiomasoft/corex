@@ -41,9 +41,9 @@ final readonly class SqlRateImporter implements RateImporter
     #[Override]
     public function import(DataScope $scope, RateBatch $batch, WriteToken $token): RateImportReceipt
     {
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
 
-        if (! $this->authorizer->authorize($scope, new RecordRef('rate-import', $token->operationKey), new FieldSelection([]), FieldUse::Write)->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'rate-import', id: $token->operationKey), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
             throw new AccessDeniedException('Rate import is not authorized for the current actor.');
         }
 
@@ -78,8 +78,8 @@ final readonly class SqlRateImporter implements RateImporter
         $conflicts = 0;
 
         return $this->connection->transaction(function () use ($scope, $batch, $token, &$imported, &$noop, &$conflicts): RateImportReceipt {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-intl', 'rate-import', ['batch' => $batch]);
-            $this->current->assert($scope, $this->connection);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-intl', kind: 'rate-import', witness: ['batch' => $batch]);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $generation = $batch->expectedGeneration;
 
             foreach ($batch->snapshots as $snapshot) {

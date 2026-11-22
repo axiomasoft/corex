@@ -10,7 +10,7 @@ use Packman\Attributes\Internal;
 #[Internal]
 final class CrmSchemas
 {
-    /** @return array<string, mixed> */
+    /** @return array{type: 'object', additionalProperties: false, properties: array<string, mixed>, required: list<string>} */
     public static function record(bool $company, bool $request = false): array
     {
         $properties = [];
@@ -46,6 +46,22 @@ final class CrmSchemas
     }
 
     /** @return array<string, mixed> */
+    public static function companyUpdate(): array
+    {
+        return self::object([
+            'name' => ['type' => 'string', 'minLength' => 1, 'maxLength' => 255],
+            'legal_name' => ['type' => ['string', 'null'], 'maxLength' => 255],
+            'domain' => ['type' => ['string', 'null'], 'maxLength' => 190],
+        ], []);
+    }
+
+    /** @return array<string, mixed> */
+    public static function companyDeleted(): array
+    {
+        return self::object(['id' => ['type' => 'string'], 'deleted' => ['const' => true, 'type' => 'boolean']], ['id', 'deleted']);
+    }
+
+    /** @return array<string, mixed> */
     public static function listing(bool $company): array
     {
         return self::object(['items' => ['type' => 'array', 'items' => self::record($company)]], ['items']);
@@ -73,7 +89,7 @@ final class CrmSchemas
     /**
      * @param  array<string, mixed>  $properties
      * @param  list<string>  $required
-     * @return array<string, mixed>
+     * @return array{type: 'object', additionalProperties: false, properties: array<string, mixed>, required: list<string>}
      */
     private static function object(array $properties, array $required): array
     {

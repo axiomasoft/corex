@@ -64,12 +64,16 @@ final readonly class ErrorMapper implements ErrorMapping
         }
 
         if ($error instanceof ValidationException) {
+            $field = array_key_first($error->errors());
+            $path = is_string($field) && strlen($field) <= 191 && preg_match('/\A[A-Za-z0-9_.-]+\z/D', $field) === 1
+                ? '/'.str_replace('.', '/', $field) : null;
+
             return new ApiError(
                 errorCode: OperationsErrorCode::ValidationFailed,
                 status: 422,
                 message: 'Input validation failed.',
-                details: JsonDocuments::capture($error->errors()),
                 category: ErrorCategory::Validation,
+                path: $path,
             );
         }
 

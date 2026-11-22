@@ -42,22 +42,22 @@ final readonly class SqlExportPublications implements ExportPublications
             if ($this->connection->getDriverName() === 'pgsql') {
                 $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ');
             }
-            $this->runtime->assertCurrent($this->connection, $scope);
-            $verify = new SealedExportParts($this->connection, $this->storage, $this->authorizer, $this->schema);
-            $stored = $verify->manifest($scope, $transfer->id, published: false);
+            $this->runtime->assertCurrent(connection: $this->connection, scope: $scope);
+            $verify = new SealedExportParts(connection: $this->connection, storage: $this->storage, authorizer: $this->authorizer, schema: $this->schema);
+            $stored = $verify->manifest(scope: $scope, jobId: $transfer->id, published: false);
 
-            if (Value::field($stored, 'id') !== $manifest->id || Value::field($stored, 'parts_hash') !== $manifest->partsHash
-                || Value::field($stored, 'schema_hash') !== $manifest->schemaHash || $scope->restoreEpoch !== $manifest->restoreEpoch
-                || ! Value::sameMap(Value::map(json_decode(Value::text(Value::field($stored, 'roster')), true, flags: JSON_THROW_ON_ERROR)), JsonDocuments::map($manifest->roster))) {
+            if (Value::field(row: $stored, name: 'id') !== $manifest->id || Value::field(row: $stored, name: 'parts_hash') !== $manifest->partsHash
+                || Value::field(row: $stored, name: 'schema_hash') !== $manifest->schemaHash || $scope->restoreEpoch !== $manifest->restoreEpoch
+                || ! Value::sameMap(left: Value::map(json_decode(Value::text(Value::field(row: $stored, name: 'roster')), true, flags: JSON_THROW_ON_ERROR)), right: JsonDocuments::map($manifest->roster))) {
                 throw new ExportUnavailable('Export publication does not address the sealed manifest.');
             }
-            $verify->summary($scope, $stored);
+            $verify->summary(scope: $scope, manifest: $stored);
 
-            if (Value::field($stored, 'state') === 'published') {
+            if (Value::field(row: $stored, name: 'state') === 'published') {
                 return;
             }
 
-            $this->references->enlist($scope, $this->connection, JsonDocuments::map($manifest->roster));
+            $this->references->enlist(scope: $scope, connection: $this->connection, stamp: JsonDocuments::map($manifest->roster));
             $changed = $this->connection->table('corex_export_manifests')->where('id', $manifest->id)->where('job_id', $transfer->id)
                 ->where('state', 'sealed')->where('parts_hash', $manifest->partsHash)->update(['state' => 'published', 'published_at' => $this->clock->now()]);
 

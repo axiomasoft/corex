@@ -25,7 +25,7 @@ final class FieldJson
         preg_match_all('~"(?:[^"\\\\]|\\\\.)*"|[{}\[\],:]|[^\s{}\[\],:"]+~s', $json, $tokens);
         $position = 0;
 
-        return self::read($tokens[0], $position);
+        return self::read(tokens: $tokens[0], position: $position);
     }
 
     /** @param list<string> $tokens */
@@ -42,7 +42,7 @@ final class FieldJson
                 if (array_key_exists($key, $members)) {
                     throw new InvalidArgumentException('Duplicate JSON member.');
                 }
-                $members[$key] = $key.':'.self::read($tokens, $position);
+                $members[$key] = $key.':'.self::read(tokens: $tokens, position: $position);
 
                 if ($tokens[$position] === ',') {
                     $position++;
@@ -57,7 +57,7 @@ final class FieldJson
         if ($token === '[') {
             $entries = [];
             while ($tokens[$position] !== ']') {
-                $entries[] = self::read($tokens, $position);
+                $entries[] = self::read(tokens: $tokens, position: $position);
 
                 if ($tokens[$position] === ',') {
                     $position++;

@@ -180,7 +180,7 @@ final class IdempotentInvocationTest extends TestCase
         $store = new CountingStore($this->store);
         $invoker = $this->invoker($store);
         $this->operationAuthorizer->allow = false;
-        $this->expectApiError('operations.forbidden', fn () => $invoker->invoke($this->invocation(key: 'auth-key')));
+        $this->expectApiError('operations.access_denied', fn () => $invoker->invoke($this->invocation(key: 'auth-key')));
         self::assertSame(0, $store->beginCalls);
         self::assertSame(0, $this->inner->calls);
         self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
@@ -269,7 +269,7 @@ final class IdempotentInvocationTest extends TestCase
             context: ResolvedContexts::make(
                 tenantContext: $this->tenants->current(),
                 authenticatedPrincipal: $principal ?? $this->principal,
-                requestMetadata: new InvocationMetadata($requestId, 'v1', 'notes.create', $method),
+                requestMetadata: new InvocationMetadata($requestId, 'v2', 'notes.create', $method),
             ),
             input: JsonDocuments::capture($input),
             parameters: ['parent' => 'root'],
@@ -285,7 +285,7 @@ final class IdempotentInvocationTest extends TestCase
         return new Operation(
             module: 'example/notes',
             id: 'notes.create',
-            version: 'v1',
+            version: 'v2',
             method: 'POST',
             path: '/notes',
             ability: 'notes.write',

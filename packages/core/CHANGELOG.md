@@ -1,5 +1,10 @@
 # Changelog
 
+## CoreX 2.0 — Scope errors
+
+- Keep `ScopeContextMismatch` and `ScopeStale` as separate final coded errors. Recovery callers handle both explicitly when they support both causes.
+- Add the optional `FieldUseSnapshot` SPI for coherent authorized metadata reads.
+
 ## Unreleased — CoreX 2.0 lifecycle and ownership
 
 - Add typed lifecycle plan, inspection and apply contracts with persisted digests, blockers, cleanup receipts and resume cursors. Compose the public Packman lifecycle binding with current operator authorization and reference admission fencing.

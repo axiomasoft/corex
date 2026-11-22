@@ -41,8 +41,10 @@ const CARBON_CLASSES = ['Carbon', 'CarbonImmutable'];
 const CARBON_CLOCK_METHODS = ['now', 'today', 'tomorrow', 'yesterday', 'parse'];
 const CLOCK_CLASSES = ['DateTime', 'DateTimeImmutable', 'Carbon', 'CarbonImmutable'];
 
+require_once __DIR__.'/support/cli-arguments.php';
+
 $repoRoot = dirname(__DIR__);
-$options = parseOptions($argv);
+$options = parseOptions(\CoreX\Scripts\cliArguments());
 $config = loadConfig(optionPath($options, 'config', $repoRoot.'/scripts/runtime-globals.json'));
 $baselinePath = optionPath($options, 'baseline', $repoRoot.'/scripts/runtime-globals-baseline.json');
 $findings = collectFindings($repoRoot, $config);

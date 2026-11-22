@@ -5,10 +5,16 @@ on:
   pull_request:
     paths:
       - 'composer.*'
+      - 'packman.json'
+      - 'api/**'
       - 'packages/**'
       - 'products/**'
       - 'fixtures/**'
       - 'tests/Distribution/**'
+      - 'tests/Arch/**'
+      - 'scripts/check-api-contract.php'
+      - 'scripts/*-gate.*'
+      - 'scripts/quality/**'
       - 'scripts/distribution/**'
       - 'scripts/migration/**'
       - '.github/workflows/distribution-proof.yml'
@@ -84,16 +90,16 @@ jobs:
         run: |
           python3 scripts/distribution/profile-proof.py --candidate "$CANDIDATE" --mode all --php "$PHP_VERSION" --receipt "$EVIDENCE/profile-receipt.json" --matrix "$EVIDENCE/profile-matrix.json"
           python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case installed-boot --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/scenario"
-      - name: Prove scoped workers, provider delivery, fields and search from installed archives
+      - name: Prove the staged runtime scenarios from installed archives
         run: |
-          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation field-search task-lifetime; do
+          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation field-search task-lifetime bulk-transfer lifecycle owner-effects transport product; do
             python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case "$scenario" --php "$PHP_VERSION" --postgres "$PG_MAJOR" --evidence-dir "$EVIDENCE/scenarios/$scenario"
           done
       - name: Prove extension and equipment fixtures
         if: matrix.php == '8.4' && matrix.postgres == '18'
         run: |
-          python3 scripts/distribution/verify_extension_fixtures.py --candidate "$CANDIDATE" --receipt "$EVIDENCE/extensions.json"
-          python3 scripts/distribution/verify_equipment_consumer.py --candidate "$CANDIDATE" --receipt "$EVIDENCE/equipment.json"
+          python3 scripts/distribution/verify_extension_fixtures.py --candidate "$CANDIDATE" --php "$PHP_VERSION" --postgres "$PG_MAJOR" --receipt "$EVIDENCE/extensions.json"
+          python3 scripts/distribution/verify_equipment_consumer.py --candidate "$CANDIDATE" --php "$PHP_VERSION" --postgres "$PG_MAJOR" --receipt "$EVIDENCE/equipment.json"
       - name: Compile Search extension with and without the Fields bridge
         if: matrix.php != '8.4' || matrix.postgres != '18'
         run: python3 scripts/distribution/verify_extension_fixtures.py --candidate "$CANDIDATE" --only custom-search-provider --php "$PHP_VERSION" --postgres "$PG_MAJOR" --receipt "$EVIDENCE/search-extension.json"

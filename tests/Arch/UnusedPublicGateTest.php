@@ -160,6 +160,71 @@ it('rejects an absent source contour instead of passing an empty report', functi
     });
 });
 
+it('counts callable-return and narrowed receivers on the matching type only', function (string $usage): void {
+    unusedPublicFixture([
+        'packages/demo/src/Entry.php' => <<<'PHP'
+            <?php
+            namespace Demo;
+
+            interface Port { public function run(): string; }
+            final class Registered implements Port { public function run(): string { return 'registered'; } }
+            PHP
+            ."\n".$usage,
+        'packages/demo/src/Other.php' => '<?php namespace Demo; final class Other { public function run(): string { return "other"; } }',
+    ], function (string $root, Filesystem $files, Closure $run): void {
+        $result = $run();
+        expect($result->getExitCode())->toBe(1)
+            ->and($result->getErrorOutput())->toContain('UNUSED-PUBLIC Demo\\Other::run')
+            ->not->toContain('UNUSED-PUBLIC Demo\\Registered::run')
+            ->not->toContain('UNUSED-PUBLIC Demo\\Port::run');
+        $files->delete($root.'/packages/demo/src/Other.php');
+        expect($run()->getExitCode())->toBe(0);
+    });
+})->with([
+    'typed callable' => <<<'PHP'
+        final class Caller {
+            /** @param \Closure(): Port $service */
+            public function __construct(private \Closure $service) {}
+            public function call(): string { return ($this->service)()->run(); }
+        }
+        (new Caller(static fn (): Port => new Registered))->call();
+        PHP,
+    'nullable typed callable' => <<<'PHP'
+        final class Caller {
+            /** @param \Closure(): ?Port $service */
+            public function __construct(private \Closure $service) {}
+            public function call(): ?string { return ($this->service)()?->run(); }
+        }
+        (new Caller(static fn (): ?Port => new Registered))->call();
+        PHP,
+    'instanceof' => 'function call(mixed $service): ?string { return $service instanceof Port ? $service->run() : null; }',
+    'coalesce or throw' => 'function call(?Port $service): string { return ($service ?? throw new \\LogicException)->run(); }',
+]);
+
+it('does not mistake first-class closure creation for invoking its typed result', function (): void {
+    unusedPublicFixture([
+        'packages/demo/src/Entry.php' => <<<'PHP'
+            <?php
+            namespace Demo;
+
+            final class Value { public function call(): string { return 'unused'; } }
+            final class Caller {
+                /** @param \Closure(): Value $load */
+                public function __construct(private \Closure $load) {}
+                public function run(): Value { return ($this->load)(...)->call($this); }
+            }
+            (new Caller(static fn (): Value => new Value))->run();
+            PHP,
+    ], function (string $root, Filesystem $files, Closure $run): void {
+        $result = $run();
+        expect($result->getExitCode())->toBe(1)
+            ->and($result->getErrorOutput())->toContain('UNUSED-PUBLIC Demo\\Value::call');
+        $source = $files->get($root.'/packages/demo/src/Entry.php');
+        $files->put($root.'/packages/demo/src/Entry.php', str_replace("public function call(): string { return 'unused'; }", '', $source));
+        expect($run()->getExitCode())->toBe(0);
+    });
+});
+
 it('follows typed Packman callbacks without exempting unrelated methods or auditing vendor exports', function (): void {
     unusedPublicFixture([
         'vendor/axiomasoft/packman/packages/core/src/Dispatch.php' => '<?php namespace Packman\Fixture; #[\Packman\Attributes\Spi] interface Port { public function execute(): void; } final class Dispatch { public function invoke(Port $port): void { $port->execute(); } }',

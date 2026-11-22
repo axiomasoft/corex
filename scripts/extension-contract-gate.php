@@ -8,6 +8,9 @@ use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Testing\ExtensionContract;
 
 $root = dirname(__DIR__);
+require_once __DIR__.'/support/cli-arguments.php';
+
+$argv = \CoreX\Scripts\cliArguments();
 $fixture = ($argv[1] ?? null) === '--fixture' ? ($argv[2] ?? null) : null;
 
 if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_with($fixture, '.php'))) {

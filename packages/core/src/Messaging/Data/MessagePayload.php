@@ -55,9 +55,9 @@ final readonly class MessagePayload
             if (! $decoded instanceof stdClass) {
                 throw InvalidMessage::payloadShape('must be a bounded object map, not a list or scalar');
             }
-            $tree = self::canonicalValue($decoded, 0, true);
+            $tree = self::canonicalValue(value: $decoded, depth: 0, fromJson: true);
         } else {
-            $tree = self::canonicalValue($values, 0, false);
+            $tree = self::canonicalValue(value: $values, depth: 0, fromJson: false);
         }
         $this->wire = json_encode($tree, JSON_THROW_ON_ERROR);
 

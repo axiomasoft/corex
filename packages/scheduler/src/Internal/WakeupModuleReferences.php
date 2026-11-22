@@ -33,12 +33,12 @@ final readonly class WakeupModuleReferences implements ModuleTableReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'sys_wakeup_requests' => [$tenant, ['kind', 'generation', 'status'], fn (array $row, string $id): LifecycleBlocker => new LifecycleBlocker(
-                $this->owner(), 'sys_wakeup_requests', $id, $scope, in_array($row['status'], ['completed', 'cancelled', 'exhausted', 'quarantined'], true) ? 'retain-original-receipt' : 'drain-original-wakeup',
+                owner: $this->owner(), resourceKind: 'sys_wakeup_requests', resourceId: $id, scope: $scope, requiredAction: in_array($row['status'], ['completed', 'cancelled', 'exhausted', 'quarantined'], true) ? 'retain-original-receipt' : 'drain-original-wakeup',
             )],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

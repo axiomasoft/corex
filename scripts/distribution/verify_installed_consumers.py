@@ -21,9 +21,6 @@ OCTANE = ROOT / "packages/core/tests/Release/octane-consumer"
 
 
 def install(consumer: Path, repository: Path, home: Path, php: str) -> dict:
-    composer = shutil.which("composer")
-    if composer is None:
-        raise ConsumerError("Composer is unavailable")
     manifest = load_json(consumer / "composer.json")
     manifest["repositories"] = repositories(repository, ROOT)
     manifest["config"] = {
@@ -33,10 +30,9 @@ def install(consumer: Path, repository: Path, home: Path, php: str) -> dict:
         "platform": {"php": php},
     }
     (consumer / "composer.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8")
-    php84 = shutil.which("php8.4") or shutil.which("php")
     completed = extensions.run(
-        [php84, composer, "update", "--prefer-dist", "--no-scripts", "--no-interaction", "--no-progress"],
-        consumer, extensions.composer_env(home),
+        extensions.profile_proof_module().composer_command("update", "--prefer-dist", "--no-scripts", "--no-interaction", "--no-progress"),
+        consumer, extensions.composer_env(home, ".".join(php.split(".")[:2])),
     )
     if completed.returncode:
         raise ConsumerError(completed.stderr or completed.stdout or "Composer install failed")

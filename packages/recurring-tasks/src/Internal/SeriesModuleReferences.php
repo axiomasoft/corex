@@ -32,12 +32,12 @@ final readonly class SeriesModuleReferences implements ModuleTableReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'corex_task_series' => [$tenant, []],
             'corex_task_series_state' => [$tenant, ['generation']],
             'corex_task_occurrences' => [$tenant, ['task_ref', 'state']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

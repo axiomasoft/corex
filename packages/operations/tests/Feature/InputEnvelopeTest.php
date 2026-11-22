@@ -19,6 +19,7 @@ use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
+use CoreX\Operations\Tests\Fixtures\TrustedClient;
 use CoreX\Operations\Tests\TestCase;
 use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Errors\Enums\ErrorCategory;
@@ -39,6 +40,7 @@ final class InputEnvelopeTest extends TestCase
                 id: 'notes.'.strtolower($method), method: $method, path: '/notes', handler: NoteHandler::class, ability: 'notes.read',
                 requestSchema: ['type' => 'object', 'additionalProperties' => false, 'required' => ['title'], 'properties' => ['title' => ['type' => 'string']]],
                 responseSchema: ['type' => 'object'], rules: ['title' => ['required', 'string']],
+                version: 'v2',
             );
         }
         $registry = $this->app->make(ModuleCompilation::class)->compile([
@@ -61,7 +63,7 @@ final class InputEnvelopeTest extends TestCase
             }
         });
         NoteHandler::$calls = 0;
-        $this->app['router']->match(['GET', 'POST'], '/strict/{version}/{path}', ApiController::class);
+        $this->app['router']->match(['GET', 'POST'], '/strict/{version}/{path}', ApiController::class)->middleware(TrustedClient::class);
     }
 
     public static function requests(): array
@@ -73,6 +75,7 @@ final class InputEnvelopeTest extends TestCase
             'query before media type' => ['POST', '?a=1', '{', 'text/plain', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
             'query with body' => ['POST', '?a=1', '{"title":"x"}', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
             'array' => ['POST', '', '[1,2]', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
+            'duplicate key' => ['POST', '', '{"title":"first","title":"second"}', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
             'malformed' => ['POST', '', '{', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
             'scalar' => ['POST', '', 'null', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
             'strict body' => ['POST', '', '{"title":"x","b":1,"a":2}', 'application/json', 422, OperationsErrorCode::UndeclaredFields, ['a', 'b']],
@@ -84,7 +87,7 @@ final class InputEnvelopeTest extends TestCase
     #[DataProvider('requests')]
     public function test_input_envelope_and_strictness(string $method, string $query, string $body, string $contentType, int $status, ?OperationsErrorCode $code, ?array $fields): void
     {
-        $response = $this->call($method, '/strict/v1/notes'.$query, server: ['CONTENT_TYPE' => $contentType], content: $body);
+        $response = $this->call($method, '/strict/v2/notes'.$query, server: ['CONTENT_TYPE' => $contentType], content: $body);
         $response->assertStatus($status);
 
         if ($code === null) {

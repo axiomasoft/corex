@@ -25,7 +25,7 @@ final readonly class CloudCentralWorkRunner implements CentralWorkRunner
             return $this->runtime->run(Selection::central($this->profile), new Purpose('corex:central-job'), function () use ($work): mixed {
                 $this->app->forgetScopedInstances();
 
-                return $this->auth->run(null, $work);
+                return $this->auth->run(principal: null, work: $work);
             });
         } finally {
             $this->app->forgetScopedInstances();

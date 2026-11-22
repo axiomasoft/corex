@@ -62,7 +62,7 @@ final readonly class CreateTask implements CreateTaskCommand
 
     private function create(TaskDraft $draft, TenantContext $context, Connection $connection): TaskReference
     {
-        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-create', ['targets' => $draft->targets]);
+        ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex-tasks', kind: 'task-create', witness: ['targets' => $draft->targets]);
         $connectionName = $connection->getName();
         $title = trim($draft->title);
 

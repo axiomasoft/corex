@@ -36,7 +36,7 @@ final readonly class FieldProjectionFilter implements ProjectionFilter
 
     public function normalize(array $values, FieldUsePlan $grant): array
     {
-        $schema = $this->catalogue->snapshot($this->context->scope, $this->context->entity);
+        $schema = $this->catalogue->snapshot(scope: $this->context->scope, entity: $this->context->entity);
 
         if ($schema->revision->value !== $this->expected->revision->value || $schema->mappingDigest !== $this->expected->mappingDigest) {
             throw SearchWitnessChanged::changed();
@@ -44,8 +44,8 @@ final readonly class FieldProjectionFilter implements ProjectionFilter
         $single = count($values) === 1;
 
         try {
-            $node = new FilterNode($this->field, $single ? FieldOperator::Eq : FieldOperator::In, FieldInput::from($single ? $values[0] : $values));
-            $plan = $this->filter->compile($this->context->scope, $schema, $node);
+            $node = new FilterNode(field: $this->field, operator: $single ? FieldOperator::Eq : FieldOperator::In, operand: FieldInput::from($single ? $values[0] : $values));
+            $plan = $this->filter->compile(scope: $this->context->scope, schema: $schema, filter: $node);
         } catch (FieldFailure $failure) {
             throw $failure->errorDescriptor()->code === CustomFieldsErrorCode::SchemaRevisionMismatch->value
                 ? SearchWitnessChanged::changed() : SearchFeatureUnavailable::unsupported();

@@ -53,13 +53,13 @@ test('operation contract ratchet detects a direct handler path without field pol
 
 test('operation contract ratchet detects GraphQL source, dependency, capability and snapshot', function (): void {
     $source = SourceScanner::packagePath('operations', 'src/P13GraphqlProbe.php');
-    $snapshot = SourceScanner::repoRoot().'/api/v1/graphql.json';
+    $snapshot = SourceScanner::repoRoot().'/api/v2/graphql.json';
     file_put_contents($source, '<?php $capability = "graphql.query";');
     file_put_contents($snapshot, '{}');
 
     try {
         expect(p13ApiArchitectureViolations())->toContain('graphql-source: packages/operations/src/P13GraphqlProbe.php')
-            ->toContain('graphql-snapshot: api/v1/graphql.json');
+            ->toContain('graphql-snapshot: api/v2/graphql.json');
         expect(p13ApiArchitectureViolations(composer: '{"require":{"webonyx/graphql-php":"^15"}}'))
             ->toContain('graphql-dependency: packages/operations/composer.json');
     } finally {
@@ -99,12 +99,13 @@ function p13ApiArchitectureViolations(?string $composer = null): array
     foreach (SourceScanner::filesMatching($src, '/->handle\s*\(/') as $path) {
         $name = basename($path);
 
-        if ($name === 'OperationDispatcher.php' || preg_match('/(?:Http|Tool)Adapter\.php$/', $name) === 1) {
+        if ($name === 'HttpOperationDispatcher.php' || preg_match('/(?:Http|Tool)Adapter\.php$/', $name) === 1) {
             $violations[] = 'direct-adapter-handler: '.$relative($path);
         }
     }
 
-    $dispatcher = (string) file_get_contents($src.'/Invocation/Internal/OperationDispatcher.php');
+    $controller = (string) file_get_contents($src.'/Internal/Http/ApiController.php');
+    $dispatcher = (string) file_get_contents($src.'/Laravel/HttpOperationDispatcher.php');
     $tools = (string) file_get_contents(SourceScanner::packagePath('tools', 'src/Internal/GuardedToolInvoker.php'));
     $profile = (string) file_get_contents($src.'/Versioning/Data/ApiProfile.php');
     $factory = (string) file_get_contents($src.'/Versioning/Internal/ApiProfileFactory.php');
@@ -113,7 +114,7 @@ function p13ApiArchitectureViolations(?string $composer = null): array
     $exposed = strstr($tools, "if (\$declaration->toolKind === 'exposed')");
     $exposed = $exposed === false ? '' : explode('} else {', $exposed, 2)[0];
 
-    if (! str_contains($dispatcher, '$this->invoker->invoke(')) {
+    if (! str_contains($controller, '$this->dispatcher->dispatch(') || ! str_contains($dispatcher, '$this->invoker->invoke(')) {
         $violations[] = 'http-invoker-bypass';
     }
 
@@ -151,7 +152,7 @@ function p13ApiArchitectureViolations(?string $composer = null): array
     if (stripos($composer, 'graphql') !== false || stripos((string) file_get_contents($root.'/composer.json'), 'graphql') !== false) {
         $violations[] = 'graphql-dependency: packages/operations/composer.json';
     }
-    foreach (glob($root.'/api/v1/*') ?: [] as $path) {
+    foreach (glob($root.'/api/v[12]/*') ?: [] as $path) {
         if (stripos(basename($path), 'graphql') !== false || (is_file($path) && stripos((string) file_get_contents($path), 'graphql') !== false)) {
             $violations[] = 'graphql-snapshot: '.$relative($path);
         }

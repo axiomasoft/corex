@@ -38,7 +38,7 @@ final class LocalWorkTransactions
 
     public function holds(DataScope $scope, ConnectionInterface $connection): bool
     {
-        return $this->localTicket($scope, $connection) !== null;
+        return $this->localTicket(scope: $scope, connection: $connection) !== null;
     }
 
     public function holdsReceipt(AdmissionTicket $provider, ConnectionInterface $connection): bool
@@ -57,11 +57,11 @@ final class LocalWorkTransactions
 
     public function pin(ScopeAdmission $admission, DataScope $scope, ConnectionInterface $connection): void
     {
-        if ($connection->transactionLevel() === 0 || $this->holds($scope, $connection)) {
+        if ($connection->transactionLevel() === 0 || $this->holds(scope: $scope, connection: $connection)) {
             return;
         }
-        $ticket = $admission->acquire($scope, new OperationKey((string) Str::uuid7(), 1), AdmissionKind::LocalWrite);
-        $this->enter($admission, $ticket, $connection);
+        $ticket = $admission->acquire(scope: $scope, key: new OperationKey(id: (string) Str::uuid7(), attempt: 1), kind: AdmissionKind::LocalWrite);
+        $this->enter(admission: $admission, ticket: $ticket, connection: $connection);
         $this->attempts[$ticket->id]['waiting'] = true;
     }
 
@@ -95,7 +95,7 @@ final class LocalWorkTransactions
             $rollback = $event instanceof TransactionRolledBack;
 
             if ($attempt['waiting']) {
-                $this->settle($id, $rollback && ! $attempt['outside'] ? 'rolled-back' : 'committed');
+                $this->settle(id: $id, outcome: $rollback && ! $attempt['outside'] ? 'rolled-back' : 'committed');
             } elseif ($rollback) {
                 $this->attempts[$id]['rollback'] = true;
             } else {
@@ -109,7 +109,7 @@ final class LocalWorkTransactions
      */
     public function commitConfirmation(DataScope $scope, ConnectionInterface $connection): ?Closure
     {
-        $ticket = $this->localTicket($scope, $connection);
+        $ticket = $this->localTicket(scope: $scope, connection: $connection);
 
         if ($ticket === null || ! $this->attempts[$ticket->id]['waiting']) {
             return null;
@@ -119,7 +119,7 @@ final class LocalWorkTransactions
             $attempt = $this->attempts[$ticket->id] ?? null;
 
             if ($attempt !== null && $attempt['ticket'] === $ticket && $connection->transactionLevel() === 0) {
-                $attempt['admission']->settle($ticket, new AttemptEvidence('committed', $ticket->id));
+                $attempt['admission']->settle($ticket, new AttemptEvidence(outcome: 'committed', reference: $ticket->id));
                 unset($this->attempts[$ticket->id]);
             }
         };
@@ -130,7 +130,7 @@ final class LocalWorkTransactions
         $attempt = $this->attempts[$ticket->id] ?? null;
 
         if ($attempt === null) {
-            $admission->settle($ticket, new AttemptEvidence('rolled-back', $ticket->id));
+            $admission->settle(ticket: $ticket, evidence: new AttemptEvidence(outcome: 'rolled-back', reference: $ticket->id));
 
             return;
         }
@@ -145,13 +145,13 @@ final class LocalWorkTransactions
         if ($attempt['rollback'] && ! $attempt['outside']) {
             $state = 'rolled-back';
         }
-        $this->settle($ticket->id, $state);
+        $this->settle(id: $ticket->id, outcome: $state);
     }
 
     private function settle(string $id, string $outcome): void
     {
         $attempt = $this->attempts[$id];
         unset($this->attempts[$id]);
-        $attempt['admission']->settle($attempt['ticket'], new AttemptEvidence($outcome, $id));
+        $attempt['admission']->settle($attempt['ticket'], new AttemptEvidence(outcome: $outcome, reference: $id));
     }
 }

@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Feature;
 
+use Closure;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\BrokenHandler;
@@ -31,6 +35,7 @@ use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
+use CoreX\Tools\Mcp\Laravel\McpToolEndpoint;
 use CoreX\Tools\Tests\Support\AssertsRegisteredToolErrors;
 use CoreX\Tools\Tests\Support\CountingHandler;
 use CoreX\Tools\Tests\Support\HeadlessWrappedHandler;
@@ -40,7 +45,9 @@ use CoreX\Tools\Tests\TestCase;
 use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use LogicException;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
@@ -330,6 +337,24 @@ final class ToolInvocationTest extends TestCase
         $this->assertToolError(ToolsErrorCode::UnknownEffect, $unknown->errorCode);
         self::assertSame('provider-op-7', $unknown->operationKey);
 
+        $this->policy->allowDiscover = true;
+        $this->app->instance(PrincipalResolver::class, $this->identity);
+        $this->app->instance(TenantContextResolver::class, $this->tenants);
+        $this->app->instance(TenancyManager::class, $this->tenants);
+        Route::post('/mcp', McpToolEndpoint::class)->middleware(ProviderToolCredential::class);
+        $descriptor = $this->descriptor('notes.provider');
+        $this->postJson('/mcp', [
+            'jsonrpc' => '2.0',
+            'id' => 7,
+            'method' => 'tools/call',
+            'params' => ['name' => $descriptor->wireName, 'arguments' => ['name' => 'alpha'], 'operationKey' => 'provider-op-7'],
+        ], ['Authorization' => 'Bearer provider-tool-fixture'])
+            ->assertOk()
+            ->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.outcome', 'unknown')
+            ->assertJsonPath('result.structuredContent.code', ToolsErrorCode::UnknownEffect->value)
+            ->assertJsonPath('result.structuredContent.retryable', false);
+
         ProviderKeyHandler::$mode = 'committed';
         $committed = $invoker->invoke($this->context(), $call);
         self::assertSame(ToolOutcome::Committed, $committed->outcome);
@@ -489,5 +514,17 @@ final class ToolInvocationTest extends TestCase
 
         $result = $invoker->invoke($this->context(), $stale);
         $this->assertToolError(ToolsErrorCode::ToolRevisionConflict, $result->errorCode);
+    }
+}
+
+final class ProviderToolCredential
+{
+    public function handle(Request $request, Closure $next): mixed
+    {
+        if ($request->bearerToken() === 'provider-tool-fixture') {
+            $request->attributes->set('corex.client_id', 'provider-tool-client');
+        }
+
+        return $next($request);
     }
 }

@@ -12,6 +12,6 @@ final readonly class SourceRecords
     /** @param list<SourceRecord> $records */
     public function __construct(public array $records)
     {
-        ProjectionInput::objects($records, SourceRecord::class);
+        ProjectionInput::objects(items: $records, class: SourceRecord::class);
     }
 }

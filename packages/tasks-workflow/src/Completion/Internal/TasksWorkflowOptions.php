@@ -27,11 +27,11 @@ final readonly class TasksWorkflowOptions
             $enabled = false;
         }
 
-        $definitionRef = self::stableRef($violations, 'definition_ref', $config['definition_ref'] ?? null, $enabled);
-        $versionRef = self::stableRef($violations, 'version_ref', $config['version_ref'] ?? null, $enabled);
+        $definitionRef = self::stableRef(violations: $violations, path: 'definition_ref', value: $config['definition_ref'] ?? null, required: $enabled);
+        $versionRef = self::stableRef(violations: $violations, path: 'version_ref', value: $config['version_ref'] ?? null, required: $enabled);
         $violations->failIfAny();
 
-        return new self($enabled, $definitionRef, $versionRef);
+        return new self(enabled: $enabled, definitionRef: $definitionRef, versionRef: $versionRef);
     }
 
     private static function stableRef(ConfigurationValidator $violations, string $path, mixed $value, bool $required): ?string

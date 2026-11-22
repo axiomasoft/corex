@@ -27,12 +27,12 @@ final readonly class DatabaseDirectGrants implements DirectGrants
 
     public function grant(Principal $principal, string $entityKey, string $action, ?DateTimeImmutable $expiresAt = null): void
     {
-        $this->write($principal, $entityKey, $action, $expiresAt, revoke: false);
+        $this->write(principal: $principal, entityKey: $entityKey, action: $action, expiresAt: $expiresAt, revoke: false);
     }
 
     public function revoke(Principal $principal, string $entityKey, string $action): void
     {
-        $this->write($principal, $entityKey, $action, null, revoke: true);
+        $this->write(principal: $principal, entityKey: $entityKey, action: $action, expiresAt: null, revoke: true);
     }
 
     private function write(Principal $principal, string $entityKey, string $action, ?DateTimeImmutable $expiresAt, bool $revoke): void
@@ -48,7 +48,7 @@ final readonly class DatabaseDirectGrants implements DirectGrants
         ];
         $connection = $this->connections->connection();
         $connection->transaction(function () use ($connection, $identity, $expiresAt, $revoke): void {
-            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-access', 'grant', ['grant' => $identity]);
+            ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex-access', kind: 'grant', witness: ['grant' => $identity]);
             // A first grant has no existing row to lock. Serialize grants and revocations for this principal and permission.
             $connection->selectOne(
                 "SELECT pg_advisory_xact_lock(hashtextextended(jsonb_build_array('corex.access.direct', ?::text, ?::uuid, ?::text)::text, 0))",

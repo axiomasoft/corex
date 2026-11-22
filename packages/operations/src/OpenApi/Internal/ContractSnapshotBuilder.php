@@ -8,17 +8,16 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
-use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
 use Packman\Errors\Contracts\ProblemRegistry;
 
-/** @internal Installed-code v1 snapshot. It does not record tenant activation. */
+/** @internal Installed-code v2 snapshot. */
 #[Internal]
 final readonly class ContractSnapshotBuilder
 {
-    public const array FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json'];
+    public const array FILES = ['errors.json', 'openapi.json', 'operations.json', 'webhooks.json', 'manifest.json'];
 
     /** @var array<string, string> */
     private const array ENFORCEMENT = [
@@ -40,13 +39,7 @@ final readonly class ContractSnapshotBuilder
         'side_effect' => 0,
     ];
 
-    /** @var list<string> */
-    private const array BULK_STATES = [
-        'cancelled', 'cancelling', 'completed', 'expired', 'failed', 'pending', 'running',
-    ];
-
-    /** @var list<ContractSnapshotSection> */
-    private array $sections;
+    private ContractSnapshotSection $webhooks;
 
     /** @param iterable<ContractSnapshotSection> $sections */
     public function __construct(
@@ -54,61 +47,45 @@ final readonly class ContractSnapshotBuilder
         private OpenApiDocumentGenerator $openApi,
         private ApiProfile $profile,
         private ProblemRegistry $problems,
+        private string $serverUrl,
         iterable $sections = [],
     ) {
-        $items = [];
+        $webhooks = null;
 
         foreach ($sections as $section) {
-            $items[] = $section;
+            if ($section->file() !== 'webhooks.json' || $webhooks !== null) {
+                throw new InvalidArgumentException('Snapshot requires exactly one webhooks.json contributor.');
+            }
+
+            $webhooks = $section;
         }
 
-        $this->sections = $items;
+        $this->webhooks = $webhooks ?? throw new InvalidArgumentException('Missing webhooks.json contributor.');
     }
 
-    /** @return list<string> */
-    public function files(): array
+    /** @return array<string, string> */
+    public function documents(): array
     {
-        return [...self::FILES, ...array_map(static fn (ContractSnapshotSection $section): string => $section->file(), $this->sections)];
-    }
-
-    /**
-     * @param  list<array<string, mixed>>  $errorContracts
-     * @return array<string, string>
-     */
-    public function documents(array $errorContracts, string $major = 'v1'): array
-    {
+        $major = 'v2';
         $operations = [];
 
         foreach ($this->operations->all($major) as $operation) {
             $operations[] = $this->operation($operation);
         }
 
-        $known = array_column($operations, 'id');
-        $contour = [];
-
-        foreach ($this->contourOperations($major) as $operation) {
-            if (! in_array($operation['id'], $known, true)) {
-                $operations[] = $operation;
-                $contour[] = $operation;
-            }
-        }
-
         usort($operations, static fn (array $left, array $right): int => $left['id'] <=> $right['id']);
-        $normalized = SnapshotJson::normalize($this->openApi->document($major));
+        $normalized = SnapshotJson::normalize($this->openApi->document(version: $major, serverUrl: $this->serverUrl));
 
         if (! is_array($normalized)) {
             throw new InvalidArgumentException('OpenAPI snapshot is not a document.');
         }
 
-        $openapi = $this->mergeOpenApi(document: $normalized, contour: $contour);
         $bodies = [
-            'errors.json' => SnapshotJson::pretty($this->errors($errorContracts)),
-            'openapi.json' => SnapshotJson::pretty($openapi),
-            'operations.json' => SnapshotJson::pretty($operations),
+            'errors.json' => SnapshotJson::pretty(value: $this->errors()),
+            'openapi.json' => SnapshotJson::pretty(value: $normalized),
+            'operations.json' => SnapshotJson::pretty(value: $operations),
+            'webhooks.json' => SnapshotJson::pretty(value: $this->webhooks->document(major: $major)),
         ];
-        foreach ($this->sections as $section) {
-            $bodies[$section->file()] = SnapshotJson::pretty($section->document($major));
-        }
 
         $bodies['manifest.json'] = SnapshotJson::pretty([
             'contract_fingerprint' => $this->profile->contractFingerprint,
@@ -168,45 +145,8 @@ final readonly class ContractSnapshotBuilder
         return ['enforcement' => self::ENFORCEMENT, 'recipe' => $recipe];
     }
 
-    /**
-     * @param  list<array<string, mixed>>  $errorContracts
-     * @return list<array<string, mixed>>
-     */
-    private function errors(array $errorContracts): array
-    {
-        $errors = $errorContracts;
-        $present = [];
-
-        foreach ($errors as $row) {
-            $owner = $row['owner'] ?? '';
-            $code = $row['code'] ?? '';
-
-            if (! is_string($owner) || ! is_string($code)) {
-                throw new InvalidArgumentException('Error contract owner and code must be strings.');
-            }
-            $present[$owner."\0".$code] = true;
-        }
-
-        foreach ($this->safeCodes() as $row) {
-            if (! isset($present[$row['owner']."\0".$row['code']])) {
-                $errors[] = $row;
-            }
-        }
-
-        usort($errors, static fn (array $left, array $right): int => [$left['owner'] ?? '', $left['code'] ?? ''] <=> [$right['owner'] ?? '', $right['code'] ?? '']);
-
-        return array_map(static fn (array $row): array => [
-            'category' => $row['category'],
-            'code' => $row['code'],
-            'detail_keys' => $row['detail_keys'],
-            'owner' => $row['owner'],
-            'path' => $row['path'],
-            'retryable' => $row['retryable'],
-        ], $errors);
-    }
-
     /** @return list<array{owner: string, code: string, category: string, detail_keys: list<string>, path: null, retryable: bool}> */
-    private function safeCodes(): array
+    private function errors(): array
     {
         $rows = [];
         foreach ($this->problems->all() as $definition) {
@@ -214,128 +154,14 @@ final readonly class ContractSnapshotBuilder
                 'category' => $definition->category->value,
                 'code' => $definition->code->value(),
                 'detail_keys' => $definition->detailKeys,
-                'owner' => $this->problems->owner($definition->code),
+                'owner' => $this->problems->owner(code: $definition->code),
                 'path' => null,
                 'retryable' => $definition->retryable,
             ];
         }
 
+        usort($rows, static fn (array $left, array $right): int => [$left['owner'], $left['code']] <=> [$right['owner'], $right['code']]);
+
         return $rows;
-    }
-
-    /**
-     * @param  array<mixed>  $document
-     * @param  list<array<string, mixed>>  $contour
-     * @return array<mixed>
-     */
-    private function mergeOpenApi(array $document, array $contour): array
-    {
-        $paths = $document['paths'] ?? [];
-        $paths = is_array($paths) ? $paths : [];
-
-        foreach ($contour as $operation) {
-            $path = $operation['path'];
-            $method = $operation['method'];
-            $status = $operation['success_status'];
-
-            if (! is_string($path) || ! is_string($method) || ! is_int($status)) {
-                throw new InvalidArgumentException('Contour operation path, method and status are invalid.');
-            }
-            $pathItem = $paths[$path] ?? [];
-
-            if (! is_array($pathItem)) {
-                throw new InvalidArgumentException('OpenAPI path item must be an object.');
-            }
-            $pathItem[strtolower($method)] = [
-                'operationId' => $operation['id'],
-                'responses' => [(string) $status => ['description' => 'Success']],
-                'x-corex-ability' => $operation['ability'],
-                'x-corex-cost' => $operation['cost'],
-                'x-packman-module' => 'axiomasoft/corex-operations',
-            ];
-            $paths[$path] = $pathItem;
-        }
-
-        $document['paths'] = $paths;
-
-        return $document;
-    }
-
-    /** @return list<array<string, mixed>> */
-    private function contourOperations(string $major): array
-    {
-        $status = ['enum' => self::BULK_STATES, 'type' => 'string'];
-        $object = ['type' => 'object'];
-        $rows = [
-            ['bulk-operations.cancel', 'POST', '/bulk-operations/{id}/cancel', 'async_command', 'required', 'tenant_transactional', 'bulk.manage', 202, $object, ['properties' => ['status' => $status], 'required' => ['status'], 'type' => 'object']],
-            ['bulk-operations.failures', 'GET', '/bulk-operations/{id}/failures', 'query', 'forbidden', null, 'bulk.manage', 200, $object, $object],
-            ['bulk-operations.result', 'GET', '/bulk-operations/{id}/result', 'query', 'forbidden', null, 'bulk.manage', 200, $object, $object],
-            ['bulk-operations.show', 'GET', '/bulk-operations/{id}', 'query', 'forbidden', null, 'bulk.manage', 200, $object, ['properties' => ['status' => $status], 'required' => ['status'], 'type' => 'object']],
-            ['bulk-operations.submit', 'POST', '/bulk-operations', 'async_command', 'required', 'tenant_transactional', 'bulk.manage', 202, $object, ['properties' => ['operation_id' => ['type' => 'string'], 'status' => $status], 'required' => ['operation_id', 'status'], 'type' => 'object']],
-            ['webhook-deliveries.attempts', 'GET', '/webhook-deliveries/{id}/attempts', 'query', 'forbidden', null, 'webhooks.manage', 200, $object, $object],
-            ['webhook-deliveries.list', 'GET', '/webhook-deliveries', 'query', 'forbidden', null, 'webhooks.manage', 200, $object, $object],
-            ['webhook-deliveries.range-replay', 'POST', '/webhook-deliveries/replay', 'command', 'required', 'tenant_transactional', 'webhooks.replay', 200, $object, $object],
-            ['webhook-deliveries.replay', 'POST', '/webhook-deliveries/{id}/replay', 'command', 'required', 'tenant_transactional', 'webhooks.replay', 200, $object, $object],
-            ['webhook-deliveries.show', 'GET', '/webhook-deliveries/{id}', 'query', 'forbidden', null, 'webhooks.manage', 200, $object, $object],
-            ['webhook-subscriptions.create', 'POST', '/webhook-subscriptions', 'command', 'required', 'tenant_transactional', 'webhooks.manage', 201, $object, $object],
-            ['webhook-subscriptions.disable', 'POST', '/webhook-subscriptions/{id}/disable', 'command', 'required', 'tenant_transactional', 'webhooks.manage', 200, $object, $object],
-            ['webhook-subscriptions.list', 'GET', '/webhook-subscriptions', 'query', 'forbidden', null, 'webhooks.manage', 200, $object, $object],
-            ['webhook-subscriptions.update', 'PATCH', '/webhook-subscriptions/{id}', 'command', 'required', 'tenant_transactional', 'webhooks.manage', 200, $object, $object],
-        ];
-        $operations = [];
-
-        foreach ($rows as $row) {
-            $operations[] = $this->contour(id: $row[0], method: $row[1], path: $row[2], mode: $row[3], idempotency: $row[4], effect: $row[5], ability: $row[6], status: $row[7], major: $major, request: $row[8], response: $row[9]);
-        }
-
-        return $operations;
-    }
-
-    /**
-     * @param  array<string, mixed>  $request
-     * @param  array<string, mixed>  $response
-     * @return array<string, mixed>
-     */
-    private function contour(
-        string $id,
-        string $method,
-        string $path,
-        string $mode,
-        string $idempotency,
-        ?string $effect,
-        string $ability,
-        int $status,
-        string $major,
-        array $request,
-        array $response,
-    ): array {
-        $operation = [
-            'ability' => $ability,
-            'capabilities' => [],
-            'cost' => $this->cost(null),
-            'deprecation' => null,
-            'effect_mode' => $effect,
-            'execution_supported' => true,
-            'id' => $id,
-            'idempotency' => $idempotency,
-            'method' => $method,
-            'mode' => $mode,
-            'module' => 'axiomasoft/corex-operations',
-            'pagination' => null,
-            'path' => $path,
-            'read_fields' => null,
-            'request_schema' => $request,
-            'required_scopes' => [$ability],
-            'response_schema' => $response,
-            'success_status' => $status,
-            'version' => $major,
-            'write_fields' => null,
-        ];
-        $operation['contract_hash'] = hash('sha256', JsonCanonical::encode([
-            'operation' => $operation,
-            'schema' => 'load-contour-operation/1',
-        ]));
-
-        return $operation;
     }
 }

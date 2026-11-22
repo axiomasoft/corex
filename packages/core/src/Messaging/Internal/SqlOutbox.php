@@ -39,7 +39,7 @@ final readonly class SqlOutbox implements Outbox
             throw OutboxRefused::outsideTransaction($message->contract());
         }
 
-        $this->current->assert($message->scope, $connection);
+        $this->current->assert(scope: $message->scope, connection: $connection);
         $contract = $this->contracts->get(name: $message->name, version: $message->contractVersion);
 
         if (! $contract->maxPiiClass->permits($message->piiClass)) {
@@ -51,10 +51,10 @@ final readonly class SqlOutbox implements Outbox
         }
 
         $contract->validateFact($message);
-        ReferenceWrites::enlist($connection, $message->scope, 'axiomasoft/corex', 'outbox', ['package' => $contract->owner, 'subject' => $message->subjectData(), 'contract' => $contract->id()]);
+        ReferenceWrites::enlist(connection: $connection, scope: $message->scope, producer: 'axiomasoft/corex', kind: 'outbox', witness: ['package' => $contract->owner, 'subject' => $message->subjectData(), 'contract' => $contract->id()]);
         $key = [...MessageReceiptIdentity::logical($message->scope), 'source' => $message->source, 'message_id' => $message->messageId];
         $digest = $message->digest();
-        $proof = $this->issuer->issue($message->scope, MessageEnvelope::PROOF_OWNER, $digest);
+        $proof = $this->issuer->issue(scope: $message->scope, owner: MessageEnvelope::PROOF_OWNER, reference: $digest);
         $now = $this->clock->now();
         $metadata = $this->traces->inject(metadata: $message->metadata);
 

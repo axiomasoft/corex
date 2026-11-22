@@ -15,16 +15,17 @@ use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
+use CoreX\Operations\Errors\Laravel\OperationErrorBoundary;
 use CoreX\Operations\Internal\Http\ApiController;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
+use CoreX\Operations\Tests\Fixtures\TrustedClient;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -75,6 +76,7 @@ final class PlatformTest extends TestCase
                 'properties' => ['title' => ['type' => 'string', 'maxLength' => 100]]],
             responseSchema: ['type' => 'object'], rules: ['title' => ['required', 'string', 'max:100']],
             successStatus: $status,
+            version: 'v2',
         );
     }
 
@@ -98,12 +100,13 @@ final class PlatformTest extends TestCase
         });
     }
 
-    private function dispatch(string $method = 'POST', string $path = 'notes', string $body = '{"title":"Hello"}', string $version = 'v1'): JsonResponse
+    private function dispatch(string $method = 'POST', string $path = 'notes', string $body = '{"title":"Hello"}', string $version = 'v2'): JsonResponse
     {
         $request = Request::create('/chosen/'.$version.'/'.$path, $method,
             $method === 'GET' ? ['title' => 'Hello'] : [], server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_REQUEST_ID' => 'request-123'], content: $body);
+        $request->attributes->set('corex.client_id', 'client-1');
 
-        return $this->app->make(OperationDispatcher::class)->dispatch($request, $version, $path);
+        return $this->app->make(HttpOperationDispatcher::class)->dispatch($request, $version, $path);
     }
 
     public function test_default_authentication_and_authorization_deny(): void
@@ -121,7 +124,7 @@ final class PlatformTest extends TestCase
         self::assertSame(201, $response->getStatusCode());
         self::assertSame('request-123', $response->headers->get('X-Request-ID'));
         self::assertSame('no-store, private', $response->headers->get('Cache-Control'));
-        self::assertSame(['request_id' => 'request-123', 'correlation_id' => 'request-123', 'api_version' => 'v1'], $response->getData(true)['meta']);
+        self::assertSame(['request_id' => 'request-123', 'correlation_id' => 'request-123', 'api_version' => 'v2', 'replayed' => false], $response->getData(true)['meta']);
         self::assertSame('trusted-user', $response->getData(true)['data']['actor']);
         self::assertSame('A', $response->getData(true)['data']['account']);
         self::assertArrayNotHasKey('error', $response->getData(true));
@@ -130,11 +133,11 @@ final class PlatformTest extends TestCase
     public function test_unknown_routes_methods_versions_and_metadata_are_not_executable(): void
     {
         $this->allow();
-        foreach ([['DELETE', 'notes', 'v1'], ['POST', 'undeclared', 'v1'], ['POST', 'notes', 'v2'], ['GET', 'notes.note', 'v1']] as [$method, $path, $version]) {
+        foreach ([['DELETE', 'notes', 'v2'], ['POST', 'undeclared', 'v2'], ['POST', 'notes', 'v1'], ['POST', 'notes', 'v3'], ['GET', 'notes.note', 'v2']] as [$method, $path, $version]) {
             self::assertSame(404, $this->dispatch($method, $path, version: $version)->getStatusCode());
         }
         self::assertSame(0, NoteHandler::$calls);
-        self::assertSame('notes.options', $this->app->make(OperationRegistry::class)->match('v1', 'GET', '/notes/options')[0]->id);
+        self::assertSame('notes.options', $this->app->make(OperationRegistry::class)->match('v2', 'GET', '/notes/options')[0]->id);
     }
 
     public function test_missing_boxed_and_disabled_contexts_fail_closed(): void
@@ -162,15 +165,16 @@ final class PlatformTest extends TestCase
     public function test_context_and_module_state_are_read_on_every_dispatch(): void
     {
         $this->allow();
-        $dispatcher = $this->app->make(OperationDispatcher::class);
+        $dispatcher = $this->app->make(HttpOperationDispatcher::class);
         $request = Request::create('/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{"title":"Hello"}');
+        $request->attributes->set('corex.client_id', 'client-1');
         foreach (['A', 'B', 'A'] as $id) {
             $this->tenants->initialize($this->account($id));
-            self::assertSame($id, $dispatcher->dispatch($request, 'v1', 'notes')->getData(true)['data']['account']);
+            self::assertSame($id, $dispatcher->dispatch($request, 'v2', 'notes')->getData(true)['data']['account']);
         }
         $this->modules->enabled = false;
-        self::assertSame(404, $dispatcher->dispatch($request, 'v1', 'notes')->getStatusCode());
-        self::assertSame(['A', 'B', 'A', 'A'], $this->modules->visitedAccounts);
+        self::assertSame(404, $dispatcher->dispatch($request, 'v2', 'notes')->getStatusCode());
+        self::assertSame(['A', 'A', 'B', 'B', 'A', 'A', 'A'], $this->modules->visitedAccounts);
     }
 
     public static function malformedBodies(): array
@@ -225,7 +229,7 @@ final class PlatformTest extends TestCase
     public function test_openapi_is_deterministic_and_derived_from_operations_only(): void
     {
         $schema = $this->app->make(OpenApiDocumentGenerator::class);
-        $document = $schema->document('v1', 'https://example.test/chosen/v1');
+        $document = $schema->document('v2', 'https://example.test/chosen/v2');
         $paths = (array) $document['paths'];
         self::assertSame('3.1.0', $document['openapi']);
         self::assertCount(3, $paths);
@@ -241,9 +245,9 @@ final class PlatformTest extends TestCase
         self::assertContains('api_version', $problem['required']);
         self::assertSame(['data', 'meta'], $paths['/notes']['post']['responses'][201]['content']['application/json']['schema']['required']);
         self::assertArrayHasKey(415, $paths['/notes']['post']['responses']);
-        self::assertSame(json_encode($document), json_encode($schema->document('v1', 'https://example.test/chosen/v1')));
+        self::assertSame(json_encode($document), json_encode($schema->document('v2', 'https://example.test/chosen/v2')));
         $this->modules->registry = $this->compile(array_reverse($this->modules->registry->api));
-        self::assertSame(json_encode($document), json_encode($schema->document('v1', 'https://example.test/chosen/v1')));
+        self::assertSame(json_encode($document), json_encode($schema->document('v2', 'https://example.test/chosen/v2')));
         self::assertSame('{}', json_encode($schema->document('v9')['paths']));
     }
 
@@ -252,9 +256,9 @@ final class PlatformTest extends TestCase
         self::assertTrue($this->app['router']->has('corex.api.discovery'));
         self::assertTrue($this->app['router']->has('corex.api.operation'));
         $this->allow();
-        $this->app['router']->match(['GET', 'POST'], '/chosen/{workspace}/{version}/{path?}', ApiController::class)->where('path', '.*');
-        $this->postJson('/chosen/alpha/v1/notes', ['title' => 'Hello'])->assertCreated()->assertJsonPath('data.actor', 'trusted-user');
-        $this->getJson('/chosen/alpha/v1/undeclared')->assertNotFound();
+        $this->app['router']->match(['GET', 'POST'], '/chosen/{workspace}/{version}/{path?}', ApiController::class)->where('path', '.*')->middleware(TrustedClient::class);
+        $this->postJson('/chosen/alpha/v2/notes', ['title' => 'Hello'])->assertCreated()->assertJsonPath('data.actor', 'trusted-user');
+        $this->getJson('/chosen/alpha/v2/undeclared')->assertNotFound();
     }
 
     public function test_error_boundary_normalizes_upstream_errors_with_named_version_and_request_id(): void
@@ -276,8 +280,8 @@ final class PlatformTest extends TestCase
     public function test_generated_request_id_is_shared_by_the_boundary_and_dispatcher(): void
     {
         $this->allow();
-        $this->app['router']->post('/bounded/{version}/{path}', ApiController::class)->middleware(OperationErrorBoundary::class);
-        $response = $this->postJson('/bounded/v1/notes', ['title' => 'Hello'], ['X-Request-ID' => str_repeat('x', 129)]);
+        $this->app['router']->post('/bounded/{version}/{path}', ApiController::class)->middleware([OperationErrorBoundary::class, TrustedClient::class]);
+        $response = $this->postJson('/bounded/v2/notes', ['title' => 'Hello'], ['X-Request-ID' => str_repeat('x', 129)]);
         $response->assertCreated();
         $id = $response->json('meta.request_id');
         self::assertMatchesRegularExpression('/^[a-f0-9-]{36}$/D', $id);
@@ -287,9 +291,9 @@ final class PlatformTest extends TestCase
     public function test_query_in_a_mutation_and_non_json_body_are_rejected(): void
     {
         $this->allow();
-        $this->app['router']->post('/strict/{version}/{path}', ApiController::class);
-        $this->postJson('/strict/v1/notes?actor=forged', ['title' => 'Hello'])->assertUnprocessable();
-        $this->post('/strict/v1/notes', ['title' => 'Hello'])->assertStatus(415);
+        $this->app['router']->post('/strict/{version}/{path}', ApiController::class)->middleware(TrustedClient::class);
+        $this->postJson('/strict/v2/notes?actor=forged', ['title' => 'Hello'])->assertUnprocessable();
+        $this->post('/strict/v2/notes', ['title' => 'Hello'])->assertStatus(415);
         self::assertSame(0, NoteHandler::$calls);
     }
 
@@ -332,7 +336,7 @@ final class PlatformTest extends TestCase
     public function test_module_adapters_receive_context_only_during_the_current_operation(): void
     {
         $this->allow();
-        $this->app['router']->get('/adapters/{version}/{path}', ApiController::class)->where('path', '.*');
+        $this->app['router']->get('/adapters/{version}/{path}', ApiController::class)->where('path', '.*')->middleware(TrustedClient::class);
         $provider = $this->app->make(RequestContextProvider::class);
         $handler = new readonly class($provider) implements OperationHandler
         {
@@ -346,7 +350,7 @@ final class PlatformTest extends TestCase
             }
         };
         $this->app->instance(NoteHandler::class, $handler);
-        $this->getJson('/adapters/v1/notes/1?title=Hello')->assertOk()->assertJsonPath('data.actor', 'trusted-user');
+        $this->getJson('/adapters/v2/notes/1?title=Hello')->assertOk()->assertJsonPath('data.actor', 'trusted-user');
         $this->expectException(ApiError::class);
         $provider->current();
     }

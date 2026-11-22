@@ -28,9 +28,9 @@ final readonly class FieldModuleReferences implements ModuleReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'sys_field_schema_heads' => [$tenant, ['entity']],
             'sys_attribute_documents' => [$tenant, ['entity']],
             'sys_attribute_write_tokens' => [$tenant, ['entity']],
@@ -41,15 +41,15 @@ final readonly class FieldModuleReferences implements ModuleReferences
                     $spec = SchemaValue::map($spec);
                     foreach (SchemaRows::fence($scope) as $field => $expected) {
                         if ((is_int($expected) ? SchemaValue::integer($row[$field]) : SchemaValue::text($row[$field])) !== $expected) {
-                            return new LifecycleBlocker($this->owner(), 'field-index-plan', $id, $scope, 'reconcile-original-physical-owner');
+                            return new LifecycleBlocker(owner: $this->owner(), resourceKind: 'field-index-plan', resourceId: $id, scope: $scope, requiredAction: 'reconcile-original-physical-owner');
                         }
                     }
 
-                    if ($this->route->namespace($tenant, $scope) !== $spec['namespace']) {
-                        return new LifecycleBlocker($this->owner(), 'field-index-plan', $id, $scope, 'restore-index-namespace');
+                    if ($this->route->namespace(db: $tenant, scope: $scope) !== $spec['namespace']) {
+                        return new LifecycleBlocker(owner: $this->owner(), resourceKind: 'field-index-plan', resourceId: $id, scope: $scope, requiredAction: 'restore-index-namespace');
                     }
-                    IndexCatalogue::verifyParent($tenant, $spec);
-                    $index = IndexCatalogue::inspect($tenant, $spec);
+                    IndexCatalogue::verifyParent(db: $tenant, spec: $spec);
+                    $index = IndexCatalogue::inspect(db: $tenant, spec: $spec);
 
                     if ($index !== null) {
                         $oid = SchemaValue::text($index->oid);
@@ -58,16 +58,16 @@ final readonly class FieldModuleReferences implements ModuleReferences
                         $action = $receipt !== null && ($receipt['oid'] ?? null) !== $oid
                             ? 'reconcile-replaced-index' : ($valid ? 'retire-owned-index' : 'retire-invalid-index');
 
-                        return new LifecycleBlocker($this->owner(), $valid ? 'field-index' : 'invalid-cic', $oid, $scope, $action);
+                        return new LifecycleBlocker(owner: $this->owner(), resourceKind: $valid ? 'field-index' : 'invalid-cic', resourceId: $oid, scope: $scope, requiredAction: $action);
                     }
                 }
 
-                return new LifecycleBlocker($this->owner(), 'sys_attribute_schema_operations', $id, $scope,
-                    in_array($row['state'], ['completed', 'cancelled'], true) ? 'remove-or-rebind-reference' : 'drain-schema-operation');
+                return new LifecycleBlocker(owner: $this->owner(), resourceKind: 'sys_attribute_schema_operations', resourceId: $id, scope: $scope,
+                    requiredAction: in_array($row['state'], ['completed', 'cancelled'], true) ? 'remove-or-rebind-reference' : 'drain-schema-operation');
             }],
             'sys_attribute_definitions' => [$tenant, ['entity', 'owner', 'provenance', 'field_id']],
             'sys_attribute_key_reservations' => [$tenant, ['entity', 'operation_id', 'field_id']],
             'sys_attribute_backfills' => [$tenant, ['operation_id', 'kind']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

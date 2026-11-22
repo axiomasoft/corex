@@ -262,14 +262,14 @@ final class GoldenSnapshot
     }
 
     /** @return array<string, mixed> */
-    public static function wire(string $tmp, string $fixture): array
+    public static function wire(string $tmp): array
     {
         if (file_exists($tmp)) {
             throw new RuntimeException("Snapshot directory already exists: {$tmp}");
         }
 
         try {
-            if (Artisan::call('corex:operations:snapshot', ['directory' => $tmp, '--fixture' => $fixture]) !== 0) {
+            if (Artisan::call('corex:operations:snapshot', ['directory' => $tmp]) !== 0) {
                 throw new RuntimeException('Snapshot command failed: '.Artisan::output());
             }
             $out = [];

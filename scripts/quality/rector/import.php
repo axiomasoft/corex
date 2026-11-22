@@ -10,7 +10,10 @@ require __DIR__.'/Import/DocumentationVisitor.php';
 require __DIR__.'/Import/SourceSnapshot.php';
 require __DIR__.'/Import/SubsetImporter.php';
 
+require_once dirname(__DIR__, 2).'/support/cli-arguments.php';
+
 try {
+    $argv = \CoreX\Scripts\cliArguments();
     $source = __DIR__.'/upstream.json';
     $adjustments = __DIR__.'/native-adjustments.json';
     $destination = __DIR__;

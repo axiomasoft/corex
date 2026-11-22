@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Search metadata
+
+- Expose Search descriptions of fields and capabilities under the current query policy and active generation. Report denied metadata through the registered Search error contract.
+
 ## CoreX 2.0 — Fenced generation ownership
 
 - Add exact index-removal evidence and namespace-exclusion host ports for lifecycle retirement. Unknown inventory or unverified absence blocks destructive work.

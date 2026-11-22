@@ -71,8 +71,8 @@ final class RuntimeRegistrar implements PackageRegistrar
         $app->singleton(TenancyManager::class, static fn (Application $app): TenantRuntimeManager => $app->make(TenantRuntimeManager::class));
         $app->scoped(WorkPrincipalAuthority::class, MembershipWorkPrincipal::class);
         $app->bind(CentralWorkRunner::class, static fn (Application $app): CentralWorkRunner => new CloudCentralWorkRunner(
-            $app->make(TenantRuntime::class), $app->make(Container::class), $app->make(WorkAuthentication::class),
-            new ProfileRef($app->make(Repository::class)->string('tenant.runtime_profile'), 1),
+            runtime: $app->make(TenantRuntime::class), app: $app->make(Container::class), auth: $app->make(WorkAuthentication::class),
+            profile: new ProfileRef($app->make(Repository::class)->string('tenant.runtime_profile'), 1),
         ));
         $app->afterResolving(WorkQueueHandlers::class, self::declareCentralJobs(...));
         $app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);

@@ -80,7 +80,7 @@
 | corex-operations.cursor.current_key_id | axiomasoft/corex-operations | string | primary | no | product-policy | unobserved | unobserved | ApiOptions::$cursorKeyId |  |  |
 | corex-operations.cursor.keyring.primary | axiomasoft/corex-operations | string | '' | yes | secret | unobserved | unobserved | ApiOptions::$cursorKeyring |  |  |
 | corex-operations.cursor.ttl_seconds | axiomasoft/corex-operations | int | 3600 | no | product-policy | unobserved | unobserved | ApiOptions::$cursorTtlSeconds |  |  |
-| corex-operations.default_major | axiomasoft/corex-operations | string | v1 | no | product-policy | unobserved | unobserved | ApiOptions::$defaultMajor |  |  |
+| corex-operations.default_major | axiomasoft/corex-operations | string | v2 | no | product-policy | unobserved | unobserved | ApiOptions::$defaultMajor |  |  |
 | corex-operations.discovery | axiomasoft/corex-operations | string | public | no | product-policy | unobserved | unobserved | ApiOptions::$discovery |  |  |
 | corex-operations.idempotency.lease_seconds | axiomasoft/corex-operations | int | 30 | no | product-policy | unobserved | unobserved | ApiOptions::$idempotencyLeaseSeconds |  |  |
 | corex-operations.idempotency.retention_seconds | axiomasoft/corex-operations | int | 86400 | no | product-policy | unobserved | unobserved | ApiOptions::$idempotencyRetentionSeconds |  |  |

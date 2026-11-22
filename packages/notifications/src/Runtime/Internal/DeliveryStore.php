@@ -55,7 +55,7 @@ final readonly class DeliveryStore
         $scope = $this->sweepScope();
 
         return $this->connection->transaction(function () use ($scope): int {
-            $this->current->assert($scope, $this->connection);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $now = $this->clock->now();
             $expired = $this->lane($scope)->where('lease_until', '<=', $now);
             $possibleSend = (clone $expired)->where('state', 'sending')->update([
@@ -78,7 +78,7 @@ final readonly class DeliveryStore
         $scope = $this->sweepScope();
 
         return $this->connection->transaction(function () use ($scope, $deliveryId): ?DeliveryClaim {
-            $this->current->assert($scope, $this->connection);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $query = $this->runnable($this->lane($scope)->where('id', $deliveryId));
             $row = $query->lock($this->connection->getDriverName() === 'pgsql' ? 'for update skip locked' : true)->first();
 
@@ -87,10 +87,10 @@ final readonly class DeliveryStore
             }
 
             $token = (string) Str::uuid7();
-            $epoch = NotificationValue::integer(NotificationValue::field($row, 'claim_epoch')) + 1;
-            $attempts = NotificationValue::integer(NotificationValue::field($row, 'attempts')) + 1;
+            $epoch = NotificationValue::integer(NotificationValue::field(row: $row, name: 'claim_epoch')) + 1;
+            $attempts = NotificationValue::integer(NotificationValue::field(row: $row, name: 'attempts')) + 1;
             $deadline = $this->clock->now()->add(new DateInterval('PT'.$this->claimSeconds.'S'));
-            $claim = $this->claimFromRow($row, $scope, $token, $epoch, $attempts, $deadline);
+            $claim = $this->claimFromRow(row: $row, scope: $scope, token: $token, epoch: $epoch, attempts: $attempts, deadline: $deadline);
 
             if ($claim === null) {
                 $this->lane($scope)->where('id', $deliveryId)->update(['state' => 'quarantined', 'next_attempt' => null]);
@@ -111,17 +111,17 @@ final readonly class DeliveryStore
 
     private function claimFromRow(object $row, DataScope $scope, string $token, int $epoch, int $attempts, DateTimeImmutable $deadline): ?DeliveryClaim
     {
-        $id = NotificationValue::text(NotificationValue::field($row, 'id'));
-        $key = NotificationValue::text(NotificationValue::field($row, 'delivery_key'));
-        $channel = NotificationValue::text(NotificationValue::field($row, 'channel'));
-        $digest = NotificationValue::text(NotificationValue::field($row, 'message_hash'));
-        $driverVersion = NotificationValue::text(NotificationValue::field($row, 'driver_version'));
-        $message = NotificationValue::text(NotificationValue::field($row, 'message'));
-        $notificationId = NotificationValue::nullableText(NotificationValue::field($row, 'notification_id'));
-        $runId = NotificationValue::nullableText(NotificationValue::field($row, 'digest_run_id'));
-        $original = $this->codec->decode(NotificationValue::map(json_decode(NotificationValue::text(NotificationValue::field($row, 'scope')), true, flags: JSON_THROW_ON_ERROR)));
+        $id = NotificationValue::text(NotificationValue::field(row: $row, name: 'id'));
+        $key = NotificationValue::text(NotificationValue::field(row: $row, name: 'delivery_key'));
+        $channel = NotificationValue::text(NotificationValue::field(row: $row, name: 'channel'));
+        $digest = NotificationValue::text(NotificationValue::field(row: $row, name: 'message_hash'));
+        $driverVersion = NotificationValue::text(NotificationValue::field(row: $row, name: 'driver_version'));
+        $message = NotificationValue::text(NotificationValue::field(row: $row, name: 'message'));
+        $notificationId = NotificationValue::nullableText(NotificationValue::field(row: $row, name: 'notification_id'));
+        $runId = NotificationValue::nullableText(NotificationValue::field(row: $row, name: 'digest_run_id'));
+        $original = $this->codec->decode(NotificationValue::map(json_decode(NotificationValue::text(NotificationValue::field(row: $row, name: 'scope')), true, flags: JSON_THROW_ON_ERROR)));
 
-        if (($notificationId === null) === ($runId === null) || NotificationValue::field($row, 'template_version') !== '1' || NotificationValue::field($row, 'policy_version') !== '1'
+        if (($notificationId === null) === ($runId === null) || NotificationValue::field(row: $row, name: 'template_version') !== '1' || NotificationValue::field(row: $row, name: 'policy_version') !== '1'
             || ! hash_equals($digest, hash('sha256', $message))
             || NotificationScope::logical($original) !== NotificationScope::logical($scope)
             || NotificationScope::fence($original) !== NotificationScope::fence($scope)) {
@@ -138,56 +138,56 @@ final readonly class DeliveryStore
             attempts: $attempts,
             message: JsonDocuments::capture(NotificationValue::map(json_decode($message, true, flags: JSON_THROW_ON_ERROR))),
             messageHash: $digest,
-            templateVersion: NotificationValue::text(NotificationValue::field($row, 'template_version')),
-            policyVersion: NotificationValue::text(NotificationValue::field($row, 'policy_version')),
+            templateVersion: NotificationValue::text(NotificationValue::field(row: $row, name: 'template_version')),
+            policyVersion: NotificationValue::text(NotificationValue::field(row: $row, name: 'policy_version')),
             driverVersion: $driverVersion,
             scope: $original,
             proof: new StoredWorkProof(
-                DeliveryIntents::Owner, DeliveryIntents::reference($id, $key, $digest, $channel, $driverVersion, $notificationId, $runId),
-                NotificationValue::text(NotificationValue::field($row, 'scope_seal')),
+                owner: DeliveryIntents::Owner, reference: DeliveryIntents::reference(id: $id, key: $key, digest: $digest, channel: $channel, driverVersion: $driverVersion, notificationId: $notificationId, runId: $runId),
+                seal: NotificationValue::text(NotificationValue::field(row: $row, name: 'scope_seal')),
             ),
             token: $token,
             deadline: $deadline,
-            providerNamespace: NotificationValue::nullableText(NotificationValue::field($row, 'provider_namespace')),
-            targetReference: NotificationValue::nullableText(NotificationValue::field($row, 'target_reference')),
+            providerNamespace: NotificationValue::nullableText(NotificationValue::field(row: $row, name: 'provider_namespace')),
+            targetReference: NotificationValue::nullableText(NotificationValue::field(row: $row, name: 'target_reference')),
         );
     }
 
     public function freezeTarget(DeliveryClaim $claim, string $namespace, string $target): bool
     {
-        return $this->change($claim, 'claimed', ['provider_namespace' => $namespace, 'target_reference' => $target]);
+        return $this->change(claim: $claim, state: 'claimed', values: ['provider_namespace' => $namespace, 'target_reference' => $target]);
     }
 
     public function startSending(DeliveryClaim $claim, string $ticketId): bool
     {
-        return $this->change($claim, 'claimed', ['state' => 'sending', 'provider_ticket' => $ticketId]);
+        return $this->change(claim: $claim, state: 'claimed', values: ['state' => 'sending', 'provider_ticket' => $ticketId]);
     }
 
     /** @param array<string, mixed> $values */
     private function change(DeliveryClaim $claim, string $state, array $values): bool
     {
         return $this->connection->transaction(function () use ($claim, $state, $values): bool {
-            $this->current->assert($claim->scope, $this->connection);
+            $this->current->assert(scope: $claim->scope, connection: $this->connection);
 
-            return $this->owned($claim, $state)->update($values) === 1;
+            return $this->owned(claim: $claim, state: $state)->update($values) === 1;
         });
     }
 
     public function complete(DeliveryClaim $claim, DeliveryOutcome $outcome, string $state = 'claimed'): bool
     {
         return $this->connection->transaction(function () use ($claim, $outcome, $state): bool {
-            $this->current->assert($claim->scope, $this->connection);
+            $this->current->assert(scope: $claim->scope, connection: $this->connection);
 
-            return $this->persistOutcome($this->owned($claim, $state), $claim->digestRunId, $claim->attempts, $outcome);
+            return $this->persistOutcome(query: $this->owned(claim: $claim, state: $state), runId: $claim->digestRunId, attempts: $claim->attempts, outcome: $outcome);
         });
     }
 
     public function skip(DeliveryClaim $claim, string $reason): bool
     {
         return $this->connection->transaction(function () use ($claim, $reason): bool {
-            $this->current->assert($claim->scope, $this->connection);
+            $this->current->assert(scope: $claim->scope, connection: $this->connection);
 
-            return $this->finish($this->owned($claim, 'claimed'), $claim->digestRunId, 'skipped', [
+            return $this->finish(query: $this->owned(claim: $claim, state: 'claimed'), runId: $claim->digestRunId, next: 'skipped', values: [
                 'error' => json_encode(['reason' => $reason], JSON_THROW_ON_ERROR),
             ]);
         });
@@ -197,8 +197,8 @@ final readonly class DeliveryStore
     {
         $scope = $this->sweepScope();
         $this->connection->transaction(function () use ($scope, $claim): void {
-            $this->current->assert($scope, $this->connection);
-            $this->owned($claim, 'claimed')->update([
+            $this->current->assert(scope: $scope, connection: $this->connection);
+            $this->owned(claim: $claim, state: 'claimed')->update([
                 'state' => 'quarantined', 'next_attempt' => null, 'claim_token' => null, 'lease_until' => null,
             ]);
         });
@@ -209,12 +209,12 @@ final readonly class DeliveryStore
         $scope = $this->sweepScope();
         $row = $this->lane($scope)->where('id', $id)->whereNotNull('provider_namespace')->first();
 
-        return $row === null ? null : self::effectRef($scope, NotificationValue::text(NotificationValue::field($row, 'provider_namespace')), NotificationValue::text(NotificationValue::field($row, 'delivery_key')));
+        return $row === null ? null : self::effectRef(scope: $scope, namespace: NotificationValue::text(NotificationValue::field(row: $row, name: 'provider_namespace')), key: NotificationValue::text(NotificationValue::field(row: $row, name: 'delivery_key')));
     }
 
     public static function effectRef(DataScope $scope, string $namespace, string $key): ProviderEffectRef
     {
-        return new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, DeliveryIntents::Owner, $namespace, $key);
+        return new ProviderEffectRef(accountId: $scope->accountId, accountIncarnation: $scope->accountIncarnation, workspaceId: $scope->workspaceId, owner: DeliveryIntents::Owner, providerNamespace: $namespace, effectKey: $key);
     }
 
     public static function providerDigest(string $messageHash, string $namespace, string $target): string
@@ -224,33 +224,33 @@ final readonly class DeliveryStore
 
     public function providerRow(ProviderEffectStatus $status): ?object
     {
-        return $this->validatedProviderRow($status, true);
+        return $this->validatedProviderRow(status: $status, linked: true);
     }
 
     public function claimPrecededSend(ProviderEffectStatus $status): bool
     {
-        $row = $this->validatedProviderRow($status, false);
+        $row = $this->validatedProviderRow(status: $status, linked: false);
 
-        return $row !== null && NotificationValue::field($row, 'provider_ticket') !== $status->ticket->id
-            && NotificationValue::field($row, 'claim_token') !== $status->claimToken
-            && in_array(NotificationValue::field($row, 'state'), ['claimed', 'retry-scheduled', 'cancelled', 'exhausted', 'skipped', 'quarantined'], true);
+        return $row !== null && NotificationValue::field(row: $row, name: 'provider_ticket') !== $status->ticket->id
+            && NotificationValue::field(row: $row, name: 'claim_token') !== $status->claimToken
+            && in_array(NotificationValue::field(row: $row, name: 'state'), ['claimed', 'retry-scheduled', 'cancelled', 'exhausted', 'skipped', 'quarantined'], true);
     }
 
     private function validatedProviderRow(ProviderEffectStatus $status, bool $linked): ?object
     {
         ($this->receiptRecovery)()->assertReceipt($status, $this->connection);
-        $row = $this->providerQuery($status, $linked)->first();
+        $row = $this->providerQuery(status: $status, linked: $linked)->first();
 
         if ($row === null) {
             return null;
         }
 
-        $target = NotificationValue::text(NotificationValue::field($row, 'target_reference'));
-        $message = NotificationValue::text(NotificationValue::field($row, 'message'));
-        $hash = NotificationValue::text(NotificationValue::field($row, 'message_hash'));
+        $target = NotificationValue::text(NotificationValue::field(row: $row, name: 'target_reference'));
+        $message = NotificationValue::text(NotificationValue::field(row: $row, name: 'message'));
+        $hash = NotificationValue::text(NotificationValue::field(row: $row, name: 'message_hash'));
 
         return hash_equals($hash, hash('sha256', $message))
-            && hash_equals($status->digest, self::providerDigest($hash, $status->effect->providerNamespace, $target)) ? $row : null;
+            && hash_equals($status->digest, self::providerDigest(messageHash: $hash, namespace: $status->effect->providerNamespace, target: $target)) ? $row : null;
     }
 
     public function project(ProviderEffectStatus $status, DeliveryOutcome $outcome): ?string
@@ -263,24 +263,24 @@ final readonly class DeliveryStore
                     ? $status->ownerRef : null;
             }
 
-            if ($outcome->kind === DeliveryOutcomeKind::Retryable && NotificationValue::integer(NotificationValue::field($row, 'attempts')) > $status->ticket->key->attempt) {
+            if ($outcome->kind === DeliveryOutcomeKind::Retryable && NotificationValue::integer(NotificationValue::field(row: $row, name: 'attempts')) > $status->ticket->key->attempt) {
                 return $status->ownerRef;
             }
 
-            $state = NotificationValue::text(NotificationValue::field($row, 'state'));
+            $state = NotificationValue::text(NotificationValue::field(row: $row, name: 'state'));
             $query = $this->providerQuery($status)->where('state', $state);
 
             if ($state === 'sending') {
                 $query->where('claim_token', $status->claimToken)->where('lease_until', '<=', $this->clock->now());
             } elseif (! in_array($state, ['unknown', 'accepted'], true)) {
-                return $this->sameResult($row, $outcome) ? $status->ownerRef : null;
+                return $this->sameResult(row: $row, outcome: $outcome) ? $status->ownerRef : null;
             }
 
             if ($state === 'accepted' && $outcome->kind !== DeliveryOutcomeKind::Completed) {
-                return $this->sameResult($row, $outcome) ? $status->ownerRef : null;
+                return $this->sameResult(row: $row, outcome: $outcome) ? $status->ownerRef : null;
             }
 
-            return $this->persistOutcome($query, NotificationValue::nullableText(NotificationValue::field($row, 'digest_run_id')), NotificationValue::integer(NotificationValue::field($row, 'attempts')), $outcome)
+            return $this->persistOutcome(query: $query, runId: NotificationValue::nullableText(NotificationValue::field(row: $row, name: 'digest_run_id')), attempts: NotificationValue::integer(NotificationValue::field(row: $row, name: 'attempts')), outcome: $outcome)
                 ? $status->ownerRef : null;
         });
     }
@@ -288,10 +288,10 @@ final readonly class DeliveryStore
     private function sameResult(object $row, DeliveryOutcome $outcome): bool
     {
         return match ($outcome->kind) {
-            DeliveryOutcomeKind::Completed => NotificationValue::field($row, 'state') === 'completed' && NotificationValue::field($row, 'provider_ref') === $outcome->providerRef,
-            DeliveryOutcomeKind::Accepted => NotificationValue::field($row, 'state') === 'accepted' && NotificationValue::field($row, 'provider_ref') === $outcome->providerRef,
-            DeliveryOutcomeKind::Retryable => in_array(NotificationValue::field($row, 'state'), ['retry-scheduled', 'exhausted'], true),
-            DeliveryOutcomeKind::Permanent => NotificationValue::field($row, 'state') === 'permanently-failed',
+            DeliveryOutcomeKind::Completed => NotificationValue::field(row: $row, name: 'state') === 'completed' && NotificationValue::field(row: $row, name: 'provider_ref') === $outcome->providerRef,
+            DeliveryOutcomeKind::Accepted => NotificationValue::field(row: $row, name: 'state') === 'accepted' && NotificationValue::field(row: $row, name: 'provider_ref') === $outcome->providerRef,
+            DeliveryOutcomeKind::Retryable => in_array(NotificationValue::field(row: $row, name: 'state'), ['retry-scheduled', 'exhausted'], true),
+            DeliveryOutcomeKind::Permanent => NotificationValue::field(row: $row, name: 'state') === 'permanently-failed',
             DeliveryOutcomeKind::Unknown => false,
         };
     }
@@ -335,7 +335,7 @@ final readonly class DeliveryStore
         $next = $state === 'retry-scheduled' && $outcome->retryAfter !== null
             ? $this->clock->now()->add(new DateInterval('PT'.$outcome->retryAfter.'S')) : null;
 
-        return $this->finish($query, $runId, $state, [
+        return $this->finish(query: $query, runId: $runId, next: $state, values: [
             'provider_ref' => $outcome->providerRef,
             'error' => json_encode(['reason' => $outcome->reason], JSON_THROW_ON_ERROR),
             'sent_at' => in_array($state, ['accepted', 'completed'], true) ? $this->clock->now() : null,
@@ -369,7 +369,7 @@ final readonly class DeliveryStore
     private function sweepScope(): DataScope
     {
         $scope = $this->scopes->forCurrentPrincipal($this->tenants->current());
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
 
         return $scope;
     }

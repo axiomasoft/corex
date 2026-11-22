@@ -35,9 +35,9 @@ final readonly class TaskModuleReferences implements ModuleTableReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'tsk_projects' => [$tenant, []],
             'tsk_stages' => [$tenant, []],
             'tsk_sprints' => [$tenant, []],
@@ -47,6 +47,6 @@ final readonly class TaskModuleReferences implements ModuleTableReferences
             'tsk_time_logs' => [$tenant, ['source']],
             'tsk_timers' => [$tenant, []],
             'corex_task_operations' => [$tenant, ['kind', 'result_ref']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

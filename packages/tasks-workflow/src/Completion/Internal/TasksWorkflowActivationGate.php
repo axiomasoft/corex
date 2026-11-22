@@ -71,12 +71,12 @@ final readonly class TasksWorkflowActivationGate implements ModuleActivationGate
         }
 
         $provider = $container->make(EngineAdapter::class)->provider(new DefinitionRequest(
-            $context,
-            TaskCompletionTrigger::MODULE,
-            TaskCompletionTrigger::ENTITY,
-            TaskCompletionTrigger::EVENT,
-            $this->definitionRef,
-            $this->versionRef,
+            context: $context,
+            module: TaskCompletionTrigger::MODULE,
+            entityHandle: TaskCompletionTrigger::ENTITY,
+            eventName: TaskCompletionTrigger::EVENT,
+            definitionRef: $this->definitionRef,
+            versionRef: $this->versionRef,
         ));
 
         return $provider === null

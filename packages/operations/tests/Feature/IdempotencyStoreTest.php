@@ -199,7 +199,7 @@ final class IdempotencyStoreTest extends TestCase
         $wrong = new IdempotencyScope(
             scope: new DataScope('installation-test', 'other-account', null, 'fixture-binding', 1, 'incarnation-1', str_repeat('a', 64), 'user', 'principal-1'),
             clientId: null,
-            apiMajor: 'v1',
+            apiMajor: 'v2',
             operationId: 'notes.create',
         );
 
@@ -385,7 +385,7 @@ final class IdempotencyStoreTest extends TestCase
         return new IdempotencyScope(
             scope: new DataScope('installation-test', 'account-1', null, 'fixture-binding', 1, 'incarnation-1', str_repeat('a', 64), 'user', 'principal-1'),
             clientId: 'client-1',
-            apiMajor: 'v1',
+            apiMajor: 'v2',
             operationId: 'notes.create',
         );
     }

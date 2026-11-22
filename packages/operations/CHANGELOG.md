@@ -1,5 +1,11 @@
 # Changelog
 
+## CoreX 2.0 — HTTP v2
+
+- Publish literal v2 routes, RFC 9457 errors and typed async acceptance with a status URL. The Laravel dispatcher and host-mounted MCP use the same operation invoker.
+- Require an authenticated client, check current resource and field permissions before replay, and recover the original settlement across HTTP, MCP and Bulk.
+- Compile metadata and the five v2 snapshots from installed operation and Problem declarations.
+
 ## Unreleased — owner-scoped bulk transfer
 
 - Added the neutral BulkExecutor and BulkOwner ports, scoped admission, replayable step tokens, and typed owner result and failure references.

@@ -50,8 +50,8 @@ final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             ->where('id', $exportId)
             ->update(['status' => 'running', 'updated_at' => $this->clock->now()]);
 
-        $archive = $this->resources->export($account, $exportId, $kind);
-        $this->verifyArchive($account, $archive);
+        $archive = $this->resources->export(account: $account, exportId: $exportId, kind: $kind);
+        $this->verifyArchive(account: $account, archive: $archive);
 
         $this->db()->table('root_account_exports')
             ->where('id', $exportId)
@@ -81,16 +81,16 @@ final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             );
         }
 
-        $archive = new AccountArchive(DatabaseValue::text($latestExport->storage_path), DatabaseValue::integer($latestExport->size_bytes));
-        $this->verifyArchive($account, $archive);
-        $this->resources->drop($account, $archive);
+        $archive = new AccountArchive(reference: DatabaseValue::text($latestExport->storage_path), sizeBytes: DatabaseValue::integer($latestExport->size_bytes));
+        $this->verifyArchive(account: $account, archive: $archive);
+        $this->resources->drop(account: $account, archive: $archive);
 
         $this->events->dispatch(new AccountPurged($account));
     }
 
     private function verifyArchive(AccountRef $account, AccountArchive $archive): void
     {
-        if (! $this->resources->verifyArchive($account, $archive)) {
+        if (! $this->resources->verifyArchive(account: $account, archive: $archive)) {
             throw new RuntimeException('The physical owner did not verify this account archive; refusing ready or deletion.');
         }
     }

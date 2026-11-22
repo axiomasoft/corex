@@ -40,6 +40,10 @@
                     "value": "'search.feature_unavailable'"
                 },
                 {
+                    "name": "MetadataDenied",
+                    "value": "'search.metadata_denied'"
+                },
+                {
                     "name": "IndexNotReady",
                     "value": "'search.index_not_ready'"
                 },
@@ -2589,6 +2593,54 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
+        "CoreX\\Search\\Query\\Contracts\\SearchMetadata": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "describe": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "entity",
+                            "type": "CoreX\\Data\\Data\\EntityHandle",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Search\\Query\\Data\\SearchDescription",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
         "CoreX\\Search\\Query\\Data\\Candidate": {
             "kind": "class",
             "layer": "api",
@@ -2930,6 +2982,53 @@
                     "hooks": []
                 }
             },
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Search\\Query\\Data\\SearchDescription": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "body",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "witness",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []

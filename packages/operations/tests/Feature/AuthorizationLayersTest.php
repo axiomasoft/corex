@@ -26,9 +26,9 @@ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -106,6 +106,7 @@ final class AuthorizationLayersTest extends TestCase
                 'claimed_account' => ['sometimes', 'string'],
                 'secret' => ['sometimes', 'string'],
             ],
+            version: 'v2',
         )->asCommand()
             ->idempotency('optional')
             ->effect('tenant_transactional')
@@ -239,15 +240,18 @@ final class AuthorizationLayersTest extends TestCase
     /** @param array<string, mixed> $input */
     private function dispatch(array $input, ?string $idempotencyKey = null): JsonResponse
     {
-        return $this->app->make(OperationDispatcher::class)->dispatch(Request::create(
-            '/api/v1/notes',
+        $request = Request::create(
+            '/api/v2/notes',
             'POST',
             server: array_filter([
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_IDEMPOTENCY_KEY' => $idempotencyKey,
             ]),
             content: JsonCanonical::encode($input),
-        ), 'v1', 'notes');
+        );
+        $request->attributes->set('corex.client_id', 'client-1');
+
+        return $this->app->make(HttpOperationDispatcher::class)->dispatch($request, 'v2', 'notes');
     }
 
     private function assertApiError(string $code, Closure $callback): void
@@ -279,7 +283,7 @@ final class AuthorizationLayersTest extends TestCase
         return ResolvedContexts::make(
             $this->tenants->current(),
             $this->identity,
-            new InvocationMetadata('request-1', 'v1', 'notes.update', 'POST'),
+            new InvocationMetadata('request-1', 'v2', 'notes.update', 'POST'),
         );
     }
 

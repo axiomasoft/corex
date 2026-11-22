@@ -72,6 +72,6 @@ final class PanelsServiceProvider extends ServiceProvider
 
     private function decorate(SavedViewRepository $host): FencedSavedViewRepository
     {
-        return $host instanceof FencedSavedViewRepository ? $host : new FencedSavedViewRepository($host, $this->app);
+        return $host instanceof FencedSavedViewRepository ? $host : new FencedSavedViewRepository(inner: $host, app: $this->app);
     }
 }

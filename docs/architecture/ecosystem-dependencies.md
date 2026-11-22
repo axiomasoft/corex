@@ -116,7 +116,7 @@ Composer не наследует `repositories` зависимостей. Кор
 не описывает дочерний пакет.
 
 После настройки канала выберите нужные пакеты, например
-`composer require 'axiomasoft/corex:^1.0@dev'`, и сохраните lockfile приложения.
+`composer require 'axiomasoft/corex:^2.0'`, и сохраните lockfile приложения.
 Split-артефакты CoreX не включают чужой исходный код и не предоставляют внешний
 Composer-канал автоматически. Проверки consumer fixtures добавляют снимки владельцев
 после candidate-репозитория; для их Git sources действуют те же требования доступа.

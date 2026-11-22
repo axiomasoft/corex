@@ -44,7 +44,7 @@ final readonly class TaskCompletion
     public function scope(TenantContext $context, ConnectionInterface $connection): DataScope
     {
         $scope = $this->scopes->forCurrentPrincipal($context);
-        $this->workScope->assert($scope, $connection);
+        $this->workScope->assert(scope: $scope, connection: $connection);
 
         return $scope;
     }
@@ -75,7 +75,7 @@ final readonly class TaskCompletion
         if ($task->getConnection() !== $connection || $connection->transactionLevel() < 1) {
             throw new LogicException('Task completion requires the locked Task owner transaction.');
         }
-        $this->workScope->assert($scope, $connection);
+        $this->workScope->assert(scope: $scope, connection: $connection);
 
         if ($task->status === TaskStatus::Done) {
             return false;
@@ -85,7 +85,7 @@ final readonly class TaskCompletion
             throw ValidationException::withMessages(['status' => ['Отменённую задачу нельзя завершить.']]);
         }
 
-        $this->admit($task, $data, $context, $scope, $connection);
+        $this->admit(task: $task, data: $data, context: $context, scope: $scope, connection: $connection);
         $task->status = TaskStatus::Done;
         $task->completed_at = $this->clock->now();
 
@@ -104,7 +104,7 @@ final readonly class TaskCompletion
             subjectRef: 'task:'.$task->id,
         );
 
-        $prior = $this->receipts->find($connection, $identity);
+        $prior = $this->receipts->find(connection: $connection, identity: $identity);
 
         if ($prior !== null) {
             $ref = JsonDocuments::map($prior->resultRef);
@@ -121,7 +121,7 @@ final readonly class TaskCompletion
             return;
         }
 
-        $admission = $this->capture->capture(new TaskCompletionCandidate(
+        $admission = $this->capture->capture(candidate: new TaskCompletionCandidate(
             context: $context,
             scope: $scope,
             taskId: $task->id,
@@ -129,14 +129,14 @@ final readonly class TaskCompletion
             status: TaskStatus::Done,
             requestKey: $requestKey,
             actor: $data->actor,
-        ), $connection);
+        ), connection: $connection);
 
         if ($admission->status === TaskCompletionAdmissionStatus::Conflict || $admission->digest === null
             || $admission->intentRef === null || $admission->versionRef === null) {
             throw new LogicException('Conflicting completion intent for the task.');
         }
 
-        $this->receipts->record($connection, $identity, new TaskOperationReceipt(
+        $this->receipts->record(connection: $connection, identity: $identity, receipt: new TaskOperationReceipt(
             payloadHash: $admission->digest,
             originalFence: TaskOperationFence::fromScope($scope),
             resultRef: JsonDocuments::capture([

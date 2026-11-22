@@ -20,7 +20,7 @@ final readonly class FieldTypeDescriptor
      */
     public function __construct(public string $codecId, public int $codecVersion, public FieldCodec $codec, public array $uses, public bool $nullable = true, public bool $multiple = false, public array $limits = [], public array $conversions = [])
     {
-        FieldList::check($uses, [FieldUse::class]);
+        FieldList::check(values: $uses, classes: [FieldUse::class]);
 
         if ($codecId === '' || $codecVersion < 1) {
             throw new InvalidArgumentException('Invalid field type descriptor.');

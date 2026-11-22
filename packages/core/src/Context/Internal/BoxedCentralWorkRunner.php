@@ -20,7 +20,7 @@ final readonly class BoxedCentralWorkRunner implements CentralWorkRunner
         $this->app->forgetScopedInstances();
 
         try {
-            return $this->auth->run(null, $work);
+            return $this->auth->run(principal: null, work: $work);
         } finally {
             $this->app->forgetScopedInstances();
         }

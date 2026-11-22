@@ -20,7 +20,7 @@ final readonly class BulkFailurePage
         $previous = null;
 
         foreach ($records as $row) {
-            if (! self::ordinal($row['ordinal']) || ($previous !== null && self::compare($previous, $row['ordinal']) >= 0)
+            if (! self::ordinal($row['ordinal']) || ($previous !== null && self::compare(left: $previous, right: $row['ordinal']) >= 0)
                 || preg_match('/\A[a-zA-Z][a-zA-Z0-9_.-]{0,127}\z/D', $row['code']) !== 1
                 || ($row['path'] !== null && (strlen($row['path']) > 512 || preg_match('/\A(?:\/(?:[^~\x00-\x1f\x7f]|~[01])*)*\z/Du', $row['path']) !== 1))) {
                 throw new InvalidArgumentException('Invalid bulk failure row.');

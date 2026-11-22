@@ -27,6 +27,8 @@ if (! is_array($tokens)) {
     fwrite(STDERR, "rename-completeness: invalid tokens\n");
     exit(2);
 }
+require_once __DIR__.'/support/cli-arguments.php';
+
 foreach ($tokens as $section => $rows) {
     if (! is_string($section) || ! is_array($rows)) {
         fwrite(STDERR, "rename-completeness: invalid token section\n");
@@ -42,7 +44,7 @@ foreach ($tokens as $section => $rows) {
 }
 /** @var array<string, list<array{old: string, match: 'fqcn'|'prefix'|'word', kind?: string}>> $tokens */
 $sections = array_keys($tokens);
-foreach ($argv as $arg) {
+foreach (\CoreX\Scripts\cliArguments() as $arg) {
     if (str_starts_with($arg, '--sections=')) {
         $sections = array_values(array_intersect($sections, explode(',', substr($arg, 11))));
     }

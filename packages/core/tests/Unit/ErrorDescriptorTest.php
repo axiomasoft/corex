@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Testing\DescriptorFixtureCode;
 use Packman\Errors\Contracts\DescribesError;
 use Packman\Errors\Contracts\ErrorCode;
@@ -165,6 +167,29 @@ test('describes error returns the same descriptor', function (): void {
 
     expect($failure->errorDescriptor())->toBe($descriptor);
 });
+
+test('projects the two concrete scope refusals separately', function (
+    string $failureType,
+    string $code,
+    ErrorCategory $category,
+): void {
+    $failure = new $failureType('Restricted scope detail');
+
+    try {
+        throw $failure;
+    } catch (ScopeContextMismatch|ScopeStale $caught) {
+        $descriptor = $caught->errorDescriptor();
+
+        expect($caught::class)->toBe($failureType)
+            ->and($descriptor->code)->toBe($code)
+            ->and($descriptor->category)->toBe($category)
+            ->and($descriptor->retryable)->toBeFalse()
+            ->and($descriptor->details)->toBe([]);
+    }
+})->with([
+    'context mismatch' => [ScopeContextMismatch::class, 'core.scope_context_mismatch', ErrorCategory::Authorization],
+    'stale physical binding' => [ScopeStale::class, 'core.scope_stale', ErrorCategory::Conflict],
+]);
 
 function descriptorTestCode(string $value): ErrorCode
 {

@@ -15,6 +15,7 @@ use CoreX\Context\Data\PhysicalBinding;
 use CoreX\Context\Data\ProviderEffectRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Context\Laravel\DatabaseScopeControl;
 use CoreX\Context\Laravel\ScopeControlSchema;
 use CoreX\Context\Laravel\ScopeOptions;
@@ -544,7 +545,7 @@ it('isolates a delayed old task from the new active UID and the next restore epo
     $s = $this->scope;
     $restored = new DataScope($s->deploymentId, $s->accountId, null, $s->bindingId, $s->bindingGeneration, $s->accountIncarnation,
         str_repeat('b', 64), 'service', $s->principalId);
-    expect(fn () => $this->active->active($restored, $this->entity))->toThrow(ScopeContextMismatch::class)
+    expect(fn () => $this->active->active($restored, $this->entity))->toThrow(ScopeStale::class)
         ->and(IndexTarget::uidFor($restored, $this->entity, $new->backend, $new->cluster, $new->generation, $new->allocationId))->not->toEqual($new->uid);
 });
 

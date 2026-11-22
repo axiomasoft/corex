@@ -30,6 +30,7 @@ FIXTURES = ROOT / "tests/Distribution/fixtures/scenarios"
 STAGES = Path(__file__).with_name("scenario-stages.json")
 SUPPORT = FIXTURES / "support"
 NAME = re.compile(r"[a-z][a-z0-9-]*")
+HOST_COMPONENT = re.compile(r"([a-z][a-z0-9-]*)/host/(app/[A-Z][a-zA-Z0-9]*)")
 
 
 class ScenarioError(RuntimeError):
@@ -46,6 +47,26 @@ def profile_module():
 
 def write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def host_components(spec: dict) -> tuple[tuple[Path, Path], ...]:
+    declared = spec.get("host_components", [])
+    if not isinstance(declared, list):
+        raise ScenarioError("scenario host_components must be a list")
+    components = []
+    targets = set()
+    for value in declared:
+        match = HOST_COMPONENT.fullmatch(value) if isinstance(value, str) else None
+        if match is None:
+            raise ScenarioError(f"invalid scenario host component: {value}")
+        source = FIXTURES / value
+        target = Path(match[2])
+        if match[1] == spec["id"] or target in targets or not source.is_dir() or source.resolve() != source:
+            raise ScenarioError(f"missing, ambiguous or local scenario host component: {value}")
+        targets.add(target)
+        components.append((source.relative_to(ROOT), target))
+
+    return tuple(components)
 
 
 def barrier_path(directory: Path, name: str, suffix: str) -> Path:
@@ -264,18 +285,22 @@ def prove(candidate: Path | None, case: str, evidence: Path, php: str, *, varian
     if not (fixture / "case.json").is_file():
         raise ScenarioError(f"{case} is required from stage {phases[case]} and its fixture is missing")
     spec = load_json(fixture / "case.json")
+    if spec["id"] != case:
+        raise ScenarioError(f"scenario identity mismatch: {case}")
     profiles = profile_module()
     fixtures = [fixture.relative_to(ROOT), STAGES.relative_to(ROOT)]
     if spec.get("host_support") or any(row.get("host_support") for row in spec.get("variants", {}).values()):
         fixtures.append(SUPPORT.relative_to(ROOT))
-    for item in [spec, *spec.get("variants", {}).values()]:
-        extension = item.get("profile", {}).get("extension_fixture")
+    for item in [spec, *({**spec, **row} for row in spec.get("variants", {}).values())]:
+        profile = item.get("profile", {})
+        extension = profile.get("extension_fixture")
         if extension is not None:
             fixtures.append(profiles.extension_source(extension))
+        if profile.get("product") == "flex/crm":
+            fixtures.append(Path("products/flex-crm"))
+        fixtures.extend(source for source, _ in host_components(item))
     if git_bytes(ROOT, "status", "--porcelain=v1", "--untracked-files=all", "--", *map(str, fixtures)):
         raise ScenarioError(f"scenario source is dirty: {case}")
-    if spec["id"] != case:
-        raise ScenarioError(f"scenario identity mismatch: {case}")
     variants = spec.get("variants")
     if variant is not None and (variants is None or variant not in variants):
         raise ScenarioError(f"unknown scenario variant: {variant}")
@@ -327,6 +352,7 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
             layers.append(SUPPORT / "host")
         if (fixture / "host").is_dir():
             layers.append(fixture / "host")
+        components = host_components(spec)
         with profiles.isolated_scenario_databases(profile, postgres) as database:
             if database:
                 database.update({
@@ -338,7 +364,7 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
                 database.update(cluster)
             consumer, runtime, declared = profiles.install_app(
                 root, cell, profile, repository, ROOT, interpreter, binding["candidate_version"],
-                isolated=database, host_overlays=tuple(layers),
+                isolated=database, host_overlays=tuple(layers), host_components=components,
             )
             for arguments in spec.get("artisan", []):
                 command = ["php", "artisan", *arguments]
@@ -361,6 +387,15 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
             receipt.update(assert_dist_install(consumer, repository, declared, ROOT))
             if extension := profile.get("extension_fixture"):
                 receipt["extension"] = profiles.assert_fixture_extension(consumer, extension)
+            if profile.get("product") == "flex/crm":
+                receipt["product"] = profiles.assert_fixture_product(consumer)
+            if host_require := profile.get("host_require"):
+                receipt["host_require"] = profiles.assert_host_requirements(consumer, host_require)
+            if components:
+                receipt["host_components"] = {
+                    source.as_posix(): profiles.fixture_tree_digest(consumer / target)
+                    for source, target in components
+                }
             if spec.get("retain_install_evidence"):
                 for source, name in (("composer.json", "composer.json"), ("composer.lock", "composer.lock"),
                                      ("vendor/composer/installed.json", "composer-installed.json")):

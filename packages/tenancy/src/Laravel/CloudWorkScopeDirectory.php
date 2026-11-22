@@ -20,13 +20,13 @@ final readonly class CloudWorkScopeDirectory implements WorkScopeDirectory
 
     public function account(string $accountId): AccountRef
     {
-        return $this->accounts->find($accountId, $this->options->centralConnection) ?? throw new ScopeContextMismatch('The account is unavailable.');
+        return $this->accounts->find(accountId: $accountId, connectionName: $this->options->centralConnection) ?? throw new ScopeContextMismatch('The account is unavailable.');
     }
 
     public function workspace(string $workspaceId): WorkspaceRef
     {
         $workspace = Workspace::query()->find($workspaceId) ?? throw new ScopeContextMismatch('The workspace is unavailable.');
 
-        return new WorkspaceRef($workspace->id, $workspace->slug, $workspace->type, $workspace->path, $workspace->parent_id);
+        return new WorkspaceRef(id: $workspace->id, slug: $workspace->slug, type: $workspace->type, path: $workspace->path, parentId: $workspace->parent_id);
     }
 }

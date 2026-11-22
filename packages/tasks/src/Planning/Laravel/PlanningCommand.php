@@ -71,7 +71,7 @@ final readonly class PlanningCommand implements TaskPlanning
 
         return $connection->transaction(
             callback: function () use ($draft, $token, $context, $name, $connection): ProjectReference {
-                $scope = $this->scope($context, $connection);
+                $scope = $this->scope(context: $context, connection: $connection);
                 $subject = new PlanningSubject(
                     workspaceId: $draft->workspaceId,
                     projectId: null,
@@ -89,9 +89,9 @@ final readonly class PlanningCommand implements TaskPlanning
                     $this->invalid(field: 'workspace_id', message: 'Рабочее пространство не найдено в текущем аккаунте.');
                 }
 
-                $identity = new TaskOperationIdentity($scope, TaskOperationKind::CreateProject, $token->requestKey, 'workspace:'.$draft->workspaceId, $draft->workspaceId);
+                $identity = new TaskOperationIdentity(scope: $scope, kind: TaskOperationKind::CreateProject, requestKey: $token->requestKey, subjectRef: 'workspace:'.$draft->workspaceId, workspaceId: $draft->workspaceId);
                 $store = new OperationStore(connection: $connection, receipts: $this->receipts());
-                $replay = $store->replay($identity, $token->payloadHash);
+                $replay = $store->replay(identity: $identity, payloadHash: $token->payloadHash);
 
                 if ($replay !== null) {
                     return ProjectReference::fromStored($replay);
@@ -107,7 +107,7 @@ final readonly class PlanningCommand implements TaskPlanning
                 $project->save();
 
                 $reference = ProjectReferenceFactory::fromProject($project);
-                $store->record($identity, $token->payloadHash, $reference->toArray());
+                $store->record(identity: $identity, payloadHash: $token->payloadHash, resultRef: $reference->toArray());
 
                 return $reference;
             },
@@ -125,9 +125,9 @@ final readonly class PlanningCommand implements TaskPlanning
 
         return $connection->transaction(
             callback: function () use ($draft, $token, $context, $name, $startDate, $endDate, $connection): SprintReference {
-                $scope = $this->scope($context, $connection);
+                $scope = $this->scope(context: $context, connection: $connection);
                 $project = $this->resolvedProject(projectId: $draft->projectId, connection: $connection);
-                $this->assertWorkspace($project->workspace_id, $context);
+                $this->assertWorkspace(workspaceId: $project->workspace_id, context: $context);
                 $subject = new PlanningSubject(
                     workspaceId: $project->workspace_id ?? '',
                     projectId: $project->id,
@@ -141,9 +141,9 @@ final readonly class PlanningCommand implements TaskPlanning
                     context: $context,
                 );
 
-                $identity = new TaskOperationIdentity($scope, TaskOperationKind::CreateSprint, $token->requestKey, 'project:'.$project->id, $project->workspace_id);
+                $identity = new TaskOperationIdentity(scope: $scope, kind: TaskOperationKind::CreateSprint, requestKey: $token->requestKey, subjectRef: 'project:'.$project->id, workspaceId: $project->workspace_id);
                 $store = new OperationStore(connection: $connection, receipts: $this->receipts());
-                $replay = $store->replay($identity, $token->payloadHash);
+                $replay = $store->replay(identity: $identity, payloadHash: $token->payloadHash);
 
                 if ($replay !== null) {
                     return SprintReference::fromStored($replay);
@@ -160,7 +160,7 @@ final readonly class PlanningCommand implements TaskPlanning
                 $sprint->save();
 
                 $reference = SprintReferenceFactory::fromSprint($sprint);
-                $store->record($identity, $token->payloadHash, $reference->toArray());
+                $store->record(identity: $identity, payloadHash: $token->payloadHash, resultRef: $reference->toArray());
 
                 return $reference;
             },
@@ -176,10 +176,10 @@ final readonly class PlanningCommand implements TaskPlanning
         return $this->transactionWithRetry(
             connection: $connection,
             callback: function () use ($draft, $token, $context, $connection): TimeLogReference {
-                $scope = $this->scope($context, $connection);
+                $scope = $this->scope(context: $context, connection: $connection);
                 $this->validatedTimeLog(draft: $draft, connection: $connection);
                 $task = $this->lockedTask(taskId: $draft->taskId, connection: $connection);
-                $this->assertWorkspace($task->workspace_id, $context);
+                $this->assertWorkspace(workspaceId: $task->workspace_id, context: $context);
                 $subject = $this->timeLogSubject(task: $task, userId: $draft->userId);
                 $this->access->authorize(
                     operation: PlanningOperation::RecordTime,
@@ -188,9 +188,9 @@ final readonly class PlanningCommand implements TaskPlanning
                     context: $context,
                 );
 
-                $identity = new TaskOperationIdentity($scope, TaskOperationKind::RecordTime, $token->requestKey, 'task:'.$task->id, $task->workspace_id);
+                $identity = new TaskOperationIdentity(scope: $scope, kind: TaskOperationKind::RecordTime, requestKey: $token->requestKey, subjectRef: 'task:'.$task->id, workspaceId: $task->workspace_id);
                 $store = new OperationStore(connection: $connection, receipts: $this->receipts());
-                $replay = $store->replay($identity, $token->payloadHash);
+                $replay = $store->replay(identity: $identity, payloadHash: $token->payloadHash);
 
                 if ($replay !== null) {
                     return TimeLogReference::fromStored($replay);
@@ -231,7 +231,7 @@ final readonly class PlanningCommand implements TaskPlanning
                 $task->save();
 
                 $reference = TimeLogReferenceFactory::fromTimeLog($timeLog);
-                $store->record($identity, $token->payloadHash, $reference->toArray());
+                $store->record(identity: $identity, payloadHash: $token->payloadHash, resultRef: $reference->toArray());
 
                 return $reference;
             },

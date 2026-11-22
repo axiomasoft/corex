@@ -10,28 +10,18 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from http_contract import snapshots
+
 
 def sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def graphql_artifacts(directory: Path) -> list[str]:
-    return sorted(path.name for path in directory.iterdir() if path.suffix in {".graphql", ".gql"})
-
-
 def load_snapshots(directory: Path) -> dict:
-    artifacts = graphql_artifacts(directory)
-    if artifacts:
-        raise SystemExit(f"graphql artifact refused: {', '.join(artifacts)}")
-    manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
-    digests = {}
-    for name, expected in manifest["files"].items():
-        actual = sha256((directory / name).read_bytes())
-        if actual != expected:
-            raise SystemExit(f"stale snapshot digest: {name}")
-        digests[name] = actual
-    webhooks = json.loads((directory / "webhooks.json").read_text(encoding="utf-8"))
-    return {"digests": digests, "webhooks": webhooks, "topics": topic_names(webhooks)}
+    manifest, documents = snapshots(directory)
+    webhooks = documents["webhooks.json"]
+    return {"digests": manifest["files"], "webhooks": webhooks, "topics": topic_names(webhooks)}
 
 
 def topic_names(webhooks: dict) -> list[str]:

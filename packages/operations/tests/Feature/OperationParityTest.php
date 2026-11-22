@@ -11,7 +11,7 @@ use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -42,7 +42,7 @@ final class OperationParityTest extends TestCase
         $schema = $this->schema(['title' => ['type' => 'string'], 'id' => ['type' => 'string'], 'actor' => ['type' => 'string'], 'account' => ['type' => 'string'], 'workspace' => ['type' => ['string', 'null']]]);
         $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']]),
+                Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']], version: 'v2'),
             ]),
         ], installedPackages: []));
         $this->tenants = new ContextFixture;
@@ -57,16 +57,18 @@ final class OperationParityTest extends TestCase
     public function test_denied_activation_and_authorization_skip_the_handler(): void
     {
         $this->app->instance(PrincipalResolver::class, $this->identity);
-        $denied = $this->app->make(OperationDispatcher::class)->dispatch(
-            Request::create('/chosen/v1/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{"title":"Hello"}'),
-            'v1',
+        $request = Request::create('/chosen/v2/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{"title":"Hello"}');
+        $request->attributes->set('corex.client_id', 'client-1');
+        $denied = $this->app->make(HttpOperationDispatcher::class)->dispatch(
+            $request,
+            'v2',
             'notes',
         );
         $this->modules->enabled = false;
         $this->allow();
-        $inactive = $this->app->make(OperationDispatcher::class)->dispatch(
-            Request::create('/chosen/v1/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{"title":"Hello"}'),
-            'v1',
+        $inactive = $this->app->make(HttpOperationDispatcher::class)->dispatch(
+            $request,
+            'v2',
             'notes',
         );
 
@@ -78,14 +80,15 @@ final class OperationParityTest extends TestCase
     public function test_throwing_handler_restores_request_context(): void
     {
         $this->allow();
-        $request = Request::create('/chosen/v1/notes/broken', 'GET', ['title' => 'Hello'], server: ['HTTP_X_REQUEST_ID' => 'request-123']);
+        $request = Request::create('/chosen/v2/notes/broken', 'GET', ['title' => 'Hello'], server: ['HTTP_X_REQUEST_ID' => 'request-123']);
+        $request->attributes->set('corex.client_id', 'client-1');
         $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.card', 'GET', '/notes/{id}', NoteHandler::class, 'notes.read', $this->schema(), $this->schema(), ['title' => ['required', 'string']]),
+                Api::operation('notes.card', 'GET', '/notes/{id}', NoteHandler::class, 'notes.read', $this->schema(), $this->schema(), ['title' => ['required', 'string']], version: 'v2'),
             ]),
         ], installedPackages: []));
         $this->app->instance(ModuleRegistry::class, $this->modules);
-        $response = $this->app->make(OperationDispatcher::class)->dispatch($request, 'v1', 'notes/broken');
+        $response = $this->app->make(HttpOperationDispatcher::class)->dispatch($request, 'v2', 'notes/broken');
 
         self::assertSame(500, $response->getStatusCode());
         self::assertNull($request->attributes->get(RequestContext::class));

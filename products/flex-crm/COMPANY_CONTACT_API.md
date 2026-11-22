@@ -116,3 +116,20 @@ after-commit listeners. Avoid listener ordering dependencies; compose dependent 
 Direct query-builder/bulk mutations and scope removal are privileged maintenance escape
 hatches, not supported extension points. Application HTTP/UI and its Policy remain outside
 the domain package.
+
+## Installed HTTP operations
+
+The composing Laravel host can expose the CRM declarations through Operations under
+`/api/v2`. Company create, list, show and contact association keep their existing
+operation IDs. Hosts authorize `crm.company.update` and `crm.company.delete` separately.
+
+- `PATCH /api/v2/companies/{companyId}` accepts `name`, `legal_name`, and `domain`.
+  Omitted fields keep their values. Explicit null clears either optional field.
+  The result carries the original company UUID and current normalized fields.
+- `DELETE /api/v2/companies/{companyId}` returns `{"id":"…","deleted":true}`.
+  It soft-deletes the company, retaining its UUID and association history.
+  Fresh company show and list requests exclude the deleted row.
+
+Both mutations require `Idempotency-Key` and current authorization. Use the
+installed host's verified workspace and principal. The request body carries no
+owner, workspace, or creator override.

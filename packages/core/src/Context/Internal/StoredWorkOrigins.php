@@ -23,12 +23,12 @@ final readonly class StoredWorkOrigins implements StoredWorkIssuer
     {
         $this->current->assert($scope);
 
-        return new StoredWorkProof($owner, $reference, $this->seal($scope, $owner, $reference));
+        return new StoredWorkProof(owner: $owner, reference: $reference, seal: $this->seal(scope: $scope, owner: $owner, reference: $reference));
     }
 
     public function verify(DataScope $scope, StoredWorkProof $proof): void
     {
-        if (! hash_equals($this->seal($scope, $proof->owner, $proof->reference), $proof->seal)) {
+        if (! hash_equals($this->seal(scope: $scope, owner: $proof->owner, reference: $proof->reference), $proof->seal)) {
             throw new ScopeContextMismatch('Unverified stored work provenance.');
         }
     }

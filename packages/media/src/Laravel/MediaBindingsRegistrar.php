@@ -57,7 +57,7 @@ final class MediaBindingsRegistrar implements PackageRegistrar
             (array) $app->make(Repository::class)->get('corex-media', []),
         ));
         $app->singleton(MediaPolicy::class, DenyMediaPolicy::class);
-        $app->scoped(MediaBlobs::class, static fn (Application $app): MediaBlobs => new MediaBlobs($app->make(VaulterDatabase::class), $app->make(DatabaseManager::class), $app->make(BlobStore::class), $app->make(BlobPins::class), $app->make(TenantContextResolver::class), $app->make(DataScopeFactory::class)));
+        $app->scoped(MediaBlobs::class, static fn (Application $app): MediaBlobs => new MediaBlobs(database: $app->make(VaulterDatabase::class), connections: $app->make(DatabaseManager::class), store: $app->make(BlobStore::class), pins: $app->make(BlobPins::class), tenants: $app->make(TenantContextResolver::class), scopes: $app->make(DataScopeFactory::class)));
         $app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore(connection: $app->make(DatabaseManager::class)->connection(), clock: $app->make(ClockInterface::class), blobs: $app->make(MediaBlobs::class),
             contexts: $app->make(TenantContextResolver::class), scopes: $app->make(DataScopeFactory::class),
             current: $app->make(CurrentWorkScope::class), codec: $app->make(DataScopeCodec::class),

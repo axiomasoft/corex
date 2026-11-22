@@ -6,7 +6,9 @@ use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Testing\ExtensionContract;
 
-$arguments = parseArguments(array_slice($argv, 1));
+require_once dirname(__DIR__).'/support/cli-arguments.php';
+
+$arguments = parseArguments(array_slice(\CoreX\Scripts\cliArguments(), 1));
 $vendor = $arguments['vendor'];
 $fixture = $arguments['fixture'];
 $class = $arguments['class'];

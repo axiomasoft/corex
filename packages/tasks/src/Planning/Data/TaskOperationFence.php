@@ -19,11 +19,11 @@ final readonly class TaskOperationFence
         public string $accountIncarnation,
         public string $restoreEpoch,
     ) {
-        ScopeIdentity::physical($deploymentId, $bindingId, $bindingGeneration, $accountIncarnation, $restoreEpoch);
+        ScopeIdentity::physical(deployment: $deploymentId, binding: $bindingId, generation: $bindingGeneration, incarnation: $accountIncarnation, epoch: $restoreEpoch);
     }
 
     public static function fromScope(DataScope $scope): self
     {
-        return new self($scope->deploymentId, $scope->bindingId, $scope->bindingGeneration, $scope->accountIncarnation, $scope->restoreEpoch);
+        return new self(deploymentId: $scope->deploymentId, bindingId: $scope->bindingId, bindingGeneration: $scope->bindingGeneration, accountIncarnation: $scope->accountIncarnation, restoreEpoch: $scope->restoreEpoch);
     }
 }

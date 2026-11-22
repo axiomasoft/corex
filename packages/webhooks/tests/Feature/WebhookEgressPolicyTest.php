@@ -178,7 +178,7 @@ final class WebhookEgressPolicyTest extends TestCase
 
     private function subscription(): WebhookSubscription
     {
-        return new WebhookSubscription('subscription', 0, 'v1', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $this->clock->now(), $this->clock->now());
+        return new WebhookSubscription('subscription', 0, 'v2', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $this->clock->now(), $this->clock->now());
     }
 
     private function assertDenied(callable $operation): void

@@ -1,0 +1,556 @@
+{
+  "id": "transport",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 340,
+  "retain_install_evidence": true,
+  "distinct_connections": true,
+  "variants": {
+    "cloud": {
+      "host_components": [
+        "bulk-transfer/host/app/BulkTransfer"
+      ],
+      "profile": {
+        "id": "canonical-installed-notes-v2",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "b",
+          "budget"
+        ],
+        "default_database": "control",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-tenancy",
+          "axiomasoft/corex-access",
+          "axiomasoft/corex-operations",
+          "axiomasoft/corex-tools",
+          "axiomasoft/corex-webhooks"
+        ],
+        "prerequisites": [
+          "axiomasoft/tenant-laravel"
+        ],
+        "host_require": {
+          "opis/json-schema": "2.6.2"
+        }
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/native.php",
+          "setup"
+        ],
+        "http-first": [
+          "php",
+          "{fixture}/native.php",
+          "http-first"
+        ],
+        "observe-open": [
+          "php",
+          "{fixture}/native.php",
+          "observe-open"
+        ],
+        "mcp-replay": [
+          "php",
+          "{fixture}/native.php",
+          "mcp-replay"
+        ],
+        "mcp-first": [
+          "php",
+          "{fixture}/native.php",
+          "mcp-first"
+        ],
+        "http-replay": [
+          "php",
+          "{fixture}/native.php",
+          "http-replay"
+        ],
+        "conflicts": [
+          "php",
+          "{fixture}/native.php",
+          "conflicts"
+        ],
+        "output-revoke": [
+          "php",
+          "{fixture}/native.php",
+          "output-revoke"
+        ],
+        "output-read": [
+          "php",
+          "{fixture}/native.php",
+          "output-read"
+        ],
+        "denials": [
+          "php",
+          "{fixture}/native.php",
+          "denials"
+        ],
+        "native-versions": [
+          "php",
+          "{fixture}/native.php",
+          "native-versions"
+        ],
+        "carriers": [
+          "php",
+          "{fixture}/native.php",
+          "carriers"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "http-first",
+          "environment": {
+            "COREX_SCENARIO_NOTES_OUTER": "1"
+          }
+        },
+        {
+          "action": "await",
+          "name": "notes-outer-open",
+          "process": "http-first"
+        },
+        {
+          "action": "start",
+          "name": "observe-open"
+        },
+        {
+          "action": "complete",
+          "name": "observe-open"
+        },
+        {
+          "action": "release",
+          "name": "notes-outer-open"
+        },
+        {
+          "action": "complete",
+          "name": "http-first"
+        },
+        {
+          "action": "start",
+          "name": "mcp-replay"
+        },
+        {
+          "action": "complete",
+          "name": "mcp-replay"
+        },
+        {
+          "action": "start",
+          "name": "mcp-first"
+        },
+        {
+          "action": "complete",
+          "name": "mcp-first"
+        },
+        {
+          "action": "start",
+          "name": "http-replay"
+        },
+        {
+          "action": "complete",
+          "name": "http-replay"
+        },
+        {
+          "action": "start",
+          "name": "conflicts"
+        },
+        {
+          "action": "complete",
+          "name": "conflicts"
+        },
+        {
+          "action": "start",
+          "name": "output-revoke"
+        },
+        {
+          "action": "complete",
+          "name": "output-revoke"
+        },
+        {
+          "action": "start",
+          "name": "output-read"
+        },
+        {
+          "action": "complete",
+          "name": "output-read"
+        },
+        {
+          "action": "start",
+          "name": "denials"
+        },
+        {
+          "action": "complete",
+          "name": "denials"
+        },
+        {
+          "action": "start",
+          "name": "native-versions"
+        },
+        {
+          "action": "complete",
+          "name": "native-versions"
+        },
+        {
+          "action": "start",
+          "name": "carriers"
+        },
+        {
+          "action": "complete",
+          "name": "carriers"
+        }
+      ]
+    },
+    "equipment": {
+      "host_components": [
+        "bulk-transfer/host/app/BulkTransfer",
+        "field-search/host/app/FieldSearch"
+      ],
+      "profile": {
+        "id": "installed-equipment-transport-v2",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "budget",
+          "sink"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-tools",
+          "axiomasoft/corex-webhooks",
+          "axiomasoft/corex-intl",
+          "axiomasoft/corex-search-intl",
+          "axiomasoft/corex-search-custom-fields",
+          "axiomasoft/corex-search-meilisearch"
+        ],
+        "search_custom_fields": "enabled",
+        "meilisearch": "1.16.0",
+        "extension_fixture": {
+          "id": "equipment-registry",
+          "version": "1.0.0",
+          "kind": "equipment"
+        },
+        "host_require": {
+          "opis/json-schema": "2.6.2"
+        }
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/equipment.php",
+          "setup"
+        ],
+        "async-http": [
+          "php",
+          "{fixture}/equipment.php",
+          "async-http"
+        ],
+        "async-mcp": [
+          "php",
+          "{fixture}/equipment.php",
+          "async-mcp"
+        ],
+        "bulk-work": [
+          "php",
+          "{fixture}/equipment.php",
+          "bulk-work"
+        ],
+        "bulk-routes": [
+          "php",
+          "{fixture}/equipment.php",
+          "bulk-routes"
+        ],
+        "index": [
+          "php",
+          "{fixture}/equipment.php",
+          "index"
+        ],
+        "metadata-first": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-first"
+        ],
+        "metadata-same": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-same"
+        ],
+        "metadata-fields-race": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-fields-race"
+        ],
+        "metadata-search-race": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-search-race"
+        ],
+        "metadata-revoke": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-revoke"
+        ],
+        "metadata-denied": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-denied"
+        ],
+        "schema-change": [
+          "php",
+          "{fixture}/equipment.php",
+          "schema-change"
+        ],
+        "schema-index": [
+          "php",
+          "{fixture}/equipment.php",
+          "schema-index"
+        ],
+        "metadata-schema": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-schema"
+        ],
+        "replace-index": [
+          "php",
+          "{fixture}/equipment.php",
+          "replace-index"
+        ],
+        "metadata-views": [
+          "php",
+          "{fixture}/equipment.php",
+          "metadata-views"
+        ],
+        "webhook-create": [
+          "php",
+          "{fixture}/webhooks.php",
+          "create"
+        ],
+        "webhook-deliver": [
+          "php",
+          "{fixture}/webhooks.php",
+          "deliver"
+        ],
+        "webhook-management": [
+          "php",
+          "{fixture}/webhooks.php",
+          "management"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "async-http"
+        },
+        {
+          "action": "complete",
+          "name": "async-http"
+        },
+        {
+          "action": "start",
+          "name": "async-mcp"
+        },
+        {
+          "action": "complete",
+          "name": "async-mcp"
+        },
+        {
+          "action": "start",
+          "name": "bulk-work"
+        },
+        {
+          "action": "complete",
+          "name": "bulk-work"
+        },
+        {
+          "action": "start",
+          "name": "bulk-routes"
+        },
+        {
+          "action": "complete",
+          "name": "bulk-routes"
+        },
+        {
+          "action": "start",
+          "name": "webhook-create"
+        },
+        {
+          "action": "complete",
+          "name": "webhook-create"
+        },
+        {
+          "action": "start",
+          "name": "webhook-deliver"
+        },
+        {
+          "action": "complete",
+          "name": "webhook-deliver"
+        },
+        {
+          "action": "start",
+          "name": "webhook-management"
+        },
+        {
+          "action": "complete",
+          "name": "webhook-management"
+        },
+        {
+          "action": "start",
+          "name": "index"
+        },
+        {
+          "action": "complete",
+          "name": "index"
+        },
+        {
+          "action": "start",
+          "name": "metadata-first"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-first"
+        },
+        {
+          "action": "start",
+          "name": "metadata-same"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-same"
+        },
+        {
+          "action": "start",
+          "name": "metadata-fields-race",
+          "environment": {
+            "COREX_SCENARIO_METADATA_SNAPSHOT_BARRIER": "metadata-fields-policy"
+          }
+        },
+        {
+          "action": "await",
+          "name": "metadata-fields-policy",
+          "process": "metadata-fields-race"
+        },
+        {
+          "action": "start",
+          "name": "metadata-search-race",
+          "environment": {
+            "COREX_SCENARIO_METADATA_SNAPSHOT_BARRIER": "metadata-search-policy"
+          }
+        },
+        {
+          "action": "await",
+          "name": "metadata-search-policy",
+          "process": "metadata-search-race"
+        },
+        {
+          "action": "start",
+          "name": "metadata-revoke"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-revoke"
+        },
+        {
+          "action": "release",
+          "name": "metadata-fields-policy"
+        },
+        {
+          "action": "await",
+          "name": "metadata-fields-policy-snapshot",
+          "process": "metadata-fields-race"
+        },
+        {
+          "action": "release",
+          "name": "metadata-fields-policy-snapshot"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-fields-race"
+        },
+        {
+          "action": "release",
+          "name": "metadata-search-policy"
+        },
+        {
+          "action": "await",
+          "name": "metadata-search-policy-snapshot",
+          "process": "metadata-search-race"
+        },
+        {
+          "action": "release",
+          "name": "metadata-search-policy-snapshot"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-search-race"
+        },
+        {
+          "action": "start",
+          "name": "metadata-denied"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-denied"
+        },
+        {
+          "action": "start",
+          "name": "schema-change"
+        },
+        {
+          "action": "complete",
+          "name": "schema-change"
+        },
+        {
+          "action": "start",
+          "name": "schema-index"
+        },
+        {
+          "action": "complete",
+          "name": "schema-index"
+        },
+        {
+          "action": "start",
+          "name": "metadata-schema"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-schema"
+        },
+        {
+          "action": "start",
+          "name": "replace-index"
+        },
+        {
+          "action": "complete",
+          "name": "replace-index"
+        },
+        {
+          "action": "start",
+          "name": "metadata-views"
+        },
+        {
+          "action": "complete",
+          "name": "metadata-views"
+        }
+      ]
+    }
+  }
+}

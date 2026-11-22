@@ -12,17 +12,6 @@ use Stringable;
 #[Internal]
 final class Value
 {
-    public static function field(object $row, string $name): mixed
-    {
-        $fields = get_object_vars($row);
-
-        if (! array_key_exists($name, $fields)) {
-            throw new RuntimeException('Missing stored field: '.$name);
-        }
-
-        return $fields[$name];
-    }
-
     public static function text(mixed $value): string
     {
         if (! is_string($value) && ! is_int($value) && ! $value instanceof Stringable) {

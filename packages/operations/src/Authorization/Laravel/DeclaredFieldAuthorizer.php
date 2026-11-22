@@ -26,7 +26,7 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
         return self::declares(declared: $operation->writeFields, path: $path);
     }
 
-    /** @param array<string, mixed> $input */
+    /** @param array<array-key, mixed> $input */
     public static function firstForbiddenWrite(
         Operation $operation,
         RequestContext $context,

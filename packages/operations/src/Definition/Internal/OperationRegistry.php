@@ -20,6 +20,10 @@ final readonly class OperationRegistry implements \CoreX\Operations\Definition\C
     /** @return list<Operation> Installed code catalogue; activation and authorization are checked on every dispatch. */
     public function all(string $version): array
     {
+        if ($version !== 'v2') {
+            return [];
+        }
+
         $operations = [];
         $keys = [];
 

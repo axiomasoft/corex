@@ -43,7 +43,7 @@ final readonly class FieldDefinition
         public string $localizationPolicy = 'none',
         public string $lifecycle = 'active',
     ) {
-        FieldList::check($uses, [FieldUse::class]);
+        FieldList::check(values: $uses, classes: [FieldUse::class]);
 
         if (preg_match('/\A[a-z][a-z0-9_]{0,63}\z/D', $machineKey) !== 1 || $owner === '' || strlen($owner) > 191
             || $codecVersion < 1 || $revision < 1
@@ -83,8 +83,8 @@ final readonly class FieldDefinition
     /** @param DefinitionRow $row */
     public static function fromArray(array $row): self
     {
-        return new self(new FieldId($row['id']), new EntityHandle($row['entity']), $row['machine_key'], new FieldTypeId($row['type']),
-            $row['owner'], $row['codec_version'], $row['revision'], $row['nullable'], $row['constraints'], array_map(FieldUse::from(...), $row['uses']),
-            $row['presentation'], $row['index_policy'], $row['localization_policy'], $row['lifecycle']);
+        return new self(id: new FieldId($row['id']), entity: new EntityHandle($row['entity']), machineKey: $row['machine_key'], type: new FieldTypeId($row['type']),
+            owner: $row['owner'], codecVersion: $row['codec_version'], revision: $row['revision'], nullable: $row['nullable'], constraints: $row['constraints'], uses: array_map(FieldUse::from(...), $row['uses']),
+            presentation: $row['presentation'], indexPolicy: $row['index_policy'], localizationPolicy: $row['localization_policy'], lifecycle: $row['lifecycle']);
     }
 }

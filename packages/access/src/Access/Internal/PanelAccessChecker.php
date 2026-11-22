@@ -36,20 +36,20 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
 
     public function allowed(Principal $p, string $entityKey, string $action): bool
     {
-        return $this->decide($p, $entityKey, $action);
+        return $this->decide(principal: $p, entity: $entityKey, action: $action);
     }
 
     public function canOnRecord(Principal $p, string $action, object $record): bool
     {
         $entity = $this->entities->forModel($record::class);
 
-        if ($entity === null || ! $this->decide($p, $entity->handle, $action, $record)) {
+        if ($entity === null || ! $this->decide(principal: $p, entity: $entity->handle, action: $action, record: $record)) {
             return false;
         }
 
         return isset($this->options->policyPanels[$entity->handle.'.'.$action])
-            || $this->matrix->directlyGranted($p, $entity->handle, $action)
-            || $this->predicate->matches($this->matrix->scope($p, $entity->handle, $action), $record, $p);
+            || $this->matrix->directlyGranted(principal: $p, entity: $entity->handle, action: $action)
+            || $this->predicate->matches(scope: $this->matrix->scope(principal: $p, entity: $entity->handle, action: $action), record: $record, p: $p);
     }
 
     public function apply(Builder $q, Principal $p, string $entityKey, string $action, ?RecordContext $ctx = null): Builder
@@ -72,11 +72,11 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
             try {
                 return $panel->visibility()->visibleTo($panel->definition(), $q, $this->contexts->subject($p), PermissionKey::of($owner, $permission)->full(), $scope);
             } catch (VisibilityNotSupportedException $exception) {
-                throw new ExactVisibilityUnavailable($exception->reason, $exception->component, $exception);
+                throw new ExactVisibilityUnavailable(reason: $exception->reason, component: $exception->component, previous: $exception);
             }
         }
 
-        if (! $this->decide($p, $entityKey, $action)) {
+        if (! $this->decide(principal: $p, entity: $entityKey, action: $action)) {
             $q->getQuery()->whereRaw('1 = 0');
 
             return $q;
@@ -84,14 +84,14 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
 
         // A model-defined tenant boundary needs its owning panel to provide an exact SQL mapping.
         if ($q->getModel() instanceof ProvidesAccessScope) {
-            throw new ExactVisibilityUnavailable('resource_owner_adapter', $q->getModel()::class);
+            throw new ExactVisibilityUnavailable(reason: 'resource_owner_adapter', component: $q->getModel()::class);
         }
 
-        if ($this->matrix->directlyGranted($p, $entityKey, $action)) {
+        if ($this->matrix->directlyGranted(principal: $p, entity: $entityKey, action: $action)) {
             return $q;
         }
 
-        return $this->predicate->applyTo($q, $this->matrix->scope($p, $entityKey, $action, $ctx), $p);
+        return $this->predicate->applyTo(q: $q, scope: $this->matrix->scope(principal: $p, entity: $entityKey, action: $action, context: $ctx), p: $p);
     }
 
     private function decide(Principal $principal, string $entity, string $action, ?object $record = null): bool
@@ -122,7 +122,7 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
         $panel = MatrixPanel::getId();
         $model = MatrixSubject::fromPrincipal($principal);
         $request = AccessRequest::for(SubjectRef::of($model->getMorphClass(), $subject->key()), PermissionKey::of($panel, MatrixPermission::Evaluate->value))
-            ->on(null, new MatrixCell($principal, $entity, $action, $scope))
+            ->on(null, new MatrixCell(principal: $principal, entity: $entity, action: $action, scope: $scope))
             ->withSubjectModel($model);
 
         return $this->authorization->panel($panel)->decide($request)->allowed();

@@ -36,9 +36,9 @@ final readonly class CrmModuleReferences implements ModuleTableReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'crm_sources' => [$tenant, []],
             'crm_companies' => [$tenant, []],
             'crm_contacts' => [$tenant, []],
@@ -51,6 +51,6 @@ final readonly class CrmModuleReferences implements ModuleTableReferences
             'crm_deal_contacts' => [$tenant, []],
             'crm_activities' => [$tenant, []],
             'crm_activity_targets' => [$tenant, []],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

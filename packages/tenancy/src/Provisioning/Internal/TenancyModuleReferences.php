@@ -29,7 +29,7 @@ final readonly class TenancyModuleReferences implements ModuleReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
         $name = $this->options->centralConnection;
 
         if ($name === '') {
@@ -37,7 +37,7 @@ final readonly class TenancyModuleReferences implements ModuleReferences
         }
         $central = $this->connections->connection($name);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'root_clusters' => [$central, ['template_version']],
             'root_templates' => [$central, []],
             'root_identities' => [$central, []],
@@ -64,6 +64,6 @@ final readonly class TenancyModuleReferences implements ModuleReferences
             'sessions' => [$tenant, []],
             'tnt_membership_pairs' => [$tenant, ['operation_id']],
             'tnt_membership_inbox' => [$tenant, []],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

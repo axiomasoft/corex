@@ -41,7 +41,7 @@ final readonly class DeclaredSchema
                 continue;
             }
             foreach ($source->fields($entity) as $field) {
-                $this->add($image, $entity, $source->owner(), $field);
+                $this->add(image: $image, entity: $entity, owner: $source->owner(), field: $field);
             }
         }
         foreach ($this->modules?->compiled()->entityFields ?? [] as $compiled) {
@@ -50,9 +50,9 @@ final readonly class DeclaredSchema
             if ($field->entityHandle !== $entity->value || $field->kind !== 'scalar' || $this->modules?->isActive($compiled->declaringModule, $context) !== true) {
                 continue;
             }
-            $this->add($image, $entity, $compiled->declaringModule, new FieldDefinition(
-                new FieldId(SchemaValue::text($field->meta['field_id'] ?? $field->meta['attribute_id'] ?? null)), $entity, $field->fieldHandle,
-                new FieldTypeId($field->type ?? throw new SchemaConflict('missing-field-type')), $compiled->declaringModule,
+            $this->add(image: $image, entity: $entity, owner: $compiled->declaringModule, field: new FieldDefinition(
+                id: new FieldId(SchemaValue::text($field->meta['field_id'] ?? $field->meta['attribute_id'] ?? null)), entity: $entity, machineKey: $field->fieldHandle,
+                type: new FieldTypeId($field->type ?? throw new SchemaConflict('missing-field-type')), owner: $compiled->declaringModule,
                 codecVersion: SchemaValue::integer($field->meta['codec_version'] ?? 1), nullable: ! $field->isRequired, uses: [FieldUse::Read, FieldUse::Write],
             ));
         }
@@ -75,7 +75,7 @@ final readonly class DeclaredSchema
                 throw new SchemaConflict('conflicting-declared-machine-key');
             }
         }
-        $this->types->resolve($field->type, $field->codecVersion);
-        $image->put($field, 'code', $field->revision);
+        $this->types->resolve(type: $field->type, version: $field->codecVersion);
+        $image->put(field: $field, source: 'code', storageRevision: $field->revision);
     }
 }

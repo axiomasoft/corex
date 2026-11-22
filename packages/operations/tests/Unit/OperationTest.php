@@ -11,7 +11,7 @@ use Packman\Modules\Data\Extenders\Api;
 $schema = ['type' => 'object'];
 
 it('projects compiler metadata onto the runtime descriptor', function () use ($schema): void {
-    $api = Api::operation('notes.create', 'POST', '/notes', OperationHandlerDouble::class, 'notes.write', $schema, $schema)
+    $api = Api::operation('notes.create', 'POST', '/notes', OperationHandlerDouble::class, 'notes.write', $schema, $schema, version: 'v2')
         ->asCommand()
         ->requiresScopes('notes.write')
         ->idempotency('required')

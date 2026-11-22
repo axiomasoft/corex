@@ -26,7 +26,9 @@ const MAX_BINDINGS = 8;
 
 $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/provider-size.json';
-$reportOnly = in_array('--report', $argv, true);
+require_once __DIR__.'/support/cli-arguments.php';
+
+$reportOnly = in_array('--report', \CoreX\Scripts\cliArguments(), true);
 
 $config = loadProviderSizeConfig($configPath);
 $measured = measureProviders($repoRoot);

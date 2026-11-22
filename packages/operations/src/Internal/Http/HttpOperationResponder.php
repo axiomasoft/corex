@@ -6,9 +6,8 @@ namespace CoreX\Operations\Internal\Http;
 
 use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Invocation\Data\AcceptedOperation;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Http\JsonResponse;
@@ -18,14 +17,14 @@ use Packman\Attributes\Internal;
 #[Internal]
 final class HttpOperationResponder
 {
-    public function project(?Operation $operation, JsonResponse $response): JsonResponse
+    public function project(Operation $operation, JsonResponse $response, ?AcceptedOperation $accepted): JsonResponse
     {
-        if (! $operation instanceof Operation || $response->isClientError() || $response->isServerError()) {
+        if ($response->isClientError() || $response->isServerError()) {
             return $response;
         }
 
-        if ($operation->mode === OperationMode::AsyncCommand && $response->getStatusCode() === 202) {
-            $response->header('Location', $this->location($response));
+        if ($accepted !== null) {
+            $response->header('Location', $accepted->statusUri);
         }
 
         $deprecation = $operation->deprecation;
@@ -49,20 +48,6 @@ final class HttpOperationResponder
         }
 
         return $response;
-    }
-
-    private function location(JsonResponse $response): string
-    {
-        $payload = $response->getData(true);
-        $data = is_array($payload) ? ($payload['data'] ?? null) : null;
-        $operationId = is_array($data) ? ($data['operation_id'] ?? null) : null;
-        $statusUrl = is_array($data) ? ($data['status_url'] ?? null) : null;
-
-        if (! is_string($operationId) || $operationId === '' || ! is_string($statusUrl) || preg_match('#\A(?:https://\S+|/[^\s]*)\z#', $statusUrl) !== 1) {
-            throw new ApiError(errorCode: OperationsErrorCode::InvalidRequest, status: 422, message: 'Async acceptance is incomplete.');
-        }
-
-        return $statusUrl;
     }
 
     private function httpDate(string $day): string

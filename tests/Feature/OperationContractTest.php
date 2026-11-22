@@ -14,6 +14,9 @@ use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Invocation\Contracts\OperationAcceptance;
+use CoreX\Operations\Invocation\Data\AcceptedOperation;
+use CoreX\Operations\Invocation\Internal\AuthenticatedRequestContext;
 use CoreX\Operations\Invocation\Internal\ResolvedContext;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Laravel\Support\ApiOptions;
@@ -37,12 +40,14 @@ use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Symfony\Component\HttpFoundation\Response;
 
 final class OperationContractTest extends TestCase
 {
@@ -55,6 +60,12 @@ final class OperationContractTest extends TestCase
     protected function getPackageProviders($app): array
     {
         return [...parent::getPackageProviders($app), ToolsServiceProvider::class];
+    }
+
+    protected function defineEnvironment($app): void
+    {
+        parent::defineEnvironment($app);
+        $app['config']->set('corex-operations.routes.middleware', [P13VerifiedClient::class]);
     }
 
     protected function setUp(): void
@@ -79,12 +90,12 @@ final class OperationContractTest extends TestCase
 
         // The P14 consumer declaration uses only the frozen module extender and handler contract.
         $command = P14FrozenConsumer::declaration($input, $output);
-        $query = Api::operation('notes.read', 'GET', '/notes/{id}', P13QueryHandler::class, 'notes.read', self::schema(), $output)
+        $query = Api::operation('notes.read', 'GET', '/notes/{id}', P13QueryHandler::class, 'notes.read', self::schema(), $output, version: 'v2')
             ->asQuery()->fields(read: ['/id', '/title', '/actor', '/account'], write: []);
-        $async = Api::operation('notes.export', 'POST', '/notes/export', P13AsyncHandler::class, 'notes.write', $asyncInput, $asyncOutput)
+        $async = Api::operation('notes.export', 'POST', '/notes/export', P13AsyncHandler::class, 'notes.write', $asyncInput, $asyncOutput, version: 'v2', successStatus: 202)
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
-        $tool = Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'write', 'domain-key', $input, $output, ['title' => 'title']);
-        $asyncTool = Api::exposeTool('notes.export', 'v1', 'notes.export', 'v1', 'write', 'domain-key', $asyncInput, $asyncOutput, ['format' => 'format']);
+        $tool = Api::exposeTool('notes.create', 'v2', 'notes.create', 'v2', 'write', 'domain-key', $input, $output, ['title' => 'title']);
+        $asyncTool = Api::exposeTool('notes.export', 'v2', 'notes.export', 'v2', 'write', 'domain-key', $asyncInput, $asyncOutput, ['format' => 'format']);
         $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$query, $command, $async, $tool, $asyncTool]),
         ], installedPackages: []));
@@ -155,25 +166,32 @@ final class OperationContractTest extends TestCase
         }
 
         self::assertSame(1, $operationRoutes);
-        $query = $this->getJson('/api/v1/notes/n-1');
+        $this->getJson('/api/v1/notes/n-1')->assertNotFound();
+        $this->getJson('/api/v3/notes/n-1')->assertNotFound();
+        $query = $this->getJson('/api/v2/notes/n-1');
         self::assertSame(200, $query->getStatusCode(), (string) $query->getContent());
         $query->assertJsonPath('data.id', 'n-1')->assertJsonPath('data.account', 'account-a');
 
-        $command = $this->call('POST', '/api/v1/notes', server: [
+        $command = $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
             'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
         ], content: '{"title":"Created","account":"forged"}');
-        $command->assertStatus(422);
+        $command->assertForbidden()->assertJsonPath('code', 'operations.access_denied')->assertJsonPath('path', '/account');
+        $this->call('POST', '/api/v2/notes', server: [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
+        ], content: '{"title":42}')->assertUnprocessable()->assertJsonPath('code', 'operations.validation_failed');
         self::assertSame(0, P13CommandHandler::$calls);
 
-        $command = $this->call('POST', '/api/v1/notes', server: [
+        $command = $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
             'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
         ], content: '{"title":"Created"}');
         $command->assertOk()->assertJsonPath('data.account', 'account-a');
-        $replay = $this->call('POST', '/api/v1/notes', server: [
+        $replay = $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
             'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
@@ -181,17 +199,17 @@ final class OperationContractTest extends TestCase
         $replay->assertOk();
         self::assertSame(1, P13CommandHandler::$calls);
 
-        $async = $this->call('POST', '/api/v1/notes/export', server: [
+        $async = $this->call('POST', '/api/v2/notes/export', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
             'HTTP_IDEMPOTENCY_KEY' => 'p13-export-1',
         ], content: '{}');
-        $async->assertStatus(202)->assertHeader('Location', '/api/v1/notes/export/status');
+        $async->assertStatus(202)->assertHeader('Location', '/api/v2/notes/export/status');
 
         $asyncDeclaration = $this->toolDeclaration('notes.export');
         $asyncTool = $this->app->make(ToolInvoker::class)->invoke(
-            new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('p13-export-tool', 'v1', 'notes.export', 'POST')),
-            new ToolCall('notes.export', 'v1', ToolDescriptorFactory::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'p13-export-tool', operationKey: 'p13-export-1'),
+            $this->toolContext('p13-export-tool', 'notes.export'),
+            new ToolCall('notes.export', 'v2', ToolDescriptorFactory::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'p13-export-tool', operationKey: 'p13-export-1'),
         );
         self::assertSame(ToolOutcome::Committed, $asyncTool->outcome, (string) $asyncTool->errorCode);
         self::assertTrue($asyncTool->replayed);
@@ -199,9 +217,9 @@ final class OperationContractTest extends TestCase
 
         $declaration = $this->toolDeclaration('notes.create');
         $descriptor = ToolDescriptorFactory::fromDeclaration($declaration);
-        $context = new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('p13-tool', 'v1', 'notes.create', 'POST'));
+        $context = $this->toolContext('p13-tool', 'notes.create');
         $tool = $this->app->make(ToolInvoker::class)->invoke($context, new ToolCall(
-            'notes.create', 'v1', $descriptor->contractHash,
+            'notes.create', 'v2', $descriptor->contractHash,
             new JsonObject(JsonCanonical::encode(['title' => 'Tool'])), 'p13-tool', operationKey: 'p13-tool-1',
         ));
         self::assertSame(ToolOutcome::Committed, $tool->outcome, (string) $tool->errorCode);
@@ -216,15 +234,18 @@ final class OperationContractTest extends TestCase
     public function test_snapshot_check_rejects_stale_bytes_without_rewriting_them(): void
     {
         $directory = sys_get_temp_dir().'/corex-p13-freeze-'.bin2hex(random_bytes(6));
-        $fixture = dirname(__DIR__, 2).'/tests/fixtures/public-error-contract.php';
 
         try {
-            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--fixture' => $fixture])->assertSuccessful();
-            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
+            foreach (['v1', 'v3'] as $unsupported) {
+                $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--major' => $unsupported])->assertExitCode(2);
+                self::assertDirectoryDoesNotExist($directory);
+            }
+            $this->artisan('corex:operations:snapshot', ['directory' => $directory])->assertSuccessful();
+            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--major' => 'v2', '--check' => true])->assertSuccessful();
             $path = $directory.'/operations.json';
             $stale = (string) file_get_contents($path).' ';
             file_put_contents($path, $stale);
-            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--fixture' => $fixture, '--check' => true])->assertExitCode(1);
+            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--check' => true])->assertExitCode(1);
             self::assertSame($stale, file_get_contents($path));
         } finally {
             foreach (glob($directory.'/*') ?: [] as $path) {
@@ -257,6 +278,14 @@ final class OperationContractTest extends TestCase
     private static function schema(array $properties = []): array
     {
         return ['type' => 'object', 'additionalProperties' => false, 'properties' => $properties];
+    }
+
+    private function toolContext(string $requestId, string $operation): RequestContext
+    {
+        return new AuthenticatedRequestContext(
+            new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata($requestId, 'v2', $operation, 'POST')),
+            P13VerifiedClient::ID,
+        );
     }
 
     private function toolDeclaration(string $code): Api
@@ -295,7 +324,7 @@ final class P13CommandHandler implements OperationHandler
     }
 }
 
-final class P13AsyncHandler implements OperationHandler
+final class P13AsyncHandler implements OperationAcceptance, OperationHandler
 {
     public static int $calls = 0;
 
@@ -303,7 +332,24 @@ final class P13AsyncHandler implements OperationHandler
     {
         self::$calls++;
 
-        return ['operation_id' => 'job-1', 'status_url' => '/api/v1/notes/export/status'];
+        return ['operation_id' => 'job-1', 'status_url' => '/api/v2/notes/export/status'];
+    }
+
+    public function acceptance(RequestContext $context, array $result): AcceptedOperation
+    {
+        return new AcceptedOperation('job-1', '/api/v2/notes/export/status');
+    }
+}
+
+final class P13VerifiedClient
+{
+    public const string ID = 'test-p13-client';
+
+    public function handle(Request $request, Closure $next): Response
+    {
+        $request->attributes->set('corex.client_id', self::ID);
+
+        return $next($request);
     }
 }
 
@@ -316,7 +362,7 @@ final class P14FrozenConsumer
      */
     public static function declaration(array $input, array $output): Api
     {
-        return Api::operation('notes.create', 'POST', '/notes', P13CommandHandler::class, 'notes.write', $input, $output, ['title' => ['required', 'string']])
+        return Api::operation('notes.create', 'POST', '/notes', P13CommandHandler::class, 'notes.write', $input, $output, ['title' => ['required', 'string']], version: 'v2')
             ->asCommand()->idempotency('required')->effect('tenant_transactional')
             ->fields(read: ['/id', '/title', '/actor', '/account'], write: ['/title']);
     }

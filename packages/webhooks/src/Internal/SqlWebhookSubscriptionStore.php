@@ -59,7 +59,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertEgress(scope: $scope, url: $subscription->endpointUrl);
 
         return $this->connection->transaction(function () use ($scope, $subscription): WebhookSubscription {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'subscription', ['declaration' => $subscription]);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-webhooks', kind: 'subscription', witness: ['declaration' => $subscription]);
             $this->assertScope($scope);
 
             if ($this->connection->table(self::Table)->count() >= self::CAP) {
@@ -117,7 +117,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertEgress(scope: $scope, url: $replacement->endpointUrl);
 
         return $this->connection->transaction(function () use ($scope, $id, $expectedRevision, $replacement): WebhookSubscription {
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'subscription-update', ['id' => $id, 'replacement' => $replacement]);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-webhooks', kind: 'subscription-update', witness: ['id' => $id, 'replacement' => $replacement]);
             $this->assertScope($scope);
             $updated = $this->connection->table(self::Table)
                 ->where('id', $id)
@@ -182,7 +182,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
     private function assertScope(DataScope $scope): void
     {
-        $this->contexts->assert($scope, $this->connection);
+        $this->contexts->assert(scope: $scope, connection: $this->connection);
     }
 
     private function assertRevision(int $expectedRevision): void

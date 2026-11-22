@@ -106,12 +106,21 @@ final readonly class OpisToolSchemaValidator
 
         while ($queue !== [] && count($errors) < SchemaProfile::MAX_ERRORS) {
             $current = array_shift($queue);
-            $errors[] = [
-                'code' => $current->keyword(),
-                'pointer' => self::pointer(array_values($current->data()->fullPath())),
-            ];
+            $children = $current->subErrors();
 
-            foreach ($current->subErrors() as $subError) {
+            if ($children === []) {
+                // Opis wraps the same violation differently across minor/patch releases.
+                $code = $current->keyword();
+                $path = self::pointer(array_values($current->data()->fullPath()));
+
+                if ($code !== '' && ! self::isDeclaredPropertyEcho($current)) {
+                    $errors[$path."\0".$code] = ['code' => $code, 'pointer' => $path];
+                }
+
+                continue;
+            }
+
+            foreach ($children as $subError) {
                 if (! $subError instanceof ValidationError) {
                     throw new InvalidArgumentException('Invalid schema validation suberror.');
                 }
@@ -119,7 +128,25 @@ final readonly class OpisToolSchemaValidator
             }
         }
 
-        return $errors;
+        ksort($errors, SORT_STRING);
+
+        return array_values($errors);
+    }
+
+    private static function isDeclaredPropertyEcho(ValidationError $error): bool
+    {
+        if ($error->keyword() !== 'additionalProperties') {
+            return false;
+        }
+
+        $schema = $error->schema()->info()->data();
+        $reported = $error->args()['properties'] ?? null;
+        $declared = is_object($schema) ? ($schema->properties ?? null) : null;
+
+        // Older Opis releases can mark a failed declared property as also unchecked.
+        return is_object($schema) && ($schema->additionalProperties ?? null) === false
+            && is_object($declared) && is_array($reported) && $reported !== []
+            && array_all($reported, static fn (mixed $name): bool => is_string($name) && property_exists($declared, $name));
     }
 
     /**

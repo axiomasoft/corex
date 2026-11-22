@@ -51,14 +51,14 @@ final readonly class ConversionCoordinator
 
         return $this->connection->transaction(function () use ($fileId, $profile, $digest): MediaConversionRef {
             $scope = $this->operations->currentConversionScope();
-            $this->operations->enlist(...ReferenceWrites::targets($scope, 'axiomasoft/corex-media', 'conversion-profile', ['profile' => $profile->key, 'digest' => $digest]));
+            $this->operations->enlist(...ReferenceWrites::targets(scope: $scope, producer: 'axiomasoft/corex-media', kind: 'conversion-profile', witness: ['profile' => $profile->key, 'digest' => $digest]));
             $identity = $this->operations->conversionIdentity($scope);
             $file = $this->connection->table('med_files')->where('id', $fileId)->where($identity)->lockForUpdate()->first();
 
             if ($file === null || $file->state !== 'ready') {
                 throw new MediaOperationConflict('Conversion source unavailable.');
             }
-            $ref = new MediaConversionRef($this->operations->conversionKey($scope, $fileId, $profile->key, $digest, Value::integer($file->version)), $fileId, $profile->key);
+            $ref = new MediaConversionRef(id: $this->operations->conversionKey(scope: $scope, fileId: $fileId, profileKey: $profile->key, profileDigest: $digest, sourceVersion: Value::integer($file->version)), fileId: $fileId, profile: $profile->key);
             $conversion = $this->connection->table('med_conversions')->where([
                 ...$identity,
                 'file_id' => $fileId,
@@ -74,7 +74,7 @@ final readonly class ConversionCoordinator
                     $this->enqueue(fileId: $fileId, profileKey: $profile->key, profileDigest: $digest, sourceVersion: Value::integer($file->version));
                 }
 
-                if ($this->operations->conversionOrigin($fileId, $profile->key, $ref->id) === null) {
+                if ($this->operations->conversionOrigin(fileId: $fileId, profileKey: $profile->key, operationKey: $ref->id) === null) {
                     throw new MediaOperationConflict('Conversion receipt belongs to an unavailable fence.');
                 }
 
@@ -99,7 +99,7 @@ final readonly class ConversionCoordinator
 
     private function enqueue(string $fileId, string $profileKey, string $profileDigest, int $sourceVersion): void
     {
-        $key = $this->operations->enqueueConversion($fileId, $profileKey, $profileDigest, $sourceVersion);
+        $key = $this->operations->enqueueConversion(fileId: $fileId, profileKey: $profileKey, profileDigest: $profileDigest, sourceVersion: $sourceVersion);
         $this->connection->afterCommit(function () use ($fileId, $profileKey, $key): void {
             try {
                 ConvertMedia::dispatch($fileId, $profileKey, $key);
@@ -138,10 +138,10 @@ final readonly class ConversionCoordinator
         if ($driver === null) {
             return;
         }
-        $claim = $this->operations->claimConversion($fileId, $profileKey, $this->profiles->digest($driver), $operationKey);
+        $claim = $this->operations->claimConversion(fileId: $fileId, profileKey: $profileKey, profileDigest: $this->profiles->digest($driver), operationKey: $operationKey);
 
         if ($claim !== null) {
-            $this->convert($claim, $driver);
+            $this->convert(claim: $claim, driver: $driver);
         }
     }
 

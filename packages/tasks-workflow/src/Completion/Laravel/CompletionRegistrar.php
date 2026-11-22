@@ -58,10 +58,10 @@ final class CompletionRegistrar implements PackageRegistrar
         if ($app instanceof LaravelApplication) {
             $app->scoped(CompletionScope::class);
             $gate = new ActivationGateExtension(
-                static fn (ModuleActivationGate $host, LaravelApplication $app): ModuleActivationGate => self::decorateActivationGate($host, $app, $options->definitionRef, $options->versionRef),
+                static fn (ModuleActivationGate $host, LaravelApplication $app): ModuleActivationGate => self::decorateActivationGate(host: $host, app: $app, definitionRef: $options->definitionRef, versionRef: $options->versionRef),
             );
             // Match the current alias because other providers can register it after this one.
-            $app->beforeResolving(fn (string $binding, array $parameters, LaravelApplication $app) => $this->prepareResolution($app, $binding, $gate));
+            $app->beforeResolving(fn (string $binding, array $parameters, LaravelApplication $app) => $this->prepareResolution(app: $app, binding: $binding, gate: $gate));
             $app->booted(fn () => $this->assertEnabledBindings($app));
         }
     }
@@ -79,16 +79,16 @@ final class CompletionRegistrar implements PackageRegistrar
             return;
         }
 
-        $app->extend(ModuleActivationGate::class, static fn (ModuleActivationGate $host, Application $app): ModuleActivationGate => self::decorateActivationGate($host, $app, $options->definitionRef, $options->versionRef));
+        $app->extend(ModuleActivationGate::class, static fn (ModuleActivationGate $host, Application $app): ModuleActivationGate => self::decorateActivationGate(host: $host, app: $app, definitionRef: $options->definitionRef, versionRef: $options->versionRef));
         $app->booted(fn () => $this->assertEnabledBindings($app));
     }
 
     private function prepareResolution(LaravelApplication $app, string $binding, ActivationGateExtension $gate): void
     {
         if ($app->isBooted() && $binding === $app->getAlias(ModuleActivationGate::class)) {
-            $gate->prepare($app, $binding);
+            $gate->prepare(app: $app, binding: $binding);
         } elseif ($binding === $app->getAlias(RegistryIntrospection::class)) {
-            $this->prepareReader($app, $binding);
+            $this->prepareReader(app: $app, binding: $binding);
         }
     }
 
@@ -120,9 +120,9 @@ final class CompletionRegistrar implements PackageRegistrar
         }
 
         $app->extend($binding, static fn (RegistryIntrospection $reader, LaravelApplication $app): RegistryIntrospection => new ScopedRegistryIntrospection(
-            $reader,
-            $app->make(CompletionScope::class),
-            $app->isBooted(),
+            reader: $reader,
+            scope: $app->make(CompletionScope::class),
+            booted: $app->isBooted(),
         ));
     }
 
@@ -134,7 +134,7 @@ final class CompletionRegistrar implements PackageRegistrar
 
         $scope = $app instanceof LaravelApplication ? $app->make(CompletionScope::class) : null;
 
-        return new TasksWorkflowActivationGate($host, LaravelApplication::getInstance(...), $scope, $definitionRef, $versionRef);
+        return new TasksWorkflowActivationGate(host: $host, container: LaravelApplication::getInstance(...), scope: $scope, definitionRef: $definitionRef, versionRef: $versionRef);
     }
 
     private function assertEnabledBindings(Application $app): void
@@ -170,7 +170,7 @@ final class CompletionRegistrar implements PackageRegistrar
         $cachePath = is_string($cache) ? $app->basePath($cache) : null;
 
         if ($app->runningInConsole() && $cachePath !== null && ! file_exists($cachePath) && ! is_link($cachePath)
-            && $this->compiledModulesAreMissing($app, $registry)) {
+            && $this->compiledModulesAreMissing(app: $app, registry: $registry)) {
             TaskCompletionTrigger::assertInstalledDeclaration($app->make(ModuleDiscovery::class));
 
             return;

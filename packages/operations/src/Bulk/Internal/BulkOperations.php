@@ -6,6 +6,7 @@ namespace CoreX\Operations\Bulk\Internal;
 
 use Closure;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
@@ -89,7 +90,7 @@ final readonly class BulkOperations
         }
 
         if ($operation->expiresAt !== null && $operation->expiresAt <= $this->clock->now()) {
-            return $this->problem(410, 'operations.bulk_result_expired');
+            return $this->problem(status: 410, code: 'operations.bulk_result_expired');
         }
 
         try {
@@ -99,7 +100,7 @@ final readonly class BulkOperations
         }
 
         return $page === null
-            ? $this->problem(404, 'not_found')
+            ? $this->problem(status: 404, code: 'not_found')
             : response()->json($page)->header('Cache-Control', 'private, no-store');
     }
 
@@ -107,7 +108,7 @@ final readonly class BulkOperations
     {
         try {
             $operation = $this->store->find(scope: $scope, id: $id);
-        } catch (ScopeContextMismatch) {
+        } catch (ScopeContextMismatch|ScopeStale) {
             return null;
         }
 
@@ -117,21 +118,6 @@ final readonly class BulkOperations
         }
 
         return $operation;
-    }
-
-    public function accepted(DataScope $scope, string $clientId, string $id, string $location): JsonResponse
-    {
-        $operation = $this->visible($scope, $clientId, $id);
-
-        if ($operation === null) {
-            return $this->problem(404, 'not_found');
-        }
-
-        return response()->json([
-            'operation_id' => $operation->definition->id,
-            'status_url' => $location,
-            'status' => $operation->status->value,
-        ], 202)->header('Location', $location);
     }
 
     private function problem(int $status, string $code): JsonResponse

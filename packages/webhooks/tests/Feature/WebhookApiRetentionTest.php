@@ -327,7 +327,7 @@ final class WebhookApiRetentionTest extends TestCase
             'event_id' => $eventId,
             'topic' => 'orders.placed',
             'topic_version' => 1,
-            'major' => 'v1',
+            'major' => 'v2',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
             'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope)),
             'body' => $body,
@@ -374,7 +374,7 @@ final class WebhookApiRetentionTest extends TestCase
     private function assertReplayExpired(string $deliveryId): void
     {
         $schema = ['id' => 'string'];
-        $topic = new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
+        $topic = new WebhookTopic('orders.placed', 1, 'v2', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
         $replay = new WebhookReplay(
             connection: $this->tenant,
             contexts: $this->restorer,

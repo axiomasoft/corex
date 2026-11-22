@@ -89,7 +89,7 @@ trait WebhookDeliveryFixture
             [new WebhookTopic(
                 'orders.placed',
                 1,
-                'v1',
+                'v2',
                 $schema,
                 hash('sha256', JsonCanonical::encode($schema)),
                 'personal',
@@ -110,7 +110,7 @@ trait WebhookDeliveryFixture
         $this->connection->table('sys_api_webhook_subscriptions')->insert([
             'id' => $subscription,
             'revision' => 0,
-            'major' => 'v1',
+            'major' => 'v2',
             'topic' => 'orders.placed',
             'topic_version' => 1,
             'endpoint_url' => 'https://hooks.example/receiver',
@@ -128,7 +128,7 @@ trait WebhookDeliveryFixture
             'event_id' => 'event-'.$delivery,
             'topic' => 'orders.placed',
             'topic_version' => 1,
-            'major' => 'v1',
+            'major' => 'v2',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
             'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope)),
             'body' => $body,

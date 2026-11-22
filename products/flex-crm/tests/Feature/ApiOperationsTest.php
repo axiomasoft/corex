@@ -11,8 +11,8 @@ use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\TestContext;
@@ -72,14 +72,16 @@ it('declares and dispatches company, contact and association operations through 
 
     $dispatch = function (string $method, string $path, array $input = []): JsonResponse {
         $request = Request::create(
-            uri: '/api/v1/'.$path,
+            uri: '/api/v2/'.$path,
             method: $method,
             parameters: $method === 'GET' ? $input : [],
             server: ['CONTENT_TYPE' => 'application/json'],
-            content: $method === 'GET' ? null : json_encode($input, JSON_THROW_ON_ERROR),
+            content: $method === 'GET' ? null : json_encode((object) $input, JSON_THROW_ON_ERROR),
         );
 
-        return resolve(OperationDispatcher::class)->dispatch(request: $request, version: 'v1', path: $path);
+        $request->attributes->set('corex.client_id', 'crm-source-test');
+
+        return resolve(HttpOperationDispatcher::class)->dispatch(request: $request, version: 'v2', path: $path);
     };
 
     $company = $dispatch('POST', 'companies', ['name' => 'Acme', 'inn' => '7700000000']);

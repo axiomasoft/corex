@@ -2,31 +2,32 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Operations\Errors\Internal;
+namespace CoreX\Operations\Errors\Laravel;
 
 use Closure;
 use CoreX\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Errors\Contracts\ErrorMapping;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Packman\Attributes\Internal;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Throwable;
 
 /** Application opts into placing this first, before trusted tenancy/auth/workspace middleware. */
-#[Internal]
+#[Spi(kind: SpiKind::Call, since: '2.0.0')]
 final readonly class OperationErrorBoundary
 {
     public function __construct(
         private ResponseSerializer $serializer,
-        private ErrorMapper $errors,
+        private ErrorMapping $errors,
     ) {}
 
     public function handle(Request $request, Closure $next): mixed
     {
-        $version = $request->route('version');
-        $metadata = InvocationMetadataFactory::fromRequest(request: $request, version: is_string($version) ? $version : 'v1');
+        $metadata = InvocationMetadataFactory::fromRequest(request: $request, version: 'v2');
         $previous = $request->attributes->get(InvocationMetadata::class);
         $request->attributes->set(InvocationMetadata::class, $metadata);
 

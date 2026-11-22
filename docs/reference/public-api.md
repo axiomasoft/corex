@@ -86,6 +86,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Data\Contracts\DataScopeAuthorizer` | spi-implement | 2.0.0 |
 | `CoreX\Data\Contracts\DataScopeCodec` | spi-implement | 1.0 |
 | `CoreX\Data\Contracts\FieldUsePolicy` | spi-implement | 2.0.0 |
+| `CoreX\Data\Contracts\FieldUseSnapshot` | spi-implement | 2.0.0 |
 | `CoreX\Data\Data\DataScope` | api | 2.0.0 |
 | `CoreX\Data\Data\DataScopeAccessDecision` | api | 1.0 |
 | `CoreX\Data\Data\EntityHandle` | api | 2.0.0 |
@@ -272,11 +273,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\CustomFields\Query\Data\FilterPlan` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\DeclaredFields` | spi-implement | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldCatalogue` | spi-call | 2.0.0 |
+| `CoreX\CustomFields\Schemas\Contracts\FieldMetadata` | spi-call | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldProjectionCatalogue` | spi-call | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldSchemaDependencies` | spi-implement | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldSchemas` | spi-call | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\ClaimGeneration` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldDefinition` | api | 2.0.0 |
+| `CoreX\CustomFields\Schemas\Data\FieldDescription` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldId` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldProjectionSchema` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldProjectionShape` | api | 2.0.0 |
@@ -501,12 +504,15 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\OperationAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer` | spi-implement | 1.0 |
+| `CoreX\Operations\Authorization\Contracts\OperationResourceAuthorizer` | spi-implement | 2.0.0 |
 | `CoreX\Operations\Authorization\Contracts\PrincipalResolver` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\ReplayAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer` | spi-call | 1.0 |
+| `CoreX\Operations\Bulk\Contracts\BulkDraftFactory` | spi-implement | 2.0.0 |
 | `CoreX\Operations\Bulk\Contracts\BulkExecutor` | spi-implement | 2.0.0 |
 | `CoreX\Operations\Bulk\Contracts\BulkOperationStore` | spi-implement | 1.0 |
 | `CoreX\Operations\Bulk\Contracts\BulkOwner` | spi-implement | 2.0.0 |
+| `CoreX\Operations\Bulk\Contracts\BulkTargetResolver` | spi-implement | 2.0.0 |
 | `CoreX\Operations\Bulk\Data\BulkCheckpoint` | api | 2.0.0 |
 | `CoreX\Operations\Bulk\Data\BulkContext` | api | 2.0.0 |
 | `CoreX\Operations\Bulk\Data\BulkFailurePage` | api | 2.0.0 |
@@ -520,6 +526,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Bulk\Enums\BulkStepStatus` | api | 2.0.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkHttpRegistrar` | spi-call | 1.0 |
+| `CoreX\Operations\Bulk\Laravel\BulkOperationDeclarations` | spi-call | 2.0.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkOptionsParser` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\SubmitBulkOperation` | spi-call | 2.0.0 |
@@ -555,24 +562,31 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Errors\Contracts\ResponseSerializer` | spi-implement | 1.0 |
 | `CoreX\Operations\Errors\Enums\OperationsErrorCode` | api | 1.0 |
 | `CoreX\Operations\Errors\Exceptions\ApiError` | api | 1.0 |
+| `CoreX\Operations\Errors\Laravel\OperationErrorBoundary` | spi-call | 2.0.0 |
+| `CoreX\Operations\Errors\Laravel\ProblemProjection` | spi-call | 2.0.0 |
 | `CoreX\Operations\Idempotency\Contracts\IdempotencyStore` | spi-implement | 1.0 |
 | `CoreX\Operations\Idempotency\Data\IdempotencyAttempt` | api | 1.0 |
 | `CoreX\Operations\Idempotency\Data\IdempotencyScope` | api | 1.0 |
 | `CoreX\Operations\Idempotency\Data\StoredOperationOutcome` | api | 1.0 |
 | `CoreX\Operations\Idempotency\Enums\IdempotencyRequirement` | api | 1.0 |
+| `CoreX\Operations\Invocation\Contracts\ClientRequestContext` | spi-implement | 2.0.0 |
 | `CoreX\Operations\Invocation\Contracts\ContextResolver` | spi-implement | 1.0 |
 | `CoreX\Operations\Invocation\Contracts\EffectiveCapabilities` | spi-call | 1.0 |
-| `CoreX\Operations\Invocation\Contracts\OperationDispatcher` | spi-call | 1.0 |
+| `CoreX\Operations\Invocation\Contracts\OperationAcceptance` | spi-implement | 2.0.0 |
+| `CoreX\Operations\Invocation\Contracts\OperationInputAdmission` | spi-call | 2.0.0 |
 | `CoreX\Operations\Invocation\Contracts\OperationInvoker` | api | 1.0 |
 | `CoreX\Operations\Invocation\Contracts\RequestContextProvider` | spi-implement | 1.0 |
 | `CoreX\Operations\Invocation\Contracts\TransactionalOperationInvoker` | spi-call | 2.0.0 |
+| `CoreX\Operations\Invocation\Data\AcceptedOperation` | api | 2.0.0 |
 | `CoreX\Operations\Invocation\Data\OperationInvocation` | api | 1.0 |
 | `CoreX\Operations\Invocation\Data\OperationResult` | api | 1.0 |
 | `CoreX\Operations\Invocation\Enums\InputEnvelope` | api | 1.0 |
+| `CoreX\Operations\Invocation\Laravel\AuthenticatedOperationContext` | spi-call | 2.0.0 |
 | `CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory` | spi-call | 1.0 |
 | `CoreX\Operations\Invocation\Laravel\ResolvedContexts` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\ApiSchemaBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\ApiSchemaConnections` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\HttpRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\IdempotencyRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\IdempotencyStoreFactory` | spi-call | 1.0 |
@@ -580,6 +594,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Laravel\OperationsBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\PaginationRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\Support\ApiOptions` | spi-call | 1.0 |
+| `CoreX\Operations\Metadata\Contracts\EntityMetadata` | spi-implement | 2.0.0 |
+| `CoreX\Operations\Metadata\Data\MetadataView` | api | 2.0.0 |
+| `CoreX\Operations\Metadata\Laravel\MetadataOperationDeclarations` | spi-call | 2.0.0 |
 | `CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection` | spi-implement | 1.0 |
 | `CoreX\Operations\OpenApi\Contracts\OpenApiDocuments` | spi-call | 1.0 |
 | `CoreX\Operations\OperationsServiceProvider` | spi-call | 1.0 |
@@ -732,11 +749,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Search\Query\Contracts\LiveCandidateDriver` | spi-implement | 2.0.0 |
 | `CoreX\Search\Query\Contracts\Search` | api | 2.0.0 |
 | `CoreX\Search\Query\Contracts\SearchDriverRegistry` | spi-call | 2.0.0 |
+| `CoreX\Search\Query\Contracts\SearchMetadata` | spi-call | 2.0.0 |
 | `CoreX\Search\Query\Data\Candidate` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\CandidatePage` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\CandidateRequest` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\DriverCapabilities` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\SearchCount` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchDescription` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\SearchFacets` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\SearchFilter` | api | 2.0.0 |
 | `CoreX\Search\Query\Data\SearchHit` | api | 2.0.0 |
@@ -1019,6 +1038,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tools\Data\ToolOutcome` | api | 1.0 |
 | `CoreX\Tools\Data\ToolResult` | api | 1.0 |
 | `CoreX\Tools\Errors\Enums\ToolsErrorCode` | api | 1.0 |
+| `CoreX\Tools\Mcp\Laravel\McpToolEndpoint` | spi-call | 2.0.0 |
 | `CoreX\Tools\ToolsServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-webhooks
@@ -1048,6 +1068,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Webhooks\Laravel\WebhookBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookController` | spi-call | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookHttpRegistrar` | spi-call | 1.0 |
+| `CoreX\Webhooks\Laravel\WebhookOperationDeclarations` | spi-call | 2.0.0 |
 | `CoreX\Webhooks\Laravel\WebhookOptionsParser` | spi-call | 1.0 |
 | `CoreX\Webhooks\WebhooksServiceProvider` | spi-call | 1.0 |
 

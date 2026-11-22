@@ -4,13 +4,13 @@
         {
             "symbol": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup::__construct",
             "source": "packages/access/src/Access/Internal/DirectGrantLookup.php",
-            "source_sha256": "c37ddd80d6ac87e09fd2aab50e22721c4b81611c0b146f02d9e346d885bc6086",
+            "source_sha256": "ea1f1909effc02dfe62336dcb9fb2c7519287dd9d5595746b122dc3254146678",
             "kind": "framework",
             "reason": "MatrixPermissions receives the direct grant lookup through Laravel constructor injection.",
             "root": {
                 "path": "packages/access/src/Access/Internal/MatrixPermissions.php",
                 "anchor": "private readonly DirectGrantLookup $directGrants",
-                "sha256": "2f074701fec6f93f2ab748d2d407191f97b64f45038fac8e2d263212612f98a7"
+                "sha256": "c05e6237337b54a16b24c3d54ed05924e940da5822cc4c63f8a0426a7840fba2"
             },
             "expires": null
         },
@@ -30,7 +30,7 @@
         {
             "symbol": "CoreX\\Access\\Access\\Internal\\MatrixPolicy::__construct",
             "source": "packages/access/src/Access/Internal/MatrixPolicy.php",
-            "source_sha256": "2b60de5ade3d7de6f9b77a93ceb10f6b99402ded58d3b38b47e0124879855110",
+            "source_sha256": "6758435189bda4c13bc0bdef7fe48d00cebf4ba4a84a8b23df505e79fada2630",
             "kind": "framework",
             "reason": "AzGuard resolves the CoreX panel policy through the container before invoking its bound decision method.",
             "root": {
@@ -43,7 +43,7 @@
         {
             "symbol": "CoreX\\Access\\Access\\Internal\\MatrixPolicy::evaluate",
             "source": "packages/access/src/Access/Internal/MatrixPolicy.php",
-            "source_sha256": "2b60de5ade3d7de6f9b77a93ceb10f6b99402ded58d3b38b47e0124879855110",
+            "source_sha256": "6758435189bda4c13bc0bdef7fe48d00cebf4ba4a84a8b23df505e79fada2630",
             "kind": "framework",
             "reason": "AzGuard invokes the decision callback selected from the policy registered by the CoreX matrix panel.",
             "root": {
@@ -75,7 +75,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::fromPrincipal`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -88,7 +88,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::getAuthIdentifierName`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -101,7 +101,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::getAuthPasswordName`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -114,7 +114,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::getMorphClass`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -127,7 +127,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::getRememberToken`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -140,7 +140,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::getRememberTokenName`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -153,7 +153,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Laravel\\PrincipalIdentity::setRememberToken`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -166,7 +166,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Enums\\Scope::weight`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -199,13 +199,13 @@
         {
             "symbol": "CoreX\\Access\\Internal\\AccessSchemaSets::sets",
             "source": "packages/access/src/Internal/AccessSchemaSets.php",
-            "source_sha256": "ad116b858083e381e72b6d5044031a36fbe0b70f7d9aca302350f11b47463f1e",
+            "source_sha256": "9b3e08928fb1e31ce15a829616bab5afc94f662e5152af8206d24aec9851a75f",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -335,33 +335,20 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "PruneAuditLog::class,",
-                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Audit\\Internal\\RecordAuditEntry::__construct",
-            "source": "packages/core/src/Audit/Internal/RecordAuditEntry.php",
-            "source_sha256": "f4681f040b64677c12187ee83aaec24622b4b153e262ea916e14ef23899b4e4d",
-            "kind": "framework",
-            "reason": "This exact construction/dispatch enqueues CoreX\\Audit\\Internal\\RecordAuditEntry; Laravel Bus Dispatcher invokes __construct through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
-            "root": {
-                "path": "packages/core/src/Audit/Internal/QueuedAuditLogger.php",
-                "anchor": "RecordAuditEntry::dispatch(entry: $entry->withSnapshot(occurredAt: $this->clock->now(), workspaceId: $this->tenantContext->current()->workspace?->id), writeConnection: $this->connection);",
-                "sha256": "665b955cd8756badcd08c41fcea5be817fffe2bde7213fbb624ef2afd5f7346b"
+                "sha256": "24212fb15127f06b5032b9fb11c4532eabd1a3362c0d2df79dd8207ea7d5e61e"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Audit\\Internal\\RecordAuditEntry::handle",
             "source": "packages/core/src/Audit/Internal/RecordAuditEntry.php",
-            "source_sha256": "f4681f040b64677c12187ee83aaec24622b4b153e262ea916e14ef23899b4e4d",
+            "source_sha256": "6e0444ba601920477b3dcd0532312f785d76b529a09cfb297e5f6ec03ac6b429",
             "kind": "framework",
-            "reason": "This exact construction/dispatch enqueues CoreX\\Audit\\Internal\\RecordAuditEntry; Laravel Bus Dispatcher invokes handle through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
+            "reason": "AuditRegistrar registers the tenant job; the signed queue invokes handle after QueuedAuditLogger dispatches the AuditEntry with the scoped proof.",
             "root": {
-                "path": "packages/core/src/Audit/Internal/QueuedAuditLogger.php",
-                "anchor": "RecordAuditEntry::dispatch(entry: $entry->withSnapshot(occurredAt: $this->clock->now(), workspaceId: $this->tenantContext->current()->workspace?->id), writeConnection: $this->connection);",
-                "sha256": "665b955cd8756badcd08c41fcea5be817fffe2bde7213fbb624ef2afd5f7346b"
+                "path": "packages/core/src/Audit/Laravel/AuditRegistrar.php",
+                "anchor": "->tenant(RecordAuditEntry::class)",
+                "sha256": "2cece02eafe2ec6a4d8c3ede2580605fe1198b62d35a172a1dde2a1fa90a16bc"
             },
             "expires": null
         },
@@ -374,20 +361,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Audit\\Laravel\\HasAuditLog::bootHasAuditLog`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Context\\Exceptions\\ScopeContextMismatch::errorDescriptor",
             "source": "packages/core/src/Context/Exceptions/ScopeContextMismatch.php",
-            "source_sha256": "b5bf59a19b1040f4f5ccb92f9a93288f9a60a73599d799a2f7126f322d519043",
+            "source_sha256": "685daa1e073612b9ce4a04a4883a09202293d4fb7eba07d75de1526756da4bfa",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Context\\Exceptions\\ScopeContextMismatch::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -400,20 +387,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\CustomFields\\Errors\\Exceptions\\FieldFailure::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\CustomFields\\Internal\\CustomFieldsSchemaSets::sets",
             "source": "packages/custom-fields/src/Internal/CustomFieldsSchemaSets.php",
-            "source_sha256": "d2d7ae58e6978dff9cf65047ff878203bc2bb4feba743c382b8a9a378ee573d6",
+            "source_sha256": "f80febde16c45c98e0ddee8460e5ed795a3cfeb71d5e30a2e96740a0c2d64886",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -426,7 +413,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Data\\Exceptions\\InvalidScopePayload::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -439,7 +426,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -452,7 +439,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Departments\\Exceptions\\DepartmentCycleException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -465,7 +452,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Features\\Data\\FeatureFlagDefinition::make`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -478,7 +465,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Features\\Data\\FeatureFlagDefinition::module`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -491,7 +478,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Features\\Data\\FeatureFlagDefinition::payload`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -504,7 +491,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Lifecycle/DatabaseModuleLifecycle.php",
                 "anchor": "$this->actorResolver?->current()",
-                "sha256": "4b143fb4b4af1f84bf67222e4c17ab2a138c35efb1f23b2e37e844168a05f16a"
+                "sha256": "8b3c7efd390e11648ff5730f6d9e320167c268fe95130106f81e5bc408b64584"
             },
             "expires": null
         },
@@ -517,20 +504,20 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Lifecycle/DatabaseModuleLifecycle.php",
                 "anchor": "$flags->define($definition)",
-                "sha256": "4b143fb4b4af1f84bf67222e4c17ab2a138c35efb1f23b2e37e844168a05f16a"
+                "sha256": "8b3c7efd390e11648ff5730f6d9e320167c268fe95130106f81e5bc408b64584"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\ImportExport\\Internal\\ImportExportSchemaSets::sets",
             "source": "packages/import-export/src/Internal/ImportExportSchemaSets.php",
-            "source_sha256": "5b85612a6634af9caf887371251c079a4f4e0ad562f89b6429c1ca0dd441a7bc",
+            "source_sha256": "03f14c5101f81ba96f9350bf07a09907bd0965a39b6a51ad60e5a9cfed851efe",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -543,7 +530,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -556,7 +543,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -569,20 +556,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Intl\\Internal\\IntlSchemaSets::sets",
             "source": "packages/intl/src/Internal/IntlSchemaSets.php",
-            "source_sha256": "89bb39063010e9d3d010e182dd0f1c01ede2b02f45ffce0e4424bf457b2a6356",
+            "source_sha256": "2d5d37bd3b5532864b2286fa799099c7e1f5cf688b7d9e9690b32b73a2cb2616",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -595,7 +582,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
+                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
             },
             "expires": null
         },
@@ -608,7 +595,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -621,7 +608,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -634,7 +621,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -647,7 +634,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -660,7 +647,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->compile(",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -673,7 +660,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->mode()",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -686,7 +673,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "->normalize(manifest: $manifest",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -699,33 +686,33 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$a->phase()",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Media\\Internal\\Commands\\SweepMediaOperations::handle",
             "source": "packages/media/src/Internal/Commands/SweepMediaOperations.php",
-            "source_sha256": "8ca853e8e7b406a10c3f603826b632f1e1ccbe28dfcdd9ac6da1298cc0bf0fa5",
+            "source_sha256": "ba74f7369aae68a942d6bd0bc85ed988ce6bbe62d78b2eb3e14377b13548d20f",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Media\\Internal\\Commands\\SweepMediaOperations::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/media/src/MediaServiceProvider.php",
                 "anchor": "->resolveCommands([SweepMediaOperations::class])",
-                "sha256": "ba09763fc475c8df0cb0cd57b6ac8f3906a19c40bb4ef1fcd9825b013f40bd4d"
+                "sha256": "bed01eb11dfa33314f226ee24b99dda27c05a8497eb50b6b9be811cbaa19f097"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Media\\Internal\\MediaSchemaSets::sets",
             "source": "packages/media/src/Internal/MediaSchemaSets.php",
-            "source_sha256": "0aa6a94f2372a20345b88e29006b1322572591222f07a9fda2c99bfb26293a47",
+            "source_sha256": "2a68f25d072c0915fa871da2805a39a641a3a043d25753842d7e188e7349de73",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -738,7 +725,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Contracts\\Cancellable::cancel`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -751,7 +738,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Contracts\\Cancellable::isCancelled`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -764,7 +751,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\InboxRefused::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -777,7 +764,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\InvalidMessage::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -790,7 +777,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\OutboxLeaseLost::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -803,7 +790,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\OutboxRefused::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -816,7 +803,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\UnknownMessageContract::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -829,33 +816,33 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "PruneOutboxMessages::class,",
-                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
+                "sha256": "24212fb15127f06b5032b9fb11c4532eabd1a3362c0d2df79dd8207ea7d5e61e"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\RelayOutbox::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
-            "source_sha256": "83c8b71fdd7980d80fce2b94f04671d2bcb6c6858be90513252d2910c8b9247c",
+            "source_sha256": "65c7f635de660129fd9131f2e09b9f39c5f5ae915ec68b2cc9224f8e36809a08",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\RelayOutbox::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "RelayOutbox::class,",
-                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
+                "sha256": "24212fb15127f06b5032b9fb11c4532eabd1a3362c0d2df79dd8207ea7d5e61e"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\ShowDeliveryHealth::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
-            "source_sha256": "e3828069b1fbfb12646c95bd93d93cb12a2866f72dfd80f3766661e6fafdb98b",
+            "source_sha256": "e76e2c29f9f2e1e2fbcb790eb34c9b53613a406f13ac17f3c8673588c3d12bad",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\ShowDeliveryHealth::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "ShowDeliveryHealth::class,",
-                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
+                "sha256": "24212fb15127f06b5032b9fb11c4532eabd1a3362c0d2df79dd8207ea7d5e61e"
             },
             "expires": null
         },
@@ -868,7 +855,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Internal\\OpenTelemetryTraceContextBridge::linkedConsumer` through `CoreX\\Messaging\\Contracts\\TraceContextBridge::linkedConsumer`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -881,7 +868,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "PrunePubSubMessages::class,",
-                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
+                "sha256": "24212fb15127f06b5032b9fb11c4532eabd1a3362c0d2df79dd8207ea7d5e61e"
             },
             "expires": null
         },
@@ -894,7 +881,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule::getNodeType`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -907,7 +894,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule::processNode`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -920,7 +907,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule::getNodeType`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -933,7 +920,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule::processNode`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -946,72 +933,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver::reconcile`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Notifications\\Delivery\\Internal\\Commands\\SweepNotificationDeliveries::handle",
-            "source": "packages/notifications/src/Delivery/Internal/Commands/SweepNotificationDeliveries.php",
-            "source_sha256": "31aee3508a71df70611793793b3ed2ed0a74dab133d7da22c1275ba411cc9cb8",
-            "kind": "framework",
-            "reason": "Laravel invokes CoreX\\Notifications\\Delivery\\Internal\\Commands\\SweepNotificationDeliveries::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
-            "root": {
-                "path": "packages/notifications/src/NotificationsServiceProvider.php",
-                "anchor": "->resolveCommands([SweepNotificationDeliveries::class])",
-                "sha256": "da249a6262c583df449b4e5e072f41175cec066c49b3c414a3b687f46ecf8c3f"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Notifications\\Delivery\\Internal\\InAppChannelDriver::reconcile",
-            "source": "packages/notifications/src/Delivery/Internal/InAppChannelDriver.php",
-            "source_sha256": "77b1e1c084eede13bc04abcbbb6c02ca02d9a5f27c47ad7e8536af6614fd95fa",
-            "kind": "external-implementation",
-            "reason": "Host delivery reconciliation calls NotificationChannelDriver::reconcile after an uncertain provider acknowledgement to recover the delivery outcome.",
-            "root": {
-                "path": "docs/reference/public-entrypoints.md",
-                "anchor": "`CoreX\\Notifications\\Delivery\\Internal\\InAppChannelDriver::reconcile` through `CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver::reconcile`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Notifications\\Delivery\\Internal\\Jobs\\DeliverNotification::__construct",
-            "source": "packages/notifications/src/Delivery/Internal/Jobs/DeliverNotification.php",
-            "source_sha256": "11d1add892750ffa2ca5daedbd2506cb8b54d824c6ed5ca8828053a6b08277ec",
-            "kind": "framework",
-            "reason": "This exact construction/dispatch enqueues CoreX\\Notifications\\Delivery\\Internal\\Jobs\\DeliverNotification; Laravel Bus Dispatcher invokes __construct through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
-            "root": {
-                "path": "packages/notifications/src/Delivery/Internal/Commands/SweepNotificationDeliveries.php",
-                "anchor": "DeliverNotification::dispatch($id);",
-                "sha256": "31aee3508a71df70611793793b3ed2ed0a74dab133d7da22c1275ba411cc9cb8"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Notifications\\Delivery\\Internal\\Jobs\\DeliverNotification::handle",
-            "source": "packages/notifications/src/Delivery/Internal/Jobs/DeliverNotification.php",
-            "source_sha256": "11d1add892750ffa2ca5daedbd2506cb8b54d824c6ed5ca8828053a6b08277ec",
-            "kind": "framework",
-            "reason": "This exact construction/dispatch enqueues CoreX\\Notifications\\Delivery\\Internal\\Jobs\\DeliverNotification; Laravel Bus Dispatcher invokes handle through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
-            "root": {
-                "path": "packages/notifications/src/Delivery/Internal/Commands/SweepNotificationDeliveries.php",
-                "anchor": "DeliverNotification::dispatch($id);",
-                "sha256": "31aee3508a71df70611793793b3ed2ed0a74dab133d7da22c1275ba411cc9cb8"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupHandler::__invoke",
-            "source": "packages/notifications/src/Digest/Internal/DigestWakeupHandler.php",
-            "source_sha256": "109efca6cb326fc21f7840c65a950e61e5509378d66e43b6c469ac612f09c922",
-            "kind": "framework",
-            "reason": "The registered digest wakeup callback resolves this exact invokable handler and invokes it with the trusted DigestTick.",
-            "root": {
-                "path": "packages/notifications/src/Laravel/NotificationsDigestRegistrar.php",
-                "anchor": "(Container::getInstance()->make(DigestWakeupHandler::class))($tick)",
-                "sha256": "09cf8c8857852821c053ea4203d1451f7e00da339b7a71dbbd252aecb4b6b160"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1024,7 +946,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1037,20 +959,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Notifications\\Internal\\NotificationsSchemaSets::sets",
             "source": "packages/notifications/src/Internal/NotificationsSchemaSets.php",
-            "source_sha256": "88cde5fbf1ea67d2f737df3c93d4ff9c90512f31124ccf4d5751699e1d615d43",
+            "source_sha256": "58236bea3ccde7e5db71baf1db281b0fd680d9d056160a0eacca118c1b4fa774",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -1063,14 +985,14 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
+                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Bulk\\Internal\\Commands\\WorkBulkOperations::handle",
             "source": "packages/operations/src/Bulk/Internal/Commands/WorkBulkOperations.php",
-            "source_sha256": "584176f29c5aa7b4ff479de1cc0631086d473f195a01e155075241fa97e26bb3",
+            "source_sha256": "c40e38e98c0a0b4973bcc5eb8e2f73eb211a70fde988c2f2b202f801927cf582",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Operations\\Bulk\\Internal\\Commands\\WorkBulkOperations::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -1089,33 +1011,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Bulk\\Internal\\TransferCapabilityUnavailable::errorDescriptor` through `Packman\\Errors\\Contracts\\DescribesError::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Bulk\\Laravel\\BulkHttpRegistrar::register",
             "source": "packages/operations/src/Bulk/Laravel/BulkHttpRegistrar.php",
-            "source_sha256": "e8da450640894716506536edf1041c20d440581e981c371013b36657bcbeff46",
+            "source_sha256": "69eafa32bc0d1f71ff930a811f22d6091e1a61ba971d7b1eb52c9786f96b9ef2",
             "kind": "framework",
             "reason": "This concrete adapter implements PackageRegistrar, which requires the exact register method even when that half of the lifecycle is empty. Its other lifecycle hook is explicitly composed by the owning provider.",
             "root": {
                 "path": "vendor/axiomasoft/packman/packages/core/src/Foundation/Contracts/PackageRegistrar.php",
                 "anchor": "public function register(Application $app): void;",
                 "sha256": "86d27bd56d00131464fde6f2ba236ee51836776ec801419262ded9559d8101cd"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar::register",
-            "source": "packages/operations/src/Bulk/Laravel/BulkRouteRegistrar.php",
-            "source_sha256": "c94027dca74a5a1f92eefb2621d9aa607c373af5c681c58ed27518e7a21dd5d9",
-            "kind": "external-spi",
-            "reason": "Laravel host composition registers this provider/registrar and invokes its register hook to install the package bindings and routes.",
-            "root": {
-                "path": "docs/reference/public-entrypoints.md",
-                "anchor": "`CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar::register`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
             },
             "expires": null
         },
@@ -1128,7 +1037,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1141,7 +1050,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1154,7 +1063,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Definition\\Contracts\\OperationDefinitionValidator::validateRoutePair`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1167,92 +1076,66 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Definition\\Data\\ResourceId::__toString`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Errors\\Internal\\OperationErrorBoundary::__construct",
-            "source": "packages/operations/src/Errors/Internal/OperationErrorBoundary.php",
-            "source_sha256": "e0acd74aa5188db302b7e4507b348022bbec7c585b7f2fe6de4e3d24ac257283",
-            "kind": "framework",
-            "reason": "Laravel's routing middleware pipeline resolves this exact registered operation error middleware through the container before invoking handle.",
-            "root": {
-                "path": "packages/operations/routes/api.php",
-                "anchor": "->middleware(OperationErrorBoundary::class)",
-                "sha256": "0d7ebdcd897025ddb8d39877dd352cbea65cb56b98d88eb3d1c3a177b6cc9919"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Errors\\Internal\\OperationErrorBoundary::handle",
-            "source": "packages/operations/src/Errors/Internal/OperationErrorBoundary.php",
-            "source_sha256": "e0acd74aa5188db302b7e4507b348022bbec7c585b7f2fe6de4e3d24ac257283",
-            "kind": "framework",
-            "reason": "Laravel's routing middleware pipeline invokes the handle convention on this exact registered middleware.",
-            "root": {
-                "path": "packages/operations/routes/api.php",
-                "anchor": "->middleware(OperationErrorBoundary::class)",
-                "sha256": "0d7ebdcd897025ddb8d39877dd352cbea65cb56b98d88eb3d1c3a177b6cc9919"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Internal\\Http\\ApiController::__construct",
             "source": "packages/operations/src/Internal/Http/ApiController.php",
-            "source_sha256": "6e24d604e4b6174340993a8d64d1948176f923c950214d07a16d7de4d8582680",
+            "source_sha256": "f657db096f31aaaa6d81567cb125d3e73c80701d3cc2094e39b1a299220353ba",
             "kind": "framework",
-            "reason": "Laravel resolves this exact invokable operation route controller through the container before dispatching the request.",
+            "reason": "The literal v2 operation route uses this invokable controller. Laravel resolves the exact dispatcher constructor.",
             "root": {
                 "path": "packages/operations/routes/api.php",
-                "anchor": "'{version}/{path?}', ApiController::class",
-                "sha256": "0d7ebdcd897025ddb8d39877dd352cbea65cb56b98d88eb3d1c3a177b6cc9919"
+                "anchor": "'v2/{path?}', ApiController::class",
+                "sha256": "84cff1f022c76a01d33fd12a2ba0ee4ba79d08016eae7694150fe20a90483fdd"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Internal\\Http\\ApiController::__invoke",
             "source": "packages/operations/src/Internal/Http/ApiController.php",
-            "source_sha256": "6e24d604e4b6174340993a8d64d1948176f923c950214d07a16d7de4d8582680",
+            "source_sha256": "f657db096f31aaaa6d81567cb125d3e73c80701d3cc2094e39b1a299220353ba",
             "kind": "framework",
-            "reason": "Laravel dispatches this exact controller-only route action to ApiController::__invoke.",
+            "reason": "Laravel invokes this exact controller on the registered literal v2 operation route.",
             "root": {
                 "path": "packages/operations/routes/api.php",
-                "anchor": "'{version}/{path?}', ApiController::class",
-                "sha256": "0d7ebdcd897025ddb8d39877dd352cbea65cb56b98d88eb3d1c3a177b6cc9919"
+                "anchor": "'v2/{path?}', ApiController::class",
+                "sha256": "84cff1f022c76a01d33fd12a2ba0ee4ba79d08016eae7694150fe20a90483fdd"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Internal\\Http\\DiscoveryController::__construct",
             "source": "packages/operations/src/Internal/Http/DiscoveryController.php",
-            "source_sha256": "e4b3c8e455680255f09218cc72a522fb2010e1a4e617b4195873cf0b59c15059",
+            "source_sha256": "1be9862ded0162c233044c3aa199825a1113ebab5dc42581b66c95e2a275d5ab",
             "kind": "framework",
             "reason": "Laravel constructs this exact controller registered by the discovery route callable before invoking its root/capabilities/openapi methods.",
             "root": {
                 "path": "packages/operations/routes/api.php",
                 "anchor": "[DiscoveryController::class, 'root']",
-                "sha256": "0d7ebdcd897025ddb8d39877dd352cbea65cb56b98d88eb3d1c3a177b6cc9919"
+                "sha256": "84cff1f022c76a01d33fd12a2ba0ee4ba79d08016eae7694150fe20a90483fdd"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Internal\\OperationsSchemaSets::sets",
             "source": "packages/operations/src/Internal/OperationsSchemaSets.php",
-            "source_sha256": "fa2b8c3f7f01bcd377e0fa56502ff09d527862dc580e235c7a6395920f297ca6",
+            "source_sha256": "5a9ae7ac5f9c4668119f0ca6f1ac76d015fe532ddf55c88f9a9be00de5048a83",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\Laravel\\Commands\\PruneApiOperations::handle",
             "source": "packages/operations/src/Laravel/Commands/PruneApiOperations.php",
-            "source_sha256": "f2618c5f7c0b9017d20abc8f082ce3fd3450f1f3310bbdcb991b845a792128d6",
+            "source_sha256": "d6a7a3ad6e03da518055b57a97e503a82b77321f8620c8dd91ea544857e2fe21",
             "kind": "framework",
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
@@ -1265,7 +1148,7 @@
         {
             "symbol": "CoreX\\Operations\\OpenApi\\Internal\\Commands\\WriteApiSnapshots::handle",
             "source": "packages/operations/src/OpenApi/Internal/Commands/WriteApiSnapshots.php",
-            "source_sha256": "0523d344c960d0608c0c33058a44bfafa901ad650d3bcf5fc46e5fcd34f68147",
+            "source_sha256": "327ce192cbe7219c56dcab4442d8141e8a7e9627e1b31b9d5183f8964fe68080",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Operations\\OpenApi\\Internal\\Commands\\WriteApiSnapshots::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -1284,7 +1167,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\OperationsServiceProvider::boot`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1297,7 +1180,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\OperationsServiceProvider::register`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1310,7 +1193,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Testing\\CatalogueModuleFixture::active`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1323,7 +1206,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Testing\\ModuleFixture::active`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1349,7 +1232,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Validation\\Laravel\\JsonValueFactory::fromDecoded`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1362,7 +1245,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Data\\DateWindow::__construct`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1375,7 +1258,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Data\\InstantWindow::__construct`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1388,7 +1271,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Exceptions\\StaleCursorException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1401,7 +1284,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Exceptions\\UnsupportedEnvironmentException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1414,7 +1297,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Exceptions\\MaterializationConflict::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1427,7 +1310,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Exceptions\\StaleMaterialization::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1440,33 +1323,33 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Exceptions\\UnsupportedMaterialization::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\TasksWorkflow\\Completion\\Internal\\WorkflowCompletionCapture::capture",
             "source": "packages/tasks-workflow/src/Completion/Internal/WorkflowCompletionCapture.php",
-            "source_sha256": "2897841bbf7aa9c7ecc7886f65af21738c03b7c6ec637edd69098d6fde3277c4",
+            "source_sha256": "b2c7fda345000098a519be62274c290bd9dcfafdff97b2b2d91c674f1349bdc6",
             "kind": "external-implementation",
             "reason": "Tasks Workflow submits the first completion intent on the active Tasks owner connection and returns the typed capture admission.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\TasksWorkflow\\Completion\\Internal\\WorkflowCompletionCapture::capture` through `CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture::capture`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\RecurringTasks\\Internal\\RecurringTasksSchemaSets::sets",
             "source": "packages/recurring-tasks/src/Internal/RecurringTasksSchemaSets.php",
-            "source_sha256": "e32187e1bae81303e7df756a6a33983acac81c40ea1d4f1afd275dff801629da",
+            "source_sha256": "f3bbd76b0eb08b88aeac2f7776eeeef99a1eec27324f17950157084cdbf41b1b",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -1491,34 +1374,21 @@
             "reason": "Laravel invokes CoreX\\Scheduler\\Internal\\Commands\\SweepWakeups::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/scheduler/src/SchedulerServiceProvider.php",
-                "anchor": "->resolveCommands([SweepWakeups::class, ValidateWakeupStamps::class])",
-                "sha256": "c3a24704180a6d424cdca0a246962ad4141632e5a2e32d81e94505063ed360a0"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Scheduler\\Internal\\Commands\\ValidateWakeupStamps::handle",
-            "source": "packages/scheduler/src/Internal/Commands/ValidateWakeupStamps.php",
-            "source_sha256": "9787c6e8e73939eb97d9d0617896944adb8bf89c7d719f319993a89e73391fe4",
-            "kind": "framework",
-            "reason": "Laravel invokes CoreX\\Scheduler\\Internal\\Commands\\ValidateWakeupStamps::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
-            "root": {
-                "path": "packages/scheduler/src/SchedulerServiceProvider.php",
-                "anchor": "->resolveCommands([SweepWakeups::class, ValidateWakeupStamps::class])",
-                "sha256": "c3a24704180a6d424cdca0a246962ad4141632e5a2e32d81e94505063ed360a0"
+                "anchor": "->resolveCommands([SweepWakeups::class])",
+                "sha256": "6e0d79dcb9b4239b897c18f9f4288f6c5004361b783d350bc3ad2316b32c58f1"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Scheduler\\Internal\\SchedulerSchemaSets::sets",
             "source": "packages/scheduler/src/Internal/SchedulerSchemaSets.php",
-            "source_sha256": "b983645f370de41ee611e0485eaa7b979155274ecff59ae5d9ae14781b8b947a",
+            "source_sha256": "11efa578343f3617bd07eb0814aab0bfa5948d639ac194a1f53872ad0b0b462c",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -1531,20 +1401,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\SearchMeilisearch\\Internal\\MeilisearchCandidateDriver::capabilities",
             "source": "packages/search-meilisearch/src/Internal/MeilisearchCandidateDriver.php",
-            "source_sha256": "0cc87431705c9494719e7f93f1ef8973507a33f495d032adb49a2cd4fbb9ff0f",
+            "source_sha256": "184f715ad20f8ebc424495901cc4d42f5f287410b3346b0656bbe34e58f7cf16",
             "kind": "external-implementation",
             "reason": "Search uses the declared capabilities to admit only operators and uses the backend supports.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\SearchMeilisearch\\Internal\\MeilisearchCandidateDriver::capabilities` through `CoreX\\Search\\Query\\Contracts\\CandidateDriver::capabilities`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1557,7 +1427,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Search\\Projection\\Contracts\\SearchSource::page`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1570,20 +1440,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Search\\Exceptions\\InvalidSearchConfiguration::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Search\\Internal\\Postgres\\PostgresCandidateDriver::capabilities",
             "source": "packages/search/src/Internal/Postgres/PostgresCandidateDriver.php",
-            "source_sha256": "e1bd3ee4acd7a6e571144e14f4bc8b1acc2a51e7ffed9ed322a90170546a599d",
+            "source_sha256": "ad97111715254cf6c017194618b4be60efa0beebc48daa2b28e47fb950bfd73f",
             "kind": "external-implementation",
             "reason": "Search uses the declared capabilities to admit only operators and uses the backend supports.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Search\\Internal\\Postgres\\PostgresCandidateDriver::capabilities` through `CoreX\\Search\\Query\\Contracts\\CandidateDriver::capabilities`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1601,19 +1471,6 @@
             "expires": null
         },
         {
-            "symbol": "CoreX\\Search\\Internal\\SearchManager::getDefaultDriver",
-            "source": "packages/search/src/Internal/SearchManager.php",
-            "source_sha256": "fe6a33599f5401f395d55926f407c2d7649ba141c56a341b24a501a156e057b3",
-            "kind": "framework",
-            "reason": "Illuminate Support Manager::driver invokes this exact overridden method CoreX\\Search\\Internal\\SearchManager::getDefaultDriver when no explicit driver is requested; its parent implementation supplies the runtime call root.",
-            "root": {
-                "path": "vendor/laravel/framework/src/Illuminate/Support/Manager.php",
-                "anchor": "$this->getDefaultDriver()",
-                "sha256": "f05ce84888f4cc1871cb446231fba996e692709a502332be8e126a7190591cf6"
-            },
-            "expires": null
-        },
-        {
             "symbol": "CoreX\\Search\\Internal\\SearchSchemaSets::sets",
             "source": "packages/search/src/Internal/SearchSchemaSets.php",
             "source_sha256": "e3b6c412608ebd906d8c93175fc70bb40685843b819c25262795f2d0945de639",
@@ -1622,7 +1479,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -1635,7 +1492,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Settings\\Data\\SettingsScope::account`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1648,7 +1505,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Settings\\Exceptions\\SettingValueTooLargeException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1661,7 +1518,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Settings\\Exceptions\\UnsupportedScopeException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1674,7 +1531,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1687,7 +1544,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Storage\\Exceptions\\StorageOperationFailed::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1700,20 +1557,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tasks\\Internal\\TasksSchemaSets::sets",
             "source": "packages/tasks/src/Internal/TasksSchemaSets.php",
-            "source_sha256": "a789d203230d0746d9ec8f02b9756ad8d1594a8a49cfc35602270a3e4a501d15",
+            "source_sha256": "a7bf15d9505ad434ac3b8611babf679fcaa9f3b87dd85cc2d887f50325912ec3",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -1726,7 +1583,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1739,7 +1596,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -1752,7 +1609,7 @@
             "root": {
                 "path": "packages/tasks/src/Laravel/TasksRegistrar.php",
                 "anchor": "$app->register(PlanningOperationsServiceProvider::class)",
-                "sha256": "62f6404fcb4c52998f2e90c8e776e7d10b6e2cec0dbb66ad16181473c9cf0a1d"
+                "sha256": "3ca5f066e08e450c2590fe786ca6404df4ef72067c636a40285ea3633bb75c8a"
             },
             "expires": null
         },
@@ -1830,7 +1687,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture::capture`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2025,7 +1882,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\AccountPurged::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2038,7 +1895,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\AccountSuspended::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2051,7 +1908,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\ExportReady::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2064,7 +1921,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\GraceStarted::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2077,19 +1934,19 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\TrialStarted::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Account\\Internal\\Jobs\\CreateDatabaseFromTemplate::handle",
             "source": "packages/tenancy/src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php",
-            "source_sha256": "2c24257f5c5c4180323ab43b3b704e04ca5d4b06c5d46b074c210df60ae960a0",
+            "source_sha256": "4b401a1c45ee71a1761776a470f9f17a8734d68efa180722100f9f7eed41c65a",
             "kind": "framework",
             "reason": "This exact construction/dispatch enqueues CoreX\\Tenancy\\Account\\Internal\\Jobs\\CreateDatabaseFromTemplate; Laravel Bus Dispatcher invokes handle through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
             "root": {
                 "path": "packages/tenancy/src/Account/Internal/DatabaseTenantProvisioner.php",
-                "anchor": "dispatch_sync(new CreateDatabaseFromTemplate(account: new AccountRef(id: $account->id, slug: $account->slug ?? '', status: $account->status, features: [], limits: []), params: $params));",
+                "anchor": "dispatch_sync(new CreateDatabaseFromTemplate(",
                 "sha256": "e51701ab524165920c6a26c0348bc99c5ca22fdf2a9d1f3b23fc35d026db8b81"
             },
             "expires": null
@@ -2155,7 +2012,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2168,7 +2025,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException::render`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2181,7 +2038,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\DomainTrust\\Data\\NormalizedHost::__toString`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2194,7 +2051,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2207,7 +2064,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDisabled::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2285,33 +2142,33 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Identity\\Events\\UserSynced::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount::__construct",
             "source": "packages/tenancy/src/Identity/Internal/Jobs/SyncIdentityToAccount.php",
-            "source_sha256": "aad024984c87e06e54ceb8914fc9696aed20f7ca346169b699e288af645eb0b1",
+            "source_sha256": "9b72934cf0556725e23bbf23e4e515b6f2f08168d1eb19ec67eef5ab0e057dba",
             "kind": "framework",
-            "reason": "This exact construction/dispatch enqueues CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount; Laravel Bus Dispatcher invokes __construct through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
+            "reason": "Identity reconciliation dispatches this exact tenant job with the identity ID and verified work scope.",
             "root": {
                 "path": "packages/tenancy/src/Identity/Internal/DatabaseIdentitySyncer.php",
-                "anchor": "SyncIdentityToAccount::dispatch(identityId: $identityId, accountId: DatabaseValue::text($accountId));",
-                "sha256": "4f96367fac2df14101850e2330273c95e2b54a38c304cffed244877d7aeed02f"
+                "anchor": "SyncIdentityToAccount::dispatch($identityId, $scope);",
+                "sha256": "059d259c3b66173adb2a889cf31c477a982f4008f545c0254024acb9cc53ff01"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount::handle",
             "source": "packages/tenancy/src/Identity/Internal/Jobs/SyncIdentityToAccount.php",
-            "source_sha256": "aad024984c87e06e54ceb8914fc9696aed20f7ca346169b699e288af645eb0b1",
+            "source_sha256": "9b72934cf0556725e23bbf23e4e515b6f2f08168d1eb19ec67eef5ab0e057dba",
             "kind": "framework",
-            "reason": "This exact construction/dispatch enqueues CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount; Laravel Bus Dispatcher invokes handle through the queue/container job lifecycle. This class registration, rather than the ShouldQueue marker alone, is the invocation root.",
+            "reason": "RuntimeRegistrar registers the verified tenant job so the signed queue can invoke handle in the destination tenant frame.",
             "root": {
-                "path": "packages/tenancy/src/Identity/Internal/DatabaseIdentitySyncer.php",
-                "anchor": "SyncIdentityToAccount::dispatch(identityId: $identityId, accountId: DatabaseValue::text($accountId));",
-                "sha256": "4f96367fac2df14101850e2330273c95e2b54a38c304cffed244877d7aeed02f"
+                "path": "packages/tenancy/src/Laravel/RuntimeRegistrar.php",
+                "anchor": "->tenant(SyncIdentityToAccount::class)",
+                "sha256": "03a8c564345b10e9e107951f695da5304ce6026408598760c1fa8eca6734a51a"
             },
             "expires": null
         },
@@ -2324,7 +2181,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationEnded::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2337,7 +2194,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationStarted::name`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2350,7 +2207,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/WakeupRegistrar.php",
                 "anchor": "->resolveCommands([SweepRootWakeups::class])",
-                "sha256": "d88a92c25c1902b5c42f96a7b27a9c6b03bf69d18341f7642f12752edcfed710"
+                "sha256": "61a4527a2139f62403f5ad01dfee189100f9d4a7217e1e9d2d834ae6b4ff646b"
             },
             "expires": null
         },
@@ -2376,7 +2233,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand::handle`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2415,7 +2272,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand::handle`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2448,7 +2305,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\EventsRegistrar::boot",
             "source": "packages/tenancy/src/Laravel/EventsRegistrar.php",
-            "source_sha256": "c37b63daa8a0bb70d269ec6142d8b1b618ffe4834f6764ea27e12b52a7b190fb",
+            "source_sha256": "1c4dccdacf5bd489effd9e4fd35f1c6e2fc0b57490b59d9d3e0c1f550b3d9f32",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its boot lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2461,7 +2318,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\EventsRegistrar::register",
             "source": "packages/tenancy/src/Laravel/EventsRegistrar.php",
-            "source_sha256": "c37b63daa8a0bb70d269ec6142d8b1b618ffe4834f6764ea27e12b52a7b190fb",
+            "source_sha256": "1c4dccdacf5bd489effd9e4fd35f1c6e2fc0b57490b59d9d3e0c1f550b3d9f32",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2506,7 +2363,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AllowImpersonatedWrites::handle`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2519,7 +2376,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites::handle`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2532,7 +2389,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime::handle`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2545,14 +2402,14 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard::handle`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\IdentityRegistrar::register",
             "source": "packages/tenancy/src/Laravel/IdentityRegistrar.php",
-            "source_sha256": "894e90bb39e6009b2cc441988c2914c9b2c4772fe8a16c04bf064991445fd9b5",
+            "source_sha256": "33cdcb348fd1045b433bff13517b88acb75f34295e1dc7a1a0153702e1d06e86",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2565,7 +2422,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\ProvisioningRegistrar::register",
             "source": "packages/tenancy/src/Laravel/ProvisioningRegistrar.php",
-            "source_sha256": "4be9e3425cdabfc0ef0cf61d1805e29406007625273c0ed3e92f90d99fb33ea7",
+            "source_sha256": "301444855b3d18f5463dd01dca04c1592f3c4bd907d16acc53456fb9bcfd0199",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2578,7 +2435,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\RuntimeRegistrar::register",
             "source": "packages/tenancy/src/Laravel/RuntimeRegistrar.php",
-            "source_sha256": "15c833307b5532c3a04f584a35bca53e22730e538a10a1eb82e0dc849d99ea5b",
+            "source_sha256": "03a8c564345b10e9e107951f695da5304ce6026408598760c1fa8eca6734a51a",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2597,14 +2454,14 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope::apply`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\WakeupRegistrar::register",
             "source": "packages/tenancy/src/Laravel/WakeupRegistrar.php",
-            "source_sha256": "d88a92c25c1902b5c42f96a7b27a9c6b03bf69d18341f7642f12752edcfed710",
+            "source_sha256": "61a4527a2139f62403f5ad01dfee189100f9d4a7217e1e9d2d834ae6b4ff646b",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2636,7 +2493,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Events\\MembershipGranted::__construct`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2649,7 +2506,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2662,7 +2519,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2675,7 +2532,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2688,7 +2545,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2701,7 +2558,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2714,7 +2571,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2727,7 +2584,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2740,7 +2597,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2753,7 +2610,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2766,7 +2623,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2779,7 +2636,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2792,7 +2649,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2805,7 +2662,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2818,7 +2675,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2831,7 +2688,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException::errorDescriptor`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
@@ -2948,7 +2805,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->compile(",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -2961,7 +2818,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->mode()",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -2974,7 +2831,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "->normalize(manifest: $manifest",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -2987,7 +2844,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$a->phase()",
-                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
             },
             "expires": null
         },
@@ -3000,66 +2857,66 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore::forEvent`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Webhooks\\Internal\\Commands\\DeliverWebhooks::handle",
             "source": "packages/webhooks/src/Internal/Commands/DeliverWebhooks.php",
-            "source_sha256": "e956ac513ddb22e296415286389ee48184113f74efd7bd3519cef3affb2cb25e",
+            "source_sha256": "aa03f284c0313a4f40355574dacdb5b8220c43031e0124a1aa1a7fa94ea95eec",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Webhooks\\Internal\\Commands\\DeliverWebhooks::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/webhooks/src/WebhooksServiceProvider.php",
                 "anchor": "$commands[] = DeliverWebhooks::class;",
-                "sha256": "4f5be26a8ecb9392bdaf4b8783fb2f86cb8527622bff78d5387c3adf5bfa07d9"
+                "sha256": "45e518acc9aa1d6e2e6e4df6ade95c2d5b6a21ea8a6e5154b44258f6bb820bf6"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Webhooks\\Internal\\Commands\\PruneWebhooks::handle",
             "source": "packages/webhooks/src/Internal/Commands/PruneWebhooks.php",
-            "source_sha256": "3d8214104a1c17ac02fa37738df74b24c2c161d875f61bfcadef50ff8fa0aaf9",
+            "source_sha256": "9d391127c9f5c5410acdcfcc67eeeee39b9f6b019515ddb030b513a1b3505df4",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Webhooks\\Internal\\Commands\\PruneWebhooks::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/webhooks/src/WebhooksServiceProvider.php",
                 "anchor": "$commands = [PruneWebhooks::class];",
-                "sha256": "4f5be26a8ecb9392bdaf4b8783fb2f86cb8527622bff78d5387c3adf5bfa07d9"
+                "sha256": "45e518acc9aa1d6e2e6e4df6ade95c2d5b6a21ea8a6e5154b44258f6bb820bf6"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Webhooks\\Internal\\SqlWebhookDeliveryStore::forEvent",
             "source": "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
-            "source_sha256": "78ceba9cb4f4c011fd8da8f1843e2990909d8370545d7ca1d332ab0d1b9355ff",
+            "source_sha256": "f435c1d0e65e33d87fc397a08e7e052dd719dbba2c50ba3cdbc09f51c2af5efe",
             "kind": "external-implementation",
             "reason": "Host webhook audit/replay tooling obtains existing delivery references for an event through WebhookDeliveryStore, preserving repository ownership.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Webhooks\\Internal\\SqlWebhookDeliveryStore::forEvent` through `CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore::forEvent`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Webhooks\\Internal\\WebhooksSchemaSets::sets",
             "source": "packages/webhooks/src/Internal/WebhooksSchemaSets.php",
-            "source_sha256": "5c5ad17fd0f854b19b548c7f40a2553a829c690347c3139d8764974a695475ef",
+            "source_sha256": "6a7f136ac8220335e1f6cf362aa37d5b883050153e4fafe3cb28a7d64871e644",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Webhooks\\Laravel\\WebhookHttpRegistrar::register",
             "source": "packages/webhooks/src/Laravel/WebhookHttpRegistrar.php",
-            "source_sha256": "951c4a49c2a9bca662f7d458c8962f5ed1905efeb9030df058737f17d8abaf78",
+            "source_sha256": "0b5e210ff5b64b022e6e90cdf2eb7440fa1bd83f0de550cc9f32392ad9b80ecc",
             "kind": "framework",
             "reason": "This concrete adapter implements PackageRegistrar, which requires the exact register method even when that half of the lifecycle is empty. Its other lifecycle hook is explicitly composed by the owning provider.",
             "root": {
@@ -3078,33 +2935,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Workflow\\Contracts\\EngineAdapter::start`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Workflow\\Internal\\UnavailableEngineAdapter::start",
-            "source": "packages/workflow/src/Internal/UnavailableEngineAdapter.php",
-            "source_sha256": "42a08d63b8a0f7811dc70f895821df1430bdeb5712e3fbde01fe28adcea7a0e1",
-            "kind": "external-implementation",
-            "reason": "A host workflow dispatcher starts a durable intent through EngineAdapter; the stock unavailable adapter rejects execution until an engine is configured.",
-            "root": {
-                "path": "docs/reference/public-entrypoints.md",
-                "anchor": "`CoreX\\Workflow\\Internal\\UnavailableEngineAdapter::start` through `CoreX\\Workflow\\Contracts\\EngineAdapter::start`",
-                "sha256": "173b9d84623f663d10a14956cae48083feac62ac7cc2d82c259e96aaae0f2549"
+                "sha256": "bbdfddaab750ba4f7d87f991f5acb36b90a86486b00e41238fff7efd4727a218"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Workflow\\Internal\\WorkflowSchemaSets::sets",
             "source": "packages/workflow/src/Internal/WorkflowSchemaSets.php",
-            "source_sha256": "9af8016c63c23b421204312158e4161df6cda0bc0ed846f14119e12d653855ae",
+            "source_sha256": "321cdfb67455f6a8a20a8a500b9a7bed57cc02882ac59f2c18c1b1019d181594",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
             },
             "expires": null
         },
@@ -3117,7 +2961,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
+                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
             },
             "expires": null
         },
@@ -3312,7 +3156,449 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
                 "anchor": "$provider->sets()",
-                "sha256": "6a33179e0021c6d365a052b64031cb8762c7f30416b7a3afcfdbd3f46c2cad69"
+                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Context\\Laravel\\ScopedSyncConnector::connect",
+            "source": "packages/core/src/Context/Laravel/ScopedSyncConnector.php",
+            "source_sha256": "c07d992e0a64f8b2f358e2a648ea64a22992bfd71637a68c291c10291ee114d5",
+            "kind": "framework",
+            "reason": "ContextRegistrar installs this exact sync connector. Laravel QueueManager::resolve calls the connector with its config.",
+            "root": {
+                "path": "packages/core/src/Context/Laravel/ContextRegistrar.php",
+                "anchor": "->addConnector('sync', static fn (): ScopedSyncConnector => new ScopedSyncConnector)",
+                "sha256": "6a1470fe5c77388182cd882e525464fbac69e481816f6799f51bcc31c57c57ec"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Context\\Laravel\\WorkQueueHandler::__construct",
+            "source": "packages/core/src/Context/Laravel/WorkQueueHandler.php",
+            "source_sha256": "cc6f26d88e815cdce8aef40037534d606ecedea6b0332ec6adce61f8f8d6fd03",
+            "kind": "framework",
+            "reason": "The signed WorkQueueBoundary maps admitted work to this handler. Laravel Job::resolve instantiates this exact queue handler through the container.",
+            "root": {
+                "path": "packages/core/src/Context/Laravel/WorkQueueBoundary.php",
+                "anchor": "WorkQueueHandler::class.'@fire'",
+                "sha256": "bb2ff59e81453ea4f40def7b71a547736c09d454167017624a469e3ecc13cc34"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Context\\Laravel\\WorkQueueHandler::failed",
+            "source": "packages/core/src/Context/Laravel/WorkQueueHandler.php",
+            "source_sha256": "cc6f26d88e815cdce8aef40037534d606ecedea6b0332ec6adce61f8f8d6fd03",
+            "kind": "framework",
+            "reason": "The signed WorkQueueBoundary maps admitted work to this handler. Laravel Job::failed resolves the class from the signed payload and invokes the failure callback.",
+            "root": {
+                "path": "packages/core/src/Context/Laravel/WorkQueueBoundary.php",
+                "anchor": "WorkQueueHandler::class.'@fire'",
+                "sha256": "bb2ff59e81453ea4f40def7b71a547736c09d454167017624a469e3ecc13cc34"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Context\\Laravel\\WorkQueueHandler::fire",
+            "source": "packages/core/src/Context/Laravel/WorkQueueHandler.php",
+            "source_sha256": "cc6f26d88e815cdce8aef40037534d606ecedea6b0332ec6adce61f8f8d6fd03",
+            "kind": "framework",
+            "reason": "The signed WorkQueueBoundary maps admitted work to this handler. Laravel Job::fire dispatches the exact class and method in the signed payload.",
+            "root": {
+                "path": "packages/core/src/Context/Laravel/WorkQueueBoundary.php",
+                "anchor": "WorkQueueHandler::class.'@fire'",
+                "sha256": "bb2ff59e81453ea4f40def7b71a547736c09d454167017624a469e3ecc13cc34"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Foundation\\Data\\LifecycleBlocker::jsonSerialize",
+            "source": "packages/core/src/Foundation/Data/LifecycleBlocker.php",
+            "source_sha256": "81e710b4388f80d5514b6adfa55a780e2938b9bb5522ff8118b6c1f80a1e9314",
+            "kind": "serializer",
+            "reason": "Lifecycle plans persist typed blocker arrays through the JSON encoder, which invokes JsonSerializable on each blocker.",
+            "root": {
+                "path": "packages/core/src/Foundation/Internal/DatabaseLifecyclePlans.php",
+                "anchor": "self::encode($scan['blockers'])",
+                "sha256": "9ca42b97eef29a70c2c63953fb4613372444facfeecd0a6ec688c5c79b8a55b9"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Foundation\\Internal\\Commands\\ManageLifecycle::handle",
+            "source": "packages/core/src/Foundation/Internal/Commands/ManageLifecycle.php",
+            "source_sha256": "832af515b630ac60d4850efcc8ffd8bfb07b372a68683d9b147fc76c1974b535",
+            "kind": "framework",
+            "reason": "ConsoleRegistrar resolves the registered corex:lifecycle Artisan command which calls LifecyclePlans with the verified operator.",
+            "root": {
+                "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
+                "anchor": "ManageLifecycle::class,",
+                "sha256": "24212fb15127f06b5032b9fb11c4532eabd1a3362c0d2df79dd8207ea7d5e61e"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Notifications\\Runtime\\Internal\\Commands\\SweepNotificationDeliveries::handle",
+            "source": "packages/notifications/src/Runtime/Internal/Commands/SweepNotificationDeliveries.php",
+            "source_sha256": "c30b8db0a89cacb056b0e9350632aa62eaffd4f46193fa4ae55a564f7c3e83ba",
+            "kind": "framework",
+            "reason": "NotificationsServiceProvider resolves the current Artisan command to sweep scoped durable delivery work.",
+            "root": {
+                "path": "packages/notifications/src/NotificationsServiceProvider.php",
+                "anchor": "->resolveCommands([SweepNotificationDeliveries::class])",
+                "sha256": "dddc03f41b555f679aac53b0635f748edb72411c96ad45802df18fdf064299b0"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Notifications\\Runtime\\Internal\\Jobs\\DeliverNotification::__construct",
+            "source": "packages/notifications/src/Runtime/Internal/Jobs/DeliverNotification.php",
+            "source_sha256": "8f6f3706439ca3d02debe77acc96ce2629c50bd22b928e8589205ee98926d857",
+            "kind": "framework",
+            "reason": "The sweep command dispatches the typed job. Laravel Dispatchable constructs this exact job with the selected delivery identity.",
+            "root": {
+                "path": "packages/notifications/src/Runtime/Internal/Commands/SweepNotificationDeliveries.php",
+                "anchor": "DeliverNotification::dispatch($id);",
+                "sha256": "c30b8db0a89cacb056b0e9350632aa62eaffd4f46193fa4ae55a564f7c3e83ba"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Notifications\\Runtime\\Internal\\Jobs\\DeliverNotification::handle",
+            "source": "packages/notifications/src/Runtime/Internal/Jobs/DeliverNotification.php",
+            "source_sha256": "8f6f3706439ca3d02debe77acc96ce2629c50bd22b928e8589205ee98926d857",
+            "kind": "framework",
+            "reason": "Notifications registers the exact scoped queued job; the signed tenant handler dispatch invokes handle after restoring authority.",
+            "root": {
+                "path": "packages/notifications/src/NotificationsServiceProvider.php",
+                "anchor": "->tenant(DeliverNotification::class)",
+                "sha256": "dddc03f41b555f679aac53b0635f748edb72411c96ad45802df18fdf064299b0"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Scheduler\\SchedulerModule::manifest",
+            "source": "packages/scheduler/src/SchedulerModule.php",
+            "source_sha256": "97691942233d9d5e1971cf17105a47cef8292c459dc71172e909e175b4be76c2",
+            "kind": "framework",
+            "reason": "Composer extra.packman.module registers SchedulerModule. Packman ModuleDiscovery::manifestFor invokes manifest to load Scheduler declarations.",
+            "root": {
+                "path": "packages/scheduler/composer.json",
+                "anchor": "CoreX\\\\Scheduler\\\\SchedulerModule",
+                "sha256": "3be8a8089f83720363c5a9171b171fcf324d90917eab4d55ddea638563731821"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Workflow\\Execution\\Internal\\StartIntentWorker::__construct",
+            "source": "packages/workflow/src/Execution/Internal/StartIntentWorker.php",
+            "source_sha256": "6f049801074cca252ac74364ce075f1c8ae6f4498a1a88074297390ad3adf298",
+            "kind": "framework",
+            "reason": "WorkflowServiceProvider registers this Artisan command. Laravel resolves StartIntentWorker from the typed handle parameter in the active host.",
+            "root": {
+                "path": "packages/workflow/src/Execution/Laravel/Commands/SweepWorkflowIntents.php",
+                "anchor": "function handle(StartIntentWorker $worker)",
+                "sha256": "5870c5c3f13e4b9d5a604b11b6c4dbc5ec5f3efebe67c43dd55d9a29c2843e78"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Workflow\\Execution\\Laravel\\Commands\\SweepWorkflowIntents::handle",
+            "source": "packages/workflow/src/Execution/Laravel/Commands/SweepWorkflowIntents.php",
+            "source_sha256": "5870c5c3f13e4b9d5a604b11b6c4dbc5ec5f3efebe67c43dd55d9a29c2843e78",
+            "kind": "framework",
+            "reason": "WorkflowServiceProvider registers the sweep command in Artisan and Laravel dispatches its handle method.",
+            "root": {
+                "path": "packages/workflow/src/WorkflowServiceProvider.php",
+                "anchor": "->commands([SweepWorkflowIntents::class])",
+                "sha256": "9547ba62428d0c905241600b28dd43318d12b1aae34b8e02da469a2f690e676b"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Search\\Projection\\Contracts\\ProjectionFilter::normalize",
+            "source": "packages/search/src/Projection/Contracts/ProjectionFilter.php",
+            "source_sha256": "d529979cea6934ca9d1a2f6e9de8a3cf90e7853e43bb1034d5f00f3b2bc514d5",
+            "kind": "dynamic",
+            "reason": "Search obtains this callback from the typed field projection. FieldProjectionContributor supplies FieldProjectionFilter from its registered Search Custom Fields contributor.",
+            "root": {
+                "path": "packages/search/src/Query/Internal/SearchPlan.php",
+                "anchor": "$field->filter?->normalize(",
+                "sha256": "0e2ce2add023464f90684dd8f239f228212de74571fc5eefaa571ddbff44fb3f"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\SearchCustomFields\\Projection\\Internal\\FieldProjectionFilter::normalize",
+            "source": "packages/search-custom-fields/src/Projection/Internal/FieldProjectionFilter.php",
+            "source_sha256": "58a802b812e46ba4a747c071f4177266920320f2855c7193ae97488515c69cad",
+            "kind": "dynamic",
+            "reason": "Search obtains this callback from the typed field projection. FieldProjectionContributor supplies FieldProjectionFilter from its registered Search Custom Fields contributor.",
+            "root": {
+                "path": "packages/search/src/Query/Internal/SearchPlan.php",
+                "anchor": "$field->filter?->normalize(",
+                "sha256": "0e2ce2add023464f90684dd8f239f228212de74571fc5eefaa571ddbff44fb3f"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Search\\Projection\\Data\\FieldWitnesses::matches",
+            "source": "packages/search/src/Projection/Data/FieldWitnesses.php",
+            "source_sha256": "c839ef6a24fc9b799e38e5f5ee1e055ca31a1bee18c32d6b4f36c5912ccfbf5c",
+            "kind": "dynamic",
+            "reason": "AuthorizedHydrator rechecks typed candidate field witnesses after current policy and hydration, before returning a SearchHit.",
+            "root": {
+                "path": "packages/search/src/Query/Internal/AuthorizedHydrator.php",
+                "anchor": "$candidate->textWitnesses?->matches(",
+                "sha256": "007c84b2f6d8fd0373054a25c9aa25bf026d145999c235516ca89b8d6ff96bbe"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Search\\Internal\\Postgres\\NullRank::getValue",
+            "source": "packages/search/src/Internal/Postgres/NullRank.php",
+            "source_sha256": "051be05cee6bfd56804e8413b2431fa97f2230a9740d2ae0d31ef4a59a26d3ad",
+            "kind": "framework",
+            "reason": "PostgresCandidateDriver wraps ordered null rank in this Expression. Laravel Grammar resolves its getValue when compiling the ordered query.",
+            "root": {
+                "path": "vendor/laravel/framework/src/Illuminate/Database/Grammar.php",
+                "anchor": "return $this->getValue($expression->getValue($this));",
+                "sha256": "d8a8e9148d0bd53fc0cd321d378687196120869970ba8c635678109c1456e98c"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Search\\Index\\Laravel\\RunIndexWorker::handle",
+            "source": "packages/search/src/Index/Laravel/RunIndexWorker.php",
+            "source_sha256": "d5cec6910e2d07cda37a3120c5b4f0ec373ab20a6b9d8ac607b622b0d94668a9",
+            "kind": "framework",
+            "reason": "The Search index registrar resolves RunIndexWorker on ArtisanStarting. The registered command dispatches scoped indexing work in handle.",
+            "root": {
+                "path": "packages/search/src/Index/Laravel/IndexBindings.php",
+                "anchor": "->resolveCommands([RunIndexWorker::class])",
+                "sha256": "f83c88625ff49a09938bbff148f747596443c8896007c8f8c0b1933004683c5c"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Contracts\\FieldSchemaDependencies::references",
+            "source": "packages/custom-fields/src/Schemas/Contracts/FieldSchemaDependencies.php",
+            "source_sha256": "f8e0eeadcad7ad41556bca207f2cacf0ae0b99779fe0b2c63003ecd9460af9f9",
+            "kind": "dynamic",
+            "reason": "SchemaReferences dispatches this callback on the tagged schema dependency provider iterable installed by FieldSchemaRegistrar. QueuedSchemaOperationsTest mounts an actual dependency contributor.",
+            "root": {
+                "path": "packages/custom-fields/src/Schemas/Internal/SchemaReferences.php",
+                "anchor": "$owner->references(",
+                "sha256": "9136669ffe74f64107076f8c75142e4e7a3d9c85c5b04f15e501da9960df8be9"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Contracts\\FieldSchemas::cancel",
+            "source": "packages/custom-fields/src/Schemas/Contracts/FieldSchemas.php",
+            "source_sha256": "1bcf0fcb0e78dd02611f0a006702f283915348d4eb3388e4ff5a64ea66fcf3a5",
+            "kind": "dynamic",
+            "reason": "The PostgreSQL consumer test cancels the actual scoped schema operation through FieldSchemas. FieldSchemaRegistrar supplies DatabaseFieldSchemas and the test asserts claim generation and state.",
+            "root": {
+                "path": "packages/custom-fields/tests/Pg/QueuedSchemaOperationsTest.php",
+                "anchor": "$this->schemas->cancel(",
+                "sha256": "f85e980ef0c15fbbd650f2cd029cce3813ccf2724f658170dd774f698cc6858c"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Internal\\DatabaseFieldSchemas::cancel",
+            "source": "packages/custom-fields/src/Schemas/Internal/DatabaseFieldSchemas.php",
+            "source_sha256": "9dde1c1872ebfcab70658178e47fba0b81f9e44cb5040c3f167d96e335bc6cee",
+            "kind": "dynamic",
+            "reason": "The PostgreSQL consumer test cancels the actual scoped schema operation through FieldSchemas. FieldSchemaRegistrar supplies DatabaseFieldSchemas and the test asserts claim generation and state.",
+            "root": {
+                "path": "packages/custom-fields/tests/Pg/QueuedSchemaOperationsTest.php",
+                "anchor": "$this->schemas->cancel(",
+                "sha256": "f85e980ef0c15fbbd650f2cd029cce3813ccf2724f658170dd774f698cc6858c"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Internal\\PostgresDdlExecutor::__construct",
+            "source": "packages/custom-fields/src/Schemas/Internal/PostgresDdlExecutor.php",
+            "source_sha256": "df33260f0cb81179659b4eb8e84fb9077bf2834009f3d20699eaca7bb4d442f1",
+            "kind": "framework",
+            "reason": "FieldSchemaRegistrar resolves SchemaSteps into the active scope. Laravel autowires this exact constructor as its typed dependency.",
+            "root": {
+                "path": "packages/custom-fields/src/Schemas/Internal/SchemaSteps.php",
+                "anchor": "private PostgresDdlExecutor $ddl",
+                "sha256": "3fa60b556e7798a0e93447d81c58008a232540190f5067e3bd7fad7f0a6f9dab"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Internal\\SchemaAccess::__construct",
+            "source": "packages/custom-fields/src/Schemas/Internal/SchemaAccess.php",
+            "source_sha256": "5a9b1eebbc90223ac7b4a20cc0bed9f997c72f768d152edbd5171e14819644bf",
+            "kind": "framework",
+            "reason": "FieldSchemaRegistrar resolves DatabaseFieldSchemas into the active scope. Laravel autowires this exact constructor as its typed dependency.",
+            "root": {
+                "path": "packages/custom-fields/src/Schemas/Internal/DatabaseFieldSchemas.php",
+                "anchor": "private SchemaAccess $access",
+                "sha256": "9dde1c1872ebfcab70658178e47fba0b81f9e44cb5040c3f167d96e335bc6cee"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Internal\\SchemaPlanner::__construct",
+            "source": "packages/custom-fields/src/Schemas/Internal/SchemaPlanner.php",
+            "source_sha256": "44c20253470988b09785bd3ec88541a3bed1d70106681cec60399bc32b54044d",
+            "kind": "framework",
+            "reason": "FieldSchemaRegistrar resolves DatabaseFieldSchemas into the active scope. Laravel autowires this exact constructor as its typed dependency.",
+            "root": {
+                "path": "packages/custom-fields/src/Schemas/Internal/DatabaseFieldSchemas.php",
+                "anchor": "private SchemaPlanner $planner",
+                "sha256": "9dde1c1872ebfcab70658178e47fba0b81f9e44cb5040c3f167d96e335bc6cee"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Internal\\ShadowBackfill::__construct",
+            "source": "packages/custom-fields/src/Schemas/Internal/ShadowBackfill.php",
+            "source_sha256": "cfa5021e2d2a9a5248f6f196df0e724198999432f5fe9af1c41b84526331fc2e",
+            "kind": "framework",
+            "reason": "FieldSchemaRegistrar resolves SchemaSteps into the active scope. Laravel autowires this exact constructor as its typed dependency.",
+            "root": {
+                "path": "packages/custom-fields/src/Schemas/Internal/SchemaSteps.php",
+                "anchor": "private ShadowBackfill $backfill",
+                "sha256": "3fa60b556e7798a0e93447d81c58008a232540190f5067e3bd7fad7f0a6f9dab"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\CustomFields\\Schemas\\Laravel\\RunFieldSchemaWorker::handle",
+            "source": "packages/custom-fields/src/Schemas/Laravel/RunFieldSchemaWorker.php",
+            "source_sha256": "6da529ff8aa05922c70f6ee75412291cf25ee08bd8d91766904da9394920e86e",
+            "kind": "framework",
+            "reason": "FieldSchemaRegistrar resolves the schema worker command on ArtisanStarting. Laravel invokes handle with the registered scoped worker.",
+            "root": {
+                "path": "packages/custom-fields/src/Schemas/Laravel/FieldSchemaRegistrar.php",
+                "anchor": "->resolveCommands([RunFieldSchemaWorker::class])",
+                "sha256": "89a36995c62b3103c86190561e423c02e83073fee92051daaea324f6fd3e11c6"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Bulk\\Laravel\\SubmitBulkOperation::prepare",
+            "source": "packages/operations/src/Bulk/Laravel/SubmitBulkOperation.php",
+            "source_sha256": "69ee65edaf539e5b6d512794f3a8c11b2f8657ef1d1d5291bf0ecac75df796b8",
+            "kind": "dynamic",
+            "reason": "IdempotentOperationInvoker calls the scoped Bulk handler to validate a trusted owner draft and enlist its targets before receipt lookup.",
+            "root": {
+                "path": "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+                "anchor": "$bulk->prepare(",
+                "sha256": "06a994cc8abe7bb13776ce5a40432386caa90722a41f9957711139b6a1fe4583"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Bulk\\Laravel\\SubmitBulkOperation::clear",
+            "source": "packages/operations/src/Bulk/Laravel/SubmitBulkOperation.php",
+            "source_sha256": "69ee65edaf539e5b6d512794f3a8c11b2f8657ef1d1d5291bf0ecac75df796b8",
+            "kind": "dynamic",
+            "reason": "The shared idempotency invoker clears the exact scoped invocation draft in its finally path.",
+            "root": {
+                "path": "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+                "anchor": "$bulk?->clear(",
+                "sha256": "06a994cc8abe7bb13776ce5a40432386caa90722a41f9957711139b6a1fe4583"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar::__construct",
+            "source": "packages/operations/src/Bulk/Laravel/BulkRouteRegistrar.php",
+            "source_sha256": "43e9c7dcf444b9d74e9a5f8b92d4da908db885642549657d9d82b697004b0771",
+            "kind": "framework",
+            "reason": "BulkHttpRegistrar mounts the exact v2 Bulk controller actions. Laravel autowires the dispatcher through the scoped HttpOperationDispatcher binding.",
+            "root": {
+                "path": "packages/operations/src/Bulk/Laravel/BulkHttpRegistrar.php",
+                "anchor": "[BulkRouteRegistrar::class, 'submit']",
+                "sha256": "69eafa32bc0d1f71ff930a811f22d6091e1a61ba971d7b1eb52c9786f96b9ef2"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Bulk\\Laravel\\BulkSubmitGateway::target",
+            "source": "packages/operations/src/Bulk/Laravel/BulkSubmitGateway.php",
+            "source_sha256": "e2047f73303d050b2e8c7ca540498f3e316950f473d3ab13b079002f5f3d6478",
+            "kind": "dynamic",
+            "reason": "IdempotentOperationInvoker resolves the scoped BulkSubmitGateway factory and selects the actual target before the single owner admission.",
+            "root": {
+                "path": "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+                "anchor": ")->target(",
+                "sha256": "06a994cc8abe7bb13776ce5a40432386caa90722a41f9957711139b6a1fe4583"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Bulk\\Laravel\\SubmitBulkOperation::release",
+            "source": "packages/operations/src/Bulk/Laravel/SubmitBulkOperation.php",
+            "source_sha256": "69ee65edaf539e5b6d512794f3a8c11b2f8657ef1d1d5291bf0ecac75df796b8",
+            "kind": "dynamic",
+            "reason": "The shared invoker invokes the bound Bulk handler to release the same accepted result only after current owner authorization.",
+            "root": {
+                "path": "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+                "anchor": "$handler->release(",
+                "sha256": "06a994cc8abe7bb13776ce5a40432386caa90722a41f9957711139b6a1fe4583"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Tools\\Mcp\\Laravel\\McpToolEndpoint::__construct",
+            "source": "packages/tools/src/Mcp/Laravel/McpToolEndpoint.php",
+            "source_sha256": "78c224a8c0537dd6e668b315b9541b0179cac7cf7f2979d12d4e7ebaf4be54eb",
+            "kind": "framework",
+            "reason": "The installed TransportProofServiceProvider mounts the exact invokable MCP endpoint. Laravel resolves its typed dependencies behind trusted host middleware.",
+            "root": {
+                "path": "tests/Distribution/fixtures/scenarios/transport/host/app/Providers/TransportProofServiceProvider.php",
+                "anchor": "McpToolEndpoint::class)->middleware(",
+                "sha256": "8527e1dba08f6e97de9652a7c87e25c7dd6969589a53bc29ff8e53fdf2bb99ce"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Tools\\Mcp\\Laravel\\McpToolEndpoint::__invoke",
+            "source": "packages/tools/src/Mcp/Laravel/McpToolEndpoint.php",
+            "source_sha256": "78c224a8c0537dd6e668b315b9541b0179cac7cf7f2979d12d4e7ebaf4be54eb",
+            "kind": "framework",
+            "reason": "The installed TransportProofServiceProvider mounts the actual MCP endpoint; Laravel dispatches tools/list and tools/call to this invokable action.",
+            "root": {
+                "path": "tests/Distribution/fixtures/scenarios/transport/host/app/Providers/TransportProofServiceProvider.php",
+                "anchor": "McpToolEndpoint::class)->middleware(",
+                "sha256": "8527e1dba08f6e97de9652a7c87e25c7dd6969589a53bc29ff8e53fdf2bb99ce"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Errors\\Laravel\\OperationErrorBoundary::__construct",
+            "source": "packages/operations/src/Errors/Laravel/OperationErrorBoundary.php",
+            "source_sha256": "49dfefc708ee26d9022ad3e68f7d6e66b66f7a5c885719309387b633bc14c658",
+            "kind": "framework",
+            "reason": "HttpRegistrar resolves this exact Laravel middleware on every mounted v2 operation route, including the outer ErrorBoundary.",
+            "root": {
+                "path": "packages/operations/src/Laravel/HttpRegistrar.php",
+                "anchor": "->middleware([OperationErrorBoundary::class, ...$options->routeMiddleware])",
+                "sha256": "9cd522e022ddb9a4ab3b743d86be30a31078d7c92fa25c1d04980f276696b227"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Operations\\Errors\\Laravel\\OperationErrorBoundary::handle",
+            "source": "packages/operations/src/Errors/Laravel/OperationErrorBoundary.php",
+            "source_sha256": "49dfefc708ee26d9022ad3e68f7d6e66b66f7a5c885719309387b633bc14c658",
+            "kind": "framework",
+            "reason": "HttpRegistrar installs this exact middleware in the configured v2 group. Laravel Pipeline dispatches handle and projects typed Problems.",
+            "root": {
+                "path": "packages/operations/src/Laravel/HttpRegistrar.php",
+                "anchor": "->middleware([OperationErrorBoundary::class, ...$options->routeMiddleware])",
+                "sha256": "9cd522e022ddb9a4ab3b743d86be30a31078d7c92fa25c1d04980f276696b227"
             },
             "expires": null
         }

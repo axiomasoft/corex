@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Scenario\FixtureWebhookProjector;
+
+return [
+    'delivery_enabled' => true,
+    'worker_ready' => true,
+    'topics' => [[
+        'name' => 'fixture.recordchanged',
+        'version' => 1,
+        'major' => 'v2',
+        'schema' => ['record' => 'string'],
+        'pii_class' => 'none',
+        'projector_service' => 'fixture.webhooks',
+    ]],
+    'projectors' => ['fixture.webhooks' => FixtureWebhookProjector::class],
+];

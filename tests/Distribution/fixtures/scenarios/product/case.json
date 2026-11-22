@@ -1,0 +1,321 @@
+{
+  "id": "product",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 240,
+  "retain_install_evidence": true,
+  "distinct_connections": true,
+  "variants": {
+    "equipment": {
+      "host_components": [
+        "bulk-transfer/host/app/BulkTransfer",
+        "field-search/host/app/FieldSearch"
+      ],
+      "profile": {
+        "id": "installed-equipment-product",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "budget",
+          "sink"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-scheduler",
+          "axiomasoft/corex-recurring-tasks",
+          "axiomasoft/corex-tasks",
+          "axiomasoft/corex-search-custom-fields"
+        ],
+        "extension_fixture": {
+          "id": "equipment-registry",
+          "version": "1.0.0",
+          "kind": "equipment"
+        },
+        "search_custom_fields": "enabled"
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/equipment.php",
+          "setup"
+        ],
+        "schedule": [
+          "php",
+          "{fixture}/equipment.php",
+          "schedule"
+        ],
+        "scheduler-worker": [
+          "php",
+          "{fixture}/equipment.php",
+          "scheduler-worker"
+        ],
+        "bulk-worker": [
+          "php",
+          "{fixture}/equipment.php",
+          "bulk-worker"
+        ],
+        "read": [
+          "php",
+          "{fixture}/equipment.php",
+          "read"
+        ],
+        "revoke": [
+          "php",
+          "{fixture}/equipment.php",
+          "revoke"
+        ],
+        "denial": [
+          "php",
+          "{fixture}/equipment.php",
+          "denial"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "schedule"
+        },
+        {
+          "action": "complete",
+          "name": "schedule"
+        },
+        {
+          "action": "start",
+          "name": "scheduler-worker"
+        },
+        {
+          "action": "complete",
+          "name": "scheduler-worker"
+        },
+        {
+          "action": "start",
+          "name": "bulk-worker"
+        },
+        {
+          "action": "complete",
+          "name": "bulk-worker"
+        },
+        {
+          "action": "start",
+          "name": "read"
+        },
+        {
+          "action": "complete",
+          "name": "read"
+        },
+        {
+          "action": "start",
+          "name": "revoke"
+        },
+        {
+          "action": "complete",
+          "name": "revoke"
+        },
+        {
+          "action": "start",
+          "name": "denial"
+        },
+        {
+          "action": "complete",
+          "name": "denial"
+        }
+      ]
+    },
+    "cloud": {
+      "profile": {
+        "id": "installed-flex-crm-product",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "b",
+          "budget"
+        ],
+        "default_database": "control",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-intl",
+          "axiomasoft/corex-tenancy",
+          "axiomasoft/corex-access",
+          "axiomasoft/corex-operations"
+        ],
+        "prerequisites": [
+          "axiomasoft/tenant-laravel"
+        ],
+        "product": "flex/crm"
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/crm.php",
+          "setup"
+        ],
+        "before-enable": [
+          "php",
+          "{fixture}/crm.php",
+          "before-enable"
+        ],
+        "enable": [
+          "php",
+          "{fixture}/crm.php",
+          "enable"
+        ],
+        "create": [
+          "php",
+          "{fixture}/crm.php",
+          "create"
+        ],
+        "read": [
+          "php",
+          "{fixture}/crm.php",
+          "read"
+        ],
+        "mutate": [
+          "php",
+          "{fixture}/crm.php",
+          "mutate"
+        ],
+        "read-updated": [
+          "php",
+          "{fixture}/crm.php",
+          "read-updated"
+        ],
+        "foreign": [
+          "php",
+          "{fixture}/crm.php",
+          "foreign"
+        ],
+        "delete": [
+          "php",
+          "{fixture}/crm.php",
+          "delete"
+        ],
+        "read-deleted": [
+          "php",
+          "{fixture}/crm.php",
+          "read-deleted"
+        ],
+        "revoke": [
+          "php",
+          "{fixture}/crm.php",
+          "revoke"
+        ],
+        "denial": [
+          "php",
+          "{fixture}/crm.php",
+          "denial"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "before-enable"
+        },
+        {
+          "action": "complete",
+          "name": "before-enable"
+        },
+        {
+          "action": "start",
+          "name": "enable"
+        },
+        {
+          "action": "complete",
+          "name": "enable"
+        },
+        {
+          "action": "start",
+          "name": "create"
+        },
+        {
+          "action": "complete",
+          "name": "create"
+        },
+        {
+          "action": "start",
+          "name": "read"
+        },
+        {
+          "action": "complete",
+          "name": "read"
+        },
+        {
+          "action": "start",
+          "name": "mutate"
+        },
+        {
+          "action": "complete",
+          "name": "mutate"
+        },
+        {
+          "action": "start",
+          "name": "read-updated"
+        },
+        {
+          "action": "complete",
+          "name": "read-updated"
+        },
+        {
+          "action": "start",
+          "name": "foreign"
+        },
+        {
+          "action": "complete",
+          "name": "foreign"
+        },
+        {
+          "action": "start",
+          "name": "delete"
+        },
+        {
+          "action": "complete",
+          "name": "delete"
+        },
+        {
+          "action": "start",
+          "name": "read-deleted"
+        },
+        {
+          "action": "complete",
+          "name": "read-deleted"
+        },
+        {
+          "action": "start",
+          "name": "revoke"
+        },
+        {
+          "action": "complete",
+          "name": "revoke"
+        },
+        {
+          "action": "start",
+          "name": "denial"
+        },
+        {
+          "action": "complete",
+          "name": "denial"
+        }
+      ]
+    }
+  }
+}

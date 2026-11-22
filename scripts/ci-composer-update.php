@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__.'/support/cli-arguments.php';
+
 // Resolve the Laravel matrix while keeping analysis rules bound to the reviewed lockfile.
 // Upgrading this toolchain requires a lockfile change, just as it does locally.
 $lock = json_decode((string) file_get_contents(__DIR__.'/../composer.lock'), true, flags: JSON_THROW_ON_ERROR);
@@ -45,7 +47,7 @@ foreach ($tools as $tool) {
     echo "CI locked toolchain: {$tool} {$versions[$tool]}\n";
 }
 
-$command = array_merge($command, array_slice($argv, 1));
+$command = array_merge($command, array_slice(\CoreX\Scripts\cliArguments(), 1));
 $process = proc_open($command, [STDIN, STDOUT, STDERR], $pipes, dirname(__DIR__));
 
 if (! is_resource($process)) {

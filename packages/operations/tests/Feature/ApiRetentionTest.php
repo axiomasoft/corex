@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Foundation\Contracts\ModuleReferences;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Operations\Bulk\Internal\BulkRetention;
 use CoreX\Operations\Cost\Contracts\BudgetReservation;
 use CoreX\Operations\Cost\Data\BudgetScope;
@@ -79,6 +82,35 @@ final class ApiRetentionTest extends TestCase
         }
 
         parent::tearDown();
+    }
+
+    public function test_registered_operations_probe_preserves_split_store_reference_order_and_bulk_blocker(): void
+    {
+        $this->app->instance(CurrentWorkScope::class, $this->restorer);
+        $module = new ModuleRef('axiomasoft/corex-operations');
+        $probe = collect($this->app->tagged(ModuleReferences::class))->sole(
+            static fn (ModuleReferences $probe): bool => $probe->owner() === $module->package,
+        );
+        $now = $this->clock->now();
+        $this->bulkRow('bulk-blocking', 'running', null, null, 'private-input', null, null, $now);
+        $cursor = null;
+        $revision = null;
+        for ($table = 0; $table < 4; $table++) {
+            $page = $probe->scan(module: $module, scope: $this->scope, after: $cursor);
+            $revision ??= $page->revision;
+            self::assertSame($revision, $page->revision);
+            $cursor = $page->next;
+
+            if ($table < 3) {
+                self::assertSame([], $page->blockers);
+                self::assertNotNull($cursor);
+            }
+        }
+        self::assertNull($cursor);
+        self::assertCount(1, $page->blockers);
+        self::assertSame('sys_api_bulk_operations', $page->blockers[0]->resourceKind);
+        self::assertSame('bulk-blocking', $page->blockers[0]->resourceId);
+        self::assertSame('remove-or-rebind-reference', $page->blockers[0]->requiredAction);
     }
 
     public function test_retention_windows_reject_unsafe_configuration(): void
@@ -329,7 +361,7 @@ final class ApiRetentionTest extends TestCase
 
         $this->tenant->table('sys_api_bulk_operations')->insert([
             'id' => $id,
-            'major' => 'v1',
+            'major' => 'v2',
             'operation_id' => 'contacts.export',
             'submission_id' => 'submission-'.$id,
             'logical_scope' => str_repeat('a', 64), 'scope' => JsonCanonical::encode((new ArrayDataScopeCodec)->encode($scope)),

@@ -158,7 +158,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             $connection->table('sys_api_webhook_subscriptions')->insert([
                 'id' => 'sub-local',
                 'revision' => 0,
-                'major' => 'v1',
+                'major' => 'v2',
                 'topic' => 'orders.placed',
                 'topic_version' => 1,
                 'endpoint_url' => 'https://hooks.example/receiver',
@@ -245,7 +245,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             MessagingFixtures::contracts([
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]),
-            [new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
+            [new WebhookTopic('orders.placed', 1, 'v2', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
             ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector],
         );
     }
@@ -323,7 +323,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
     private function subscription(string $id, DateTimeImmutable $now): WebhookSubscription
     {
-        return new WebhookSubscription($id, 0, 'v1', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $now, $now);
+        return new WebhookSubscription($id, 0, 'v2', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $now, $now);
     }
 }
 

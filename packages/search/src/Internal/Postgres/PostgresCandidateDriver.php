@@ -58,8 +58,8 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
     {
         $this->assertConnection($scope);
 
-        return new IndexTarget($scope, $entity, 'postgres', $this->cluster, 1,
-            IndexTarget::uidFor($scope, $entity, 'postgres', $this->cluster, 1), $mappingDigest);
+        return new IndexTarget(scope: $scope, entity: $entity, backend: 'postgres', cluster: $this->cluster, generation: 1,
+            uid: IndexTarget::uidFor(scope: $scope, entity: $entity, backend: 'postgres', cluster: $this->cluster, generation: 1), mappingDigest: $mappingDigest);
     }
 
     public function candidates(CandidateRequest $request): CandidatePage
@@ -95,7 +95,7 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
         }
 
         if ($request->position !== null) {
-            $this->after($query, $ordering, $this->position($request->position, count($ordering)));
+            $this->after(query: $query, ordering: $ordering, keys: $this->position(position: $request->position, length: count($ordering)));
         }
         $results = $query->limit($request->limit)->get();
         $candidates = [];
@@ -119,8 +119,8 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
                 }
                 $text[$field] = $value;
             }
-            $witness = $searchFields === [] ? null : FieldWitnesses::capture(new ProjectedValues($text), new ProjectionSelection($searchFields));
-            $candidates[] = new Candidate($request->generation, $record, $request->generation->documentId($record), $witness);
+            $witness = $searchFields === [] ? null : FieldWitnesses::capture(values: new ProjectedValues($text), selection: new ProjectionSelection($searchFields));
+            $candidates[] = new Candidate(generation: $request->generation, record: $record, documentId: $request->generation->documentId($record), textWitnesses: $witness);
         }
         $last = $results->last();
         $next = null;
@@ -133,7 +133,7 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
             $next = json_encode($keys, JSON_THROW_ON_ERROR);
         }
 
-        return new CandidatePage($candidates, $next);
+        return new CandidatePage(candidates: $candidates, nextPosition: $next);
     }
 
     public function inSnapshot(DataScope $scope, Closure $query): SearchPage
@@ -149,7 +149,7 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
             $this->connection->statement('SET LOCAL transaction_read_only TO on');
             $this->assertConnection($scope);
 
-            if (! $this->authority->covers($scope, $this->connection)) {
+            if (! $this->authority->covers(scope: $scope, connection: $this->connection)) {
                 return $query(false);
             }
             $this->snapshotScope = $scope;
@@ -181,7 +181,7 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
                 ->groupBy($column)->limit(1001)->get();
 
             if ($grouped->count() > 1000) {
-                return new SearchStatistics($total, null);
+                return new SearchStatistics(count: $total, facets: null);
             }
             $buckets[$field] = [];
             foreach ($grouped as $row) {
@@ -196,21 +196,21 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
             ksort($buckets[$field]);
         }
 
-        return new SearchStatistics($total, $buckets);
+        return new SearchStatistics(count: $total, facets: $buckets);
     }
 
     /** @return array{PostgresCorpusRows, Builder} */
     private function filtered(CandidateRequest $request): array
     {
         $target = $request->generation;
-        $expected = $this->target($request->scope, $target->entity, $target->mappingDigest);
+        $expected = $this->target(scope: $request->scope, entity: $target->entity, mappingDigest: $target->mappingDigest);
 
         if (get_object_vars($target->scope) !== get_object_vars($expected->scope)
             || $target->backend !== $expected->backend || $target->cluster !== $expected->cluster
             || $target->generation !== $expected->generation || $target->uid !== $expected->uid) {
             throw SearchFeatureUnavailable::unsupported();
         }
-        $rows = $this->corpus->rows($expected, $this->connection);
+        $rows = $this->corpus->rows(target: $expected, connection: $this->connection);
 
         if ($rows->query->getConnection() !== $this->connection || $rows->query->limit !== null
             || $rows->query->offset !== null || $rows->query->groups !== null || $rows->query->unions !== null) {
@@ -235,7 +235,7 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
             if ($columns === []) {
                 throw SearchFeatureUnavailable::unsupported();
             }
-            $query->whereRaw(new SearchTextExpression($columns, $this->configuration), [$this->configuration, $request->text]);
+            $query->whereRaw(new SearchTextExpression(columns: $columns, configuration: $this->configuration), [$this->configuration, $request->text]);
         }
 
         return [$rows, $query];
@@ -246,7 +246,7 @@ final class PostgresCandidateDriver implements ExactCandidateDriver
         if (! $this->connection instanceof PostgresConnection) {
             throw SearchFeatureUnavailable::unsupported();
         }
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
     }
 
     /** @return list<bool|int|string|null> */

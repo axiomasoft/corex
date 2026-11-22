@@ -30,7 +30,7 @@ final class RunIndexWorker extends Command
         $scope = $scopes->forCurrentPrincipal($context->current());
         $entity = new EntityHandle($name);
         $count = 0;
-        while ($count < $limit && $worker->advance($scope, $entity, $generation)) {
+        while ($count < $limit && $worker->advance(scope: $scope, entity: $entity, generation: $generation)) {
             $count++;
         }
         $this->line('Processed index phases: '.$count);

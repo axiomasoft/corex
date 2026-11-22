@@ -985,5 +985,7 @@ final class SchemaGate
 }
 
 if (debug_backtrace() === []) {
-    exit(SchemaGate::main(array_slice($argv, 1)));
+    require_once __DIR__.'/support/cli-arguments.php';
+
+    exit(SchemaGate::main(array_slice(\CoreX\Scripts\cliArguments(), 1)));
 }

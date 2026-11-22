@@ -129,8 +129,8 @@ final readonly class RootWakeupReconciler
 
             try {
                 $nextFireAt = $this->inAccount(
-                    $context,
-                    fn (): ?DateTimeImmutable => $this->sweeper->nextDue(context: $context),
+                    context: $context,
+                    work: fn (): ?DateTimeImmutable => $this->sweeper->nextDue(context: $context),
                 );
             } catch (Throwable) {
                 $attempts = DatabaseValue::integer($state->attempts) + 1;
@@ -217,8 +217,8 @@ final readonly class RootWakeupReconciler
     {
         $context = new TenantContext(account: $claim['account']);
         $nextFireAt = $this->inAccount(
-            $context,
-            function () use ($context): ?DateTimeImmutable {
+            context: $context,
+            work: function () use ($context): ?DateTimeImmutable {
                 $this->sweeper->sweep(context: $context, limit: 100);
 
                 return $this->sweeper->nextDue(context: $context);
@@ -248,10 +248,10 @@ final readonly class RootWakeupReconciler
     /** @param  Closure():?DateTimeImmutable  $work */
     private function inAccount(TenantContext $context, Closure $work): ?DateTimeImmutable
     {
-        return $this->tenancy->runFor($context->account, null, fn (): ?DateTimeImmutable => $this->namedPrincipals->run(
-            $context,
-            self::SERVICE,
-            function () use ($context, $work): ?DateTimeImmutable {
+        return $this->tenancy->runFor(account: $context->account, workspace: null, callback: fn (): ?DateTimeImmutable => $this->namedPrincipals->run(
+            context: $context,
+            serviceId: self::SERVICE,
+            work: function () use ($context, $work): ?DateTimeImmutable {
                 $scope = $this->scopes->forCurrentPrincipal($context);
 
                 if ($scope->principalKind !== 'service' || $scope->principalId !== self::SERVICE) {

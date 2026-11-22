@@ -28,7 +28,7 @@ final readonly class DirtyJournal implements SearchInvalidations
         if ($subjectEntity !== $entity->value) {
             throw new LogicException('Search invalidation subject does not match the entity.');
         }
-        $lane = $this->store->lane($writer, $event->scope, $entity, true);
+        $lane = $this->store->lane(db: $writer, scope: $event->scope, entity: $entity, create: true);
         $seq = Value::integer($lane->last_allocated_seq);
         foreach ($records as $record) {
             if ($record->entity !== $entity->value || ($event->subject instanceof RecordRef && $record->id !== $event->subject->id)) {

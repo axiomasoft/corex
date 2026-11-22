@@ -23,7 +23,7 @@ final readonly class WakeupRequest
         public ?WakeupWindow $window,
         public JsonDocument $payload,
     ) {
-        new WakeupIdentity($kind, $requestKey);
+        new WakeupIdentity(kind: $kind, requestKey: $requestKey);
 
         if (
             $handlerVersion === '' || trim($handlerVersion) !== $handlerVersion || strlen($handlerVersion) > 128

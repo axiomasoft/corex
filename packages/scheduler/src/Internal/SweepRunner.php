@@ -12,6 +12,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\JsonDocument;
@@ -70,16 +71,16 @@ final readonly class SweepRunner implements DueWakeupSweeper
             throw new InvalidArgumentException('Wakeup sweep limit must be between 1 and 1000.');
         }
         $owner = $this->scopes->forCurrentPrincipal($context);
-        $claims = $this->runner->run($owner, fn (): array => $this->claimDue($owner, $limit));
+        $claims = $this->runner->run(scope: $owner, work: fn (): array => $this->claimDue(owner: $owner, limit: $limit));
         $counts = ['completed' => 0, 'retried' => 0, 'failed' => 0, 'skipped' => 0];
 
         foreach ($claims as $claim) {
-            $counts[$this->run($owner, $claim)]++;
+            $counts[$this->run(owner: $owner, claim: $claim)]++;
         }
 
         $context = $this->contexts->current();
         $current = $this->scopes->forCurrentPrincipal($context);
-        $this->assertOwner($owner, $current);
+        $this->assertOwner(owner: $owner, scope: $current);
         $sources = ($this->dueSources)();
         $available = $limit - count($claims);
         $claimed = count($claims);
@@ -88,7 +89,7 @@ final readonly class SweepRunner implements DueWakeupSweeper
                 break;
             }
             $batch = max(1, intdiv($available, count($sources) - $i));
-            $result = $this->runner->run($current, fn (): SweepResult => $source->sweep($context, $this->clock->now(), $batch));
+            $result = $this->runner->run(scope: $current, work: fn (): SweepResult => $source->sweep($context, $this->clock->now(), $batch));
             $available -= $result->claimed;
             $claimed += $result->claimed;
             $counts['completed'] += $result->completed;
@@ -98,15 +99,15 @@ final readonly class SweepRunner implements DueWakeupSweeper
         }
         $next = $this->nextDue($context);
 
-        return new SweepResult($claimed, $counts['completed'], $counts['retried'], $counts['failed'], $counts['skipped'],
-            $next !== null && $next <= $this->clock->now(), $next);
+        return new SweepResult(claimed: $claimed, completed: $counts['completed'], retried: $counts['retried'], failed: $counts['failed'], skipped: $counts['skipped'],
+            remainingDue: $next !== null && $next <= $this->clock->now(), nextFireAt: $next);
     }
 
     public function nextDue(TenantContext $context): ?DateTimeImmutable
     {
         $scope = $this->scopes->forCurrentPrincipal($context);
         $db = $this->connection($scope);
-        $value = $this->runnable($db, $scope)->min($db->raw(self::DUE_TIME));
+        $value = $this->runnable(db: $db, owner: $scope)->min($db->raw(self::DUE_TIME));
         $due = $value === null ? null : WakeupInput::instant($value);
 
         foreach (($this->dueSources)() as $source) {
@@ -141,7 +142,7 @@ final readonly class SweepRunner implements DueWakeupSweeper
         return $db->transaction(function () use ($db, $owner, $limit): array {
             $now = $this->clock->now();
             $stamp = WakeupInput::time($now);
-            $query = $this->runnable($db, $owner)->whereRaw(self::DUE_TIME.' <= ?', [$stamp])
+            $query = $this->runnable(db: $db, owner: $owner)->whereRaw(self::DUE_TIME.' <= ?', [$stamp])
                 ->orderByRaw(self::DUE_TIME)->orderBy('id')->limit($limit);
             $rows = $query->lock($db->getDriverName() === 'pgsql' ? 'for update skip locked' : true)->get();
             $claims = [];
@@ -156,9 +157,9 @@ final readonly class SweepRunner implements DueWakeupSweeper
 
                     continue;
                 }
-                $claim = new WakeupClaim(Value::text($row->id), (string) Str::uuid7(), Value::integer($row->generation) + 1,
-                    $attempt + 1, Value::text($row->data_scope), Value::text($row->request_digest), Value::text($row->scope_seal), Value::text($row->workspace_scope_key),
-                    $now->add(new DateInterval("PT{$this->leaseSeconds}S")));
+                $claim = new WakeupClaim(id: Value::text($row->id), token: (string) Str::uuid7(), generation: Value::integer($row->generation) + 1,
+                    attempt: $attempt + 1, scope: Value::text($row->data_scope), digest: Value::text($row->request_digest), seal: Value::text($row->scope_seal), workspace: Value::text($row->workspace_scope_key),
+                    deadline: $now->add(new DateInterval("PT{$this->leaseSeconds}S")));
                 $update->update(['status' => 'running', 'claim_token' => $claim->token, 'generation' => $claim->generation,
                     'attempt' => $claim->attempt, 'lease_until' => WakeupInput::time($claim->deadline),
                     'retry_at' => null, 'failure_code' => null, 'updated_at' => $stamp]);
@@ -178,28 +179,28 @@ final readonly class SweepRunner implements DueWakeupSweeper
                 throw InvalidScopePayload::missing('scope');
             }
             $scope = $this->codec->decode(Value::map($fields));
-            $this->assertOwner($owner, $scope);
+            $this->assertOwner(owner: $owner, scope: $scope);
 
             if (WakeupInput::workspace($scope) !== $claim->workspace) {
                 throw new ScopeContextMismatch('Claim has an inconsistent workspace.');
             }
 
-            return $this->stored->runStored($scope, $claim->proof(), function (TenantContext $context) use ($scope, $claim): string {
+            return $this->stored->runStored(scope: $scope, proof: $claim->proof(), work: function (TenantContext $context) use ($scope, $claim): string {
                 $db = $this->connection($scope);
 
-                return $this->deliver($db, $context, $scope, $claim);
-            }, $claim->operation());
+                return $this->deliver(db: $db, context: $context, scope: $scope, claim: $claim);
+            }, attempt: $claim->operation());
         } catch (WakeupClaimLost) {
             return 'skipped';
-        } catch (InvalidScopePayload|JsonException|ScopeContextMismatch) {
+        } catch (InvalidScopePayload|JsonException|ScopeContextMismatch|ScopeStale) {
             // Only a currently admitted sweep of the same physical owner may quarantine a row.
             $current = $this->scopes->forCurrentPrincipal($this->contexts->current());
-            $this->assertOwner($owner, $current);
+            $this->assertOwner(owner: $owner, scope: $current);
 
-            return $this->runner->run($current, function () use ($current, $claim): string {
+            return $this->runner->run(scope: $current, work: function () use ($current, $claim): string {
                 $db = $this->connection($current);
 
-                return $db->transaction(fn (): string => $this->quarantine($db, $claim, 'scope-unavailable'));
+                return $db->transaction(fn (): string => $this->quarantine(db: $db, claim: $claim, reason: 'scope-unavailable'));
             });
         }
     }
@@ -229,43 +230,43 @@ final readonly class SweepRunner implements DueWakeupSweeper
                     $envelope = json_decode(Value::text($row->payload), flags: JSON_THROW_ON_ERROR);
                     $metadata = $envelope instanceof stdClass ? ($envelope->_corex ?? null) : null;
                     $data = $envelope instanceof stdClass ? ($envelope->data ?? null) : null;
-                    $payload = $this->handlers->inspectPayload(Value::text($row->kind), [
+                    $payload = $this->handlers->inspectPayload(kind: Value::text($row->kind), payload: [
                         '_corex' => $metadata instanceof stdClass ? ['schema' => $metadata->schema ?? null, 'extension' => (array) ($metadata->extension ?? null)] : null,
                         'data' => $data instanceof stdClass || $data === [] ? (array) $data : null,
                     ]);
 
                     if ($payload['status'] !== 'ready') {
-                        return $this->quarantine($db, $claim, $payload['status']);
+                        return $this->quarantine(db: $db, claim: $claim, reason: $payload['status']);
                     }
-                    $request = $this->request($row, $scope, $payload['data'] ?? []);
+                    $request = $this->request(row: $row, scope: $scope, data: $payload['data'] ?? []);
 
                     if ($row->account_id !== $scope->accountId || $row->account_incarnation !== $scope->accountIncarnation
                         || $row->workspace_scope_key !== WakeupInput::workspace($scope) || $row->data_scope !== $claim->scope
-                        || ! hash_equals($claim->digest, $this->input->digest($request, WakeupInput::payload($request->payload)))) {
-                        return $this->quarantine($db, $claim, 'request-digest-mismatch');
+                        || ! hash_equals($claim->digest, $this->input->digest(request: $request, data: WakeupInput::payload($request->payload)))) {
+                        return $this->quarantine(db: $db, claim: $claim, reason: 'request-digest-mismatch');
                     }
                 } catch (InvalidArgumentException|JsonException|RuntimeException $e) {
                     if ($e instanceof QueryException) {
                         throw $e;
                     }
 
-                    return $this->quarantine($db, $claim, 'request-invalid');
+                    return $this->quarantine(db: $db, claim: $claim, reason: 'request-invalid');
                 }
 
-                $handler = $this->handlers->handler($request->kind, $this->resolveHandler);
+                $handler = $this->handlers->handler(kind: $request->kind, resolve: $this->resolveHandler);
 
                 if ($handler === null) {
-                    return $this->quarantine($db, $claim, 'handler-unavailable');
+                    return $this->quarantine(db: $db, claim: $claim, reason: 'handler-unavailable');
                 }
-                $this->current->assert($scope, $db);
+                $this->current->assert(scope: $scope, connection: $db);
 
                 if (WakeupInput::instant($row->lease_until) <= $this->clock->now()) {
                     return 'skipped';
                 }
-                $handler->handle(new WakeupDelivery($request, $context, $claim->generation, $claim->attempt, 'wakeup:'.$claim->id));
-                $this->current->assert($scope, $db);
+                $handler->handle(new WakeupDelivery(request: $request, context: $context, generation: $claim->generation, attempt: $claim->attempt, idempotencyKey: 'wakeup:'.$claim->id));
+                $this->current->assert(scope: $scope, connection: $db);
                 $stamp = WakeupInput::time($this->clock->now());
-                $updated = $this->active($db, $claim, $stamp)->update(['status' => 'completed', 'completed_at' => $stamp,
+                $updated = $this->active(db: $db, claim: $claim, stamp: $stamp)->update(['status' => 'completed', 'completed_at' => $stamp,
                     'lease_until' => null, 'claim_token' => null, 'updated_at' => $stamp]);
 
                 if ($updated !== 1) {
@@ -274,15 +275,15 @@ final readonly class SweepRunner implements DueWakeupSweeper
 
                 return 'completed';
             });
-        } catch (WakeupClaimLost|ScopeContextMismatch $error) {
+        } catch (WakeupClaimLost|ScopeContextMismatch|ScopeStale $error) {
             throw $error;
         } catch (Throwable) {
-            $this->current->assert($scope, $db);
+            $this->current->assert(scope: $scope, connection: $db);
             $now = $this->clock->now();
             $stamp = WakeupInput::time($now);
             $retry = $claim->attempt < $this->maxAttempts;
             $delay = min(300, 2 ** min(9, $claim->attempt));
-            $changed = $this->active($db, $claim, $stamp)->update(['status' => $retry ? 'retry-scheduled' : 'exhausted',
+            $changed = $this->active(db: $db, claim: $claim, stamp: $stamp)->update(['status' => $retry ? 'retry-scheduled' : 'exhausted',
                 'retry_at' => $retry ? WakeupInput::time($now->add(new DateInterval("PT{$delay}S"))) : null,
                 'failure_code' => 'handler-failed', 'lease_until' => null, 'claim_token' => null, 'updated_at' => $stamp]);
 
@@ -298,7 +299,7 @@ final readonly class SweepRunner implements DueWakeupSweeper
     private function quarantine(Connection $db, WakeupClaim $claim, string $reason): string
     {
         $stamp = WakeupInput::time($this->clock->now());
-        $changed = $this->active($db, $claim, $stamp)->update(['status' => 'quarantined', 'retry_at' => null,
+        $changed = $this->active(db: $db, claim: $claim, stamp: $stamp)->update(['status' => 'quarantined', 'retry_at' => null,
             'failure_code' => $reason, 'lease_until' => null, 'claim_token' => null, 'updated_at' => $stamp]);
 
         return $changed === 1 ? 'failed' : 'skipped';
@@ -307,18 +308,18 @@ final readonly class SweepRunner implements DueWakeupSweeper
     /** @param array<string,mixed> $data */
     private function request(object $row, DataScope $scope, array $data): WakeupRequest
     {
-        $start = Value::field($row, 'window_start');
-        $end = Value::field($row, 'window_end');
-        $period = Value::field($row, 'period');
+        $start = Value::field(row: $row, name: 'window_start');
+        $end = Value::field(row: $row, name: 'window_end');
+        $period = Value::field(row: $row, name: 'period');
 
         if (($start === null) !== ($end === null) || ($start === null) !== ($period === null)) {
             throw new RuntimeException('Incomplete wakeup window.');
         }
-        $window = $start === null ? null : new WakeupWindow(WakeupInput::instant($start), WakeupInput::instant($end), Value::text($period));
-        $kind = Value::text(Value::field($row, 'kind'));
+        $window = $start === null ? null : new WakeupWindow(start: WakeupInput::instant($start), end: WakeupInput::instant($end), period: Value::text($period));
+        $kind = Value::text(Value::field(row: $row, name: 'kind'));
 
-        return new WakeupRequest($scope, $kind, $this->handlers->definition($kind)->version ?? '', Value::text(Value::field($row, 'request_key')),
-            WakeupInput::instant(Value::field($row, 'fire_at')), $window, new JsonDocument(json_encode((object) $data, JSON_THROW_ON_ERROR)));
+        return new WakeupRequest(scope: $scope, kind: $kind, handlerVersion: $this->handlers->definition($kind)->version ?? '', requestKey: Value::text(Value::field(row: $row, name: 'request_key')),
+            fireAt: WakeupInput::instant(Value::field(row: $row, name: 'fire_at')), window: $window, payload: new JsonDocument(json_encode((object) $data, JSON_THROW_ON_ERROR)));
     }
 
     private function assertOwner(DataScope $owner, DataScope $scope): void
@@ -333,7 +334,7 @@ final readonly class SweepRunner implements DueWakeupSweeper
     private function connection(DataScope $scope): Connection
     {
         $connection = $this->databases->connection();
-        $this->current->assert($scope, $connection);
+        $this->current->assert(scope: $scope, connection: $connection);
 
         return $connection;
     }

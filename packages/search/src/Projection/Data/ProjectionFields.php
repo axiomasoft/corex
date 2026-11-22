@@ -13,7 +13,7 @@ final readonly class ProjectionFields
     /** @param list<ProjectionField> $fields */
     public function __construct(public array $fields, public string $revision)
     {
-        ProjectionInput::objects($fields, ProjectionField::class, 256);
+        ProjectionInput::objects(items: $fields, class: ProjectionField::class, max: 256);
         ProjectionInput::digest($revision);
 
         if (count(array_unique(array_column($fields, 'id'))) !== count($fields)) {

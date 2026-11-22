@@ -109,7 +109,7 @@ final class ApiProfileTest extends TestCase
         $options = $this->app->make(ApiOptions::class);
 
         $this->assertTrue($options->requirePhysicalTenancy);
-        $this->assertSame('v1', $options->defaultMajor);
+        $this->assertSame('v2', $options->defaultMajor);
         $this->assertArrayNotHasKey('primary', $options->publicProjection());
     }
 
@@ -171,7 +171,7 @@ final class ApiProfileTest extends TestCase
     private function operation(string $id, string $capability): Api
     {
         $schema = ['type' => 'object'];
-        $api = Api::operation($id, 'POST', '/'.$id, ProfileHandler::class, 'notes.write', $schema, $schema)
+        $api = Api::operation($id, 'POST', '/'.$id, ProfileHandler::class, 'notes.write', $schema, $schema, version: 'v2')
             ->asCommand()
             ->idempotency('required')
             ->effect('tenant_transactional')

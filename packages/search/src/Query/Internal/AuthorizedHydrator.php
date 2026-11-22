@@ -35,7 +35,7 @@ final readonly class AuthorizedHydrator
         foreach ($candidates as $candidate) {
             $ref = $candidate->record;
             foreach ($plan->operations as $request) {
-                if (! $this->authorization->authorize($context->scope, $ref, $request->fields, $request->use)->allowed) {
+                if (! $this->authorization->authorize(scope: $context->scope, record: $ref, fields: $request->fields, use: $request->use)->allowed) {
                     continue 2;
                 }
             }
@@ -43,11 +43,11 @@ final readonly class AuthorizedHydrator
         }
 
         if ($allowed === []) {
-            return new LoadedHits([], [], []);
+            return new LoadedHits(hits: [], revisions: [], candidates: []);
         }
 
         $rows = [];
-        foreach ($this->source->load($context->scope, new RecordRefs(array_column($allowed, 'record')))->records as $row) {
+        foreach ($this->source->load(scope: $context->scope, records: new RecordRefs(array_column($allowed, 'record')))->records as $row) {
             $id = $row->record->id;
 
             if (! isset($allowed[$id]) || $allowed[$id]->record->entity !== $row->record->entity || isset($rows[$id])) {
@@ -76,9 +76,9 @@ final readonly class AuthorizedHydrator
             foreach ($query->fields as $field) {
                 $underlying = $plan->fields[$field]->authorizationField;
 
-                if ($plan->mayRead($field, $ref->id)
-                    && $this->authorization->authorize($context->scope, $ref, new FieldSelection([$field]), FieldUse::Read)->allowed
-                    && ($underlying === null || $this->authorization->authorize($context->scope, $ref, new FieldSelection([$underlying]), FieldUse::Read)->allowed)) {
+                if ($plan->mayRead(field: $field, id: $ref->id)
+                    && $this->authorization->authorize(scope: $context->scope, record: $ref, fields: new FieldSelection([$field]), use: FieldUse::Read)->allowed
+                    && ($underlying === null || $this->authorization->authorize(scope: $context->scope, record: $ref, fields: new FieldSelection([$underlying]), use: FieldUse::Read)->allowed)) {
                     $read[] = $field;
                 }
             }
@@ -86,7 +86,7 @@ final readonly class AuthorizedHydrator
             $values = array_intersect_key($row->values->values, array_flip($selected));
 
             if ($selected !== []) {
-                $part = $this->projection->project($context, $ref, new ProjectionSelection($selected));
+                $part = $this->projection->project(context: $context, record: $ref, selection: new ProjectionSelection($selected));
                 foreach ($part->values as $field => $value) {
                     if (! in_array($field, $selected, true) || (array_key_exists($field, $values) && $values[$field] !== $value)) {
                         throw SearchWitnessChanged::changed();
@@ -119,10 +119,10 @@ final readonly class AuthorizedHydrator
                 }
             }
             $confirmed[] = $candidate;
-            $hits[] = new SearchHit($ref, new ProjectedValues(array_intersect_key($values, array_flip($read))));
+            $hits[] = new SearchHit(record: $ref, projection: new ProjectedValues(array_intersect_key($values, array_flip($read))));
             $revisions[$ref->id] = $row->revision;
         }
 
-        return new LoadedHits($hits, $revisions, $confirmed);
+        return new LoadedHits(hits: $hits, revisions: $revisions, candidates: $confirmed);
     }
 }

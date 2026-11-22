@@ -21,9 +21,9 @@ use CoreX\Operations\Cost\Contracts\OperationBudget;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\Laravel\InvocationFixtures;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
@@ -104,9 +104,9 @@ final class ToolCostInvocationTest extends TestCase
         $schema = $this->schema();
         $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.read', 'GET', '/notes', ToolCostInvocationCostInvocationHandler::class, 'notes.read', $schema, $schema)
+                Api::operation('notes.read', 'GET', '/notes', ToolCostInvocationCostInvocationHandler::class, 'notes.read', $schema, $schema, ['name' => ['sometimes', 'string']], version: 'v2')
                     ->cost(['base' => 2]),
-                Api::exposeTool('notes.read', 'v1', 'notes.read', 'v1', 'read', 'read-only', $schema, $schema, ['name' => 'name']),
+                Api::exposeTool('notes.read', 'v2', 'notes.read', 'v1', 'read', 'read-only', $schema, $schema, ['name' => 'name']),
             ]),
         ], installedPackages: []);
         $modules = new ModuleFixture($registry);
@@ -122,9 +122,11 @@ final class ToolCostInvocationTest extends TestCase
         $this->app->instance(ToolExecutionGuard::class, new ToolCostInvocationPassThroughToolGuard);
         ToolCostInvocationCostInvocationHandler::$calls = 0;
 
-        $http = $this->app->make(OperationDispatcher::class)->dispatch(
-            Request::create('/api/v1/notes', 'GET', server: ['HTTP_X_REQUEST_ID' => 'http-cost']),
-            'v1',
+        $request = Request::create('/api/v2/notes', 'GET', server: ['HTTP_X_REQUEST_ID' => 'http-cost']);
+        $request->attributes->set('corex.client_id', 'client-1');
+        $http = $this->app->make(HttpOperationDispatcher::class)->dispatch(
+            $request,
+            'v2',
             'notes',
         );
         $toolDeclaration = collect($registry->api)->first(
@@ -216,7 +218,7 @@ final class ToolCostInvocationTest extends TestCase
         return ResolvedContexts::make(
             $this->tenants->current(),
             $this->principal,
-            new InvocationMetadata('request-1', 'v1', 'notes.create', 'POST'),
+            new InvocationMetadata('request-1', 'v2', 'notes.create', 'POST'),
         );
     }
 

@@ -24,6 +24,6 @@ final readonly class MatrixPolicy
             return false;
         }
 
-        return $this->permissions->allowed($cell->principal, $cell->entity, $cell->action);
+        return $this->permissions->allowed(p: $cell->principal, entityKey: $cell->entity, action: $cell->action);
     }
 }

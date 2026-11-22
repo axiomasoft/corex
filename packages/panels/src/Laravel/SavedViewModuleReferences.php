@@ -32,17 +32,17 @@ final readonly class SavedViewModuleReferences implements ModuleReferences, Refe
 
     public function hold(DataScope $scope, ModuleRef $module, LifecyclePlanRef $plan, ?OwnerLease $previous): OwnerLease
     {
-        return $this->inventory()->hold($scope, $module, $plan, $previous);
+        return $this->inventory()->hold(scope: $scope, module: $module, plan: $plan, previous: $previous);
     }
 
     public function verify(DataScope $scope, OwnerLease $lease): void
     {
-        $this->inventory()->verify($scope, $lease);
+        $this->inventory()->verify(scope: $scope, lease: $lease);
     }
 
     public function release(DataScope $scope, OwnerLease $lease): void
     {
-        $this->inventory()->release($scope, $lease);
+        $this->inventory()->release(scope: $scope, lease: $lease);
     }
 
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
@@ -71,7 +71,7 @@ final readonly class SavedViewModuleReferences implements ModuleReferences, Refe
 
                 try {
                     $views->compile($context, $view->id);
-                    $targets = $host->targets($scope, $context, 'inspect', $view->id, null);
+                    $targets = $host->targets(scope: $scope, context: $context, operation: 'inspect', id: $view->id, input: null);
 
                     if (! array_any($targets, static fn (ModuleRef $target): bool => $target->package === $module->package) && $module->package !== $this->owner()) {
                         continue;
@@ -81,11 +81,11 @@ final readonly class SavedViewModuleReferences implements ModuleReferences, Refe
                     report($error);
                     $action = 'restore-saved-view-provenance';
                 }
-                $blockers[] = new LifecycleBlocker($this->owner(), 'saved-view', $view->id, $scope, $action);
+                $blockers[] = new LifecycleBlocker(owner: $this->owner(), resourceKind: 'saved-view', resourceId: $view->id, scope: $scope, requiredAction: $action);
             }
         }
 
-        return new ReferencePage($blockers, $revision, isset($directory[$index + 1]) ? new ReferenceCursor((string) ($index + 1), $revision) : null);
+        return new ReferencePage(blockers: $blockers, revision: $revision, next: isset($directory[$index + 1]) ? new ReferenceCursor(position: (string) ($index + 1), revision: $revision) : null);
     }
 
     private function inventory(): SavedViewInventory

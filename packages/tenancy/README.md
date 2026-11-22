@@ -8,7 +8,7 @@ connections, clone databases, run `pg_dump` or execute database deletion.
 ## Installation
 
 Configure the application's [ecosystem dependency channel](../../docs/architecture/ecosystem-dependencies.md),
-then require `axiomasoft/corex-tenancy:^1.0@dev`. Choose the matching
+then require `axiomasoft/corex-tenancy:^2.0`. Choose the matching
 `axiomasoft/tenant-laravel` and physical-owner adapter in the host; these are optional
 host dependencies, not a bundled deployment profile. CoreX's provider is discovered
 by Laravel. Publish domain options with `php artisan vendor:publish --tag=corex-tenancy-config`.

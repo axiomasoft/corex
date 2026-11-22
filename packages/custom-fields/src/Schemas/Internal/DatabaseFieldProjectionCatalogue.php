@@ -22,25 +22,25 @@ final readonly class DatabaseFieldProjectionCatalogue implements FieldProjection
 
     public function snapshot(DataScope $scope, EntityHandle $entity): FieldProjectionSchema
     {
-        return $this->runner->run($scope, function () use ($scope, $entity): FieldProjectionSchema {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $entity): FieldProjectionSchema {
             $db = $this->database->connection();
 
             return $db->transaction(function () use ($db, $scope, $entity): FieldProjectionSchema {
-                $mapping = $this->heads->effective($db, $scope, $entity);
+                $mapping = $this->heads->effective(db: $db, scope: $scope, entity: $entity);
                 $fields = [];
                 foreach ($mapping->schema->fields as $id => $field) {
                     if ($field->lifecycle !== 'active' || ! isset($mapping->slots[$id])) {
                         continue;
                     }
 
-                    $resolved = $this->types->resolve($field->type, $field->codecVersion);
+                    $resolved = $this->types->resolve(type: $field->type, version: $field->codecVersion);
                     $descriptor = $resolved->definition();
                     $uses = array_values(array_filter($field->uses, static fn (FieldUse $use): bool => $field->permits($use, $descriptor)));
                     $operators = in_array(FieldUse::Filter, $uses, true) ? $resolved->operators($field) : null;
-                    $fields[$id] = new FieldProjectionShape($field->id, $field->type, $uses, $operators, $field->localizationPolicy !== 'none');
+                    $fields[$id] = new FieldProjectionShape(id: $field->id, type: $field->type, uses: $uses, operators: $operators, localized: $field->localizationPolicy !== 'none');
                 }
 
-                return new FieldProjectionSchema($mapping->schema->revision, $mapping->schema->mappingDigest, $fields);
+                return new FieldProjectionSchema(revision: $mapping->schema->revision, mappingDigest: $mapping->schema->mappingDigest, fields: $fields);
             });
         });
     }

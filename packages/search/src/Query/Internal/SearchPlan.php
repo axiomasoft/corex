@@ -90,14 +90,14 @@ final readonly class SearchPlan
         $operations = [];
         $corpus = null;
         foreach ($uses as [$use, $ids]) {
-            $request = new FieldUseRequest(new FieldSelection($ids), $use);
+            $request = new FieldUseRequest(fields: new FieldSelection($ids), use: $use);
             $field = $ids[0] ?? '';
             $key = $use->value.'|'.$field;
 
             if (isset($grants[$key])) {
                 continue;
             }
-            $grant = $policy->plan($context->scope, $context->entity, $request);
+            $grant = $policy->plan(scope: $context->scope, entity: $context->entity, request: $request);
             $grants[$key] = $grant;
 
             if ($use === FieldUse::Read && $ids !== []) {
@@ -112,19 +112,19 @@ final readonly class SearchPlan
                 continue;
             }
             $operations[] = $request;
-            $corpus = self::intersect($corpus, $grant);
+            $corpus = self::intersect(corpus: $corpus, grant: $grant);
         }
         foreach (array_keys($readsForPredicates) as $field) {
-            self::requireRead($grants['read|'.$field], $corpus);
-            $operations[] = new FieldUseRequest(new FieldSelection([$field]), FieldUse::Read);
+            self::requireRead(read: $grants['read|'.$field], corpus: $corpus);
+            $operations[] = new FieldUseRequest(fields: new FieldSelection([$field]), use: FieldUse::Read);
         }
         foreach ($readsForAggregates as $fieldsToRead) {
             $aggregate = $corpus;
             foreach ($fieldsToRead as $field) {
-                $aggregate = self::intersect($aggregate, $grants['aggregate|'.$field]);
+                $aggregate = self::intersect(corpus: $aggregate, grant: $grants['aggregate|'.$field]);
             }
             foreach ($fieldsToRead as $field) {
-                self::requireRead($grants['read|'.$field], $aggregate);
+                self::requireRead(read: $grants['read|'.$field], corpus: $aggregate);
             }
         }
         $filters = [];
@@ -139,11 +139,11 @@ final readonly class SearchPlan
             if (array_any($values, static fn (string|int|bool $value): bool => ! $field->type->accepts($value))) {
                 throw SearchFeatureUnavailable::unsupported();
             }
-            $filters[] = new SearchFilter($filter->field, $values);
+            $filters[] = new SearchFilter(field: $filter->field, values: $values);
         }
 
-        return new self($schema->revision, $fields, $grants, $operations, $filters, $corpus,
-            hash('sha256', json_encode([$schema->revision, $grants], JSON_THROW_ON_ERROR)));
+        return new self(mapping: $schema->revision, fields: $fields, grants: $grants, operations: $operations, filters: $filters, recordIds: $corpus,
+            witness: hash('sha256', json_encode([$schema->revision, $grants], JSON_THROW_ON_ERROR)));
     }
 
     public function verifyLowering(DriverCapabilities $capabilities, SearchQuery $query): void
@@ -159,8 +159,8 @@ final readonly class SearchPlan
         $descriptor = $this->fields[$field];
 
         return in_array(FieldUse::Read, $descriptor->uses, true)
-            && $this->mayReadField($field, $id)
-            && ($descriptor->authorizationField === null || $this->mayReadField($descriptor->authorizationField, $id));
+            && $this->mayReadField(field: $field, record: $id)
+            && ($descriptor->authorizationField === null || $this->mayReadField(field: $descriptor->authorizationField, record: $id));
     }
 
     public function physicalField(string $field): string
@@ -171,10 +171,10 @@ final readonly class SearchPlan
     /** @return ?list<string> */
     public function aggregateCorpus(string $field): ?array
     {
-        $corpus = self::intersect($this->recordIds, $this->grants['aggregate|'.$field]);
+        $corpus = self::intersect(corpus: $this->recordIds, grant: $this->grants['aggregate|'.$field]);
         $authorizationField = $this->fields[$field]->authorizationField ?? null;
 
-        return $authorizationField === null ? $corpus : self::intersect($corpus, $this->grants['aggregate|'.$authorizationField]);
+        return $authorizationField === null ? $corpus : self::intersect(corpus: $corpus, grant: $this->grants['aggregate|'.$authorizationField]);
     }
 
     private function mayReadField(string $field, string $record): bool

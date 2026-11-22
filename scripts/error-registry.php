@@ -10,8 +10,10 @@ use Throwable;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
+require_once __DIR__.'/support/cli-arguments.php';
+
 try {
-    if (array_diff(array_slice($argv, 1), ['--check', '--report']) !== []) {
+    if (array_diff(array_slice(\CoreX\Scripts\cliArguments(), 1), ['--check', '--report']) !== []) {
         throw new RuntimeException('Expected --check or --report.');
     }
     $root = dirname(__DIR__);

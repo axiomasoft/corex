@@ -18,10 +18,12 @@ use CoreX\Operations\Cost\Data\BudgetAttempt;
 use CoreX\Operations\Cost\Data\BudgetInvocationResult;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Invocation\Contracts\OperationAcceptance;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\TransactionalOperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
+use CoreX\Operations\Metadata\Contracts\MetadataOperation;
 use Illuminate\Contracts\Container\Container;
 use LogicException;
 use Packman\Attributes\Internal;
@@ -42,19 +44,19 @@ final readonly class DefaultOperationInvoker implements OperationInvoker, Transa
 
     public function invoke(OperationInvocation $invocation): OperationResult
     {
-        return $this->run($invocation, null)->result;
+        return $this->run(invocation: $invocation, attempt: null)->result;
     }
 
     public function invokeTransactional(OperationInvocation $invocation, BudgetAttempt $attempt): BudgetInvocationResult
     {
-        return $this->run($invocation, $attempt);
+        return $this->run(invocation: $invocation, attempt: $attempt);
     }
 
     private function run(OperationInvocation $invocation, ?BudgetAttempt $attempt): BudgetInvocationResult
     {
         $operation = $invocation->operation;
 
-        if (! $operation->executionSupported) {
+        if ($operation->version !== 'v2' || ! $operation->executionSupported) {
             throw new ApiError(errorCode: OperationsErrorCode::OperationUnsupported, status: 404, message: 'Operation is not executable.');
         }
 
@@ -104,17 +106,30 @@ final readonly class DefaultOperationInvoker implements OperationInvoker, Transa
                     throw new LogicException('Operation invocation callback invoked more than once.');
                 }
 
-                return new OperationResult(data: JsonDocuments::capture($handler->handle(
-                    $invocation->context,
-                    JsonDocuments::map($invocation->input),
-                    $invocation->parameters,
-                )));
+                if ($handler instanceof MetadataOperation) {
+                    $view = $handler->describe(context: $invocation->context, parameters: $invocation->parameters);
+
+                    return new OperationResult(data: $view->body, privateWitness: $view->witness);
+                }
+
+                $data = $handler->handle(
+                    context: $invocation->context,
+                    input: JsonDocuments::map($invocation->input),
+                    parameters: $invocation->parameters,
+                );
+                $accepted = $handler instanceof OperationAcceptance ? $handler->acceptance(context: $invocation->context, result: $data) : null;
+
+                if ($invocation->operation->successStatus === 202 && $accepted === null) {
+                    throw new ApiError(errorCode: CoreErrorCode::InternalError, status: 500, message: 'Operation acceptance is unavailable.');
+                }
+
+                return new OperationResult(data: JsonDocuments::capture($data), accepted: $accepted);
             };
 
             $execution = match (true) {
                 $this->budget === null => new BudgetInvocationResult($this->admitOnce(static fn (): OperationResult => $effect(static function (): void {}))),
-                $attempt === null => new BudgetInvocationResult($this->budget->invoke($invocation, $effect)),
-                default => $this->budget->invokeTransactional($invocation, $effect, $attempt),
+                $attempt === null => new BudgetInvocationResult($this->budget->invoke(invocation: $invocation, effect: $effect)),
+                default => $this->budget->invokeTransactional(invocation: $invocation, effect: $effect, attempt: $attempt),
             };
         } finally {
             $this->restore($previous);
@@ -126,9 +141,9 @@ final readonly class DefaultOperationInvoker implements OperationInvoker, Transa
             context: $invocation->context,
             authorizer: $this->fields,
             data: JsonDocuments::array($result->data),
-        )), replayed: $result->replayed, metadata: JsonDocuments::capture(JsonDocuments::map($result->metadata)));
+        )), replayed: $result->replayed, metadata: JsonDocuments::capture(JsonDocuments::map($result->metadata)), accepted: $result->accepted, privateWitness: $result->privateWitness);
 
-        return new BudgetInvocationResult($output, $execution->receipt);
+        return new BudgetInvocationResult(result: $output, receipt: $execution->receipt);
     }
 
     /**

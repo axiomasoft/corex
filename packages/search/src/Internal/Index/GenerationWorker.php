@@ -47,35 +47,35 @@ final readonly class GenerationWorker implements IndexWorker
 
     public function advance(DataScope $scope, EntityHandle $entity, int $generation): bool
     {
-        $db = $this->store->db($scope, true);
+        $db = $this->store->db(scope: $scope, worker: true);
 
         if ($db->transactionLevel() !== 0) {
             throw new LogicException('Index submission requires independent durable commits.');
         }
 
         $work = $db->transaction(function () use ($db, $scope, $entity, $generation): Submission|bool {
-            $lane = $this->store->lane($db, $scope, $entity);
-            $gen = LaneStore::generation($db, $lane, $generation)->lockForUpdate()->firstOrFail();
+            $lane = $this->store->lane(db: $db, scope: $scope, entity: $entity);
+            $gen = LaneStore::generation(db: $db, lane: $lane, number: $generation)->lockForUpdate()->firstOrFail();
             $settlement = $db->table(LaneStore::SUBMISSIONS)->where('lane_key', $lane->lane_key)->where('generation', $generation)
                 ->where('control_recorded', false)->whereNotNull('provider_ticket')->whereIn('state', ['confirmed', 'failed', 'not-sent', 'unknown'])
                 ->orderBy('claim_epoch')->first();
 
             if ($settlement !== null) {
-                return Submission::restore($this->store->target($scope, $entity, $gen), $settlement);
+                return Submission::restore(target: $this->store->target(scope: $scope, entity: $entity, generation: $gen), row: $settlement);
             }
             $row = $db->table(LaneStore::SUBMISSIONS)->where('lane_key', $lane->lane_key)->where('generation', $generation)
                 ->whereIn('state', ['planned', 'sending', 'accepted', 'unknown'])->lockForUpdate()->first();
 
             if ($row === null) {
-                ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-search', 'generation', ['entity' => $entity->value, 'generation' => $generation]);
+                ReferenceWrites::enlist(connection: $db, scope: $scope, producer: 'axiomasoft/corex-search', kind: 'generation', witness: ['entity' => $entity->value, 'generation' => $generation]);
 
                 if ($gen->state === 'retained' && $gen->retain_until !== null && new DateTimeImmutable(Value::text($gen->retain_until)) <= $this->clock->now()) {
-                    LaneStore::one(LaneStore::generation($db, $lane, $generation)->where('state', 'retained')->where('claim_epoch', $gen->claim_epoch)->update(['state' => 'retired']));
+                    LaneStore::one(LaneStore::generation(db: $db, lane: $lane, number: $generation)->where('state', 'retained')->where('claim_epoch', $gen->claim_epoch)->update(['state' => 'retired']));
 
                     return true;
                 }
 
-                return $this->plan($db, $scope, $entity, $lane, $gen);
+                return $this->plan(db: $db, scope: $scope, entity: $entity, lane: $lane, gen: $gen);
             }
 
             if ($row->state === 'unknown' || ($row->state === 'sending' && $row->lease_until !== null
@@ -83,13 +83,13 @@ final readonly class GenerationWorker implements IndexWorker
                 return false;
             }
 
-            if ($row->state === 'planned' && ! $this->canSend($lane, $gen, IndexAction::from(Value::text($row->action)))) {
-                LaneStore::one(self::query($db, $row)->where('state', 'planned')->update(['state' => 'cancelled']));
+            if ($row->state === 'planned' && ! $this->canSend(lane: $lane, gen: $gen, action: IndexAction::from(Value::text($row->action)))) {
+                LaneStore::one(self::query(db: $db, row: $row)->where('state', 'planned')->update(['state' => 'cancelled']));
 
                 return true;
             }
 
-            return Submission::restore($this->store->target($scope, $entity, $gen), $row);
+            return Submission::restore(target: $this->store->target(scope: $scope, entity: $entity, generation: $gen), row: $row);
         });
 
         if (! $work instanceof Submission) {
@@ -107,11 +107,11 @@ final readonly class GenerationWorker implements IndexWorker
 
         if (in_array($work->row->state, ['confirmed', 'failed', 'not-sent', 'unknown'], true)) {
             if ($work->row->state === 'not-sent' && $status->observation === null) {
-                $this->effects->observe($status->ticket, new ProviderObservation(ProviderObservationKind::Absent, $work->batch->submissionId, Submission::OWNER));
+                $this->effects->observe(ticket: $status->ticket, observation: new ProviderObservation(kind: ProviderObservationKind::Absent, reference: $work->batch->submissionId, observer: Submission::OWNER));
             }
 
             if ($status->state === 'outstanding') {
-                $this->admission->settle($status->ticket, new AttemptEvidence($work->row->state === 'unknown' ? 'unknown' : 'reconciled', $work->batch->submissionId));
+                $this->admission->settle(ticket: $status->ticket, evidence: new AttemptEvidence(outcome: $work->row->state === 'unknown' ? 'unknown' : 'reconciled', reference: $work->batch->submissionId));
             }
             $this->recordSettlement($work);
 
@@ -128,19 +128,19 @@ final readonly class GenerationWorker implements IndexWorker
             IndexOutcome::Failed => ProviderObservationKind::Permanent,
             IndexOutcome::Unknown => ProviderObservationKind::Unknown,
         };
-        $this->effects->observe($status->ticket, new ProviderObservation($kind, $receipt === null ? $work->batch->submissionId : Value::text($receipt), Submission::OWNER));
+        $this->effects->observe(ticket: $status->ticket, observation: new ProviderObservation(kind: $kind, reference: $receipt === null ? $work->batch->submissionId : Value::text($receipt), observer: Submission::OWNER));
         $latest = $this->effects->inspect($work->effect());
 
         if ($latest?->state === 'conflicting') {
             $outcome = IndexOutcome::Unknown;
         }
         $db->transaction(function () use ($db, $scope, $entity, $work, $outcome): void {
-            $lane = $this->store->lane($db, $scope, $entity);
-            self::finish($db, $lane, $work, $outcome);
+            $lane = $this->store->lane(db: $db, scope: $scope, entity: $entity);
+            self::finish(db: $db, lane: $lane, work: $work, outcome: $outcome);
         });
 
         if ($latest?->state !== 'conflicting') {
-            $this->admission->settle($status->ticket, new AttemptEvidence($outcome === IndexOutcome::Unknown ? 'unknown' : 'reconciled', $work->batch->submissionId));
+            $this->admission->settle(ticket: $status->ticket, evidence: new AttemptEvidence(outcome: $outcome === IndexOutcome::Unknown ? 'unknown' : 'reconciled', reference: $work->batch->submissionId));
         }
 
         $this->recordSettlement($work);
@@ -151,30 +151,30 @@ final readonly class GenerationWorker implements IndexWorker
     private function recordSettlement(Submission $work): void
     {
         $t = $work->batch->target;
-        $db = $this->store->db($t->scope, true);
+        $db = $this->store->db(scope: $t->scope, worker: true);
         $db->transaction(function () use ($db, $t, $work): void {
-            $this->store->lane($db, $t->scope, $t->entity);
-            self::query($db, $work->row)->whereIn('state', ['confirmed', 'failed', 'not-sent', 'unknown'])->update(['control_recorded' => true]);
+            $this->store->lane(db: $db, scope: $t->scope, entity: $t->entity);
+            self::query(db: $db, row: $work->row)->whereIn('state', ['confirmed', 'failed', 'not-sent', 'unknown'])->update(['control_recorded' => true]);
         });
     }
 
     private function send(Submission $work): bool
     {
         $target = $work->batch->target;
-        $db = $this->store->db($target->scope, true);
+        $db = $this->store->db(scope: $target->scope, worker: true);
         $ticket = $db->transaction(function () use ($db, $target, $work): AdmissionTicket|bool {
-            $lane = $this->store->lane($db, $target->scope, $target->entity);
-            $gen = LaneStore::generation($db, $lane, $target->generation)->lockForUpdate()->firstOrFail();
-            $row = self::query($db, $work->row)->where('state', 'planned')->lockForUpdate()->first();
+            $lane = $this->store->lane(db: $db, scope: $target->scope, entity: $target->entity);
+            $gen = LaneStore::generation(db: $db, lane: $lane, number: $target->generation)->lockForUpdate()->firstOrFail();
+            $row = self::query(db: $db, row: $work->row)->where('state', 'planned')->lockForUpdate()->first();
 
-            if ($row === null || ! $this->canSend($lane, $gen, $work->batch->action)) {
+            if ($row === null || ! $this->canSend(lane: $lane, gen: $gen, action: $work->batch->action)) {
                 return false;
             }
             $until = $this->clock->now()->modify('+30 seconds');
             $prior = $this->effects->inspect($work->effect());
 
             if (! ($this->projection)()->current($work->batch)) {
-                LaneStore::one(self::query($db, $row)->where('state', 'planned')->update([
+                LaneStore::one(self::query(db: $db, row: $row)->where('state', 'planned')->update([
                     'state' => $prior === null ? 'cancelled' : 'not-sent', 'provider_ticket' => $prior?->ticket->id]));
 
                 return true;
@@ -188,10 +188,10 @@ final readonly class GenerationWorker implements IndexWorker
                 }
                 $ticket = $prior->ticket;
             } else {
-                $ticket = ReferenceWrites::reserveEffect($target->scope, new ProviderAttempt($work->effect(), $work->batch->submissionId,
-                    Value::text($row->claim_epoch), 1, $until, Value::text($row->batch_digest), true), 'axiomasoft/corex-search', $this->effects);
+                $ticket = ReferenceWrites::reserveEffect(scope: $target->scope, attempt: new ProviderAttempt(effect: $work->effect(), ownerRef: $work->batch->submissionId,
+                    claimToken: Value::text($row->claim_epoch), attempt: 1, deadline: $until, digest: Value::text($row->batch_digest), singleInstanceReference: true), producer: 'axiomasoft/corex-search', ledger: $this->effects);
             }
-            LaneStore::one(self::query($db, $row)->where('state', 'planned')->update(['state' => 'sending', 'provider_ticket' => $ticket->id,
+            LaneStore::one(self::query(db: $db, row: $row)->where('state', 'planned')->update(['state' => 'sending', 'provider_ticket' => $ticket->id,
                 'lease_until' => $until->format('Y-m-d H:i:s.uP')]));
 
             return $ticket;
@@ -203,12 +203,12 @@ final readonly class GenerationWorker implements IndexWorker
 
         if ($ticket->key->deadline === null || $ticket->key->deadline <= $this->clock->now()) {
             $db->transaction(function () use ($db, $target, $work, $ticket): void {
-                $this->store->lane($db, $target->scope, $target->entity);
-                LaneStore::one(self::query($db, $work->row)->where('state', 'sending')->where('provider_ticket', $ticket->id)
+                $this->store->lane(db: $db, scope: $target->scope, entity: $target->entity);
+                LaneStore::one(self::query(db: $db, row: $work->row)->where('state', 'sending')->where('provider_ticket', $ticket->id)
                     ->update(['state' => 'not-sent', 'lease_until' => null]));
             });
-            $this->effects->observe($ticket, new ProviderObservation(ProviderObservationKind::Absent, $work->batch->submissionId, Submission::OWNER));
-            $this->admission->settle($ticket, new AttemptEvidence('reconciled', $work->batch->submissionId));
+            $this->effects->observe(ticket: $ticket, observation: new ProviderObservation(kind: ProviderObservationKind::Absent, reference: $work->batch->submissionId, observer: Submission::OWNER));
+            $this->admission->settle(ticket: $ticket, evidence: new AttemptEvidence(outcome: 'reconciled', reference: $work->batch->submissionId));
 
             return true;
         }
@@ -218,16 +218,16 @@ final readonly class GenerationWorker implements IndexWorker
         } catch (Throwable) {
             // The provider may have accepted the request. Only exact lookup can authorize settlement.
             $db->transaction(function () use ($db, $target, $work, $ticket): void {
-                $this->store->lane($db, $target->scope, $target->entity);
-                self::query($db, $work->row)->where('state', 'sending')->where('provider_ticket', $ticket->id)->update(['lease_until' => null]);
+                $this->store->lane(db: $db, scope: $target->scope, entity: $target->entity);
+                self::query(db: $db, row: $work->row)->where('state', 'sending')->where('provider_ticket', $ticket->id)->update(['lease_until' => null]);
             });
 
             return true;
         }
-        $this->effects->observe($ticket, new ProviderObservation(ProviderObservationKind::Accepted, $receipt->taskId, Submission::OWNER));
+        $this->effects->observe(ticket: $ticket, observation: new ProviderObservation(kind: ProviderObservationKind::Accepted, reference: $receipt->taskId, observer: Submission::OWNER));
         $db->transaction(function () use ($db, $target, $work, $ticket, $receipt): void {
-            $this->store->lane($db, $target->scope, $target->entity);
-            self::query($db, $work->row)->where('state', 'sending')->where('provider_ticket', $ticket->id)
+            $this->store->lane(db: $db, scope: $target->scope, entity: $target->entity);
+            self::query(db: $db, row: $work->row)->where('state', 'sending')->where('provider_ticket', $ticket->id)
                 ->update(['state' => 'accepted', 'task_ref' => $receipt->taskId, 'lease_until' => null]);
         });
 
@@ -252,7 +252,7 @@ final readonly class GenerationWorker implements IndexWorker
             default => IndexAction::Upsert,
         };
 
-        if (! $this->canSend($lane, $gen, $action)) {
+        if (! $this->canSend(lane: $lane, gen: $gen, action: $action)) {
             return false;
         }
         $seq = null;
@@ -261,7 +261,7 @@ final readonly class GenerationWorker implements IndexWorker
 
         if ($action === IndexAction::Upsert) {
             if ($gen->state === 'scanning') {
-                $after = $gen->scan_cursor === null ? null : new RecordRef($entity->value, Value::text($gen->scan_cursor));
+                $after = $gen->scan_cursor === null ? null : new RecordRef(entity: $entity->value, id: Value::text($gen->scan_cursor));
                 $page = ($this->projection)()->source->page($scope, $entity, $after, 1);
                 $records = $page->records->records;
 
@@ -271,7 +271,7 @@ final readonly class GenerationWorker implements IndexWorker
                 $record = $records[0] ?? null;
 
                 if ($record === null) {
-                    self::scanDone($db, $lane, $gen);
+                    self::scanDone(db: $db, lane: $lane, gen: $gen);
 
                     return true;
                 }
@@ -287,7 +287,7 @@ final readonly class GenerationWorker implements IndexWorker
                     return false;
                 }
                 $dirty = $db->table(LaneStore::DIRTY)->where('lane_key', $lane->lane_key)->where('seq', $seq)->firstOrFail();
-                $record = new RecordRef($entity->value, Value::text($dirty->record_id));
+                $record = new RecordRef(entity: $entity->value, id: Value::text($dirty->record_id));
             }
         }
         $documents = [];
@@ -300,9 +300,9 @@ final readonly class GenerationWorker implements IndexWorker
             }
             $document = ($this->projection)()->document($scope, $entity, $record);
             $action = $document === null ? IndexAction::DeleteRecords : IndexAction::Upsert;
-            $documents[] = $document ?? new IndexDocument($record, new ProjectedValues([]));
+            $documents[] = $document ?? new IndexDocument(record: $record, values: new ProjectedValues([]));
         }
-        $batch = new IndexBatch($this->store->target($scope, $entity, $gen), (string) Str::uuid7(), $action, $documents);
+        $batch = new IndexBatch(target: $this->store->target(scope: $scope, entity: $entity, generation: $gen), submissionId: (string) Str::uuid7(), action: $action, documents: $documents);
         $claim = Value::integer($gen->claim_epoch) + 1;
         $db->table('corex_search_submissions')->insert([
             'lane_key' => $lane->lane_key, 'generation' => $gen->generation, 'uid' => $gen->uid,
@@ -310,15 +310,15 @@ final readonly class GenerationWorker implements IndexWorker
             'deployment_id' => $scope->deploymentId, 'binding_id' => $scope->bindingId, 'binding_generation' => $scope->bindingGeneration,
             'restore_epoch' => $scope->restoreEpoch, 'first_seq' => $seq, 'last_seq' => $seq, 'scan_next' => $next,
             'batch_digest' => Submission::digest($batch), 'documents' => json_encode(Submission::documents($batch), JSON_THROW_ON_ERROR)]);
-        LaneStore::one(LaneStore::generation($db, $lane, Value::integer($gen->generation))->where('claim_epoch', $gen->claim_epoch)->update(['claim_epoch' => $claim]));
+        LaneStore::one(LaneStore::generation(db: $db, lane: $lane, number: Value::integer($gen->generation))->where('claim_epoch', $gen->claim_epoch)->update(['claim_epoch' => $claim]));
 
         return true;
     }
 
     public static function finish(ConnectionInterface $db, stdClass $lane, Submission $work, IndexOutcome $outcome): void
     {
-        $row = self::query($db, $work->row)->lockForUpdate()->firstOrFail();
-        $genQuery = LaneStore::generation($db, $lane, $work->batch->target->generation)->where('uid', $row->uid)->where('claim_epoch', $row->claim_epoch);
+        $row = self::query(db: $db, row: $work->row)->lockForUpdate()->firstOrFail();
+        $genQuery = LaneStore::generation(db: $db, lane: $lane, number: $work->batch->target->generation)->where('uid', $row->uid)->where('claim_epoch', $row->claim_epoch);
 
         if (! in_array($row->state, ['sending', 'accepted'], true)) {
             return;
@@ -330,7 +330,7 @@ final readonly class GenerationWorker implements IndexWorker
             IndexOutcome::Unknown => 'unknown',
             IndexOutcome::Pending => throw new LogicException('Cannot finalize a pending index submission.'),
         };
-        LaneStore::one(self::query($db, $row)->where('state', $row->state)->update(['state' => $state]));
+        LaneStore::one(self::query(db: $db, row: $row)->where('state', $row->state)->update(['state' => $state]));
 
         if ($gen->state === 'quarantined') {
             return;
@@ -346,7 +346,7 @@ final readonly class GenerationWorker implements IndexWorker
             LaneStore::one($genQuery->update(['state' => $nextState]));
 
             if ($lane->rebuild_id !== null && $db->table(LaneStore::RUNS)->where('rebuild_id', $lane->rebuild_id)->where('to_generation', $gen->generation)->exists()) {
-                RebuildJournal::release($db, $lane, Value::text($lane->rebuild_id), 'failed');
+                RebuildJournal::release(db: $db, lane: $lane, id: Value::text($lane->rebuild_id), state: 'failed');
             }
 
             return;
@@ -369,7 +369,7 @@ final readonly class GenerationWorker implements IndexWorker
         } elseif ($row->scan_next !== null) {
             LaneStore::one($genQuery->where('state', 'scanning')->update(['scan_cursor' => $row->scan_next]));
         } else {
-            self::scanDone($db, $lane, $gen);
+            self::scanDone(db: $db, lane: $lane, gen: $gen);
         }
     }
 
@@ -377,7 +377,7 @@ final readonly class GenerationWorker implements IndexWorker
     {
         $run = $db->table('corex_search_rebuilds')->where('lane_key', $lane->lane_key)->where('rebuild_id', $lane->rebuild_id)->where('to_generation', $gen->generation)->where('state', 'scanning');
         $row = (clone $run)->lockForUpdate()->firstOrFail();
-        LaneStore::one(LaneStore::generation($db, $lane, Value::integer($gen->generation))->where('state', 'scanning')->where('claim_epoch', $gen->claim_epoch)
+        LaneStore::one(LaneStore::generation(db: $db, lane: $lane, number: Value::integer($gen->generation))->where('state', 'scanning')->where('claim_epoch', $gen->claim_epoch)
             ->update(['state' => 'catching-up', 'confirmed_seq' => $row->start_seq]));
         LaneStore::one($run->update(['state' => 'catching-up']));
     }

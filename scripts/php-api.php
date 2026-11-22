@@ -13,7 +13,10 @@ use Throwable;
 ini_set('memory_limit', '1G');
 require dirname(__DIR__).'/vendor/autoload.php';
 
+require_once __DIR__.'/support/cli-arguments.php';
+
 try {
+    $argv = \CoreX\Scripts\cliArguments();
     $options = [];
     for ($i = 1; $i < count($argv); $i++) {
         $parts = explode('=', $argv[$i], 2);

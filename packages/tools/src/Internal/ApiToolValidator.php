@@ -95,6 +95,10 @@ final class ApiToolValidator
             $tool->ability = $operation->ability;
         }
 
+        if (count(array_unique($tool->parameterMap)) !== count($tool->parameterMap)) {
+            throw new CompilationException('Ambiguous parameter map for tool: '.$tool->toolCode);
+        }
+
         foreach ($tool->parameterMap as $argument => $parameter) {
             if ($argument === '' || $parameter === '') {
                 throw new CompilationException('Invalid parameter map for tool: '.$tool->toolCode);

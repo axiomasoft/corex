@@ -131,7 +131,7 @@ final class BulkResultAccessTest extends TestCase
             id: 'bulk-1',
             submissionId: 'submission-1',
             operationId: 'notes.bulk-import',
-            major: 'v1',
+            major: 'v2',
             contractHash: hash('sha256', 'bulk-contract'),
             encodedScope: (new ArrayDataScopeCodec)->encode($this->scope),
             actorId: 'actor-1',

@@ -21,8 +21,8 @@ use CoreX\Operations\Definition\Data\ResourceId;
 use CoreX\Operations\Definition\Enums\ResourceIdFormat;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
@@ -119,6 +119,7 @@ final class ToolAuthorizationLayersTest extends TestCase
                 'claimed_account' => ['sometimes', 'string'],
                 'secret' => ['sometimes', 'string'],
             ],
+            version: 'v2',
         )->asCommand()
             ->idempotency('optional')
             ->effect('tenant_transactional')
@@ -129,7 +130,7 @@ final class ToolAuthorizationLayersTest extends TestCase
             );
         $tool = Api::exposeTool(
             'notes.update',
-            'v1',
+            'v2',
             'notes.update',
             'v1',
             'write',
@@ -243,15 +244,18 @@ final class ToolAuthorizationLayersTest extends TestCase
     /** @param array<string, mixed> $input */
     private function dispatch(array $input, ?string $idempotencyKey = null): JsonResponse
     {
-        return $this->app->make(OperationDispatcher::class)->dispatch(Request::create(
-            '/api/v1/notes',
+        $request = Request::create(
+            '/api/v2/notes',
             'POST',
             server: array_filter([
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_IDEMPOTENCY_KEY' => $idempotencyKey,
             ]),
             content: JsonCanonical::encode($input),
-        ), 'v1', 'notes');
+        );
+        $request->attributes->set('corex.client_id', 'client-1');
+
+        return $this->app->make(HttpOperationDispatcher::class)->dispatch($request, 'v2', 'notes');
     }
 
     /** @param array<string, mixed> $input */
@@ -295,7 +299,7 @@ final class ToolAuthorizationLayersTest extends TestCase
         return ResolvedContexts::make(
             $this->tenants->current(),
             $this->identity,
-            new InvocationMetadata('request-1', 'v1', 'notes.update', 'POST'),
+            new InvocationMetadata('request-1', 'v2', 'notes.update', 'POST'),
         );
     }
 

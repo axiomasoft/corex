@@ -37,10 +37,10 @@ final readonly class WorkflowIntentStore
         $logicalScope = hash('sha256', json_encode([
             $scope->accountId, $scope->accountIncarnation, $scope->workspaceId, $request->module,
         ], JSON_THROW_ON_ERROR));
-        $digest = WorkflowDefinitionStamp::payloadHash('trigger', $request->requestKey, WorkflowDefinitionStamp::canonicalPayload($payload));
+        $digest = WorkflowDefinitionStamp::payloadHash(kind: 'trigger', requestKey: $request->requestKey, canonical: WorkflowDefinitionStamp::canonicalPayload($payload));
         $id = (string) Str::uuid7();
         $effectKey = hash('sha256', "corex.workflow.start/1\0{$logicalScope}\0{$request->requestKey}");
-        $proof = $this->issuer->issue($scope, self::OWNER, self::proofReference($id, $digest, $effectKey));
+        $proof = $this->issuer->issue(scope: $scope, owner: self::OWNER, reference: self::proofReference(id: $id, digest: $digest, effectKey: $effectKey));
         $now = self::time($this->clock->now());
         $columns = [
             'id' => $id,
@@ -74,7 +74,7 @@ final readonly class WorkflowIntentStore
         );
 
         if ($inserted->isNotEmpty()) {
-            return new CaptureResult(CaptureStatus::Created, $id, $digest);
+            return new CaptureResult(status: CaptureStatus::Created, intentRef: $id, digest: $digest);
         }
 
         $existing = $connection->table('sys_workflow_intents')->where('account_id', $scope->accountId)
@@ -89,7 +89,7 @@ final readonly class WorkflowIntentStore
             return new CaptureResult(CaptureStatus::Conflict);
         }
 
-        return new CaptureResult(CaptureStatus::Existing, Value::text($existing->id), $digest);
+        return new CaptureResult(status: CaptureStatus::Existing, intentRef: Value::text($existing->id), digest: $digest);
     }
 
     public static function proofReference(string $id, string $digest, string $effectKey): string
@@ -104,7 +104,7 @@ final readonly class WorkflowIntentStore
         $deadline = $now->modify('+60 seconds');
 
         return $db->transaction(function () use ($db, $scope, $limit, $now, $deadline): array {
-            $due = $this->scoped($db, $scope)
+            $due = $this->scoped(db: $db, scope: $scope)
                 ->where(static fn (Builder $query) => $query
                     ->where(static fn (Builder $pending) => $pending->whereIn('state', ['pending', 'retry-scheduled', 'accepted', 'unknown'])
                         ->where('due_at', '<=', self::time($now))
@@ -126,7 +126,7 @@ final readonly class WorkflowIntentStore
                     'state' => $state, 'claim_token' => $token, 'worker_claim' => $claim,
                     'lease_until' => self::time($deadline), 'attempt' => $attempt, 'updated_at' => self::time($now),
                 ];
-                $this->scoped($db, $scope)->where('id', $row->id)->update($changes);
+                $this->scoped(db: $db, scope: $scope)->where('id', $row->id)->update($changes);
                 $claims[] = (object) array_merge((array) $row, $changes, ['prior_state' => $prior]);
             }
 
@@ -137,15 +137,15 @@ final readonly class WorkflowIntentStore
     /** @param array<string, mixed> $changes */
     public function compareAndSet(Connection $db, DataScope $scope, object $row, string $expectedState, array $changes): bool
     {
-        return $this->scoped($db, $scope)->where('id', Value::text(Value::field($row, 'id')))
-            ->where('state', $expectedState)->where('worker_claim', Value::text(Value::field($row, 'worker_claim')))
-            ->where('claim_token', Value::text(Value::field($row, 'claim_token')))->where('lease_until', '>', self::time($this->clock->now()))
+        return $this->scoped(db: $db, scope: $scope)->where('id', Value::text(Value::field(row: $row, name: 'id')))
+            ->where('state', $expectedState)->where('worker_claim', Value::text(Value::field(row: $row, name: 'worker_claim')))
+            ->where('claim_token', Value::text(Value::field(row: $row, name: 'claim_token')))->where('lease_until', '>', self::time($this->clock->now()))
             ->update($changes + ['updated_at' => self::time($this->clock->now())]) === 1;
     }
 
     public static function instanceConflict(object $row, ProviderObservation $observation, ?string $firstProviderRef): bool
     {
-        $instance = Value::field($row, 'provider_instance');
+        $instance = Value::field(row: $row, name: 'provider_instance');
 
         return in_array($observation->kind, [ProviderObservationKind::Accepted, ProviderObservationKind::Confirmed], true)
             && (($firstProviderRef !== null && ! hash_equals($firstProviderRef, $observation->reference))

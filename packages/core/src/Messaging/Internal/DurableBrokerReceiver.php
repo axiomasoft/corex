@@ -7,6 +7,7 @@ namespace CoreX\Messaging\Internal;
 use Closure;
 use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\BrokerDeliverySource;
 use CoreX\Messaging\Contracts\BrokerReceiver;
@@ -39,12 +40,12 @@ final readonly class DurableBrokerReceiver implements BrokerReceiver
         }
 
         try {
-            [$message,$schema] = JsonCloudEventCodec::parse($wire, $host->make(DataScopeCodec::class));
+            [$message,$schema] = JsonCloudEventCodec::parse(json: $wire, scopes: $host->make(DataScopeCodec::class));
             $result = $host->make(StoredWorkRunner::class)->runStored($message->scope, $message->workProof(), function () use ($message, $schema, $consumer, $apply) {
                 $app = ($this->application)();
 
                 try {
-                    JsonCloudEventCodec::validate($message, $schema, $app->make(MessageContractRegistry::class));
+                    JsonCloudEventCodec::validate(message: $message, schema: $schema, registry: $app->make(MessageContractRegistry::class));
                 } catch (InvalidMessage|UnknownMessageContract $invalid) {
                     return $invalid;
                 }
@@ -73,7 +74,7 @@ final readonly class DurableBrokerReceiver implements BrokerReceiver
             }
 
             return $result;
-        } catch (InvalidMessage|UnknownMessageContract|ScopeContextMismatch|InboxRefused $failure) {
+        } catch (InvalidMessage|UnknownMessageContract|ScopeContextMismatch|ScopeStale|InboxRefused $failure) {
             $source->quarantine($consumer, $restrictedRef, hash('sha256', $wire), get_class($failure));
 
             return BrokerReceipt::Quarantined;

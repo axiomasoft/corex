@@ -111,6 +111,20 @@
                         "name": "key",
                         "type": "string",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "at",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "bool",
@@ -393,6 +407,12 @@
                         "name": "activity",
                         "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "isOwnerActivity",
+                        "type": "Closure",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -444,6 +464,24 @@
                     }
                 ],
                 "return": "bool",
+                "static": false
+            },
+            "inSnapshot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "read",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
                 "static": false
             },
             "scope": {
@@ -939,7 +977,8 @@
         "final": true,
         "interfaces": [
             "CoreX\\Data\\Contracts\\DataScopeAuthorizer",
-            "CoreX\\Data\\Contracts\\FieldUsePolicy"
+            "CoreX\\Data\\Contracts\\FieldUsePolicy",
+            "CoreX\\Data\\Contracts\\FieldUseSnapshot"
         ],
         "internal": true,
         "kind": "class",
@@ -987,6 +1026,12 @@
                         "name": "options",
                         "type": "CoreX\\Access\\Laravel\\AuthOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -1020,6 +1065,30 @@
                     }
                 ],
                 "return": "CoreX\\Data\\Data\\DataScopeAccessDecision",
+                "static": false
+            },
+            "inSnapshot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "read",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
                 "static": false
             },
             "plan": {
@@ -8240,7 +8309,7 @@
     "CoreX\\Context\\Exceptions\\ScopeContextMismatch": {
         "abstract": false,
         "constants": [],
-        "final": false,
+        "final": true,
         "interfaces": [
             "Packman\\Errors\\Contracts\\DescribesError",
             "Stringable",
@@ -8277,7 +8346,7 @@
                 "static": false
             }
         },
-        "parent": "CoreX\\Context\\Exceptions\\ScopeContextMismatch",
+        "parent": "Packman\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -11135,6 +11204,37 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\CustomFields\\Schemas\\Contracts\\FieldMetadata": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Schemas\\Data\\FieldDescription",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\CustomFields\\Schemas\\Contracts\\FieldProjectionCatalogue": {
         "abstract": false,
         "constants": [],
@@ -11787,6 +11887,50 @@
                 "readonly": true,
                 "static": false,
                 "type": "array"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Schemas\\Data\\FieldDescription": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "body",
+                        "type": "CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "witness",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "body": {
+                "name": "body",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\JsonDocument"
+            },
+            "witness": {
+                "name": "witness",
+                "readonly": true,
+                "static": false,
+                "type": "string"
             }
         },
         "readonly": true
@@ -13542,6 +13686,13 @@
                         "name": "enabled",
                         "type": "bool",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "declaredConnection",
+                        "type": "?Closure",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -13563,6 +13714,124 @@
                     }
                 ],
                 "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Schemas\\Internal\\DirectDdlSession": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "assertOwner": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "withRelationLock": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "route",
+                        "type": "CoreX\\CustomFields\\Schemas\\Internal\\DirectDdlRoute",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "db",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "spec",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "work",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "backend": {
+                "name": "backend",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Schemas\\Internal\\FieldMetadataReader": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\CustomFields\\Schemas\\Contracts\\FieldMetadata"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "runner",
+                        "type": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "catalogue",
+                        "type": "CoreX\\CustomFields\\Schemas\\Contracts\\FieldCatalogue",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "policy",
+                        "type": "CoreX\\Data\\Contracts\\FieldUsePolicy",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Schemas\\Data\\FieldDescription",
                 "static": false
             }
         },
@@ -16954,6 +17223,45 @@
                     }
                 ],
                 "return": "CoreX\\Data\\Data\\FieldUsePlan",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Data\\Contracts\\FieldUseSnapshot": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [
+            "CoreX\\Data\\Contracts\\FieldUsePolicy"
+        ],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "inSnapshot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "read",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
                 "static": false
             }
         },
@@ -46740,6 +47048,38 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Authorization\\Contracts\\OperationResourceAuthorizer": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "authorize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "outcome",
+                        "type": "?CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver": {
         "abstract": false,
         "constants": [],
@@ -47018,6 +47358,37 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Bulk\\Contracts\\BulkDraftFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "create": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Bulk\\Contracts\\BulkExecutor": {
         "abstract": false,
         "constants": [],
@@ -47236,6 +47607,37 @@
                     }
                 ],
                 "return": "?CoreX\\Data\\Data\\JsonDocument",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Bulk\\Contracts\\BulkTargetResolver": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "operationId": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
                 "static": false
             }
         },
@@ -48598,36 +49000,6 @@
                 "return": "",
                 "static": false
             },
-            "accepted": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "CoreX\\Data\\Data\\DataScope",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "clientId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "id",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "location",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Http\\JsonResponse",
-                "static": false
-            },
             "cancel": {
                 "params": [
                     {
@@ -49335,6 +49707,132 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkManagementOperation": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler",
+            "CoreX\\Operations\\Authorization\\Contracts\\OperationResourceAuthorizer",
+            "CoreX\\Operations\\Invocation\\Contracts\\OperationAcceptance"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scopes",
+                        "type": "CoreX\\Context\\Contracts\\DataScopeFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "runner",
+                        "type": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "operations",
+                        "type": "CoreX\\Operations\\Bulk\\Internal\\BulkOperations",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "urls",
+                        "type": "Illuminate\\Contracts\\Routing\\UrlGenerator",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "acceptance": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "result",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                "static": false
+            },
+            "authorize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "outcome",
+                        "type": "?CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkOperationDeclarations": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser": {
         "abstract": false,
         "constants": [],
@@ -49429,6 +49927,25 @@
                         "name": "definition",
                         "type": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "context",
+                        "type": "?CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "allowsStatus": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
                     }
                 ],
                 "return": "bool",
@@ -49484,8 +50001,26 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "dispatcher",
+                        "type": "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "cancel": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "name": "id",
@@ -49493,19 +50028,25 @@
                         "variadic": false
                     }
                 ],
-                "return": "mixed",
+                "return": "Illuminate\\Http\\JsonResponse",
                 "static": false
             },
             "failures": {
                 "params": [
                     {
                         "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "id",
                         "type": "string",
                         "variadic": false
                     }
                 ],
-                "return": "mixed",
+                "return": "Illuminate\\Http\\JsonResponse",
                 "static": false
             },
             "register": {
@@ -49524,16 +50065,10 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "id",
-                        "type": "string",
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
                         "variadic": false
-                    }
-                ],
-                "return": "mixed",
-                "static": false
-            },
-            "show": {
-                "params": [
+                    },
                     {
                         "byRef": false,
                         "name": "id",
@@ -49541,12 +50076,112 @@
                         "variadic": false
                     }
                 ],
-                "return": "mixed",
+                "return": "Illuminate\\Http\\JsonResponse",
+                "static": false
+            },
+            "show": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "Illuminate\\Http\\JsonResponse",
                 "static": false
             },
             "submit": {
-                "params": [],
-                "return": "mixed",
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    }
+                ],
+                "return": "Illuminate\\Http\\JsonResponse",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkSubmitGateway": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "operations",
+                        "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "inputs",
+                        "type": "CoreX\\Operations\\Invocation\\Internal\\OperationInput",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "target": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
                 "static": false
             }
         },
@@ -49559,7 +50194,8 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Invocation\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler",
+            "CoreX\\Operations\\Invocation\\Contracts\\OperationAcceptance"
         ],
         "internal": false,
         "kind": "class",
@@ -49604,6 +50240,24 @@
                     }
                 ],
                 "return": "",
+                "static": false
+            },
+            "acceptance": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "result",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
                 "static": false
             },
             "clear": {
@@ -49669,7 +50323,25 @@
                         "variadic": false
                     }
                 ],
-                "return": "void",
+                "return": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
+                "static": false
+            },
+            "release": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accepted",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
                 "static": false
             }
         },
@@ -49737,24 +50409,6 @@
                     }
                 ],
                 "return": "void",
-                "static": false
-            },
-            "replay": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "invocation",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "result",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationResult",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Operations\\Invocation\\Data\\OperationResult",
                 "static": false
             }
         },
@@ -50625,24 +51279,6 @@
                     }
                 ],
                 "return": "void",
-                "static": false
-            },
-            "replay": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "invocation",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "result",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationResult",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Operations\\Invocation\\Data\\OperationResult",
                 "static": false
             }
         },
@@ -52984,55 +53620,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Operations\\Errors\\Internal\\OperationErrorBoundary": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "serializer",
-                        "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "errors",
-                        "type": "CoreX\\Operations\\Errors\\Internal\\ErrorMapper",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "Illuminate\\Http\\Request",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "next",
-                        "type": "Closure",
-                        "variadic": false
-                    }
-                ],
-                "return": "mixed",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
     "CoreX\\Operations\\Errors\\Internal\\PackageProblemDefinitions": {
         "abstract": false,
         "constants": [],
@@ -53125,6 +53712,92 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Operations\\Errors\\Laravel\\OperationErrorBoundary": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "serializer",
+                        "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "errors",
+                        "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "next",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Operations\\Errors\\Laravel\\ProblemProjection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "Packman\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "document": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "error",
+                        "type": "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Operations\\Idempotency\\Contracts\\IdempotencyStore": {
         "abstract": false,
@@ -53554,6 +54227,13 @@
                         "name": "budgetReceipt",
                         "type": "?CoreX\\Operations\\Cost\\Data\\BudgetReceipt",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "accepted",
+                        "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                        "variadic": false
                     }
                 ],
                 "return": "self",
@@ -53562,6 +54242,12 @@
         },
         "parent": null,
         "properties": {
+            "accepted": {
+                "name": "accepted",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation"
+            },
             "budgetReceipt": {
                 "name": "budgetReceipt",
                 "readonly": true,
@@ -53856,6 +54542,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Operations\\Invocation\\Contracts\\OperationInputAdmission",
             "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker"
         ],
         "internal": true,
@@ -53955,9 +54642,49 @@
                         "name": "references",
                         "type": "?CoreX\\Foundation\\Contracts\\ReferenceAdmission",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "inputs",
+                        "type": "?Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "resources",
+                        "type": "?CoreX\\Operations\\Authorization\\Contracts\\OperationResourceAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "bulkGateway",
+                        "type": "?Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "ownerPolicy",
+                        "type": "?Closure",
+                        "variadic": false
                     }
                 ],
                 "return": "",
+                "static": false
+            },
+            "assertInput": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
                 "static": false
             },
             "invoke": {
@@ -54169,19 +54896,7 @@
                     {
                         "byRef": false,
                         "name": "dispatcher",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "operations",
-                        "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "responder",
-                        "type": "CoreX\\Operations\\Internal\\Http\\HttpOperationResponder",
+                        "type": "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher",
                         "variadic": false
                     }
                 ],
@@ -54250,14 +54965,7 @@
                 "static": false
             },
             "openapi": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "Illuminate\\Http\\Request",
-                        "variadic": false
-                    }
-                ],
+                "params": [],
                 "return": "Illuminate\\Http\\JsonResponse",
                 "static": false
             },
@@ -54284,13 +54992,19 @@
                     {
                         "byRef": false,
                         "name": "operation",
-                        "type": "?CoreX\\Operations\\Definition\\Data\\Operation",
+                        "type": "CoreX\\Operations\\Definition\\Data\\Operation",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "response",
                         "type": "Illuminate\\Http\\JsonResponse",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accepted",
+                        "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
                         "variadic": false
                     }
                 ],
@@ -54396,6 +55110,26 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\RequestContext"
+        ],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "clientId": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver": {
         "abstract": false,
         "constants": [],
@@ -54463,7 +55197,7 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher": {
+    "CoreX\\Operations\\Invocation\\Contracts\\OperationAcceptance": {
         "abstract": false,
         "constants": [],
         "final": false,
@@ -54471,28 +55205,47 @@
         "internal": false,
         "kind": "interface",
         "methods": {
-            "dispatch": {
+            "acceptance": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "request",
-                        "type": "Illuminate\\Http\\Request",
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "version",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "path",
-                        "type": "string",
+                        "name": "result",
+                        "type": "array",
                         "variadic": false
                     }
                 ],
-                "return": "Illuminate\\Http\\JsonResponse",
+                "return": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Invocation\\Contracts\\OperationInputAdmission": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "assertInput": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
                 "static": false
             }
         },
@@ -54574,6 +55327,50 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Invocation\\Data\\AcceptedOperation": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "operationRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "statusUri",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "operationRef": {
+                "name": "operationRef",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "statusUri": {
+                "name": "statusUri",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Operations\\Invocation\\Data\\OperationInvocation": {
         "abstract": false,
         "constants": [],
@@ -54620,6 +55417,13 @@
                         "name": "clientId",
                         "type": "?string",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "bulk",
+                        "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -54628,6 +55432,12 @@
         },
         "parent": null,
         "properties": {
+            "bulk": {
+                "name": "bulk",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition"
+            },
             "clientId": {
                 "name": "clientId",
                 "readonly": true,
@@ -54701,6 +55511,20 @@
                         "name": "metadata",
                         "type": "CoreX\\Data\\Data\\JsonDocument",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "accepted",
+                        "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "privateWitness",
+                        "type": "?string",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -54709,6 +55533,12 @@
         },
         "parent": null,
         "properties": {
+            "accepted": {
+                "name": "accepted",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation"
+            },
             "data": {
                 "name": "data",
                 "readonly": true,
@@ -54720,6 +55550,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Data\\Data\\JsonDocument"
+            },
+            "privateWitness": {
+                "name": "privateWitness",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
             },
             "replayed": {
                 "name": "replayed",
@@ -54816,6 +55652,67 @@
             }
         },
         "readonly": false
+    },
+    "CoreX\\Operations\\Invocation\\Internal\\AuthenticatedRequestContext": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\RequestContext",
+            "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "client",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "invocation",
+                        "type": "?CoreX\\Invocation\\Data\\InvocationMetadata",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "clientId": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "metadata": {
+                "params": [],
+                "return": "CoreX\\Invocation\\Data\\InvocationMetadata",
+                "static": false
+            },
+            "principal": {
+                "params": [],
+                "return": "CoreX\\Context\\Contracts\\Principal",
+                "static": false
+            },
+            "tenant": {
+                "params": [],
+                "return": "CoreX\\Context\\Data\\TenantContext",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Internal\\CapabilityResolver": {
         "abstract": false,
@@ -55064,13 +55961,11 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Operations\\Invocation\\Internal\\OperationDispatcher": {
+    "CoreX\\Operations\\Invocation\\Internal\\OperationInput": {
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [
-            "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher"
-        ],
+        "interfaces": [],
         "internal": true,
         "kind": "class",
         "methods": {
@@ -55078,78 +55973,24 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "operations",
-                        "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "principals",
-                        "type": "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contexts",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "serializer",
-                        "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "validation",
                         "type": "Illuminate\\Contracts\\Validation\\Factory",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "container",
-                        "type": "Illuminate\\Contracts\\Container\\Container",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "errors",
-                        "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "invoker",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker",
                         "variadic": false
                     }
                 ],
                 "return": "",
                 "static": false
             },
-            "dispatch": {
+            "normalize": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "request",
-                        "type": "Illuminate\\Http\\Request",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "version",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "path",
-                        "type": "string",
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
                         "variadic": false
                     }
                 ],
-                "return": "Illuminate\\Http\\JsonResponse",
+                "return": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
                 "static": false
             }
         },
@@ -55295,6 +56136,73 @@
                     }
                 ],
                 "return": "CoreX\\Invocation\\Contracts\\RequestContext",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Operations\\Invocation\\Laravel\\AuthenticatedOperationContext": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principals",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "forOperation": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "operation",
+                        "type": "CoreX\\Operations\\Definition\\Data\\Operation",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext",
+                "static": true
+            },
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "metadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext",
                 "static": false
             }
         },
@@ -55518,6 +56426,136 @@
         "parent": "Illuminate\\Console\\Command",
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "dispatch": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "version",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "path",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "Illuminate\\Http\\JsonResponse",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\HttpOperationDispatcher": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "operations",
+                        "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Operations\\Invocation\\Laravel\\AuthenticatedOperationContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "serializer",
+                        "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "errors",
+                        "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "invoker",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "responder",
+                        "type": "CoreX\\Operations\\Internal\\Http\\HttpOperationResponder",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "etagSecret",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "dispatch": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "version",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "path",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "Illuminate\\Http\\JsonResponse",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Operations\\Laravel\\HttpRegistrar": {
         "abstract": false,
@@ -55937,6 +56975,11 @@
                 "return": "self",
                 "static": true
             },
+            "publicBaseUri": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
             "publicProjection": {
                 "params": [],
                 "return": "array",
@@ -56083,6 +57126,214 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Metadata\\Contracts\\EntityMetadata": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Metadata\\Data\\MetadataView",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Metadata\\Contracts\\MetadataOperation": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Metadata\\Data\\MetadataView",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Metadata\\Data\\MetadataView": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "body",
+                        "type": "CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "witness",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "body": {
+                "name": "body",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\JsonDocument"
+            },
+            "witness": {
+                "name": "witness",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Operations\\Metadata\\Internal\\DescribeEntity": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler",
+            "CoreX\\Operations\\Metadata\\Contracts\\MetadataOperation"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scopes",
+                        "type": "CoreX\\Context\\Contracts\\DataScopeFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "current",
+                        "type": "CoreX\\Context\\Contracts\\CurrentWorkScope",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Metadata\\Data\\MetadataView",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Operations\\Metadata\\Laravel\\MetadataOperationDeclarations": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\OpenApi\\Contracts\\ContractSnapshotSection": {
         "abstract": false,
         "constants": [],
@@ -56211,6 +57462,7 @@
                     "errors.json",
                     "openapi.json",
                     "operations.json",
+                    "webhooks.json",
                     "manifest.json"
                 ]
             }
@@ -56248,6 +57500,12 @@
                     },
                     {
                         "byRef": false,
+                        "name": "serverUrl",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": [],
                         "name": "sections",
                         "type": "iterable",
@@ -56258,25 +57516,6 @@
                 "static": false
             },
             "documents": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "errorContracts",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": "v1",
-                        "name": "major",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "files": {
                 "params": [],
                 "return": "array",
                 "static": false
@@ -65447,6 +66686,14 @@
                     "value": "search.invalid_cursor"
                 }
             },
+            "MetadataDenied": {
+                "type": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+                "value": {
+                    "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+                    "case": "MetadataDenied",
+                    "value": "search.metadata_denied"
+                }
+            },
             "SearchFeatureUnavailable": {
                 "type": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
                 "value": {
@@ -65627,6 +66874,28 @@
                 "params": [],
                 "return": "self",
                 "static": true
+            }
+        },
+        "parent": "Packman\\Errors\\Exceptions\\CodedException",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Search\\Errors\\Exceptions\\SearchMetadataDenied": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Packman\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "Packman\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
         "parent": "Packman\\Errors\\Exceptions\\CodedException",
@@ -68215,24 +69484,6 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "field": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "row",
-                        "type": "object",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "mixed",
-                "static": true
-            },
             "integer": {
                 "params": [
                     {
@@ -69663,6 +70914,37 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Search\\Query\\Contracts\\SearchMetadata": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Search\\Query\\Data\\SearchDescription",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Search\\Query\\Data\\Candidate": {
         "abstract": false,
         "constants": [],
@@ -70016,6 +71298,50 @@
                 "readonly": true,
                 "static": false,
                 "type": "?int"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Search\\Query\\Data\\SearchDescription": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "body",
+                        "type": "CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "witness",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "body": {
+                "name": "body",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\JsonDocument"
+            },
+            "witness": {
+                "name": "witness",
+                "readonly": true,
+                "static": false,
+                "type": "string"
             }
         },
         "readonly": true
@@ -70913,6 +72239,99 @@
                 ],
                 "return": "string",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Search\\Query\\Internal\\SearchMetadataReader": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Search\\Query\\Contracts\\SearchMetadata"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "runner",
+                        "type": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "current",
+                        "type": "CoreX\\Context\\Contracts\\CurrentWorkScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "policy",
+                        "type": "CoreX\\Data\\Contracts\\FieldUsePolicy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "backend",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cluster",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "driver",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "projection",
+                        "type": "CoreX\\Search\\Projection\\Contracts\\SearchProjectionContributor",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "generations",
+                        "type": "CoreX\\Search\\Index\\Contracts\\ActiveGenerations",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "index",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Search\\Query\\Data\\SearchDescription",
+                "static": false
             }
         },
         "parent": null,
@@ -94243,6 +95662,20 @@
                         "name": "metadata",
                         "type": "CoreX\\Data\\Data\\JsonDocument",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "accepted",
+                        "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "problem",
+                        "type": "?CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -94251,6 +95684,12 @@
         },
         "parent": null,
         "properties": {
+            "accepted": {
+                "name": "accepted",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation"
+            },
             "errorCode": {
                 "name": "errorCode",
                 "readonly": true,
@@ -94274,6 +95713,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Tools\\Data\\ToolOutcome"
+            },
+            "problem": {
+                "name": "problem",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Data\\Data\\JsonDocument"
             },
             "replayed": {
                 "name": "replayed",
@@ -94727,95 +96172,6 @@
                     }
                 ],
                 "return": "CoreX\\Tools\\Data\\ToolResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
-    "CoreX\\Tools\\Internal\\McpToolsProjection": {
-        "abstract": false,
-        "constants": {
-            "PROFILE": {
-                "type": "string",
-                "value": "mcp-tools-projection/1"
-            },
-            "PROTOCOL_VERSION": {
-                "type": "string",
-                "value": "MCP2025-11-25"
-            }
-        },
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "catalogue",
-                        "type": "CoreX\\Tools\\Contracts\\ToolCatalogue",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "invoker",
-                        "type": "CoreX\\Tools\\Contracts\\ToolInvoker",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "callTool": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "wireName",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "operationKey",
-                        "type": "?string",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "listTools": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
                 "static": false
             }
         },
@@ -95297,6 +96653,97 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Tools\\Mcp\\Laravel\\McpToolEndpoint": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Operations\\Invocation\\Laravel\\AuthenticatedOperationContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "catalogue",
+                        "type": "CoreX\\Tools\\Contracts\\ToolCatalogue",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "invoker",
+                        "type": "CoreX\\Tools\\Contracts\\ToolInvoker",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "operations",
+                        "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clients",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\ClientScopeAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "actions",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "errors",
+                        "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "serializer",
+                        "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "Packman\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "projection",
+                        "type": "CoreX\\Operations\\Errors\\Laravel\\ProblemProjection",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "__invoke": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    }
+                ],
+                "return": "Illuminate\\Http\\JsonResponse",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Tools\\ToolsServiceProvider": {
         "abstract": false,
@@ -99523,13 +100970,19 @@
                     {
                         "byRef": false,
                         "name": "dispatcher",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher",
+                        "type": "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "operations",
                         "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
                         "variadic": false
                     }
                 ],
@@ -99574,6 +101027,137 @@
                 ],
                 "return": "void",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Webhooks\\Laravel\\WebhookOperation": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler",
+            "CoreX\\Operations\\Authorization\\Contracts\\OperationResourceAuthorizer"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scopes",
+                        "type": "CoreX\\Context\\Contracts\\DataScopeFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "runner",
+                        "type": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "subscriptions",
+                        "type": "CoreX\\Webhooks\\Contracts\\WebhookSubscriptionStore",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "management",
+                        "type": "CoreX\\Webhooks\\Internal\\WebhookManagement",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "replay",
+                        "type": "CoreX\\Webhooks\\Internal\\WebhookReplay",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "topics",
+                        "type": "CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "gate",
+                        "type": "Illuminate\\Contracts\\Auth\\Access\\Gate",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "authorize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "outcome",
+                        "type": "?CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Webhooks\\Laravel\\WebhookOperationDeclarations": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": true
             }
         },
         "parent": null,
@@ -102247,6 +103831,16 @@
                 "return": "array",
                 "static": true
             },
+            "companyDeleted": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "companyUpdate": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
             "listInput": {
                 "params": [],
                 "return": "array",
@@ -102325,6 +103919,86 @@
         "properties": [],
         "readonly": true
     },
+    "Flex\\Crm\\Company\\Actions\\DeleteCompany": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "guard",
+                        "type": "Flex\\Crm\\Context\\ContextGuard",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "companyId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "Flex\\Crm\\Company\\Actions\\UpdateCompany": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "guard",
+                        "type": "Flex\\Crm\\Context\\ContextGuard",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "companyId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "changes",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "Flex\\Crm\\Company\\Models\\Company",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "Flex\\Crm\\Company\\Api\\CompanyPayload": {
         "abstract": false,
         "constants": [],
@@ -102366,6 +104040,57 @@
                         "byRef": false,
                         "name": "createCompany",
                         "type": "Flex\\Crm\\Company\\Actions\\CreateCompany",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "Flex\\Crm\\Company\\Api\\DeleteCompanyOperation": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "deleteCompany",
+                        "type": "Flex\\Crm\\Company\\Actions\\DeleteCompany",
                         "variadic": false
                     }
                 ],
@@ -102468,6 +104193,57 @@
                         "byRef": false,
                         "name": "guard",
                         "type": "Flex\\Crm\\Context\\ContextGuard",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "Flex\\Crm\\Company\\Api\\UpdateCompanyOperation": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "updateCompany",
+                        "type": "Flex\\Crm\\Company\\Actions\\UpdateCompany",
                         "variadic": false
                     }
                 ],

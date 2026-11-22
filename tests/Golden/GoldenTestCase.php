@@ -28,6 +28,7 @@ use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tests\TestCase;
 use CoreX\Tools\ToolsServiceProvider;
+use CoreX\Webhooks\WebhooksServiceProvider;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Flex\Crm\CrmServiceProvider;
 use Illuminate\Support\ServiceProvider;
@@ -63,6 +64,7 @@ abstract class GoldenTestCase extends TestCase
             WorkflowServiceProvider::class,
             OperationsServiceProvider::class,
             ToolsServiceProvider::class,
+            WebhooksServiceProvider::class,
             ...$this->manifestProviders(),
         ];
     }

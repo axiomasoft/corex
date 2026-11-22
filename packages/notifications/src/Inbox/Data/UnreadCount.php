@@ -18,7 +18,7 @@ final readonly class UnreadCount
             throw new InvalidArgumentException('Unread count cannot be negative.');
         }
 
-        return new self($count, null);
+        return new self(count: $count, reason: null);
     }
 
     public static function unavailable(string $reason): self
@@ -27,6 +27,6 @@ final readonly class UnreadCount
             throw new InvalidArgumentException('Unread count unavailability reason is invalid.');
         }
 
-        return new self(null, $reason);
+        return new self(count: null, reason: $reason);
     }
 }

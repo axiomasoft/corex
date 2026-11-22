@@ -43,7 +43,9 @@ foreach (array_merge((($entries = glob($root.'/packages/*/composer.json')) === f
     $actual['dependencies'][$dir] = substr_count((string) @file_get_contents(dirname($manifest).'/composer-dependency-analyser.php'), '// ratchet:');
 }
 
-if (in_array('--tighten', $argv, true)) {
+require_once __DIR__.'/support/cli-arguments.php';
+
+if (in_array('--tighten', \CoreX\Scripts\cliArguments(), true)) {
     foreach ($actual as $kind => $values) {
         foreach ($values as $key => $value) {
             $ceilings[$kind][$key] = min($value, $ceilings[$kind][$key] ?? $value);

@@ -37,20 +37,20 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
 
     public function plan(DataScope $scope, FieldSchemaChange $change, SchemaRevision $expected): SchemaPlan
     {
-        return $this->runner->run($scope, function () use ($scope, $change, $expected): SchemaPlan {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $change, $expected): SchemaPlan {
             $db = $this->database->connection();
 
             return $db->transaction(function () use ($db, $scope, $change, $expected): SchemaPlan {
-                $this->current->assert($scope, $db);
-                $this->access->manage($scope, $change->entity);
-                ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'schema-plan', ['entity' => $change->entity->value, 'change' => $change]);
-                $head = $this->heads->row($db, $scope, $change->entity, allowManifestChange: true);
+                $this->current->assert(scope: $scope, connection: $db);
+                $this->access->manage(scope: $scope, entity: $change->entity);
+                ReferenceWrites::enlist(connection: $db, scope: $scope, producer: 'axiomasoft/corex-custom-fields', kind: 'schema-plan', witness: ['entity' => $change->entity->value, 'change' => $change]);
+                $head = $this->heads->row(db: $db, scope: $scope, entity: $change->entity, allowManifestChange: true);
 
                 if ($head->effective_revision !== $expected->value) {
                     throw new SchemaConflict('stale-base-revision');
                 }
                 $ref = (string) Str::uuid7();
-                $plan = $this->planner->build($db, $scope, $head, $change, $ref);
+                $plan = $this->planner->build(db: $db, scope: $scope, head: $head, change: $change, ref: $ref);
                 $digest = SchemaRows::digest(['fields.plan.v2', SchemaRows::logical($scope), SchemaRows::fence($scope), $plan]);
                 $db->table('sys_attribute_schema_operations')->insert([...SchemaRows::logical($scope), ...SchemaRows::fence($scope), 'entity' => $change->entity->value,
                     'id' => $ref, 'operation_key' => 'P/'.$ref, 'plan' => SchemaRows::json($plan), 'plan_digest' => $digest,
@@ -59,10 +59,10 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
 
                 $ddl = $plan['ddl'] === null ? null : SchemaValue::map($plan['ddl']);
 
-                return new SchemaPlan(new SchemaPlanRef($ref), new PlanDigest($digest), $expected, new SchemaRevision(SchemaValue::text($plan['target'])),
-                    $this->blockers($plan), SchemaValue::integer($plan['estimated_rows']), $change,
-                    $ddl === null ? null : new PlanDigest(SchemaValue::text($ddl['digest'])), SchemaValue::strings($plan['dependencies']),
-                    SchemaValue::text($plan['failure_policy']));
+                return new SchemaPlan(ref: new SchemaPlanRef($ref), digest: new PlanDigest($digest), base: $expected, target: new SchemaRevision(SchemaValue::text($plan['target'])),
+                    blockers: $this->blockers($plan), estimatedRows: SchemaValue::integer($plan['estimated_rows']), change: $change,
+                    ddlDigest: $ddl === null ? null : new PlanDigest(SchemaValue::text($ddl['digest'])), dependencies: SchemaValue::strings($plan['dependencies']),
+                    conversionFailurePolicy: SchemaValue::text($plan['failure_policy']));
             });
         });
     }
@@ -78,44 +78,44 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
 
     public function apply(DataScope $scope, SchemaPlanRef $plan, PlanDigest $expected, OperationKey $key): SchemaOperationRef
     {
-        return $this->runner->run($scope, function () use ($scope, $plan, $expected, $key): SchemaOperationRef {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $plan, $expected, $key): SchemaOperationRef {
             $db = $this->database->connection();
 
             return $db->transaction(function () use ($db, $scope, $plan, $expected, $key): SchemaOperationRef {
-                $this->current->assert($scope, $db);
-                $query = $this->journal->operation($db, $scope, $plan->id);
+                $this->current->assert(scope: $scope, connection: $db);
+                $query = $this->journal->operation(db: $db, scope: $scope, id: $plan->id);
                 $entity = new EntityHandle(SchemaValue::text((clone $query)->value('entity') ?? throw new SchemaConflict('unknown-plan')));
-                $this->access->manage($scope, $entity);
-                $head = $this->heads->row($db, $scope, $entity, true, true);
+                $this->access->manage(scope: $scope, entity: $entity);
+                $head = $this->heads->row(db: $db, scope: $scope, entity: $entity, exclusive: true, allowManifestChange: true);
                 $row = (clone $query)->lockForUpdate()->first() ?? throw new SchemaConflict('unknown-plan');
                 $body = SchemaRows::decode($row->plan);
-                ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'schema-apply', ['entity' => $entity->value, 'plan' => $body]);
+                ReferenceWrites::enlist(connection: $db, scope: $scope, producer: 'axiomasoft/corex-custom-fields', kind: 'schema-apply', witness: ['entity' => $entity->value, 'plan' => $body]);
 
                 if ($row->plan_digest !== $expected->value || $expected->value !== SchemaRows::digest(['fields.plan.v2', SchemaRows::logical($scope), SchemaRows::fence($scope), $body])
                     || ($key->deadline !== null && $key->deadline <= $this->clock->now())) {
                     throw new SchemaConflict('plan-digest-or-deadline');
                 }
                 $keyValue = 'A/'.$key->id;
-                $previous = SchemaRows::rows($db, SchemaRows::OPERATIONS, $scope, $entity->value)->where('operation_key', $keyValue)->first();
+                $previous = SchemaRows::rows(db: $db, table: SchemaRows::OPERATIONS, scope: $scope, entity: $entity->value)->where('operation_key', $keyValue)->first();
 
                 if ($previous !== null) {
                     if ($previous->id !== $row->id || $previous->plan_digest !== $expected->value) {
-                        throw new SchemaConflict('schema-operation-key-conflict', true);
+                        throw new SchemaConflict(reason: 'schema-operation-key-conflict', keyConflict: true);
                     }
 
                     return new SchemaOperationRef($plan->id);
                 }
 
                 if ($this->blockers($body) !== [] || (($body['shadow'] === true || $body['kind'] === 'retire')
-                    && $this->references->get($scope, $entity, SchemaValue::text($body['field']), SchemaValue::text($body['base'])) !== []) || $row->state !== 'planned' || $head->pending_plan !== null || $head->effective_revision !== $row->base_revision
-                    || $head->mapping_digest !== $body['base_mapping_digest'] || $this->heads->declared($db, $scope, $entity)->digest() !== $body['deployed_manifest_digest']) {
+                    && $this->references->get(scope: $scope, entity: $entity, field: SchemaValue::text($body['field']), revision: SchemaValue::text($body['base'])) !== []) || $row->state !== 'planned' || $head->pending_plan !== null || $head->effective_revision !== $row->base_revision
+                    || $head->mapping_digest !== $body['base_mapping_digest'] || $this->heads->declared(db: $db, scope: $scope, entity: $entity)->digest() !== $body['deployed_manifest_digest']) {
                     throw new SchemaConflict('stale-or-pending-schema');
                 }
-                $proof = $this->origins->issue($scope, SchemaJournal::OWNER, SchemaJournal::proofReference($row));
+                $proof = $this->origins->issue(scope: $scope, owner: SchemaJournal::OWNER, reference: SchemaJournal::proofReference($row));
                 SchemaRows::one($query->where('state', 'planned')->update(['operation_key' => $keyValue, 'scope_seal' => $proof->seal,
                     'scope' => SchemaRows::json($this->codec->encode($scope)), 'state' => 'queued', 'next_attempt_at' => $this->journal->now()]));
-                SchemaRows::one(SchemaRows::rows($db, SchemaRows::HEAD, $scope, $entity->value)->whereNull('pending_plan')->update(['pending_plan' => $row->id]));
-                $this->facts->requested($db, $scope, $entity, $plan->id, $expected->value, SchemaValue::text($row->requested_message));
+                SchemaRows::one(SchemaRows::rows(db: $db, table: SchemaRows::HEAD, scope: $scope, entity: $entity->value)->whereNull('pending_plan')->update(['pending_plan' => $row->id]));
+                $this->facts->requested(db: $db, scope: $scope, entity: $entity, plan: $plan->id, digest: $expected->value, messageId: SchemaValue::text($row->requested_message));
 
                 return new SchemaOperationRef($plan->id);
             });
@@ -124,34 +124,34 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
 
     public function inspect(DataScope $scope, SchemaOperationRef $operation): SchemaOperationStatus
     {
-        return $this->control($scope, $operation, null, null);
+        return $this->control(scope: $scope, operation: $operation, expected: null, command: null);
     }
 
     public function retry(DataScope $scope, SchemaOperationRef $operation, ClaimGeneration $expected): SchemaOperationStatus
     {
-        return $this->control($scope, $operation, $expected, 'retry');
+        return $this->control(scope: $scope, operation: $operation, expected: $expected, command: 'retry');
     }
 
     public function cancel(DataScope $scope, SchemaOperationRef $operation, ClaimGeneration $expected): SchemaOperationStatus
     {
-        return $this->control($scope, $operation, $expected, 'cancel');
+        return $this->control(scope: $scope, operation: $operation, expected: $expected, command: 'cancel');
     }
 
     private function control(DataScope $scope, SchemaOperationRef $operation, ?ClaimGeneration $expected, ?string $command): SchemaOperationStatus
     {
-        return $this->runner->run($scope, function () use ($scope, $operation, $expected, $command): SchemaOperationStatus {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $operation, $expected, $command): SchemaOperationStatus {
             $db = $this->database->connection();
 
             return $db->transaction(function () use ($db, $scope, $operation, $expected, $command): SchemaOperationStatus {
-                $this->current->assert($scope, $db);
-                $query = $this->journal->operation($db, $scope, $operation->id);
+                $this->current->assert(scope: $scope, connection: $db);
+                $query = $this->journal->operation(db: $db, scope: $scope, id: $operation->id);
                 $entity = new EntityHandle(SchemaValue::text((clone $query)->value('entity') ?? throw new SchemaConflict('unknown-operation')));
-                $this->access->manage($scope, $entity, $command === null ? FieldUse::Read : FieldUse::Write);
-                $head = $this->heads->row($db, $scope, $entity, $command !== null, true);
+                $this->access->manage(scope: $scope, entity: $entity, use: $command === null ? FieldUse::Read : FieldUse::Write);
+                $head = $this->heads->row(db: $db, scope: $scope, entity: $entity, exclusive: $command !== null, allowManifestChange: true);
                 $row = (clone $query)->lockForUpdate()->first() ?? throw new SchemaConflict('unknown-operation');
 
                 if ($expected === null) {
-                    return $this->journal->status($db, $row);
+                    return $this->journal->status(db: $db, row: $row);
                 }
 
                 if ($row->generation !== $expected->value && SchemaValue::integer($row->generation) !== $expected->value) {
@@ -181,7 +181,7 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
                 SchemaRows::one((clone $query)->where('generation', $expected->value)->update(['generation' => $expected->value + 1, 'claim_token' => null, 'lease_until' => null,
                     'state' => $next, 'cancel_requested' => $command === 'cancel', 'blockers' => '[]', 'next_attempt_at' => $this->journal->now()]));
 
-                return $this->journal->status($db, $query->first() ?? throw new SchemaConflict('unknown-operation'));
+                return $this->journal->status(db: $db, row: $query->first() ?? throw new SchemaConflict('unknown-operation'));
             });
         });
     }

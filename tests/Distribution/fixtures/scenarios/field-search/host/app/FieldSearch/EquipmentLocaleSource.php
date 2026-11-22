@@ -46,14 +46,14 @@ final readonly class EquipmentLocaleSource implements LocalizedSearchValues
         return $result;
     }
 
-    public function load(ProjectionContext $context, LocalizedFieldBinding $binding, RecordRef $record): ?LocalizedText
+    public function load(ProjectionContext $context, LocalizedFieldBinding $field, RecordRef $record): ?LocalizedText
     {
         if ($record->entity !== EquipmentOwner::ENTITY || ! EquipmentOwner::records($context->scope)->where('asset_key', $record->id)->exists()) {
             return null;
         }
-        $encoded = DB::table('scenario_equipment_locales')->where(['asset_key' => $record->id, 'field_id' => $binding->fieldId])->value('translations');
+        $encoded = DB::table('scenario_equipment_locales')->where(['asset_key' => $record->id, 'field_id' => $field->fieldId])->value('translations');
 
-        return is_string($encoded) ? new LocalizedText($binding->declaredField, $binding->schemaHash, json_decode($encoded, true, flags: JSON_THROW_ON_ERROR)) : null;
+        return is_string($encoded) ? new LocalizedText($field->declaredField, $field->schemaHash, json_decode($encoded, true, flags: JSON_THROW_ON_ERROR)) : null;
     }
 
     public static function shape(string $id, string $locale): string

@@ -12,6 +12,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\CustomFields\Schemas\Contracts\DeclaredFields;
 use CoreX\CustomFields\Schemas\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Schemas\Contracts\FieldMetadata;
 use CoreX\CustomFields\Schemas\Contracts\FieldProjectionCatalogue;
 use CoreX\CustomFields\Schemas\Contracts\FieldSchemaDependencies;
 use CoreX\CustomFields\Schemas\Contracts\FieldSchemas;
@@ -22,6 +23,7 @@ use CoreX\CustomFields\Schemas\Internal\DatabaseFieldSchemas;
 use CoreX\CustomFields\Schemas\Internal\DatabaseSchemaHeads;
 use CoreX\CustomFields\Schemas\Internal\DeclaredSchema;
 use CoreX\CustomFields\Schemas\Internal\DirectDdlRoute;
+use CoreX\CustomFields\Schemas\Internal\FieldMetadataReader;
 use CoreX\CustomFields\Schemas\Internal\FieldModuleReferences;
 use CoreX\CustomFields\Schemas\Internal\SchemaJournal;
 use CoreX\CustomFields\Schemas\Internal\SchemaReferences;
@@ -35,6 +37,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
 use Packman\Foundation\Contracts\PackageRegistrar;
@@ -50,21 +53,33 @@ final class FieldSchemaRegistrar implements PackageRegistrar
         $app->scoped(FieldModuleReferences::class);
         $app->tag(FieldModuleReferences::class, ModuleReferences::class);
 
-        $app->scoped(DeclaredSchema::class, static fn (Application $app): DeclaredSchema => new DeclaredSchema($app->make(FieldTypes::class),
-            static fn (): iterable => self::tagged($app, DeclaredFields::class),
-            $app->bound(EntityRegistry::class) ? $app->make(EntityRegistry::class) : null, $app->bound(ModuleRegistry::class) ? $app->make(ModuleRegistry::class) : null));
-        $app->scoped(DirectDdlRoute::class, static fn (Application $app): DirectDdlRoute => new DirectDdlRoute($app->make(CurrentWorkScope::class),
-            $app->bound(AccountConnectionResolver::class) ? $app->make(AccountConnectionResolver::class) : null, $app->make(Repository::class)->get('corex-custom-fields.ddl', true) === true));
-        $app->scoped(SchemaReferences::class, static fn (Application $app): SchemaReferences => new SchemaReferences(static fn (): iterable => self::tagged($app, FieldSchemaDependencies::class)));
+        $app->scoped(DeclaredSchema::class, static fn (Application $app): DeclaredSchema => new DeclaredSchema(types: $app->make(FieldTypes::class),
+            declarations: static fn (): iterable => self::tagged(app: $app, type: DeclaredFields::class),
+            entities: $app->bound(EntityRegistry::class) ? $app->make(EntityRegistry::class) : null, modules: $app->bound(ModuleRegistry::class) ? $app->make(ModuleRegistry::class) : null));
+        $app->scoped(DirectDdlRoute::class, static fn (Application $app): DirectDdlRoute => new DirectDdlRoute(
+            current: $app->make(CurrentWorkScope::class),
+            routes: $app->bound(AccountConnectionResolver::class) ? $app->make(AccountConnectionResolver::class) : null,
+            enabled: $app->make(Repository::class)->get('corex-custom-fields.ddl', true) === true,
+            declaredConnection: static fn (string $name): mixed => self::declaredConnection(app: $app, name: $name),
+        ));
+        $app->scoped(SchemaReferences::class, static fn (Application $app): SchemaReferences => new SchemaReferences(static fn (): iterable => self::tagged(app: $app, type: FieldSchemaDependencies::class)));
         $app->scoped(DatabaseSchemaHeads::class);
         $app->alias(DatabaseSchemaHeads::class, SchemaHeads::class);
         $app->scoped(FieldSchemas::class, DatabaseFieldSchemas::class);
         $app->scoped(FieldCatalogue::class, DatabaseFieldCatalogue::class);
+        $app->bind(FieldMetadata::class, FieldMetadataReader::class);
         $app->scoped(FieldProjectionCatalogue::class, DatabaseFieldProjectionCatalogue::class);
-        $app->scoped(SchemaWorker::class, static fn (Application $app): SchemaWorker => new SchemaWorker($app->make(DatabaseManager::class),
-            $app->make(TenantContextResolver::class), $app->make(DataScopeFactory::class), $app->make(WorkScopeRunner::class), $app->make(StoredWorkRunner::class),
-            $app->make(CurrentWorkScope::class), $app->make(DataScopeCodec::class), $app->make(SchemaJournal::class), $app->make(ClockInterface::class),
-            static fn (): SchemaSteps => $app->make(SchemaSteps::class)));
+        $app->scoped(SchemaWorker::class, static fn (Application $app): SchemaWorker => new SchemaWorker(database: $app->make(DatabaseManager::class),
+            contexts: $app->make(TenantContextResolver::class), scopes: $app->make(DataScopeFactory::class), runner: $app->make(WorkScopeRunner::class), stored: $app->make(StoredWorkRunner::class),
+            current: $app->make(CurrentWorkScope::class), codec: $app->make(DataScopeCodec::class), journal: $app->make(SchemaJournal::class), clock: $app->make(ClockInterface::class),
+            steps: static fn (): SchemaSteps => $app->make(SchemaSteps::class)));
+    }
+
+    private static function declaredConnection(Application $app, string $name): mixed
+    {
+        $connections = $app->make(Repository::class)->get('database.connections');
+
+        return is_array($connections) ? Arr::get($connections, $name) : null;
     }
 
     /**

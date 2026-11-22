@@ -87,7 +87,7 @@ final readonly class DatabaseFeatureFlags implements FeatureFlags
         // never stomps an admin-toggled `is_enabled`.
         $db = FeatureFlag::on($this->connection)->getQuery()->getConnection();
         $db->transaction(function () use ($db, $def): void {
-            ReferenceWrites::enlistFeatureDefault($db, $def);
+            ReferenceWrites::enlistFeatureDefault(db: $db, def: $def);
             FeatureFlag::on($this->connection)->createOrFirst(
                 attributes: ['key' => $def->key],
                 values: [

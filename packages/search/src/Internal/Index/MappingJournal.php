@@ -33,7 +33,7 @@ final readonly class MappingJournal implements SearchMappingInvalidations
             throw new LogicException('Search mapping invalidations require an entity fact and its open subscriber transaction.');
         }
 
-        $lane = $this->store->lane($writer, $event->scope, $entity, true);
+        $lane = $this->store->lane(db: $writer, scope: $event->scope, entity: $entity, create: true);
         $requests = $writer->table('corex_search_rebuilds')->where('lane_key', $lane->lane_key);
         $key = 'schema-event/'.hash('sha256', json_encode([$event->source, $event->messageId], JSON_THROW_ON_ERROR));
 
@@ -42,8 +42,8 @@ final readonly class MappingJournal implements SearchMappingInvalidations
         }
 
         // Derive the required mapping from current owners. Delivery order cannot regress it.
-        $mapping = ($this->projection)()->describe(new ProjectionContext($event->scope, $entity))->revision;
-        $active = $lane->active_generation === null ? null : LaneStore::generation($writer, $lane, Value::integer($lane->active_generation))
+        $mapping = ($this->projection)()->describe(new ProjectionContext(scope: $event->scope, entity: $entity))->revision;
+        $active = $lane->active_generation === null ? null : LaneStore::generation(db: $writer, lane: $lane, number: Value::integer($lane->active_generation))
             ->where('state', 'active')->value('mapping_digest');
 
         $pending = (clone $requests)->where('state', 'requested');
@@ -63,8 +63,8 @@ final readonly class MappingJournal implements SearchMappingInvalidations
 
     public function pending(DataScope $scope, EntityHandle $entity): bool
     {
-        $db = $this->store->db($scope, true);
-        $identity = $this->store->laneIdentity($scope, $entity);
+        $db = $this->store->db(scope: $scope, worker: true);
+        $identity = $this->store->laneIdentity(scope: $scope, entity: $entity);
         $lanes = $db->table(LaneStore::LANES)->select('lane_key')->where($identity);
 
         return $db->table(LaneStore::RUNS)->useWritePdo()

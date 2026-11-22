@@ -113,6 +113,7 @@
                 "Internal",
                 "Invocation",
                 "Laravel",
+                "Metadata",
                 "OpenApi",
                 "Pagination",
                 "Testing",

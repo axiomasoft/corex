@@ -36,15 +36,15 @@ final readonly class SchemaFieldFilter implements FieldFilter
 
     public function compile(DataScope $scope, FieldSchemaSnapshot $schema, FilterNode $filter): FilterPlan
     {
-        return $this->runner->run($scope, function () use ($scope, $schema, $filter): FilterPlan {
-            $current = $this->catalogue->snapshot($scope, $schema->entity);
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $schema, $filter): FilterPlan {
+            $current = $this->catalogue->snapshot(scope: $scope, entity: $schema->entity);
 
             if ($current->revision->value !== $schema->revision->value || $current->mappingDigest !== $schema->mappingDigest) {
                 throw new FieldFailure(CustomFieldsErrorCode::SchemaRevisionMismatch);
             }
             $field = $current->fields[$filter->field->value] ?? throw new FieldFailure(CustomFieldsErrorCode::AccessDenied);
-            $type = $this->types->resolve($field->type, $field->codecVersion);
-            $use = $this->policy->plan($scope, $current->entity, new FieldUseRequest(new FieldSelection([$field->id->value]), FieldUse::Filter));
+            $type = $this->types->resolve(type: $field->type, version: $field->codecVersion);
+            $use = $this->policy->plan(scope: $scope, entity: $current->entity, request: new FieldUseRequest(fields: new FieldSelection([$field->id->value]), use: FieldUse::Filter));
 
             if ($use->kind === FieldUsePlanKind::Denied || $use->witness === null || ! $field->permits(FieldUse::Filter, $type->definition())) {
                 throw new FieldFailure(CustomFieldsErrorCode::AccessDenied);
@@ -54,9 +54,9 @@ final readonly class SchemaFieldFilter implements FieldFilter
                 throw new InvalidArgumentException('Unsupported field operator.');
             }
 
-            return new FilterPlan($current->entity, $field->id, $filter->operator, $this->operand($scope, $filter, $type, $field),
-                $current->revision, $current->mappingDigest, hash('sha256', json_encode([DataScope::VERSION, $scope], JSON_THROW_ON_ERROR)), $use->witness,
-                $use->kind === FieldUsePlanKind::ScopedPredicate ? $use->recordIds : null);
+            return new FilterPlan(entity: $current->entity, field: $field->id, operator: $filter->operator, operand: $this->operand(scope: $scope, filter: $filter, type: $type, field: $field),
+                schemaRevision: $current->revision, mappingDigest: $current->mappingDigest, scopeFingerprint: hash('sha256', json_encode([DataScope::VERSION, $scope], JSON_THROW_ON_ERROR)), policyWitness: $use->witness,
+                recordIds: $use->kind === FieldUsePlanKind::ScopedPredicate ? $use->recordIds : null);
         });
     }
 
@@ -66,9 +66,9 @@ final readonly class SchemaFieldFilter implements FieldFilter
             return null;
         }
         $encode = function (FieldInput $input) use ($scope, $type, $field): JsonDocument {
-            $value = $type->normalize($input, $field);
+            $value = $type->normalize(input: $input, field: $field);
 
-            if (! FieldReferences::visible($this->access, $scope, $field, $value)) {
+            if (! FieldReferences::visible(access: $this->access, scope: $scope, field: $field, value: $value)) {
                 throw new FieldFailure(CustomFieldsErrorCode::AccessDenied);
             }
 

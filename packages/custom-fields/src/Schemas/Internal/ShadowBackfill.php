@@ -26,7 +26,7 @@ final readonly class ShadowBackfill
     public function begin(Connection $db, DataScope $scope, string $entity, stdClass $claim): void
     {
         // Expand holds the head exclusively. Later inserts, including keys behind this bound, dual-write from birth.
-        $upper = SchemaRows::rows($db, SchemaRows::DOCUMENTS, $scope, $entity)->max('record_id');
+        $upper = SchemaRows::rows(db: $db, table: SchemaRows::DOCUMENTS, scope: $scope, entity: $entity)->max('record_id');
         foreach (['scan', 'verify'] as $partition) {
             $db->table('sys_attribute_backfills')->insert(['operation_id' => $claim->id, 'partition_id' => $partition,
                 'kind' => $partition, 'upper_record_id' => $upper]);
@@ -40,25 +40,25 @@ final readonly class ShadowBackfill
         $scan = (clone $ledger)->where('partition_id', 'scan')->sole();
 
         if (! $scan->exhausted) {
-            $this->page($db, $scope, $claim, $plan, $scan);
+            $this->page(db: $db, scope: $scope, claim: $claim, plan: $plan, checkpoint: $scan);
 
             return 'backfill';
         }
 
         // Apply the revision filter in PostgreSQL so an arbitrarily large set of unchanged errors cannot starve corrected rows.
-        $documents = SchemaRows::rows($db, SchemaRows::DOCUMENTS, $scope, SchemaValue::text($plan['entity']))->select('record_id', 'document_revision');
+        $documents = SchemaRows::rows(db: $db, table: SchemaRows::DOCUMENTS, scope: $scope, entity: SchemaValue::text($plan['entity']))->select('record_id', 'document_revision');
         $markers = $db->table('sys_attribute_backfills as f')->leftJoinSub($documents, 'd', 'd.record_id', '=', 'f.record_id')
             ->where('f.operation_id', $claim->id)->whereIn('f.kind', ['retry', 'error'])
             ->where(static fn (Builder $q) => $q->where('f.kind', 'retry')->orWhereRaw('d.document_revision IS DISTINCT FROM f.seen_revision'))
             ->distinct()->orderBy('f.record_id')->limit(self::BATCH)->get(['f.record_id']);
-        $rows = $this->documents($db, $scope, $plan);
+        $rows = $this->documents(db: $db, scope: $scope, plan: $plan);
         foreach ($markers as $marker) {
             $row = (clone $rows)->where('record_id', $marker->record_id)->first();
 
             if ($row === null) {
                 (clone $ledger)->where('record_id', $marker->record_id)->delete();
             } else {
-                $this->copy($db, $scope, $claim, $plan, $row);
+                $this->copy(db: $db, scope: $scope, claim: $claim, plan: $plan, row: $row);
             }
 
             if ($this->yieldClaim($claim)) {
@@ -92,28 +92,28 @@ final readonly class ShadowBackfill
             throw new SchemaConflict('historical-verification-incomplete');
         }
 
-        return $this->page($db, $scope, $claim, $plan, $verified);
+        return $this->page(db: $db, scope: $scope, claim: $claim, plan: $plan, checkpoint: $verified);
     }
 
     /** @param array<string,mixed> $plan */
     private function page(Connection $db, DataScope $scope, stdClass $claim, array $plan, stdClass $checkpoint): bool
     {
-        $rows = $this->documents($db, $scope, $plan);
+        $rows = $this->documents(db: $db, scope: $scope, plan: $plan);
         $verify = $checkpoint->partition_id === 'verify';
 
         if ($verify) {
             $target = SchemaValue::text(SchemaValue::map($plan['to'])['slot']);
             $rows->selectRaw('(slots -> CAST(? AS text))::text AS shadow_value', [$target]);
         }
-        $this->range($rows, $checkpoint);
+        $this->range(query: $rows, checkpoint: $checkpoint);
         $selected = $rows->get();
         $cursor = $checkpoint->cursor_record_id;
         $processed = 0;
         foreach ($selected as $row) {
             if ($verify) {
-                $this->verifyRow($db, $plan, $row);
+                $this->verifyRow(db: $db, plan: $plan, row: $row);
             } else {
-                $this->copy($db, $scope, $claim, $plan, $row);
+                $this->copy(db: $db, scope: $scope, claim: $claim, plan: $plan, row: $row);
             }
             $cursor = $row->record_id;
             $processed++;
@@ -123,7 +123,7 @@ final readonly class ShadowBackfill
             }
         }
         $done = $processed === $selected->count() && ($processed < self::BATCH || $cursor === $checkpoint->upper_record_id);
-        $this->advanceCursor($db, $claim, $checkpoint, $cursor, $done);
+        $this->advanceCursor(db: $db, claim: $claim, checkpoint: $checkpoint, cursor: $cursor, done: $done);
 
         return $done;
     }
@@ -157,7 +157,7 @@ final readonly class ShadowBackfill
     /** @param array<string,mixed> $plan */
     private function verifyRow(Connection $db, array $plan, stdClass $row): void
     {
-        $expected = $this->convert($plan, $row);
+        $expected = $this->convert(plan: $plan, row: $row);
 
         if (($expected === null) !== ($row->shadow_value === null)) {
             throw new SchemaConflict('shadow-verification-failed');
@@ -174,7 +174,7 @@ final readonly class ShadowBackfill
 
     public function discard(Connection $db, DataScope $scope, string $entity, stdClass $claim, string $slot): bool
     {
-        $rows = SchemaRows::rows($db, SchemaRows::DOCUMENTS, $scope, $entity);
+        $rows = SchemaRows::rows(db: $db, table: SchemaRows::DOCUMENTS, scope: $scope, entity: $entity);
         $ledger = $db->table('sys_attribute_backfills')->where('operation_id', $claim->id)->where('partition_id', 'cleanup');
         $checkpoint = $ledger->first();
 
@@ -187,7 +187,7 @@ final readonly class ShadowBackfill
         if ($checkpoint->exhausted) {
             return true;
         }
-        $this->range($rows, $checkpoint);
+        $this->range(query: $rows, checkpoint: $checkpoint);
         $keys = $rows->pluck('record_id');
         $cursor = $checkpoint->cursor_record_id;
 
@@ -198,7 +198,7 @@ final readonly class ShadowBackfill
                 [$slot, ...array_values(SchemaRows::logical($scope)), $entity, $keys->first(), $keys->last(), $slot]);
         }
         $done = $keys->count() < self::BATCH || $cursor === $checkpoint->upper_record_id;
-        $this->advanceCursor($db, $claim, $checkpoint, $cursor, $done);
+        $this->advanceCursor(db: $db, claim: $claim, checkpoint: $checkpoint, cursor: $cursor, done: $done);
 
         return $done;
     }
@@ -206,7 +206,7 @@ final readonly class ShadowBackfill
     /** @param array<string,mixed> $plan */
     private function documents(Connection $db, DataScope $scope, array $plan): Builder
     {
-        return SchemaRows::rows($db, SchemaRows::DOCUMENTS, $scope, SchemaValue::text($plan['entity']))->select(['record_id', 'document_revision'])
+        return SchemaRows::rows(db: $db, table: SchemaRows::DOCUMENTS, scope: $scope, entity: SchemaValue::text($plan['entity']))->select(['record_id', 'document_revision'])
             ->selectRaw('(slots -> CAST(? AS text))::text AS source_value', [SchemaValue::text(SchemaValue::map($plan['from'])['slot'])]);
     }
 
@@ -219,8 +219,8 @@ final readonly class ShadowBackfill
         $from = SchemaImage::hydrate(SchemaValue::map(SchemaValue::map($plan['from'])['definition']));
         $to = SchemaImage::hydrate(SchemaValue::map(SchemaValue::map($plan['to'])['definition']));
 
-        return $this->conversions->convert(new JsonDocument(SchemaValue::text($row->source_value)), $from, $to, SchemaValue::nullableText($plan['converter_id']),
-            $plan['converter_version'] === null ? null : SchemaValue::integer($plan['converter_version']));
+        return $this->conversions->convert(document: new JsonDocument(SchemaValue::text($row->source_value)), from: $from, to: $to, converterId: SchemaValue::nullableText($plan['converter_id']),
+            converterVersion: $plan['converter_version'] === null ? null : SchemaValue::integer($plan['converter_version']));
     }
 
     /** @param array<string,mixed> $plan */
@@ -230,11 +230,11 @@ final readonly class ShadowBackfill
         $slot = SchemaValue::text(SchemaValue::map($plan['to'])['slot']);
 
         try {
-            $value = $this->convert($plan, $row);
+            $value = $this->convert(plan: $plan, row: $row);
         } catch (InvalidArgumentException|FieldFailure $failure) {
             // Conversion can race a correction. Only a still-current failed source blocks verification.
             $kind = $db->table('sys_attribute_documents')->where($key)->exists() ? 'error' : 'retry';
-            $this->marker($db, $claim, $row, $kind);
+            $this->marker(db: $db, claim: $claim, row: $row, kind: $kind);
 
             return;
         }
@@ -244,7 +244,7 @@ final readonly class ShadowBackfill
             : $db->update('UPDATE sys_attribute_documents SET slots = jsonb_set(slots, ARRAY[CAST(? AS text)], CAST(? AS jsonb), true)'.$where, [$slot, $value->canonicalJson, ...array_values($key)]);
 
         if ($changed === 0) {
-            $this->marker($db, $claim, $row, 'retry');
+            $this->marker(db: $db, claim: $claim, row: $row, kind: 'retry');
 
             return;
         }

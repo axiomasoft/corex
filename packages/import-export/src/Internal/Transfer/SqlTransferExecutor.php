@@ -61,36 +61,36 @@ final readonly class SqlTransferExecutor implements TransferRunner
     #[Override]
     public function step(DataScope $scope, TransferRef $transfer, StepToken $token): TransferReceipt
     {
-        $this->runtime?->assertCurrent($this->connection, $scope);
+        $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
         $this->runtime?->assertTransfer($transfer->id);
 
         $guard = $this->guard ?? ExecutionGuard::production($this->limits);
 
         try {
-            $prepared = $this->prepareStep($scope, $transfer, $token, $guard);
+            $prepared = $this->prepareStep(scope: $scope, transfer: $transfer, token: $token, guard: $guard);
 
             if ($prepared instanceof TransferReceipt) {
                 return $prepared;
             }
 
             return $this->connection->transaction(function () use ($scope, $transfer, $token, $guard, $prepared): TransferReceipt {
-                $this->runtime?->assertCurrent($this->connection, $scope);
+                $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
                 $job = $this->connection->table('corex_transfer_jobs')->where('id', $transfer->id)->lockForUpdate()->first();
 
                 if ($job === null) {
                     throw new ImportUnavailable('Transfer job is not available.');
                 }
 
-                $this->assertAuthority($job, $scope);
-                $receipt = $this->storedReceipt($transfer, $token);
+                $this->assertAuthority(job: $job, scope: $scope);
+                $receipt = $this->storedReceipt(transfer: $transfer, token: $token);
 
                 if ($receipt !== null) {
                     return $receipt;
                 }
                 $this->assertFence(job: $job, scope: $scope, token: $token);
-                $this->references?->enlist($scope, $this->connection, $this->mapping->definition);
+                $this->references?->enlist(scope: $scope, connection: $this->connection, stamp: $this->mapping->definition);
                 $cursor = $this->cursor(job: $job);
-                $manifest = $this->currentManifest($job, $scope, $token);
+                $manifest = $this->currentManifest(job: $job, scope: $scope, token: $token);
 
                 $gaps = [];
                 $stats = $this->stats(job: $job);
@@ -104,7 +104,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
                 $batch = $prepared ?? $this->source->read(source: $manifest, after: $cursor, limits: $this->limits);
                 $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats);
                 $this->assertSourceBounds(manifest: $manifest, batch: $batch);
-                $this->verifyBatch($transfer, $token, $batch, $cursor, $manifest);
+                $this->verifyBatch(transfer: $transfer, token: $token, batch: $batch, cursor: $cursor, manifest: $manifest);
 
                 foreach ($batch->rows as $row) {
                     $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats);
@@ -129,34 +129,34 @@ final readonly class SqlTransferExecutor implements TransferRunner
 
                     $record = $mapped->record;
 
-                    $writeToken = $this->writeToken($record, $transfer, $token, $row->ordinal);
-                    $existing = $this->lockReference($scope, $transfer->id, $record);
+                    $writeToken = $this->writeToken(record: $record, transfer: $transfer, step: $token, ordinal: $row->ordinal);
+                    $existing = $this->lockReference(scope: $scope, jobId: $transfer->id, record: $record);
                     $result = $token->stepKey === null && $this->references === null
-                        ? ($existing ? $this->target->lookup($scope, $writeToken) : $this->target->apply($scope, $record, $this->conflictRule, $writeToken))
-                        : $this->reconcileRow($scope, $transfer, $record, $writeToken);
+                        ? ($existing ? $this->target->lookup(scope: $scope, token: $writeToken) : $this->target->apply(scope: $scope, record: $record, rule: $this->conflictRule, token: $writeToken))
+                        : $this->reconcileRow(scope: $scope, transfer: $transfer, record: $record, token: $writeToken);
 
                     if ($result->status === 'absent-with-proof' && $this->cancellation->isCancelled()) {
-                        $cancelled = $this->cancelled($transfer->id, $cursor, $token->checkpointSequence, $stats, $dryRun);
-                        $this->saveReceipt($transfer, $token, $cancelled);
+                        $cancelled = $this->cancelled(jobId: $transfer->id, cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats, dryRun: $dryRun);
+                        $this->saveReceipt(transfer: $transfer, token: $token, receipt: $cancelled);
 
                         return $cancelled;
                     }
 
                     if (in_array($result->status, ['unknown', 'absent-with-proof'], true)) {
-                        $this->storeReference($scope, $record, $result);
-                        $this->recordResult($transfer->id, $row->ordinal, $result, $record->payloadHash, $token->epoch, $writeToken->operationKey);
+                        $this->storeReference(scope: $scope, record: $record, result: $result);
+                        $this->recordResult(jobId: $transfer->id, ordinal: $row->ordinal, result: $result, payloadHash: $record->payloadHash, epoch: $token->epoch, key: $writeToken->operationKey);
                         $gaps[] = $row->ordinal;
 
                         break;
                     }
 
-                    $this->storeReference($scope, $record, $result);
-                    $this->recordResult($transfer->id, $row->ordinal, $result, $record->payloadHash, $token->epoch, $writeToken->operationKey);
+                    $this->storeReference(scope: $scope, record: $record, result: $result);
+                    $this->recordResult(jobId: $transfer->id, ordinal: $row->ordinal, result: $result, payloadHash: $record->payloadHash, epoch: $token->epoch, key: $writeToken->operationKey);
                     $stats[$result->status] = ($stats[$result->status] ?? 0) + 1;
                 }
 
                 if ($gaps !== [] && $token->stepKey !== null) {
-                    return new TransferReceipt('unknown', $cursor, $token->checkpointSequence, $this->stats($job), $gaps, 'unknownTarget');
+                    return new TransferReceipt(state: 'unknown', cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $this->stats($job), gaps: $gaps, errorCode: 'unknownTarget');
                 }
 
                 $guard->assertWithin($cursor, $token->checkpointSequence, $this->stats($job));
@@ -183,7 +183,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
                 }
 
                 $receipt = new TransferReceipt(state: $state, cursor: $next, checkpointSequence: $sequence, stats: $stats, gaps: $gaps, errorCode: $gaps === [] ? null : 'unknownTarget');
-                $this->saveReceipt($transfer, $token, $receipt);
+                $this->saveReceipt(transfer: $transfer, token: $token, receipt: $receipt);
 
                 return $receipt;
             }, attempts: 3);
@@ -206,28 +206,28 @@ final readonly class SqlTransferExecutor implements TransferRunner
         }
 
         return $this->connection->transaction(function () use ($scope, $transfer, $token, $guard): TransferReceipt|RowBatch {
-            $this->runtime?->assertCurrent($this->connection, $scope);
+            $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
             $job = $this->connection->table('corex_transfer_jobs')->where('id', $transfer->id)->lockForUpdate()->first()
                 ?? throw new ImportUnavailable('Transfer job is not available.');
-            $this->assertAuthority($job, $scope);
-            $receipt = $this->storedReceipt($transfer, $token);
+            $this->assertAuthority(job: $job, scope: $scope);
+            $receipt = $this->storedReceipt(transfer: $transfer, token: $token);
 
             if ($receipt !== null) {
                 return $receipt;
             }
 
-            $this->assertFence($job, $scope, $token);
-            $this->references?->enlist($scope, $this->connection, $this->mapping->definition);
+            $this->assertFence(job: $job, scope: $scope, token: $token);
+            $this->references?->enlist(scope: $scope, connection: $this->connection, stamp: $this->mapping->definition);
             $this->connection->table('corex_transfer_steps')->insertOrIgnore([
                 'job_id' => $transfer->id, 'step_key' => $token->stepKey, 'digest' => $this->stepDigest($token),
             ]);
-            $manifest = $this->currentManifest($job, $scope, $token);
+            $manifest = $this->currentManifest(job: $job, scope: $scope, token: $token);
             $cursor = $this->cursor($job);
-            $guard->assertWithin($cursor, $token->checkpointSequence, $this->stats($job));
-            $batch = $this->source->read($manifest, $cursor, $this->limits);
-            $guard->assertWithin($cursor, $token->checkpointSequence, $this->stats($job));
-            $this->assertSourceBounds($manifest, $batch);
-            $this->verifyBatch($transfer, $token, $batch, $cursor, $manifest);
+            $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $this->stats($job));
+            $batch = $this->source->read(source: $manifest, after: $cursor, limits: $this->limits);
+            $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $this->stats($job));
+            $this->assertSourceBounds(manifest: $manifest, batch: $batch);
+            $this->verifyBatch(transfer: $transfer, token: $token, batch: $batch, cursor: $cursor, manifest: $manifest);
 
             return $batch;
         });
@@ -236,11 +236,11 @@ final readonly class SqlTransferExecutor implements TransferRunner
     private function currentManifest(object $job, DataScope $scope, StepToken $token): SourceManifest
     {
         $manifest = $this->source->describe($scope);
-        $pinned = Value::map(json_decode(Value::text(Value::field($job, 'source_manifest')), true, flags: JSON_THROW_ON_ERROR));
+        $pinned = Value::map(json_decode(Value::text(Value::field(row: $job, name: 'source_manifest')), true, flags: JSON_THROW_ON_ERROR));
         $current = Value::map(json_decode(json_encode($manifest, JSON_THROW_ON_ERROR), true, flags: JSON_THROW_ON_ERROR));
 
         if ($manifest->sha256 !== $token->sourceHash || $manifest->schemaHash !== $token->schemaHash
-            || ($this->runtime !== null && ! Value::sameMap(array_intersect_key($pinned, $current), $current))) {
+            || ($this->runtime !== null && ! Value::sameMap(left: array_intersect_key($pinned, $current), right: $current))) {
             throw new ImportUnavailable('Source changed; transfer resume is refused.');
         }
 
@@ -264,10 +264,10 @@ final readonly class SqlTransferExecutor implements TransferRunner
             return null;
         }
 
-        if (! hash_equals(Value::text(Value::field($row, 'digest')), $this->stepDigest($token))) {
+        if (! hash_equals(Value::text(Value::field(row: $row, name: 'digest')), $this->stepDigest($token))) {
             throw new ImportUnavailable('Transfer step digest has changed.');
         }
-        $raw = Value::nullableText(Value::field($row, 'receipt'));
+        $raw = Value::nullableText(Value::field(row: $row, name: 'receipt'));
 
         if ($raw === null) {
             return null;
@@ -277,12 +277,12 @@ final readonly class SqlTransferExecutor implements TransferRunner
         $cursor = Value::map($data['cursor'] ?? null);
 
         return new TransferReceipt(
-            Value::text($data['state'] ?? null),
-            new SourceCursor(Value::text($cursor['ordinal'] ?? null), Value::nullableText($cursor['boundaryByteOffset'] ?? null), Value::text($cursor['sourceHash'] ?? null)),
-            Value::text($data['checkpointSequence'] ?? null),
-            array_map(Value::integer(...), Value::map($data['stats'] ?? null)),
-            [],
-            Value::nullableText($data['errorCode'] ?? null),
+            state: Value::text($data['state'] ?? null),
+            cursor: new SourceCursor(ordinal: Value::text($cursor['ordinal'] ?? null), boundaryByteOffset: Value::nullableText($cursor['boundaryByteOffset'] ?? null), sourceHash: Value::text($cursor['sourceHash'] ?? null)),
+            checkpointSequence: Value::text($data['checkpointSequence'] ?? null),
+            stats: array_map(Value::integer(...), Value::map($data['stats'] ?? null)),
+            gaps: [],
+            errorCode: Value::nullableText($data['errorCode'] ?? null),
         );
     }
 
@@ -330,12 +330,12 @@ final readonly class SqlTransferExecutor implements TransferRunner
     private function reconcileRow(DataScope $scope, TransferRef $transfer, CanonicalRecord $record, WriteToken $token): TargetResult
     {
         $key = $token->operationKey;
-        $evidence = $this->references?->inspect($scope, 'transfer-sink', $key, $transfer->id, $token->payloadHash);
-        $result = $this->target->lookup($scope, $token);
+        $evidence = $this->references?->inspect(scope: $scope, namespace: 'transfer-sink', key: $key, ownerRef: $transfer->id, digest: $token->payloadHash);
+        $result = $this->target->lookup(scope: $scope, token: $token);
 
         if ($result->status !== 'absent-with-proof') {
             if ($evidence !== null) {
-                $this->observeRow($evidence->ticket, $result, $key);
+                $this->observeRow(ticket: $evidence->ticket, result: $result, key: $key);
             }
 
             return $result;
@@ -345,17 +345,17 @@ final readonly class SqlTransferExecutor implements TransferRunner
             if ($evidence->observation?->kind === ProviderObservationKind::Confirmed) {
                 throw new ImportUnavailable('The sink cannot prove the previously committed effect.');
             }
-            $this->references->observe($evidence->ticket, ProviderObservationKind::Absent, $key);
+            $this->references->observe(ticket: $evidence->ticket, kind: ProviderObservationKind::Absent, reference: $key);
         }
 
         if ($this->cancellation->isCancelled()) {
             return $result;
         }
-        $ticket = $this->references?->reserve($scope, 'transfer-sink', $key, $transfer->id, $token->payloadHash, $this->mapping->definition, $this->limits->maxRuntimeSeconds, $evidence);
-        $result = $this->target->apply($scope, $record, $this->conflictRule, $token);
+        $ticket = $this->references?->reserve(scope: $scope, namespace: 'transfer-sink', key: $key, ownerRef: $transfer->id, digest: $token->payloadHash, stamp: $this->mapping->definition, seconds: $this->limits->maxRuntimeSeconds, previous: $evidence);
+        $result = $this->target->apply(scope: $scope, record: $record, rule: $this->conflictRule, token: $token);
 
         if ($ticket !== null) {
-            $this->observeRow($ticket, $result, $key);
+            $this->observeRow(ticket: $ticket, result: $result, key: $key);
         }
 
         return $result;
@@ -368,7 +368,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
             'invalid', 'conflict', 'unsupported' => ProviderObservationKind::Permanent,
             default => ProviderObservationKind::Unknown,
         };
-        $this->references?->observe($ticket, $kind, $key);
+        $this->references?->observe(ticket: $ticket, kind: $kind, reference: $key);
     }
 
     /**
@@ -410,7 +410,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
 
     private function assertFence(object $job, DataScope $scope, StepToken $token): void
     {
-        if (in_array(Value::field($job, 'state'), ['completed', 'cancelled', 'failed'], true)) {
+        if (in_array(Value::field(row: $job, name: 'state'), ['completed', 'cancelled', 'failed'], true)) {
             throw new ImportUnavailable('Terminal transfers cannot execute another step.');
         }
 
@@ -422,9 +422,9 @@ final readonly class SqlTransferExecutor implements TransferRunner
 
     private function assertAuthority(object $job, DataScope $scope): void
     {
-        SessionIdentity::assertScope($job, $scope);
+        SessionIdentity::assertScope(job: $job, scope: $scope);
 
-        if (! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', Value::text(Value::field(row: $job, name: 'id'))), new FieldSelection([]), FieldUse::Write)->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'import-export.transfer', id: Value::text(Value::field(row: $job, name: 'id'))), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
             throw new ImportUnavailable('Transfer access is denied by the current policy.');
         }
     }

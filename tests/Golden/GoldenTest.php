@@ -26,7 +26,7 @@ final class GoldenTest extends GoldenTestCase
             'php-surface' => GoldenSnapshot::phpSurface($classes),
             'routes' => GoldenSnapshot::routes(),
             'events' => GoldenSnapshot::events($classes),
-            'wire' => GoldenSnapshot::wire(sys_get_temp_dir().'/corex-golden-'.getmypid(), $root.'/tests/fixtures/public-error-contract.php'),
+            'wire' => GoldenSnapshot::wire(sys_get_temp_dir().'/corex-golden-'.getmypid()),
         };
         $path = __DIR__."/baseline/{$layer}.json";
         $map = RenameMap::load(__DIR__.'/rename-map.json');

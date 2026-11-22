@@ -28,7 +28,7 @@ final class FieldReferences
             }
 
             if (! $ref instanceof stdClass || ! is_string($ref->entity ?? null) || ! is_string($ref->id ?? null)
-                || ! $access->authorize($scope, new RecordRef($ref->entity, $ref->id), new FieldSelection([]), FieldUse::Read)->allowed) {
+                || ! $access->authorize(scope: $scope, record: new RecordRef(entity: $ref->entity, id: $ref->id), fields: new FieldSelection([]), use: FieldUse::Read)->allowed) {
                 return false;
             }
         }

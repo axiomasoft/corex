@@ -153,6 +153,14 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      meilisearch:
+        image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
+        env:
+          MEILI_MASTER_KEY: corex-ci-disposable-meilisearch-key
+          MEILI_NO_ANALYTICS: 'true'
+          MEILI_ENV: development
+        ports:
+          - 7700:7700
     env:
       LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
@@ -177,7 +185,7 @@ jobs:
 
       - name: Prepare PostgreSQL test databases
         run: |
-          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test; do
+          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test corex_sink_test; do
             PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
               || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
           done
@@ -190,8 +198,12 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_BUDGET_DATABASE: corex_budget_test
           PGSQL_CONTROL_DATABASE: corex_search_control_test
+          PGSQL_SINK_DATABASE: corex_sink_test
+          COREX_LIFECYCLE_CONTROL_DATABASE: corex_search_control_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
+          MEILISEARCH_HOST: http://127.0.0.1:7700
+          MEILISEARCH_MASTER_KEY: corex-ci-disposable-meilisearch-key
 
   operations-tests:
     permissions:
@@ -906,8 +918,9 @@ jobs:
           --health-timeout 5s
           --health-retries 10
       meilisearch:
-        image: getmeili/meilisearch:v1.16
+        image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
         env:
+          MEILI_MASTER_KEY: corex-ci-disposable-meilisearch-key
           MEILI_NO_ANALYTICS: 'true'
           MEILI_ENV: development
         ports:
@@ -931,7 +944,7 @@ jobs:
 
       - name: Prepare PostgreSQL test databases
         run: |
-          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test; do
+          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test corex_sink_test; do
             PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
               || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
           done
@@ -950,8 +963,12 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_BUDGET_DATABASE: corex_budget_test
           PGSQL_CONTROL_DATABASE: corex_search_control_test
+          PGSQL_SINK_DATABASE: corex_sink_test
+          COREX_LIFECYCLE_CONTROL_DATABASE: corex_search_control_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
+          MEILISEARCH_HOST: http://127.0.0.1:7700
+          MEILISEARCH_MASTER_KEY: corex-ci-disposable-meilisearch-key
 
   quality:
     permissions:

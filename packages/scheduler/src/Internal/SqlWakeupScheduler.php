@@ -43,26 +43,26 @@ final readonly class SqlWakeupScheduler implements WakeupScheduler
     {
         $this->current->assert($request->scope);
 
-        return $this->runner->run($request->scope, function (TenantContext $context) use ($request): ScheduleResult {
+        return $this->runner->run(scope: $request->scope, work: function (TenantContext $context) use ($request): ScheduleResult {
             $db = $this->databases->connection();
-            $this->current->assert($request->scope, $db);
+            $this->current->assert(scope: $request->scope, connection: $db);
 
-            return $db->transaction(fn (): ScheduleResult => $this->store($db, $context, $request));
+            return $db->transaction(fn (): ScheduleResult => $this->store(db: $db, context: $context, request: $request));
         });
     }
 
     private function store(Connection $db, TenantContext $context, WakeupRequest $request): ScheduleResult
     {
         $definition = $this->handlers->definition($request->kind);
-        ReferenceWrites::enlist($db, $request->scope, 'axiomasoft/corex-scheduler', 'wakeup', ['handler' => $request->kind, 'version' => $request->handlerVersion]);
+        ReferenceWrites::enlist(connection: $db, scope: $request->scope, producer: 'axiomasoft/corex-scheduler', kind: 'wakeup', witness: ['handler' => $request->kind, 'version' => $request->handlerVersion]);
         $data = WakeupInput::payload($request->payload);
-        $digest = $this->input->digest($request, $data);
-        $identity = WakeupInput::identity($db, $request->scope, $request->kind, $request->requestKey);
+        $digest = $this->input->digest(request: $request, data: $data);
+        $identity = WakeupInput::identity(db: $db, scope: $request->scope, kind: $request->kind, key: $request->requestKey);
 
         $existing = $identity->first(['id', 'request_digest']);
 
         if ($existing !== null) {
-            return $this->replay($existing, $request, $digest);
+            return $this->replay(existing: $existing, request: $request, digest: $digest);
         }
 
         if ($definition === null || $definition->version !== $request->handlerVersion) {
@@ -76,7 +76,7 @@ final readonly class SqlWakeupScheduler implements WakeupScheduler
             'account_incarnation' => $request->scope->accountIncarnation,
             'workspace_scope_key' => WakeupInput::workspace($request->scope),
             'data_scope' => json_encode($this->input->scope($request->scope), JSON_THROW_ON_ERROR),
-            'scope_seal' => $this->issuer->issue($request->scope, WakeupInput::PROOF_OWNER, WakeupInput::proofReference($id, $digest))->seal,
+            'scope_seal' => $this->issuer->issue(scope: $request->scope, owner: WakeupInput::PROOF_OWNER, reference: WakeupInput::proofReference(id: $id, digest: $digest))->seal,
             'kind' => $request->kind,
             'request_key' => $request->requestKey,
             'request_digest' => $digest,
@@ -84,7 +84,7 @@ final readonly class SqlWakeupScheduler implements WakeupScheduler
             'window_start' => $request->window === null ? null : WakeupInput::time($request->window->start),
             'window_end' => $request->window === null ? null : WakeupInput::time($request->window->end),
             'period' => $request->window?->period,
-            'payload' => json_encode($this->handlers->envelope($definition, $data), JSON_THROW_ON_ERROR),
+            'payload' => json_encode($this->handlers->envelope(definition: $definition, data: $data), JSON_THROW_ON_ERROR),
             'status' => 'pending',
             'generation' => 0,
             'attempt' => 0,
@@ -96,33 +96,33 @@ final readonly class SqlWakeupScheduler implements WakeupScheduler
         );
 
         if ($inserted->isEmpty()) {
-            return $this->replay($identity->firstOrFail(['id', 'request_digest']), $request, $digest);
+            return $this->replay(existing: $identity->firstOrFail(['id', 'request_digest']), request: $request, digest: $digest);
         }
 
-        $db->afterCommit(fn () => $this->dispatchHints($context, $request->fireAt));
+        $db->afterCommit(fn () => $this->dispatchHints(context: $context, fireAt: $request->fireAt));
 
-        return new ScheduleResult('created', $request->requestKey, $id);
+        return new ScheduleResult(status: 'created', requestKey: $request->requestKey, id: $id);
     }
 
     private function replay(object $existing, WakeupRequest $request, string $digest): ScheduleResult
     {
-        if (! hash_equals(Value::text(Value::field($existing, 'request_digest')), $digest)) {
-            return new ScheduleResult('conflict', $request->requestKey);
+        if (! hash_equals(Value::text(Value::field(row: $existing, name: 'request_digest')), $digest)) {
+            return new ScheduleResult(status: 'conflict', requestKey: $request->requestKey);
         }
 
-        return new ScheduleResult('existing', $request->requestKey, Value::text(Value::field($existing, 'id')));
+        return new ScheduleResult(status: 'existing', requestKey: $request->requestKey, id: Value::text(Value::field(row: $existing, name: 'id')));
     }
 
     public function cancel(DataScope $scope, WakeupIdentity $identity): CancelResult
     {
         $this->current->assert($scope);
 
-        return $this->runner->run($scope, function () use ($scope, $identity): CancelResult {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $identity): CancelResult {
             $db = $this->databases->connection();
-            $this->current->assert($scope, $db);
+            $this->current->assert(scope: $scope, connection: $db);
 
             return $db->transaction(function () use ($db, $scope, $identity): CancelResult {
-                $query = WakeupInput::identity($db, $scope, $identity->kind, $identity->requestKey);
+                $query = WakeupInput::identity(db: $db, scope: $scope, kind: $identity->kind, key: $identity->requestKey);
                 $row = $query->lockForUpdate()->first();
 
                 if ($row === null) {

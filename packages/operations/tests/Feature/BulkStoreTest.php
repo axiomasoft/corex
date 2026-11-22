@@ -423,7 +423,7 @@ final class BulkStoreTest extends TestCase
             id: $id,
             submissionId: $submission,
             operationId: 'notes.bulk-import',
-            major: 'v1',
+            major: 'v2',
             contractHash: hash('sha256', 'bulk-contract'),
             encodedScope: (new ArrayDataScopeCodec)->encode($scope),
             actorId: $scope->principalId,

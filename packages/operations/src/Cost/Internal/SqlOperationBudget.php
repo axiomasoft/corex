@@ -77,7 +77,7 @@ final readonly class SqlOperationBudget implements DurableOperationBudget
     #[Override]
     public function reserve(BudgetScope $scope, EstimatedCost $cost): BudgetReservation
     {
-        return $this->hold($scope, $cost, (string) Str::uuid7());
+        return $this->hold(scope: $scope, cost: $cost, id: (string) Str::uuid7());
     }
 
     public function reserveAttempt(BudgetScope $scope, EstimatedCost $cost, string $reservationId): BudgetReservation
@@ -86,12 +86,12 @@ final readonly class SqlOperationBudget implements DurableOperationBudget
             throw new InvalidArgumentException('Invalid budget reservation ID.');
         }
 
-        return $this->hold($scope, $cost, $reservationId);
+        return $this->hold(scope: $scope, cost: $cost, id: $reservationId);
     }
 
     public function recover(BudgetReceipt $receipt): void
     {
-        $this->settle($receipt->reservationId, new ActualCost($receipt->actualUnits));
+        $this->settle(id: $receipt->reservationId, cost: new ActualCost($receipt->actualUnits));
     }
 
     public function provesHold(BudgetScope $scope, EstimatedCost $cost, string $id): bool
@@ -106,7 +106,7 @@ final readonly class SqlOperationBudget implements DurableOperationBudget
         sort($keys, SORT_STRING);
 
         if ($row->keys !== JsonCanonical::encode($keys) || $row->recipe_hash !== $cost->recipeHash
-            || DatabaseValue::integer($row->estimate) !== $this->toMicroUnits($cost->units, 'estimated cost')) {
+            || DatabaseValue::integer($row->estimate) !== $this->toMicroUnits(units: $cost->units, label: 'estimated cost')) {
             throw new RuntimeException('Budget attempt ID has conflicting evidence.');
         }
 
@@ -167,7 +167,7 @@ final readonly class SqlOperationBudget implements DurableOperationBudget
                         $reservation->where('state', $existing->state)->update(['state' => 'held', 'expires_at' => $deadline]);
                     }
 
-                    return $this->reservation($id, $available[$keysByLevel['global']], $now);
+                    return $this->reservation(id: $id, available: $available[$keysByLevel['global']], now: $now);
                 }
             }
 
@@ -213,7 +213,7 @@ final readonly class SqlOperationBudget implements DurableOperationBudget
                 throw new RuntimeException('Budget hold lost its rollback recovery fence.');
             }
 
-            return $this->reservation($id, $available[$keysByLevel['global']] - $estimate, $now);
+            return $this->reservation(id: $id, available: $available[$keysByLevel['global']] - $estimate, now: $now);
         }, $attempts);
     }
 

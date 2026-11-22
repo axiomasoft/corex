@@ -36,17 +36,17 @@ final readonly class FencedSavedViewRepository implements SavedViewRepository
 
     public function save(ViewContext $context, SaveViewInput $input): SavedViewRef
     {
-        return $this->write($context, 'save', $input->id, $input, fn () => $this->inner->save($context, $input));
+        return $this->write(context: $context, operation: 'save', id: $input->id, input: $input, write: fn () => $this->inner->save($context, $input));
     }
 
     public function delete(ViewContext $context, string $viewId): void
     {
-        $this->write($context, 'delete', $viewId, null, fn () => $this->inner->delete($context, $viewId));
+        $this->write(context: $context, operation: 'delete', id: $viewId, input: null, write: fn () => $this->inner->delete($context, $viewId));
     }
 
     public function setDefault(ViewContext $context, string $viewId): SavedViewRef
     {
-        return $this->write($context, 'set-default', $viewId, null, fn () => $this->inner->setDefault($context, $viewId));
+        return $this->write(context: $context, operation: 'set-default', id: $viewId, input: null, write: fn () => $this->inner->setDefault($context, $viewId));
     }
 
     /** @template T

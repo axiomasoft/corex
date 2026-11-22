@@ -16,6 +16,23 @@ import prove_scenario as runner
 
 
 class ScenarioProcessTest(unittest.TestCase):
+    def test_host_components_are_exact_committed_subtrees_with_unique_targets(self) -> None:
+        bulk = "bulk-transfer/host/app/BulkTransfer"
+        fields = "field-search/host/app/FieldSearch"
+        received = runner.host_components({"id": "transport", "host_components": [bulk, fields]})
+        self.assertEqual(
+            [(runner.FIXTURES.relative_to(runner.ROOT) / bulk, Path("app/BulkTransfer")),
+             (runner.FIXTURES.relative_to(runner.ROOT) / fields, Path("app/FieldSearch"))],
+            list(received),
+        )
+        for invalid in ("../" + bulk, "bulk-transfer/host", bulk + "/../Other", "support/host/app/Missing"):
+            with self.subTest(component=invalid), self.assertRaises(runner.ScenarioError):
+                runner.host_components({"id": "transport", "host_components": [invalid]})
+        with self.assertRaises(runner.ScenarioError):
+            runner.host_components({"id": "transport", "host_components": [bulk, bulk]})
+        with self.assertRaises(runner.ScenarioError):
+            runner.host_components({"id": "bulk-transfer", "host_components": [bulk]})
+
     def test_meilisearch_requires_the_expected_loopback_service(self) -> None:
         with patch.dict(os.environ, {"MEILISEARCH_HOST": "http://127.0.0.1:17700", "MEILISEARCH_MASTER_KEY": "fixture-key"}):
             with patch.object(runner, "meilisearch_request", return_value={"pkgVersion": "1.15.0", "commitSha": "ab"}):

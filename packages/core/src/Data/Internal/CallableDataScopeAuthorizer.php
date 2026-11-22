@@ -23,6 +23,6 @@ final readonly class CallableDataScopeAuthorizer implements DataScopeAuthorizer
     {
         $allowed = ($this->predicate)($scope, $record, $fields, $use);
 
-        return new DataScopeAccessDecision($allowed, $allowed ? 'callable.allowed' : 'callable.denied');
+        return new DataScopeAccessDecision(allowed: $allowed, reasonCode: $allowed ? 'callable.allowed' : 'callable.denied');
     }
 }

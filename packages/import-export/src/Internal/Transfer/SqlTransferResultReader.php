@@ -45,11 +45,11 @@ final readonly class SqlTransferResultReader implements TransferResultReader
         }
 
         if ($afterOrdinal !== null) {
-            Validation::unsignedInteger($afterOrdinal, 'transfer failure cursor');
+            Validation::unsignedInteger(value: $afterOrdinal, name: 'transfer failure cursor');
         }
 
-        if (Value::field($job, 'mode') === 'export') {
-            $this->publishedExport($scope, $ref);
+        if (Value::field(row: $job, name: 'mode') === 'export') {
+            $this->publishedExport(scope: $scope, ref: $ref);
 
             return ['records' => [], 'next' => null];
         }
@@ -92,8 +92,8 @@ final readonly class SqlTransferResultReader implements TransferResultReader
     {
         $job = $this->authorize(scope: $scope, ref: $ref);
 
-        if (Value::field($job, 'mode') === 'export') {
-            return $this->publishedExport($scope, $ref);
+        if (Value::field(row: $job, name: 'mode') === 'export') {
+            return $this->publishedExport(scope: $scope, ref: $ref);
         }
         $cursor = json_decode(Value::text(Value::field(row: $job, name: 'cursor')), true);
         $stats = json_decode(Value::text(Value::field(row: $job, name: 'stats')), true);
@@ -124,16 +124,16 @@ final readonly class SqlTransferResultReader implements TransferResultReader
             if ($this->connection->getDriverName() === 'pgsql') {
                 $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY');
             }
-            $this->runtime?->assertCurrent($this->connection, $scope);
-            $verify = new SealedExportParts($this->connection, $this->storage, $this->authorizer, $this->schema);
+            $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
+            $verify = new SealedExportParts(connection: $this->connection, storage: $this->storage, authorizer: $this->authorizer, schema: $this->schema);
 
-            return $verify->summary($scope, $verify->manifest($scope, $ref->id, published: true));
+            return $verify->summary(scope: $scope, manifest: $verify->manifest(scope: $scope, jobId: $ref->id, published: true));
         });
     }
 
     private function authorize(DataScope $scope, TransferRef $ref): object
     {
-        $this->runtime?->assertCurrent($this->connection, $scope);
+        $this->runtime?->assertCurrent(connection: $this->connection, scope: $scope);
         $this->runtime?->assertTransfer($ref->id);
         $job = $this->connection->table('corex_transfer_jobs')->where('id', $ref->id)->first();
 
@@ -141,9 +141,9 @@ final readonly class SqlTransferResultReader implements TransferResultReader
             throw new ImportUnavailable('Transfer result is not available under the current authority.');
         }
 
-        SessionIdentity::assertScope($job, $scope);
+        SessionIdentity::assertScope(job: $job, scope: $scope);
 
-        if (! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', $ref->id), new FieldSelection([]), FieldUse::Read)->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef(entity: 'import-export.transfer', id: $ref->id), fields: new FieldSelection([]), use: FieldUse::Read)->allowed) {
             throw new ImportUnavailable('Transfer result is not available under the current authority.');
         }
 

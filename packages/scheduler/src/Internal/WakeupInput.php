@@ -94,7 +94,7 @@ final readonly class WakeupInput
         if (! $value instanceof stdClass) {
             throw new RuntimeException('Wakeup payload must be an object map.');
         }
-        $value = self::canonical($value, 0);
+        $value = self::canonical(value: $value, depth: 0);
 
         if (strlen(json_encode($value, JSON_THROW_ON_ERROR)) > 65_536) {
             throw new RuntimeException('Wakeup payload exceeds 64KiB.');
@@ -127,7 +127,7 @@ final readonly class WakeupInput
             }
         }
         foreach ($values as $key => $item) {
-            $values[$key] = self::canonical($item, $depth + 1);
+            $values[$key] = self::canonical(value: $item, depth: $depth + 1);
         }
 
         return is_array($value) ? $values : (object) $values;

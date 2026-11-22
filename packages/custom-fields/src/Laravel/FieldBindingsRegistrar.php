@@ -29,7 +29,7 @@ final class FieldBindingsRegistrar implements PackageRegistrar
     public function register(Application $app): void
     {
         $app->singleton(CustomFieldsOptions::class, static fn (Application $app): CustomFieldsOptions => CustomFieldsOptions::fromArray((array) $app->make(Repository::class)->get('corex-custom-fields', [])));
-        $app->singleton(RegisteredFieldTypes::class, static fn (Application $app): RegisteredFieldTypes => new RegisteredFieldTypes($app->tagged(FieldType::class), $app->tagged(FieldConverterProvider::class)));
+        $app->singleton(RegisteredFieldTypes::class, static fn (Application $app): RegisteredFieldTypes => new RegisteredFieldTypes(extensions: $app->tagged(FieldType::class), providers: $app->tagged(FieldConverterProvider::class)));
         $app->alias(RegisteredFieldTypes::class, FieldTypes::class);
         $app->alias(RegisteredFieldTypes::class, FieldConversions::class);
         $app->scoped(FieldValues::class, JsonbFieldValues::class);

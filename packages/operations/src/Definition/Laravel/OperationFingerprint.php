@@ -22,6 +22,10 @@ final class OperationFingerprint
             $invocation->operation->contractHash,
             JsonCanonical::encode($invocation->parameters),
             JsonCanonical::encode(JsonDocuments::map($invocation->input)),
+            ...($invocation->bulk === null ? [] : [JsonCanonical::encode([
+                JsonDocuments::map($invocation->bulk->inputRef), JsonDocuments::map($invocation->bulk->extensionStamp),
+                $invocation->bulk->rowLimit, $invocation->bulk->timeLimitSeconds,
+            ])]),
         ]));
     }
 

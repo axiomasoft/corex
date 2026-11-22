@@ -71,7 +71,7 @@ final readonly class WebhookRetention
     {
         $this->assertLimit($limit);
 
-        return $this->connection->transaction(fn (): array => $this->pruneAdmitted($scope, $limit));
+        return $this->connection->transaction(fn (): array => $this->pruneAdmitted(scope: $scope, limit: $limit));
     }
 
     /** @return array{bodies: int, attempts: int, inbox: int} */
@@ -91,7 +91,7 @@ final readonly class WebhookRetention
             ->orderBy('id')
             ->limit($limit)
             ->get(['id', 'effect_key', 'endpoint_snapshot', 'provider_ticket']);
-        $bodyIds = $this->settledDeliveryIds($scope, $bodyIds);
+        $bodyIds = $this->settledDeliveryIds(scope: $scope, rows: $bodyIds);
         $bodies = $bodyIds === []
             ? 0
             : $this->connection->table(self::Deliveries)->whereIn('id', $bodyIds)->update([
@@ -104,7 +104,7 @@ final readonly class WebhookRetention
             ->orderBy('id')
             ->limit($limit)
             ->get(['id', 'effect_key', 'endpoint_snapshot', 'provider_ticket']);
-        $historyIds = $this->settledDeliveryIds($scope, $historyIds);
+        $historyIds = $this->settledDeliveryIds(scope: $scope, rows: $historyIds);
         $attemptIds = $historyIds === []
             ? []
             : $this->connection->table(self::Attempts)
@@ -132,10 +132,10 @@ final readonly class WebhookRetention
     {
         $ids = [];
         foreach ($rows as $row) {
-            if (DatabaseValue::field($row, 'provider_ticket') !== null) {
+            if (DatabaseValue::field(row: $row, name: 'provider_ticket') !== null) {
                 $effect = new ProviderEffectRef(
-                    $scope->accountId, $scope->accountIncarnation, $scope->workspaceId, WebhookWork::Owner,
-                    'webhook.'.hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot'))), DatabaseValue::text(DatabaseValue::field($row, 'effect_key')),
+                    accountId: $scope->accountId, accountIncarnation: $scope->accountIncarnation, workspaceId: $scope->workspaceId, owner: WebhookWork::Owner,
+                    providerNamespace: 'webhook.'.hash('sha256', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'endpoint_snapshot'))), effectKey: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'effect_key')),
                 );
                 $status = ($this->providerLedger)()->inspect($effect);
 
@@ -144,7 +144,7 @@ final readonly class WebhookRetention
                 }
             }
 
-            $ids[] = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+            $ids[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
         }
 
         return $ids;
@@ -159,7 +159,7 @@ final readonly class WebhookRetention
 
     private function assertScope(DataScope $scope): void
     {
-        $this->contexts->assert($scope, $this->connection);
+        $this->contexts->assert(scope: $scope, connection: $this->connection);
     }
 
     private function terminal(DataScope $scope, DateTimeImmutable $now): Builder
@@ -173,6 +173,6 @@ final readonly class WebhookRetention
 
     private function scoped(DataScope $scope): Builder
     {
-        return WebhookDeliveryScope::constrain($this->connection->table(self::Deliveries), $scope);
+        return WebhookDeliveryScope::constrain(query: $this->connection->table(self::Deliveries), scope: $scope);
     }
 }

@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class Runtime
 {
-    public const string BASE = '/api/v1/bulk-operations';
+    public const string BASE = '/api/v2/bulk-operations';
 
     /** @return array{status: int, body: array, location: ?string, cache: ?string} */
     public static function http(string $method, string $uri, array $data = [], ?string $key = null): array
@@ -31,7 +31,7 @@ final class Runtime
         if ($key !== null) {
             $headers['HTTP_IDEMPOTENCY_KEY'] = $key;
         }
-        $request = Request::create($uri, $method, [], [], [], $headers, json_encode($data, JSON_THROW_ON_ERROR));
+        $request = Request::create($uri, $method, [], [], [], $headers, json_encode((object) $data, JSON_THROW_ON_ERROR));
         $kernel = app(Kernel::class);
         $response = $kernel->handle($request);
         $kernel->terminate($request, $response);
@@ -106,7 +106,7 @@ final class Runtime
             throw new RuntimeException('HTTP '.$response->getStatusCode().' returned a non-JSON response.');
         }
 
-        return ['status' => $response->getStatusCode(), 'body' => $decoded, 'location' => $response->headers->get('Location'),
+        return ['status' => $response->getStatusCode(), 'body' => $decoded['data'] ?? $decoded, 'location' => $response->headers->get('Location'),
             'cache' => $response->headers->get('Cache-Control')];
     }
 }

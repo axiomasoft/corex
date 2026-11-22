@@ -14,7 +14,7 @@ final readonly class FieldOperatorSet
     /** @param list<FieldOperator> $operators */
     public function __construct(public array $operators)
     {
-        FieldList::check($operators, [FieldOperator::class]);
+        FieldList::check(values: $operators, classes: [FieldOperator::class]);
 
         if (count(array_unique(array_column($operators, 'value'))) !== count($operators)) {
             throw new InvalidArgumentException('Invalid field operators.');

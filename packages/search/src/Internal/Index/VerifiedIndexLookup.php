@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\ProviderEffectLedger;
 use CoreX\Context\Contracts\ProviderEffectRecovery;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Search\Index\Contracts\IndexLookupAccess;
 use CoreX\Search\Index\Data\IndexBatch;
 use Illuminate\Database\DatabaseManager;
@@ -24,15 +25,15 @@ final readonly class VerifiedIndexLookup implements IndexLookupAccess
         $connection = $this->database->connection();
 
         try {
-            $this->current->assert($batch->target->scope, $connection);
-        } catch (ScopeContextMismatch $closed) {
+            $this->current->assert(scope: $batch->target->scope, connection: $connection);
+        } catch (ScopeContextMismatch|ScopeStale $closed) {
             $status = $this->effects->inspect(Submission::effectFor($batch));
 
             if ($status === null || $status->ownerRef !== $batch->submissionId || $status->digest !== Submission::digest($batch)
                 || get_object_vars($batch->target->scope) !== get_object_vars($status->ticket->scope)) {
                 throw $closed;
             }
-            $this->recovery->assertReceipt($status, $connection);
+            $this->recovery->assertReceipt(status: $status, connection: $connection);
         }
     }
 }

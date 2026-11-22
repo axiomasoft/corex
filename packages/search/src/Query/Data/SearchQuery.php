@@ -35,8 +35,8 @@ final readonly class SearchQuery
         foreach ([$searchFields, $fields, $facets] as $selection) {
             new FieldSelection($selection);
         }
-        ProjectionInput::objects($filters, SearchFilter::class, 64);
-        ProjectionInput::objects($sort, SearchSort::class, 16);
+        ProjectionInput::objects(items: $filters, class: SearchFilter::class, max: 64);
+        ProjectionInput::objects(items: $sort, class: SearchSort::class, max: 16);
 
         if (($text === null) !== ($searchFields === []) || $text === '' || strlen($text ?? '') > 4096
             || $limit < 1 || $limit > 100 || count(array_unique(array_column($sort, 'field'))) !== count($sort)

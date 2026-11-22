@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\PhysicalBinding;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
+use CoreX\Context\Laravel\DatabaseScopeControl;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
@@ -23,14 +28,48 @@ use CoreX\ImportExport\Data\Export\ExportPage;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\ExportUnavailable;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
+use CoreX\ImportExport\Internal\SessionRuntime;
 use CoreX\ImportExport\Tests\PgTestCase;
 use CoreX\ImportExport\Tests\TransferAdmissionFixture;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Data\StorageCapabilities;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
+
+it('keeps transfer session refusal closed for a mismatched connection and a stale physical binding', function (): void {
+    LocalWorkContexts::install(app())->initialize(new AccountRef('export-session', 'export-session', 'active', [], []));
+    $scope = WorkScopeFixture::install(app())->scope();
+    $runtime = new SessionRuntime(resolve(CurrentWorkScope::class));
+    $tenant = DB::connection('pgsql');
+
+    $assertRefused = static function (ConnectionInterface $connection, string $cause) use ($runtime, $scope): void {
+        try {
+            $runtime->assertCurrent($connection, $scope);
+        } catch (SessionUnavailable $error) {
+            expect($error->getPrevious())->toBeInstanceOf($cause);
+
+            return;
+        }
+
+        throw new LogicException('The transfer session accepted an invalid owner.');
+    };
+
+    $runtime->assertCurrent($tenant, $scope);
+    $assertRefused(DB::connection('work-scope-control'), ScopeContextMismatch::class);
+
+    $owner = app(DatabaseScopeControl::class);
+    $closed = $owner->drain($scope->accountId, $owner->close($scope->accountId, 1));
+    $next = new PhysicalBinding($scope->deploymentId, $scope->bindingId, $scope->bindingGeneration, $scope->accountIncarnation, str_repeat('c', 64));
+    $owner->reopen($scope->accountId, $closed, $next, static fn () => true);
+
+    $assertRefused($tenant, ScopeStale::class);
+});
 
 it('seals, reads and reopens a public export without touching private tables', function (): void {
     $resolver = Mockery::mock(TenantContextResolver::class);

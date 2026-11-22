@@ -23,33 +23,33 @@ final readonly class DatabaseSchemaHeads implements SchemaHeads
 
     public function lockForWrite(ConnectionInterface $db, DataScope $scope, EntityHandle $entity): LockedFieldMapping
     {
-        return $this->mapping($this->row($db, $scope, $entity), $entity);
+        return $this->mapping(row: $this->row(db: $db, scope: $scope, entity: $entity), entity: $entity);
     }
 
     public function effective(ConnectionInterface $db, DataScope $scope, EntityHandle $entity): LockedFieldMapping
     {
-        return $this->lockForWrite($db, $scope, $entity);
+        return $this->lockForWrite(db: $db, scope: $scope, entity: $entity);
     }
 
     public function row(ConnectionInterface $db, DataScope $scope, EntityHandle $entity, bool $exclusive = false, bool $allowManifestChange = false): stdClass
     {
         SchemaRows::transaction($db);
-        $declared = $this->declared->image($this->current->assert($scope, $db), $entity);
+        $declared = $this->declared->image(context: $this->current->assert(scope: $scope, connection: $db), entity: $entity);
         $key = [...SchemaRows::logical($scope), 'entity' => $entity->value];
         $query = $db->table('sys_field_schema_heads')->where($key);
         $lock = $exclusive ? 'for update' : 'for share';
         $row = (clone $query)->lock($lock)->first();
 
         if ($row === null) {
-            ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'schema-head', ['entity' => $entity->value, 'entries' => $declared->entries]);
+            ReferenceWrites::enlist(connection: $db, scope: $scope, producer: 'axiomasoft/corex-custom-fields', kind: 'schema-head', witness: ['entity' => $entity->value, 'entries' => $declared->entries]);
             $digest = $declared->digest();
             $inserted = $db->table('sys_field_schema_heads')->insertOrIgnoreReturning([...$key, 'mapping' => SchemaRows::json($declared->entries),
                 'effective_revision' => $digest, 'mapping_digest' => $digest, 'manifest_digest' => $digest], ['entity'], ['account_id', 'account_incarnation', 'workspace_scope', 'entity']);
 
             if ($inserted->isNotEmpty()) {
                 foreach (array_keys($declared->entries) as $id) {
-                    $this->publishDefinition($db, $scope, $entity, $declared, $id);
-                    $this->reserve($db, $scope, $entity, $declared, $id, null);
+                    $this->publishDefinition(db: $db, scope: $scope, entity: $entity, image: $declared, id: $id);
+                    $this->reserve(db: $db, scope: $scope, entity: $entity, image: $declared, id: $id, operation: null);
                 }
             }
             $row = (clone $query)->lock($lock)->first() ?? throw new SchemaConflict('head-bootstrap-conflict');
@@ -70,7 +70,7 @@ final readonly class DatabaseSchemaHeads implements SchemaHeads
 
     public function declared(ConnectionInterface $db, DataScope $scope, EntityHandle $entity): SchemaImage
     {
-        return $this->declared->image($this->current->assert($scope, $db), $entity);
+        return $this->declared->image(context: $this->current->assert(scope: $scope, connection: $db), entity: $entity);
     }
 
     public function publishDefinition(ConnectionInterface $db, DataScope $scope, EntityHandle $entity, SchemaImage $image, string $id): void
@@ -113,8 +113,8 @@ final readonly class DatabaseSchemaHeads implements SchemaHeads
             $shadowSlots[$id] = SchemaValue::text($dual['slot']);
         }
 
-        return new LockedFieldMapping(new FieldSchemaSnapshot($entity, new SchemaRevision(SchemaValue::text($row->effective_revision)),
-            SchemaValue::text($row->mapping_digest), $fields), $slots, $shadows, $shadowSlots,
-            SchemaValue::nullableText($dual['converter_id'] ?? null), isset($dual['converter_version']) ? SchemaValue::integer($dual['converter_version']) : null);
+        return new LockedFieldMapping(schema: new FieldSchemaSnapshot(entity: $entity, revision: new SchemaRevision(SchemaValue::text($row->effective_revision)),
+            mappingDigest: SchemaValue::text($row->mapping_digest), fields: $fields), slots: $slots, shadows: $shadows, shadowSlots: $shadowSlots,
+            converterId: SchemaValue::nullableText($dual['converter_id'] ?? null), converterVersion: isset($dual['converter_version']) ? SchemaValue::integer($dual['converter_version']) : null);
     }
 }

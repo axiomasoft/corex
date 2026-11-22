@@ -9,9 +9,9 @@ use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Errors\Internal\ProblemDetailsSerializer;
 use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
+use CoreX\Operations\Errors\Laravel\OperationErrorBoundary;
 use CoreX\Operations\Tests\Support\SyntheticErrorCode;
 use CoreX\Operations\Tests\TestCase;
 use Packman\Errors\Contracts\ProblemRegistry;
@@ -34,20 +34,20 @@ final class ErrorRepresentationTest extends TestCase
                 message: 'Safe '.$category->value.' message.',
                 details: JsonDocuments::capture(['reason' => $category->value]),
                 category: $category,
-                retryable: $category === ErrorCategory::Conflict,
+                retryable: $category === ErrorCategory::Unavailable,
                 path: '/attributes/color',
             );
-            $problem = $serializer->error(error: $error, metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'))->getData(true);
+            $problem = $serializer->error(error: $error, metadata: new InvocationMetadata('req-1', 'v2', '', 'GET', 'corr-1'))->getData(true);
 
             self::assertSame($error->status, $problem['status']);
             self::assertSame($code->value(), $problem['code']);
             self::assertSame($category->value, $problem['category']);
             self::assertSame('/attributes/color', $problem['path']);
-            self::assertSame($category === ErrorCategory::Conflict, $problem['retryable']);
+            self::assertSame($category === ErrorCategory::Unavailable, $problem['retryable']);
             self::assertSame(['reason' => $category->value], $problem['details']);
             self::assertSame('req-1', $problem['request_id']);
             self::assertSame('corr-1', $problem['correlation_id']);
-            self::assertSame('v1', $problem['api_version']);
+            self::assertSame('v2', $problem['api_version']);
             self::assertSame($registry->get($code)->type, $problem['type']);
             self::assertSame($registry->get($code)->title, $problem['title']);
             self::assertSame($error->getMessage(), $problem['detail']);
@@ -59,7 +59,7 @@ final class ErrorRepresentationTest extends TestCase
     {
         $registry = $this->app->make(ProblemRegistry::class);
         $serializer = $this->app->make(ResponseSerializer::class);
-        $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET');
+        $metadata = new InvocationMetadata('req-1', 'v2', '', 'GET');
 
         self::assertNotEmpty($registry->all());
         foreach ($registry->all() as $definition) {
@@ -81,9 +81,9 @@ final class ErrorRepresentationTest extends TestCase
     public function test_human_message_change_leaves_the_machine_fixture_unchanged(): void
     {
         $serializer = $this->app->make(ResponseSerializer::class);
-        $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1');
-        $first = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'First safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
-        $second = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Second safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
+        $metadata = new InvocationMetadata('req-1', 'v2', '', 'GET', 'corr-1');
+        $first = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'First safe message.', category: ErrorCategory::Conflict, path: '/a'), $metadata)->getData(true);
+        $second = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Second safe message.', category: ErrorCategory::Conflict, path: '/a'), $metadata)->getData(true);
 
         self::assertNotSame($first['detail'], $second['detail']);
         unset($first['detail'], $second['detail']);
@@ -118,10 +118,10 @@ final class ErrorRepresentationTest extends TestCase
     public function test_retry_after_requires_a_named_bounded_policy(): void
     {
         $serializer = $this->app->make(ResponseSerializer::class);
-        $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET');
-        $retryable = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true), $metadata);
-        $named = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: RetryAfterPolicy::RATE_LIMIT), $metadata);
-        $unknown = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: 'custom'), $metadata);
+        $metadata = new InvocationMetadata('req-1', 'v2', '', 'GET');
+        $retryable = $serializer->error(new ApiError(OperationsErrorCode::IdempotencyInProgress, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true), $metadata);
+        $named = $serializer->error(new ApiError(OperationsErrorCode::IdempotencyInProgress, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: RetryAfterPolicy::RATE_LIMIT), $metadata);
+        $unknown = $serializer->error(new ApiError(OperationsErrorCode::IdempotencyInProgress, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: 'custom'), $metadata);
 
         self::assertNull($retryable->headers->get('Retry-After'));
         self::assertSame('60', $named->headers->get('Retry-After'));

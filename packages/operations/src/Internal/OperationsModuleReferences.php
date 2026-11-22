@@ -27,14 +27,14 @@ final readonly class OperationsModuleReferences implements ModuleReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->tenant();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
         $budget = $this->connections->budget();
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'sys_api_budget_buckets' => [$budget, ['key']],
             'sys_api_budget_reservations' => [$budget, ['recipe_hash', 'state']],
             'sys_api_idempotency' => [$tenant, ['operation_id', 'state']],
             'sys_api_bulk_operations' => [$tenant, ['operation_id', 'result_ref']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

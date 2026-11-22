@@ -33,7 +33,7 @@ final readonly class DeliveryIntents
         if ($this->connection->transactionLevel() < 1) {
             throw new NotificationOperationConflict('Notification delivery intent requires its owner transaction.');
         }
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
         $driver = $this->drivers->find($channel)?->descriptor();
 
         if ($driver === null) {
@@ -42,8 +42,8 @@ final readonly class DeliveryIntents
 
         $id = (string) Str::uuid7();
         $digest = hash('sha256', $message);
-        $reference = self::reference($id, $effectKey, $digest, $channel, $driver->version, $notificationId, $runId);
-        $proof = $this->issuer->issue($scope, self::Owner, $reference);
+        $reference = self::reference(id: $id, key: $effectKey, digest: $digest, channel: $channel, driverVersion: $driver->version, notificationId: $notificationId, runId: $runId);
+        $proof = $this->issuer->issue(scope: $scope, owner: self::Owner, reference: $reference);
         $this->connection->table('ntf_deliveries')->insert([
             ...NotificationScope::logical($scope),
             ...NotificationScope::fence($scope),

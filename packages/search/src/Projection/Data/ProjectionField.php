@@ -25,7 +25,7 @@ final readonly class ProjectionField
         public bool $predicateRequiresRead = false,
     ) {
         new FieldSelection([$id]);
-        ProjectionInput::objects($uses, FieldUse::class, 7);
+        ProjectionInput::objects(items: $uses, class: FieldUse::class, max: 7);
 
         if ($physicalId !== null && preg_match('/\A[a-z][a-z0-9_]{0,62}\z/D', $physicalId) !== 1) {
             throw new InvalidArgumentException('A physical projection field requires a backend-safe identifier.');

@@ -44,7 +44,7 @@ final readonly class SchemaJournal
 
     public function locked(ConnectionInterface $db, DataScope $scope, stdClass $claim): stdClass
     {
-        $row = $this->claim($db, $scope, $claim)->lockForUpdate()->first();
+        $row = $this->claim(db: $db, scope: $scope, claim: $claim)->lockForUpdate()->first();
 
         if ($row === null || new DateTimeImmutable(SchemaValue::text($row->lease_until)) <= $this->clock->now()) {
             throw new SchemaClaimLost('Schema claim expired.');
@@ -56,7 +56,7 @@ final readonly class SchemaJournal
     /** @param array<string,mixed> $values */
     public function advance(ConnectionInterface $db, DataScope $scope, stdClass $claim, string $state, string $phase, array $values = []): void
     {
-        SchemaRows::one($this->claim($db, $scope, $claim)->update(['state' => $state, 'phase' => $phase, 'claim_token' => null, 'lease_until' => null,
+        SchemaRows::one($this->claim(db: $db, scope: $scope, claim: $claim)->update(['state' => $state, 'phase' => $phase, 'claim_token' => null, 'lease_until' => null,
             'next_attempt_at' => $this->now(), ...$values]));
     }
 
@@ -70,9 +70,9 @@ final readonly class SchemaJournal
 
         $checkpoint = $row->cancel_requested === true || $row->phase === 'contract' ? 'cleanup' : ($row->phase === 'verify' || $row->phase === 'switch' ? 'verify' : 'scan');
 
-        return new SchemaOperationStatus(new SchemaOperationRef(SchemaValue::text($row->id)), SchemaValue::text($row->state),
-            new ClaimGeneration(SchemaValue::integer($row->generation)), SchemaValue::strings(json_decode(SchemaValue::text($row->blockers), true, flags: JSON_THROW_ON_ERROR)),
-            $failures, SchemaValue::nullableText((clone $progress)->where('partition_id', $checkpoint)->value('cursor_record_id')));
+        return new SchemaOperationStatus(ref: new SchemaOperationRef(SchemaValue::text($row->id)), state: SchemaValue::text($row->state),
+            generation: new ClaimGeneration(SchemaValue::integer($row->generation)), blockers: SchemaValue::strings(json_decode(SchemaValue::text($row->blockers), true, flags: JSON_THROW_ON_ERROR)),
+            failures: $failures, checkpoint: SchemaValue::nullableText((clone $progress)->where('partition_id', $checkpoint)->value('cursor_record_id')));
     }
 
     public static function proofReference(stdClass $row): string

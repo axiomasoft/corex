@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use Closure;
+use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Definition\Laravel\OperationFactory;
+use CoreX\Operations\Errors\Contracts\ErrorMapping;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Errors\Laravel\ProblemProjection;
+use CoreX\Operations\Invocation\Contracts\ClientRequestContext;
+use CoreX\Operations\Invocation\Contracts\OperationInputAdmission;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
+use CoreX\Operations\Validation\Laravel\SchemaBudget;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
@@ -32,6 +38,7 @@ use InvalidArgumentException;
 use LogicException;
 use Override;
 use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\DescribesError;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use RuntimeException;
@@ -76,11 +83,12 @@ final readonly class GuardedToolInvoker implements ToolInvoker
 
         $inputError = $this->validateInput(tool: $tool, call: $call);
 
-        if ($inputError !== null) {
+        if ($inputError !== null && ($tool->operationRef === null || $inputError->errorCode !== ToolsErrorCode::InputInvalid->value)) {
             return $inputError;
         }
 
         $callbackInvocations = 0;
+        $effectResult = null;
 
         /** @var Closure():ToolResult $effect */
         $effect = function () use (
@@ -88,7 +96,9 @@ final readonly class GuardedToolInvoker implements ToolInvoker
             $tool,
             $context,
             $call,
+            $inputError,
             &$callbackInvocations,
+            &$effectResult,
         ): ToolResult {
             $callbackInvocations++;
 
@@ -96,20 +106,41 @@ final readonly class GuardedToolInvoker implements ToolInvoker
                 throw new LogicException('Tool execution callback invoked more than once.');
             }
 
-            return $this->executeHandler(
+            return $effectResult = $this->executeHandler(
                 declaration: $declaration,
                 tool: $tool,
                 context: $context,
                 call: $call,
+                inputError: $inputError,
             );
         };
 
-        $result = $this->guard->execute(tool: $tool, context: $context, call: $call, effect: $effect);
+        try {
+            $result = $this->guard->execute(tool: $tool, context: $context, call: $call, effect: $effect);
+        } catch (ApiError $error) {
+            // A host transaction can commit after the operation callback has returned.
+            if ($tool->operationRef === null || $error->errorCode !== OperationsErrorCode::ReconciliationRequired->value) {
+                throw $error;
+            }
+
+            return $this->failedOperation(error: $error, call: $call);
+        } catch (Throwable $error) {
+            if ($tool->operationRef === null || $callbackInvocations !== 1
+                || $effectResult?->outcome !== ToolOutcome::Committed || $error instanceof DescribesError) {
+                throw $error;
+            }
+
+            return $this->failedOperation(error: new ApiError(
+                errorCode: OperationsErrorCode::ReconciliationRequired,
+                status: 409,
+                message: 'The operation outcome must be reconciled before retry.',
+            ), call: $call);
+        }
 
         if (
-            $callbackInvocations === 0
-            && $result->outcome === ToolOutcome::Committed
-            && ! $result->replayed
+            $result->outcome === ToolOutcome::Committed
+            && (($tool->operationRef !== null && $result !== $effectResult)
+                || ($callbackInvocations === 0 && ! $result->replayed))
         ) {
             return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
         }
@@ -132,6 +163,17 @@ final readonly class GuardedToolInvoker implements ToolInvoker
     {
         try {
             $handle = $this->schemas->admit(schema: $tool->inputSchema, profile: $tool->schemaProfile);
+
+            if ($tool->operationRef !== null) {
+                $json = $call->arguments->canonicalJson;
+
+                try {
+                    SchemaBudget::assertPayload(rawJson: $json, decoded: JsonCanonical::decode($json));
+                } catch (InvalidArgumentException) {
+                    return $this->denied(errorCode: ToolsErrorCode::SchemaLimit, call: $call);
+                }
+            }
+
             $validation = $this->schemas->validate(
                 schema: $handle,
                 value: new JsonValue(canonicalJson: $call->arguments->canonicalJson),
@@ -139,6 +181,10 @@ final readonly class GuardedToolInvoker implements ToolInvoker
 
             if (! $validation->valid) {
                 return $this->denied(errorCode: ToolsErrorCode::InputInvalid, call: $call);
+            }
+
+            if ($tool->operationRef !== null) {
+                $this->schemas->admit(schema: $tool->outputSchema, profile: $tool->schemaProfile);
             }
         } catch (ToolSchemaFailure $exception) {
             return $this->denied(errorCode: $exception->errorCode, call: $call);
@@ -154,38 +200,49 @@ final readonly class GuardedToolInvoker implements ToolInvoker
         ToolDescriptor $tool,
         RequestContext $context,
         ToolCall $call,
+        ?ToolResult $inputError,
     ): ToolResult {
         try {
-            [$input, $parameters] = $this->mapArguments(declaration: $declaration, arguments: $call->arguments);
-
             $replayed = false;
+            $accepted = null;
             $metadata = [];
 
             if ($declaration->toolKind === 'exposed') {
                 try {
-                    $result = $this->operations->invoke(new OperationInvocation(
-                        operation: $this->exposedOperation($declaration),
+                    [$input, $parameters] = $this->mapArguments(declaration: $declaration, arguments: $call->arguments);
+                    $operation = $this->exposedOperation($declaration);
+                    $invocation = new OperationInvocation(
+                        operation: $operation,
                         context: $context,
                         input: JsonDocuments::capture($input),
                         parameters: $parameters,
                         idempotencyKey: $call->operationKey,
-                    ));
+                        clientId: $context instanceof ClientRequestContext ? $context->clientId() : null,
+                    );
+
+                    if ($inputError !== null) {
+                        if ($this->operations instanceof OperationInputAdmission) {
+                            $this->operations->assertInput($invocation);
+                        }
+
+                        return $inputError;
+                    }
+                    $result = $this->operations->invoke($invocation);
                 } catch (Throwable $error) {
-                    if ($error instanceof ApiError) {
-                        return $this->operationFailed(errorCode: $error->errorCode, call: $call);
-                    }
-
-                    if ($error instanceof HttpExceptionInterface && $error->getStatusCode() === 429) {
-                        return $this->denied(errorCode: ToolsErrorCode::RateLimited, call: $call);
-                    }
-
-                    throw $error;
+                    return $this->failedOperation(error: $error, call: $call);
                 }
 
                 $output = JsonDocuments::array($result->data);
+                $accepted = $result->accepted;
+
+                if ($accepted !== null) {
+                    $output['operation_id'] = $accepted->operationRef;
+                    $output['status_url'] = $accepted->statusUri;
+                }
                 $replayed = $result->replayed;
                 $metadata = JsonDocuments::map($result->metadata);
             } else {
+                [$input, $parameters] = $this->mapArguments(declaration: $declaration, arguments: $call->arguments);
                 $handler = $this->container->make($declaration->handler ?? throw new LogicException('Tool handler missing.'));
 
                 if (! $handler instanceof OperationHandler) {
@@ -215,6 +272,7 @@ final readonly class GuardedToolInvoker implements ToolInvoker
                 operationKey: $call->operationKey,
                 replayed: $replayed,
                 metadata: JsonDocuments::capture($metadata),
+                accepted: $accepted,
             );
         } catch (Throwable $exception) {
             if ($tool->idempotency === 'provider-key') {
@@ -225,13 +283,38 @@ final readonly class GuardedToolInvoker implements ToolInvoker
         }
     }
 
+    private function failedOperation(Throwable $error, ToolCall $call): ToolResult
+    {
+        if (! $this->container->bound(ErrorMapping::class)) {
+            throw $error;
+        }
+        $problem = $this->container->make(ErrorMapping::class)->map($error);
+        $body = $this->container->make(ProblemProjection::class)->document(error: $problem);
+
+        if ($problem->status === 429 && $error instanceof HttpExceptionInterface) {
+            $seconds = filter_var($error->getHeaders()['Retry-After'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+
+            if ($seconds !== false) {
+                $body['retry_after_seconds'] = $seconds;
+            }
+        }
+
+        $outcome = $problem->errorCode === OperationsErrorCode::ReconciliationRequired->value
+            ? ToolOutcome::Unknown : ToolOutcome::NotExecuted;
+
+        return new ToolResult(outcome: $outcome, structuredData: null,
+            errorCode: $problem->errorCode, operationKey: $call->operationKey, replayed: false,
+            problem: new JsonDocument(json_encode($body, JSON_THROW_ON_ERROR)));
+    }
+
     private function exposedOperation(Api $declaration): Operation
     {
         $ref = $declaration->operationRef ?? throw new LogicException('Exposed tool is missing operationRef.');
 
-        foreach ($this->modules->compiled()->api as $api) {
-            if ($api->mode === 'operation' && $api->version.':'.$api->operationId === $ref) {
-                return OperationFactory::fromDeclaration(api: $api, registryFingerprint: $this->modules->compiled()->fingerprint);
+        $operations = $this->container->make(OperationRegistry::class);
+        foreach ($operations->all(version: 'v2') as $operation) {
+            if ($operation->module === $declaration->declaringModule && 'v2:'.$operation->id === $ref) {
+                return $operation;
             }
         }
 
@@ -248,6 +331,15 @@ final readonly class GuardedToolInvoker implements ToolInvoker
         if ($declaration->toolKind === 'exposed' && $declaration->parameterMap !== []) {
             $input = [];
             $parameters = [];
+            $extra = array_map(strval(...), array_keys(array_diff_key($decoded, $declaration->parameterMap)));
+
+            if ($extra !== []) {
+                sort($extra, SORT_STRING);
+
+                throw new ApiError(errorCode: OperationsErrorCode::UndeclaredFields, status: 422,
+                    message: 'Input contains undeclared fields.', details: JsonDocuments::capture(['fields' => $extra]),
+                    path: '/'.str_replace(['~', '/'], ['~0', '~1'], $extra[0]));
+            }
 
             foreach ($declaration->parameterMap as $argumentField => $target) {
                 if (! array_key_exists($argumentField, $decoded)) {
@@ -257,10 +349,13 @@ final readonly class GuardedToolInvoker implements ToolInvoker
                 if (str_starts_with($target, 'path:')) {
                     $value = $decoded[$argumentField];
 
-                    if (! is_scalar($value) && $value !== null) {
-                        throw new InvalidArgumentException('Path arguments must be scalar.');
+                    $parameter = substr($target, 5);
+
+                    if (! is_string($value) && ! is_int($value)) {
+                        throw new ApiError(errorCode: OperationsErrorCode::InvalidRequest, status: 422,
+                            message: 'Invalid operation parameter.', path: '/'.$parameter);
                     }
-                    $parameters[substr($target, 5)] = (string) $value;
+                    $parameters[$parameter] = (string) $value;
                 } else {
                     $input[$target] = $decoded[$argumentField];
                 }
@@ -303,16 +398,10 @@ final readonly class GuardedToolInvoker implements ToolInvoker
 
     private function denied(ToolsErrorCode $errorCode, ToolCall $call): ToolResult
     {
-        return $this->operationFailed(errorCode: $errorCode->value, call: $call);
-    }
-
-    /** Registered codes from the invoked operation retain their owning namespace. */
-    private function operationFailed(string $errorCode, ToolCall $call): ToolResult
-    {
         return new ToolResult(
             outcome: ToolOutcome::NotExecuted,
             structuredData: null,
-            errorCode: $errorCode,
+            errorCode: $errorCode->value,
             operationKey: $call->operationKey,
             replayed: false,
         );

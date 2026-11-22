@@ -60,12 +60,12 @@ final class ToolSchemaWorkerContractTest extends TestCase
         self::assertTrue($invalid['ok']);
         self::assertIsArray($invalid['validation']);
         self::assertFalse($invalid['validation']['valid']);
-        self::assertSame([
-            ['code' => '', 'pointer' => ''],
-            ['code' => 'properties', 'pointer' => ''],
+        self::assertSame([['code' => 'type', 'pointer' => '/count']], $invalid['validation']['errors']);
+        $request['value'] = '{"count":7,"unknown":"private"}';
+        $extra = $this->request(json_encode($request, JSON_THROW_ON_ERROR));
+        self::assertSame(['valid' => false, 'errors' => [
             ['code' => 'additionalProperties', 'pointer' => ''],
-            ['code' => 'type', 'pointer' => '/count'],
-        ], $invalid['validation']['errors']);
+        ]], $extra['validation']);
         $request['value'] = null;
         self::assertSame(['ok' => false, 'error' => ToolsErrorCode::SchemaLimit->value], $this->request(json_encode($request, JSON_THROW_ON_ERROR)));
     }

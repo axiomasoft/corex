@@ -9,6 +9,7 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Operations\Cost\Data\BudgetReceipt;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Invocation\Data\AcceptedOperation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
@@ -35,12 +36,13 @@ final readonly class StoredOperationOutcome
         public bool $errorRetryable,
         public ?string $errorPath,
         public ?BudgetReceipt $budgetReceipt = null,
+        public ?AcceptedOperation $accepted = null,
     ) {}
 
     /** Immutable JSON value. */
-    public static function success(JsonDocument $data, ?BudgetReceipt $budgetReceipt = null): self
+    public static function success(JsonDocument $data, ?BudgetReceipt $budgetReceipt = null, ?AcceptedOperation $accepted = null): self
     {
-        return new self(kind: 'success', data: JsonDocuments::nullable($data), errorCode: null, errorStatus: null, errorMessage: null, errorDetails: JsonDocuments::capture([]), errorCategory: null, errorRetryable: false, errorPath: null, budgetReceipt: $budgetReceipt);
+        return new self(kind: 'success', data: JsonDocuments::nullable($data), errorCode: null, errorStatus: null, errorMessage: null, errorDetails: JsonDocuments::capture([]), errorCategory: null, errorRetryable: false, errorPath: null, budgetReceipt: $budgetReceipt, accepted: $accepted);
     }
 
     public static function failure(ApiError $error): self
@@ -72,18 +74,31 @@ final readonly class StoredOperationOutcome
         $rootKeys = array_keys($payload);
         sort($rootKeys);
 
-        if ($kind === 'success' && is_array($payload['data'] ?? null)) {
-            if ($rootKeys === ['data', 'kind']) {
-                return self::success(JsonDocuments::capture($payload['data']));
-            }
-
+        if ($kind === 'success' && is_array($payload['data'] ?? null)
+            && array_diff($rootKeys, ['accepted', 'budget', 'data', 'kind']) === []) {
+            $receipt = null;
             $budget = $payload['budget'] ?? null;
 
-            if ($rootKeys === ['budget', 'data', 'kind'] && is_array($budget)
-                && array_keys($budget) === ['actual_units', 'reservation_id']
-                && is_int($budget['actual_units']) && is_string($budget['reservation_id'])) {
-                return self::success(JsonDocuments::capture($payload['data']), new BudgetReceipt($budget['reservation_id'], $budget['actual_units']));
+            if (array_key_exists('budget', $payload)) {
+                if (! is_array($budget) || array_keys($budget) !== ['actual_units', 'reservation_id']
+                    || ! is_int($budget['actual_units']) || ! is_string($budget['reservation_id'])) {
+                    throw new InvalidArgumentException('Stored operation budget has an invalid shape.');
+                }
+                $receipt = new BudgetReceipt(reservationId: $budget['reservation_id'], actualUnits: $budget['actual_units']);
             }
+
+            $accepted = null;
+            $reference = $payload['accepted'] ?? null;
+
+            if (array_key_exists('accepted', $payload)) {
+                if (! is_array($reference) || array_keys($reference) !== ['operation_ref', 'status_uri']
+                    || ! is_string($reference['operation_ref']) || ! is_string($reference['status_uri'])) {
+                    throw new InvalidArgumentException('Stored operation acceptance has an invalid shape.');
+                }
+                $accepted = new AcceptedOperation(operationRef: $reference['operation_ref'], statusUri: $reference['status_uri']);
+            }
+
+            return self::success(data: JsonDocuments::capture($payload['data']), budgetReceipt: $receipt, accepted: $accepted);
         }
 
         $error = $payload['error'] ?? null;
@@ -139,6 +154,10 @@ final readonly class StoredOperationOutcome
         return JsonCanonical::encode($this->kind === 'success'
             ? [
                 'data' => JsonDocuments::optionalArray($this->data), 'kind' => 'success',
+                ...($this->accepted === null ? [] : ['accepted' => [
+                    'operation_ref' => $this->accepted->operationRef,
+                    'status_uri' => $this->accepted->statusUri,
+                ]]),
                 ...($this->budgetReceipt === null ? [] : ['budget' => [
                     'actual_units' => $this->budgetReceipt->actualUnits,
                     'reservation_id' => $this->budgetReceipt->reservationId,
@@ -164,7 +183,7 @@ final readonly class StoredOperationOutcome
             throw new InvalidArgumentException('An error outcome cannot become an operation result.');
         }
 
-        return new OperationResult(data: JsonDocuments::capture($this->data), replayed: $replayed);
+        return new OperationResult(data: JsonDocuments::capture($this->data), replayed: $replayed, accepted: $this->accepted);
     }
 
     public function error(ProblemRegistry $problems): ApiError

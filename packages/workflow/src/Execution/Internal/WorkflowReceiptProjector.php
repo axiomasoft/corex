@@ -42,15 +42,15 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
     {
         $db = $this->database->connection();
         $scope = $status->ticket->scope;
-        $context = $this->recovery->assertReceipt($status, $db);
-        $row = $this->intent($db, $status)->first();
+        $context = $this->recovery->assertReceipt(status: $status, connection: $db);
+        $row = $this->intent(db: $db, status: $status)->first();
 
         if ($row === null) {
             return null;
         }
 
         try {
-            $request = $this->worker->request($context, $scope, $row, $status->digest, $status->effect->effectKey);
+            $request = $this->worker->request(context: $context, scope: $scope, row: $row, digest: $status->digest, effectKey: $status->effect->effectKey);
         } catch (UnsupportedWorkflowCapability) {
             return null;
         }
@@ -66,14 +66,14 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
         if ($accepted?->kind === ProviderObservationKind::Accepted && $instanceRef !== $accepted->reference) {
             // Keep the original accepted identity before lookup can advance the authority's observation.
             $this->project($status);
-            $instanceRef = $this->intent($db, $status)->value('provider_instance');
+            $instanceRef = $this->intent(db: $db, status: $status)->value('provider_instance');
 
             if ($instanceRef !== $accepted->reference) {
                 return null;
             }
         }
 
-        $result = $this->engine->reconcile(new EngineEffectRef($scope, $provider->namespace, $status->effect->effectKey, is_string($instanceRef) ? $instanceRef : null));
+        $result = $this->engine->reconcile(new EngineEffectRef(scope: $scope, providerNamespace: $provider->namespace, effectKey: $status->effect->effectKey, instanceRef: is_string($instanceRef) ? $instanceRef : null));
         $kind = match ($result->status) {
             StartOutcome::Confirmed => ProviderObservationKind::Confirmed,
             StartOutcome::Accepted => ProviderObservationKind::Accepted,
@@ -83,7 +83,7 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
         };
         $ref = $result->instanceRef ?? $result->errorCode;
 
-        return $kind !== null && $ref !== null ? new ProviderObservation($kind, $ref, $provider->namespace) : null;
+        return $kind !== null && $ref !== null ? new ProviderObservation(kind: $kind, reference: $ref, observer: $provider->namespace) : null;
     }
 
     public function project(ProviderEffectStatus $status): ?string
@@ -91,8 +91,8 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
         $db = $this->database->connection();
         $quarantined = false;
         $receipt = $db->transaction(function () use ($db, $status, &$quarantined): ?string {
-            $this->recovery->assertReceipt($status, $db);
-            $query = $this->intent($db, $status);
+            $this->recovery->assertReceipt(status: $status, connection: $db);
+            $query = $this->intent(db: $db, status: $status);
             $row = (clone $query)->lockForUpdate()->first();
 
             if ($row === null) {
@@ -119,7 +119,7 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
 
             $liveReceipt = $available->whereIn('state', ['claimed', 'sending', 'unknown', 'accepted']);
 
-            if (WorkflowIntentStore::instanceConflict($row, $observation, $status->firstProviderRef)) {
+            if (WorkflowIntentStore::instanceConflict(row: $row, observation: $observation, firstProviderRef: $status->firstProviderRef)) {
                 $quarantined = $liveReceipt->update(WorkflowIntentStore::quarantineChanges($status->firstProviderRef) + [
                     'provider_ticket' => $status->ticket->id, 'updated_at' => $now,
                 ]) === 1;
@@ -150,7 +150,7 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
         });
 
         if ($quarantined && $status->state === 'outstanding') {
-            $this->admission->settle($status->ticket, new AttemptEvidence('unknown', $status->ownerRef));
+            $this->admission->settle(ticket: $status->ticket, evidence: new AttemptEvidence(outcome: 'unknown', reference: $status->ownerRef));
         }
 
         return $receipt;
@@ -158,7 +158,7 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
 
     private function intent(Connection $db, ProviderEffectStatus $status): Builder
     {
-        return $this->intents->scoped($db, $status->ticket->scope)->where([
+        return $this->intents->scoped(db: $db, scope: $status->ticket->scope)->where([
             'id' => $status->ownerRef,
             'payload_hash' => $status->digest,
             'claim_token' => $status->claimToken,

@@ -41,7 +41,7 @@ final readonly class TransferReferences
 
     public function inspect(DataScope $scope, string $namespace, string $key, string $ownerRef, string $digest): ?ProviderEffectStatus
     {
-        $status = $this->effects->inspect($this->ref($scope, $namespace, $key));
+        $status = $this->effects->inspect($this->ref(scope: $scope, namespace: $namespace, key: $key));
 
         if ($status !== null && (get_object_vars($status->ticket->scope) !== get_object_vars($scope) || $status->ownerRef !== $ownerRef
             || ! hash_equals($status->digest, $digest) || in_array($status->state, ['conflicting', 'isolated'], true))) {
@@ -58,7 +58,7 @@ final readonly class TransferReferences
 
         return $this->admission->reserve(
             $scope,
-            new ProviderAttempt($this->ref($scope, $namespace, $key), $ownerRef, $key.':'.$attempt, $attempt, $this->clock->now()->modify("+{$seconds} seconds"), $digest),
+            new ProviderAttempt(effect: $this->ref(scope: $scope, namespace: $namespace, key: $key), ownerRef: $ownerRef, claimToken: $key.':'.$attempt, attempt: $attempt, deadline: $this->clock->now()->modify("+{$seconds} seconds"), digest: $digest),
             new ModuleRef(self::OWNER),
             ...$this->targets($stamp),
         );
@@ -66,16 +66,16 @@ final readonly class TransferReferences
 
     public function observe(AdmissionTicket $ticket, ProviderObservationKind $kind, string $reference): void
     {
-        $this->effects->observe($ticket, new ProviderObservation($kind, $reference, self::OWNER));
+        $this->effects->observe(ticket: $ticket, observation: new ProviderObservation(kind: $kind, reference: $reference, observer: self::OWNER));
 
         if ($kind !== ProviderObservationKind::Unknown) {
-            $this->tickets->settle($ticket, new AttemptEvidence('reconciled', $reference));
+            $this->tickets->settle(ticket: $ticket, evidence: new AttemptEvidence(outcome: 'reconciled', reference: $reference));
         }
     }
 
     private function ref(DataScope $scope, string $namespace, string $key): ProviderEffectRef
     {
-        return new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, self::OWNER, $namespace, $key);
+        return new ProviderEffectRef(accountId: $scope->accountId, accountIncarnation: $scope->accountIncarnation, workspaceId: $scope->workspaceId, owner: self::OWNER, providerNamespace: $namespace, effectKey: $key);
     }
 
     /** @param array<string, mixed> $stamp

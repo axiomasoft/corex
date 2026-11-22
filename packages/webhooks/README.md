@@ -16,6 +16,11 @@ Register `CoreX\Webhooks\WebhooksServiceProvider` alongside `CoreX\Operations\Op
 
 Configure explicit topics and payload projectors in `corex-webhooks`. Bind the package contracts for signing keys and guarded delivery in the host. Subscriptions and replay use the trusted operation context; see the [operation contract](../operations/README.md).
 
+The composing module includes `WebhookOperationDeclarations::all()` for the nine v2 operations.
+The default routes use `/api/v2/webhook-subscriptions` and `/api/v2/webhook-deliveries`.
+An authorized replay creates a delivery with a new ID and a `replay_of` reference to the original
+delivery. Automatic attempts keep the delivery ID.
+
 ## Failure handling
 
 Unavailable transport or signing capability refuses delivery. Transport rejection takes precedence over an untrusted HTTP status; a rejected peer response cannot acknowledge a delivery or disable a subscription. Egress SPI and persistence failures propagate without being mapped to DNS errors. URL policy, subscription scope, replay horizon and lease checks remain mandatory. Failed attempts retain their recorded outcome; resolve the cause before replaying through the supported API.

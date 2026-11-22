@@ -74,9 +74,9 @@ final readonly class NotificationDigestDueSource implements DueWakeupSource
                 $id = NotificationValue::text($run->id);
                 $window = new WakeupWindow(start: $this->date($run->period_start), end: $this->date($run->period_end), period: NotificationValue::text($run->period));
                 $proof = new StoredWorkProof(
-                    DigestRunIdentity::Owner,
-                    DigestRunIdentity::reference($id, $window->start, $window->end, $window->period),
-                    NotificationValue::text($run->scope_seal),
+                    owner: DigestRunIdentity::Owner,
+                    reference: DigestRunIdentity::reference(runId: $id, start: $window->start, end: $window->end, period: $window->period),
+                    seal: NotificationValue::text($run->scope_seal),
                 );
                 $request = new WakeupRequest(
                     scope: $scope,
@@ -87,10 +87,10 @@ final readonly class NotificationDigestDueSource implements DueWakeupSource
                     window: $window,
                     payload: JsonDocuments::capture(['run_id' => $id]),
                 );
-                $result = $this->runner->runStored($scope, $proof, fn () => ($this->scheduler)()->schedule($request));
+                $result = $this->runner->runStored(scope: $scope, proof: $proof, work: fn () => ($this->scheduler)()->schedule($request));
             } catch (DateException|InvalidArgumentException|JsonException|ScopeStale) {
                 $this->connection->transaction(function () use ($context, $run): void {
-                    $this->current->assert($this->currentScopes->forCurrentPrincipal($context), $this->connection);
+                    $this->current->assert(scope: $this->currentScopes->forCurrentPrincipal($context), connection: $this->connection);
                     $this->frozen($context)->where('id', $run->id)->update(['state' => 'quarantined']);
                 });
                 $failed++;
@@ -111,7 +111,7 @@ final readonly class NotificationDigestDueSource implements DueWakeupSource
     private function frozen(TenantContext $context): Builder
     {
         $scope = $this->currentScopes->forCurrentPrincipal($context);
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
 
         return $this->connection->table('ntf_digest_runs')->where('account_id', $scope->accountId)
             ->where('account_incarnation', $scope->accountIncarnation)->where('state', 'frozen');

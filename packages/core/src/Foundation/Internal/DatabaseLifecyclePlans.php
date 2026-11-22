@@ -60,13 +60,13 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
 
     public function plan(DataScope $scope, ModuleId $module, LifecycleAction $action): LifecyclePlan
     {
-        return $this->prepare($scope, $module, $action, DisableReason::Manual, false);
+        return $this->prepare(scope: $scope, module: $module, action: $action, reason: DisableReason::Manual, cascade: false);
     }
 
     public function inspect(DataScope $scope, LifecyclePlanRef $ref): LifecycleStatus
     {
-        $row = $this->row($scope, $ref);
-        $this->operator->authorize($scope, new ModuleRef($row->module), 'inspect', $ref, new PlanDigest($row->digest));
+        $row = $this->row(scope: $scope, ref: $ref);
+        $this->operator->authorize(scope: $scope, target: new ModuleRef($row->module), ability: 'inspect', ref: $ref, digest: new PlanDigest($row->digest));
 
         return $this->status($row);
     }
@@ -74,9 +74,9 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     public function direct(string $module, LifecycleAction $action, DisableReason $reason = DisableReason::Manual, bool $cascade = false): void
     {
         $scope = $this->operator->current();
-        $plan = $this->prepare($scope, new ModuleId($module), $action, $reason, $cascade);
+        $plan = $this->prepare(scope: $scope, module: new ModuleId($module), action: $action, reason: $reason, cascade: $cascade);
 
-        if ($this->apply($scope, $plan->ref, $plan->digest)->phase !== LifecyclePhase::Done) {
+        if ($this->apply(scope: $scope, ref: $plan->ref, digest: $plan->digest)->phase !== LifecyclePhase::Done) {
             throw new LifecycleBlocked('lifecycle-blocked '.$plan->ref->id);
         }
     }
@@ -84,13 +84,13 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     public function confirmedPurge(string $module, LifecycleConfirmation $approval): void
     {
         $scope = $this->operator->current();
-        $row = $this->row($scope, $approval->ref);
+        $row = $this->row(scope: $scope, ref: $approval->ref);
 
         if ($row->module !== $module || $row->action !== LifecycleAction::Purge->value) {
             throw new LifecyclePlanConflict('Purge confirmation does not select this module.');
         }
 
-        if ($this->apply($scope, $approval->ref, $approval->digest)->phase !== LifecyclePhase::Done) {
+        if ($this->apply(scope: $scope, ref: $approval->ref, digest: $approval->digest)->phase !== LifecyclePhase::Done) {
             throw new LifecycleBlocked('lifecycle-blocked '.$approval->ref->id);
         }
     }
@@ -110,8 +110,8 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     {
         $scope = $this->operator->current();
         $target = new ModuleRef($module);
-        $this->operator->authorize($scope, $target, $method);
-        $this->locked($scope, function () use ($inner, $guard, $scope, $module, $method, $edition, $cascade): void {
+        $this->operator->authorize(scope: $scope, target: $target, ability: $method);
+        $this->locked(scope: $scope, work: function () use ($inner, $guard, $scope, $module, $method, $edition, $cascade): void {
             $targets = [$module];
 
             if ($method === 'enable') {
@@ -126,7 +126,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             $closures = [];
             foreach ($targets as $name) {
                 $member = new ModuleRef($name);
-                $closed = $this->control->moduleClosure($scope, $member);
+                $closed = $this->control->moduleClosure(scope: $scope, target: $member);
 
                 if ($name !== $module && (! $cascade || $inner->status($name)->state === ModuleState::Enabled)) {
                     // Even a satisfied prerequisite is a new dependency reference of this enable.
@@ -136,10 +136,10 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
 
                     continue;
                 }
-                $this->operator->authorize($scope, $member, $method);
+                $this->operator->authorize(scope: $scope, target: $member, ability: $method);
 
                 if ($closed !== null) {
-                    $record = $this->row($scope, new LifecyclePlanRef($closed));
+                    $record = $this->row(scope: $scope, ref: new LifecyclePlanRef($closed));
 
                     if ($record->state !== 'done' || $method === 'upgrade') {
                         throw new LifecycleBlocked('Another lifecycle plan still owns this module.');
@@ -149,7 +149,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             }
             $db = $this->owner($scope);
             $db->transaction(function () use ($inner, $guard, $module, $method, $edition, $cascade, $scope, $db, $closures): void {
-                $this->current->assert($scope, $db);
+                $this->current->assert(scope: $scope, connection: $db);
                 $args = $method === 'enable' ? [$module, $edition, $cascade] : [$module];
                 $frame = $this->app->make(LifecycleFrame::class);
 
@@ -160,10 +160,10 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                         if ($name === null || ! isset($closures[$name]) || $db->transactionLevel() === 0) {
                             return null;
                         }
-                        $this->current->assert($scope, $db);
-                        $this->operator->authorize($scope, new ModuleRef($name), 'enable');
+                        $this->current->assert(scope: $scope, connection: $db);
+                        $this->operator->authorize(scope: $scope, target: new ModuleRef($name), ability: 'enable');
 
-                        if ($this->control->moduleClosure($scope, new ModuleRef($name)) !== $closures[$name]) {
+                        if ($this->control->moduleClosure(scope: $scope, target: new ModuleRef($name)) !== $closures[$name]) {
                             throw new LifecycleBlocked('Native declaration lost its module closure.');
                         }
                         foreach ($this->registry->compiled()->featureFlags as $flag) {
@@ -191,10 +191,10 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
 
             if ($method === 'enable') {
                 foreach ($closures as $name => $closed) {
-                    $this->operator->authorize($scope, new ModuleRef($name), $method);
+                    $this->operator->authorize(scope: $scope, target: new ModuleRef($name), ability: $method);
 
                     if ($inner->status($name)->state === ModuleState::Enabled) {
-                        $this->control->reopenModule($scope, new ModuleRef($name), $closed);
+                        $this->control->reopenModule(scope: $scope, target: new ModuleRef($name), expected: $closed);
                     }
                 }
             }
@@ -238,7 +238,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         $saved = $args['targets'];
 
         if ($action === LifecycleAction::Disable) {
-            $live = $this->disableTargets($target->package, $args['cascade']);
+            $live = $this->disableTargets(module: $target->package, cascade: $args['cascade']);
             sort($live, SORT_STRING);
             sort($saved, SORT_STRING);
 
@@ -248,9 +248,9 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         }
         foreach ($saved as $name) {
             $member = new ModuleRef($name);
-            $this->operator->authorize($scope, $member, $action->value, $ref, $digest);
+            $this->operator->authorize(scope: $scope, target: $member, ability: $action->value, ref: $ref, digest: $digest);
 
-            if ($this->control->moduleClosure($scope, $member) !== $ref->id) {
+            if ($this->control->moduleClosure(scope: $scope, target: $member) !== $ref->id) {
                 throw new LifecycleBlocked('The original module closure was lost.');
             }
         }
@@ -259,22 +259,22 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     private function prepare(DataScope $scope, ModuleId $module, LifecycleAction $action, DisableReason $reason, bool $cascade): LifecyclePlan
     {
         $target = new ModuleRef($module->package);
-        $this->operator->authorize($scope, $target, $action->value);
+        $this->operator->authorize(scope: $scope, target: $target, ability: $action->value);
 
-        return $this->locked($scope, function () use ($scope, $module, $target, $action, $reason, $cascade): LifecyclePlan {
+        return $this->locked(scope: $scope, work: function () use ($scope, $module, $target, $action, $reason, $cascade): LifecyclePlan {
             $declaration = $this->registry->get($module->package);
             $state = $this->lifecycle()->status($module->package)->state;
 
             if ($action !== LifecycleAction::Disable && ! in_array($state, [ModuleState::Disabled, ModuleState::Archived], true)) {
                 throw new LifecycleBlocked('Detach and purge require a disabled or archived module.');
             }
-            $targets = $action === LifecycleAction::Disable ? $this->disableTargets($module->package, $cascade) : [$module->package];
+            $targets = $action === LifecycleAction::Disable ? $this->disableTargets(module: $module->package, cascade: $cascade) : [$module->package];
             foreach ($targets as $name) {
-                $this->operator->authorize($scope, new ModuleRef($name), $action->value);
+                $this->operator->authorize(scope: $scope, target: new ModuleRef($name), ability: $action->value);
             }
             $args = ['reason' => $reason->value, 'cascade' => $cascade, 'targets' => $targets];
-            $previous = $this->control->moduleClosure($scope, $target);
-            $prior = $previous === null ? null : $this->row($scope, new LifecyclePlanRef($previous));
+            $previous = $this->control->moduleClosure(scope: $scope, target: $target);
+            $prior = $previous === null ? null : $this->row(scope: $scope, ref: new LifecyclePlanRef($previous));
 
             if ($prior !== null && $prior->state !== 'done' && ($prior->module !== $module->package || $prior->action !== $action->value || self::hash($prior->arguments) !== self::hash($args))) {
                 throw new LifecycleBlocked('Another plan owns this module closure.');
@@ -283,7 +283,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             $query = $db->table(self::Table)->where($this->logical($scope))->where('module', $module->package);
 
             if ($prior !== null && $prior->state === 'done' && $prior->action === $action->value && self::hash($prior->arguments) === self::hash($args)) {
-                return new LifecyclePlan(new LifecyclePlanRef($prior->planId), $module, $action, new PlanDigest($prior->digest));
+                return new LifecyclePlan(ref: new LifecyclePlanRef($prior->planId), module: $module, action: $action, digest: new PlanDigest($prior->digest));
             }
             $generation = $previous ?? (clone $query)->where('state', 'done')->orderByDesc('plan_id')->value('plan_id');
             $request = self::hash([$scope->deploymentId, $scope->bindingId, $scope->bindingGeneration, $scope->restoreEpoch, $action, $args, $generation]);
@@ -300,63 +300,63 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             $ref = new LifecyclePlanRef($id);
             foreach ($args['targets'] as $name) {
                 $member = new ModuleRef($name);
-                $old = $this->control->moduleClosure($scope, $member);
+                $old = $this->control->moduleClosure(scope: $scope, target: $member);
 
-                if ($old !== null && $old !== $id && $this->row($scope, new LifecyclePlanRef($old))->state !== 'done') {
+                if ($old !== null && $old !== $id && $this->row(scope: $scope, ref: new LifecyclePlanRef($old))->state !== 'done') {
                     throw new LifecycleBlocked('A dependent module is fenced by another plan.');
                 }
-                $this->control->fenceModule($scope, $member, $id, $old);
+                $this->control->fenceModule(scope: $scope, target: $member, plan: $id, predecessor: $old);
             }
-            $record = $this->row($scope, $ref);
+            $record = $this->row(scope: $scope, ref: $ref);
 
             if (! $record->cleanupStarted && $record->receipts === [] && ! in_array($record->state, ['cleaning', 'packman-transition'], true)) {
-                $this->write($ref, ['state' => 'fenced']);
-                $scan = $this->scan($scope, $ref, $action, $args['targets']);
+                $this->write(ref: $ref, changes: ['state' => 'fenced']);
+                $scan = $this->scan(scope: $scope, ref: $ref, action: $action, targets: $args['targets']);
                 $digest = self::hash([$record->requestKey, $this->codec->encode($scope), $declaration->toArray(), $scan['inventory'], $scan['actions'], $args, $action]);
-                $this->write($ref, ['digest' => $digest, 'inventory' => self::encode($scan['inventory']), 'actions' => self::encode($scan['actions']),
+                $this->write(ref: $ref, changes: ['digest' => $digest, 'inventory' => self::encode($scan['inventory']), 'actions' => self::encode($scan['actions']),
                     'blockers' => self::encode($scan['blockers']), 'state' => $scan['blockers'] === [] ? 'fenced' : 'blocked']);
             }
 
-            return new LifecyclePlan($ref, $module, $action, new PlanDigest($this->row($scope, $ref)->digest));
+            return new LifecyclePlan(ref: $ref, module: $module, action: $action, digest: new PlanDigest($this->row(scope: $scope, ref: $ref)->digest));
         });
     }
 
     public function apply(DataScope $scope, LifecyclePlanRef $ref, PlanDigest $digest): LifecycleStatus
     {
-        $initial = $this->row($scope, $ref);
+        $initial = $this->row(scope: $scope, ref: $ref);
         $target = new ModuleRef($initial->module);
-        $this->operator->authorize($scope, $target, $initial->action, $ref, $digest);
-        $this->operator->authorize($scope, $target, 'inspect', $ref, $digest);
+        $this->operator->authorize(scope: $scope, target: $target, ability: $initial->action, ref: $ref, digest: $digest);
+        $this->operator->authorize(scope: $scope, target: $target, ability: 'inspect', ref: $ref, digest: $digest);
 
         if (! hash_equals($initial->digest, $digest->value)) {
             throw new LifecyclePlanConflict('Lifecycle plan digest changed.');
         }
 
-        return $this->locked($scope, function () use ($scope, $ref, $digest): LifecycleStatus {
-            $row = $this->row($scope, $ref);
+        return $this->locked(scope: $scope, work: function () use ($scope, $ref, $digest): LifecycleStatus {
+            $row = $this->row(scope: $scope, ref: $ref);
             $action = LifecycleAction::from($row->action);
             $target = new ModuleRef($row->module);
-            $this->operator->authorize($scope, $target, $action->value, $ref, $digest);
-            $this->operator->authorize($scope, $target, 'inspect', $ref, $digest);
+            $this->operator->authorize(scope: $scope, target: $target, ability: $action->value, ref: $ref, digest: $digest);
+            $this->operator->authorize(scope: $scope, target: $target, ability: 'inspect', ref: $ref, digest: $digest);
 
             if (! hash_equals($row->digest, $digest->value)) {
                 throw new LifecyclePlanConflict('Lifecycle plan digest changed.');
             }
 
             if ($row->state === 'done') {
-                $this->release($scope, $ref);
+                $this->release(scope: $scope, ref: $ref);
 
                 return $this->status($row);
             }
             $args = $row->arguments;
             $targets = $args['targets'];
-            $this->assertTargets($scope, $target, $action, $ref, $digest, $args);
-            $scan = $this->scan($scope, $ref, $action, $targets);
+            $this->assertTargets(scope: $scope, target: $target, action: $action, ref: $ref, digest: $digest, args: $args);
+            $scan = $this->scan(scope: $scope, ref: $ref, action: $action, targets: $targets);
 
             if ($scan['blockers'] !== []) {
-                $this->write($ref, ['state' => 'blocked', 'blockers' => self::encode($scan['blockers'])]);
+                $this->write(ref: $ref, changes: ['state' => 'blocked', 'blockers' => self::encode($scan['blockers'])]);
 
-                return $this->status($this->row($scope, $ref));
+                return $this->status($this->row(scope: $scope, ref: $ref));
             }
             $approved = $row->actions;
 
@@ -373,27 +373,27 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
 
             try {
                 if ($action === LifecycleAction::Purge) {
-                    $this->clean($scope, $ref, $digest, $target, $approved);
-                    $final = $this->scan($scope, $ref, $action, $targets);
+                    $this->clean(scope: $scope, ref: $ref, digest: $digest, target: $target, approved: $approved);
+                    $final = $this->scan(scope: $scope, ref: $ref, action: $action, targets: $targets);
 
                     if ($final['blockers'] !== []) {
-                        $this->write($ref, ['state' => 'blocked', 'blockers' => self::encode($final['blockers'])]);
+                        $this->write(ref: $ref, changes: ['state' => 'blocked', 'blockers' => self::encode($final['blockers'])]);
 
-                        return $this->status($this->row($scope, $ref));
+                        return $this->status($this->row(scope: $scope, ref: $ref));
                     }
 
                     if (self::hash($final['inventory']) !== self::hash($scan['inventory']) || array_diff_assoc(array_map(self::hash(...), $final['actions']), array_map(self::hash(...), $approved)) !== []) {
                         throw new LifecyclePlanConflict('The final owner inventory or cleanup identity changed.');
                     }
-                    $this->clean($scope, $ref, $digest, $target, $approved, verifyOnly: true);
+                    $this->clean(scope: $scope, ref: $ref, digest: $digest, target: $target, approved: $approved, verifyOnly: true);
                 }
-                $this->write($ref, ['state' => 'packman-transition', 'blockers' => '[]']);
-                $this->verifyLeases($scope, $ref);
+                $this->write(ref: $ref, changes: ['state' => 'packman-transition', 'blockers' => '[]']);
+                $this->verifyLeases(scope: $scope, ref: $ref);
                 $db = $this->owner($scope);
                 $db->transaction(function () use ($db, $scope, $target, $action, $ref, $digest, $args, &$confirmCommit): void {
-                    $this->current->assert($scope, $db);
+                    $this->current->assert(scope: $scope, connection: $db);
                     $confirmCommit = ($this->commitConfirmation)($scope, $db);
-                    $this->assertTargets($scope, $target, $action, $ref, $digest, $args);
+                    $this->assertTargets(scope: $scope, target: $target, action: $action, ref: $ref, digest: $digest, args: $args);
                     $keep = $action === LifecycleAction::Detach;
                     $executor = $this->app->make(self::class);
                     $executor->transition = $action === LifecycleAction::Disable
@@ -419,12 +419,12 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                         $result = $lifecycle->status($target->package)->state;
                         $changes = ['state' => 'done', 'transition_result' => $result->value];
 
-                        if ($tables !== [] && $result === ModuleState::Purged && $this->schemaNamespace($db) === $namespace && $this->relationsAbsent($db, $tables)) {
-                            $original = $this->row($scope, $ref);
+                        if ($tables !== [] && $result === ModuleState::Purged && $this->schemaNamespace($db) === $namespace && $this->relationsAbsent(db: $db, tables: $tables)) {
+                            $original = $this->row(scope: $scope, ref: $ref);
                             $changes['cursor'] = self::encode(['last_page' => $original->cursor, 'schema' => $namespace, 'dropped_tables' => $tables,
                                 'cleanup_digest' => self::hash([$original->actions, $original->receipts])]);
                         }
-                        $this->write($ref, $changes);
+                        $this->write(ref: $ref, changes: $changes);
                     } finally {
                         $executor->transition = null;
                     }
@@ -434,7 +434,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                 if ($this->owner($scope)->transactionLevel() !== 0) {
                     throw $error;
                 }
-                $checkpoint = $this->row($scope, $ref);
+                $checkpoint = $this->row(scope: $scope, ref: $ref);
 
                 if ($checkpoint->state === 'done' && hash_equals($checkpoint->digest, $digest->value)) {
                     $this->exceptions->report($error);
@@ -448,7 +448,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                     }
 
                     try {
-                        $this->release($scope, $ref);
+                        $this->release(scope: $scope, ref: $ref);
                     } catch (Throwable $releaseError) {
                         // The remaining leases stay journalled for same-digest replay.
                         $this->exceptions->report($releaseError);
@@ -461,14 +461,14 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                     throw $error;
                 }
                 $this->exceptions->report($error);
-                $blocker = $error instanceof UnavailableOwnerCheckpoint ? $error->blocker : new LifecycleBlocker($target->package, 'transition', $ref->id, $scope, 'reconcile-owner-checkpoint');
-                $this->write($ref, ['state' => 'blocked', 'blockers' => self::encode([$blocker])]);
+                $blocker = $error instanceof UnavailableOwnerCheckpoint ? $error->blocker : new LifecycleBlocker(owner: $target->package, resourceKind: 'transition', resourceId: $ref->id, scope: $scope, requiredAction: 'reconcile-owner-checkpoint');
+                $this->write(ref: $ref, changes: ['state' => 'blocked', 'blockers' => self::encode([$blocker])]);
 
-                return $this->status($this->row($scope, $ref));
+                return $this->status($this->row(scope: $scope, ref: $ref));
             }
-            $this->release($scope, $ref);
+            $this->release(scope: $scope, ref: $ref);
 
-            return $this->status($this->row($scope, $ref));
+            return $this->status($this->row(scope: $scope, ref: $ref));
         });
     }
 
@@ -500,33 +500,33 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             }
             foreach ($targets as $package) {
                 $target = new ModuleRef($package);
-                $outstanding = $this->control->outstandingReferences($scope, $target);
+                $outstanding = $this->control->outstandingReferences(scope: $scope, target: $target);
                 foreach ($outstanding as $ticket) {
-                    $blockers[] = new LifecycleBlocker($owner, 'admission-ticket', $ticket, $scope, 'drain-or-reconcile');
+                    $blockers[] = new LifecycleBlocker(owner: $owner, resourceKind: 'admission-ticket', resourceId: $ticket, scope: $scope, requiredAction: 'drain-or-reconcile');
                 }
 
                 if ($outstanding !== []) {
                     continue;
                 }
-                $directory[$package] = $host->revision($scope, $target);
-                $scopes = $host->scopes($scope, $target);
+                $directory[$package] = $host->revision(operator: $scope, target: $target);
+                $scopes = $host->scopes(operator: $scope, target: $target);
 
                 if ($scopes === [] || $directory[$package] === '') {
                     throw new LifecycleBlocked('Physical scope roster unavailable.');
                 }
                 $seen = [];
                 foreach ($scopes as $subject) {
-                    $this->samePhysical($scope, $subject);
+                    $this->samePhysical(expected: $scope, actual: $subject);
                     $scopeKey = $subject->workspaceId === null ? 'account' : 'workspace:'.$subject->workspaceId;
 
                     if (isset($seen[$scopeKey])) {
                         throw new LifecycleBlocked('Duplicate physical scope.');
                     }
                     $seen[$scopeKey] = true;
-                    $host->run($subject, function () use ($host, $target, $subject, $composition, $purges, $ref, $scopeKey, $action, &$owner, &$owners, &$revisions, &$quarantined, &$actions, &$blockers): void {
-                        $this->current->assert($subject, $this->database->connection());
+                    $host->run(scope: $subject, operation: function () use ($host, $target, $subject, $composition, $purges, $ref, $scopeKey, $action, &$owner, &$owners, &$revisions, &$quarantined, &$actions, &$blockers): void {
+                        $this->current->assert(scope: $subject, connection: $this->database->connection());
                         $probes = $this->probes();
-                        $external = $host->owners($subject, $target);
+                        $external = $host->owners(scope: $subject, target: $target);
                         $expected = array_unique([...$this->catalogue->expectedOwners($composition), ...$external, ...array_keys($probes)]);
                         sort($expected, SORT_STRING);
                         $owners[$target->package][$scopeKey] = $expected;
@@ -534,7 +534,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                             $owner = $probeOwner;
 
                             if (! isset($probes[$owner])) {
-                                $blockers[] = new LifecycleBlocker($owner, 'owner-inventory', $owner, $subject, 'install-or-restore-owner-probe');
+                                $blockers[] = new LifecycleBlocker(owner: $owner, resourceKind: 'owner-inventory', resourceId: $owner, scope: $subject, requiredAction: 'install-or-restore-owner-probe');
 
                                 continue;
                             }
@@ -546,7 +546,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                                 }
 
                                 if ($probe instanceof ReferenceExclusion) {
-                                    $this->hold($subject, $target, $ref, $probe, $owner);
+                                    $this->hold(subject: $subject, target: $target, ref: $ref, probe: $probe, owner: $owner);
                                 }
                                 $cursor = null;
                                 $revision = null;
@@ -601,12 +601,12 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                                     if ($cursor !== null) {
                                         $positions[$cursor->position] = true;
                                     }
-                                    $this->write($ref, ['cursor' => self::encode([$owner, $scopeKey, $target->package, $revision, $cursor])]);
+                                    $this->write(ref: $ref, changes: ['cursor' => self::encode([$owner, $scopeKey, $target->package, $revision, $cursor])]);
                                 } while ($cursor !== null);
                                 $revisions[$target->package][$scopeKey][$owner] = $revision;
                             } catch (Throwable $error) {
                                 $this->exceptions->report($error);
-                                $blockers[] = new LifecycleBlocker($owner, 'owner-inventory', $owner, $subject, 'restore-complete-fenced-inventory');
+                                $blockers[] = new LifecycleBlocker(owner: $owner, resourceKind: 'owner-inventory', resourceId: $owner, scope: $subject, requiredAction: 'restore-complete-fenced-inventory');
                             }
                         }
                     });
@@ -618,7 +618,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             }
         } catch (Throwable $error) {
             $this->exceptions->report($error);
-            $blockers[] = new LifecycleBlocker($owner, 'owner-inventory', $owner, $scope, 'restore-complete-fenced-inventory');
+            $blockers[] = new LifecycleBlocker(owner: $owner, resourceKind: 'owner-inventory', resourceId: $owner, scope: $scope, requiredAction: 'restore-complete-fenced-inventory');
         }
         ksort($actions, SORT_STRING);
 
@@ -650,17 +650,17 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         }
         $purges = [];
         foreach ($query->get(['module', 'plan_id']) as $record) {
-            $package = LifecycleCheckpoint::text(get_object_vars($record), 'module');
-            $id = LifecycleCheckpoint::text(get_object_vars($record), 'plan_id');
+            $package = LifecycleCheckpoint::text(values: get_object_vars($record), key: 'module');
+            $id = LifecycleCheckpoint::text(values: get_object_vars($record), key: 'plan_id');
 
-            if ($this->control->moduleClosure($scope, new ModuleRef($package)) !== $id) {
+            if ($this->control->moduleClosure(scope: $scope, target: new ModuleRef($package)) !== $id) {
                 continue;
             }
 
             try {
                 $lifecycle = $this->lifecycle();
                 $purged = $owner === null
-                    ? $this->confirmNativePurge($scope, new LifecyclePlanRef($id), $lifecycle)
+                    ? $this->confirmNativePurge(scope: $scope, ref: new LifecyclePlanRef($id), lifecycle: $lifecycle)
                     : $lifecycle->status($package)->state === ModuleState::Purged;
 
                 if ($purged) {
@@ -679,7 +679,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         if ($scope->workspaceId !== null || $this->verifyLock === null) {
             throw new LifecycleBlocked('Purge provenance requires the locked account frame.');
         }
-        $package = $this->row($scope, $ref)->module;
+        $package = $this->row(scope: $scope, ref: $ref)->module;
         $frame = $this->app->make(LifecycleFrame::class);
         $this->transition = [$package, 'purge-status', []];
         $frame->purgeWitness = $this;
@@ -695,24 +695,24 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     /** @param list<string> $tables */
     public function droppedSchema(DataScope $scope, string $owner, array $tables, Connection $db): string
     {
-        $purges = $this->app->make(LifecycleFrame::class)->purges ?? $this->nativePurges($scope, $owner);
+        $purges = $this->app->make(LifecycleFrame::class)->purges ?? $this->nativePurges(scope: $scope, owner: $owner);
         $id = $purges[$owner] ?? null;
 
-        if ($id === null || $this->owner($scope) !== $db || $this->control->moduleClosure($scope, new ModuleRef($owner)) !== $id) {
+        if ($id === null || $this->owner($scope) !== $db || $this->control->moduleClosure(scope: $scope, target: new ModuleRef($owner)) !== $id) {
             throw new LifecycleBlocked('No current native purge for this physical reference owner.');
         }
-        $row = $this->row($scope, new LifecyclePlanRef($id));
+        $row = $this->row(scope: $scope, ref: new LifecyclePlanRef($id));
 
         if ($row->module !== $owner || $row->action !== 'purge' || $row->state !== 'done' || $row->transitionResult !== ModuleState::Purged->value
             || $row->arguments['targets'] !== [$owner] || ($row->cursor['schema'] ?? null) !== $this->schemaNamespace($db)
-            || ($row->cursor['dropped_tables'] ?? null) !== $tables || ! $this->relationsAbsent($db, $tables)
+            || ($row->cursor['dropped_tables'] ?? null) !== $tables || ! $this->relationsAbsent(db: $db, tables: $tables)
             || ($row->cursor['cleanup_digest'] ?? null) !== self::hash([$row->actions, $row->receipts])
             || count($row->receipts) !== count($row->actions)) {
             throw new LifecycleBlocked('Physical schema differs from the committed module purge.');
         }
         foreach ($row->actions as $key => $approved) {
             $receipt = LifecycleCheckpoint::map($row->receipts[$key] ?? null);
-            LifecycleCheckpoint::text($receipt, 'evidence');
+            LifecycleCheckpoint::text(values: $receipt, key: 'evidence');
 
             $original = LifecycleCheckpoint::cleanupAction(LifecycleCheckpoint::map($approved)['action'] ?? null);
             $confirmed = LifecycleCheckpoint::cleanupAction($receipt['action'] ?? null);
@@ -771,31 +771,31 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
 
     private function hold(DataScope $subject, ModuleRef $target, LifecyclePlanRef $ref, ReferenceExclusion $probe, string $owner): void
     {
-        $row = $this->row($subject, $ref);
+        $row = $this->row(scope: $subject, ref: $ref);
         $leases = $row->leases;
         $key = self::hash([$target->package, $subject->accountId, $subject->workspaceId, $owner]);
         $old = isset($leases[$key]) ? LifecycleCheckpoint::lease(LifecycleCheckpoint::map($leases[$key])['lease'] ?? null) : null;
-        $lease = $probe->hold($subject, $target, $ref, $old);
+        $lease = $probe->hold(scope: $subject, module: $target, plan: $ref, previous: $old);
 
         if ($lease->owner !== $owner || $lease->namespace === '' || $lease->token === '' || $lease->revision === ''
             || ($old !== null && ($old->namespace !== $lease->namespace || $old->revision !== $lease->revision))) {
             throw new LifecycleBlocked('External exclusion changed.');
         }
-        $probe->verify($subject, $lease);
+        $probe->verify(scope: $subject, lease: $lease);
         $leases[$key] = ['scope' => $this->codec->encode($subject), 'lease' => get_object_vars($lease)];
-        $this->write($ref, ['leases' => self::encode($leases)]);
+        $this->write(ref: $ref, changes: ['leases' => self::encode($leases)]);
     }
 
     private function verifyLeases(DataScope $scope, LifecyclePlanRef $ref, bool $release = false): void
     {
-        $leases = $this->row($scope, $ref)->leases;
+        $leases = $this->row(scope: $scope, ref: $ref)->leases;
         foreach ($leases as $key => $saved) {
             $saved = LifecycleCheckpoint::map($saved);
             $subject = $this->codec->decode(LifecycleCheckpoint::map($saved['scope'] ?? null));
             $lease = LifecycleCheckpoint::lease($saved['lease'] ?? null);
 
             try {
-                $this->inventory()->run($subject, function () use ($subject, $lease, $release): void {
+                $this->inventory()->run(scope: $subject, operation: function () use ($subject, $lease, $release): void {
                     $probe = $this->probes()[$lease->owner] ?? null;
 
                     if (! $probe instanceof ReferenceExclusion) {
@@ -812,36 +812,36 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             } catch (AuthorizationException|LifecyclePlanConflict $error) {
                 throw $error;
             } catch (Throwable $error) {
-                throw new UnavailableOwnerCheckpoint(new LifecycleBlocker($lease->owner, 'owner-lease', $lease->namespace, $subject, 'restore-original-owner-exclusion'), $error);
+                throw new UnavailableOwnerCheckpoint(blocker: new LifecycleBlocker(owner: $lease->owner, resourceKind: 'owner-lease', resourceId: $lease->namespace, scope: $subject, requiredAction: 'restore-original-owner-exclusion'), cause: $error);
             }
 
             if ($release) {
                 unset($leases[$key]);
-                $this->write($ref, ['leases' => self::encode($leases)]);
+                $this->write(ref: $ref, changes: ['leases' => self::encode($leases)]);
             }
         }
     }
 
     private function release(DataScope $scope, LifecyclePlanRef $ref): void
     {
-        $this->verifyLeases($scope, $ref, true);
+        $this->verifyLeases(scope: $scope, ref: $ref, release: true);
     }
 
     /** @param array<string,mixed> $approved */
     private function clean(DataScope $scope, LifecyclePlanRef $ref, PlanDigest $digest, ModuleRef $target, array $approved, bool $verifyOnly = false): void
     {
         if (! $verifyOnly && $approved !== []) {
-            $this->write($ref, ['state' => 'cleaning', 'cleanup_started' => true]);
+            $this->write(ref: $ref, changes: ['state' => 'cleaning', 'cleanup_started' => true]);
         }
-        $receipts = $this->row($scope, $ref)->receipts;
+        $receipts = $this->row(scope: $scope, ref: $ref)->receipts;
         foreach ($approved as $key => $entry) {
-            $this->operator->authorize($scope, $target, 'purge', $ref, $digest);
-            $this->verifyLeases($scope, $ref);
+            $this->operator->authorize(scope: $scope, target: $target, ability: 'purge', ref: $ref, digest: $digest);
+            $this->verifyLeases(scope: $scope, ref: $ref);
             $entry = LifecycleCheckpoint::map($entry);
             $subject = $this->codec->decode(LifecycleCheckpoint::map($entry['scope'] ?? null));
             $item = LifecycleCheckpoint::cleanupAction($entry['action'] ?? null);
             $leases = [];
-            foreach ($this->row($scope, $ref)->leases as $saved) {
+            foreach ($this->row(scope: $scope, ref: $ref)->leases as $saved) {
                 $saved = LifecycleCheckpoint::map($saved);
                 $held = $this->codec->decode(LifecycleCheckpoint::map($saved['scope'] ?? null));
 
@@ -852,7 +852,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             }
 
             try {
-                $receipt = $this->inventory()->run($subject, function () use ($subject, $item, $receipts, $key, $leases, $verifyOnly): CleanupReceipt {
+                $receipt = $this->inventory()->run(scope: $subject, operation: function () use ($subject, $item, $receipts, $key, $leases, $verifyOnly): CleanupReceipt {
                     $probe = $this->probes()[$item->owner] ?? null;
 
                     if (! $probe instanceof ReferenceCleanup) {
@@ -866,7 +866,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
                     try {
                         $receipt = $probe->lookup($subject, $item);
 
-                        if (isset($receipts[$key]) && ($receipt === null || $receipt->evidence !== LifecycleCheckpoint::text(LifecycleCheckpoint::map($receipts[$key]), 'evidence'))) {
+                        if (isset($receipts[$key]) && ($receipt === null || $receipt->evidence !== LifecycleCheckpoint::text(values: LifecycleCheckpoint::map($receipts[$key]), key: 'evidence'))) {
                             throw new LifecycleBlocked('Previously recorded cleanup receipt unavailable.');
                         }
 
@@ -892,10 +892,10 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
             } catch (AuthorizationException|LifecyclePlanConflict $error) {
                 throw $error;
             } catch (Throwable $error) {
-                throw new UnavailableOwnerCheckpoint(new LifecycleBlocker($item->owner, $item->resourceKind, $item->resourceId, $subject, 'reconcile-original-cleanup-receipt'), $error);
+                throw new UnavailableOwnerCheckpoint(blocker: new LifecycleBlocker(owner: $item->owner, resourceKind: $item->resourceKind, resourceId: $item->resourceId, scope: $subject, requiredAction: 'reconcile-original-cleanup-receipt'), cause: $error);
             }
             $receipts[$key] = ['action' => get_object_vars($item), 'evidence' => $receipt->evidence];
-            $this->write($ref, ['receipts' => self::encode($receipts)]);
+            $this->write(ref: $ref, changes: ['receipts' => self::encode($receipts)]);
         }
     }
 
@@ -920,7 +920,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
 
         $this->owner($scope);
 
-        return $this->control->withLifecycleLock($scope, function (Closure $verify) use ($work): mixed {
+        return $this->control->withLifecycleLock(scope: $scope, work: function (Closure $verify) use ($work): mixed {
             $this->verifyLock = $verify;
 
             try {
@@ -941,7 +941,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         if ($db->getDriverName() !== 'pgsql' || $db !== $this->database->connection($this->packmanConnection)) {
             throw new LifecycleBlocked('Lifecycle requires the verified PostgreSQL owner.');
         }
-        $this->current->assert($scope, $db);
+        $this->current->assert(scope: $scope, connection: $db);
 
         return $db;
     }
@@ -964,7 +964,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         $row = $db->table(self::Table)->useWritePdo()->where($this->logical($scope))->where('plan_id', $ref->id)->first()
             ?? throw new LifecycleBlocked('Lifecycle plan unavailable.');
         $checkpoint = new LifecycleCheckpoint($row);
-        $this->samePhysical($scope, $this->codec->decode($checkpoint->scope));
+        $this->samePhysical(expected: $scope, actual: $this->codec->decode($checkpoint->scope));
 
         return $checkpoint;
     }
@@ -973,7 +973,7 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     private function write(LifecyclePlanRef $ref, array $changes): void
     {
         $scope = $this->operator->current();
-        $this->row($scope, $ref);
+        $this->row(scope: $scope, ref: $ref);
 
         if ($this->owner($scope)->table(self::Table)->where($this->logical($scope))->where('plan_id', $ref->id)->update([...$changes, 'updated_at' => $this->clock->now()]) !== 1) {
             throw new LifecycleBlocked('Lifecycle checkpoint unavailable.');
@@ -985,15 +985,15 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
         $blockers = [];
         foreach ($row->blockers as $b) {
             $b = LifecycleCheckpoint::map($b);
-            $blockers[] = new LifecycleBlocker(LifecycleCheckpoint::text($b, 'owner'), LifecycleCheckpoint::text($b, 'resource_kind'), LifecycleCheckpoint::text($b, 'resource_id'), LifecycleCheckpoint::blockerScope($b['scope'] ?? null), LifecycleCheckpoint::text($b, 'required_action'));
+            $blockers[] = new LifecycleBlocker(owner: LifecycleCheckpoint::text(values: $b, key: 'owner'), resourceKind: LifecycleCheckpoint::text(values: $b, key: 'resource_kind'), resourceId: LifecycleCheckpoint::text(values: $b, key: 'resource_id'), scope: LifecycleCheckpoint::blockerScope($b['scope'] ?? null), requiredAction: LifecycleCheckpoint::text(values: $b, key: 'required_action'));
         }
         $receipts = [];
         foreach ($row->receipts as $r) {
             $r = LifecycleCheckpoint::map($r);
-            $receipts[] = new CleanupReceipt(LifecycleCheckpoint::cleanupAction($r['action'] ?? null), LifecycleCheckpoint::text($r, 'evidence'));
+            $receipts[] = new CleanupReceipt(action: LifecycleCheckpoint::cleanupAction($r['action'] ?? null), evidence: LifecycleCheckpoint::text(values: $r, key: 'evidence'));
         }
 
-        return new LifecycleStatus(new LifecyclePlanRef($row->planId), LifecyclePhase::from($row->state), new PlanDigest($row->digest), $blockers, $receipts, $row->transitionResult);
+        return new LifecycleStatus(ref: new LifecyclePlanRef($row->planId), phase: LifecyclePhase::from($row->state), digest: new PlanDigest($row->digest), blockers: $blockers, receipts: $receipts, transitionResult: $row->transitionResult);
     }
 
     /** @return array<mixed> */

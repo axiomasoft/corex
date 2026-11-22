@@ -48,10 +48,10 @@ final readonly class WebhookFanout
     {
         $scope = $message->scope;
         $this->connection->transaction(function () use ($message, $scope): void {
-            $this->current->assert($scope, $this->connection);
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'webhook-fanout', ['contract' => $message->name, 'source' => $message->source]);
+            $this->current->assert(scope: $scope, connection: $this->connection);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-webhooks', kind: 'webhook-fanout', witness: ['contract' => $message->name, 'source' => $message->source]);
 
-            if (! $this->inbox->claim($this->connection, new ConsumerId(self::Consumer, 1), $message)) {
+            if (! $this->inbox->claim(connection: $this->connection, consumer: new ConsumerId(name: self::Consumer, version: 1), message: $message)) {
                 return;
             }
 
@@ -80,14 +80,14 @@ final readonly class WebhookFanout
             $now = $this->clock->now();
 
             foreach ($rows as $row) {
-                $subscription = DatabaseValue::text(DatabaseValue::field($row, 'id'));
-                $revision = DatabaseValue::integer(DatabaseValue::field($row, 'revision'));
-                $endpoint = DatabaseValue::text(DatabaseValue::field($row, 'endpoint_url'));
-                $key = WebhookWork::key($scope, $subscription, $message->source, $message->messageId, 'original');
+                $subscription = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
+                $revision = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'revision'));
+                $endpoint = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'endpoint_url'));
+                $key = WebhookWork::key(scope: $scope, subscription: $subscription, source: $message->source, event: $message->messageId, replay: 'original');
                 $id = substr($key, 0, 32);
                 $bodyHash = hash('sha256', $body);
-                $digest = WebhookWork::digest($endpoint, $bodyHash, $topic->name, $topic->version, $revision, $topic->major);
-                $proof = $this->issuer->issue($scope, WebhookWork::Owner, WebhookWork::reference($id, $key, $digest));
+                $digest = WebhookWork::digest(endpoint: $endpoint, bodyHash: $bodyHash, topic: $topic->name, version: $topic->version, subscriptionRevision: $revision, major: $topic->major);
+                $proof = $this->issuer->issue(scope: $scope, owner: WebhookWork::Owner, reference: WebhookWork::reference(id: $id, key: $key, digest: $digest));
                 $this->connection->table('sys_api_webhook_deliveries')->insert([
                     ...WebhookDeliveryScope::logical($scope),
                     ...WebhookDeliveryScope::fence($scope),

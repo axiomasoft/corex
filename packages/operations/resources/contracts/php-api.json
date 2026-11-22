@@ -193,6 +193,54 @@
             "enum_cases": [],
             "spi_kind": "implement"
         },
+        "CoreX\\Operations\\Authorization\\Contracts\\OperationResourceAuthorizer": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "authorize": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "invocation",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "outcome",
+                            "type": "?CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
         "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver": {
             "kind": "interface",
             "layer": "spi",
@@ -479,6 +527,54 @@
             "enum_backing": null,
             "enum_cases": [],
             "spi_kind": "call"
+        },
+        "CoreX\\Operations\\Bulk\\Contracts\\BulkDraftFactory": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "create": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "invocation",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Operations\\Bulk\\Contracts\\BulkExecutor": {
             "kind": "interface",
@@ -827,6 +923,54 @@
                         }
                     ],
                     "return": "?CoreX\\Data\\Data\\JsonDocument",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\Operations\\Bulk\\Contracts\\BulkTargetResolver": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "operationId": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "input",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "string",
                     "doc": []
                 }
             },
@@ -1966,6 +2110,35 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
+        "CoreX\\Operations\\Bulk\\Laravel\\BulkOperationDeclarations": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "all": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "array",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
         "CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser": {
             "kind": "class",
             "layer": "spi",
@@ -2017,6 +2190,26 @@
             "uses": [],
             "doc": [],
             "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "dispatcher",
+                            "type": "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
                 "cancel": {
                     "visibility": "public",
                     "static": false,
@@ -2024,6 +2217,15 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
                         {
                             "name": "id",
                             "type": "string",
@@ -2034,7 +2236,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "mixed",
+                    "return": "Illuminate\\Http\\JsonResponse",
                     "doc": []
                 },
                 "failures": {
@@ -2045,6 +2247,15 @@
                     "by_reference": false,
                     "parameters": [
                         {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
                             "name": "id",
                             "type": "string",
                             "by_reference": false,
@@ -2054,7 +2265,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "mixed",
+                    "return": "Illuminate\\Http\\JsonResponse",
                     "doc": []
                 },
                 "register": {
@@ -2085,25 +2296,14 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "id",
-                            "type": "string",
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
                             "default": null,
                             "flags": 0
-                        }
-                    ],
-                    "return": "mixed",
-                    "doc": []
-                },
-                "show": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
+                        },
                         {
                             "name": "id",
                             "type": "string",
@@ -2114,7 +2314,36 @@
                             "flags": 0
                         }
                     ],
-                    "return": "mixed",
+                    "return": "Illuminate\\Http\\JsonResponse",
+                    "doc": []
+                },
+                "show": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Illuminate\\Http\\JsonResponse",
                     "doc": []
                 },
                 "submit": {
@@ -2123,8 +2352,18 @@
                     "final": false,
                     "abstract": false,
                     "by_reference": false,
-                    "parameters": [],
-                    "return": "mixed",
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Illuminate\\Http\\JsonResponse",
                     "doc": []
                 }
             },
@@ -2143,6 +2382,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
+                "CoreX\\Operations\\Invocation\\Contracts\\OperationAcceptance",
                 "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
@@ -2211,6 +2451,35 @@
                         }
                     ],
                     "return": null,
+                    "doc": []
+                },
+                "acceptance": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "result",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
                     "doc": []
                 },
                 "clear": {
@@ -2315,7 +2584,36 @@
                             "flags": 0
                         }
                     ],
-                    "return": "void",
+                    "return": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
+                    "doc": []
+                },
+                "release": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "invocation",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "accepted",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
                     "doc": []
                 }
             },
@@ -2422,35 +2720,6 @@
                         }
                     ],
                     "return": "void",
-                    "doc": []
-                },
-                "replay": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "invocation",
-                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "result",
-                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationResult",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "CoreX\\Operations\\Invocation\\Data\\OperationResult",
                     "doc": []
                 }
             },
@@ -4685,6 +4954,142 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Operations\\Errors\\Laravel\\OperationErrorBoundary": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "serializer",
+                            "type": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "errors",
+                            "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "handle": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "next",
+                            "type": "Closure",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "mixed",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
+        "CoreX\\Operations\\Errors\\Laravel\\ProblemProjection": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "problems",
+                            "type": "Packman\\Errors\\Contracts\\ProblemRegistry",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "document": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "error",
+                            "type": "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "array",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
         "CoreX\\Operations\\Idempotency\\Contracts\\IdempotencyStore": {
             "kind": "interface",
             "layer": "spi",
@@ -5218,6 +5623,15 @@
                             "optional": true,
                             "default": "null",
                             "flags": 0
+                        },
+                        {
+                            "name": "accepted",
+                            "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
                         }
                     ],
                     "return": "self",
@@ -5225,6 +5639,16 @@
                 }
             },
             "properties": {
+                "accepted": {
+                    "flags": 1,
+                    "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                },
                 "budgetReceipt": {
                     "flags": 1,
                     "type": "?CoreX\\Operations\\Cost\\Data\\BudgetReceipt",
@@ -5360,6 +5784,37 @@
                 }
             ]
         },
+        "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "CoreX\\Invocation\\Contracts\\RequestContext"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "clientId": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "string",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
         "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver": {
             "kind": "interface",
             "layer": "spi",
@@ -5466,10 +5921,10 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
-        "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher": {
+        "CoreX\\Operations\\Invocation\\Contracts\\OperationAcceptance": {
             "kind": "interface",
             "layer": "spi",
-            "since": "1.0",
+            "since": "2.0.0",
             "final": false,
             "readonly": false,
             "abstract": false,
@@ -5478,7 +5933,7 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "dispatch": {
+                "acceptance": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -5486,8 +5941,8 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "request",
-                            "type": "Illuminate\\Http\\Request",
+                            "name": "context",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -5495,17 +5950,8 @@
                             "flags": 0
                         },
                         {
-                            "name": "version",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "path",
-                            "type": "string",
+                            "name": "result",
+                            "type": "array",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -5513,7 +5959,46 @@
                             "flags": 0
                         }
                     ],
-                    "return": "Illuminate\\Http\\JsonResponse",
+                    "return": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\Operations\\Invocation\\Contracts\\OperationInputAdmission": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "assertInput": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "invocation",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
                     "doc": []
                 }
             },
@@ -5638,6 +6123,53 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
+        "CoreX\\Operations\\Invocation\\Data\\AcceptedOperation": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "operationRef",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "statusUri",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Operations\\Invocation\\Data\\OperationInvocation": {
             "kind": "class",
             "layer": "api",
@@ -5710,6 +6242,15 @@
                             "optional": true,
                             "default": "null",
                             "flags": 1
+                        },
+                        {
+                            "name": "bulk",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -5765,6 +6306,24 @@
                             "variadic": false,
                             "optional": true,
                             "default": "new \\CoreX\\Data\\Data\\JsonDocument('[]')",
+                            "flags": 1
+                        },
+                        {
+                            "name": "accepted",
+                            "type": "?CoreX\\Operations\\Invocation\\Data\\AcceptedOperation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
+                        },
+                        {
+                            "name": "privateWitness",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
                             "flags": 1
                         }
                     ],
@@ -5823,6 +6382,112 @@
                     "value": "'json-object'"
                 }
             ]
+        },
+        "CoreX\\Operations\\Invocation\\Laravel\\AuthenticatedOperationContext": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "principals",
+                            "type": "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "contexts",
+                            "type": "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "forOperation": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "operation",
+                            "type": "CoreX\\Operations\\Definition\\Data\\Operation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext",
+                    "doc": []
+                },
+                "resolve": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "metadata",
+                            "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Invocation\\Contracts\\ClientRequestContext",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory": {
             "kind": "class",
@@ -6114,6 +6779,63 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "Illuminate\\Database\\Connection",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
+        "CoreX\\Operations\\Laravel\\Contracts\\HttpOperationDispatcher": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "dispatch": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "version",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Illuminate\\Http\\JsonResponse",
                     "doc": []
                 }
             },
@@ -6771,9 +7493,143 @@
                     "return": "self",
                     "doc": []
                 },
+                "publicBaseUri": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "string",
+                    "doc": []
+                },
                 "publicProjection": {
                     "visibility": "public",
                     "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "array",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
+        "CoreX\\Operations\\Metadata\\Contracts\\EntityMetadata": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "describe": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "entity",
+                            "type": "CoreX\\Data\\Data\\EntityHandle",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Metadata\\Data\\MetadataView",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\Operations\\Metadata\\Data\\MetadataView": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "body",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "witness",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Operations\\Metadata\\Laravel\\MetadataOperationDeclarations": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "all": {
+                    "visibility": "public",
+                    "static": true,
                     "final": false,
                     "abstract": false,
                     "by_reference": false,

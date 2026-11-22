@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Feature;
 
+use Closure;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
@@ -23,8 +27,8 @@ use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Tools\Internal\DenyToolPolicy;
-use CoreX\Tools\Internal\McpToolsProjection;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
+use CoreX\Tools\Mcp\Laravel\McpToolEndpoint;
 use CoreX\Tools\Tests\Support\ArchiveToolModule;
 use CoreX\Tools\Tests\Support\AssertsRegisteredToolErrors;
 use CoreX\Tools\Tests\Support\CountingHandler;
@@ -34,6 +38,7 @@ use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
 use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -211,36 +216,33 @@ final class InstalledToolContractTest extends TestCase
         $this->assertToolError(ToolsErrorCode::ApprovalInvalid, $foreign->errorCode);
     }
 
-    public function test_direct_and_mcp_projection_share_descriptor_and_result_semantics_inst_03(): void
+    public function test_direct_and_mounted_mcp_share_descriptor_and_result_semantics_inst_03(): void
     {
         $this->bindArchiveModule();
         $this->policy->allowDiscover = true;
         $this->policy->allowInvoke = true;
         $this->app->instance(ToolExecutionGuard::class, new ReadOnlyToolExecutionGuard);
-        $this->app->forgetInstance(ToolInvoker::class);
-        $this->app->forgetInstance(ToolCatalogue::class);
+        $this->app->instance(PrincipalResolver::class, $this->identity);
+        $this->app->instance(TenantContextResolver::class, $this->tenants);
+        $this->app->instance(TenancyManager::class, $this->tenants);
+        Route::post('/mcp', McpToolEndpoint::class)->middleware(ArchiveMcpCredential::class);
 
-        $context = $this->context();
         $descriptor = $this->archiveDescriptor('files.read_retained');
-        $invoker = $this->app->make(ToolInvoker::class);
-        $projection = new McpToolsProjection(
-            $this->app->make(ToolCatalogue::class),
-            $invoker,
-        );
-
-        $listed = $projection->listTools($context);
-        self::assertSame(McpToolsProjection::PROFILE, $listed['profile']);
-        self::assertSame(McpToolsProjection::PROTOCOL_VERSION, $listed['protocol']);
+        $rpc = ['jsonrpc' => '2.0', 'id' => 1];
+        $headers = ['Authorization' => 'Bearer archive-fixture'];
+        $this->postJson('/mcp', [...$rpc, 'method' => 'initialize'], $headers)
+            ->assertOk()->assertJsonPath('result.protocolVersion', '2025-11-25');
+        $listed = $this->postJson('/mcp', [...$rpc, 'method' => 'tools/list'], $headers)->assertOk();
         $entry = array_values(array_filter(
-            $listed['tools'],
+            $listed->json('result.tools'),
             static fn (array $tool): bool => ($tool['canonicalCode'] ?? '') === 'files.read_retained',
         ))[0];
         self::assertSame($descriptor->wireName, $entry['name']);
         self::assertSame($descriptor->contractHash, $entry['contractHash']);
         self::assertTrue($entry['annotations']['readOnlyHint']);
 
-        $direct = $invoker->invoke(
-            $context,
+        $direct = $this->app->make(ToolInvoker::class)->invoke(
+            $this->context(),
             new ToolCall(
                 code: $descriptor->code,
                 toolVersion: $descriptor->toolVersion,
@@ -249,36 +251,18 @@ final class InstalledToolContractTest extends TestCase
                 requestId: 'req-parity',
             ),
         );
-        $mcp = $projection->callTool(
-            context: $context,
-            wireName: $descriptor->wireName,
-            arguments: ['name' => 'parity'],
-            requestId: 'req-parity',
-        );
+        $call = [...$rpc, 'method' => 'tools/call'];
+        $mcp = $this->postJson('/mcp', [...$call, 'params' => ['name' => $descriptor->wireName, 'arguments' => ['name' => 'parity']]], $headers)
+            ->assertOk()->assertJsonPath('result.isError', false);
+        self::assertSame(JsonCanonical::decodeObject($direct->structuredData?->canonicalJson ?? '{}'), $mcp->json('result.structuredContent'));
 
-        self::assertFalse($mcp['isError']);
-        self::assertSame(
-            JsonCanonical::decodeObject($direct->structuredData?->canonicalJson ?? '{}'),
-            $mcp['structuredContent'],
-        );
+        $this->postJson('/mcp', [...$call, 'params' => ['name' => 'files_read_retained__v999', 'arguments' => ['name' => 'missing']]], $headers)
+            ->assertOk()->assertJsonPath('error.code', -32602);
 
-        $invalid = $projection->callTool(
-            context: $context,
-            wireName: 'files_read_retained__v999',
-            arguments: ['name' => 'missing'],
-            requestId: 'req-missing',
-        );
-        self::assertSame(-32602, $invalid['error']['code']);
-
-        $this->app->forgetInstance(ToolInvoker::class);
-        $badInput = $projection->callTool(
-            context: $context,
-            wireName: $descriptor->wireName,
-            arguments: ['name' => 1],
-            requestId: 'req-bad-input',
-        );
-        self::assertTrue($badInput['isError']);
-        self::assertSame(ToolsErrorCode::InputInvalid->value, $badInput['structuredContent']['errorCode']);
+        $this->postJson('/mcp', [...$call, 'params' => ['name' => $descriptor->wireName, 'arguments' => ['name' => 1]]], $headers)
+            ->assertOk()->assertJsonPath('result.isError', true)
+            ->assertJsonPath('result.structuredContent.code', ToolsErrorCode::InputInvalid->value)
+            ->assertJsonPath('result.structuredContent.status', 422);
     }
 
     public function test_tool_provider_mounts_no_routes_and_rejects_unknown_or_unguarded_mutations_inst_04(): void
@@ -373,5 +357,17 @@ final class InstalledToolContractTest extends TestCase
         );
         self::assertContains('locale.format', $labCodes);
         self::assertNotContains('files.read_retained', $labCodes);
+    }
+}
+
+final class ArchiveMcpCredential
+{
+    public function handle(Request $request, Closure $next): mixed
+    {
+        if ($request->bearerToken() === 'archive-fixture') {
+            $request->attributes->set('corex.client_id', 'archive-client');
+        }
+
+        return $next($request);
     }
 }

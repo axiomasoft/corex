@@ -35,9 +35,9 @@ final readonly class IntlModuleReferences implements ModuleTableReferences
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             'corex_rate_snapshots' => [$tenant, ['source', 'publication_revision']],
             'corex_rate_batches' => [$tenant, ['generation', 'state']],
             'corex_rate_current' => [$tenant, ['source', 'generation']],
@@ -45,6 +45,6 @@ final readonly class IntlModuleReferences implements ModuleTableReferences
             'corex_reference_records' => [$tenant, ['provenance', 'kind', 'namespace']],
             'corex_reference_aliases' => [$tenant, ['namespace']],
             'corex_reference_current' => [$tenant, ['generation']],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 }

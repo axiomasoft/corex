@@ -56,12 +56,12 @@ final readonly class MoveTaskToStage implements MoveTaskToStageCommand
 
     private function move(MoveTaskToStageData $data, TenantContext $context, Connection $connection): TaskReference
     {
-        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-move', ['task' => $data->taskId]);
+        ReferenceWrites::enlist(connection: $connection, scope: ReferenceWrites::current(), producer: 'axiomasoft/corex-tasks', kind: 'task-move', witness: ['task' => $data->taskId]);
         $connectionName = $connection->getName();
 
-        $scope = $this->completion->scope($context, $connection);
+        $scope = $this->completion->scope(context: $context, connection: $connection);
         $this->access->authorizeMove(data: $data, context: $context);
-        $task = $this->completion->lockTask($data->taskId, $scope, $connection);
+        $task = $this->completion->lockTask(taskId: $data->taskId, scope: $scope, connection: $connection);
 
         /** @var Stage|null $stage */
         $stage = Stage::on($connectionName)->find($data->stageId);

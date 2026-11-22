@@ -20,9 +20,9 @@ final readonly class HostProviderRemoval implements ProviderRemovalGate
 
     public function prepare(ModuleRef $provider, PlanDigest $installed, PlanDigest $proposed): RemovalApproval
     {
-        $this->operator->authorize($this->operator->current(), $provider, 'remove-provider', digest: $proposed);
+        $this->operator->authorize(scope: $this->operator->current(), target: $provider, ability: 'remove-provider', digest: $proposed);
         $host = $this->host();
-        $revision = $host->freeze($provider, $installed, $proposed);
+        $revision = $host->freeze(provider: $provider, installed: $installed, proposed: $proposed);
         $owners = $host->owners($revision);
 
         if ($revision === '' || $owners === [] || count(array_unique($owners)) !== count($owners)) {
@@ -31,16 +31,16 @@ final readonly class HostProviderRemoval implements ProviderRemovalGate
         sort($owners, SORT_STRING);
         $receipts = [];
         foreach ($owners as $owner) {
-            $this->operator->authorize($this->operator->current(), $provider, 'remove-provider', digest: $proposed);
-            $receipt = $host->certify($revision, $owner, $provider);
+            $this->operator->authorize(scope: $this->operator->current(), target: $provider, ability: 'remove-provider', digest: $proposed);
+            $receipt = $host->certify(revision: $revision, owner: $owner, provider: $provider);
 
             if ($owner === '' || $receipt === '') {
                 throw new LifecycleBlocked('Missing physical owner receipt.');
             }
             $receipts[$owner] = $receipt;
         }
-        $this->operator->authorize($this->operator->current(), $provider, 'remove-provider', digest: $proposed);
-        $approval = $host->seal($revision, $provider, $installed, $proposed, $receipts);
+        $this->operator->authorize(scope: $this->operator->current(), target: $provider, ability: 'remove-provider', digest: $proposed);
+        $approval = $host->seal(revision: $revision, provider: $provider, installed: $installed, proposed: $proposed, receipts: $receipts);
 
         if ($approval->provider->package !== $provider->package || $approval->installed->value !== $installed->value || $approval->proposed->value !== $proposed->value || $approval->receipt === '') {
             throw new LifecycleBlocked('Deployment receipt does not cover the requested composition.');
@@ -51,12 +51,12 @@ final readonly class HostProviderRemoval implements ProviderRemovalGate
 
     public function consume(RemovalApproval $approval, PlanDigest $installed): void
     {
-        $this->operator->authorize($this->operator->current(), $approval->provider, 'remove-provider', digest: $approval->proposed);
+        $this->operator->authorize(scope: $this->operator->current(), target: $approval->provider, ability: 'remove-provider', digest: $approval->proposed);
 
         if ($approval->installed->value !== $installed->value || $approval->receipt === '') {
             throw new LifecycleBlocked('Deployment composition changed.');
         }
-        $this->host()->promote($approval, $installed);
+        $this->host()->promote(approval: $approval, installed: $installed);
     }
 
     private function host(): DeploymentOwners

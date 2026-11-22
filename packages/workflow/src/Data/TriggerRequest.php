@@ -17,6 +17,6 @@ final readonly class TriggerRequest
 
     public function definition(): DefinitionRequest
     {
-        return new DefinitionRequest($this->context, $this->module, $this->entityHandle, $this->eventName, $this->definitionRef, $this->versionRef);
+        return new DefinitionRequest(context: $this->context, module: $this->module, entityHandle: $this->entityHandle, eventName: $this->eventName, definitionRef: $this->definitionRef, versionRef: $this->versionRef);
     }
 }

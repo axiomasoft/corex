@@ -32,33 +32,33 @@ final readonly class PostgresFieldMatches
     /** @return list<RecordRef> */
     public function matching(DataScope $scope, EntityHandle $entity, FilterNode $filter, RecordSelection $records): array
     {
-        return $this->runner->run($scope, function () use ($scope, $entity, $filter, $records): array {
+        return $this->runner->run(scope: $scope, work: function () use ($scope, $entity, $filter, $records): array {
             $db = $this->databases->connection();
-            $this->current->assert($scope, $db);
+            $this->current->assert(scope: $scope, connection: $db);
 
             return $db->transaction(function () use ($scope, $entity, $filter, $records, $db): array {
-                $mapping = $this->heads->lockForWrite($db, $scope, $entity);
-                $schema = $this->catalogue->snapshot($scope, $entity);
-                $plan = $this->filters->compile($scope, $schema, $filter);
+                $mapping = $this->heads->lockForWrite(db: $db, scope: $scope, entity: $entity);
+                $schema = $this->catalogue->snapshot(scope: $scope, entity: $entity);
+                $plan = $this->filters->compile(scope: $scope, schema: $schema, filter: $filter);
                 $id = $filter->field->value;
                 $slot = $mapping->slots[$id];
                 $field = $mapping->schema->fields[$id];
                 $selection = new FieldSelection([$id]);
                 $allowed = fn (RecordRef $r): bool => $r->entity === $entity->value
                     && ($plan->recordIds === null || in_array($r->id, $plan->recordIds, true))
-                    && $this->access->authorize($scope, $r, new FieldSelection([]), FieldUse::Read)->allowed
-                    && $this->access->authorize($scope, $r, $selection, FieldUse::Filter)->allowed;
+                    && $this->access->authorize(scope: $scope, record: $r, fields: new FieldSelection([]), use: FieldUse::Read)->allowed
+                    && $this->access->authorize(scope: $scope, record: $r, fields: $selection, use: FieldUse::Filter)->allowed;
                 $refs = array_filter($records->records, $allowed);
 
                 if ($refs === []) {
                     return [];
                 }
-                [$sql, $parameters] = $this->predicate($plan, $slot, $field->type->value);
+                [$sql, $parameters] = $this->predicate(plan: $plan, slot: $slot, type: $field->type->value);
                 // VALUES supplies requested IDs so an absent document also matches is-absent.
                 $rows = $db->select('SELECT wanted.id FROM jsonb_array_elements_text(?::jsonb) wanted(id) LEFT JOIN sys_attribute_documents doc ON doc.record_id=wanted.id AND doc.account_id=? AND doc.account_incarnation=? AND doc.workspace_scope=? AND doc.entity=? WHERE '.$sql,
                     [json_encode(array_values(array_map(static fn (RecordRef $r): string => $r->id, $refs)), JSON_THROW_ON_ERROR),
                         $scope->accountId, $scope->accountIncarnation, $scope->workspaceId === null ? 'account' : 'workspace:'.$scope->workspaceId, $entity->value, ...$parameters]);
-                $new = $this->filters->compile($scope, $schema, $filter);
+                $new = $this->filters->compile(scope: $scope, schema: $schema, filter: $filter);
 
                 if ($new->policyWitness !== $plan->policyWitness || $new->recordIds !== $plan->recordIds || $new->mappingDigest !== $plan->mappingDigest) {
                     throw new RuntimeException('Field filter policy changed.');
@@ -68,7 +68,7 @@ final readonly class PostgresFieldMatches
                     if (! $row instanceof stdClass || ! is_string($row->id)) {
                         throw new RuntimeException('Invalid query result.');
                     }
-                    $record = new RecordRef($entity->value, $row->id);
+                    $record = new RecordRef(entity: $entity->value, id: $row->id);
 
                     if ($allowed($record)) {
                         $result[] = $record;

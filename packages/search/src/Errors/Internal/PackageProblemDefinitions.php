@@ -18,6 +18,7 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
     {
         yield new ProblemDefinition(code: SearchErrorCode::InvalidSearchConfiguration, type: 'urn:packman:problem:search.invalid_search_configuration', defaultStatus: 500, title: 'Invalid search configuration.', retryable: false, category: ErrorCategory::Internal, detailKeys: []);
         foreach ([
+            [SearchErrorCode::MetadataDenied, ErrorCategory::Authorization, 403, 'Search metadata is unavailable.'],
             [SearchErrorCode::SearchFeatureUnavailable, ErrorCategory::Unsupported, 422, 'Search feature unavailable.'],
             [SearchErrorCode::IndexNotReady, ErrorCategory::Unavailable, 503, 'Search index is not ready.'],
             [SearchErrorCode::GenerationChanged, ErrorCategory::Conflict, 409, 'Search generation changed.'],

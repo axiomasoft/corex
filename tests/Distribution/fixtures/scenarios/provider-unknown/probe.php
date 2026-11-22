@@ -136,7 +136,7 @@ if ($mode === 'produce') {
         ));
         $now = $clock->now();
         $subscription = app(WebhookSubscriptionStore::class)->create($scope, new WebhookSubscription(
-            'fixture-subscription', 0, 'v1', 'fixture.recordchanged', 1, 'https://'.FixtureWebhookTransport::HOST.'/hook',
+            'fixture-subscription', 0, 'v2', 'fixture.recordchanged', 1, 'https://'.FixtureWebhookTransport::HOST.'/hook',
             'active', 'none', [FixtureWebhookTransport::KEY], $now, $now,
         ), sensitiveAbility: false, policyAllows: true);
         $proof->same('fixture-subscription', $subscription->id, 'The published topic is subscribed through the installed store');

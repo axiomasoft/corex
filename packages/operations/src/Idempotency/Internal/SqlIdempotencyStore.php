@@ -274,7 +274,7 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
 
     private function assertScope(IdempotencyScope $scope): void
     {
-        $this->current->assert($scope->scope, $this->connection);
+        $this->current->assert(scope: $scope->scope, connection: $this->connection);
     }
 
     private function assertTransaction(): void

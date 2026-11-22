@@ -15,7 +15,7 @@ final readonly class RecordSelection
     /** @param list<RecordRef> $records */
     public function __construct(public array $records)
     {
-        FieldList::check($records, [RecordRef::class], 1, 50);
+        FieldList::check(values: $records, classes: [RecordRef::class], min: 1, max: 50);
         $seen = [];
         foreach ($records as $record) {
             if (isset($seen[$record->entity][$record->id])) {

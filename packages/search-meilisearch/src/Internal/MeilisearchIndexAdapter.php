@@ -104,7 +104,7 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver, IndexRemova
     public function absent(IndexTarget $target): bool
     {
         $this->current->assert($target->scope);
-        MeilisearchNamespace::fingerprint($target, $this->cluster);
+        MeilisearchNamespace::fingerprint(target: $target, cluster: $this->cluster);
         $client = ($this->clients)($target, MeilisearchAccess::Observe);
 
         try {
@@ -127,7 +127,7 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver, IndexRemova
     public function canary(IndexTarget $target): bool
     {
         $this->current->assert($target->scope);
-        MeilisearchNamespace::fingerprint($target, $this->cluster);
+        MeilisearchNamespace::fingerprint(target: $target, cluster: $this->cluster);
 
         try {
             $client = ($this->clients)($target, MeilisearchAccess::Observe);
@@ -148,7 +148,7 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver, IndexRemova
     private function submission(IndexBatch $batch): array
     {
         $target = $batch->target;
-        $stamp = MeilisearchNamespace::fingerprint($target, $this->cluster);
+        $stamp = MeilisearchNamespace::fingerprint(target: $target, cluster: $this->cluster);
         $hasDocuments = in_array($batch->action, [IndexAction::Upsert, IndexAction::DeleteRecords], true);
 
         if ($batch->submissionId === '' || $hasDocuments !== ($batch->documents !== [])) {

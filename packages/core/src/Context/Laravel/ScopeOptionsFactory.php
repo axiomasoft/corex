@@ -13,8 +13,8 @@ final class ScopeOptionsFactory
     /** @param array<array-key,mixed> $config */
     public static function fromArray(array $config): ScopeOptions
     {
-        return new ScopeOptions(self::name($config['deployment_id'] ?? null), self::name($config['control_connection'] ?? null),
-            self::jobs($config['tenant_jobs'] ?? []), self::jobs($config['central_jobs'] ?? []));
+        return new ScopeOptions(deploymentId: self::name($config['deployment_id'] ?? null), controlConnection: self::name($config['control_connection'] ?? null),
+            tenantJobs: self::jobs($config['tenant_jobs'] ?? []), centralJobs: self::jobs($config['central_jobs'] ?? []));
     }
 
     private static function name(mixed $name): ?string

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use Closure;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
@@ -15,15 +18,19 @@ use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
+use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
-use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Testing\IdentityFixture;
+use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
@@ -33,6 +40,7 @@ use CoreX\Webhooks\Internal\WebhookManagement;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Laravel\WebhookController;
 use CoreX\Webhooks\Laravel\WebhookHttpRegistrar;
+use CoreX\Webhooks\Laravel\WebhookOperationDeclarations;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
 use DateTimeImmutable;
@@ -41,10 +49,12 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Mockery;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Contracts\Migration\SchemaSets;
-use ReflectionClass;
-use ReflectionMethod;
 
 final class WebhookManagementTest extends TestCase
 {
@@ -55,6 +65,12 @@ final class WebhookManagementTest extends TestCase
     private ContextFixture $contexts;
 
     private WebhookManagement $management;
+
+    protected function defineEnvironment($app): void
+    {
+        parent::defineEnvironment($app);
+        $app['config']->set('corex-operations.routes.middleware', [TrustedWebhookClient::class]);
+    }
 
     protected function setUp(): void
     {
@@ -162,18 +178,26 @@ final class WebhookManagementTest extends TestCase
         self::assertSame(['POST'], $replay->methods());
     }
 
-    public function test_shared_dispatcher_preserves_idempotency_key_for_required_replay(): void
+    public function test_mounted_replay_requires_an_idempotency_key_and_refuses_legacy_majors(): void
     {
-        $request = Request::create(
-            '/api/v1/webhook-deliveries/delivery-a/replay',
-            'POST',
-            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_IDEMPOTENCY_KEY' => 'replay-key'],
-            content: '{}',
-        );
-        $dispatcher = new ReflectionClass(OperationDispatcher::class)->newInstanceWithoutConstructor();
-        $extract = new ReflectionMethod(OperationDispatcher::class, 'idempotencyKey');
+        $registry = resolve(ModuleCompilation::class)->compile([
+            ModuleManifest::make('example/notes')->title('Webhooks')->tablePrefix('whk')->extends(WebhookOperationDeclarations::all()),
+        ], installedPackages: []);
+        $this->app->instance(ModuleRegistry::class, new ModuleFixture($registry));
+        $this->app->instance(TenantContextResolver::class, $this->contexts);
+        $this->app->instance(TenancyManager::class, $this->contexts);
+        $this->app->instance(PrincipalResolver::class, new IdentityFixture);
+        foreach ([OperationAuthorizer::class, ClientScopeAuthorizer::class] as $port) {
+            $authorizer = Mockery::mock($port);
+            $authorizer->shouldReceive('allows')->andReturnTrue();
+            $this->app->instance($port, $authorizer);
+        }
 
-        self::assertSame('replay-key', $extract->invoke($dispatcher, $request));
+        (new WebhookHttpRegistrar)->boot($this->app);
+        $this->postJson('/api/v2/webhook-deliveries/delivery-a/replay', ['audit_reason' => 'verify'])
+            ->assertJsonPath('code', 'operations.idempotency_key_required')->assertUnprocessable();
+        $this->postJson('/api/v1/webhook-deliveries/delivery-a/replay')->assertNotFound();
+        $this->postJson('/api/v3/webhook-deliveries/delivery-a/replay')->assertNotFound();
     }
 
     public function test_route_contract_requires_actor_scope_and_transactional_idempotency(): void
@@ -205,7 +229,7 @@ final class WebhookManagementTest extends TestCase
     private function seedSubscription(string $id): void
     {
         $this->connection->table('sys_api_webhook_subscriptions')->insert([
-            'id' => $id, 'revision' => 0, 'major' => 'v1', 'topic' => 'orders.placed', 'topic_version' => 1,
+            'id' => $id, 'revision' => 0, 'major' => 'v2', 'topic' => 'orders.placed', 'topic_version' => 1,
             'endpoint_url' => 'https://hooks.example/receiver?token=private', 'status' => 'active',
             'max_pii_class' => 'personal', 'key_refs' => '["current"]',
             'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
@@ -217,7 +241,7 @@ final class WebhookManagementTest extends TestCase
         $body = JsonCanonical::encode(['event_id' => $id, 'data' => ['secret' => 'never-public']]);
         $this->connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($scope, [
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => 0,
-            'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
+            'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v2',
             'endpoint_snapshot' => 'https://hooks.example/receiver?token=private',
             'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($scope)),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => 'dead', 'attempt' => 1,
@@ -265,7 +289,7 @@ final class WebhookManagementTest extends TestCase
         return new Operation(
             module: 'axiomasoft/corex-operations',
             id: 'webhook-contract-fixture',
-            version: 'v1',
+            version: 'v2',
             method: $method,
             path: $path,
             ability: $ability,
@@ -289,7 +313,7 @@ final class WebhookManagementTest extends TestCase
             MessagingFixtures::contracts([
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]),
-            [new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
+            [new WebhookTopic('orders.placed', 1, 'v2', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
             ['orders.placed' => new ManagementProjector],
         );
     }
@@ -327,5 +351,15 @@ final class WebhookContractHandler implements OperationHandler
     public function handle(RequestContext $context, array $input, array $parameters): array
     {
         return [];
+    }
+}
+
+final class TrustedWebhookClient
+{
+    public function handle(Request $request, Closure $next): mixed
+    {
+        $request->attributes->set('corex.client_id', 'client-a');
+
+        return $next($request);
     }
 }

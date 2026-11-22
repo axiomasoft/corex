@@ -36,7 +36,7 @@ final readonly class WebhookReceiptProjector implements ProviderReceiptProjector
 
         if ($delivery === null) {
             return $this->store->claimPrecededSend($status)
-                ? new ProviderObservation(ProviderObservationKind::Absent, 'owner-send-not-started', $this->owner())
+                ? new ProviderObservation(kind: ProviderObservationKind::Absent, reference: 'owner-send-not-started', observer: $this->owner())
                 : null;
         }
 
@@ -50,12 +50,12 @@ final readonly class WebhookReceiptProjector implements ProviderReceiptProjector
             return null;
         }
 
-        if (! $this->egress->allows($status->ticket->scope, $destination)) {
+        if (! $this->egress->allows(scope: $status->ticket->scope, destination: $destination)) {
             return null;
         }
 
         return $this->container->make(WebhookProviderLookup::class)->lookup(new WebhookProviderReference(
-            $status->ticket->scope, $delivery->id, $delivery->endpointSnapshot, $delivery->effectKey,
+            scope: $status->ticket->scope, deliveryId: $delivery->id, endpoint: $delivery->endpointSnapshot, effectKey: $delivery->effectKey,
         ));
     }
 

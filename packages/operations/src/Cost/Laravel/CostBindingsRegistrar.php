@@ -62,8 +62,8 @@ final class CostBindingsRegistrar implements PackageRegistrar
         ));
         $app->bind(BudgetExecution::class, static fn (Application $app): BudgetExecution => $app->make(BudgetAdmission::class));
         $app->scoped(BudgetReferences::class, static fn (Application $app): BudgetReferences => new BudgetReferences(
-            $app->make(DataScopeFactory::class), $app->make(ReferenceAdmission::class), $app->make(ProviderEffectLedger::class),
-            $app->make(ScopeAdmission::class), $app->make(ClockInterface::class),
+            scopes: $app->make(DataScopeFactory::class), admission: $app->make(ReferenceAdmission::class), effects: $app->make(ProviderEffectLedger::class),
+            tickets: $app->make(ScopeAdmission::class), clock: $app->make(ClockInterface::class),
         ));
         $app->scoped(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
             budget: $app->make(OperationBudget::class),

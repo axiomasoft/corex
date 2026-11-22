@@ -15,6 +15,7 @@ use CoreX\Context\Data\ProviderObservation;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Delivery\Contracts\DeliveryExecution;
 use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
@@ -52,10 +53,10 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
         }
 
         try {
-            $this->work->runStored($claim->scope, $claim->proof, static function (TenantContext $tenant) use ($claim): void {
+            $this->work->runStored(scope: $claim->scope, proof: $claim->proof, work: static function (TenantContext $tenant) use ($claim): void {
                 Container::getInstance()->make(self::class)->send($claim, $tenant);
             });
-        } catch (ScopeContextMismatch $error) {
+        } catch (ScopeContextMismatch|ScopeStale $error) {
             $this->deliveries->quarantine($claim);
 
             throw $error;
@@ -73,11 +74,11 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
 
     private function send(DeliveryClaim $claim, TenantContext $tenant): void
     {
-        $context = new NotificationContext($tenant, $claim->scope->principalKind, $claim->scope->principalId);
+        $context = new NotificationContext(tenant: $tenant, actorKind: $claim->scope->principalKind, actorId: $claim->scope->principalId);
         $rows = $this->deliveries->subjectRows($claim);
 
         if ($rows === []) {
-            $this->deliveries->skip($claim, 'notification-unavailable');
+            $this->deliveries->skip(claim: $claim, reason: 'notification-unavailable');
 
             return;
         }
@@ -86,8 +87,8 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
         foreach ($rows as $row) {
             $subject = $this->visibility->subject($row);
 
-            if (! $this->visibility->allows($context, $subject) || ! $this->policy->allows($context, NotificationAction::Notify, $subject)) {
-                $this->deliveries->skip($claim, 'policy-denied');
+            if (! $this->visibility->allows(context: $context, subject: $subject) || ! $this->policy->allows(context: $context, action: NotificationAction::Notify, subject: $subject)) {
+                $this->deliveries->skip(claim: $claim, reason: 'policy-denied');
 
                 return;
             }
@@ -97,31 +98,31 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
         $driver = $this->drivers->find($claim->channel);
 
         if ($driver === null || $driver->descriptor()->version !== $claim->driverVersion) {
-            $this->deliveries->skip($claim, 'provider-unconfigured');
+            $this->deliveries->skip(claim: $claim, reason: 'provider-unconfigured');
 
             return;
         }
-        $target = $this->recipients->resolve($context, $recipient, $claim->channel);
+        $target = $this->recipients->resolve(context: $context, recipient: $recipient, channel: $claim->channel);
 
         if ($target === null || $target->channel !== $claim->channel || $target->reference === ''
             || ($claim->targetReference !== null && $target->reference !== $claim->targetReference)) {
-            $this->deliveries->skip($claim, 'recipient-unavailable');
+            $this->deliveries->skip(claim: $claim, reason: 'recipient-unavailable');
 
             return;
         }
 
         $input = new DeliveryInput(
-            $claim->deliveryKey, $claim->epoch, $target, $claim->message, $context,
-            $claim->messageHash, $claim->templateVersion, $claim->policyVersion, $claim->driverVersion,
+            deliveryKey: $claim->deliveryKey, attemptEpoch: $claim->epoch, target: $target, message: $claim->message, context: $context,
+            messageSha256: $claim->messageHash, templateVersion: $claim->templateVersion, policyVersion: $claim->policyVersion, driverVersion: $claim->driverVersion,
         );
 
         if ($driver instanceof InAppChannelDriver) {
-            $this->deliveries->complete($claim, $driver->send($input));
+            $this->deliveries->complete(claim: $claim, outcome: $driver->send($input));
 
             return;
         }
 
-        $this->sendExternal($claim, $driver, $input);
+        $this->sendExternal(claim: $claim, driver: $driver, input: $input);
     }
 
     private function sendExternal(DeliveryClaim $claim, NotificationChannelDriver $driver, DeliveryInput $input): void
@@ -130,11 +131,11 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
         $namespace = 'notification.'.hash('sha256', json_encode([$descriptor->key, $descriptor->version, $descriptor->dedupScope], JSON_THROW_ON_ERROR));
 
         if (($claim->providerNamespace !== null && $claim->providerNamespace !== $namespace)
-            || ! $this->deliveries->freezeTarget($claim, $namespace, $input->target->reference)) {
+            || ! $this->deliveries->freezeTarget(claim: $claim, namespace: $namespace, target: $input->target->reference)) {
             return;
         }
 
-        $effect = DeliveryStore::effectRef($claim->scope, $namespace, $claim->deliveryKey);
+        $effect = DeliveryStore::effectRef(scope: $claim->scope, namespace: $namespace, key: $claim->deliveryKey);
         $ledger = $this->container->make(ProviderEffectLedger::class);
         $admission = $this->container->make(ScopeAdmission::class);
         $prior = $ledger->inspect($effect);
@@ -143,17 +144,17 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
             && ! $this->container->make(ProviderEffectRecovery::class)->recover($effect)) {
             return;
         }
-        $ticket = ReferenceWrites::reserveEffect($claim->scope, new ProviderAttempt(
+        $ticket = ReferenceWrites::reserveEffect(scope: $claim->scope, attempt: new ProviderAttempt(
             effect: $effect,
             ownerRef: $claim->id,
             claimToken: $claim->token,
             attempt: $claim->attempts,
             deadline: $claim->deadline,
-            digest: DeliveryStore::providerDigest($claim->messageHash, $namespace, $input->target->reference),
-        ), 'axiomasoft/corex-notifications', $ledger);
+            digest: DeliveryStore::providerDigest(messageHash: $claim->messageHash, namespace: $namespace, target: $input->target->reference),
+        ), producer: 'axiomasoft/corex-notifications', ledger: $ledger);
 
-        if (! $this->deliveries->startSending($claim, $ticket->id)) {
-            $ledger->observe($ticket, new ProviderObservation(ProviderObservationKind::Absent, 'owner-send-not-started', DeliveryIntents::Owner));
+        if (! $this->deliveries->startSending(claim: $claim, ticketId: $ticket->id)) {
+            $ledger->observe($ticket, new ProviderObservation(kind: ProviderObservationKind::Absent, reference: 'owner-send-not-started', observer: DeliveryIntents::Owner));
             $this->container->make(ProviderEffectRecovery::class)->recover($effect);
 
             return;
@@ -162,30 +163,30 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
         try {
             $outcome = $driver->send($input);
         } catch (Throwable $exception) {
-            $outcome = new DeliveryOutcome(DeliveryOutcomeKind::Unknown, null, null, 'worker-exception');
-            $this->record($claim, $outcome, $ledger, $admission, $ticket);
+            $outcome = new DeliveryOutcome(kind: DeliveryOutcomeKind::Unknown, providerRef: null, retryAfter: null, reason: 'worker-exception');
+            $this->record(claim: $claim, outcome: $outcome, ledger: $ledger, admission: $admission, ticket: $ticket);
 
             throw $exception;
         }
 
-        $this->record($claim, $outcome, $ledger, $admission, $ticket);
+        $this->record(claim: $claim, outcome: $outcome, ledger: $ledger, admission: $admission, ticket: $ticket);
     }
 
     private function record(DeliveryClaim $claim, DeliveryOutcome $outcome, ProviderEffectLedger $ledger, ScopeAdmission $admission, AdmissionTicket $ticket): void
     {
         if ($outcome->kind === DeliveryOutcomeKind::Completed && $outcome->providerRef === null) {
-            $outcome = new DeliveryOutcome($outcome->kind, $claim->deliveryKey, null, $outcome->reason);
+            $outcome = new DeliveryOutcome(kind: $outcome->kind, providerRef: $claim->deliveryKey, retryAfter: null, reason: $outcome->reason);
         }
 
         if ($outcome->kind === DeliveryOutcomeKind::Retryable && ! $outcome->absenceProven) {
-            $outcome = new DeliveryOutcome(DeliveryOutcomeKind::Unknown, null, null, 'unproven-resend');
+            $outcome = new DeliveryOutcome(kind: DeliveryOutcomeKind::Unknown, providerRef: null, retryAfter: null, reason: 'unproven-resend');
         }
-        $ledger->observe($ticket, self::observation($outcome, $claim->deliveryKey));
+        $ledger->observe(ticket: $ticket, observation: self::observation(outcome: $outcome, effectKey: $claim->deliveryKey));
 
-        if ($this->deliveries->complete($claim, $outcome, 'sending')) {
-            $admission->settle($ticket, new AttemptEvidence(
-                $outcome->kind === DeliveryOutcomeKind::Unknown ? 'unknown' : 'reconciled',
-                $claim->id,
+        if ($this->deliveries->complete(claim: $claim, outcome: $outcome, state: 'sending')) {
+            $admission->settle(ticket: $ticket, evidence: new AttemptEvidence(
+                outcome: $outcome->kind === DeliveryOutcomeKind::Unknown ? 'unknown' : 'reconciled',
+                reference: $claim->id,
             ));
         }
     }
@@ -200,10 +201,10 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
             DeliveryOutcomeKind::Unknown => ProviderObservationKind::Unknown,
         };
 
-        return new ProviderObservation($kind, $outcome->providerRef ?? match ($kind) {
+        return new ProviderObservation(kind: $kind, reference: $outcome->providerRef ?? match ($kind) {
             ProviderObservationKind::Confirmed => $effectKey,
             ProviderObservationKind::Absent => 'retry-after-'.($outcome->retryAfter ?? 60),
             default => $outcome->reason,
-        }, DeliveryIntents::Owner);
+        }, observer: DeliveryIntents::Owner);
     }
 }

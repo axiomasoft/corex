@@ -6,9 +6,11 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
+use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
 use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
+use Packman\Errors\Enums\ErrorCategory;
 use Tenant\Composition\CompositionBuilder;
 use Tenant\Contracts\Context\ContextResolver;
 use Tenant\Data\Context\ContextState;
@@ -26,6 +28,24 @@ use Tenant\Exceptions\Runtime\OpenResource;
 use Tenant\Exceptions\Runtime\RuntimePoisoned;
 use Tenant\Exceptions\Verification\StaleRoute;
 use Tenant\Runtime\SafeTenantRuntime;
+
+it('projects host tenant resolution failures with the same public descriptor', function (
+    Closure $failure,
+    string $operatorMessage,
+): void {
+    $error = $failure();
+    $descriptor = $error->errorDescriptor();
+
+    expect($error->getMessage())->toContain($operatorMessage)
+        ->and($descriptor->code)->toBe('tenancy.context_unavailable')
+        ->and($descriptor->category)->toBe(ErrorCategory::Unavailable)
+        ->and($descriptor->retryable)->toBeFalse()
+        ->and($descriptor->details)->toBe([]);
+})->with([
+    'unknown account' => [static fn (): TenantContextUnavailable => TenantContextUnavailable::missingAccount(accountId: 'private-account'), 'private-account'],
+    'unknown workspace' => [static fn (): TenantContextUnavailable => TenantContextUnavailable::missingWorkspace(workspaceId: 'private-workspace'), 'private-workspace'],
+    'invalid payload' => [static fn (): TenantContextUnavailable => TenantContextUnavailable::invalidPayload(), 'queued tenant payload'],
+]);
 
 /** Real Tenant executor with a trusted no-I/O fixture profile, never production routing. */
 function externalTenantRig(): array

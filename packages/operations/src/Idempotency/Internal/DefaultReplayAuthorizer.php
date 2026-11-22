@@ -48,12 +48,12 @@ final readonly class DefaultReplayAuthorizer implements ReplayAuthorizer
         }
 
         if ($replayed && $outcome->kind === 'success' && JsonDocuments::optionalArray($outcome->data) !== null) {
-            return StoredOperationOutcome::success(JsonDocuments::capture(DeclaredFieldAuthorizer::prune(
+            return StoredOperationOutcome::success(data: JsonDocuments::capture(DeclaredFieldAuthorizer::prune(
                 operation: $invocation->operation,
                 context: $invocation->context,
                 authorizer: $this->fields,
                 data: JsonDocuments::optionalArray($outcome->data),
-            )));
+            )), budgetReceipt: $outcome->budgetReceipt, accepted: $outcome->accepted);
         }
 
         return $outcome;

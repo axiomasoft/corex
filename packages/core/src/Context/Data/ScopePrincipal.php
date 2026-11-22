@@ -12,6 +12,6 @@ final readonly class ScopePrincipal
 {
     public function __construct(public string $kind, public string $id)
     {
-        ScopeIdentity::principal($kind, $id);
+        ScopeIdentity::principal(kind: $kind, id: $id);
     }
 }

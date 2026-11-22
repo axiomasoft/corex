@@ -27,7 +27,7 @@ final readonly class AuthorizedSearch implements Search
 
     public function query(DataScope $scope, SearchQuery $query): SearchPage
     {
-        $outcome = $this->runner->run($scope, function () use ($scope, $query): SearchPage|CodedException {
+        $outcome = $this->runner->run(scope: $scope, work: function () use ($scope, $query): SearchPage|CodedException {
             $this->current->assert($scope);
 
             try {

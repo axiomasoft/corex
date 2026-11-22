@@ -66,7 +66,7 @@ final class ContextRegistrar implements PackageRegistrar
         $app->singleton(WorkProcessHealth::class);
         $app->singleton(LocalWorkTransactions::class);
         $app->singleton(WorkQueueHandlers::class);
-        $app->singleton(WorkQueueBoundary::class, static fn (Application $app): WorkQueueBoundary => new WorkQueueBoundary($app->make(WorkQueueHandlers::class), static fn (): Container => Container::getInstance()));
+        $app->singleton(WorkQueueBoundary::class, static fn (Application $app): WorkQueueBoundary => new WorkQueueBoundary(handlers: $app->make(WorkQueueHandlers::class), application: static fn (): Container => Container::getInstance()));
         $app->bind(CentralWorkRunner::class, BoxedCentralWorkRunner::class);
         $app->scoped(VerifiedWorkScope::class, static fn (): VerifiedWorkScope => new VerifiedWorkScope(static fn (): Container => Container::getInstance()));
         $app->alias(VerifiedWorkScope::class, CurrentWorkScope::class);

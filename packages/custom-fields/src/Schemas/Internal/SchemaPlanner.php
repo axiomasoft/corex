@@ -28,10 +28,10 @@ final readonly class SchemaPlanner
             throw new SchemaConflict('field-identity-conflict');
         }
 
-        if ($old === null && SchemaRows::rows($db, SchemaRows::DEFINITIONS, $scope, $change->entity->value)->where('field_id', $id)->exists()) {
+        if ($old === null && SchemaRows::rows(db: $db, table: SchemaRows::DEFINITIONS, scope: $scope, entity: $change->entity->value)->where('field_id', $id)->exists()) {
             throw new SchemaConflict('retired-field-identity');
         }
-        $code = $this->heads->declared($db, $scope, $change->entity);
+        $code = $this->heads->declared(db: $db, scope: $scope, entity: $change->entity);
         $declared = isset($code->entries[$id]) ? $code->definition($id) : null;
         $to = $change->definition;
 
@@ -60,7 +60,7 @@ final readonly class SchemaPlanner
         if ($change->kind !== 'retire' && $to->lifecycle !== 'active') {
             throw new SchemaConflict('target-field-inactive');
         }
-        $this->types->resolve($to->type, $to->codecVersion);
+        $this->types->resolve(type: $to->type, version: $to->codecVersion);
         $representation = $from !== null && ($from->type->value !== $to->type->value || $from->codecVersion !== $to->codecVersion
             || $from->localizationPolicy !== $to->localizationPolicy);
 
@@ -69,7 +69,7 @@ final readonly class SchemaPlanner
         }
 
         if ($change->converterId !== null && $change->converterVersion !== null) {
-            $this->types->converter($change->converterId, $change->converterVersion);
+            $this->types->converter(id: $change->converterId, version: $change->converterVersion);
         }
         $shadow = $from !== null && $change->kind === 'revise' && ($representation || $change->converterId !== null
             || $from->nullable !== $to->nullable || $from->constraints !== $to->constraints);
@@ -77,7 +77,7 @@ final readonly class SchemaPlanner
         $oldIndex = SchemaValue::nullableText($old['index_operation'] ?? null);
         $needsIndex = $change->kind !== 'retire' && $to->indexPolicy === 'expression_btree';
         $newIndex = $needsIndex ? ($oldIndex !== null && ! $shadow ? $oldIndex : $ref) : null;
-        $image->put($to, SchemaValue::text($source), $storage, $newIndex);
+        $image->put(field: $to, source: SchemaValue::text($source), storageRevision: $storage, indexOperation: $newIndex);
         $targetEntry = $image->entry($id);
 
         if ($change->kind === 'retire') {
@@ -97,17 +97,17 @@ final readonly class SchemaPlanner
         foreach (array_keys($image->entries) as $other) {
             if ($image->entry($other)['source'] === 'code') {
                 $field = $image->definition($other);
-                $projectedCode->put($field, 'code', $field->revision);
+                $projectedCode->put(field: $field, source: 'code', storageRevision: $field->revision);
             }
         }
-        $ddl = $newIndex === $ref ? IndexCatalogue::plan($db, $scope, $to, SchemaValue::text($targetEntry['slot']), $this->route->namespace($db, $scope)) : null;
+        $ddl = $newIndex === $ref ? IndexCatalogue::plan(db: $db, scope: $scope, field: $to, slot: SchemaValue::text($targetEntry['slot']), namespace: $this->route->namespace(db: $db, scope: $scope)) : null;
 
         return ['field' => $id, 'kind' => $change->kind, 'entity' => $change->entity->value, 'change' => $change->toArray(),
             'base' => $head->effective_revision, 'base_mapping_digest' => $head->mapping_digest, 'target' => SchemaRows::digest(['schema.revision.v2', $ref, $image->digest()]),
             'mapping_digest' => $image->digest(), 'manifest_digest' => $projectedCode->digest(), 'deployed_manifest_digest' => $code->digest(), 'mapping' => $image->entries, 'from' => $old, 'to' => $targetEntry,
             'shadow' => $shadow, 'converter_id' => $change->converterId, 'converter_version' => $change->converterVersion,
-            'dependencies' => $this->references->get($scope, $change->entity, $id, SchemaValue::text($head->effective_revision)),
+            'dependencies' => $this->references->get(scope: $scope, entity: $change->entity, field: $id, revision: SchemaValue::text($head->effective_revision)),
             'failure_policy' => 'block-until-corrected', 'ddl' => $ddl, 'drop_origin' => $oldIndex !== $newIndex ? $oldIndex : null,
-            'estimated_rows' => SchemaRows::rows($db, SchemaRows::DOCUMENTS, $scope, $change->entity->value)->count()];
+            'estimated_rows' => SchemaRows::rows(db: $db, table: SchemaRows::DOCUMENTS, scope: $scope, entity: $change->entity->value)->count()];
     }
 }

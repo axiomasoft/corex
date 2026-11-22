@@ -95,7 +95,7 @@ final class BulkTransferTest extends TestCase
     private function definition(): BulkOperationDefinition
     {
         return new BulkOperationDefinition(
-            'bulk-1', 'submission-1', 'notes.bulk-import', 'v1', hash('sha256', 'bulk-contract'),
+            'bulk-1', 'submission-1', 'notes.bulk-import', 'v2', hash('sha256', 'bulk-contract'),
             (new ArrayDataScopeCodec)->encode($this->scope), 'actor-1', 'client-1',
             JsonDocuments::capture(['point' => 'api.operation', 'owners' => ['fixture/owner']]),
             JsonDocuments::capture(['kind' => 'import']), 2, 10,

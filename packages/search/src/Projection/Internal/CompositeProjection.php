@@ -55,7 +55,7 @@ final readonly class CompositeProjection implements ProjectionSnapshotCapabiliti
             $mapping[] = $shape;
         }
 
-        return new ProjectionFields($fields, hash('sha256', json_encode([1, $context->entity->value, $revisions, $mapping], JSON_THROW_ON_ERROR)));
+        return new ProjectionFields(fields: $fields, revision: hash('sha256', json_encode([1, $context->entity->value, $revisions, $mapping], JSON_THROW_ON_ERROR)));
     }
 
     public function project(ProjectionContext $context, RecordRef $record, ProjectionSelection $selection): ProjectedValues

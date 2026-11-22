@@ -12,6 +12,7 @@ use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\StoredWorkProof;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Context\Internal\WorkProcessHealth;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
@@ -67,12 +68,12 @@ final class WorkQueueBoundary
         if ($mode === 'tenant') {
             $scope = ($this->application)()->make(DataScopeFactory::class)->forCurrentPrincipal(($this->application)()->make(TenantContextResolver::class)->current());
             $wire = ($this->application)()->make(DataScopeCodec::class)->encode($scope);
-            $seal = ($this->application)()->make(StoredWorkIssuer::class)->issue($scope, 'corex.queue', $this->commandRef($id, $handler, $data))->seal;
+            $seal = ($this->application)()->make(StoredWorkIssuer::class)->issue($scope, 'corex.queue', $this->commandRef(id: $id, handler: $handler, data: $data))->seal;
         }
         $log = ($this->application)()->make(LogContext::class);
         $metadata = ['seal' => $seal, 'context' => array_filter($log->all(), 'is_scalar'), 'hidden' => array_filter($log->allHidden(), 'is_scalar'), 'handler' => $handler, 'transport' => $transport, 'mode' => $mode, 'scope' => $wire];
 
-        return ['job' => WorkQueueHandler::class.'@fire', 'illuminate:log:context' => null, 'corex_scope' => [...$metadata, 'signature' => $this->sign($id, $metadata, $data)]];
+        return ['job' => WorkQueueHandler::class.'@fire', 'illuminate:log:context' => null, 'corex_scope' => [...$metadata, 'signature' => $this->sign(id: $id, metadata: $metadata, data: $data)]];
     }
 
     public function processing(JobProcessing $event): void
@@ -106,7 +107,7 @@ final class WorkQueueBoundary
             $signature = $metadata['signature'];
             unset($metadata['signature']);
 
-            if (! hash_equals($this->sign($payload['uuid'], $metadata, $data), $signature)) {
+            if (! hash_equals($this->sign(id: $payload['uuid'], metadata: $metadata, data: $data), $signature)) {
                 throw new ScopeContextMismatch('Unverified job scope.');
             }
 
@@ -123,12 +124,12 @@ final class WorkQueueBoundary
             if ($scope !== null && ! is_string($metadata['seal'] ?? null)) {
                 throw new ScopeContextMismatch('Missing work provenance.');
             }
-            $proof = $scope === null ? null : new StoredWorkProof('corex.queue', $this->commandRef($payload['uuid'], $metadata['handler'], $data), $metadata['seal']);
+            $proof = $scope === null ? null : new StoredWorkProof(owner: 'corex.queue', reference: $this->commandRef(id: $payload['uuid'], handler: $metadata['handler'], data: $data), seal: $metadata['seal']);
             $log = ($this->application)()->make(LogContext::class);
             $this->frames[] = ['proof' => $proof, 'outer' => $log->all(), 'outerHidden' => $log->allHidden(), 'context' => array_filter($metadata['context'], 'is_string', ARRAY_FILTER_USE_KEY), 'hidden' => array_filter($metadata['hidden'], 'is_string', ARRAY_FILTER_USE_KEY), 'job' => $job, 'handler' => $metadata['handler'], 'transport' => $metadata['transport'], 'connection' => $event->connectionName, 'scope' => $scope];
         } catch (Throwable $error) {
             // Refused bytes must never enter Laravel's serialized failure callback.
-            $this->quarantine($job, $event->connectionName, $error);
+            $this->quarantine(job: $job, connection: $event->connectionName, error: $error);
 
             throw $error;
         }
@@ -171,9 +172,9 @@ final class WorkQueueBoundary
             return $frame['scope'] === null
                 ? ($this->application)()->make(CentralWorkRunner::class)->run($work)
                 : ($this->application)()->make(StoredWorkRunner::class)->runStored($frame['scope'], $frame['proof'] ?? throw new ScopeContextMismatch('Missing work provenance.'), $work);
-        } catch (ScopeContextMismatch $refusal) {
+        } catch (ScopeContextMismatch|ScopeStale $refusal) {
             if (! $entered && ! $job->hasFailed()) {
-                $this->quarantine($job, $frame['connection'], $refusal);
+                $this->quarantine(job: $job, connection: $frame['connection'], error: $refusal);
             }
 
             throw $refusal;

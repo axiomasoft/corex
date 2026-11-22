@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-use App\Providers\BulkTransferServiceProvider;
+use App\BulkTransfer\BulkTransferServiceProvider;
 use App\Providers\ScenarioServiceProvider;
 
 return [

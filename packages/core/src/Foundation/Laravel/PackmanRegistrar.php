@@ -55,8 +55,8 @@ final class PackmanRegistrar implements PackageRegistrar
         $app->tag(CoreModuleReferences::class, ModuleReferences::class);
 
         $app->scoped(ReferenceAdmission::class, static fn (Application $app): DatabaseReferenceAdmission => new DatabaseReferenceAdmission(
-            $app->make(CurrentWorkScope::class), $app->make(LocalWorkTransactions::class)->localTicket(...),
-            $app->make(DatabaseScopeControl::class), $app->make(LifecycleCatalogue::class),
+            current: $app->make(CurrentWorkScope::class), ticketFor: $app->make(LocalWorkTransactions::class)->localTicket(...),
+            control: $app->make(DatabaseScopeControl::class), catalogue: $app->make(LifecycleCatalogue::class),
         ));
         $app->when(DatabaseLifecyclePlans::class)->needs(Closure::class)->give(static fn (Application $app): Closure => $app->make(LocalWorkTransactions::class)->commitConfirmation(...));
         $app->when(DatabaseLifecyclePlans::class)->needs('$packmanConnection')->give(static fn (Application $app): ?string => self::packmanConnection($app->make(Repository::class)));
@@ -68,7 +68,7 @@ final class PackmanRegistrar implements PackageRegistrar
         if ($app instanceof LaravelApplication) {
             $app->beforeResolving($this->decorateLifecycle(...));
         } else {
-            $app->extend(ModuleLifecycle::class, static fn (ModuleLifecycle $host): GuardedModuleLifecycle => new GuardedModuleLifecycle($host, $app, $app->make(LifecycleFrame::class), true));
+            $app->extend(ModuleLifecycle::class, static fn (ModuleLifecycle $host): GuardedModuleLifecycle => new GuardedModuleLifecycle(inner: $host, app: $app, origin: $app->make(LifecycleFrame::class), booted: true));
         }
 
         $app->singleton(ContextResolverInterface::class, PackmanContextResolver::class);
@@ -95,7 +95,7 @@ final class PackmanRegistrar implements PackageRegistrar
             return;
         }
         $decorate = static fn (ModuleLifecycle $host, LaravelApplication $app): ModuleLifecycle => $host instanceof GuardedModuleLifecycle
-            ? $host : new GuardedModuleLifecycle($host, $app, $app->make(LifecycleFrame::class), $app->isBooted());
+            ? $host : new GuardedModuleLifecycle(inner: $host, app: $app, origin: $app->make(LifecycleFrame::class), booted: $app->isBooted());
 
         if (! $app->isShared($binding)) {
             if (! isset($this->transient[$binding])) {

@@ -19,7 +19,7 @@ uses(TestCase::class);
 
 $schema = static fn (): array => ['type' => 'object', 'additionalProperties' => false];
 
-$operation = (static fn (string $method = 'GET', string $id = 'notes.list'): Api => Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema()));
+$operation = (static fn (string $method = 'GET', string $id = 'notes.list'): Api => Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema(), version: 'v2'));
 
 $compile = static function (Api $api): Api {
     $compiled = resolve(ModuleCompilation::class)->compile([
@@ -131,6 +131,7 @@ it('projects the same contract hash when declaration order is reversed', functio
         'notes.read',
         $schema(),
         $schema(),
+        version: 'v2',
     )->fields(read: ['id', 'name'], write: ['name']);
 
     $compile = static function (array $extenders): array {
@@ -165,7 +166,7 @@ it('projects the same contract hash when declaration order is reversed', functio
 it('reuses tagged compiler contributions across repeated compilations', function (): void {
     $compiler = resolve(ModuleCompilation::class);
     $manifest = ModuleManifest::make('example/repeat')->title('Repeat')->tablePrefix('rpt')->extends([
-        Api::operation('repeat.read', 'GET', '/repeat', StubOperationHandler::class, 'repeat.read', ['type' => 'object'], ['type' => 'object']),
+        Api::operation('repeat.read', 'GET', '/repeat', StubOperationHandler::class, 'repeat.read', ['type' => 'object'], ['type' => 'object'], version: 'v2'),
     ]);
 
     expect($compiler->compile([$manifest], installedPackages: [])->fingerprint)

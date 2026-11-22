@@ -10,6 +10,7 @@ use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Laravel\ScopeResolver;
+use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
@@ -25,6 +26,7 @@ use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Enums\PrincipalType;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Contracts\FieldUsePolicy;
+use CoreX\Data\Contracts\FieldUseSnapshot;
 use CoreX\Data\Data\EntityHandle;
 use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\FieldUseRequest;
@@ -509,4 +511,75 @@ it('intersects record and stable field permissions for each independent use', fu
     expect($visible->kind)->toBe(FieldUsePlanKind::ScopedPredicate)
         ->and($visible->recordIds)->toBe([$mine])
         ->and($policy->plan($scope, $entity, new FieldUseRequest($fields, $export))->kind)->toBe(FieldUsePlanKind::Denied);
+});
+
+it('keeps current field-use decisions in one verified owner snapshot', function (): void {
+    $actor = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $owner = LocalWorkContexts::install(app());
+    $owner->initialize(new AccountRef('field-account', 'fields', 'active', [], []));
+    $scope = WorkScopeFixture::install(app(), $actor->principalId())->scope();
+    $this->actingAs($actor);
+    $role = ($this->newRole)();
+    foreach (['read', 'field.title.read'] as $action) {
+        RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => $action, 'scope' => 'account']);
+    }
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $actor->principalId()]);
+    $mine = (string) Str::uuid7();
+    DB::table('deals')->insert(['id' => $mine, 'owner_id' => $actor->principalId()]);
+    $policy = app(FieldUsePolicy::class);
+    expect($policy)->toBeInstanceOf(FieldUseSnapshot::class);
+    assert($policy instanceof FieldUseSnapshot);
+    $entity = new EntityHandle('crm.deal');
+    $request = new FieldUseRequest(new FieldSelection(['title']), FieldUse::Read);
+    expect($policy->plan($scope, $entity, $request)->kind)->toBe(FieldUsePlanKind::Unconditional);
+
+    config(['database.connections.access_snapshot_mutator' => config('database.connections.pgsql')]);
+    $mutator = DB::connection('access_snapshot_mutator');
+
+    try {
+        expect($mutator->selectOne('select pg_backend_pid() as pid')->pid)->not->toBe(DB::selectOne('select pg_backend_pid() as pid')->pid);
+        $grant = $mutator->table('aut_role_matrix')->where('role_id', $role->id)->where('action', 'field.title.read');
+        // The publisher's role cache version has not yet advanced.
+        expect($grant->update(['scope' => 'own']))->toBe(1);
+        $released = $policy->inSnapshot($scope, $entity, function () use ($policy, $scope, $entity, $request, $grant) {
+            expect(DB::selectOne('show transaction_isolation')->transaction_isolation)->toBe('repeatable read');
+            $first = $policy->plan($scope, $entity, $request);
+            expect($grant->update(['scope' => 'none']))->toBe(1);
+
+            return [$first, $policy->plan($scope, $entity, $request)];
+        });
+        expect($released)->not->toBeNull()
+            ->and($released[0]->kind)->toBe(FieldUsePlanKind::ScopedPredicate)
+            ->and($released[0]->recordIds)->toBe([$mine])
+            ->and($released[0])->toEqual($released[1])
+            ->and($policy->plan($scope, $entity, $request)->kind)->toBe(FieldUsePlanKind::Denied);
+
+        DB::transaction(function () use ($policy, $scope, $entity): void {
+            $view = $policy->inSnapshot($scope, $entity, fn () => throw new RuntimeException('Unproven parent transaction was used.'));
+            expect($view)->toBeNull();
+        });
+    } finally {
+        DB::purge('access_snapshot_mutator');
+    }
+});
+
+it('refuses a field-use snapshot with an unverified activity provider', function (): void {
+    $actor = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $owner = LocalWorkContexts::install(app());
+    $owner->initialize(new AccountRef('field-account', 'fields', 'active', [], []));
+    $scope = WorkScopeFixture::install(app(), $actor->principalId())->scope();
+    $this->actingAs($actor);
+    app()->instance(EntityActivity::class, new class implements EntityActivity
+    {
+        public function isActive(string $entityKey): bool
+        {
+            return true;
+        }
+    });
+    $policy = app(FieldUsePolicy::class);
+    expect($policy)->toBeInstanceOf(FieldUseSnapshot::class);
+    assert($policy instanceof FieldUseSnapshot);
+
+    expect($policy->inSnapshot($scope, new EntityHandle('crm.deal'), static fn (): never => throw new RuntimeException('Unverified activity was used.')))
+        ->toBeNull();
 });

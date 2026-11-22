@@ -60,6 +60,17 @@
         {
             "package": "axiomasoft/corex-search",
             "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "MetadataDenied",
+            "code": "search.metadata_denied",
+            "type": "urn:packman:problem:search.metadata_denied",
+            "status": 403,
+            "title": "Search metadata is unavailable.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
             "case": "SearchWitnessChanged",
             "code": "search.witness_changed",
             "type": "urn:packman:problem:search.witness_changed",

@@ -85,7 +85,7 @@ final class WebhookSubscriptionTest extends TestCase
         }
 
         $this->expectException(InvalidArgumentException::class);
-        new WebhookTopic('orders.placed', 1, 'v1', ['id' => 'string'], hash('sha256', '{}'), 'none', 'App\\Events\\OrderPlaced');
+        new WebhookTopic('orders.placed', 1, 'v2', ['id' => 'string'], hash('sha256', '{}'), 'none', 'App\\Events\\OrderPlaced');
     }
 
     public function test_sensitive_topics_require_an_ability_and_secrets_are_always_denied(): void
@@ -255,14 +255,14 @@ final class WebhookSubscriptionTest extends TestCase
     {
         $schema = ['id' => 'string'];
 
-        return new WebhookTopic($name, 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), $piiClass, $projector);
+        return new WebhookTopic($name, 1, 'v2', $schema, hash('sha256', JsonCanonical::encode($schema)), $piiClass, $projector);
     }
 
     private function subscription(string $id, string $topic = 'orders.placed', string $pii = 'personal'): WebhookSubscription
     {
         $now = $this->clock->now();
 
-        return new WebhookSubscription($id, 0, 'v1', $topic, 1, 'https://hooks.example/receiver', 'active', $pii, ['current'], $now, $now);
+        return new WebhookSubscription($id, 0, 'v2', $topic, 1, 'https://hooks.example/receiver', 'active', $pii, ['current'], $now, $now);
     }
 
     private function configure(string $name): void

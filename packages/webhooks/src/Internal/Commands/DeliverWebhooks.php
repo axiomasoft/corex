@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
 use Illuminate\Console\Command;
 use Packman\Attributes\Internal;
@@ -27,7 +28,7 @@ final class DeliverWebhooks extends Command
     {
         try {
             $scope = $this->laravel->make(DataScopeFactory::class)->forCurrentPrincipal($this->laravel->make(TenantContextResolver::class)->current());
-        } catch (CentralContextException|ScopeContextMismatch) {
+        } catch (CentralContextException|ScopeContextMismatch|ScopeStale) {
             $this->components->warn('No trusted tenant scope is active.');
 
             return self::SUCCESS;

@@ -62,6 +62,7 @@ use Packman\Modules\Data\Extenders\Workflow;
 use Packman\Modules\Data\Lifecycle\ModuleActivationDecision;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Enums\Lifecycle\ModuleState;
+use Packman\Modules\Internal\Discovery\ModuleDiscovery as PackmanModuleDiscovery;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Testing\MigratesSchemaSets;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -599,13 +600,20 @@ final class TaskCompletionCaptureTest extends TestCase
 
     private function writeWarmRegistry(Application $app): void
     {
-        $manifest = (new TasksModule)->manifest();
+        // The Testbench skeleton has its own Composer metadata. Supply the same
+        // Tasks declaration to the compiler and Packman's lifecycle discovery.
+        $discovery = new PackmanModuleDiscovery(fallbackModules: [TasksModule::class]);
+        $app->instance(ModuleDiscovery::class, $discovery);
+        $manifests = $discovery->discover();
         $compiled = $app->make(ModuleCompilation::class)->compile(
-            manifests: [$manifest],
+            manifests: $manifests,
             installedPackages: [TasksModule::NAME],
             installedVersions: [TasksModule::NAME => new InstalledPackageVersion(TasksModule::NAME, '2.0.0', 'fixture')],
         );
-        $cache = ['modules' => [CompiledModule::fromManifest($manifest)->toArray()], 'registry' => $compiled->toArray()];
+        $cache = [
+            'modules' => array_map(static fn (ModuleManifest $manifest): array => CompiledModule::fromManifest($manifest)->toArray(), $manifests),
+            'registry' => $compiled->toArray(),
+        ];
         file_put_contents($this->moduleCache, '<?php return '.var_export($cache, true).';');
     }
 

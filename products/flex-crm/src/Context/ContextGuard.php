@@ -68,7 +68,7 @@ final readonly class ContextGuard
                 || $scope->principalId !== (string) $ctx->principalId) {
                 throw new AuthorizationException('The CRM write does not belong to the current scope.');
             }
-            ReferenceWrites::enlist($db, $scope, 'flex/crm', 'crm-mutation', ['actor' => $ctx->actor->source]);
+            ReferenceWrites::enlist(connection: $db, scope: $scope, producer: 'flex/crm', kind: 'crm-mutation', witness: ['actor' => $ctx->actor->source]);
         }
 
         return $ctx;

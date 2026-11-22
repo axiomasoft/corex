@@ -22,7 +22,7 @@ final readonly class PhysicalBinding
         public string $mode = 'open',
         public int $controlRevision = 1,
     ) {
-        ScopeIdentity::physical($deploymentId, $bindingId, $bindingGeneration, $accountIncarnation, $restoreEpoch);
+        ScopeIdentity::physical(deployment: $deploymentId, binding: $bindingId, generation: $bindingGeneration, incarnation: $accountIncarnation, epoch: $restoreEpoch);
 
         if ($controlRevision < 1 || ! in_array($mode, ['open', 'closing', 'closed'], true)) {
             throw new InvalidArgumentException('Invalid physical binding admission state.');

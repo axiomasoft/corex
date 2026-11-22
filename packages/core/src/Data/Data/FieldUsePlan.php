@@ -16,14 +16,14 @@ final readonly class FieldUsePlan
 
     public static function denied(): self
     {
-        return new self(FieldUsePlanKind::Denied, null, []);
+        return new self(kind: FieldUsePlanKind::Denied, witness: null, recordIds: []);
     }
 
     public static function unconditional(string $witness): self
     {
         self::checkWitness($witness);
 
-        return new self(FieldUsePlanKind::Unconditional, $witness, []);
+        return new self(kind: FieldUsePlanKind::Unconditional, witness: $witness, recordIds: []);
     }
 
     /** @param list<string> $recordIds */
@@ -41,7 +41,7 @@ final readonly class FieldUsePlan
             }
         }
 
-        return new self(FieldUsePlanKind::ScopedPredicate, $witness, $recordIds);
+        return new self(kind: FieldUsePlanKind::ScopedPredicate, witness: $witness, recordIds: $recordIds);
     }
 
     private static function checkWitness(string $witness): void

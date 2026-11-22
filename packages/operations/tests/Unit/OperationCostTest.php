@@ -56,7 +56,7 @@ it('estimates table-driven weights, page, export, field, relation, filter, highl
     foreach ($cases as $name => $case) {
         [$recipe, $costInput, $expected] = $case;
         $pagination = $case[3] ?? null;
-        $api = Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema);
+        $api = Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema, version: 'v2');
 
         if (is_array($recipe)) {
             $api->cost($recipe);
@@ -77,7 +77,7 @@ it('denies overflow and absent bounded export', function () use ($schema, $proje
     $estimator = new DeclaredCostEstimator;
 
     $overflow = $project(
-        Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema)
+        Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema, version: 'v2')
             ->cost(['row' => 2, 'max_units' => 10]),
     );
 
@@ -93,7 +93,7 @@ it('denies overflow and absent bounded export', function () use ($schema, $proje
     }
 
     $unbounded = $project(
-        Api::operation('notes.export', 'POST', '/notes/export', CostOperationHandler::class, 'notes.read', $schema, $schema)
+        Api::operation('notes.export', 'POST', '/notes/export', CostOperationHandler::class, 'notes.read', $schema, $schema, version: 'v2')
             ->asBulkQuery()
             ->idempotency('required')
             ->effect('tenant_transactional')
@@ -115,7 +115,7 @@ it('does not call database, cache or network while estimating', function () use 
     Cache::put('cost-sentinel', 'untouched');
 
     $operation = $project(
-        Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema)
+        Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema, version: 'v2')
             ->cost(['row' => 2, 'field' => 1]),
     );
 
@@ -146,8 +146,8 @@ it('keeps old positional constructors working and hashes cost additively', funct
         ->and($positional->executionSupported)->toBeTrue()
         ->and($positional->id)->toBe('notes.list');
 
-    $legacy = $project(Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema));
-    $priced = $project(Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema)->cost(['base' => 1]));
+    $legacy = $project(Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema, version: 'v2'));
+    $priced = $project(Api::operation('notes.list', 'GET', '/notes', CostOperationHandler::class, 'notes.read', $schema, $schema, version: 'v2')->cost(['base' => 1]));
 
     expect($legacy->cost)->toBeNull()
         ->and($priced->cost['base'] ?? null)->toBe(1)

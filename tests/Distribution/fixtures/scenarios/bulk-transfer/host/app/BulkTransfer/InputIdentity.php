@@ -48,7 +48,7 @@ final class InputIdentity
             'equipment' => 'equipment.ndjson',
             'equipment-alternate' => 'equipment-alternate.ndjson',
         };
-        $bytes = file_get_contents(resource_path('bulk-transfer/'.$file));
+        $bytes = file_get_contents(__DIR__.'/resources/'.$file);
 
         if (! is_string($bytes) || ! str_ends_with($bytes, "\n") || preg_match('//u', $bytes) !== 1) {
             throw new RuntimeException('Input is not complete UTF-8 NDJSON.');

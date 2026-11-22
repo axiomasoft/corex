@@ -1,4 +1,8 @@
 
+## CoreX 2.0 — HTTP v2
+
+- Compile the nine management routes and declared webhook topics into the v2 catalogue. Webhook delivery payload and signature versions remain governed by their own contract.
+
 ## Unreleased — Packman governance
 
 ## Unreleased — CoreX 2.0 delivery receipts

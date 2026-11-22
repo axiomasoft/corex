@@ -41,9 +41,9 @@ final class FixtureSetup
         return $names;
     }
 
-    public static function install(): void
+    public static function install(string $case = 'bulk-transfer'): void
     {
-        ScenarioSetup::install('bulk-transfer', false);
+        ScenarioSetup::install($case, false);
         app(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
         $tenant = Scenario::connection('a');
         $schema = $tenant->getSchemaBuilder();

@@ -60,9 +60,7 @@ final readonly class GdThumbnailDriver implements ConversionDriver
             imagefill($target, 0, 0, $color);
         }
 
-        if (! imagecopyresampled($target, $source, 0, 0, 0, 0, $width, $height, $sourceWidth, $sourceHeight)) {
-            throw new MediaOperationConflict('The conversion target could not be rendered.');
-        }
+        imagecopyresampled($target, $source, 0, 0, 0, 0, $width, $height, $sourceWidth, $sourceHeight);
 
         ob_start();
         $written = $facts['mime'] === 'image/png' ? imagepng($target) : imagejpeg($target, quality: 85);

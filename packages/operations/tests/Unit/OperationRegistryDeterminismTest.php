@@ -22,11 +22,12 @@ it('rejects duplicate normalized route identity and names both owners', function
         ability: 'notes.view',
         requestSchema: ['type' => 'object', 'additionalProperties' => false],
         responseSchema: ['type' => 'object', 'additionalProperties' => false],
+        version: 'v2',
     );
 
     $alpha = ModuleManifest::make('example/alpha')->title('A')->tablePrefix('aaa')->extends([$operation()]);
     $beta = ModuleManifest::make('example/beta')->title('B')->tablePrefix('bbb')->extends([$operation()]);
 
     expect(fn () => resolve(ModuleCompilation::class)->compile([$alpha, $beta], []))
-        ->toThrow(CompilationException::class, 'Duplicate identity [api.operation:v1:notes.show]');
+        ->toThrow(CompilationException::class, 'Duplicate identity [api.operation:v2:notes.show]');
 });

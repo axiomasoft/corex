@@ -73,10 +73,10 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         ]));
 
         return $this->connection->transaction(function () use ($context, $scope, $input, $subject, $payload, $related, $channels, $identity, $digest): NotificationRef {
-            $this->current->assert($scope, $this->connection);
-            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-notifications', 'notify', ['source' => $identity, 'related' => $related, 'channels' => $channels]);
+            $this->current->assert(scope: $scope, connection: $this->connection);
+            ReferenceWrites::enlist(connection: $this->connection, scope: $scope, producer: 'axiomasoft/corex-notifications', kind: 'notify', witness: ['source' => $identity, 'related' => $related, 'channels' => $channels]);
 
-            if (! $this->policy->allows($context, NotificationAction::Notify, $subject)) {
+            if (! $this->policy->allows(context: $context, action: NotificationAction::Notify, subject: $subject)) {
                 throw new NotificationAccessDenied('Notification delivery is denied.');
             }
 
@@ -116,7 +116,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 
                 foreach ($channels as $channel) {
                     $key = hash('sha256', $this->json(['delivery' => $identity, 'channel' => $channel]));
-                    $this->deliveries->add($scope, $id, null, $channel, $key, $message);
+                    $this->deliveries->add(scope: $scope, notificationId: $id, runId: null, channel: $channel, effectKey: $key, message: $message);
                 }
             }
 
@@ -129,14 +129,14 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         $scope = $this->scopes->of($context);
 
         return $this->connection->transaction(function () use ($context, $scope, $notificationId): CancelResult {
-            $this->current->assert($scope, $this->connection);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $notification = $this->notifications($scope)->where('id', $notificationId)->lockForUpdate()->first();
 
             if ($notification === null) {
                 return new CancelResult(cancelled: false, alreadyDispatched: []);
             }
 
-            if (! $this->policy->allows($context, NotificationAction::Cancel, $this->visibility->subject($notification))) {
+            if (! $this->policy->allows(context: $context, action: NotificationAction::Cancel, subject: $this->visibility->subject($notification))) {
                 throw new NotificationAccessDenied('Notification cancellation is denied.');
             }
 
@@ -164,11 +164,11 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         $scope = $this->scopes->of($context);
 
         $this->connection->transaction(function () use ($context, $scope, $notificationId): void {
-            $this->current->assert($scope, $this->connection);
+            $this->current->assert(scope: $scope, connection: $this->connection);
             $query = $this->recipient($scope)->where('id', $notificationId);
             $notification = $query->lockForUpdate()->first();
 
-            if ($notification === null || ! $this->visibility->allows($context, $this->visibility->subject($notification))) {
+            if ($notification === null || ! $this->visibility->allows(context: $context, subject: $this->visibility->subject($notification))) {
                 throw new NotificationAccessDenied('Notification is unavailable.');
             }
 
@@ -185,8 +185,8 @@ final readonly class SqlNotificationCenter implements NotificationCenter
     public function inbox(NotificationContext $context, InboxQuery $query): InboxPage
     {
         $scope = $this->scopes->of($context);
-        $this->current->assert($scope, $this->connection);
-        $before = $this->decodeCursor($scope, $query->before);
+        $this->current->assert(scope: $scope, connection: $this->connection);
+        $before = $this->decodeCursor(scope: $scope, cursor: $query->before);
         $rows = $this->recipient($scope)
             ->when($before !== null, static fn (Builder $builder) => $builder->where('id', '<', $before))
             ->orderByDesc('id')
@@ -197,23 +197,23 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         $last = null;
         foreach ($rows as $index => $row) {
             if ($index === self::ScanLimit || count($result) === $query->limit) {
-                return new InboxPage($result, $last === null ? null : $this->cursor($scope, $last));
+                return new InboxPage(items: $result, cursor: $last === null ? null : $this->cursor(scope: $scope, id: $last));
             }
 
             $last = NotificationValue::text($row->id);
 
-            if ($this->visibility->allows($context, $this->visibility->subject($row))) {
+            if ($this->visibility->allows(context: $context, subject: $this->visibility->subject($row))) {
                 $result[] = $this->reference($row);
             }
         }
 
-        return new InboxPage($result, null);
+        return new InboxPage(items: $result, cursor: null);
     }
 
     public function unreadCount(NotificationContext $context): UnreadCount
     {
         $scope = $this->scopes->of($context);
-        $this->current->assert($scope, $this->connection);
+        $this->current->assert(scope: $scope, connection: $this->connection);
         $rows = $this->recipient($scope)->whereNull('read_at')->limit(self::ScanLimit + 1)->get();
 
         if ($rows->count() > self::ScanLimit) {
@@ -222,7 +222,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 
         $count = 0;
         foreach ($rows as $row) {
-            if ($this->visibility->allows($context, $this->visibility->subject($row))) {
+            if ($this->visibility->allows(context: $context, subject: $this->visibility->subject($row))) {
                 $count++;
             }
         }
@@ -282,12 +282,12 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         $subject = $this->visibility->subject($row);
 
         return new NotificationRef(
-            id: NotificationValue::text(NotificationValue::field($row, 'id')),
+            id: NotificationValue::text(NotificationValue::field(row: $row, name: 'id')),
             recipient: $subject->recipient,
-            eventType: NotificationValue::text(NotificationValue::field($row, 'event_type')),
-            revision: NotificationValue::text(NotificationValue::field($row, 'revision')),
-            readAt: $this->date(NotificationValue::field($row, 'read_at')),
-            cancelledAt: $this->date(NotificationValue::field($row, 'cancelled_at')),
+            eventType: NotificationValue::text(NotificationValue::field(row: $row, name: 'event_type')),
+            revision: NotificationValue::text(NotificationValue::field(row: $row, name: 'revision')),
+            readAt: $this->date(NotificationValue::field(row: $row, name: 'read_at')),
+            cancelledAt: $this->date(NotificationValue::field(row: $row, name: 'cancelled_at')),
             related: $subject->related,
         );
     }

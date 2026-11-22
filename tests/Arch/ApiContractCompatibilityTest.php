@@ -7,7 +7,7 @@ declare(strict_types=1);
 test('api contract gate accepts the committed snapshot and additive fixtures', function (): void {
     $repoRoot = dirname(__DIR__, 2);
 
-    $committed = runContractGate($repoRoot, $repoRoot.'/api/v1', $repoRoot.'/api/v1');
+    $committed = runContractGate($repoRoot);
     $allowed = runContractGate(
         $repoRoot,
         $repoRoot.'/tests/fixtures/api-contract/baseline',
@@ -27,6 +27,39 @@ test('api contract gate accepts the committed snapshot and additive fixtures', f
         ->and($webhookAllowed['exit'])->toBe(0, $webhookAllowed['output'])
         ->and($webhookAllowed['output'])->toContain('api-contract: OK');
 });
+
+test('the v2 contract check refuses an incomplete or stale carrier set', function (string $fault, string $violation): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $directory = sys_get_temp_dir().'/corex-api-contract-'.bin2hex(random_bytes(8));
+    mkdir($directory);
+
+    try {
+        foreach (glob($repoRoot.'/api/v2/*.json') ?: [] as $path) {
+            copy($path, $directory.'/'.basename($path));
+        }
+
+        $carrier = $directory.'/webhooks.json';
+
+        if ($fault === 'missing') {
+            unlink($carrier);
+        } else {
+            file_put_contents($carrier, "\n", FILE_APPEND);
+        }
+
+        $result = runContractGate($repoRoot, $repoRoot.'/api/v2', $directory);
+
+        expect($result['exit'])->toBe(1, $result['output'])
+            ->and($result['output'])->toContain($violation);
+    } finally {
+        foreach (glob($directory.'/*.json') ?: [] as $path) {
+            unlink($path);
+        }
+        rmdir($directory);
+    }
+})->with([
+    'missing carrier' => ['missing', 'snapshot-file-set manifest.json /files'],
+    'stale digest' => ['stale', 'snapshot-digest manifest.json /files/webhooks.json'],
+]);
 
 test('api contract gate rejects each forbidden intra-major delta', function (string $candidate, string $rule, string $pointer, string $baseline = 'baseline'): void {
     $repoRoot = dirname(__DIR__, 2);
@@ -77,12 +110,14 @@ test('api contract check refuses to update the baseline', function (): void {
 /**
  * @return array{exit: int, output: string}
  */
-function runContractGate(string $repoRoot, string $baseline, string $candidate): array
+function runContractGate(string $repoRoot, ?string $baseline = null, ?string $candidate = null): array
 {
-    $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/check-api-contract.php')
-        .' --baseline '.escapeshellarg($baseline)
-        .' --candidate '.escapeshellarg($candidate)
-        .' 2>&1';
+    $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/check-api-contract.php');
+
+    if ($baseline !== null && $candidate !== null) {
+        $command .= ' --baseline '.escapeshellarg($baseline).' --candidate '.escapeshellarg($candidate);
+    }
+    $command .= ' 2>&1';
     $output = [];
     $exitCode = 0;
 

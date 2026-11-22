@@ -23,6 +23,9 @@ interface ToolExecutionGuard
      * Exceptions must also roll back. Provider-key effects cannot be rolled back
      * locally: preserve Committed or Unknown and reconcile using the same key.
      *
+     * Exposed operations own their replay receipts. For a committed result,
+     * return the result of this invocation's effect callback unchanged.
+     *
      * @param  Closure():ToolResult  $effect
      */
     public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult;

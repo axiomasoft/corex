@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""External REST client. Reads committed api/v1 snapshots, then calls one local server."""
+"""External REST client. Reads committed api/v2 snapshots, then calls one local server."""
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 import urllib.error
-import urllib.request
+from urllib.request import Request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from http_contract import local_url, mount, open_request, operation_url, snapshots
 
 RESOURCE_IDS = (
     "note:uuid:01900000-0000-7000-8000-000000000001",
@@ -26,36 +28,11 @@ PROBLEM_KEYS = frozenset({
 SEMANTIC_ERROR_KEYS = ("code", "category", "path", "retryable", "details")
 
 
-def snapshot_bytes(directory: Path, name: str) -> bytes:
-    return (directory / name).read_bytes()
-
-
-def sha256(payload: bytes) -> str:
-    return hashlib.sha256(payload).hexdigest()
-
-
-def graphql_artifacts(directory: Path) -> list[str]:
-    return sorted(path.name for path in directory.iterdir() if path.suffix in {".graphql", ".gql"})
-
-
 def load_snapshots(directory: Path) -> dict:
-    artifacts = graphql_artifacts(directory)
-    if artifacts:
-        raise SystemExit(f"graphql artifact refused: {', '.join(artifacts)}")
-    manifest = json.loads(snapshot_bytes(directory, "manifest.json"))
-    digests = {}
-    for name, expected in manifest["files"].items():
-        actual = sha256(snapshot_bytes(directory, name))
-        if actual != expected:
-            raise SystemExit(f"stale snapshot digest: {name}")
-        digests[name] = actual
-    return {
-        "manifest": manifest,
-        "digests": digests,
-        "operations": json.loads(snapshot_bytes(directory, "operations.json")),
-        "errors": json.loads(snapshot_bytes(directory, "errors.json")),
-        "openapi": json.loads(snapshot_bytes(directory, "openapi.json")),
-    }
+    manifest, documents = snapshots(directory)
+    return {"manifest": manifest, "digests": manifest["files"],
+            "operations": documents["operations.json"], "errors": documents["errors.json"],
+            "openapi": documents["openapi.json"], "mount": mount(documents["openapi.json"])}
 
 
 def operation(contract: dict, operation_id: str) -> dict:
@@ -83,24 +60,22 @@ def semantic_error(payload: dict, media: str) -> dict:
 
 
 def forward_cursor(base: str, nxt: str) -> str:
-    if not nxt.startswith("/") or "://" in nxt:
-        raise SystemExit("cursor is not a response-provided local path")
-    return base.rstrip("/") + nxt
+    return local_url(base, nxt)
 
 
 def request_json(url: str, *, method: str = "GET", body: dict | None = None, headers: dict[str, str] | None = None) -> tuple[int, dict[str, str], dict]:
     data = None if body is None else json.dumps(body, sort_keys=True, separators=(",", ":")).encode()
-    request = urllib.request.Request(url, data=data, method=method)
+    request = Request(url, data=data, method=method)
     supplied = {name.lower(): value for name, value in (headers or {}).items()}
-    media = supplied.get("accept", "application/json")
-    request.add_header("accept", media)
+    accept = supplied.get("accept", "application/json")
+    request.add_header("accept", accept)
     if body is not None:
         request.add_header("content-type", "application/json")
     for name, value in supplied.items():
         if name != "accept":
             request.add_header(name, value)
     try:
-        with urllib.request.urlopen(request) as response:
+        with open_request(request) as response:
             raw = response.read()
             response_headers = {key.lower(): value for key, value in response.headers.items()}
             status = response.status
@@ -111,6 +86,14 @@ def request_json(url: str, *, method: str = "GET", body: dict | None = None, hea
     payload = json.loads(raw)
     if not isinstance(payload, dict):
         raise SystemExit("response is not a JSON object")
+    media = response_headers.get("content-type", "").split(";", 1)[0]
+    expected_media = "application/problem+json" if status >= 400 else "application/json"
+    if media != expected_media:
+        raise SystemExit(f"unexpected response media type: {media}")
+    if status < 400 and (payload.get("meta", {}).get("api_version") != "v2" or not isinstance(payload.get("data"), dict)):
+        raise SystemExit("success response is missing the v2 data envelope")
+    if status >= 400 and payload.get("api_version") != "v2":
+        raise SystemExit("Problem response is missing its API major")
     extra = unexpected_fields(payload, media)
     if extra:
         raise SystemExit(f"unexpected field: {', '.join(extra)}")
@@ -118,7 +101,7 @@ def request_json(url: str, *, method: str = "GET", body: dict | None = None, hea
 
 
 def assert_error(contract: dict, status: int, headers: dict[str, str], payload: dict, media: str) -> dict:
-    if headers.get("vary") != "Accept" or headers.get("cache-control") != "no-store":
+    if "no-store" not in {item.strip() for item in headers.get("cache-control", "").split(",")}:
         raise SystemExit("error response is missing published cache headers")
     semantic = semantic_error(payload, media)
     descriptor = error_descriptor(contract, semantic["code"])
@@ -139,7 +122,7 @@ def run(base: str, contract: dict) -> dict:
     if query["path"] not in contract["openapi"]["paths"] or command["path"] not in contract["openapi"]["paths"]:
         raise SystemExit("openapi is missing the published paths")
 
-    status, _, first = request_json(base + query["path"])
+    status, _, first = request_json(operation_url(base, contract["mount"], query["path"]))
     if status != query["success_status"]:
         raise SystemExit("query status drifted")
     nxt = first["data"]["next"]
@@ -152,7 +135,7 @@ def run(base: str, contract: dict) -> dict:
     for resource_id, key in zip(RESOURCE_IDS, IDEMPOTENCY_KEYS, strict=True):
         body = {"resource_id": resource_id, "title": "equipment"}
         status, _, payload = request_json(
-            base + command["path"],
+            operation_url(base, contract["mount"], command["path"]),
             method="POST",
             body=body,
             headers={"Idempotency-Key": key},
@@ -160,7 +143,7 @@ def run(base: str, contract: dict) -> dict:
         if status != command["success_status"] or payload["data"]["resource_id"] != resource_id:
             raise SystemExit(f"resource id did not round-trip: {resource_id}")
         replay_status, _, replay = request_json(
-            base + command["path"],
+            operation_url(base, contract["mount"], command["path"]),
             method="POST",
             body=body,
             headers={"Idempotency-Key": key},
@@ -169,10 +152,10 @@ def run(base: str, contract: dict) -> dict:
             raise SystemExit(f"idempotent replay diverged for {key}")
         created.append({"key": key, "data": payload["data"]})
 
-    missing = base + "/notes/missing"
+    missing = operation_url(base, contract["mount"], "/notes/missing")
     json_status, json_headers, json_body = request_json(missing, headers={"Accept": "application/json"})
     problem_status, problem_headers, problem_body = request_json(missing, headers={"Accept": "application/problem+json"})
-    json_error = assert_error(contract, json_status, json_headers, json_body, "application/json")
+    json_error = assert_error(contract, json_status, json_headers, json_body, "application/problem+json")
     problem_error = assert_error(contract, problem_status, problem_headers, problem_body, "application/problem+json")
     if json_status != problem_status or json_error != problem_error:
         raise SystemExit("error media types diverged")

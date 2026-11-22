@@ -39,9 +39,9 @@ final readonly class MembershipWorkPrincipal implements WorkPrincipalAuthority
         if (! is_string($id) || $id === '') {
             throw new ScopeContextMismatch('The authenticated principal has no stable identity.');
         }
-        $this->check($context, $id);
+        $this->check(context: $context, id: $id);
 
-        return new ScopePrincipal('user', $id);
+        return new ScopePrincipal(kind: 'user', id: $id);
     }
 
     public function run(DataScope $scope, TenantContext $context, bool $durable, Closure $work): mixed
@@ -55,7 +55,7 @@ final readonly class MembershipWorkPrincipal implements WorkPrincipalAuthority
                 throw new ScopeContextMismatch('Work principal is not authenticated.');
             }
         }
-        $this->check($context, $scope->principalId);
+        $this->check(context: $context, id: $scope->principalId);
         $guard = $this->auth->guard($this->options->membershipGuard);
         $provider = $guard instanceof SessionGuard || $guard instanceof RequestGuard ? $guard->getProvider() : null;
         $user = $provider?->retrieveById($scope->principalId);
@@ -64,7 +64,7 @@ final readonly class MembershipWorkPrincipal implements WorkPrincipalAuthority
             throw new ScopeContextMismatch('The current membership identity cannot be restored.');
         }
 
-        return $this->frame->run($user, $work, $provider);
+        return $this->frame->run(principal: $user, work: $work, provider: $provider);
     }
 
     private function check(TenantContext $context, string $id): void
@@ -73,7 +73,7 @@ final readonly class MembershipWorkPrincipal implements WorkPrincipalAuthority
             throw new ScopeContextMismatch('The user is no longer active.');
         }
         $granted = $context->workspace === null
-            ? $this->accounts->ownerIdentityId($context->account->id, $this->options->centralConnection) === $id
+            ? $this->accounts->ownerIdentityId(accountId: $context->account->id, connectionName: $this->options->centralConnection) === $id
             : WorkspaceMember::query()->where('workspace_id', $context->workspace->id)->where('user_id', $id)->where('status', 'active')->toBase()->exists();
 
         if (! $granted) {

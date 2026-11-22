@@ -24,6 +24,4 @@ interface BudgetExecution
     public function invokeTransactional(OperationInvocation $invocation, Closure $effect, BudgetAttempt $attempt): BudgetInvocationResult;
 
     public function recover(BudgetReceipt $receipt): void;
-
-    public function replay(OperationInvocation $invocation, OperationResult $result): OperationResult;
 }

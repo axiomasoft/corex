@@ -54,22 +54,22 @@ final readonly class BulkWorker
         $now = $this->clock->now();
         $definition = $claimed->definition;
 
-        if (! $this->store->ownsClaim($scope, $claimed) || $claimed->leaseUntil === null
+        if (! $this->store->ownsClaim(scope: $scope, operation: $claimed) || $claimed->leaseUntil === null
             || $now->add(new DateInterval("PT{$definition->timeLimitSeconds}S")) >= $claimed->leaseUntil) {
             return $claimed;
         }
 
         try {
             $result = $claimed->recoveryAttempts > $this->maxRecoveryAttempts
-                ? new BulkStepResult(BulkStepStatus::Failed, $claimed->checkpoint, [], errorCode: 'bulk_reconciliation_required')
-                : $this->step($scope, $claimed);
-            $advanced = $this->advance($claimed, $result);
+                ? new BulkStepResult(status: BulkStepStatus::Failed, nextCheckpoint: $claimed->checkpoint, counters: [], errorCode: 'bulk_reconciliation_required')
+                : $this->step(scope: $scope, operation: $claimed);
+            $advanced = $this->advance(operation: $claimed, outcome: $result);
         } catch (ApiError $error) {
             if ($error->errorCode !== OperationsErrorCode::IdempotencyContractMismatch->value) {
                 throw $error;
             }
-            $advanced = $this->advance($claimed, new BulkStepResult(
-                BulkStepStatus::Failed, $claimed->checkpoint, [],
+            $advanced = $this->advance(operation: $claimed, outcome: new BulkStepResult(
+                status: BulkStepStatus::Failed, nextCheckpoint: $claimed->checkpoint, counters: [],
                 errorCode: $claimed->recoveryAttempts > 1 ? 'bulk_reconciliation_required' : 'contract_drift',
             ));
         } catch (Throwable $exception) {
@@ -132,10 +132,10 @@ final readonly class BulkWorker
             JsonDocuments::map($definition->inputRef), JsonDocuments::map($definition->extensionStamp),
             $definition->rowLimit, $definition->timeLimitSeconds, $operation->checkpoint->sequence ?? 0,
         ]));
-        $context = $definition->context($scope, new OperationKey($definition->id, $operation->attempt, $token, $operation->leaseUntil));
+        $context = $definition->context(scope: $scope, key: new OperationKey(id: $definition->id, attempt: $operation->attempt, effectKey: $token, deadline: $operation->leaseUntil));
 
         return ($this->executor)()->step($context, new BulkStep(
-            $token, $operation->checkpoint, $definition->rowLimit, $definition->timeLimitSeconds, $operation->cancelRequestedAt !== null,
+            token: $token, checkpoint: $operation->checkpoint, rowLimit: $definition->rowLimit, timeLimitSeconds: $definition->timeLimitSeconds, cancelRequested: $operation->cancelRequestedAt !== null,
         ));
     }
 

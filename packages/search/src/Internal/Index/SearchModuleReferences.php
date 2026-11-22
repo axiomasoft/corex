@@ -48,7 +48,7 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
     public function scan(ModuleRef $module, DataScope $scope, ?ReferenceCursor $after): ReferencePage
     {
         $tenant = $this->connections->connection();
-        $this->current->assert($scope, $tenant);
+        $this->current->assert(scope: $scope, connection: $tenant);
         $child = static function (Builder $query, DataScope $scope) use ($tenant): void {
             $lanes = $tenant->table(LaneStore::LANES);
 
@@ -61,10 +61,10 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
             ]));
         };
 
-        return SqlReferenceInventory::scan($this->owner(), [
+        return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
             LaneStore::LANES => [$tenant, ['entity', 'active_generation', 'writer_generation', 'rebuild_id'], function (array $row, string $id) use ($scope): ?LifecycleBlocker {
                 return $row['active_generation'] === null && $row['rebuild_id'] === null ? null
-                    : new LifecycleBlocker($this->owner(), 'search-lane', $id, $scope, 'retire-or-rebind-active-lane');
+                    : new LifecycleBlocker(owner: $this->owner(), resourceKind: 'search-lane', resourceId: $id, scope: $scope, requiredAction: 'retire-or-rebind-active-lane');
             }],
             LaneStore::DIRTY => [$tenant, ['source', 'lane_key'], null, $child],
             LaneStore::RUNS => [$tenant, ['state', 'lane_key'], null, $child],
@@ -73,13 +73,13 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
                 $state = Value::text($row['state']);
 
                 if (! in_array($state, ['retired', 'cleanup', 'removed'], true)) {
-                    return new LifecycleBlocker($this->owner(), 'search-generation', $uid, $scope, 'drain-or-retire-generation');
+                    return new LifecycleBlocker(owner: $this->owner(), resourceKind: 'search-generation', resourceId: $uid, scope: $scope, requiredAction: 'drain-or-retire-generation');
                 }
-                $target = $this->target($scope, $uid);
+                $target = $this->target(scope: $scope, uid: $uid);
                 $host = $this->app->bound(IndexNamespaceExclusion::class) ? $this->app->make(IndexNamespaceExclusion::class) : null;
 
                 if ($host === null || ! in_array($host->owner(), $this->app->make(LifecycleInventory::class)->owners($scope, $module), true)) {
-                    return new LifecycleBlocker($this->owner(), 'search-generation', $uid, $scope, 'restore-exact-index-namespace-exclusion');
+                    return new LifecycleBlocker(owner: $this->owner(), resourceKind: 'search-generation', resourceId: $uid, scope: $scope, requiredAction: 'restore-exact-index-namespace-exclusion');
                 }
 
                 return $this->action($target);
@@ -92,9 +92,9 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
                     return null;
                 }
 
-                return new LifecycleBlocker($this->owner(), 'search-task', Value::text($row['task_ref'] ?? $row['provider_ticket'] ?? $id), $scope, 'reconcile-index-submission');
+                return new LifecycleBlocker(owner: $this->owner(), resourceKind: 'search-task', resourceId: Value::text($row['task_ref'] ?? $row['provider_ticket'] ?? $id), scope: $scope, requiredAction: 'reconcile-index-submission');
             }, $child],
-        ], $module, $scope, $after);
+        ], module: $module, scope: $scope, after: $after);
     }
 
     private function target(DataScope $scope, string $uid): IndexTarget
@@ -104,30 +104,30 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
         $lane = $db->table(LaneStore::LANES)->where($this->store->identity($scope))->where('lane_key', $gen->lane_key)->firstOrFail();
         $entity = new EntityHandle(Value::text($lane->entity));
 
-        if ($lane->lane_key !== $this->store->laneIdentity($scope, $entity)['lane_key']) {
+        if ($lane->lane_key !== $this->store->laneIdentity(scope: $scope, entity: $entity)['lane_key']) {
             throw new LifecycleBlocked('Search lane identity changed.');
         }
 
-        return $this->store->target($scope, $entity, $gen);
+        return $this->store->target(scope: $scope, entity: $entity, generation: $gen);
     }
 
     private function action(IndexTarget $target): CleanupAction
     {
-        return new CleanupAction($this->owner(), $target->cluster, 'retire-index', $target->uid, $target->mappingDigest,
-            'search.drop.'.hash('sha256', $target->uid.'/'.$target->allocationId.'/'.$target->mappingDigest));
+        return new CleanupAction(owner: $this->owner(), namespace: $target->cluster, resourceKind: 'retire-index', resourceId: $target->uid, version: $target->mappingDigest,
+            effectKey: 'search.drop.'.hash('sha256', $target->uid.'/'.$target->allocationId.'/'.$target->mappingDigest));
     }
 
     /** @return array{IndexTarget,IndexDriver&IndexRemovalEvidence} */
     private function verified(DataScope $scope, CleanupAction $action): array
     {
-        ReferenceWrites::assertCleanup($scope, $action);
-        $target = $this->target($scope, $action->resourceId);
+        ReferenceWrites::assertCleanup(scope: $scope, action: $action);
+        $target = $this->target(scope: $scope, uid: $action->resourceId);
         $owner = $this->app->make(IndexNamespaceExclusion::class);
 
         if (get_object_vars($this->action($target)) !== get_object_vars($action)) {
             throw new LifecycleBlocked('Unrecognized search cleanup authority.');
         }
-        $lease = ReferenceWrites::cleanupLease($scope, $action, $owner->owner());
+        $lease = ReferenceWrites::cleanupLease(scope: $scope, action: $action, owner: $owner->owner());
         $owner->verify($scope, $lease);
         $owner->verifyTarget($target, $lease);
         $driver = $this->app->make(IndexDriver::class);
@@ -142,7 +142,7 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
     private function journal(IndexTarget $target): Builder
     {
         return $this->store->db($target->scope)->table(LaneStore::SUBMISSIONS)->where([
-            'lane_key' => $this->store->laneIdentity($target->scope, $target->entity)['lane_key'],
+            'lane_key' => $this->store->laneIdentity(scope: $target->scope, entity: $target->entity)['lane_key'],
             'generation' => $target->generation, 'uid' => $target->uid,
         ]);
     }
@@ -160,25 +160,25 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
 
     public function lookup(DataScope $scope, CleanupAction $action): ?CleanupReceipt
     {
-        [$target, $driver] = $this->verified($scope, $action);
+        [$target, $driver] = $this->verified(scope: $scope, action: $action);
         $row = $this->submission($target);
 
         if ($row === null || $row->state !== 'cleanup-confirmed') {
             return null;
         }
-        $work = Submission::restore($target, $row);
+        $work = Submission::restore(target: $target, row: $row);
 
         if (! $driver->absent($target)) {
             throw new LifecycleBlocked('Removed index reappeared.');
         }
 
-        return new CleanupReceipt($action, json_encode(['uid' => $target->uid, 'allocation' => $target->allocationId,
+        return new CleanupReceipt(action: $action, evidence: json_encode(['uid' => $target->uid, 'allocation' => $target->allocationId,
             'submission' => $work->batch->submissionId, 'task' => $row->task_ref, 'absence' => 'verified'], JSON_THROW_ON_ERROR));
     }
 
     public function cleanup(DataScope $scope, CleanupAction $action): CleanupReceipt
     {
-        [$target, $driver] = $this->verified($scope, $action);
+        [$target, $driver] = $this->verified(scope: $scope, action: $action);
         $db = $this->store->db($scope);
 
         if ($db->transactionLevel() !== 0) {
@@ -186,8 +186,8 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
         }
         $send = false;
         $row = $db->transaction(function () use ($db, $scope, $target, &$send): stdClass {
-            $lane = $this->store->lane($db, $scope, $target->entity);
-            $generation = LaneStore::generation($db, $lane, $target->generation);
+            $lane = $this->store->lane(db: $db, scope: $scope, entity: $target->entity);
+            $generation = LaneStore::generation(db: $db, lane: $lane, number: $target->generation);
             $gen = (clone $generation)->lockForUpdate()->firstOrFail();
 
             if (! in_array($gen->state, ['retired', 'removed', 'cleanup'], true) || $lane->active_generation === $gen->generation
@@ -200,7 +200,7 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
                 return $prior;
             }
             $id = (string) Str::uuid7();
-            $batch = new IndexBatch($target, $id, IndexAction::Drop, []);
+            $batch = new IndexBatch(target: $target, submissionId: $id, action: IndexAction::Drop, documents: []);
             $epoch = Value::integer($gen->claim_epoch) + 1;
             $db->table('corex_search_submissions')->insert(['lane_key' => $lane->lane_key, 'generation' => $target->generation, 'submission_id' => $id,
                 'claim_epoch' => $epoch, 'uid' => $target->uid, 'deployment_id' => $scope->deploymentId, 'binding_id' => $scope->bindingId,
@@ -211,7 +211,7 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
 
             return $this->journal($target)->where('submission_id', $id)->firstOrFail();
         });
-        $work = Submission::restore($target, $row);
+        $work = Submission::restore(target: $target, row: $row);
         $journal = $this->journal($target)->where('submission_id', $work->batch->submissionId);
 
         if (! $driver->absent($target) && $send) {
@@ -224,13 +224,13 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
             || ! $driver->absent($target)) {
             throw new LifecycleBlocked('Await exact index drop evidence.');
         }
-        $this->verified($scope, $action);
+        $this->verified(scope: $scope, action: $action);
         $db->transaction(function () use ($db, $scope, $target, $journal): void {
-            $lane = $this->store->lane($db, $scope, $target->entity);
-            LaneStore::one(LaneStore::generation($db, $lane, $target->generation)->whereIn('state', ['removed', 'cleanup'])->update(['state' => 'removed']));
+            $lane = $this->store->lane(db: $db, scope: $scope, entity: $target->entity);
+            LaneStore::one(LaneStore::generation(db: $db, lane: $lane, number: $target->generation)->whereIn('state', ['removed', 'cleanup'])->update(['state' => 'removed']));
             LaneStore::one($journal->update(['state' => 'cleanup-confirmed']));
         });
 
-        return $this->lookup($scope, $action) ?? throw new LifecycleBlocked('Index retirement receipt unavailable.');
+        return $this->lookup(scope: $scope, action: $action) ?? throw new LifecycleBlocked('Index retirement receipt unavailable.');
     }
 }

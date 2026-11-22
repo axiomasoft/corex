@@ -4063,7 +4063,7 @@
             "kind": "class",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [
@@ -4097,7 +4097,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Context\\Exceptions\\ScopeContextMismatch"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -5369,6 +5369,65 @@
                         }
                     ],
                     "return": "CoreX\\Data\\Data\\FieldUsePlan",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\Data\\Contracts\\FieldUseSnapshot": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "CoreX\\Data\\Contracts\\FieldUsePolicy"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "inSnapshot": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "entity",
+                            "type": "CoreX\\Data\\Data\\EntityHandle",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "read",
+                            "type": "Closure",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "mixed",
                     "doc": []
                 }
             },

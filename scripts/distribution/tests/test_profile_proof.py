@@ -146,6 +146,64 @@ class ProfileProofTest(unittest.TestCase):
             with self.assertRaisesRegex(MODULE.ProfileError, "does not match the committed source copy"):
                 MODULE.assert_fixture_extension(consumer, extension)
 
+    def test_product_provenance_binds_the_physical_copy_to_lock_and_source(self) -> None:
+        with tempfile.TemporaryDirectory() as work:
+            consumer = Path(work)
+            source = consumer / "flex-crm"
+            MODULE.copy_committed_fixture(ROOT, Path("products/flex-crm"), source)
+            installed = consumer / "vendor/flex/crm"
+            shutil.copytree(source, installed)
+            (consumer / "vendor/composer").mkdir()
+            locked = {"name": "flex/crm", "version": "1.0.x-dev",
+                      "dist": {"type": "path", "url": "flex-crm", "reference": "a" * 40}}
+            (consumer / "composer.lock").write_text(json.dumps({"packages": [locked]}))
+            metadata = consumer / "vendor/composer/installed.json"
+            metadata.write_text(json.dumps({"packages": [locked]}))
+
+            proof = MODULE.assert_fixture_product(consumer)
+            self.assertEqual(proof["source_sha256"], proof["installed_sha256"])
+            self.assertEqual(proof["dist"], locked["dist"])
+            for version in ("1.0.x-dev", "1.0.x-dev aaaaaaa"):
+                shown = {"locked": [{"name": "flex/crm", "version": version}]}
+                self.assertEqual(MODULE.locked_summary(shown, product=proof), ["flex/crm:1.0.x-dev"])
+            shown = {"locked": [{"name": "flex/crm", "version": "1.0.x-dev bbbbbbb"}]}
+            with self.assertRaisesRegex(MODULE.ProfileError, "disagrees with the verified flex/crm version and reference"):
+                MODULE.locked_summary(shown, product=proof)
+            metadata.write_text(json.dumps({"packages": [{**locked, "dist": {**locked["dist"], "url": "../../products/flex-crm"}}]}))
+            with self.assertRaisesRegex(MODULE.ProfileError, "locked relative source distribution"):
+                MODULE.assert_fixture_product(consumer)
+            metadata.write_text(json.dumps({"packages": [locked]}))
+            (installed / "composer.json").write_text("{}")
+            with self.assertRaisesRegex(MODULE.ProfileError, "committed source copy"):
+                MODULE.assert_fixture_product(consumer)
+
+    def test_optional_host_opis_is_pinned_dist_and_never_a_corex_shadow(self) -> None:
+        with tempfile.TemporaryDirectory() as work:
+            consumer = Path(work)
+            manifest = consumer / "composer.json"
+            manifest.write_text(json.dumps({"require": {}}))
+            for requirements in ({"axiomasoft/corex": "2.0.0"}, {"opis/json-schema": "^2.6"}):
+                with self.subTest(requirements=requirements), self.assertRaisesRegex(MODULE.ProfileError, "unknown or unpinned"):
+                    MODULE.add_host_requirements(consumer, requirements)
+            pins = {"opis/json-schema": "2.6.2"}
+            MODULE.add_host_requirements(consumer, pins)
+            self.assertEqual(json.loads(manifest.read_text())["require"], pins)
+            vendor = consumer / "vendor"
+            (vendor / "composer").mkdir(parents=True)
+            (vendor / "opis/json-schema").mkdir(parents=True)
+            (vendor / "opis/json-schema/composer.json").write_text(json.dumps({"name": "opis/json-schema"}))
+            dist = {"type": "zip", "url": "https://api.github.com/repos/opis/json-schema/zipball/example", "reference": "a" * 40}
+            package = {"name": "opis/json-schema", "version": "2.6.2", "dist": dist}
+            (consumer / "composer.lock").write_text(json.dumps({"packages": [package]}))
+            installed = vendor / "composer/installed.json"
+            observed = {**package, "installation-source": "dist", "install-path": "../opis/json-schema"}
+            installed.write_text(json.dumps({"packages": [observed]}))
+            proof = MODULE.assert_host_requirements(consumer, pins)
+            self.assertEqual(proof["opis/json-schema"]["dist"], dist)
+            installed.write_text(json.dumps({"packages": [{**observed, "installation-source": "source"}]}))
+            with self.assertRaisesRegex(MODULE.ProfileError, "pinned release dist"):
+                MODULE.assert_host_requirements(consumer, pins)
+
     def test_undeclared_skip_names_the_cell(self) -> None:
         with self.assertRaises(MODULE.ProfileError) as caught:
             MODULE.assert_cell_closed({"id": "bare-single-php8.4-l12", "status": "skip"})

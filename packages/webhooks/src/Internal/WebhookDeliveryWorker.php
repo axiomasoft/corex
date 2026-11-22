@@ -15,6 +15,7 @@ use CoreX\Context\Data\ProviderObservation;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Foundation\Laravel\ReferenceWrites;
@@ -69,14 +70,14 @@ final readonly class WebhookDeliveryWorker
 
             Container::getInstance()->make(StoredWorkRunner::class)->runStored(
                 $original,
-                WebhookWork::proof($original, $delivery),
+                WebhookWork::proof(scope: $original, delivery: $delivery),
                 function (TenantContext $tenant) use ($original, $delivery): void {
                     $worker = $this->resolveWorker === null ? $this : ($this->resolveWorker)();
                     $worker->send($original, $delivery);
                 },
             );
-        } catch (InvalidArgumentException|ScopeContextMismatch) {
-            $this->store->quarantine($scope, $delivery);
+        } catch (InvalidArgumentException|ScopeContextMismatch|ScopeStale) {
+            $this->store->quarantine(scope: $scope, delivery: $delivery);
         }
 
         return $this->store->find(scope: $scope, id: $delivery->id) ?? $delivery;
@@ -84,9 +85,9 @@ final readonly class WebhookDeliveryWorker
 
     public function reconcile(DataScope $scope, string $deliveryId): bool
     {
-        $delivery = $this->store->find($scope, $deliveryId);
+        $delivery = $this->store->find(scope: $scope, id: $deliveryId);
 
-        return $delivery !== null && Container::getInstance()->make(ProviderEffectRecovery::class)->recover(WebhookWork::effect($scope, $delivery));
+        return $delivery !== null && Container::getInstance()->make(ProviderEffectRecovery::class)->recover(WebhookWork::effect(scope: $scope, delivery: $delivery));
     }
 
     private function send(DataScope $scope, WebhookDelivery $delivery): ?WebhookDelivery
@@ -178,20 +179,20 @@ final readonly class WebhookDeliveryWorker
         $container = Container::getInstance();
         $ledger = $container->make(ProviderEffectLedger::class);
         $admission = $container->make(ScopeAdmission::class);
-        $effect = WebhookWork::effect($scope, $delivery);
+        $effect = WebhookWork::effect(scope: $scope, delivery: $delivery);
         $prior = $ledger->inspect($effect);
 
         if ($prior !== null && $prior->state !== 'reconciled'
             && ! $container->make(ProviderEffectRecovery::class)->recover($effect)) {
             return null;
         }
-        $ticket = ReferenceWrites::reserveEffect($scope, new ProviderAttempt(
-            $effect, $delivery->id, $delivery->claimToken, $delivery->attempt,
-            $delivery->leaseUntil, WebhookWork::deliveryDigest($delivery),
-        ), 'axiomasoft/corex-webhooks', $ledger);
+        $ticket = ReferenceWrites::reserveEffect(scope: $scope, attempt: new ProviderAttempt(
+            effect: $effect, ownerRef: $delivery->id, claimToken: $delivery->claimToken, attempt: $delivery->attempt,
+            deadline: $delivery->leaseUntil, digest: WebhookWork::deliveryDigest($delivery),
+        ), producer: 'axiomasoft/corex-webhooks', ledger: $ledger);
 
-        if (! $this->store->startSending($scope, $delivery, $ticket->id)) {
-            $ledger->observe($ticket, new ProviderObservation(ProviderObservationKind::Absent, 'owner-send-not-started', WebhookWork::Owner));
+        if (! $this->store->startSending(scope: $scope, delivery: $delivery, ticket: $ticket->id)) {
+            $ledger->observe($ticket, new ProviderObservation(kind: ProviderObservationKind::Absent, reference: 'owner-send-not-started', observer: WebhookWork::Owner));
             $container->make(ProviderEffectRecovery::class)->recover($effect);
 
             return null;
@@ -209,13 +210,13 @@ final readonly class WebhookDeliveryWorker
         }
 
         $kind = $this->store->observation($result);
-        $ledger->observe($ticket, new ProviderObservation($kind, $result->providerRef ?? match ($kind) {
+        $ledger->observe($ticket, new ProviderObservation(kind: $kind, reference: $result->providerRef ?? match ($kind) {
             ProviderObservationKind::Confirmed => $delivery->effectKey,
             default => $result->errorCode->value ?? 'http-'.($result->status ?? 0),
-        }, WebhookWork::Owner));
+        }, observer: WebhookWork::Owner));
 
-        if ($this->store->finish($scope, $delivery, $result, sent: true)) {
-            $admission->settle($ticket, new AttemptEvidence($kind === ProviderObservationKind::Unknown ? 'unknown' : 'reconciled', $delivery->id));
+        if ($this->store->finish(scope: $scope, delivery: $delivery, result: $result, sent: true)) {
+            $admission->settle($ticket, new AttemptEvidence(outcome: $kind === ProviderObservationKind::Unknown ? 'unknown' : 'reconciled', reference: $delivery->id));
         }
 
         return null;

@@ -10,7 +10,7 @@ use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
-use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
+use CoreX\Operations\Errors\Laravel\OperationErrorBoundary;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use CoreX\Operations\Tests\Support\ErrorBoundaryCountingHandler;
 use CoreX\Operations\Tests\Support\SyntheticErrorCode;
@@ -32,7 +32,7 @@ final class OperationErrorBoundaryTest extends TestCase
     {
         $response = $this->app->make(ResponseSerializer::class)->error(
             error: new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.'),
-            metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'),
+            metadata: new InvocationMetadata('req-1', 'v2', '', 'GET', 'corr-1'),
         );
         $payload = $response->getData(true);
         $json = $response->getContent();
@@ -48,7 +48,7 @@ final class OperationErrorBoundaryTest extends TestCase
             'details' => [],
             'request_id' => 'req-1',
             'correlation_id' => 'corr-1',
-            'api_version' => 'v1',
+            'api_version' => 'v2',
         ], $payload);
         $this->assertSame('req-1', $response->headers->get('X-Request-ID'));
         $this->assertNull($response->headers->get('Vary'));
@@ -153,7 +153,7 @@ final class OperationErrorBoundaryTest extends TestCase
                 'details' => [],
                 'request_id' => 'req-boom',
                 'correlation_id' => 'req-boom',
-                'api_version' => 'v1',
+                'api_version' => 'v2',
             ])
             ->assertHeader('X-Request-ID', 'req-boom');
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
@@ -181,12 +181,14 @@ final class OperationErrorBoundaryTest extends TestCase
     public function test_framework_fallbacks_stay_safe_and_gain_a_category(): void
     {
         $mapper = resolve(ErrorMapper::class);
-        $validation = $mapper->map(ValidationException::withMessages(['title' => ['Required.']]));
+        $validation = $mapper->map(ValidationException::withMessages(['title' => ['Private validation explanation.']]));
         $http = $mapper->map(new HttpException(409, 'private secret'));
 
         $this->assertSame(422, $validation->status);
         $this->assertSame(ErrorCategory::Validation, $validation->category);
-        $this->assertSame(['title' => ['Required.']], JsonDocuments::map($validation->details));
+        $this->assertSame([], JsonDocuments::map($validation->details));
+        $this->assertSame('/title', $validation->path);
+        $this->assertStringNotContainsString('Private validation explanation.', $validation->getMessage());
         $this->assertSame(409, $http->status);
         $this->assertSame('operations.conflict', $http->errorCode);
         $this->assertSame(ErrorCategory::Conflict, $http->category);

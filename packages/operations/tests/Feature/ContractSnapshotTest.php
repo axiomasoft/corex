@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
+use CoreX\Operations\Bulk\Laravel\BulkOperationDeclarations;
+use CoreX\Operations\Metadata\Laravel\MetadataOperationDeclarations;
 use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
+use CoreX\Webhooks\Laravel\WebhookOperationDeclarations;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
@@ -20,12 +22,14 @@ final class ContractSnapshotTest extends TestCase
 {
     public function test_generation_is_byte_stable_and_check_detects_drift(): void
     {
-        $fixture = dirname(__DIR__, 4).'/tests/fixtures/public-error-contract.php';
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false)));
         $first = sys_get_temp_dir().'/corex-api-snapshot-a-'.bin2hex(random_bytes(4));
         $second = sys_get_temp_dir().'/corex-api-snapshot-b-'.bin2hex(random_bytes(4));
-        $this->artisan('corex:operations:snapshot', ['directory' => $first, '--fixture' => $fixture])->assertSuccessful();
-        $this->artisan('corex:operations:snapshot', ['directory' => $second, '--fixture' => $fixture])->assertSuccessful();
+        $invalid = sys_get_temp_dir().'/corex-api-snapshot-invalid-'.bin2hex(random_bytes(4));
+        $this->artisan('corex:operations:snapshot', ['directory' => $invalid, '--major' => 'v1'])->assertExitCode(2);
+        $this->assertDirectoryDoesNotExist($invalid);
+        $this->artisan('corex:operations:snapshot', ['directory' => $first])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $second, '--major' => 'v2'])->assertSuccessful();
         $this->assertSame($this->files($first), $this->files($second));
         $this->assertSame(hash('sha256', $this->files($first)['errors.json']), json_decode($this->files($first)['manifest.json'], true)['files']['errors.json']);
         $this->assertSame(hash('sha256', $this->files($first)['openapi.json']), json_decode($this->files($first)['manifest.json'], true)['files']['openapi.json']);
@@ -39,6 +43,15 @@ final class ContractSnapshotTest extends TestCase
         $this->assertSame('delivery-id', $webhooks['rotation']['id_semantics']);
         $this->assertSame(20480, $webhooks['payload_limit_bytes']);
         $operations = json_decode($this->files($first)['operations.json'], true);
+        $openapi = json_decode($this->files($first)['openapi.json'], true);
+        $this->assertSame([['url' => '/api/v2']], $openapi['servers']);
+        $paths = $openapi['paths'];
+        $this->assertCount(18, $operations);
+        $this->assertSame('bulk-operations.submit', $paths['/bulk-operations']['post']['operationId']);
+        $this->assertSame('webhook-deliveries.range-replay', $paths['/webhook-deliveries/replay']['post']['operationId']);
+        $this->assertArrayHasKey(304, $paths['/entities/{entity}/fields']['get']['responses']);
+        $this->assertArrayHasKey('Location', $paths['/bulk-operations']['post']['responses'][202]['headers']);
+        $this->assertSame(['v2'], array_values(array_unique(array_column($operations, 'version'))));
         $created = array_values(array_filter($operations, static fn (array $row): bool => $row['id'] === 'notes.create'))[0];
         $this->assertSame('enforce', $created['cost']['enforcement']['global']);
         $this->assertSame('observe', $created['cost']['enforcement']['account']);
@@ -49,11 +62,11 @@ final class ContractSnapshotTest extends TestCase
 
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(true)));
         $reversed = sys_get_temp_dir().'/corex-api-snapshot-c-'.bin2hex(random_bytes(4));
-        $this->artisan('corex:operations:snapshot', ['directory' => $reversed, '--fixture' => $fixture])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $reversed])->assertSuccessful();
         $this->assertSame($this->files($first), $this->files($reversed));
         $changed = sys_get_temp_dir().'/corex-api-snapshot-e-'.bin2hex(random_bytes(4));
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false, 'notes.changed')));
-        $this->artisan('corex:operations:snapshot', ['directory' => $changed, '--fixture' => $fixture])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $changed])->assertSuccessful();
         $this->assertNotSame($this->files($first)['manifest.json'], $this->files($changed)['manifest.json']);
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false)));
 
@@ -62,15 +75,10 @@ final class ContractSnapshotTest extends TestCase
         foreach ($this->files($first) as $name => $bytes) {
             file_put_contents($drift.'/'.$name, $name === 'operations.json' ? $bytes.' ' : $bytes);
         }
-        $this->artisan('corex:operations:snapshot', ['directory' => $drift, '--fixture' => $fixture, '--check' => true])->assertExitCode(1);
-        $this->artisan('corex:operations:snapshot', ['directory' => $first, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
-        $committed = dirname(__DIR__, 4).'/api/v1';
-        $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false)));
-
-        if (! is_file($committed.'/manifest.json')) {
-            $this->artisan('corex:operations:snapshot', ['directory' => $committed, '--fixture' => $fixture])->assertSuccessful();
-        }
-        $this->artisan('corex:operations:snapshot', ['directory' => $committed, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $drift, '--check' => true])->assertExitCode(1);
+        $this->artisan('corex:operations:snapshot', ['directory' => $first, '--check' => true])->assertSuccessful();
+        file_put_contents($first.'/extra.json', '{}');
+        $this->artisan('corex:operations:snapshot', ['directory' => $first, '--check' => true])->assertFailed();
 
         $joined = implode("\n", $this->files($first));
         $this->assertStringNotContainsString('/home/', $joined);
@@ -84,7 +92,7 @@ final class ContractSnapshotTest extends TestCase
     {
         $files = [];
 
-        foreach ([...ContractSnapshotBuilder::FILES, ...array_map(static fn ($section): string => $section->file(), [...$this->app->tagged(ContractSnapshotSection::class)])] as $name) {
+        foreach (ContractSnapshotBuilder::FILES as $name) {
             $files[$name] = (string) file_get_contents($directory.'/'.$name);
         }
 
@@ -96,13 +104,18 @@ final class ContractSnapshotTest extends TestCase
     private function compile(bool $reversed, string $createId = 'notes.create'): CompiledRegistry
     {
         $declarations = [
+            ...BulkOperationDeclarations::all(),
+            ...MetadataOperationDeclarations::all(),
+            ...WebhookOperationDeclarations::all(),
             Api::operation(
                 id: $createId, method: 'POST', path: '/notes', handler: NoteHandler::class, ability: 'notes.read',
                 requestSchema: ['type' => 'object'], responseSchema: ['type' => 'object'], successStatus: 201,
+                version: 'v2',
             ),
             Api::operation(
                 id: 'notes.read', method: 'GET', path: '/notes/{id}', handler: NoteHandler::class, ability: 'notes.read',
                 requestSchema: ['type' => 'object'], responseSchema: ['type' => 'object'],
+                version: 'v2',
             ),
         ];
 

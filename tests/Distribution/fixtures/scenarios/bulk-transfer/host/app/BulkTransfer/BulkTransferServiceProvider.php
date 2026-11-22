@@ -2,15 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Providers;
+namespace App\BulkTransfer;
 
-use App\BulkTransfer\BulkAuthority;
-use App\BulkTransfer\BulkDeclaration;
-use App\BulkTransfer\BulkRequest;
-use App\BulkTransfer\EquipmentExportSchema;
-use App\BulkTransfer\EquipmentInputs;
-use App\BulkTransfer\ObservedExecutor;
-use App\BulkTransfer\PrivateStorage;
 use App\Scenario\BoxedWorkspaces;
 use App\Scenario\ScenarioClock;
 use CoreX\Context\Contracts\TenancyManager;
@@ -21,7 +14,9 @@ use CoreX\ImportExport\Contracts\ExportSchemaWitness;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Bulk\Contracts\BulkDraftFactory;
 use CoreX\Operations\Bulk\Contracts\BulkExecutor;
+use CoreX\Operations\Bulk\Contracts\BulkTargetResolver;
 use CoreX\Storage\Contracts\TenantStorage;
 use Equipment\Registry\TransferBulkAdapter;
 use Equipment\Registry\TransferBulkInputs;
@@ -47,6 +42,8 @@ final class BulkTransferServiceProvider extends ServiceProvider
             $this->app->alias(BoxedWorkspaces::class, $contract);
         }
         $this->app->scoped(BulkAuthority::class);
+        $this->app->scoped(BulkDraftFactory::class, BulkDrafts::class);
+        $this->app->scoped(BulkTargetResolver::class, BulkDrafts::class);
         foreach ([PrincipalResolver::class, ClientScopeAuthorizer::class, OperationAuthorizer::class, DataScopeAuthorizer::class] as $contract) {
             $this->app->scoped($contract, static fn ($app): BulkAuthority => $app->make(BulkAuthority::class));
         }

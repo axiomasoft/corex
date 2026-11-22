@@ -33,10 +33,10 @@ final readonly class IndexProjection
     /** @return array{string,string} */
     public function witnesses(DataScope $scope, EntityHandle $entity): array
     {
-        $schema = $this->projection->describe(new ProjectionContext($scope, $entity));
+        $schema = $this->projection->describe(new ProjectionContext(scope: $scope, entity: $entity));
         $grants = [];
         foreach ($schema->fields as $field) {
-            $plan = $this->policy->plan($scope, $entity, new FieldUseRequest(new FieldSelection([$field->id]), FieldUse::Read));
+            $plan = $this->policy->plan(scope: $scope, entity: $entity, request: new FieldUseRequest(fields: new FieldSelection([$field->id]), use: FieldUse::Read));
 
             if ($plan->kind !== FieldUsePlanKind::Unconditional) {
                 throw new LogicException('Indexing requires a service grant across the indexed corpus.');
@@ -44,7 +44,7 @@ final readonly class IndexProjection
             $grants[$field->id] = $plan->witness;
 
             if ($field->authorizationField !== null) {
-                $underlying = $this->policy->plan($scope, $entity, new FieldUseRequest(new FieldSelection([$field->authorizationField]), FieldUse::Read));
+                $underlying = $this->policy->plan(scope: $scope, entity: $entity, request: new FieldUseRequest(fields: new FieldSelection([$field->authorizationField]), use: FieldUse::Read));
 
                 if ($underlying->kind !== FieldUsePlanKind::Unconditional) {
                     throw new LogicException('Indexing requires a service grant for the underlying field.');
@@ -64,13 +64,13 @@ final readonly class IndexProjection
             return true;
         }
         $target = $batch->target;
-        [$mapping] = $this->witnesses($target->scope, $target->entity);
+        [$mapping] = $this->witnesses(scope: $target->scope, entity: $target->entity);
 
         if ($mapping !== $target->mappingDigest) {
             throw new LogicException('Search index mapping changed before submission.');
         }
         foreach ($batch->documents as $planned) {
-            $current = $this->document($target->scope, $target->entity, $planned->record);
+            $current = $this->document(scope: $target->scope, entity: $target->entity, record: $planned->record);
 
             if ($current === null ? $batch->action !== IndexAction::DeleteRecords
                 : ($batch->action !== IndexAction::Upsert || $planned->values->values !== $current->values->values)) {
@@ -83,7 +83,7 @@ final readonly class IndexProjection
 
     public function document(DataScope $scope, EntityHandle $entity, RecordRef $record): ?IndexDocument
     {
-        $loaded = $this->source->load($scope, new RecordRefs([$record]))->records;
+        $loaded = $this->source->load(scope: $scope, records: new RecordRefs([$record]))->records;
 
         if ($loaded === []) {
             return null;
@@ -93,21 +93,21 @@ final readonly class IndexProjection
             throw new LogicException('Index source returned an unexpected identity.');
         }
 
-        if (! $this->auth->authorize($scope, $record, new FieldSelection([]), FieldUse::Read)->allowed) {
+        if (! $this->auth->authorize(scope: $scope, record: $record, fields: new FieldSelection([]), use: FieldUse::Read)->allowed) {
             throw new LogicException('Index service cannot read the record.');
         }
-        $context = new ProjectionContext($scope, $entity);
+        $context = new ProjectionContext(scope: $scope, entity: $entity);
         $fields = [];
         $schema = $this->projection->describe($context);
         foreach ($schema->fields as $field) {
-            if (! $this->auth->authorize($scope, $record, new FieldSelection([$field->id]), FieldUse::Read)->allowed
+            if (! $this->auth->authorize(scope: $scope, record: $record, fields: new FieldSelection([$field->id]), use: FieldUse::Read)->allowed
                 || ($field->authorizationField !== null
-                    && ! $this->auth->authorize($scope, $record, new FieldSelection([$field->authorizationField]), FieldUse::Read)->allowed)) {
+                    && ! $this->auth->authorize(scope: $scope, record: $record, fields: new FieldSelection([$field->authorizationField]), use: FieldUse::Read)->allowed)) {
                 throw new LogicException('Index service cannot read the declared field.');
             }
             $fields[] = $field->id;
         }
-        $extra = $this->projection->project($context, $record, new ProjectionSelection($fields));
+        $extra = $this->projection->project(context: $context, record: $record, selection: new ProjectionSelection($fields));
         $values = array_intersect_key($loaded[0]->values->values, array_flip($fields));
         foreach ($extra->values as $id => $value) {
             if (! in_array($id, $fields, true) || (array_key_exists($id, $values) && $values[$id] !== $value)) {
@@ -127,6 +127,6 @@ final readonly class IndexProjection
         }
         ksort($physicalValues, SORT_STRING);
 
-        return new IndexDocument($record, new ProjectedValues($physicalValues));
+        return new IndexDocument(record: $record, values: new ProjectedValues($physicalValues));
     }
 }
