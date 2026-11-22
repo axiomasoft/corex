@@ -8,7 +8,6 @@
         "~^docs/architecture/rename-registry\\.md$~",
         "~^tests/Golden/(?:rename-map|package-projection)\\.json$~",
         "~^scripts/rename-completeness\\.json$~",
-        "~^scripts/migration/corex-v2/tests/export-source-v1\\.php\\.fixture$~",
         "~^tests/Golden/baseline/~",
         "~^scripts/ratchet-successors\\.json$~"
     ],

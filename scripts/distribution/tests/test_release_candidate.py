@@ -28,20 +28,29 @@ class ReleaseCandidateTest(unittest.TestCase):
         self.git('config', 'user.email', 'candidate@example.test')
         self.git('config', 'user.name', 'Candidate Test')
         self.write('LICENSE', 'fixture license\n')
-        self.write_package('alpha', 'axiomasoft/corex-alpha', {'axiomasoft/corex-beta': '@dev', 'vendor/exact': '1.2.3'})
+        self.write_package('alpha', 'axiomasoft/corex-alpha', {'axiomasoft/corex-beta': '^2.0@dev', 'vendor/exact': '1.2.3'})
         self.write_package('beta', 'axiomasoft/corex-beta', {})
         self.write_package('flex-crm', 'flex/crm', {'axiomasoft/corex-alpha': '@dev'}, package_type='product')
         self.git('add', '-A')
         self.git('commit', '-qm', 'fixture')
         self.commit = self.git('rev-parse', 'HEAD').strip()
         self.policy = {
-            'schema_version': 'corex-release-policy/1',
+            'schema_version': MODULE.POLICY_V2,
+            'version': '2.0.0',
+            'source_constraint': '^2.0@dev',
+            'released_constraint': '^2.0',
             'include': ['composer.json', 'src/', 'README.md', 'LICENSE'],
             'forbidden_segments': ['vendor', 'node_modules', 'tests', '.env', 'auth.json', '.git', '.plan-cache'],
             'required_if_present': ['README.md'],
             'channels': {
-                'packages/alpha': {'distribution': 'public', 'mirror': 'example/corex-alpha'},
-                'packages/beta': {'distribution': 'private', 'mirror': 'example/corex-beta'},
+                'packages/alpha': {
+                    'name': 'axiomasoft/corex-alpha', 'distribution': 'public', 'mirror': 'example/corex-alpha',
+                    'edges': {'require': ['axiomasoft/corex-beta'], 'require-dev': []},
+                },
+                'packages/beta': {
+                    'name': 'axiomasoft/corex-beta', 'distribution': 'private', 'mirror': 'example/corex-beta',
+                    'edges': {'require': [], 'require-dev': []},
+                },
             },
             'excluded': [
                 {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
@@ -92,7 +101,7 @@ class ReleaseCandidateTest(unittest.TestCase):
         candidate = MODULE.build_repository(
             self.root,
             self.commit,
-            '1.0.0',
+            '2.0.0',
             output,
             self.policy,
             enforce_clean=True,
@@ -108,13 +117,13 @@ class ReleaseCandidateTest(unittest.TestCase):
 
         self.assertEqual(MODULE.output_files(first), MODULE.output_files(second))
         self.assertEqual(['axiomasoft/corex-alpha', 'axiomasoft/corex-beta'], [row['name'] for row in candidate['packages']])
-        alpha = first / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
+        alpha = first / 'artifacts/axiomasoft-corex-alpha-2.0.0.zip'
         with zipfile.ZipFile(alpha) as archive:
             self.assertNotIn('tests/Excluded.php', archive.namelist())
             composer = json.loads(archive.read('composer.json'))
         self.assertNotIn('version', composer)
         self.assertNotIn('repositories', composer)
-        self.assertEqual('^1.0', composer['require']['axiomasoft/corex-beta'])
+        self.assertEqual('^2.0', composer['require']['axiomasoft/corex-beta'])
         self.assertEqual('>=1.2.3 <=1.2.3', composer['require']['vendor/exact'])
         MODULE.verify_candidate(first / 'candidate.json', self.root, self.policy, composer_checks=False)
 
@@ -154,7 +163,7 @@ class ReleaseCandidateTest(unittest.TestCase):
 
     def test_verify_rejects_forbidden_archive_member(self) -> None:
         output, candidate = self.build()
-        archive = output / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
+        archive = output / 'artifacts/axiomasoft-corex-alpha-2.0.0.zip'
         with zipfile.ZipFile(archive, 'a') as target:
             target.writestr('tests/Leak.php', '<?php\n')
         candidate['packages'][0]['archive_sha256'] = MODULE.sha256_path(archive)
@@ -165,13 +174,13 @@ class ReleaseCandidateTest(unittest.TestCase):
 
     def test_dependency_gap_is_rejected(self) -> None:
         output, candidate = self.build()
-        original = output / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
+        original = output / 'artifacts/axiomasoft-corex-alpha-2.0.0.zip'
         tree = {}
         with zipfile.ZipFile(original) as source:
             for name in source.namelist():
                 tree[name] = {'bytes': source.read(name), 'mode': '100644'}
         composer = json.loads(tree['composer.json']['bytes'])
-        composer['require']['axiomasoft/corex-missing'] = '^1.0'
+        composer['require']['axiomasoft/corex-missing'] = '^2.0'
         tree['composer.json']['bytes'] = MODULE.pretty_json(composer)
         archive = output / 'gap.zip'
         archive_sha = MODULE.write_archive(archive, tree)
@@ -184,7 +193,7 @@ class ReleaseCandidateTest(unittest.TestCase):
             MODULE.validate_archive(
                 archive,
                 row,
-                '1.0.0',
+                '2.0.0',
                 {'axiomasoft/corex-alpha', 'axiomasoft/corex-beta'},
                 self.policy,
                 self.root,
@@ -201,7 +210,7 @@ class ReleaseCandidateTest(unittest.TestCase):
 
     def test_verify_rejects_one_byte_archive_drift(self) -> None:
         output, _ = self.build()
-        archive = output / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
+        archive = output / 'artifacts/axiomasoft-corex-alpha-2.0.0.zip'
         archive.write_bytes(archive.read_bytes() + b'!')
 
         with self.assertRaisesRegex(MODULE.CandidateError, 'archive digest mismatch'):
@@ -218,24 +227,11 @@ class ReleaseCandidateTest(unittest.TestCase):
     def commit_v2_policy(self, *, omit_migrations: bool = False) -> dict:
         self.write_package('alpha', 'axiomasoft/corex-alpha', {'axiomasoft/corex-beta': '^2.0@dev'})
         self.write('packages/alpha/database/migrations/tenant/001.php', '<?php\n')
-        policy = {
-            **copy.deepcopy(self.policy),
-            'schema_version': MODULE.POLICY_V2,
-            'version': '2.0.0',
-            'source_constraint': '^2.0@dev',
-            'released_constraint': '^2.0',
-        }
+        policy = copy.deepcopy(self.policy)
         migration = 'database/migrations/'
         policy['required_if_present'].append(migration)
         if not omit_migrations:
             policy['include'].append(migration)
-        for name, channel in policy['channels'].items():
-            leaf = name.split('/')[-1]
-            channel['name'] = f'axiomasoft/corex-{leaf}'
-            channel['edges'] = {
-                'require': ['axiomasoft/corex-beta'] if leaf == 'alpha' else [],
-                'require-dev': [],
-            }
         self.write('scripts/distribution/release-2.0-policy.json', json.dumps(policy))
         self.git('add', '-A')
         self.git('commit', '-qm', 'fixture 2.0')

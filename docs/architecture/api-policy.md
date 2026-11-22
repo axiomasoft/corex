@@ -112,8 +112,8 @@ Search проверяет готовность индекса до снимка 
 него. Если хост не может предоставить такой снимок, выдача метаданных закрыта.
 
 Пять опубликованных файлов `api/v2` имеют имена `errors.json`, `manifest.json`,
-`openapi.json`, `operations.json` и `webhooks.json`. Исторические байты `api/v1`
-хранятся как исходная база сравнения из `1c11e0e35961409631cf68ebb28c7d2cd53ebb91`.
+`openapi.json`, `operations.json` и `webhooks.json`. Для сравнения с ранним
+состоянием разработки используйте файлы из истории Git.
 
 Зелёный контракт проверяют `tests/Feature/OperationContractTest.php`,
 `tests/Arch/ApiContractTest.php`, `corex:operations:snapshot --check` и

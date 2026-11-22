@@ -15,7 +15,5 @@
   "lifecycle": 7,
   "owner-effects": 7,
   "product": 8,
-  "transport": 8,
-  "migration": 9,
-  "schema-profile": 9
+  "transport": 8
 }

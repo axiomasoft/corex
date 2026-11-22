@@ -22,14 +22,14 @@ CoreX 2.0 перевыпускает 20 пакетов на общей Composer-
 
 ## Потребители и внешние владельцы
 
-Equipment Registry, публичный Laravel consumer, Octane, пять extension fixtures и `products/flex-crm` проверяются в репозитории. Расширения Custom Fields, Search, Transfer и Workflow переходят на PHP `^8.4` вместе с пакетами CoreX 2.0. Перед production cutover владелец релиза получает у операторов текущий inventory установок, `composer.lock`, зарегистрированные Laravel providers и манифесты Packman, а также используемые REST/MCP SDK и webhook schemas. Эти артефакты разрешают актуальные PHP bindings, зависимости и runtime endpoints.
+Equipment Registry, публичный Laravel consumer, Octane, пять extension fixtures и `products/flex-crm` проверяются в репозитории. Расширения Custom Fields, Search, Transfer и Workflow используют PHP `^8.4` вместе с пакетами CoreX 2.0.
 
-Production FlexCRM и Equipment deployments, частные расширения для Search, Workflow, Custom Fields, Panels и Import/Export, внешние REST/MCP клиенты, webhook consumers и конфигурации реальных worker недоступны в базовом checkout. Их владельцы сверяют соответствующие API/SPI с установленной версией и повторяют сценарии со своими декларациями. Packman Panels подтверждает SavedViews, хост Tenancy — physical tenant binding, Vaulter — CAS blobs и pins, AzGuard — решения авторизации. Результаты входят в release evidence до production cutover.
+При подключении внешних расширений их владельцы сверяют API/SPI с установленным составом пакетов и проверяют собственные декларации. Packman Panels подтверждает SavedViews, хост Tenancy — physical tenant binding, Vaulter — CAS blobs и pins, AzGuard — решения авторизации.
 
 ## Доказательства конкретных изменений
 
 HTTP major 2 использует буквальный маршрут `/api/v2` и одну точку исполнения
-`OperationInvoker` для HTTP и MCP. `api/v1` сохраняет байты исходного сравнения.
+`OperationInvoker` для HTTP и MCP. Исходное состояние разработки доступно в истории Git.
 `api/v2` генерируется из установленного Packman-каталога и реестра Problem
 Definitions. Одна исходная tenant receipt связывает результат и расчёт бюджета.
 Повтор запроса проверяет текущие права и восстанавливает расчёт по тому же

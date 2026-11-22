@@ -22,7 +22,6 @@ from ecosystem_repositories import is_corex_package
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = Path(__file__).with_name('release-2.0-policy.json')
-LEGACY_SOURCE = '1c11e0e35961409631cf68ebb28c7d2cd53ebb91'
 POLICY_V2 = 'corex-release-policy/2'
 REQUIRE_SECTIONS = ('require', 'require-dev')
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
@@ -95,18 +94,17 @@ def load_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
 
 
 def approved_version(policy: dict[str, Any]) -> str:
-    return policy['version'] if policy.get('schema_version') == POLICY_V2 else '1.0.0'
+    return policy['version']
 
 
 def released_constraint(policy: dict[str, Any]) -> str:
-    return policy['released_constraint'] if policy.get('schema_version') == POLICY_V2 else '^1.0'
+    return policy['released_constraint']
 
 
 def validate_policy(policy: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(policy, dict):
         raise CandidateError('release policy must be an object')
-    schema = policy.get('schema_version')
-    if schema not in {'corex-release-policy/1', POLICY_V2}:
+    if policy.get('schema_version') != POLICY_V2:
         raise CandidateError('unknown release policy schema_version')
     if not isinstance(policy.get('include'), list) or 'composer.json' not in policy['include']:
         raise CandidateError('policy include must contain composer.json')
@@ -120,34 +118,33 @@ def validate_policy(policy: dict[str, Any]) -> dict[str, Any]:
         {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
     ]:
         raise CandidateError('policy must exclude the FlexCRM product')
-    if schema == POLICY_V2:
-        version = policy.get('version')
-        if not isinstance(version, str) or not re.fullmatch(r'\d+\.\d+\.\d+', version):
-            raise CandidateError('policy must approve an exact stable version')
-        major, minor, _ = version.split('.')
-        constraint = f'^{major}.{minor}'
-        if policy.get('source_constraint') != f'{constraint}@dev' or policy.get('released_constraint') != constraint:
-            raise CandidateError('policy constraints must match the approved release line')
-        names = set()
-        for path, channel in channels.items():
-            if not isinstance(channel, dict) or not re.fullmatch(r'packages/[^/]+', path):
-                raise CandidateError(f'invalid policy channel: {path}')
-            name = channel.get('name')
-            if not isinstance(name, str) or not PACKAGE.fullmatch(name) or not is_corex_package(name) or name in names:
-                raise CandidateError(f'invalid or duplicate policy identity: {path}')
-            names.add(name)
-            edges = channel.get('edges')
-            if not isinstance(edges, dict) or set(edges) != set(REQUIRE_SECTIONS):
-                raise CandidateError(f'{name}: invalid policy edge sections')
-            for dependencies in edges.values():
-                if not isinstance(dependencies, list) or any(not isinstance(dependency, str) for dependency in dependencies):
-                    raise CandidateError(f'{name}: invalid policy edges')
-                if dependencies != sorted(set(dependencies)):
-                    raise CandidateError(f'{name}: policy edges must be unique and sorted')
-        for channel in channels.values():
-            for dependencies in channel['edges'].values():
-                if channel['name'] in dependencies or set(dependencies) - names:
-                    raise CandidateError(f"{channel['name']}: policy dependency outside the cohort or self reference")
+    version = policy.get('version')
+    if not isinstance(version, str) or not re.fullmatch(r'\d+\.\d+\.\d+', version):
+        raise CandidateError('policy must approve an exact stable version')
+    major, minor, _ = version.split('.')
+    constraint = f'^{major}.{minor}'
+    if policy.get('source_constraint') != f'{constraint}@dev' or policy.get('released_constraint') != constraint:
+        raise CandidateError('policy constraints must match the approved release line')
+    names = set()
+    for path, channel in channels.items():
+        if not isinstance(channel, dict) or not re.fullmatch(r'packages/[^/]+', path):
+            raise CandidateError(f'invalid policy channel: {path}')
+        name = channel.get('name')
+        if not isinstance(name, str) or not PACKAGE.fullmatch(name) or not is_corex_package(name) or name in names:
+            raise CandidateError(f'invalid or duplicate policy identity: {path}')
+        names.add(name)
+        edges = channel.get('edges')
+        if not isinstance(edges, dict) or set(edges) != set(REQUIRE_SECTIONS):
+            raise CandidateError(f'{name}: invalid policy edge sections')
+        for dependencies in edges.values():
+            if not isinstance(dependencies, list) or any(not isinstance(dependency, str) for dependency in dependencies):
+                raise CandidateError(f'{name}: invalid policy edges')
+            if dependencies != sorted(set(dependencies)):
+                raise CandidateError(f'{name}: policy edges must be unique and sorted')
+    for channel in channels.values():
+        for dependencies in channel['edges'].values():
+            if channel['name'] in dependencies or set(dependencies) - names:
+                raise CandidateError(f"{channel['name']}: policy dependency outside the cohort or self reference")
     return policy
 
 
@@ -159,10 +156,8 @@ def source_policy(root: Path, commit: str, version: str | None = None) -> dict[s
     """Resolve the approved version from the source tree, independently of the working tree."""
     if version is not None and not re.fullmatch(r'\d+\.\d+\.\d+', version):
         raise CandidateError(f'invalid release version: {version}')
-    if version == '1.0.0' and commit != LEGACY_SOURCE:
-        raise CandidateError(f'CoreX 1.0.0 requires frozen source {LEGACY_SOURCE}')
     if version is None:
-        filename = 'release-1.0-policy.json' if commit == LEGACY_SOURCE else POLICY_PATH.name
+        filename = POLICY_PATH.name
     else:
         major, minor, _ = version.split('.')
         filename = f'release-{major}.{minor}-policy.json'
@@ -244,10 +239,9 @@ def derive_cohort(packages: list[PackageSource], policy: dict[str, Any]) -> list
         mirror = channel.get('mirror')
         if not isinstance(mirror, str) or not MIRROR.fullmatch(mirror):
             raise CandidateError(f'{package.name}: unknown mirror')
-        if policy.get('schema_version') == POLICY_V2:
-            if package.name != channel['name']:
-                raise CandidateError(f'{package.path}: policy identity mismatch for {package.name}')
-            assert_require_edges(package.name, package.composer, channel['edges'], policy['source_constraint'])
+        if package.name != channel['name']:
+            raise CandidateError(f'{package.path}: policy identity mismatch for {package.name}')
+        assert_require_edges(package.name, package.composer, channel['edges'], policy['source_constraint'])
     return live_corex
 
 
@@ -266,9 +260,8 @@ def assert_clean_source(root: Path, ref: str, packages: list[PackageSource], pol
     if resolve_commit(root, 'HEAD') != ref:
         raise CandidateError(f'checkout must be at the requested source commit {ref}')
     paths = [package.path for package in packages]
-    if policy.get('schema_version') == POLICY_V2:
-        major, minor, _ = approved_version(policy).split('.')
-        paths.extend(['packages', 'products', 'LICENSE', f'scripts/distribution/release-{major}.{minor}-policy.json'])
+    major, minor, _ = approved_version(policy).split('.')
+    paths.extend(['packages', 'products', 'LICENSE', f'scripts/distribution/release-{major}.{minor}-policy.json'])
     status = git_bytes(root, 'status', '--porcelain=v1', '--untracked-files=all', '--', *paths)
     if status:
         rows = status.decode('utf-8', 'replace').splitlines()
@@ -341,7 +334,7 @@ def release_composer(package: PackageSource, cohort_names: set[str], policy: dic
         composer['require-dev'] = {
             dependency: constraint
             for dependency, constraint in composer['require-dev'].items()
-            if dependency not in runtime_dependencies or (policy.get('schema_version') == POLICY_V2 and dependency in cohort_names)
+            if dependency not in runtime_dependencies or dependency in cohort_names
         }
     return pretty_json(composer)
 
@@ -442,9 +435,8 @@ def build_repository(
         'packages': manifest_rows,
         'excluded': policy['excluded'],
     }
-    if policy.get('schema_version') == POLICY_V2:
-        candidate['source_timestamp'] = source_timestamp(root, commit)
-        candidate['policy_sha256'] = sha256_bytes(canonical_json(policy))
+    candidate['source_timestamp'] = source_timestamp(root, commit)
+    candidate['policy_sha256'] = sha256_bytes(canonical_json(policy))
     (output / 'packages.json').write_bytes(pretty_json({'packages': repository}))
     (output / 'candidate.json').write_bytes(pretty_json(candidate))
     return candidate
@@ -517,8 +509,7 @@ def validate_archive(
                     raise CandidateError(f"{package['name']}: dependency gap: {dependency}")
                 if constraint != released_constraint(policy):
                     raise CandidateError(f"{package['name']}: unpinned cohort dependency: {dependency}")
-        if policy.get('schema_version') == POLICY_V2:
-            assert_require_edges(package['name'], composer, policy['channels'][package['path']]['edges'], released_constraint(policy))
+        assert_require_edges(package['name'], composer, policy['channels'][package['path']]['edges'], released_constraint(policy))
 
 
 def validate_candidate_shape(candidate: dict[str, Any], policy: dict[str, Any]) -> None:
@@ -545,7 +536,7 @@ def validate_candidate_shape(candidate: dict[str, Any], policy: dict[str, Any]) 
         expected = policy['channels'].get(row.get('path'))
         if expected is None:
             raise CandidateError(f"unexpected candidate package path: {row.get('path')}")
-        if policy.get('schema_version') == POLICY_V2 and row.get('name') != expected['name']:
+        if row.get('name') != expected['name']:
             raise CandidateError(f"{row.get('path')}: candidate package identity mismatch")
         if row.get('distribution') != expected['distribution']:
             raise CandidateError(f"{row.get('name')}: wrong distribution channel")
@@ -624,11 +615,10 @@ def verify_candidate(
     commit = resolve_commit(root, source)
     policy = policy if policy is not None else source_policy(root, commit, version)
     validate_candidate_shape(candidate, policy)
-    if policy.get('schema_version') == POLICY_V2:
-        if candidate.get('source_timestamp') != source_timestamp(root, commit):
-            raise CandidateError('candidate source timestamp mismatch')
-        if candidate.get('policy_sha256') != sha256_bytes(canonical_json(policy)):
-            raise CandidateError('candidate policy digest mismatch')
+    if candidate.get('source_timestamp') != source_timestamp(root, commit):
+        raise CandidateError('candidate source timestamp mismatch')
+    if candidate.get('policy_sha256') != sha256_bytes(canonical_json(policy)):
+        raise CandidateError('candidate policy digest mismatch')
     discovered = derive_cohort(discover_packages(root, commit), policy)
     expected_names = {package.name for package in discovered}
     candidate_names = {row['name'] for row in candidate['packages']}
