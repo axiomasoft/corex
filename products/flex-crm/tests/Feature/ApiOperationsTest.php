@@ -14,6 +14,8 @@ use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Laravel\Contracts\HttpOperationDispatcher;
 use Flex\Crm\ApiShared\CrmIdentifier;
+use Flex\Crm\Company\Api\DeleteCompanyOperation;
+use Flex\Crm\Company\Api\UpdateCompanyOperation;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\TestContext;
 use Illuminate\Http\JsonResponse;
@@ -113,6 +115,19 @@ it('declares and dispatches company, contact and association operations through 
     $shownContact = $dispatch('GET', 'contacts/'.$contactId);
     expect($shownContact->getStatusCode())->toBe(200)
         ->and($shownContact->getData(true)['data']['id'])->toBe($contactId);
+    $shownCompany = $dispatch('GET', 'companies/'.$companyId);
+    expect($shownCompany->getStatusCode())->toBe(200)
+        ->and($shownCompany->getData(true)['data']['name'])->toBe('Acme');
+    // Writes that require an idempotency key need a durable invocation
+    // principal; the handlers themselves are exercised directly.
+    $request = Mockery::mock(RequestContext::class);
+    expect(resolve(UpdateCompanyOperation::class)->handle($request, ['name' => 'Acme Group'], ['companyId' => $companyId])['name'])->toBe('Acme Group')
+        ->and($dispatch('GET', 'companies/'.$companyId)->getData(true)['data']['name'])->toBe('Acme Group');
+    $disposableId = $dispatch('POST', 'companies', ['name' => 'Disposable'])->getData(true)['data']['id'];
+    $delete = resolve(DeleteCompanyOperation::class);
+    expect(fn (): array => $delete->handle($request, ['name' => 'ignored'], ['companyId' => $disposableId]))->toThrow(ValidationException::class)
+        ->and($delete->handle($request, [], ['companyId' => $disposableId]))->toBe(['id' => $disposableId, 'deleted' => true])
+        ->and($dispatch('GET', 'companies/'.$disposableId)->getStatusCode())->toBe(404);
     $forgedOwner = $dispatch('POST', 'companies', ['name' => 'Hidden', 'owner_id' => 'forged']);
     expect($forgedOwner->getStatusCode())->toBe(403)
         ->and($forgedOwner->getData(true)['code'])->toBe('operations.forbidden');
