@@ -41,6 +41,8 @@ it('accepts the boundary values of every notification value object', function ()
 it('rejects invalid notification values', function (Closure $build): void {
     $build();
 })->throws(InvalidArgumentException::class)->with([
+    'empty recipient kind' => [fn () => new RecipientReference(kind: '', id: 'user-1')],
+    'overlong recipient id' => [fn () => new RecipientReference(kind: 'user', id: str_repeat('u', 129))],
     'inbox limit 0' => [fn () => new InboxQuery(before: null, limit: 0)],
     'inbox limit 101' => [fn () => new InboxQuery(before: null, limit: 101)],
     'empty entity handle' => [fn () => new EntityReference('', 'id')],
