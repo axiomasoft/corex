@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\SleepFuncToSleepStaticCallRector;
 use CoreX\Tooling\Rector\Laravel\Rector\StaticCall\DispatchToHelperFunctionsRector;
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -23,6 +24,10 @@ return RectorConfig::configure()
         ...glob(__DIR__.'/packages/*/database/migrations', GLOB_ONLYDIR),
         ...glob(__DIR__.'/products/*/database/migrations', GLOB_ONLYDIR),
         ...glob(__DIR__.'/packages/*/tests/Fixtures/vendor', GLOB_ONLYDIR),
+        // Runs as a bare `php` child process with no Composer autoloader.
+        SleepFuncToSleepStaticCallRector::class => [
+            __DIR__.'/packages/custom-fields/tests/Pg/Support/ObserveConcurrentIndex.php',
+        ],
     ])
     ->withSets([
         __DIR__.'/scripts/quality/rector/Laravel/config/sets/laravel-code-quality.php',

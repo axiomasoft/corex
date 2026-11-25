@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Sleep;
-
 // Separate observer process and two independent sockets. Only stop a backend building the asserted index
 // in this disposable database, after PostgreSQL identifies our own held snapshot as its blocker.
 [$script,$directory,$parent,$name] = $argv;
@@ -54,7 +52,7 @@ do {
         file_put_contents($directory.'/result', json_encode([...$work, ...$state], JSON_THROW_ON_ERROR));
         exit(0);
     }
-    Sleep::usleep(15000);
+    usleep(15000);
 } while (hrtime(true) < $until);
 
 throw new RuntimeException('PostgreSQL never reached the required owned CIC snapshot barrier.');
