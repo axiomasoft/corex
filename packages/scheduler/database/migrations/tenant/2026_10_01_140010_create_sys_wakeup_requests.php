@@ -14,7 +14,7 @@ return new class extends PackmanMigration
 
     public function up(): void
     {
-        $this->create('sys_wakeup_requests', function (Blueprint $table): void {
+        $physical = $this->create('sys_wakeup_requests', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'sys_wakeup_requests_pk');
             $table->string('account_id', 128);
@@ -40,9 +40,19 @@ return new class extends PackmanMigration
             $table->timestampTz('completed_at', 6)->nullable();
             $table->timestampsTz();
             $table->unique(['account_id', 'account_incarnation', 'workspace_scope_key', 'kind', 'request_key'], 'sys_wakeup_requests_identity_uq');
-            $table->index(['account_id', 'status', 'fire_at', 'id'], 'sys_wakeup_requests_due_ix');
-            $table->index(['account_id', 'status', 'lease_until'], 'sys_wakeup_requests_lease_ix');
         });
+
+        // The sweep orders runnable rows by the instant each one becomes due, which depends on
+        // its status (lease expiry, retry time or fire time). Indexing that same expression
+        // over runnable rows only lets the claim and next-due queries stop at the first rows
+        // that are due instead of reading and sorting every future wakeup of the account.
+        // Keep the expression identical to SweepRunner::DUE_TIME: PostgreSQL and SQLite use an
+        // expression index only for a query that repeats the same expression.
+        $this->db()->statement(<<<SQL
+            CREATE INDEX {$physical}_due_ix ON {$physical} (account_id,
+                (case when status in ('running', 'cancel-requested') then lease_until when status = 'retry-scheduled' then retry_at else fire_at end), id)
+            WHERE status IN ('pending', 'retry-scheduled', 'running', 'cancel-requested')
+            SQL);
     }
 
     public function down(): void

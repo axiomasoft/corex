@@ -5893,11 +5893,10 @@
                     "kind": "ix",
                     "columns": [
                         "account_id",
-                        "status",
-                        "fire_at",
+                        "(case when status in ('running', 'cancel-requested') then lease_until when status = 'retry-scheduled' then retry_at else fire_at end)",
                         "id"
                     ],
-                    "predicate": null,
+                    "predicate": "status IN ('pending', 'retry-scheduled', 'running', 'cancel-requested')",
                     "method": "btree"
                 },
                 {
@@ -5909,17 +5908,6 @@
                         "workspace_scope_key",
                         "kind",
                         "request_key"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "sys_wakeup_requests_lease_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "account_id",
-                        "status",
-                        "lease_until"
                     ],
                     "predicate": null,
                     "method": "btree"

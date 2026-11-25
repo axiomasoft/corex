@@ -8930,11 +8930,10 @@
                     "kind": "ix",
                     "columns": [
                         "account_id",
-                        "status",
-                        "fire_at",
+                        "(\nCASE\n    WHEN ((status)::text = ANY ((ARRAY['running'::character varying, 'cancel-requested'::character varying])::text[])) THEN lease_until\n    WHEN ((status)::text = 'retry-scheduled'::text) THEN retry_at\n    ELSE fire_at\nEND)",
                         "id"
                     ],
-                    "predicate": null,
+                    "predicate": "((status)::text = ANY ((ARRAY['pending'::character varying, 'retry-scheduled'::character varying, 'running'::character varying, 'cancel-requested'::character varying])::text[]))",
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -8947,18 +8946,6 @@
                         "workspace_scope_key",
                         "kind",
                         "request_key"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
-                    "name": "sys_wakeup_requests_lease_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "account_id",
-                        "status",
-                        "lease_until"
                     ],
                     "predicate": null,
                     "method": "btree",
