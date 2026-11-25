@@ -114,7 +114,7 @@ final readonly class ContextTenantStorage implements TenantStorage
     {
         $accountId ??= $this->contexts->current()->account->id;
 
-        if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $accountId) !== 1) {
+        if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iD', $accountId) !== 1) {
             throw new StorageOperationFailed('Tenant account identifier is invalid.');
         }
 

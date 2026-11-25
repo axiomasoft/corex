@@ -26,7 +26,7 @@ final readonly class CapabilityDescriptor
         public array $operationIds,
         public array $limits = [],
     ) {
-        if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/', $id) !== 1) {
+        if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/D', $id) !== 1) {
             throw new InvalidArgumentException('capability: id must match name.vN');
         }
 
@@ -69,7 +69,7 @@ final readonly class CapabilityDescriptor
                 throw new InvalidArgumentException('capability: public map rejects infrastructure keys');
             }
 
-            if (preg_match('/^[a-z][a-z0-9_]*$/', $key) !== 1) {
+            if (preg_match('/^[a-z][a-z0-9_]*$/D', $key) !== 1) {
                 throw new InvalidArgumentException('capability: limit keys must be public names');
             }
 

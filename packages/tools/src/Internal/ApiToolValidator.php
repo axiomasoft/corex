@@ -27,7 +27,7 @@ final class ApiToolValidator
             throw new CompilationException('Expected tool declaration.');
         }
 
-        if (preg_match('/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/', $api->toolCode) !== 1) {
+        if (preg_match('/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/D', $api->toolCode) !== 1) {
             throw new CompilationException('Invalid canonical tool code: '.$api->toolCode);
         }
 
@@ -37,7 +37,7 @@ final class ApiToolValidator
             throw new CompilationException('Canonical tool verb reserves __v suffix: '.$api->toolCode);
         }
 
-        if (preg_match('/^v[1-9][0-9]*$/', $api->toolVersion) !== 1) {
+        if (preg_match('/^v[1-9][0-9]*$/D', $api->toolVersion) !== 1) {
             throw new CompilationException('Invalid tool version: '.$api->toolVersion);
         }
 

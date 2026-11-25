@@ -284,7 +284,7 @@ final readonly class PairStore
             throw new PairStoreViolation('Production pair mapping requires a snapshot digest.');
         }
 
-        if ($snapshotDigest !== null && preg_match('/^[a-f0-9]{64}$/', $snapshotDigest) !== 1) {
+        if ($snapshotDigest !== null && preg_match('/^[a-f0-9]{64}$/D', $snapshotDigest) !== 1) {
             throw new PairStoreViolation('Snapshot digest must be a canonical SHA-256 value.');
         }
     }

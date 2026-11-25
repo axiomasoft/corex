@@ -43,7 +43,7 @@ final class PendingClearCommand extends Command
 
     private function parseDurationToSeconds(string $duration): int
     {
-        if (preg_match('/^(\d+)([smhd])$/', $duration, $matches) !== 1) {
+        if (preg_match('/^(\d+)([smhd])$/D', $duration, $matches) !== 1) {
             throw new InvalidArgumentException("Invalid --older-than duration [{$duration}]; expected e.g. 30s/15m/24h/7d.");
         }
 

@@ -23,7 +23,7 @@ final readonly class DateStart
             throw new InvalidArgumentException('TZID recurrence requires a timezone identifier.');
         }
 
-        if ($valueType === 'DATE' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $nominalStart) !== 1) {
+        if ($valueType === 'DATE' && preg_match('/^\d{4}-\d{2}-\d{2}$/D', $nominalStart) !== 1) {
             throw new InvalidArgumentException('DATE recurrence requires a calendar date start.');
         }
     }

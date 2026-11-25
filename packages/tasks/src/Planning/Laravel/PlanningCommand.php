@@ -251,7 +251,7 @@ final readonly class PlanningCommand implements TaskPlanning
             throw InvalidPlanningDraft::forField(field: 'request_key', message: 'Ключ запроса должен содержать от 1 до 190 байт.');
         }
 
-        if (preg_match('/^[a-f0-9]{64}$/', $token->payloadHash) !== 1) {
+        if (preg_match('/^[a-f0-9]{64}$/D', $token->payloadHash) !== 1) {
             throw InvalidPlanningDraft::forField(field: 'payload_hash', message: 'Хеш запроса должен быть SHA-256 в нижнем регистре.');
         }
 
