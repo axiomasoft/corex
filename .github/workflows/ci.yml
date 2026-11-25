@@ -525,6 +525,11 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:8-alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -533,7 +538,7 @@ jobs:
       - name: Set up PHP
         uses: $/.github/actions/setup-php
         with:
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, redis
       - name: Install dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
       - name: Install PostgreSQL 18 client
@@ -555,6 +560,7 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
+          P3_REDIS_PORT: 6379
       - name: PHPStan (tenancy/src)
         run: composer --working-dir=packages/tenancy analyse
 

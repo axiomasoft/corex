@@ -41,6 +41,10 @@ Some suites shell out to host tools or need PHP extensions:
   PostgreSQL 18 server).
 - The media thumbnail tests need `ext-gd`; without it the GD driver and its
   conversion profile are not registered.
+- The tenancy Redis account-menu tests need `ext-redis` and a disposable
+  Redis server; set `P3_REDIS_PORT` to its port on `127.0.0.1` (they use
+  database 15). Without the variable they are skipped. The tenancy CI job
+  runs them against a `redis:8-alpine` service.
 
 ### Standalone package installs
 
