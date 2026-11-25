@@ -64,6 +64,7 @@ it('rejects malformed CloudEvents', function (array $change): void {
     'unversioned' => [['type' => 'customfields.attribute.changed']], 'zoneless' => [['time' => '2026-10-03T08:00:00']],
     'scope list' => [['corexscope' => '[]']], 'bad date' => [['time' => '2026-02-30T08:00:00Z']],
     'invalid pii' => [['corexpii' => 'secret']], 'string envelope' => [['corexenvelope' => '2']], 'legacy' => [['corexenvelope' => 1]],
+    'foreign schema' => [['dataschema' => 'https://schemas.example.test/other/v1.json']],
     'data list' => [['data' => [1, 2]]], 'null optional' => [['subject' => null]], 'invalid trace' => [['traceparent' => []]],
 ])->throws(InvalidMessage::class);
 
@@ -106,3 +107,13 @@ it('bounds external JSON trees and rejects non JSON values', function (): void {
     }
     cloudEventCodec()->encodeExternal(cloudEventMessage(), $data);
 })->throws(InvalidMessage::class);
+
+it('refuses a fact above the contract PII limit on encode and on decode', function (): void {
+    $strict = new JsonCloudEventCodec(new ArrayMessageContractRegistry([
+        new MessageContract('customfields.attribute.changed', 1, MessageClass::IntegrationEvent, 'axiomasoft/corex-custom-fields', PiiClass::None, 'events', 'https://schemas.example.test/customfields.attribute.changed/v1.json'),
+    ]), resolve(DataScopeCodec::class));
+    $personal = new MessageEnvelope(...[...get_object_vars(cloudEventMessage()), 'piiClass' => PiiClass::Personal]);
+
+    expect(fn (): string => $strict->encode($personal))->toThrow(InvalidMessage::class)
+        ->and(fn (): MessageEnvelope => $strict->decode(cloudEventCodec()->encode($personal)))->toThrow(InvalidMessage::class);
+});
