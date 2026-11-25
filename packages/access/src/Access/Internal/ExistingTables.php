@@ -25,7 +25,7 @@ final class ExistingTables
 
     public function has(Connection $connection, string $table): bool
     {
-        $key = $this->key($connection, $table);
+        $key = $this->key(connection: $connection, table: $table);
 
         if (isset($this->seen[$key])) {
             return true;
