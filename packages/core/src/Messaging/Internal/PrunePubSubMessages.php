@@ -48,8 +48,8 @@ final class PrunePubSubMessages extends Command
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $deleted = BatchedDelete::run($connections->connection($connection)->table('sys_pubsub_messages')
-            ->where('created_at', '<', $cutoff), 'id', BatchedDelete::batchOption($this->option('batch')));
+        $deleted = BatchedDelete::run(query: $connections->connection($connection)->table('sys_pubsub_messages')
+            ->where('created_at', '<', $cutoff), key: 'id', batch: BatchedDelete::batchOption($this->option('batch')));
 
         $this->info(sprintf(
             'PubSub retention: pruned %d row(s) older than %s (threshold: %s).',

@@ -50,13 +50,13 @@ final class PruneOutboxMessages extends Command
         $now = $clock->now();
         $table = 'sys_outbox_messages';
 
-        $prunedPublished = BatchedDelete::run($connections->connection($connection)->table($table)
+        $prunedPublished = BatchedDelete::run(query: $connections->connection($connection)->table($table)
             ->where('status', 'published')
-            ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published))), 'id', $batch);
+            ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published))), key: 'id', batch: $batch);
 
-        $prunedDead = BatchedDelete::run($connections->connection($connection)->table($table)
+        $prunedDead = BatchedDelete::run(query: $connections->connection($connection)->table($table)
             ->where('status', 'dead')
-            ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead))), 'id', $batch);
+            ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead))), key: 'id', batch: $batch);
 
         $this->info(sprintf(
             'Outbox retention: pruned %d published (older than %s) and %d dead (older than %s).',

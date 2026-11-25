@@ -810,7 +810,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
-            "source_sha256": "c32142d9331af3b4013bd2982ca52951d44f16f73b95b1abba95e07303fe574b",
+            "source_sha256": "3677618cafcb58bc45a41a1ddc5bfc8e88a9f292d4cfd4ac2c6a05c30fc219ab",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -862,7 +862,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\PrunePubSubMessages::handle",
             "source": "packages/core/src/Messaging/Internal/PrunePubSubMessages.php",
-            "source_sha256": "570e7073694aee252d7941a91e335e3b37ae7a0f071d56d59ea570353dc0945a",
+            "source_sha256": "590f017fe37dd1ab54aa9d2957066a55cecb5da75d5c773ab5ab07dee3e046c0",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\PrunePubSubMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
