@@ -17,8 +17,8 @@ PSR-4 пути внутри монорепозитория владельца. �
 | Владелец | Пакеты | Source reference |
 |---|---|---|
 | Packman (`0.1.2`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `d4eaf2ad01d22a822368765d154ae51ff70981f2` |
-| AzGuard | `azguard` | `68709d166ec2b91f7dce3975eadccd4539906bc0` |
-| Tenant | `tenant`, `tenant-laravel` | `1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd` |
+| AzGuard | `azguard` | `42bdb639d3ab4ea2571c3026113cac7727c88b18` |
+| Tenant | `tenant`, `tenant-laravel` | `6325c62d5a9c0afe1f7bce769b32b7b24c726294` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `b230f6e27b53c92145fa81be2fdeb89ea5c8ae03` |
 
 Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.2`,

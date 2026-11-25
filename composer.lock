@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20fd4232893f222146092eea1efeaa6d",
+    "content-hash": "04d61df28975058ca4963a3ec5476b94",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -2131,7 +2131,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/tenant.git",
-                "reference": "1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd"
+                "reference": "6325c62d5a9c0afe1f7bce769b32b7b24c726294"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9032,7 +9032,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/azguard.git",
-                "reference": "68709d166ec2b91f7dce3975eadccd4539906bc0"
+                "reference": "42bdb639d3ab4ea2571c3026113cac7727c88b18"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9608,7 +9608,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/tenant.git",
-                "reference": "1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd"
+                "reference": "6325c62d5a9c0afe1f7bce769b32b7b24c726294"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -16866,6 +16866,6 @@
     "platform": {
         "php": "^8.4"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.9.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.11.0"
 }
