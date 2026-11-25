@@ -60,6 +60,7 @@ final class LockedAdmissions
         if ($level === 0 || ! $this->container->bound('db.transactions')) {
             return [];
         }
+
         return array_values($this->container->make('db.transactions')->getPendingTransactions()
             ->filter(static fn (DatabaseTransactionRecord $record): bool => $record->connection === $connection->getName() && $record->level <= $level)
             ->sortBy('level')
