@@ -2,15 +2,20 @@
 #
 #   changes → quality → { tests, PostgreSQL, packages, analysis, gates } → CI gate
 #
-# `changes` skips the PHP lanes when a push touches only Markdown, docs/ or
-# LICENSE; main and workflow_dispatch always run everything. `quality` is the
-# fast fail (audit, manifests, strict validate, Pint, actionlint, zizmor):
-# heavier lanes start only after it passes. Rector and PHPStan take minutes, so
-# they run in the parallel `Static analysis` lane instead of delaying tests. The supply-chain gates (anti-weakening, gitleaks,
-# contract guard) run in parallel from the start. `CI gate` is the one check a
-# branch rule should require; skipped lanes count as passed, failed or
-# cancelled ones do not. Mutation testing runs on workflow_dispatch with
-# `mutation: true`.
+# `changes` skips the PHP lanes when the branch differs from main only in
+# Markdown, docs/ or LICENSE. It compares with main rather than with the
+# previous push, so a cancelled run never hides a code change. Pushes to main
+# and workflow_dispatch always run everything.
+#
+# `quality` is the fast fail (audit, manifest policy, strict validate, Pint,
+# actionlint, zizmor); the PHP lanes start only after it passes. Rector and
+# PHPStan take minutes, so they run in the parallel `Static analysis` lane.
+# The supply-chain gates (anti-weakening, gitleaks, contract guard) start
+# immediately.
+#
+# `CI gate` is the one check a branch rule should require: skipped lanes count
+# as passed, failed or cancelled ones do not. Mutation testing runs on
+# workflow_dispatch with `mutation: true`.
 
 name: CI
 
@@ -57,11 +62,13 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Filter paths
         id: filter
         if: github.event_name != 'workflow_dispatch' && github.ref != 'refs/heads/main'
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
+          base: main
           filters: |
             code:
               - "**"
