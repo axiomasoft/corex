@@ -15,12 +15,9 @@
         }
     ],
     "require": {
-        "ext-ctype": "*",
         "ext-filter": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "ext-session": "*",
-        "ext-sodium": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^2.0@dev",
         "firebase/php-jwt": "^7.1",

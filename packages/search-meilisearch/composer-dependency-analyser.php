@@ -13,4 +13,8 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/contracts; shipped component imports retain their standalone constraint
     ->ignoreErrorsOnPackage('illuminate/contracts', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped component imports retain their standalone constraint
-    ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY]);
+    ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
+    // The PostgreSQL + Meilisearch retirement case runs only in the root suite (root TestCase); its fixtures live in the test file.
+    ->ignoreUnknownClasses(['CoreX\\Tests\\TestCase', 'FixtureSearchRetirementModule', 'SearchRetirementTestCase'])
+    // Shared monorepo fixtures from tests/Support, loaded by tests/Support/autoload.php; not a Composer package.
+    ->ignoreUnknownClassesRegex('~^CoreX\\\\Tests\\\\Support\\\\~');

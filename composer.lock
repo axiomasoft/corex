@@ -12,14 +12,14 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "772a22acf010e96735f1223980ffc19f13254c37"
+                "reference": "97f59034867b827163e0c40a3c76c028735d22b8"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-ctype": "*",
-                "ext-mbstring": "*",
+                "ext-filter": "*",
                 "illuminate/auth": "^13.0",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -36,6 +36,7 @@
             },
             "require-dev": {
                 "ext-pdo": "*",
+                "ext-posix": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/octane": "2.21.0",
                 "mockery/mockery": "^1.6",
@@ -166,7 +167,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "17f60ef9af2f292d4dface51d256ad096f8f0c32"
+                "reference": "3140f3d15b86117036cae3def78e4ba4f9ba6895"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -175,6 +176,7 @@
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
+                "ext-pdo": "*",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
@@ -186,6 +188,9 @@
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
                 "symfony/process": "^7.2|^8.0"
+            },
+            "suggest": {
+                "ext-pdo_pgsql": "Direct DDL sessions for queued schema operations on PostgreSQL connections."
             },
             "type": "library",
             "extra": {
@@ -266,7 +271,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/import-export",
-                "reference": "169f4dd7be8fe2a0a5941dcd5abbb627eec82e99"
+                "reference": "c4b6a32c9e390d1215dca4c1a7d93e252bf8980c"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -279,6 +284,7 @@
             },
             "require-dev": {
                 "illuminate/contracts": "^13.0",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5"
             },
@@ -648,7 +654,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "39f2ecdba4600bb570fd0e4b983bfc1f5db7a317"
+                "reference": "6d5761a47f7ac6dcc6bb3a23e4c3c4859b0f0aba"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -676,6 +682,7 @@
                 "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "opis/json-schema": "^2.4.1",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
@@ -765,16 +772,16 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "2465d5eb3ae5ab8807a9e188e05f91e6ed0b6b90"
+                "reference": "005226bc850a9fee864d773ca93111cb6cf359bd"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-panels": "^0.1",
+                "ext-filter": "*",
                 "illuminate/contracts": "^13.0",
                 "illuminate/support": "^13.0",
-                "php": "^8.4",
-                "psr/clock": "^1.0"
+                "php": "^8.4"
             },
             "require-dev": {
                 "axiomasoft/packman-schema": "^0.1",
@@ -783,7 +790,8 @@
                 "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
-                "pestphp/pest": "^5.2"
+                "pestphp/pest": "^5.2",
+                "psr/clock": "^1.0"
             },
             "type": "library",
             "extra": {
@@ -849,10 +857,9 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "70e47c007d49d124e350897bc070fcb504dc9865"
+                "reference": "15608f356d522331d6b17f068e89a71552c875c2"
             },
             "require": {
-                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "laravel/framework": "^13.0",
                 "php": "^8.4",
@@ -1107,12 +1114,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "b0f846d0041a0a5a69ce313ba8e0eb002ddab511"
+                "reference": "9bb7131cb162222b6be1bdf54c6321fad5a7e5f4"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-schema": "^0.1",
+                "ext-filter": "*",
                 "ext-openssl": "*",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
@@ -1121,8 +1129,10 @@
                 "psr/clock": "^1.0"
             },
             "require-dev": {
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5"
+                "orchestra/testbench-core": "^11.5",
+                "phpunit/phpunit": "^13.3"
             },
             "type": "library",
             "extra": {
@@ -1201,7 +1211,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-custom-fields",
-                "reference": "02c71a841580b16ae61252b6e65dd2125426c670"
+                "reference": "efba494323eb751063333c4424442a7b52187bc3"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1215,7 +1225,8 @@
             },
             "require-dev": {
                 "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5"
+                "orchestra/testbench-core": "^11.5",
+                "phpunit/phpunit": "^13.3"
             },
             "type": "library",
             "extra": {
@@ -1286,7 +1297,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "ff82e6178ed6464892b3f89438a7e85c1e22cb0a"
+                "reference": "8a651dd9345bf825b2eca63f3aa49c23c8e1b71d"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1300,6 +1311,7 @@
                 "axiomasoft/packman-schema": "^0.1",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
@@ -1367,7 +1379,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "d2b75418c4eef46856cfdc231f75ac943cfe4514"
+                "reference": "dab0f55cdd81d9db8ca35e0d95c5d06a1dd22813"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1380,6 +1392,8 @@
                 "php": "^8.4"
             },
             "require-dev": {
+                "axiomasoft/packman-modules": "^0.1.1",
+                "axiomasoft/packman-schema": "^0.1",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
                 "phpunit/phpunit": "^13.3"
@@ -1567,7 +1581,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "8cb11fd2505b9bc42a2198a278f5b554ad839923"
+                "reference": "a6f0afd83c02a250f82801d4c1e1f9692972d2a2"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1582,8 +1596,11 @@
                 "php": "^8.4"
             },
             "require-dev": {
+                "axiomasoft/packman-schema": "^0.1",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5"
+                "orchestra/testbench-core": "^11.5",
+                "phpunit/phpunit": "^13.3"
             },
             "type": "library",
             "extra": {
@@ -1649,19 +1666,16 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "489373b7d502ed7523647d42175e025182b47e19"
+                "reference": "13bb564692a9303595165ec80aed30aa86850041"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-schema": "^0.1.1",
                 "axiomasoft/tenant": "^1.0@dev",
-                "ext-ctype": "*",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "ext-session": "*",
-                "ext-sodium": "*",
                 "firebase/php-jwt": "^7.1",
                 "laravel/framework": "^13.0",
                 "nesbot/carbon": "^3.0",
@@ -1789,13 +1803,14 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "2311938adc044d8df99df41b97d6d8621bdef159"
+                "reference": "f7f0b4e36859c998124e4f8e3f12e0634f69d706"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
+                "ext-filter": "*",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
@@ -1803,6 +1818,7 @@
                 "psr/clock": "^1.0"
             },
             "require-dev": {
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5"
             },
@@ -9463,7 +9479,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "cdf2dbaf661411a8bd200771d1727d443717137e"
+                "reference": "db8321fc59aa8131ba6d23479cc110bbeacb39b8"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -9471,6 +9487,7 @@
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "composer-runtime-api": "^2.1",
+                "ext-filter": "*",
                 "illuminate/auth": "^13.0",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -9571,12 +9588,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "76950d9a588ccedb8cbb19bcc51cb90d86377ed2"
+                "reference": "79b337f3f1969d8f2005bfc1bbe3d77a0e519aff"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/corex-operations": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-filter": "*",
                 "illuminate/auth": "^13.0",
@@ -9591,13 +9609,13 @@
             },
             "require-dev": {
                 "axiomasoft/corex-import-export": "^2.0@dev",
-                "axiomasoft/packman-modules": "^0.1.1",
                 "ext-curl": "*",
                 "ext-openssl": "*",
                 "ext-pcntl": "*",
                 "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "opis/json-schema": "^2.4.1",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
