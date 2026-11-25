@@ -60,7 +60,11 @@ final class CsvCodec
     /** @return list<string> */
     private function parseRecord(string $record, int $maxFields): array
     {
-        $fields = str_getcsv(rtrim($record, "\r\n"), ',', '"', '\\');
+        // RFC 4180 has no escape character: a quote is escaped only by doubling it, which is
+        // also the rule decode() uses to find record boundaries. PHP's default `\` escape
+        // would treat `\"` as an escaped quote, so a field ending in a backslash would swallow
+        // the following fields and disagree with the boundary scan.
+        $fields = str_getcsv(rtrim($record, "\r\n"), ',', '"', '');
 
         if (count($fields) > $maxFields) {
             throw new InvalidArgumentException('CSV field limit or syntax violation.');

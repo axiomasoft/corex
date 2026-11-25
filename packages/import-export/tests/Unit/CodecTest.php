@@ -13,6 +13,11 @@ it('parses a multiline CSV logical record and escaped quote as one bounded row',
     expect($rows)->toBe([['name', 'notes'], ['Ada', "line one\nline \"two\""]]);
 });
 
+it('treats a backslash before a closing quote as data, not as an escape', function (): void {
+    expect((new CsvCodec)->decode("path,note\n\"C:\\\",x\n\"a\\\"\"b\",y\n"))
+        ->toBe([['path', 'note'], ['C:\\', 'x'], ['a\\"b', 'y']]);
+});
+
 it('refuses a CSV record before it can grow beyond its limit', function (): void {
     expect(fn (): array => (new CsvCodec)->decode(bytes: 'abcdef', maxRecordBytes: 5))
         ->toThrow(InvalidArgumentException::class);
