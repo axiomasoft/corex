@@ -11,6 +11,7 @@ use CoreX\Media\Data\AttachmentInput;
 use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
+use CoreX\Media\Data\UploadFile;
 use CoreX\Media\Data\UploadInput;
 use CoreX\Media\Exceptions\MediaAccessDenied;
 use CoreX\Media\Exceptions\MediaOperationConflict;
@@ -128,6 +129,33 @@ it('rejects an unregistered purpose and a server-detected executable MIME type',
 
     expect(DB::table('med_files')->whereIn('request_key', ['unknown-purpose', 'executable-mime'])->count())->toBe(0);
 });
+
+function pngHeader(int $width, int $height): string
+{
+    $ihdr = 'IHDR'.pack('NN', $width, $height)."\x08\x02\x00\x00\x00";
+
+    return "\x89PNG\r\n\x1a\n".pack('N', 13).$ihdr.pack('N', crc32($ihdr));
+}
+
+it('admits a directly constructed upload only when it is well formed', function (UploadFile $file): void {
+    allowMediaEdges();
+    $library = resolve(MediaLibrary::class);
+
+    expect($library->store(mediaEdgeContext(), new UploadInput('direct-ok', new UploadFile('bytes', 'safe.txt', true, 5, 'text/plain'), 'attachment'))->id)->not->toBe('')
+        ->and(fn (): mixed => $library->store(mediaEdgeContext(), new UploadInput('direct-bad', $file, 'attachment')))->toThrow(MediaOperationConflict::class)
+        ->and(DB::table('med_files')->where('request_key', 'direct-bad')->count())->toBe(0);
+})->with([
+    'flagged invalid' => fn (): UploadFile => new UploadFile('bytes', 'safe.txt', false, 5, 'text/plain'),
+    'no bytes' => fn (): UploadFile => new UploadFile(null, 'safe.txt', true, 5, 'text/plain'),
+    'empty name' => fn (): UploadFile => new UploadFile('bytes', '', true, 5, 'text/plain'),
+    'slash in name' => fn (): UploadFile => new UploadFile('bytes', '../safe.txt', true, 5, 'text/plain'),
+    'backslash in name' => fn (): UploadFile => new UploadFile('bytes', 'dir\\safe.txt', true, 5, 'text/plain'),
+    'NUL in name' => fn (): UploadFile => new UploadFile('bytes', "safe\0.txt", true, 5, 'text/plain'),
+    'empty file' => fn (): UploadFile => new UploadFile('', 'safe.txt', true, 0, 'text/plain'),
+    'size mismatch' => fn (): UploadFile => new UploadFile('bytes', 'safe.txt', true, 4, 'text/plain'),
+    'over max_upload_bytes' => fn (): UploadFile => new UploadFile(str_repeat('a', 10 * 1024 * 1024 + 1), 'big.txt', true, 10 * 1024 * 1024 + 1, 'text/plain'),
+    'image over max_image_pixels' => fn (): UploadFile => new UploadFile(pngHeader(100_000, 100_000), 'bomb.png', true, strlen(pngHeader(100_000, 100_000)), 'image/png'),
+]);
 
 it('rechecks policy before publishing uploaded bytes and when an authorized handle is consumed', function (): void {
     $policy = new class implements MediaPolicy

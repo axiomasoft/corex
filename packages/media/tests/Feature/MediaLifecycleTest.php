@@ -140,6 +140,7 @@ it('refuses each media operation its consumer policy denies', function (MediaAct
         ->and(DB::table('med_relations')->where('file_id', $stored->id)->count())->toBe(1);
 })->with([
     'read' => [MediaAction::Read, fn (string $id): mixed => resolve(MediaLibrary::class)->read(mediaContext(), $id)],
+    'request conversion' => [MediaAction::Read, fn (string $id): mixed => resolve(MediaLibrary::class)->requestConversion(mediaContext(), $id, 'thumbnail')],
     'usages' => [MediaAction::Read, fn (string $id): mixed => resolve(MediaAttachments::class)->usages(mediaContext(), $id)],
     'attach' => [MediaAction::Attach, fn (string $id): mixed => resolve(MediaAttachments::class)->attach(mediaContext(), new AttachmentInput($id, 'crm.contact', 'contact-2', 'avatar'))],
     'detach' => [MediaAction::Detach, fn (string $id): mixed => resolve(MediaAttachments::class)->detach(mediaContext(), new AttachmentInput($id, 'crm.contact', 'contact-1', 'avatar'))],
