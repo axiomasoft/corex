@@ -20,7 +20,8 @@
         "orchestra/testbench-core": "^11.5",
         "pestphp/pest": "^5.2",
         "axiomasoft/packman-schema": "^0.1",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/corex-custom-fields": "^2.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -64,6 +65,16 @@
             "options": {
                 "versions": {
                     "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
+        },
+        {
+            "type": "path",
+            "url": "../custom-fields",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-custom-fields": "2.0.x-dev"
                 },
                 "reference": "config"
             }
