@@ -4,8 +4,9 @@
 #
 # `changes` skips the PHP lanes when a push touches only Markdown, docs/ or
 # LICENSE; main and workflow_dispatch always run everything. `quality` is the
-# fast fail (audit, manifests, Pint, Rector, actionlint, zizmor): heavier lanes
-# start only after it passes. The supply-chain gates (anti-weakening, gitleaks,
+# fast fail (audit, manifests, strict validate, Pint, actionlint, zizmor):
+# heavier lanes start only after it passes. Rector and PHPStan take minutes, so
+# they run in the parallel `Static analysis` lane instead of delaying tests. The supply-chain gates (anti-weakening, gitleaks,
 # contract guard) run in parallel from the start. `CI gate` is the one check a
 # branch rule should require; skipped lanes count as passed, failed or
 # cancelled ones do not. Mutation testing runs on workflow_dispatch with
@@ -92,6 +93,8 @@ jobs:
         uses: $/.github/actions/setup-php
         with:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+      - name: Composer audit
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Manifest policy
         run: python3 scripts/manifest-check.py
       - name: Strict validation of every installing root
@@ -101,8 +104,6 @@ jobs:
           done
       - name: Pint
         run: composer lint:check
-      - name: Rector
-        run: composer refactor:check
       - name: Lint workflows
         uses: $/.github/actions/lint-workflows
 
@@ -863,6 +864,8 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
       - name: PHPStan (modules-lint on tests/)
         run: composer analyse:tests-lint
+      - name: Rector
+        run: composer refactor:check
 
   golden:
     name: Golden surface and wire contracts
