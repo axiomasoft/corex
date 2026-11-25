@@ -611,3 +611,29 @@ it('MatrixValidator warns when a matrix row names a scope the entity is missing 
         ->and($warnings[0])->toContain('crm.drift')
         ->and($warnings[0])->toContain('ownable');
 });
+
+it('MatrixValidator stays quiet for a consistent matrix, an unknown entity and a column the table lacks', function (): void {
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
+        handle: 'crm.columnless',
+        model: Deal::class,
+        table: 'users',
+        module: 'corex/access-tests',
+        labelSingular: 'Columnless',
+        labelPlural: 'Columnless',
+        capabilities: [],
+        fields: [],
+        titleAttribute: null,
+    ));
+
+    $role = ($this->newRole)(['assignable_to' => [PrincipalType::User->value, PrincipalType::Agent->value]]);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'workspace']);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'update', 'scope' => 'account']);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.unregistered', 'action' => 'read', 'scope' => 'workspace']);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.columnless', 'action' => 'read', 'scope' => 'workspace']);
+
+    expect(resolve(MatrixValidator::class)->validate(RoleMatrixData::role((string) $role->getKey())))->toBe([]);
+
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'delete', 'scope' => 'own']);
+
+    expect(resolve(MatrixValidator::class)->validate(RoleMatrixData::role((string) $role->getKey())))->toHaveCount(1);
+});

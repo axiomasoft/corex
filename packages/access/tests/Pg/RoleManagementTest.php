@@ -102,3 +102,29 @@ it('preserves the system role mutation guard on public scope writes', function (
         ->toThrow(AuthorizationException::class)
         ->and(DB::table('aut_role_matrix')->count())->toBe(0);
 });
+
+it('refuses a role without a slug, a name or a principal type before writing anything', function (string $slug, string $name, array $assignableTo): void {
+    $before = Role::query()->count();
+
+    expect(fn () => resolve(RoleAdministration::class)->create($slug, $name, $assignableTo))
+        ->toThrow(InvalidArgumentException::class);
+
+    expect(Role::query()->count())->toBe($before);
+})->with([
+    'blank slug' => [' ', 'Sales', [PrincipalType::User]],
+    'blank name' => ['sales', ' ', [PrincipalType::User]],
+    'no principal type' => ['sales', 'Sales', []],
+]);
+
+it('refuses a direct grant without an entity key or with more than one action name', function (string $entityKey, string $action): void {
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+
+    expect(fn () => resolve(DirectGrants::class)->grant($principal, $entityKey, $action))
+        ->toThrow(InvalidArgumentException::class);
+
+    expect(DB::table('aut_direct_grants')->count())->toBe(0);
+})->with([
+    'empty entity' => ['', 'read'],
+    'wildcard action' => ['crm.deal', '*'],
+    'two actions' => ['crm.deal', 'read,delete'],
+]);
