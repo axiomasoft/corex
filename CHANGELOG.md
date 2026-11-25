@@ -12,7 +12,7 @@
 
 - Every foreign key has an index on its referencing columns (42 new indexes, including `users.department_id`, `tsk_tasks`, `crm_*`, `wsp_invitations` and the `root_*` control-plane tables). `tests/Arch/ForeignKeyIndexTest.php` checks the schema goldens.
 - `outbox:prune` and the pub/sub prune delete in bounded batches (`--batch`, default 1000) instead of one unbounded `DELETE`.
-- dept and dept_tree record access checks run one joined statement instead of four or six.
+- dept and dept_tree record access checks run one joined statement instead of four or six. The `users` and `sys_departments` table probes run once per request or job, so later checks in the same request issue only that statement.
 - CI is a job graph ending in a single `CI gate` check; manual runs can target selected jobs. See [Testing and CI](docs/testing-ci.md).
 - Documentation is English and indexed from [docs/index.md](docs/index.md).
 

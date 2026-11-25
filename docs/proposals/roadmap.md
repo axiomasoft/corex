@@ -169,20 +169,17 @@ changes mid-request; a transaction-scoped memo keeps that guarantee, since the
 first locked read already holds the row locks. It needs a careful review of
 Octane worker reuse, so it is not a drive-by change.
 
-## 15. Table probes in access checks (P3)
+## 15. Table probes in access checks (done)
 
-**Problem.** `ScopePredicate` asks the schema builder whether `users` and
+`ScopePredicate` asked the schema builder whether `users` and
 `sys_departments` exist on every dept/dept_tree check, so 2 of the 3
-statements per record check are catalogue queries. The probes exist for the
-boxed profile, which has no such tables.
-
-**Proposal.** Decide the profile once at boot (or per tenant connection) and
-inject it, instead of probing per check.
-
-**Rationale.** It halves the remaining queries per record check. A process
-cache keyed only by connection name is unsafe under Octane when a module
-migration creates the tables mid-process, so the decision belongs to the
-lifecycle that creates them.
+statements per record check were catalogue queries. `ExistingTables`, a
+scoped binding, now remembers tables seen to exist for the current request or
+job: the container drops it between Octane requests and queue jobs, only
+positive answers are kept (a table a migration creates later in the request is
+still found), and the key is the physical database behind the connection, so a
+tenant switch never reuses another database's answer. Later checks in the same
+request run 1 statement instead of 3.
 
 ## 16. Retention for `ntf_notifications` (P2, owner decision)
 

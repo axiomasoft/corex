@@ -15,7 +15,6 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Packman\Attributes\Internal;
 use UnexpectedValueException;
 
@@ -29,6 +28,7 @@ final readonly class ScopePredicate
         private TenancyManager $tenancyManager,
         private EffectiveWorkspaceScope $workspaceScope,
         private ConnectionResolverInterface $connections,
+        private ExistingTables $tables,
     ) {}
 
     /**
@@ -82,7 +82,7 @@ final readonly class ScopePredicate
             return $this->applyNone($q);
         }
 
-        if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
             return $this->applyNone($q);
         }
 
@@ -129,7 +129,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
             return false;
         }
 
@@ -261,7 +261,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->schema()->hasTable('wsp_workspaces')) {
+        if (! $this->hasTable('wsp_workspaces')) {
             return false;
         }
 
@@ -295,11 +295,11 @@ final readonly class ScopePredicate
         return $q;
     }
 
-    private function schema(): SchemaBuilder
+    private function hasTable(string $table): bool
     {
         /** @var Connection */
         $connection = $this->connections->connection();
 
-        return $connection->getSchemaBuilder();
+        return $this->tables->has(connection: $connection, table: $table);
     }
 }

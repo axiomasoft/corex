@@ -185,6 +185,37 @@
         },
         "readonly": true
     },
+    "CoreX\\Access\\Access\\Internal\\ExistingTables": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "has": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "table",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Access\\Access\\Internal\\MatrixCell": {
         "abstract": false,
         "constants": [],
@@ -912,6 +943,12 @@
                         "byRef": false,
                         "name": "connections",
                         "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "tables",
+                        "type": "CoreX\\Access\\Access\\Internal\\ExistingTables",
                         "variadic": false
                     }
                 ],

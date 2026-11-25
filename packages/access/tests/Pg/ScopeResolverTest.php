@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
+use CoreX\Access\Access\Internal\ExistingTables;
 use CoreX\Access\Access\Internal\ScopePredicate;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
@@ -431,25 +432,50 @@ it('matches real department records to the same IDs through ScopeResolver and Ac
     'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
 ]);
 
-it('checks a record against dept and dept_tree in one statement after the table probes', function (Scope $scope, int $statements): void {
+it('checks a record against dept and dept_tree in one statement once the tables are known', function (Scope $scope): void {
     $workspaceId = ($this->makeWorkspace)('oneStatement');
     $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'oneStatement.parent');
     $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'oneStatement.parent.child');
     $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentDepartmentId));
     $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($scope === Scope::Dept ? $parentDepartmentId : $childDepartmentId)]);
-    $predicate = resolve(ScopePredicate::class);
     $queries = 0;
     DB::listen(static function () use (&$queries): void {
         $queries++;
     });
+    $count = static function () use (&$queries, $scope, $record, $identity): int {
+        $queries = 0;
+        expect(resolve(ScopePredicate::class)->matches($scope, $record, $identity))->toBeTrue();
 
-    expect($predicate->matches($scope, $record, $identity))->toBeTrue()
-        ->and($queries)->toBe($statements);
+        return $queries;
+    };
+
+    // The first check of a request probes users and sys_departments; later
+    // checks in the same request only run the joined lookup. A new request
+    // (scoped instances forgotten) probes again.
+    expect($count())->toBe(3)
+        ->and($count())->toBe(1);
+    app()->forgetScopedInstances();
+    expect($count())->toBe(3);
 })->with([
-    // Two hasTable() probes plus the joined lookup; previously 4 and 6 statements.
-    'dept' => [Scope::Dept, 3],
-    'dept_tree' => [Scope::DeptTree, 3],
+    'dept' => [Scope::Dept],
+    'dept_tree' => [Scope::DeptTree],
 ]);
+
+it('remembers only tables that exist, so one created later in the request is found', function (): void {
+    $tables = resolve(ExistingTables::class);
+    $connection = DB::connection();
+
+    expect($tables->has(connection: $connection, table: 'late_access_probe'))->toBeFalse();
+    Schema::create('late_access_probe', static function (Blueprint $table): void {
+        $table->id();
+    });
+
+    try {
+        expect($tables->has(connection: $connection, table: 'late_access_probe'))->toBeTrue();
+    } finally {
+        Schema::drop('late_access_probe');
+    }
+});
 
 it('drops removed owner and principal departments out of dept_tree, as the builder does', function (bool $removeOwnerDepartment): void {
     $workspaceId = ($this->makeWorkspace)('removedDepartments');
