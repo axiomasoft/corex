@@ -105594,6 +105594,12 @@
                         "name": "modules",
                         "type": "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "admissions",
+                        "type": "Flex\\Crm\\Context\\Internal\\LockedAdmissions",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -105876,6 +105882,67 @@
             }
         },
         "readonly": true
+    },
+    "Flex\\Crm\\Context\\Internal\\LockedAdmissions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "proven": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "remember": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "Flex\\Crm\\Context\\Internal\\RecordRules": {
         "abstract": false,

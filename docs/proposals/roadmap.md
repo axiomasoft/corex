@@ -151,23 +151,26 @@ manual dispatch.
   rewrites `$_SERVER['argv']` in CLI code, which is process state, not request
   input; `scripts/` is preserved in `rector.php` for that reason.
 
-## 14. One context check per CRM save (P2)
+## 14. One context check per CRM save (done)
 
-**Problem.** A CRM action resolves `ContextGuard::current()` before its
-transaction, again with `lock: true` inside it, and the `RecordRules` saving
-observer resolves it a third time for the same record. Each call re-reads the
-tenant, workspace and actor rows, so one save costs 8 or more queries before
-the insert.
+A CRM action checked its context before the transaction, again with
+`lock: true` inside it, and the tenant scope, both saving observers and the
+owner check repeated the user, workspace and membership reads: seven rounds
+of three reads for one company update.
 
-**Proposal.** Memoise the locked context per connection and transaction
-level for the lifetime of that transaction, and let `RecordRules` reuse it.
-The unlocked pre-check stays, because it rejects early without opening a
-transaction.
+`LockedAdmissions`, a scoped binding, records a principal admission proven
+under share locks on Laravel's transaction record for the savepoint that took
+the locks. Later checks in the same transaction chain reuse it; a savepoint
+rollback or the end of the transaction drops the record and with it the
+proof, and the container forgets the binding between Octane requests and
+queue jobs. Unlocked checks never create a proof, and the pre-check before the
+transaction still reads the rows. The `ReferenceWrites` enlistment and the
+in-memory context checks still run on every call. A company update went from
+35 to 20 statements (SQLite), a create from 31 to 19.
 
-**Rationale.** The repeated locked reads protect against a context that
-changes mid-request; a transaction-scoped memo keeps that guarantee, since the
-first locked read already holds the row locks. It needs a careful review of
-Octane worker reuse, so it is not a drive-by change.
+Accepted limit: a proof assumes the transaction itself does not deactivate the
+principal or revoke the membership after the first locked check; CRM code
+never does.
 
 ## 15. Table probes in access checks (done)
 
