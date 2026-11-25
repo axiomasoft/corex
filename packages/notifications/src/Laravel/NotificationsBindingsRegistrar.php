@@ -22,6 +22,7 @@ use CoreX\Notifications\Internal\DigestSchedulerCheck;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Runtime\Internal\ChannelDrivers;
+use CoreX\Notifications\Runtime\Internal\Commands\PruneNotifications;
 use CoreX\Notifications\Runtime\Internal\DeliveryCoordinator;
 use CoreX\Notifications\Runtime\Internal\DeliveryIntents;
 use CoreX\Notifications\Runtime\Internal\DeliveryReceiptProjector;
@@ -74,6 +75,9 @@ final class NotificationsBindingsRegistrar implements PackageRegistrar
             issuer: $app->make(StoredWorkIssuer::class),
             drivers: $app->make(ChannelDrivers::class),
             clock: $app->make(ClockInterface::class),
+        ));
+        $app->bind(PruneNotifications::class, static fn (Application $app): PruneNotifications => new PruneNotifications(
+            defaultRetentionDays: $app->make(NotificationsOptions::class)->retentionSettledDays,
         ));
         $app->scoped(DeliveryReceiptProjector::class);
         $app->tag(DeliveryReceiptProjector::class, ProviderReceiptProjector::class);

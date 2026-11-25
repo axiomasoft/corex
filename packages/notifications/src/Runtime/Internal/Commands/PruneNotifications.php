@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Runtime\Internal\Commands;
 
-use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Runtime\Internal\NotificationValue;
 use DateInterval;
 use DateTimeImmutable;
@@ -38,9 +37,15 @@ final class PruneNotifications extends Command
 
     protected $description = 'Delete read, dismissed or cancelled notifications older than their retention window.';
 
-    public function handle(ClockInterface $clock, NotificationsOptions $options, ConnectionResolverInterface $connections): int
+    /** @param  int  $defaultRetentionDays  corex-notifications.retention.settled_days, passed in by the package's composition root */
+    public function __construct(private readonly int $defaultRetentionDays)
     {
-        $days = $this->positive(name: 'older-than-days', fallback: $options->retentionSettledDays);
+        parent::__construct();
+    }
+
+    public function handle(ClockInterface $clock, ConnectionResolverInterface $connections): int
+    {
+        $days = $this->positive(name: 'older-than-days', fallback: $this->defaultRetentionDays);
         $batch = $this->positive(name: 'batch', fallback: 1000);
 
         if ($days === null || $batch === null || $batch > 10_000) {

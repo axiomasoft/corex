@@ -41777,18 +41777,24 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "defaultRetentionDays",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "handle": {
                 "params": [
                     {
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Notifications\\Internal\\NotificationsOptions",
                         "variadic": false
                     },
                     {

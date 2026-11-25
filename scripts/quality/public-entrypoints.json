@@ -3168,7 +3168,7 @@
         {
             "symbol": "CoreX\\Notifications\\Runtime\\Internal\\Commands\\PruneNotifications::handle",
             "source": "packages/notifications/src/Runtime/Internal/Commands/PruneNotifications.php",
-            "source_sha256": "2bfeb3294a740855c69f298180438fa08650f4a66cb5f0c80b26e608d70634c5",
+            "source_sha256": "69484816fec4f64e885d0f8ff8617ea959bd2f395f2d60f51857a09ecfef5c14",
             "kind": "framework",
             "reason": "NotificationsServiceProvider resolves the Artisan command that prunes settled notifications past their retention window.",
             "root": {
