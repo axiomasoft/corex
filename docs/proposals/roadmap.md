@@ -150,3 +150,82 @@ manual dispatch.
 - The vendored Laravel Rector rule `ServerVariableToRequestFacadeRector`
   rewrites `$_SERVER['argv']` in CLI code, which is process state, not request
   input; `scripts/` is preserved in `rector.php` for that reason.
+
+## 14. One context check per CRM save (P2)
+
+**Problem.** A CRM action resolves `ContextGuard::current()` before its
+transaction, again with `lock: true` inside it, and the `RecordRules` saving
+observer resolves it a third time for the same record. Each call re-reads the
+tenant, workspace and actor rows, so one save costs 8 or more queries before
+the insert.
+
+**Proposal.** Memoise the locked context per connection and transaction
+level for the lifetime of that transaction, and let `RecordRules` reuse it.
+The unlocked pre-check stays, because it rejects early without opening a
+transaction.
+
+**Rationale.** The repeated locked reads protect against a context that
+changes mid-request; a transaction-scoped memo keeps that guarantee, since the
+first locked read already holds the row locks. It needs a careful review of
+Octane worker reuse, so it is not a drive-by change.
+
+## 15. Table probes in access checks (P3)
+
+**Problem.** `ScopePredicate` asks the schema builder whether `users` and
+`sys_departments` exist on every dept/dept_tree check, so 2 of the 3
+statements per record check are catalogue queries. The probes exist for the
+boxed profile, which has no such tables.
+
+**Proposal.** Decide the profile once at boot (or per tenant connection) and
+inject it, instead of probing per check.
+
+**Rationale.** It halves the remaining queries per record check. A process
+cache keyed only by connection name is unsafe under Octane when a module
+migration creates the tables mid-process, so the decision belongs to the
+lifecycle that creates them.
+
+## 16. Retention for `ntf_notifications` (P2, owner decision)
+
+**Problem.** Delivered and read notifications are never pruned. The outbox
+and pub/sub tables have batched prune commands; notifications do not.
+
+**Proposal.** A `notifications:prune` command with a configurable retention
+(for example 90 days after read), using the same bounded batches as
+`outbox:prune`, scheduled by the host.
+
+**Rationale.** The table grows with every event fan-out. The retention period
+is a product decision.
+
+## 17. Unused import/export codecs (P3)
+
+**Problem.** `CsvCodec` and `NdjsonCodec` in `import-export` are only used by
+their own tests. `CsvCodec` scans the input character by character in PHP
+(about 870 ms per 10 MB).
+
+**Proposal.** Either wire them into the transfer runner, with a streaming
+decoder built on `fgetcsv` over a `php://temp` stream, or remove them.
+
+**Rationale.** Internal code without a caller still costs reviews and
+security audits.
+
+## 18. Standalone suites that need a sibling package (P3)
+
+**Problem.** The media tests only run from their own package install, and an
+isolated tenancy run shows 8 `ClaimLifecycleConformanceTest` failures that
+the cohort run hides. The panels suite needed `corex-custom-fields` as a dev
+requirement before it could run standalone.
+
+**Proposal.** Run every package suite both standalone and from the root
+vendor in CI, and fix whichever mode fails.
+
+**Rationale.** A package that only passes inside the monorepo is not
+independently installable.
+
+## 19. More upstream notes (P3)
+
+- Packman's own validators use `'/^...$/'` without the `D` modifier, so they
+  accept a trailing newline. CoreX fixed its own patterns and guards them in
+  `tests/Arch/RegexAnchorTest.php`; the same fix belongs in Packman.
+- The vendored Rector rule `SleepFuncToSleepStaticCallRector` rewrites
+  `usleep()` in scripts that run without the Composer autoloader;
+  `rector.php` skips the one affected test helper.
