@@ -207,3 +207,27 @@ it('д: EnforceSessionLifetime — сессия убита через 12ч01м (
     $this->get('/oidc-lifetime-probe')->assertStatus(401);
     expect(auth('web')->check())->toBeFalse();
 });
+
+it('revokes refresh tokens through the session index instead of scanning every identity token', function (): void {
+    $identityId = makeIdentityGL();
+    $token = makeRefreshTokenGL(makeIdpSessionGL($identityId));
+    $other = makeIdpSessionGL(makeIdentityGL(), ['revoked_at' => now()]);
+    DB::connection('pgsql')->statement(<<<'SQL'
+        insert into root_oauth_refresh_tokens (id, session_id, client_id, token_hash, expires_at, revoked_at)
+        select gen_random_uuid(), ?, 'oidc-test-client', md5(g::text) || md5((g + 1)::text), now(), now() from generate_series(1, 5000) g
+        SQL, [$other]);
+    DB::connection('pgsql')->statement('analyze root_oauth_refresh_tokens');
+    $revokes = [];
+    DB::connection('pgsql')->listen(static function ($query) use (&$revokes): void {
+        if (str_starts_with($query->sql, 'update "root_oauth_refresh_tokens"')) {
+            $revokes[] = [$query->sql, $query->bindings];
+        }
+    });
+
+    logoutGL($identityId)->assertRedirect();
+
+    expect(DB::connection('pgsql')->table('root_oauth_refresh_tokens')->where('id', $token)->value('revoked_at'))->not->toBeNull()
+        ->and($revokes)->toHaveCount(1)
+        ->and((string) DB::connection('pgsql')->scalar('explain (format json) '.$revokes[0][0], $revokes[0][1]))
+        ->not->toContain('"Node Type": "Seq Scan"');
+});

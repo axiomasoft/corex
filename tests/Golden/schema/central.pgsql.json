@@ -2141,6 +2141,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "root_oauth_refresh_tokens_session_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "session_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_oauth_refresh_tokens_token_hash_uq",
                     "kind": "uq",
                     "columns": [
