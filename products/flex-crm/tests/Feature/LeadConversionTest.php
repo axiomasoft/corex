@@ -12,6 +12,7 @@ use Flex\Crm\Lead\Actions\CreateLead;
 use Flex\Crm\Lead\Enums\LeadStatus;
 use Flex\Crm\Lead\Events\LeadConverted;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Validation\ValidationException;
 
 beforeEach(function (): void {
     $this->pipeline = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'sales', 'name' => ['en' => 'Sales']]);
@@ -67,4 +68,14 @@ it('returns the same conversion on retry even when passed a stale lead instance'
         ->and(Company::query()->count())->toBe(1)
         ->and(Deal::query()->count())->toBe(1);
     Event::assertDispatchedTimes(LeadConverted::class, 1);
+});
+
+it('refuses to convert a junk lead or a lead without any contact identity', function (): void {
+    $junk = resolve(CreateLead::class)->handle(title: 'Spam', contactName: 'Bot');
+    $junk->forceFill(['status' => LeadStatus::Junk])->save();
+    $anonymous = resolve(CreateLead::class)->handle(title: 'Anonymous');
+
+    expect(fn () => resolve(ConvertLead::class)->handle($junk))->toThrow(ValidationException::class)
+        ->and(fn () => resolve(ConvertLead::class)->handle($anonymous))->toThrow(ValidationException::class)
+        ->and(Contact::query()->count())->toBe(0);
 });

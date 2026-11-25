@@ -11,6 +11,7 @@ use Flex\Crm\Company\Data\CompanyData;
 use Flex\Crm\Contact\Actions\CreateContact;
 use Flex\Crm\Contact\Data\ContactData;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Validation\ValidationException;
 
 it('logs a polymorphic activity resolved through the morph alias', function (): void {
     Event::fake([ActivityLogged::class]);
@@ -36,4 +37,12 @@ it('attaches activities to different subject types', function (): void {
     expect(Activity::query()->count())->toBe(2)
         ->and($contact->activities()->count())->toBe(1)
         ->and($company->activities()->count())->toBe(1);
+});
+
+it('refuses legacy metadata instead of converting it', function (): void {
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Jane'));
+
+    expect(fn () => resolve(LogActivity::class)->handle($contact, ActivityType::Call, 'Legacy', metadata: ['direction' => 'in']))
+        ->toThrow(ValidationException::class)
+        ->and(Activity::query()->count())->toBe(0);
 });

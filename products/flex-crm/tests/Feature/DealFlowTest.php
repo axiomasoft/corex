@@ -11,6 +11,7 @@ use Flex\Crm\Deal\Events\DealMovedToStage;
 use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Deal\Models\Pipeline;
 use Flex\Crm\Deal\Models\Stage;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -81,4 +82,25 @@ it('rolls back a vetoed stage update without a success event', function (): void
     expect(fn () => resolve(MoveDealToStage::class)->handle($deal, $this->wonStage))->toThrow(ValidationException::class);
     expect($deal->fresh()->stage_id)->toBe($this->newStage->id);
     Event::assertNotDispatched(DealMovedToStage::class);
+});
+
+it('refuses a pipeline that belongs to another entity type', function (): void {
+    $leads = Pipeline::create(['entity_type' => 'crm.lead', 'code' => 'intake', 'name' => ['en' => 'Intake']]);
+    Stage::create(['pipeline_id' => $leads->id, 'code' => 'new', 'name' => ['en' => 'New'], 'position' => 0]);
+
+    expect(fn () => resolve(CreateDeal::class)->handle($leads, 'Misfiled'))->toThrow(AuthorizationException::class);
+    expect(Deal::query()->count())->toBe(0);
+});
+
+it('enforces the required fields of the first stage on create and of the target stage on move', function (): void {
+    $gated = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'gated', 'name' => ['en' => 'Gated']]);
+    Stage::create(['pipeline_id' => $gated->id, 'code' => 'qualify', 'name' => ['en' => 'Qualify'], 'position' => 0, 'required_fields' => ['owner_id']]);
+
+    expect(fn () => resolve(CreateDeal::class)->handle($gated, 'Unowned'))->toThrow(ValidationException::class);
+
+    $deal = resolve(CreateDeal::class)->handle($this->pipeline, 'Unowned');
+    $proposal = Stage::create(['pipeline_id' => $this->pipeline->id, 'code' => 'proposal', 'name' => ['en' => 'Proposal'], 'position' => 2, 'required_fields' => ['owner_id']]);
+
+    expect(fn () => resolve(MoveDealToStage::class)->handle($deal, $proposal))->toThrow(ValidationException::class);
+    expect($deal->fresh()->stage_id)->toBe($this->newStage->id);
 });
