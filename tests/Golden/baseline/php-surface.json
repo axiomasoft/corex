@@ -39834,6 +39834,60 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Messaging\\Internal\\BatchedDelete": {
+        "abstract": false,
+        "constants": {
+            "DEFAULT_BATCH": {
+                "type": "int",
+                "value": 1000
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "batchOption": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "run": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "Illuminate\\Database\\Query\\Builder",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "batch",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages": {
         "abstract": false,
         "constants": [],

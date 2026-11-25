@@ -116,3 +116,32 @@ it('uses FrozenClock for retention thresholds', function (): void {
     expect(DB::table('sys_outbox_messages')->pluck('message_id')->all())
         ->toBe(['on-boundary']);
 });
+
+it('deletes a retention backlog in bounded statements', function (): void {
+    $now = resolve(ClockInterface::class)->now();
+    foreach (range(1, 5) as $i) {
+        outboxRelayInsertRow([
+            'id' => 'pub-old-'.$i,
+            'status' => 'published',
+            'published_at' => $now->sub(new DateInterval('P20D')),
+        ]);
+    }
+    $deletes = [];
+    DB::listen(static function ($query) use (&$deletes): void {
+        if (str_starts_with(strtolower($query->sql), 'delete')) {
+            $deletes[] = $query->bindings;
+        }
+    });
+
+    Artisan::call('corex:messaging:prune', ['--published-older-than' => '14 days', '--batch' => '2']);
+
+    expect(DB::table('sys_outbox_messages')->count())->toBe(0)
+        ->and(Artisan::output())->toContain('pruned 5 published')
+        ->and($deletes)->toHaveCount(3)
+        ->and(array_map(count(...), $deletes))->each->toBeLessThanOrEqual(4); // status, cutoff and at most two ids
+});
+
+it('rejects a batch size that is not a positive integer', function (): void {
+    expect(fn () => Artisan::call('corex:messaging:prune', ['--batch' => '0']))
+        ->toThrow(InvalidArgumentException::class);
+});

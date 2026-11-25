@@ -32,7 +32,8 @@ final class PrunePubSubMessages extends Command
 {
     protected $signature = 'corex:messaging:prune-pubsub
         {--older-than= : DateInterval-parseable age threshold, e.g. "30 days" (default: corex.pubsub.retention)}
-        {--database= : Connection to prune (default: the app default)}';
+        {--database= : Connection to prune (default: the app default)}
+        {--batch= : Rows deleted per statement (default: 1000)}';
 
     protected $description = 'Delete sys_pubsub_messages rows older than the retention threshold.';
 
@@ -47,9 +48,8 @@ final class PrunePubSubMessages extends Command
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $deleted = $connections->connection($connection)->table('sys_pubsub_messages')
-            ->where('created_at', '<', $cutoff)
-            ->delete();
+        $deleted = BatchedDelete::run($connections->connection($connection)->table('sys_pubsub_messages')
+            ->where('created_at', '<', $cutoff), 'id', BatchedDelete::batchOption($this->option('batch')));
 
         $this->info(sprintf(
             'PubSub retention: pruned %d row(s) older than %s (threshold: %s).',
