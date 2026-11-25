@@ -681,7 +681,7 @@ it('releases only a serialization failure from a field-use snapshot and rethrows
     $policy = resolve(FieldUsePolicy::class);
     assert($policy instanceof FieldUseSnapshot);
     $entity = new EntityHandle('crm.deal');
-    $failure = static fn (string $state): QueryException => new QueryException('pgsql', 'select 1', [], new class($state) extends PDOException
+    $failure = static fn (string $state): QueryException => new QueryException('pgsql', 'select 1', [], new class($state) extends RuntimeException
     {
         public function __construct(string $state)
         {
