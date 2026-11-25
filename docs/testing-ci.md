@@ -20,8 +20,14 @@ Heavy runs on a shared machine can be bounded with
 
 ### PostgreSQL
 
-`docker compose up -d pgsql` starts a loopback-only PostgreSQL. The PostgreSQL
-lanes read:
+`docker compose up -d` starts loopback-only PostgreSQL 18 and Meilisearch, the
+services of the CI `PG lane` job. On a fresh data volume
+`docker/pgsql/create-test-databases.sh` creates the lane's extra databases
+(`corex_search_a_test`, `corex_search_b_test`, `corex_budget_test`,
+`corex_control_test`, `corex_search_control_test`, `corex_sink_test`). The
+volume is `corex_pgsql18_data`; a volume left by the earlier PostgreSQL 16
+compose file is not reused and can be removed with `docker volume rm`.
+The PostgreSQL lanes read:
 
 | Variable | Default |
 | --- | --- |
@@ -32,7 +38,22 @@ lanes read:
 | `PGSQL_BUDGET_DATABASE`, `PGSQL_CONTROL_DATABASE`, `PGSQL_SINK_DATABASE` | extra databases for the resource-budget, scope-control and sink suites |
 | `MEILISEARCH_HOST`, `MEILISEARCH_MASTER_KEY` | the Meilisearch adapter suite |
 
-The CI `PG lane` job shows the full set of databases it creates.
+To run the lane as CI does against the compose services:
+
+```bash
+docker compose up -d
+PGSQL_PORT=5434 \
+PGSQL_BUDGET_DATABASE=corex_budget_test \
+PGSQL_CONTROL_DATABASE=corex_search_control_test \
+PGSQL_SINK_DATABASE=corex_sink_test \
+COREX_LIFECYCLE_CONTROL_DATABASE=corex_search_control_test \
+MEILISEARCH_HOST=http://127.0.0.1:7700 \
+MEILISEARCH_MASTER_KEY=corex-local-disposable-meilisearch-key \
+composer test:pg
+```
+
+CI also runs the lane on PostgreSQL 16; the compose file follows the newest
+version, which the package jobs use.
 
 Some suites shell out to host tools or need PHP extensions:
 
