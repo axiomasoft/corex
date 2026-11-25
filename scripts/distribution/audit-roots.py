@@ -309,7 +309,7 @@ def audit_root(root: Path, row: dict, directory: Path, environment: dict[str, st
                     receipt["commands"].append(run_command(role, arguments, working, environment, directory, runner, timeout))
         receipt["effective_manifest_sha256"] = digest(directory / "composer.json")
         receipt["lock_sha256"] = digest(directory / "composer.lock")
-        verify_commands(receipt, directory)
+        verify_commands(root, receipt, directory)
         receipt["status"] = "GREEN"
     except (AuditError, OSError, ValueError, TypeError) as error:
         receipt["error"] = str(error)
@@ -317,8 +317,11 @@ def audit_root(root: Path, row: dict, directory: Path, environment: dict[str, st
     return receipt
 
 
-def verify_commands(receipt: dict, directory: Path) -> None:
+def verify_commands(root: Path, receipt: dict, directory: Path) -> None:
     commands = receipt.get("commands", [])
+    # The isolated solve pins the reviewed static-analysis toolchain to the root lock
+    # with `--with name:version`, so its exact arguments derive from the effective manifest.
+    toolchain = [] if receipt.get("lock_kind") == "source" else reviewed_toolchain_arguments(root, read_json(directory / "composer.json"))
     roles = [row.get("role") for row in commands]
     required = ["validate", "audit"] if receipt.get("lock_kind") == "source" else ["validate-source", "solve", "validate", "audit"]
     if roles != required:
@@ -333,7 +336,7 @@ def verify_commands(receipt: dict, directory: Path) -> None:
         command = result.get("command", [])
         if command[:4] != ["composer", "--no-interaction", "--no-plugins", "--no-scripts"]:
             raise AuditError(f"unsafe/missing tool command: {receipt['manifest']}")
-        expected = {"validate": ["validate", "--strict"], "validate-source": ["validate", "--strict"], "solve": ["update", "--no-install", "--no-progress", "--prefer-dist"], "audit": ["audit", "--locked", "--format=json", "--abandoned=fail"]}[row["role"]]
+        expected = {"validate": ["validate", "--strict"], "validate-source": ["validate", "--strict"], "solve": ["update", "--no-install", "--no-progress", "--prefer-dist", *toolchain], "audit": ["audit", "--locked", "--format=json", "--abandoned=fail"]}[row["role"]]
         if command[4:] != expected:
             raise AuditError(f"insecure/missing {row['role']} command: {receipt['manifest']}")
         if row["role"] == "audit":
@@ -397,7 +400,7 @@ def verify_evidence(root: Path, evidence: Path) -> None:
         if digest(directory / "composer.json") != receipt["effective_manifest_sha256"] or digest(directory / "composer.lock") != receipt["lock_sha256"]:
             raise AuditError(f"lock/manifest evidence changed: {row['manifest']}")
         require_lock(directory / "composer.json", directory / "composer.lock")
-        verify_commands(receipt, directory)
+        verify_commands(root, receipt, directory)
 
 
 def audit(root: Path, evidence: Path, *, runner=process, timeout: int = 180, environment: dict[str, str] | None = None) -> dict:
