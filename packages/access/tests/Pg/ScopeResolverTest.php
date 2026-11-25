@@ -431,6 +431,45 @@ it('matches real department records to the same IDs through ScopeResolver and Ac
     'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
 ]);
 
+it('checks a record against dept and dept_tree in one statement after the table probes', function (Scope $scope, int $statements): void {
+    $workspaceId = ($this->makeWorkspace)('oneStatement');
+    $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'oneStatement.parent');
+    $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'oneStatement.parent.child');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentDepartmentId));
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($scope === Scope::Dept ? $parentDepartmentId : $childDepartmentId)]);
+    $predicate = resolve(ScopePredicate::class);
+    $queries = 0;
+    DB::listen(static function () use (&$queries): void {
+        $queries++;
+    });
+
+    expect($predicate->matches($scope, $record, $identity))->toBeTrue()
+        ->and($queries)->toBe($statements);
+})->with([
+    // Two hasTable() probes plus the joined lookup; previously 4 and 6 statements.
+    'dept' => [Scope::Dept, 3],
+    'dept_tree' => [Scope::DeptTree, 3],
+]);
+
+it('drops removed owner and principal departments out of dept_tree, as the builder does', function (bool $removeOwnerDepartment): void {
+    $workspaceId = ($this->makeWorkspace)('removedDepartments');
+    $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'removedDepartments.parent');
+    $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'removedDepartments.parent.child');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentDepartmentId));
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($childDepartmentId)]);
+    $predicate = resolve(ScopePredicate::class);
+
+    expect($predicate->matches(Scope::DeptTree, $record, $identity))->toBeTrue();
+
+    DB::table('sys_departments')->where('id', $removeOwnerDepartment ? $childDepartmentId : $parentDepartmentId)->update(['deleted_at' => now()]);
+
+    expect($predicate->matches(Scope::DeptTree, $record, $identity))->toBeFalse()
+        ->and(resolve(ScopePredicate::class)->applyTo(Deal::query(), Scope::DeptTree, $identity)->pluck('id')->all())->toBe([]);
+})->with([
+    'owner department removed' => [true],
+    'principal department removed' => [false],
+]);
+
 // Monotonicity holds ONLY on a fixture with the NAMED invariants below (premortem A7) — asserted here, not assumed globally.
 it('own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where every owner is in-subtree and in-workspace', function (): void {
     $workspaceId = ($this->makeWorkspace)('wsMono');
