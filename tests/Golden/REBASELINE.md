@@ -4,6 +4,7 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 
 | Дата | Решение | Слои | Причина |
 |:--|:--|:--|:--|
+| 2026-11-25 | Remove unused import codecs | php-surface | Delete Internal `CoreX\\ImportExport\\Internal\\Codecs\\CsvCodec` and `NdjsonCodec`: no runtime caller, only their own unit tests. Import sources decode their own input through `TransferSource`; export keeps Internal `CanonicalExportCodec`. No public contract, route, event, wire or schema change. |
 | 2026-11-25 | Notification retention prune | php-surface | Internal `CoreX\\Notifications\\Runtime\\Internal\\Commands\\PruneNotifications` (`corex:notifications:prune`) deletes settled notifications past `corex-notifications.retention.settled_days`; Internal `NotificationsOptions` gains `retentionSettledDays`. No public contract, route, event, wire or schema change. |
 | 2026-11-25 | Transaction-scoped CRM principal admission | php-surface | Internal `Flex\\Crm\\Context\\Internal\\LockedAdmissions` (scoped; `proven()`, `remember()`) keeps principal admissions proven under share locks for the open transaction; `ContextGuard` gains it as a constructor dependency. No public contract, route, event, wire or schema change. |
 | 2026-11-25 | Request-scoped table probes for access checks | php-surface | Internal `CoreX\\Access\\Access\\Internal\\ExistingTables` (scoped, `has(connection, table)`) remembers tables seen to exist for one request or job; `ScopePredicate` gains it as a constructor dependency. No public contract, route, event, wire or schema change. |

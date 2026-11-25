@@ -600,8 +600,6 @@
         "packages/import-export/src/Exceptions/ImportUnavailable.php",
         "packages/import-export/src/Exceptions/SessionUnavailable.php",
         "packages/import-export/src/ImportExportServiceProvider.php",
-        "packages/import-export/src/Internal/Codecs/CsvCodec.php",
-        "packages/import-export/src/Internal/Codecs/NdjsonCodec.php",
         "packages/import-export/src/Internal/Export/CanonicalExportCodec.php",
         "packages/import-export/src/Internal/Export/CurrentExportSchema.php",
         "packages/import-export/src/Internal/Export/DatabaseExportRunner.php",
