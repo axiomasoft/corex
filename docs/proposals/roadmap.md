@@ -234,7 +234,7 @@ independently installable.
   `usleep()` in scripts that run without the Composer autoloader;
   `rector.php` skips the one affected test helper.
 
-## 20. Guard coverage from the mutation pass (P3)
+## 20. Guard coverage from the mutation pass (done)
 
 **Findings.** Each authz, scope, tenancy, validation and invariant guard in
 access, CRM, tenancy, messaging, notifications, media and the panels saved
@@ -269,17 +269,15 @@ mutation run does not rediscover them:
   `SettingsPreferenceRepository`) and media (`Internal\Value`,
   `MediaOperationStore` row lookups). They are unreachable from typed input;
   the PHPStan rules in `tests/PHPStan` cover the messaging contracts.
-- *Real but untested in the package:* `MediaModuleReferences::cleanup()`
-  rechecks attachments and open operations under lock (line 125) and refuses
-  an enclosing transaction (line 114), but `cleanup()` runs only inside a
-  confirmed Packman lifecycle plan, which only the full purge test in
-  `tests/Pg/ModulePurgeInventoryTest.php` sets up. The `SqlMediaLibrary::store`
-  replay check after a unique-key race (line 142) needs two concurrent
-  uploads.
+- *Formerly untested, now covered:* `MediaModuleReferences::cleanup()`
+  rechecks attachments and open operations under lock and refuses an
+  enclosing transaction; `tests/Feature/MediaReleaseRecheckTest.php` drives
+  it through the `ConfirmedCleanup` fixture, which opens the same cleanup
+  frame as a confirmed purge plan. The `SqlMediaLibrary::store` retry after a
+  unique-key race is covered by `tests/Pg/StoreRaceTest.php`, where a second
+  connection commits the competing upload at a clock barrier.
 
-**Proposal.** Add a purge-plan fixture so the attach-after-scan race and the
-nested-transaction refusal get their own cases, and a concurrent upload case
-next to `ConversionConcurrencyTest`. Leave the defensive checks in place.
+**Proposal.** Leave the defensive checks in place.
 
 **Rationale.** These guards protect against data loss or cross-tenant replay
 under races, which is where a regression would go unnoticed longest.
