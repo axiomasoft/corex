@@ -342,7 +342,7 @@
                 "version": "dev-main",
                 "source": {
                     "type": "git",
-                    "url": "https://github.com/axiomasoft/azguard-private.git",
+                    "url": "https://github.com/axiomasoft/azguard.git",
                     "reference": "68709d166ec2b91f7dce3975eadccd4539906bc0"
                 },
                 "require": {
@@ -439,7 +439,7 @@
                 "support": {
                     "email": "dv.vostrikov@gmail.com",
                     "issues": "https://github.com/axiomasoft/azguard/issues",
-                    "security": "https://github.com/axiomasoft/azguard-private/blob/main/SECURITY.md",
+                    "security": "https://github.com/axiomasoft/azguard/blob/main/SECURITY.md",
                     "source": "https://github.com/axiomasoft/azguard"
                 }
             }
