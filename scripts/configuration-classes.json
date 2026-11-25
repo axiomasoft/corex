@@ -475,6 +475,15 @@
             "deprecated_aliases": "",
             "notes": ""
         },
+        "corex-notifications.retention.settled_days": {
+            "owner": "axiomasoft/corex-notifications",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "unobserved",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
         "corex-operations.build": {
             "owner": "axiomasoft/corex-operations",
             "secret": "no",

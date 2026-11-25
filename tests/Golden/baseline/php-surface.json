@@ -43535,6 +43535,12 @@
                         "name": "deliveryMaxAttempts",
                         "type": "int",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "retentionSettledDays",
+                        "type": "int",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -43572,6 +43578,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "bool"
+            },
+            "retentionSettledDays": {
+                "name": "retentionSettledDays",
+                "readonly": true,
+                "static": false,
+                "type": "int"
             }
         },
         "readonly": true
@@ -43949,6 +43961,45 @@
             }
         },
         "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Notifications\\Runtime\\Internal\\Commands\\PruneNotifications": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Symfony\\Component\\Console\\Command\\SignalableCommandInterface"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Notifications\\Internal\\NotificationsOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Console\\Command",
         "properties": [],
         "readonly": false
     },

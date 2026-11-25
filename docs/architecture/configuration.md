@@ -57,6 +57,7 @@
 | corex-notifications.delivery.claim_seconds | axiomasoft/corex-notifications | int | 60 | no | product-policy | unobserved | unobserved | NotificationsOptions::$deliveryClaimSeconds |  |  |
 | corex-notifications.delivery.max_attempts | axiomasoft/corex-notifications | int | 5 | no | product-policy | unobserved | unobserved | NotificationsOptions::$deliveryMaxAttempts |  |  |
 | corex-notifications.digest.enabled | axiomasoft/corex-notifications | bool | false | no | product-policy | unobserved | unobserved | NotificationsOptions::$digestEnabled |  |  |
+| corex-notifications.retention.settled_days | axiomasoft/corex-notifications | int | 90 | no | product-policy | unobserved | unobserved | NotificationsOptions::$retentionSettledDays |  |  |
 | corex-operations.build | axiomasoft/corex-operations | string | dev | no | product-policy | unobserved | unobserved | ApiOptions::$build |  |  |
 | corex-operations.bulk.enabled | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | BulkOptions::$enabled |  |  |
 | corex-operations.bulk.idempotency_retention_seconds | axiomasoft/corex-operations | int | 86400 | no | product-policy | unobserved | unobserved | BulkOptions::$idempotencyRetentionSeconds |  |  |

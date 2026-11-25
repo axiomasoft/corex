@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — notification retention
+
+- Add `corex:notifications:prune` and `corex-notifications.retention.settled_days` (default 90): settled notifications past the window are deleted in bounded batches with their final deliveries; unread, unfinished and digest-held notifications are kept.
+
 ## Unreleased — CoreX 2.0 delivery receipts
 
 - Return `InboxPage` with an encrypted continuation and `UnreadCount` with an exact count or an unavailability reason. Inbox reads, mark-read, counts and send eligibility apply related-record visibility.

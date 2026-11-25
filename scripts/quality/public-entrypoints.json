@@ -3246,8 +3246,21 @@
             "reason": "NotificationsServiceProvider resolves the current Artisan command to sweep scoped durable delivery work.",
             "root": {
                 "path": "packages/notifications/src/NotificationsServiceProvider.php",
-                "anchor": "->resolveCommands([SweepNotificationDeliveries::class])",
-                "sha256": "dddc03f41b555f679aac53b0635f748edb72411c96ad45802df18fdf064299b0"
+                "anchor": "->resolveCommands([SweepNotificationDeliveries::class, ",
+                "sha256": "a661ea3e68cc47e4d3d2cc78169754e45134c360d8bb2776093ee7d42ac59807"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Notifications\\Runtime\\Internal\\Commands\\PruneNotifications::handle",
+            "source": "packages/notifications/src/Runtime/Internal/Commands/PruneNotifications.php",
+            "source_sha256": "2bfeb3294a740855c69f298180438fa08650f4a66cb5f0c80b26e608d70634c5",
+            "kind": "framework",
+            "reason": "NotificationsServiceProvider resolves the Artisan command that prunes settled notifications past their retention window.",
+            "root": {
+                "path": "packages/notifications/src/NotificationsServiceProvider.php",
+                "anchor": "PruneNotifications::class])",
+                "sha256": "a661ea3e68cc47e4d3d2cc78169754e45134c360d8bb2776093ee7d42ac59807"
             },
             "expires": null
         },
@@ -3273,7 +3286,7 @@
             "root": {
                 "path": "packages/notifications/src/NotificationsServiceProvider.php",
                 "anchor": "->tenant(DeliverNotification::class)",
-                "sha256": "dddc03f41b555f679aac53b0635f748edb72411c96ad45802df18fdf064299b0"
+                "sha256": "a661ea3e68cc47e4d3d2cc78169754e45134c360d8bb2776093ee7d42ac59807"
             },
             "expires": null
         },
