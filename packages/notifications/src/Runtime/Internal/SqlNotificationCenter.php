@@ -37,6 +37,8 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 {
     private const int ScanLimit = 1000;
 
+    private const int InboxBatch = 50;
+
     public function __construct(
         private ConnectionInterface $connection,
         private NotificationPolicy $policy,
@@ -187,23 +189,34 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         $scope = $this->scopes->of($context);
         $this->current->assert(scope: $scope, connection: $this->connection);
         $before = $this->decodeCursor(scope: $scope, cursor: $query->before);
-        $rows = $this->recipient($scope)
-            ->when($before !== null, static fn (Builder $builder) => $builder->where('id', '<', $before))
-            ->orderByDesc('id')
-            ->limit(self::ScanLimit + 1)
-            ->get();
-
         $result = [];
         $last = null;
-        foreach ($rows as $index => $row) {
-            if ($index === self::ScanLimit || count($result) === $query->limit) {
-                return new InboxPage(items: $result, cursor: $last === null ? null : $this->cursor(scope: $scope, id: $last));
-            }
+        $index = 0;
+        $more = true;
 
-            $last = NotificationValue::text($row->id);
+        // Rows are read newest first in batches sized to the requested page, so a page that the
+        // policy fills quickly loads a few rows instead of the whole scan budget. The budget and
+        // cursor semantics are unchanged: at most ScanLimit rows are examined per page.
+        while ($more) {
+            $batch = min(self::ScanLimit + 1 - $index, max($query->limit + 1, self::InboxBatch));
+            $rows = $this->recipient($scope)
+                ->when($last ?? $before, static fn (Builder $builder, string $id) => $builder->where('id', '<', $id))
+                ->orderByDesc('id')
+                ->limit($batch)
+                ->get();
+            $more = $rows->count() === $batch;
 
-            if ($this->visibility->allows(context: $context, subject: $this->visibility->subject($row))) {
-                $result[] = $this->reference($row);
+            foreach ($rows as $row) {
+                if ($index === self::ScanLimit || count($result) === $query->limit) {
+                    return new InboxPage(items: $result, cursor: $last === null ? null : $this->cursor(scope: $scope, id: $last));
+                }
+
+                $index++;
+                $last = NotificationValue::text($row->id);
+
+                if ($this->visibility->allows(context: $context, subject: $this->visibility->subject($row))) {
+                    $result[] = $this->reference($row);
+                }
             }
         }
 

@@ -189,3 +189,41 @@ function admissionNotificationContext(): NotificationContext
         resolve(TenantContextResolver::class)->current(), 'user', '11111111-1111-7111-8111-111111111112',
     );
 }
+
+it('reads an inbox page from the recipient id index instead of sorting the whole history', function (): void {
+    app()->instance(NotificationPolicy::class, new class implements NotificationPolicy
+    {
+        public function allows(NotificationContext $context, NotificationAction $action, NotificationSubject $subject): bool
+        {
+            return true;
+        }
+    });
+    $context = admissionNotificationContext();
+    $center = resolve(NotificationCenter::class);
+    $first = $center->notify($context, new NotificationInput(
+        'history-0', 'document.ready', new RecipientReference('user', $context->actorId ?? ''), 'document-ready', JsonDocuments::capture(['status' => 'ready']), null,
+    ));
+    // A long read history for this recipient and for others: without an index ordered by id the
+    // page query sorts every notification the recipient ever received.
+    DB::statement(<<<'SQL'
+        insert into ntf_notifications (id, account_id, account_incarnation, workspace_scope, recipient_kind, recipient_id, source, event_id,
+            request_digest, event_type, template_action, payload, read_at, revision, created_at, updated_at)
+        select gen_random_uuid(), account_id, account_incarnation, workspace_scope, recipient_kind,
+            case when g % 4 = 0 then recipient_id else 'other-'||(g % 50) end, source, 'history-'||g,
+            request_digest, event_type, template_action, payload, now(), revision, created_at, updated_at
+        from ntf_notifications, generate_series(1, 8000) g where id = ?
+        SQL, [$first->id]);
+    DB::statement('analyze ntf_notifications');
+    $queries = [];
+    DB::listen(static function ($query) use (&$queries): void {
+        if (str_contains($query->sql, 'ntf_notifications') && str_contains($query->sql, 'order by "id" desc')) {
+            $queries[] = [$query->sql, $query->bindings];
+        }
+    });
+
+    expect($center->inbox($context, new InboxQuery(null, 20))->items)->toHaveCount(20)
+        ->and($queries)->toHaveCount(1);
+    $plan = (string) DB::scalar('explain (format json) '.$queries[0][0], $queries[0][1]);
+    expect($plan)->toContain('"Index Name": "ntf_notifications_inbox_ix"')
+        ->and($plan)->not->toContain('"Node Type": "Sort"');
+});

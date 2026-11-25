@@ -5796,6 +5796,21 @@
             },
             "indexes": [
                 {
+                    "name": "ntf_notifications_inbox_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "recipient_kind",
+                        "recipient_id",
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "ntf_notifications_intent_uq",
                     "kind": "uq",
                     "columns": [
