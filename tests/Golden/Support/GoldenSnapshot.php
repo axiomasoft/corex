@@ -127,6 +127,7 @@ final class GoldenSnapshot
         $out = [];
         foreach ($classes as $class) {
             $r = new ReflectionClass($class);
+            $vendorTraitProperties = self::vendorTraitProperties($r);
             $constants = [];
             foreach ($r->getReflectionConstants() as $constant) {
                 if (! $constant->isPublic() || $constant->getDeclaringClass()->getName() !== $class) {
@@ -141,7 +142,7 @@ final class GoldenSnapshot
             ksort($constants);
             $properties = [];
             foreach ($r->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-                if ($property->getDeclaringClass()->getName() !== $class) {
+                if ($property->getDeclaringClass()->getName() !== $class || isset($vendorTraitProperties[$property->getName()])) {
                     continue;
                 }
                 $properties[$property->getName()] = [
@@ -154,7 +155,7 @@ final class GoldenSnapshot
             ksort($properties);
             $methods = [];
             foreach ($r->getMethods(ReflectionMethod::IS_PUBLIC) as $m) {
-                if ($m->getDeclaringClass()->getName() !== $class) {
+                if ($m->getDeclaringClass()->getName() !== $class || self::isVendorFile($m->getFileName())) {
                     continue;
                 }
                 $methods[$m->getName()] = [
@@ -192,6 +193,38 @@ final class GoldenSnapshot
         }
 
         return $out;
+    }
+
+    /**
+     * Members a class takes from a dependency's trait (Laravel's Dispatchable,
+     * Queueable, ...) belong to that dependency's release, not to the CoreX
+     * surface; recording them turned framework patch releases into
+     * rebaselines. Methods the class declares itself stay recorded.
+     *
+     * @param  ReflectionClass<object>  $class
+     * @return array<string, true>
+     */
+    private static function vendorTraitProperties(ReflectionClass $class): array
+    {
+        $fromVendor = [];
+        $pending = array_values($class->getTraits());
+        while ($pending !== []) {
+            $trait = array_pop($pending);
+
+            if (self::isVendorFile($trait->getFileName())) {
+                foreach ($trait->getProperties() as $property) {
+                    $fromVendor[$property->getName()] = true;
+                }
+            }
+            array_push($pending, ...array_values($trait->getTraits()));
+        }
+
+        return $fromVendor;
+    }
+
+    private static function isVendorFile(string|false $file): bool
+    {
+        return $file !== false && str_contains(str_replace('\\', '/', $file), '/vendor/');
     }
 
     private static function surfaceValue(mixed $value): mixed
