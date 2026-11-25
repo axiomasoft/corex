@@ -57,6 +57,7 @@ function messagingSampleEnvelope(array $overrides = []): MessageEnvelope
         causationId: array_key_exists('causationId', $overrides) ? $overrides['causationId'] : 'cause-1',
         metadata: $overrides['metadata'] ?? [],
         envelopeVersion: $overrides['envelopeVersion'] ?? MessageEnvelope::ENVELOPE_VERSION,
+        seal: $overrides['seal'] ?? null,
     );
 }
 
