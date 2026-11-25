@@ -144,13 +144,35 @@ PYRATCHET
 # entry in the remote-base diff must not authorize unrelated future changes.
 # A pushed commit cannot be amended without rewriting shared history, so an
 # entry added later on the branch also counts when it names that commit's full
-# sha; it still authorizes exactly one change.
+# sha. One entry authorizes exactly one change: an entry that names a commit
+# counts only for that commit, and one naming several commits counts for none.
+rebaseline_entries() {
+    command grep -E '^\+\| [0-9]{4}-' || true
+}
+entry_shas() {
+    command grep -oE '[0-9a-f]{40}' <<<"$1" | sort -u || true
+}
 check_golden_rebaseline() {
-    local before="$1" after="${2:-}"
-    if git diff --name-only "$before" ${after:+"$after"} -- tests/Golden/baseline | command grep -q . \
-       && ! git diff "$before" ${after:+"$after"} -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-' \
-       && ! { [ -n "$after" ] && git diff "$BASE_REF" HEAD -- tests/Golden/REBASELINE.md \
-                | command grep -E '^\+\| [0-9]{4}-' | command grep -qF "$(git rev-parse "$after")"; }; then
+    local before="$1" after="${2:-}" line shas authorized=0
+    git diff --name-only "$before" ${after:+"$after"} -- tests/Golden/baseline | command grep -q . || return 0
+    local own=""
+    [ -n "$after" ] && own="$(git rev-parse "$after")"
+    # Entries added by the change itself, unless they name another commit.
+    while IFS= read -r line; do
+        [ -n "$line" ] || continue
+        shas="$(entry_shas "$line")"
+        if [ -z "$shas" ] || [ "$shas" = "$own" ]; then
+            authorized=1
+        fi
+    done < <(git diff "$before" ${after:+"$after"} -- tests/Golden/REBASELINE.md | rebaseline_entries)
+    # A later entry on the branch that names exactly this commit.
+    if [ "$authorized" = 0 ] && [ -n "$own" ]; then
+        while IFS= read -r line; do
+            [ -n "$line" ] || continue
+            [ "$(entry_shas "$line")" = "$own" ] && authorized=1
+        done < <(git diff "$BASE_REF" HEAD -- tests/Golden/REBASELINE.md | rebaseline_entries)
+    fi
+    if [ "$authorized" = 0 ]; then
         log_fail "golden baseline changed without a REBASELINE.md entry ($before ${after:-worktree})"
     fi
 }
