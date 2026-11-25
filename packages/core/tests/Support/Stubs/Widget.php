@@ -8,7 +8,7 @@ use CoreX\Audit\Contracts\Auditable;
 use CoreX\Database\Laravel\BaseModel;
 
 /**
- * Test double exercising the kernel: ULID + soft deletes + audit (BaseModel)
+ * Test double exercising the kernel: UUIDv7 key + soft deletes + audit (BaseModel)
  * without optional package casts.
  *
  * @property string $id

@@ -1,6 +1,6 @@
 # axiomasoft/corex
 
-Ядро CoreX для любого Laravel-приложения: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
+Ядро CoreX для любого Laravel-приложения: `BaseModel` (ключи UUIDv7), `Settings` (каскад
 System→Tenant→User), append-only `Audit`, tenant-контекст, департаменты (ltree),
 фичефлаги, PubSub-контракт, адаптация реестра сущностей Packman и контракты отложенного пробуждения
 `CoreX\Scheduling` (исполнение — пакет `corex-scheduler`). MIT.

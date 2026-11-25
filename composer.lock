@@ -155,7 +155,7 @@
                 "laravel",
                 "multi-tenancy",
                 "settings",
-                "ulid"
+                "uuid"
             ],
             "transport-options": {
                 "relative": true
@@ -3133,7 +3133,7 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
+            "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (UUIDv7, tenancy, money).",
             "keywords": [
                 "crm",
                 "deals",
