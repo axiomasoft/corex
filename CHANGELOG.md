@@ -4,6 +4,18 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Validator patterns anchored with `$` now use the `D` modifier, so identifiers, API versions and names with a trailing newline are rejected. `tests/Arch/RegexAnchorTest.php` guards shipped sources.
+
+### Changed
+
+- Every foreign key has an index on its referencing columns (42 new indexes, including `users.department_id`, `tsk_tasks`, `crm_*`, `wsp_invitations` and the `root_*` control-plane tables). `tests/Arch/ForeignKeyIndexTest.php` checks the schema goldens.
+- `outbox:prune` and the pub/sub prune delete in bounded batches (`--batch`, default 1000) instead of one unbounded `DELETE`.
+- dept and dept_tree record access checks run one joined statement instead of four or six.
+- CI is a job graph ending in a single `CI gate` check; manual runs can target selected jobs. See [Testing and CI](docs/testing-ci.md).
+- Documentation is English and indexed from [docs/index.md](docs/index.md).
+
 ### Added
 
 - Поставка CoreX 2.0 включает 22 split-архива, пять снимков API v2, проекцию MCP для приложений и независимые установочные сценарии Equipment Registry и FlexCRM.
