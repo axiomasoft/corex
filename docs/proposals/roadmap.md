@@ -233,3 +233,53 @@ independently installable.
 - The vendored Rector rule `SleepFuncToSleepStaticCallRector` rewrites
   `usleep()` in scripts that run without the Composer autoloader;
   `rector.php` skips the one affected test helper.
+
+## 20. Guard coverage from the mutation pass (P3)
+
+**Findings.** Each authz, scope, tenancy, validation and invariant guard in
+access, CRM, tenancy, messaging, notifications, media and the panels saved
+views was disabled one at a time (condition forced false, or guard call
+dropped) and the package suite rerun. Survivors that guarded real behaviour
+now have tests that fail without them. The rest are listed here so a future
+mutation run does not rediscover them:
+
+- *Subsumed by a stricter check on the same path:* `MessageContract` line 86
+  (the name regex at line 90), the `SqlInbox` PII pre-check (`validateFact`),
+  `PanelAccessChecker`'s entity-registered check
+  (`ActiveEntityFilter::isActive`), `ScopePredicate`'s non-user department
+  check (`MatrixPermissions::degradesToNone`), `SqlDigestBuilder`'s null actor
+  (its line 61 check).
+- *Equivalent fail-closed:* the `SqlNotificationCenter` cursor length check
+  (decoding fails with the same exception) and the
+  `FencedSavedViewRepository` `bound()` check (the container throws, only the
+  message differs).
+- *Layered:* the CRM workspace and connection guards in the use cases
+  (`AssociateContactCompany`, `DeleteCompany`, `ContactCompany`, `CreateDeal`,
+  `MoveDealToStage`, `ConvertLead`, `LogActivity`, `ContextGuard`,
+  `LockedAdmissions`, `RecordRules`) repeat what global scopes and model
+  guards already enforce; `GdThumbnailDriver`'s size, pixel and MIME limits
+  repeat the upload admission in `SqlMediaLibrary::store`, with the same
+  defaults.
+- *Defensive type checks on database or driver values:* access
+  (`MatrixPermissions`, `ScopePredicate`, `DatabaseRoleMatrixCompiler`,
+  `DatabaseRoleAdministration`, `AccessIntegrationRegistrar`,
+  `ScopedFieldPolicy`), messaging (`SqlOutboxRelay`, `DurableBrokerReceiver`,
+  `SubscribeGuard`, `MessagePayload`, the CloudEvent parse type checks),
+  notifications (`ChannelDrivers`, `DeliveryIntents`, `NotificationValue`,
+  `SettingsPreferenceRepository`) and media (`Internal\Value`,
+  `MediaOperationStore` row lookups). They are unreachable from typed input;
+  the PHPStan rules in `tests/PHPStan` cover the messaging contracts.
+- *Real but untested in the package:* `MediaModuleReferences::cleanup()`
+  rechecks attachments and open operations under lock (line 125) and refuses
+  an enclosing transaction (line 114), but `cleanup()` runs only inside a
+  confirmed Packman lifecycle plan, which only the full purge test in
+  `tests/Pg/ModulePurgeInventoryTest.php` sets up. The `SqlMediaLibrary::store`
+  replay check after a unique-key race (line 142) needs two concurrent
+  uploads.
+
+**Proposal.** Add a purge-plan fixture so the attach-after-scan race and the
+nested-transaction refusal get their own cases, and a concurrent upload case
+next to `ConversionConcurrencyTest`. Leave the defensive checks in place.
+
+**Rationale.** These guards protect against data loss or cross-tenant replay
+under races, which is where a regression would go unnoticed longest.
