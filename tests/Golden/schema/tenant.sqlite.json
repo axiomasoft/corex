@@ -3724,6 +3724,15 @@
             },
             "indexes": [
                 {
+                    "name": "med_conversions_file_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "file_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
                     "name": "med_conversions_pk",
                     "kind": "pk",
                     "columns": [
@@ -4023,6 +4032,16 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "med_operations_file_kind_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "file_id",
+                        "kind"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
                 {
                     "name": "med_operations_operation_key_uq",
                     "kind": "uq",
