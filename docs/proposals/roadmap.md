@@ -210,13 +210,17 @@ security audits.
 
 ## 18. Standalone suites that need a sibling package (P3)
 
-**Problem.** The media tests only run from their own package install, and an
-isolated tenancy run shows 8 `ClaimLifecycleConformanceTest` failures that
-the cohort run hides. The panels suite needed `corex-custom-fields` as a dev
-requirement before it could run standalone.
+**Findings.** The 8 `ClaimLifecycleConformanceTest` failures of an isolated
+tenancy run came from the local `pg_dump` 17 refusing a PostgreSQL 18 server;
+with matching tools all 9 cases pass. The media suite also runs from the root
+vendor; its only failures there need `ext-gd`. Both requirements are now in
+[Testing and CI](../testing-ci.md). The real defect found on the way: the
+access and tenancy `ConfigReportSectionTest` sat outside every suite in their
+`phpunit.xml`, and the tenancy one had been failing unnoticed; both now run.
 
 **Proposal.** Run every package suite both standalone and from the root
-vendor in CI, and fix whichever mode fails.
+vendor in CI, so a test outside its suites or a package that passes only
+inside the monorepo shows up.
 
 **Rationale.** A package that only passes inside the monorepo is not
 independently installable.

@@ -34,6 +34,14 @@ lanes read:
 
 The CI `PG lane` job shows the full set of databases it creates.
 
+Some suites shell out to host tools or need PHP extensions:
+
+- The tenancy claim lifecycle tests run `pg_dump` and `pg_restore`; their
+  major version must not be older than the server's (`pg_dump` 17 refuses a
+  PostgreSQL 18 server).
+- The media thumbnail tests need `ext-gd`; without it the GD driver and its
+  conversion profile are not registered.
+
 ### Standalone package installs
 
 Packages are tested both from the monorepo root and on their own, which proves
