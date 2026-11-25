@@ -4,7 +4,7 @@ Open proposals found while polishing the repository. Each item states the
 problem, the proposal, why it is worth doing and a priority:
 **P1** next, **P2** soon, **P3** when convenient.
 
-## 1. Snapshots that pin framework internals (P1)
+## 1. Snapshots that pin framework internals (done)
 
 **Problem.** The Golden surface snapshot records trait methods that Laravel
 adds to internal jobs, and the unused-public ledger stores SHA-256 hashes of
@@ -18,6 +18,13 @@ instead of file hashes.
 
 **Rationale.** Security updates of the framework should be a lockfile change,
 not a snapshot review.
+
+**Status: done.** The Golden PHP surface skips members a class takes from a
+trait under `vendor/`, and the unused-public ledger (schema 2) proves a vendor
+root by its anchor only; repository roots keep their hash. Accepted limit: a
+CoreX class that only adds or drops a framework trait without changing any
+member it declares itself is no longer visible in the PHP surface. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
 
 ## 2. English-only documentation and messages (P1)
 
@@ -34,6 +41,15 @@ English in one pass per package.
 **Rationale.** The packages are meant for external consumers; mixed languages
 make the public surface and the logs harder to use.
 
+**Status: open, deferred.** A translation of the normative layer is a
+documentation project of its own and should be reviewed by the owner in one
+piece; mixing it into the polish branch would bury the code changes. Order
+when it starts: exception messages per package (they reach logs), then the
+configuration-reference template, then the CHANGELOGs and the architecture
+layer. The remaining planning identifiers of item 3 go in the same pass.
+Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
 ## 3. Planning identifiers inside tooling (P2)
 
 **Problem.** Gate scripts and data files carry planning identifiers: phase
@@ -45,6 +61,14 @@ They mean nothing without the private plans.
 the phase bookkeeping from the gates.
 
 **Rationale.** Tooling should explain itself from the repository alone.
+
+**Status: partly done.** The package docs gate no longer maps packages to
+planning phases (report schema 2), and the coverage floor file describes the
+check. Header comments of the other gates still cite plan items and move to
+English with item 2. Identifiers inside stored receipts (`item`,
+`review_item` in the distribution and mutation tooling) are part of evidence
+formats and stay. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
 
 ## 4. Publish the ecosystem packages to a Composer registry (P1, owner decision)
 
@@ -59,6 +83,28 @@ depend on version constraints.
 **Rationale.** Removes the wrapper, makes installs reproducible and lets
 Composer audit the ecosystem packages.
 
+**Status: ready on the CoreX side, blocked on owner actions.** Every package
+manifest has a name, MIT license, autoload and `extra.packman`, and the
+packages already require each other through `^2.0@dev` constraints that a
+registry can satisfy. Steps, in order:
+
+1. Owner: choose the registry (private Packagist or Satis) and provide its
+   credentials to CI.
+2. Publish tagged releases of the dependencies first: Packman (`packman`,
+   `-modules`, `-schema`, `-panels`, `-plugins`, `-devtools`, `-testkit`),
+   AzGuard, Tenant (`tenant`, `tenant-laravel`) and Vaulter (`vaulter-core`,
+   `vaulter-media`). CoreX cannot be installed from a registry before them.
+3. Publish CoreX: Packagist needs one repository per package, so either a
+   read-only split per package (for example splitsh-lite on tag) or a Satis
+   build that reads the monorepo tags. Tag `2.0.0` and switch the sibling
+   constraints from `^2.0@dev` to `^2.0`.
+4. Replace the inline `type: package` repositories with the registry and
+   delete `scripts/composer-with-snapshots.py`.
+
+Optional before publishing: 18 package manifests have no `authors` block;
+Composer does not require it. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
 ## 5. A shared test kit instead of cross-package test coupling (P2)
 
 **Problem.** Package suites load shared fixtures from the monorepo's
@@ -71,7 +117,13 @@ case and the Meilisearch adapter tests use the root test case.
 **Rationale.** Each package becomes testable from its own manifest, and the
 dependency analyser no longer needs ignore rules for the shared fixtures.
 
-## 6. Retire the frozen-baseline spike tooling (P2)
+**Status: open, deferred.** Extracting the kit touches every package suite
+and the dependency analyser rules, and its value appears only once packages
+are installed from a registry (item 4). Do it right after publication.
+Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
+## 6. Retire the frozen-baseline spike tooling (done)
 
 **Problem.** `scripts/quality/infection-spike.py` compares `ci.yml` with a
 fixed historic commit and fails on any CI change. It is not wired into CI.
@@ -80,6 +132,11 @@ fixed historic commit and fails on any CI change. It is not wired into CI.
 mutation tooling that CI does run.
 
 **Rationale.** Dead verification code misleads reviewers.
+
+**Status: done.** `infection-spike.py` and its tests are deleted; mutation
+testing runs through `scripts/quality/mutation.py`. The inventory check also
+found four sources outside every mutation zone; they are assigned now. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
 
 ## 7. Faster CI lanes (P2)
 
@@ -93,7 +150,13 @@ in the lanes; shard the root suite across two runners with Pest's
 
 **Rationale.** Cuts the wall time of the slowest lanes and the runner minutes.
 
-## 8. Local PostgreSQL environment matches CI (P3)
+**Status: open, deferred.** A shared `vendor/` artifact and root suite
+sharding change the critical path of every lane and need several full CI runs
+to tune, which costs runner minutes the owner has to approve. Measure the
+slowest lanes from the run history first. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
+## 8. Local PostgreSQL environment matches CI (done)
 
 **Problem.** `docker-compose.yml` starts PostgreSQL 16 only; CI runs 16 and 18
 with Meilisearch and creates five extra databases for the PG lane.
@@ -103,7 +166,15 @@ init script that creates the lane databases.
 
 **Rationale.** `composer test:pg` should pass locally with one command.
 
-## 9. Coverage floor in one place (P3)
+**Status: done.** `docker-compose.yml` runs PostgreSQL 18 (new volume
+`corex_pgsql18_data`), creates the lane databases through
+`docker/pgsql/create-test-databases.sh` and starts Meilisearch with the CI
+image. [Testing and CI](../testing-ci.md) lists the environment for
+`composer test:pg`. PostgreSQL 16 stays a CI-only lane. Not exercised under
+Docker on the build machine. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
+## 9. Coverage floor in one place (done)
 
 **Problem.** `scripts/coverage-min-floor.txt` documents the floor, but
 `composer test:coverage` hard-codes `--min=80`.
@@ -113,7 +184,12 @@ or delete the file.
 
 **Rationale.** One source of truth for a gate threshold.
 
-## 10. Identifier strategy in FlexCRM (P2, owner decision)
+**Status: done.** `scripts/coverage-min-floor.txt` is the single source:
+`run-root-coverage.sh` reads it, `composer test:coverage` passes no number,
+and the anti-weakening gate fails when the file's floor drops. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
+## 10. Identifier strategy in FlexCRM (done)
 
 **Problem.** The kernel and modules use UUIDv7; some FlexCRM models still use
 ULIDs, and the `flex/crm` description advertises ULIDs.
@@ -123,6 +199,14 @@ remaining models before the first release.
 
 **Rationale.** Mixed identifier types complicate references, search and
 imports.
+
+**Status: done.** FlexCRM already uses UUIDv7 everywhere (`BaseModel` with
+`HasUuids`, uuid columns); only the descriptions said ULID and now say UUIDv7.
+Kept on purpose: `ResourceIdFormat` still accepts ULIDs for host resources,
+and Intl's rate snapshots and batches keep `char(26)` ULIDs because
+`RateSnapshot` accepts provider-supplied ids and the rows are not CRM
+references. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
 
 ## 11. Require the CI gate on main (P1, owner action)
 
@@ -134,6 +218,10 @@ imports.
 **Rationale.** It is the single aggregated verdict; skipped lanes are already
 handled.
 
+**Status: owner action.** Not changed from the branch: repository settings
+are the owner's.
+
+
 ## 12. Mutation testing cadence (P3)
 
 **Problem.** Mutation jobs were disabled with `if: false`; they now run only on
@@ -143,6 +231,14 @@ manual dispatch.
 
 **Rationale.** Mutation scores decay silently when nobody runs them.
 
+**Status: open, owner decision.** A schedule runs only from the default
+branch and every scheduled run spends the mutation matrix's runner minutes.
+Ready to add after merge: an `on.schedule` entry (for example
+`cron: '0 3 * * 1'`) with the mutation jobs' condition extended to
+`github.event_name == 'schedule'`. The inventory check that the scheduled run
+would start with passes again on this branch. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
 ## 13. Tooling quirks worth reporting upstream (P3)
 
 - The dependency analyser resolves the `event()` helper case-insensitively to
@@ -150,6 +246,10 @@ manual dispatch.
 - The vendored Laravel Rector rule `ServerVariableToRequestFacadeRector`
   rewrites `$_SERVER['argv']` in CLI code, which is process state, not request
   input; `scripts/` is preserved in `rector.php` for that reason.
+
+**Status: owner action.** Reports go to the upstream projects under the
+owner's account.
+
 
 ## 14. One context check per CRM save (done)
 
@@ -184,7 +284,7 @@ still found), and the key is the physical database behind the connection, so a
 tenant switch never reuses another database's answer. Later checks in the same
 request run 1 statement instead of 3.
 
-## 16. Retention for `ntf_notifications` (P2, owner decision)
+## 16. Retention for `ntf_notifications` (done)
 
 **Problem.** Delivered and read notifications are never pruned. The outbox
 and pub/sub tables have batched prune commands; notifications do not.
@@ -196,7 +296,15 @@ and pub/sub tables have batched prune commands; notifications do not.
 **Rationale.** The table grows with every event fan-out. The retention period
 is a product decision.
 
-## 17. Unused import/export codecs (P3)
+**Status: done.** `corex:notifications:prune` deletes notifications read,
+dismissed or cancelled more than `corex-notifications.retention.settled_days`
+(default 90) ago, in primary-key batches (`--batch`, default 1000), one
+transaction per batch. Unread notifications, notifications with a delivery
+that is not final and notifications held by a digest are kept; deliveries go
+with their notification. The host schedules the command. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
+## 17. Unused import/export codecs (done)
 
 **Problem.** `CsvCodec` and `NdjsonCodec` in `import-export` are only used by
 their own tests. `CsvCodec` scans the input character by character in PHP
@@ -207,6 +315,11 @@ decoder built on `fgetcsv` over a `php://temp` stream, or remove them.
 
 **Rationale.** Internal code without a caller still costs reviews and
 security audits.
+
+**Status: done.** Removed. Imports read rows through the host's
+`TransferSource`, which owns decoding of its input; a streaming file source
+can be added when a product needs one. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
 
 ## 18. Standalone suites that need a sibling package (P3)
 
@@ -225,6 +338,11 @@ inside the monorepo shows up.
 **Rationale.** A package that only passes inside the monorepo is not
 independently installable.
 
+**Status: open, deferred.** Doubling every package lane costs runner minutes
+the owner has to approve; it fits best after item 7 makes lanes cheaper. The
+two suites that sat outside their `phpunit.xml` are fixed. Implementer's choice; the reviewer must evaluate whether it is the best option.
+
+
 ## 19. More upstream notes (P3)
 
 - Packman's own validators use `'/^...$/'` without the `D` modifier, so they
@@ -233,6 +351,9 @@ independently installable.
 - The vendored Rector rule `SleepFuncToSleepStaticCallRector` rewrites
   `usleep()` in scripts that run without the Composer autoloader;
   `rector.php` skips the one affected test helper.
+
+**Status: owner action.** As item 13.
+
 
 ## 20. Guard coverage from the mutation pass (done)
 
