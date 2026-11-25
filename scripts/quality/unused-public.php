@@ -18,6 +18,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
@@ -65,7 +66,7 @@ final class UsageScanner
         ContainerInterface::class,
     ];
 
-    /** @var array<string, array{node: Stmt\ClassLike, parents: list<string>, properties: array<string, list<string>>, methods: array<string, MethodDeclaration>}> */
+    /** @var array<string, array{parents: list<string>, properties: array<string, list<string>>, methods: array<string, MethodDeclaration>}> */
     private array $classes = [];
 
     /** @var array<string, MethodDeclaration> */
@@ -109,7 +110,8 @@ final class UsageScanner
     public function scan(): array
     {
         $parser = new ParserFactory()->createForNewestSupportedVersion();
-        $trees = [];
+        $parse = static fn (string $source): array => array_values(new NodeTraverser(new NameResolver)->traverse($parser->parse($source) ?? []));
+        $parsed = [];
         $jsonFiles = [];
         foreach ($this->files() as $file) {
             $source = file_get_contents($this->root.'/'.$file);
@@ -127,10 +129,8 @@ final class UsageScanner
             }
 
             try {
-                $tree = $parser->parse($source) ?? [];
-                $tree = array_values(new NodeTraverser(new NameResolver)->traverse($tree));
-                $trees[$file] = $tree;
-                $this->declarations($tree, $file, hash('sha256', $source));
+                $this->declarations($parse($source), $file, hash('sha256', $source));
+                $parsed[] = $file;
             } catch (Throwable $error) {
                 $this->errors[] = 'SOURCE-PARSE '.$file.': '.$error->getMessage();
             }
@@ -148,7 +148,12 @@ final class UsageScanner
                 $this->dispatch[$receiver] = array_values(array_unique([...$this->dispatch[$receiver], ...$this->relatives($class)]));
             }
         }
-        foreach ($trees as $file => $tree) {
+        // Re-parse instead of holding every tree from the first pass: test files
+        // are mostly top-level closures that no declaration keeps alive, and
+        // retaining all of them pushed the scan past a 1 GB memory limit.
+        foreach ($parsed as $file) {
+            $tree = $parse((string) file_get_contents($this->root.'/'.$file));
+            $this->classNames($tree, $file);
             $this->currentFile = $file;
             $variables = [];
             $this->visit($tree, $file, null, $variables);
@@ -186,6 +191,19 @@ final class UsageScanner
         }
 
         return ['methods' => $methods, 'errors' => $this->errors];
+    }
+
+    private static function className(Stmt\ClassLike $node, string $file): string
+    {
+        return $node->name !== null && isset($node->namespacedName) ? $node->namespacedName->toString() : 'Anonymous\\Source_'.substr(hash('sha256', $file), 0, 16).'_Line'.$node->getStartLine().'_Offset'.$node->getStartFilePos();
+    }
+
+    /** @param list<Node> $tree */
+    private function classNames(array $tree, string $file): void
+    {
+        foreach (new NodeFinder()->findInstanceOf($tree, Stmt\ClassLike::class) as $node) {
+            $node->setAttribute('unusedPublicClass', self::className(node: $node, file: $file));
+        }
     }
 
     /** @return list<string> */
@@ -245,7 +263,7 @@ final class UsageScanner
             }
 
             if ($node instanceof Stmt\ClassLike) {
-                $class = $node->name !== null && isset($node->namespacedName) ? $node->namespacedName->toString() : 'Anonymous\\Source_'.substr(hash('sha256', $file), 0, 16).'_Line'.$node->getStartLine().'_Offset'.$node->getStartFilePos();
+                $class = self::className(node: $node, file: $file);
                 $node->setAttribute('unusedPublicClass', $class);
                 $this->classImports[$class] = $this->imports[$file] ?? [];
                 $parents = [];
@@ -300,7 +318,7 @@ final class UsageScanner
                         }
                     }
                 }
-                $this->classes[$class] = ['node' => $node, 'parents' => $parents, 'properties' => $properties, 'methods' => $methods];
+                $this->classes[$class] = ['parents' => $parents, 'properties' => $properties, 'methods' => $methods];
             }
             $children = get_object_vars($node);
             foreach ($node->getSubNodeNames() as $field) {
