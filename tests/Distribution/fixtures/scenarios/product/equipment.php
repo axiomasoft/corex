@@ -82,8 +82,8 @@ switch ($mode) {
             foreach ([...PACKAGES, BulkDeclaration::MODULE] as $package) {
                 FixtureLifecycleOperators::grant($scope, $package, 'inspect');
                 FixtureLifecycleOperators::grant($scope, $package, 'enable');
-                app(ModuleLifecycle::class)->enable($package, cascade: true);
-                $proof->check(app(ModuleRegistry::class)->isActive($package, app(TenantContextResolver::class)->current()), 'Actual module active '.$package);
+                resolve(ModuleLifecycle::class)->enable($package, cascade: true);
+                $proof->check(resolve(ModuleRegistry::class)->isActive($package, resolve(TenantContextResolver::class)->current()), 'Actual module active '.$package);
             }
             Equipment::query()->forceCreate(['asset_key' => $record->id, 'name' => 'Registry compressor']);
         });
@@ -119,7 +119,7 @@ switch ($mode) {
     case 'schedule':
         $series = $db->table('corex_task_series')->where('series_key', SERIES)->sole();
         [$scheduled, $replayed, $field, $queued] = Runtime::scoped(static function (DataScope $scope) use ($series, $record, $serial): array {
-            $now = app(ScenarioClock::class)->now();
+            $now = resolve(ScenarioClock::class)->now();
             $request = new WakeupRequest(
                 scope: $scope, kind: 'task-recurrence.materialize', handlerVersion: 'task-materialization/1',
                 requestKey: SCHEDULE, fireAt: $now, window: new WakeupWindow($now->modify('-1 minute'), $now, 'custom'),
@@ -129,10 +129,10 @@ switch ($mode) {
                     'aheadDays' => 1, 'pageLimit' => 10, 'maxSeconds' => 5,
                 ]),
             );
-            $scheduler = app(WakeupScheduler::class);
+            $scheduler = resolve(WakeupScheduler::class);
             $scheduled = $scheduler->schedule($request);
             $replayed = $scheduler->schedule($request);
-            $values = app(FieldValues::class);
+            $values = resolve(FieldValues::class);
             $prior = $values->read($scope, $record, new FieldSelection([]));
             $patch = new FieldPatch([new SetField(new FieldId($serial), FieldInput::from('EQ-101'))], $prior->schemaRevision, $prior->valueRevision);
             $field = $values->update($scope, $record, $patch, $patch->token($scope, $record, 'equipment-installed-serial'));
@@ -185,9 +185,9 @@ switch ($mode) {
         $join = equipmentTask($db);
         $after['owner'] = Runtime::scoped(static function (DataScope $scope) use ($proof, $record, $join, $serial): array {
             $task = readEquipmentTask($scope, $join['link']['task_id']);
-            $fields = app(FieldValues::class)->read($scope, $record, new FieldSelection([$serial]));
+            $fields = resolve(FieldValues::class)->read($scope, $record, new FieldSelection([$serial]));
             $page = findEquipment($scope, $record);
-            $transfer = app(TransferResultReader::class)->result($scope, new TransferRef(Runtime::transfer(Runtime::id('import'))));
+            $transfer = resolve(TransferResultReader::class)->result($scope, new TransferRef(Runtime::transfer(Runtime::id('import'))));
             $proof->same($join['task']['id'], $task['id'], 'Fresh public Task relationship resolves the persisted task ID.');
             $proof->check(isset($fields->values[$serial]), 'Fresh owner FieldValues read releases the explicitly granted field.');
             $proof->same([$record->id], array_map(static fn ($hit): string => $hit->record->id, $page->hits), 'Actual PostgreSQL search returns one installed equipment ref.');
@@ -222,7 +222,7 @@ switch ($mode) {
                 }
 
                 try {
-                    $fields = app(FieldValues::class)->read($scope, $record, new FieldSelection([$serial]));
+                    $fields = resolve(FieldValues::class)->read($scope, $record, new FieldSelection([$serial]));
                     $field = ! isset($fields->values[$serial]);
                 } catch (FieldFailure) {
                     $field = true;
@@ -266,12 +266,12 @@ function equipmentTask(Connection $database): array
 
 function readEquipmentTask(DataScope $scope, string $task): array
 {
-    $tenant = app(TenantContextResolver::class)->current();
+    $tenant = resolve(TenantContextResolver::class)->current();
     $link = EquipmentTaskLink::query()->whereKey($task)->firstOrFail();
 
     if ($link->getAttribute('workspace_id') !== $scope->workspaceId
-        || ! app(ModuleRegistry::class)->isActive('axiomasoft/corex-tasks', $tenant)
-        || ! app(DataScopeAuthorizer::class)->authorize(scope: $scope, record: new RecordRef('task-series', $link->getAttribute('series_id')), fields: new FieldSelection(['title']), use: FieldUse::Read)->allowed) {
+        || ! resolve(ModuleRegistry::class)->isActive('axiomasoft/corex-tasks', $tenant)
+        || ! resolve(DataScopeAuthorizer::class)->authorize(scope: $scope, record: new RecordRef('task-series', $link->getAttribute('series_id')), fields: new FieldSelection(['title']), use: FieldUse::Read)->allowed) {
         throw new AuthorizationException('The known task is unavailable in the current equipment scope.');
     }
 
@@ -280,7 +280,7 @@ function readEquipmentTask(DataScope $scope, string $task): array
 
 function findEquipment(DataScope $scope, RecordRef $record): SearchPage
 {
-    return app(Search::class)->query($scope, new SearchQuery(
+    return resolve(Search::class)->query($scope, new SearchQuery(
         entity: new EntityHandle($record->entity), text: 'compressor', searchFields: ['title'], fields: ['title'],
     ));
 }

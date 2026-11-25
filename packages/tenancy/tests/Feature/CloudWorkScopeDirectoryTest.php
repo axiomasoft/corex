@@ -25,7 +25,7 @@ it('resolves a missing worker account only through the central directory', funct
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
-    expect(fn () => app(WorkScopeDirectory::class)->account((string) Str::uuid()))->toThrow(ScopeContextMismatch::class)
+    expect(fn () => resolve(WorkScopeDirectory::class)->account((string) Str::uuid()))->toThrow(ScopeContextMismatch::class)
         ->and(DB::getDefaultConnection())->toBe('pgsql');
 });
 

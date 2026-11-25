@@ -150,9 +150,9 @@ it('keeps the requested descending record order through continuation', function 
 
 it('provides exact statistics only inside a proven shared read only snapshot', function (): void {
     $owner = DB::connection();
-    $authority = new class($owner) implements PostgresSnapshotAuthority
+    $authority = new readonly class($owner) implements PostgresSnapshotAuthority
     {
-        public function __construct(private readonly ConnectionInterface $owner) {}
+        public function __construct(private ConnectionInterface $owner) {}
 
         public function covers(DataScope $scope, ConnectionInterface $connection): bool
         {

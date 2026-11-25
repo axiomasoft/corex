@@ -60,7 +60,7 @@ final class MediaInventory implements LifecycleInventory, ReferenceOwners
 
     public function resolve(DataScope $scope, string $producer, string $kind, array $witness): array
     {
-        app(CurrentWorkScope::class)->assert($scope);
+        resolve(CurrentWorkScope::class)->assert($scope);
         $role = str_starts_with($kind, 'root_') ? 'control' : match ($scope->accountId) {
             Scenario::ACCOUNT_A => 'a', Scenario::ACCOUNT_B => 'b',
         };
@@ -95,7 +95,7 @@ final class MediaInventory implements LifecycleInventory, ReferenceOwners
 
     public function revision(DataScope $operator, ModuleRef $target): string
     {
-        app(CurrentWorkScope::class)->assert($operator);
+        resolve(CurrentWorkScope::class)->assert($operator);
         $sites = Scenario::connection('control')->table('scenario_binding_locations')->orderBy('role')->get()->all();
 
         if (array_column($sites, 'account_id') !== [Scenario::ACCOUNT_A, Scenario::ACCOUNT_B] || array_column($sites, 'role') !== ['a', 'b']) {
@@ -108,7 +108,7 @@ final class MediaInventory implements LifecycleInventory, ReferenceOwners
     public function run(DataScope $scope, Closure $operation): mixed
     {
         $work = static function () use ($operation, $scope): mixed {
-            app(CurrentWorkScope::class)->assert($scope, DB::connection());
+            resolve(CurrentWorkScope::class)->assert($scope, DB::connection());
 
             return $operation();
         };

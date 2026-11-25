@@ -95,10 +95,8 @@ final class BuiltinModuleInventoryPgTest extends CoreXTestCase
 
         $scope = WorkScopeFixture::install($this->app, 'scheduler-operator')->scope();
         foreach (['enable', 'inspect', 'disable', 'purge'] as $ability) {
-            Gate::define('corex.lifecycle.'.$ability, function (ScopePrincipal $principal, DataScope $current, ModuleRef $target) use ($ability, $scope, $scheduler, $other): bool {
-                return $current == $scope && $principal->kind === $scope->principalKind && $principal->id === $scope->principalId
-                    && ($target->package === $other || ($target->package === $scheduler && ($ability !== 'inspect' || $this->inspectScheduler)));
-            });
+            Gate::define('corex.lifecycle.'.$ability, fn (ScopePrincipal $principal, DataScope $current, ModuleRef $target): bool => $current == $scope && $principal->kind === $scope->principalKind && $principal->id === $scope->principalId
+                && ($target->package === $other || ($target->package === $scheduler && ($ability !== 'inspect' || $this->inspectScheduler))));
         }
         // This boxed installation has one verified account, no workspaces and no external owners.
         $this->app->instance(LifecycleInventory::class, new readonly class($scope) implements LifecycleInventory

@@ -57,13 +57,13 @@ if (($argv[1] ?? null) === 'produce') {
 }
 $producer = Scenario::barrierRead('produced');
 $proof->check($producer['control']['session'] !== $controlWitness['session'], 'The worker must use a different physical PostgreSQL session');
-$default = app('db')->getDefaultConnection();
+$default = resolve('db')->getDefaultConnection();
 
 if (! $cloud) {
     $before = auth()->guard()->user();
     $seen = ScenarioQueue::inScope(Scenario::BOXED, null, Scenario::USER_A, static function () use ($proof): array {
-        $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
-        $runner = app(WorkScopeRunner::class);
+        $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
+        $runner = resolve(WorkScopeRunner::class);
         $outer = $runner->run($scope, static function ($context) use ($proof, $runner, $scope): array {
             $proof->check($context->isBoxed(), 'Core must admit this fixed account in boxed mode');
             $proof->same(Scenario::BOXED, $context->id(), 'Boxed account identity');
@@ -82,7 +82,7 @@ if (! $cloud) {
 
             return $first;
         });
-        $codec = app(DataScopeCodec::class);
+        $codec = resolve(DataScopeCodec::class);
         $stale = $codec->decode([...$codec->encode($scope), 'restore_epoch' => str_repeat('b', 64)]);
 
         try {
@@ -96,21 +96,21 @@ if (! $cloud) {
         return $outer;
     });
     $proof->same($before, auth()->guard()->user(), 'Boxed host principal restored');
-    $proof->same($default, app('db')->getDefaultConnection(), 'Boxed default connection restored');
+    $proof->same($default, resolve('db')->getDefaultConnection(), 'Boxed default connection restored');
     Scenario::barrier('worked', ['owner' => $seen]);
     $proof->report($control, ['binding-a'], ['default' => $default], ['owner' => $seen, 'principal' => null]);
 
     return;
 }
 
-$ledger = app(ScenarioJobLedger::class);
+$ledger = resolve(ScenarioJobLedger::class);
 $states = [];
 for ($attempt = 0; $attempt < 3; $attempt++) {
     ScenarioQueue::next();
     $states[] = [
-        'account' => app(TenancyManager::class)->context()?->id(),
+        'account' => resolve(TenancyManager::class)->context()?->id(),
         'principal' => auth()->guard()->user()?->getAuthIdentifier(),
-        'connection' => app('db')->getDefaultConnection(),
+        'connection' => resolve('db')->getDefaultConnection(),
     ];
 }
 $proof->same(array_fill(0, 3, ['account' => null, 'principal' => null, 'connection' => $default]), $states, 'Each Laravel worker attempt must restore central, DB and auth state');
@@ -140,9 +140,9 @@ $proof->same(Scenario::USER_A, $last['outer_principal'], 'Nested failure restore
 $proof->same(getenv('COREX_SCENARIO_DB_A'), $last['outer_db']['database'], 'Nested failure restores the physical A database');
 
 $wakeup = ScenarioQueue::inScope(Scenario::ACCOUNT_A, Scenario::W1, Scenario::USER_A, static function (): ScheduleResult {
-    $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
+    $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
 
-    return app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    return resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
         scope: $scope, kind: 'scenario.root-sweep', handlerVersion: 'root-sweep/1', requestKey: 'root-cli-wakeup',
         fireAt: new DateTimeImmutable('2000-01-01T00:00:00Z'), window: null, payload: JsonDocuments::capture(['reference' => 'root-cli-wakeup']),
     ));
@@ -172,9 +172,9 @@ $admitted = $control->table('corex_scope_tickets')->where('account_id', Scenario
     ->whereRaw("scope->>'principal_id' = ?", ['corex.scheduler-sweep'])
     ->where('state', 'committed')->pluck('ticket_id')->all();
 $proof->check($admitted !== [], 'The independent control store records the named root service admission');
-$proof->same(null, app(TenancyManager::class)->context(), 'The CLI restores the host tenancy frame');
+$proof->same(null, resolve(TenancyManager::class)->context(), 'The CLI restores the host tenancy frame');
 $proof->same(null, auth()->guard()->user(), 'The CLI leaves no user installed in the host');
-$proof->same($default, app('db')->getDefaultConnection(), 'The CLI restores the host connection');
+$proof->same($default, resolve('db')->getDefaultConnection(), 'The CLI restores the host connection');
 $rootSweep = ['reconcile' => $reconcile, 'sweep' => $sweep, 'wakeup' => $wakeup->id, 'service_admissions' => $admitted, 'effects' => $effects];
 Scenario::barrier('worked', ['queries' => $byRef, 'root_sweep' => $rootSweep]);
 $proof->report($control, $producer['refs'], ['default' => $default], ['states' => $states, 'queries' => $byRef, 'nested' => $ledger->failures, 'root_sweep' => $rootSweep]);

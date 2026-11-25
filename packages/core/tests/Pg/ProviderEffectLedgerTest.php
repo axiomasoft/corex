@@ -28,7 +28,7 @@ require_once __DIR__.'/../Support/Messaging.php';
 
 function allowProviderJournalRecovery(ProviderEffectRef $allowed): void
 {
-    app()->instance(ProviderRecoveryAuthority::class, new class($allowed) implements ProviderRecoveryAuthority
+    app()->instance(ProviderRecoveryAuthority::class, new readonly class($allowed) implements ProviderRecoveryAuthority
     {
         public function __construct(private ProviderEffectRef $allowed) {}
 
@@ -55,7 +55,7 @@ beforeEach(function (): void {
     expect($journal->selectOne('select current_database() as name')->name)->toBe($this->journalDatabase)
         ->and($pg->selectOne('select current_database() as name')->name)->not->toBe($this->journalDatabase);
     ScopeControlSchema::install($journal);
-    app()->instance(ControlStoreIsolation::class, new class($journal) implements ControlStoreIsolation
+    app()->instance(ControlStoreIsolation::class, new readonly class($journal) implements ControlStoreIsolation
     {
         public function __construct(private ConnectionInterface $journal) {}
 

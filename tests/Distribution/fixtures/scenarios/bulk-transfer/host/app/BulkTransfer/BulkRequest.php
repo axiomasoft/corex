@@ -16,7 +16,7 @@ final class BulkRequest
         $request->attributes->set('corex.client_id', getenv('COREX_BULK_CLIENT') ?: 'fixture-client');
 
         if ($request->isMethod('POST') && $request->is('api/v2/bulk-operations') && getenv('COREX_BULK_MODE') === 'submit-b') {
-            Scenario::barrier('bulk-concurrent', Scenario::describe(app('db')->connection()));
+            Scenario::barrier('bulk-concurrent', Scenario::describe(resolve('db')->connection()));
         }
 
         return $next($request);

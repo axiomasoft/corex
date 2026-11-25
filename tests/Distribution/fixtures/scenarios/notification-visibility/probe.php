@@ -43,9 +43,9 @@ function identity(): PrincipalIdentity
 function withRecipient(Closure $work): mixed
 {
     return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, Scenario::USER_A, static function () use ($work): mixed {
-        $context = new NotificationContext(app(TenantContextResolver::class)->current(), 'user', Scenario::USER_A);
+        $context = new NotificationContext(resolve(TenantContextResolver::class)->current(), 'user', Scenario::USER_A);
 
-        return $work(app(NotificationCenter::class), $context);
+        return $work(resolve(NotificationCenter::class), $context);
     });
 }
 
@@ -69,15 +69,15 @@ function delivery(Connection $database, string $notification): object
 
 function visibleRelated(): bool
 {
-    return app(AccessChecker::class)->canOnRecord(identity(), 'read', NotificationRelated::query()->findOrFail(Scenario::RECORD));
+    return resolve(AccessChecker::class)->canOnRecord(identity(), 'read', NotificationRelated::query()->findOrFail(Scenario::RECORD));
 }
 
 switch ($mode) {
     case 'produce':
         ScenarioSetup::install('notification-visibility', false);
         $refs = withRecipient(static function (NotificationCenter $center, NotificationContext $context) use ($proof): array {
-            app(ModuleLifecycle::class)->enable('axiomasoft/corex-notifications', cascade: true);
-            app(DirectGrants::class)->grant(identity(), NotificationRelated::HANDLE, 'read');
+            resolve(ModuleLifecycle::class)->enable('axiomasoft/corex-notifications', cascade: true);
+            resolve(DirectGrants::class)->grant(identity(), NotificationRelated::HANDLE, 'read');
             $proof->same(true, visibleRelated(), 'The installed Access checker sees the original related grant');
             $hidden = $center->notify($context, input('one-fact', true));
             $duplicate = $center->notify($context, input('one-fact', true));
@@ -99,7 +99,7 @@ switch ($mode) {
         $refs = Scenario::barrierRead('notification-committed');
         $proof->same('pending', delivery($database, $refs['hidden'])->state, 'An independent session observes committed work before revocation');
         withRecipient(static function () use ($proof): void {
-            app(DirectGrants::class)->revoke(identity(), NotificationRelated::HANDLE, 'read');
+            resolve(DirectGrants::class)->revoke(identity(), NotificationRelated::HANDLE, 'read');
             $proof->same(false, visibleRelated(), 'The actual Access grant has been revoked for the related record');
         });
         $proof->report($database, [$refs['hidden']], ['related_visible' => true], ['related_visible' => false]);
@@ -123,7 +123,7 @@ switch ($mode) {
             }
             $center->markRead($context, $refs['visible']);
             $proof->same(0, $center->unreadCount($context)->count, 'A visible markRead changes the exact count');
-            $execution = app(DeliveryExecution::class);
+            $execution = resolve(DeliveryExecution::class);
             $execution->deliver($hidden->id);
             $execution->deliver($visible->id);
         });
@@ -147,16 +147,16 @@ switch ($mode) {
     case 'history':
         $due = withRecipient(static function (NotificationCenter $center, NotificationContext $context) use ($proof): NotificationRef {
             // The producer seals the historical rows normally. Fixture SQL gives them inert outcomes and early due times.
-            app(DirectGrants::class)->grant(identity(), NotificationRelated::HANDLE, 'read');
+            resolve(DirectGrants::class)->grant(identity(), NotificationRelated::HANDLE, 'read');
             DB::connection()->transaction(static function () use ($center, $context): void {
                 for ($index = 0; $index < 1001; $index++) {
                     $center->notify($context, input('historical-'.$index, true));
                 }
                 DB::table('ntf_deliveries')->where('state', 'pending')->update([
-                    'state' => 'completed', 'next_attempt' => app(ScenarioClock::class)->now()->modify('-1 hour'),
+                    'state' => 'completed', 'next_attempt' => resolve(ScenarioClock::class)->now()->modify('-1 hour'),
                 ]);
             });
-            app(DirectGrants::class)->revoke(identity(), NotificationRelated::HANDLE, 'read');
+            resolve(DirectGrants::class)->revoke(identity(), NotificationRelated::HANDLE, 'read');
             $proof->same(false, visibleRelated(), 'All related history is hidden by the installed access policy');
 
             return $center->notify($context, input('next-due'));

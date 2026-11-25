@@ -77,7 +77,7 @@ final class ExternalResources implements IndexNamespaceExclusion, ReferenceClean
         if ($driver->lookup($batch, $receipt) !== IndexOutcome::Confirmed || ! $driver->canary($target)) {
             throw new RuntimeException('The new physical generation is unavailable.');
         }
-        $credentials = app(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Index);
+        $credentials = resolve(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Index);
         $response = Http::baseUrl(getenv('MEILISEARCH_HOST'))->withToken($credentials->reveal())->timeout(3)
             ->patch('/indexes/'.$target->uid.'/settings', ['displayedAttributes' => ['*']])->throw();
         $ack = $response->json();
@@ -262,7 +262,7 @@ final class ExternalResources implements IndexNamespaceExclusion, ReferenceClean
         if (! ctype_digit($id)) {
             throw new RuntimeException('Invalid owner task receipt.');
         }
-        $key = app(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Observe);
+        $key = resolve(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Observe);
         $client = Http::baseUrl(getenv('MEILISEARCH_HOST'))->withToken($key->reveal())->timeout(3);
 
         return SearchScenarioMeili::await('the scoped owner observes its original Meili task', static function () use ($client, $id, $target): ?array {
@@ -292,7 +292,7 @@ final class ExternalResources implements IndexNamespaceExclusion, ReferenceClean
                 throw new RuntimeException('The installed search owner cannot verify removal.');
             }
             $authoritative = $adapter->absent($target);
-            $key = app(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Observe);
+            $key = resolve(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Observe);
             $client = Http::baseUrl((string) getenv('MEILISEARCH_HOST'))->withToken($key->reveal())->timeout(3);
         }
         $response = $client->get('/indexes/'.$target->uid);

@@ -19,8 +19,8 @@ final class PostgresExport implements ExportSource
 {
     public function page(DataScope $scope, ExportManifest $manifest, ExportCursor $after, TransferLimits $limits): ExportPage
     {
-        $connection = app('db')->connection();
-        app(CurrentWorkScope::class)->assert($scope, $connection);
+        $connection = resolve('db')->connection();
+        resolve(CurrentWorkScope::class)->assert($scope, $connection);
         $isolation = $connection->selectOne('SHOW transaction_isolation')->transaction_isolation;
 
         if ($connection->transactionLevel() < 1 || ! in_array($isolation, ['repeatable read', 'serializable'], true)) {

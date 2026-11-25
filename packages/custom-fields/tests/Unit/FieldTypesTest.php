@@ -38,9 +38,7 @@ it('round trips canonical values and explicit null through every builtin codec',
 
 it('preserves exact JSON numbers, localized maps, decimal bounds, and independent length and currency constraints', function (): void {
     $types = new RegisteredFieldTypes([], []);
-    $normalize = static function (FieldDefinition $field, mixed $value) use ($types) {
-        return $types->resolve($field->type, 1)->normalize(FieldInput::from($value), $field)->document->canonicalJson;
-    };
+    $normalize = (static fn (FieldDefinition $field, mixed $value) => $types->resolve($field->type, 1)->normalize(FieldInput::from($value), $field)->document->canonicalJson);
     expect(fn () => $normalize(typedField('text', ['minLength' => 4]), '100'))->toThrow(InvalidArgumentException::class)
         ->and(fn () => $normalize(typedField('decimal', ['min' => '9999999999999999999.01']), '9999999999999999999.00'))->toThrow(InvalidArgumentException::class)
         ->and(fn () => $normalize(typedField('money', ['currency' => 'EUR']), ['currency' => 'USD', 'amount' => '5']))->toThrow(InvalidArgumentException::class)
@@ -80,7 +78,7 @@ it('computes declared uses from field policy, builtin support and currency or lo
 
 it('retains exact nested JSON numbers when round-tripping localized values', function (): void {
     $field = typedField('json', localization: 'localized');
-    $type = (new RegisteredFieldTypes([], []))->resolve($field->type, 1);
+    $type = new RegisteredFieldTypes([], [])->resolve($field->type, 1);
     $raw = new JsonDocument('{"en":{"z":900719925474099333333333333},"fr-CA":[1.0000000000000000000000001]}');
     $codec = $type->definition()->codec;
     expect($codec->decode($codec->encode($type->normalize(new FieldInput($raw), $field)))->document->canonicalJson)->toBe($raw->canonicalJson)

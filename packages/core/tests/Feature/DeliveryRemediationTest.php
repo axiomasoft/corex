@@ -50,10 +50,10 @@ it('serializes publishers so a cursor cannot overtake an uncommitted message', f
     $firstConnection = DB::connection('pgsql');
     expect($other->scalar('select current_database()'))->toBe($firstConnection->getDatabaseName())
         ->and($other->scalar('select pg_backend_pid()'))->not->toBe($firstConnection->scalar('select pg_backend_pid()'));
-    $scope = app(WorkScopeFixture::class)->scope();
+    $scope = resolve(WorkScopeFixture::class)->scope();
     $marker = "select json_build_array(current_database(), inet_server_addr(), inet_server_port(), 'sys_pubsub_messages'::regclass::oid)::text";
     $physical = $firstConnection->scalar($marker, [], false);
-    $verifier = app(PhysicalBindingVerifier::class);
+    $verifier = resolve(PhysicalBindingVerifier::class);
     app()->instance(PhysicalBindingVerifier::class, new readonly class($verifier, $other, $scope, $marker, $physical) implements PhysicalBindingVerifier
     {
         public function __construct(private PhysicalBindingVerifier $owner, private ConnectionInterface $second, private DataScope $scope, private string $marker, private string $physical) {}

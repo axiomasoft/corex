@@ -44,7 +44,7 @@ final class TaskLifetimeSeries
                 $series->definitionHash, $window->start, $window->end, (string) $window->aheadDays, (string) $window->pageLimit, (string) $window->maxSeconds,
             ]));
             $token = new WriteToken('installed-series-window', $digest, $series->immutableRevision);
-            $owner = app(TaskRecurrenceCommand::class);
+            $owner = resolve(TaskRecurrenceCommand::class);
             $first = $owner->materialize($scope, $series, $window, $token);
             $again = $owner->materialize($scope, $series, $window, $token);
             $proof->same(1, $first->created, 'The real installed RecurringTasks command materializes one occurrence');

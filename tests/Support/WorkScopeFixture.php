@@ -59,9 +59,9 @@ final class WorkScopeFixture implements ControlStoreIsolation, WorkPrincipalAuth
         $app->instance(self::class, $host);
         $app->instance(ControlStoreIsolation::class, $host);
         $app->scoped(WorkPrincipalAuthority::class, static fn (): self => $host);
-        $app->scoped(PhysicalBindingVerifier::class, static fn (): PhysicalBindingVerifier => new class($host) implements PhysicalBindingVerifier
+        $app->scoped(PhysicalBindingVerifier::class, static fn (): PhysicalBindingVerifier => new readonly class($host) implements PhysicalBindingVerifier
         {
-            public function __construct(private readonly WorkScopeFixture $host) {}
+            public function __construct(private WorkScopeFixture $host) {}
 
             public function verify(PhysicalBinding $binding, TenantContext $context, ConnectionInterface $connection): void
             {

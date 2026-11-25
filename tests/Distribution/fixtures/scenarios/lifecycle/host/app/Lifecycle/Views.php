@@ -23,7 +23,7 @@ final class Views implements ViewAccessPolicy, ViewSchemaProvider
     {
         $scope = Inventory::scope();
 
-        return new ViewContext(app(TenantContextResolver::class)->current(), $scope->principalKind, $scope->principalId);
+        return new ViewContext(resolve(TenantContextResolver::class)->current(), $scope->principalKind, $scope->principalId);
     }
 
     public static function scopes(): array

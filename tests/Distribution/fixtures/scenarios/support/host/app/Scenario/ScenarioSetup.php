@@ -43,7 +43,7 @@ final class ScenarioSetup
                 throw new RuntimeException('Could not install the Laravel database broker. '.Artisan::output());
             }
         }
-        $migrator = app(SchemaMigrator::class);
+        $migrator = resolve(SchemaMigrator::class);
         $ran = [];
 
         if ($cloud) {
@@ -71,7 +71,7 @@ final class ScenarioSetup
             $control->table('scenario_binding_locations')->insert(['binding_id' => $binding->bindingId, 'account_id' => $account, 'role' => $role]);
 
             if ($case !== 'binding-restore' || $role === 'a') {
-                app(DatabaseScopeControl::class)->register($account, $binding);
+                resolve(DatabaseScopeControl::class)->register($account, $binding);
 
                 if ($cloud) {
                     self::seedRootAccount($control, $database, $account, $role);
@@ -86,7 +86,7 @@ final class ScenarioSetup
         FixtureLifecycleOperators::provision($case);
 
         if ($case === 'workspace-sweep') {
-            ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static fn () => app(ModuleLifecycle::class)->enable(
+            ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static fn () => resolve(ModuleLifecycle::class)->enable(
                 'axiomasoft/corex-tasks', cascade: true,
             ));
         }

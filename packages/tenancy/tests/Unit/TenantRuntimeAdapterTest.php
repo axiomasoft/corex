@@ -44,7 +44,7 @@ it('projects host tenant resolution failures with the same public descriptor', f
 })->with([
     'unknown account' => [static fn (): TenantContextUnavailable => TenantContextUnavailable::missingAccount(accountId: 'private-account'), 'private-account'],
     'unknown workspace' => [static fn (): TenantContextUnavailable => TenantContextUnavailable::missingWorkspace(workspaceId: 'private-workspace'), 'private-workspace'],
-    'invalid payload' => [static fn (): TenantContextUnavailable => TenantContextUnavailable::invalidPayload(), 'queued tenant payload'],
+    'invalid payload' => [TenantContextUnavailable::invalidPayload(...), 'queued tenant payload'],
 ]);
 
 /** Real Tenant executor with a trusted no-I/O fixture profile, never production routing. */

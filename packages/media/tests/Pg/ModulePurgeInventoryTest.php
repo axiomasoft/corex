@@ -83,7 +83,7 @@ it('accounts for exactly the native Media table drop between purge replay and re
     app()->forgetInstance(ModuleRegistry::class);
     $this->artisan('modules:compile')->assertSuccessful();
 
-    $accountRef = app(TenantContextResolver::class)->current()->account;
+    $accountRef = resolve(TenantContextResolver::class)->current()->account;
     $contexts = LocalWorkContexts::install(app());
     $contexts->initialize($accountRef);
     $host = WorkScopeFixture::install(app());
@@ -120,7 +120,7 @@ it('accounts for exactly the native Media table drop between purge replay and re
         public function run(DataScope $scope, Closure $operation): mixed
         {
             return $this->contexts->runFor($this->contexts->account($scope->accountId), $scope->workspaceId === null ? null : $this->contexts->workspace($scope->workspaceId), static function () use ($scope, $operation): mixed {
-                app(CurrentWorkScope::class)->assert($scope, DB::connection());
+                resolve(CurrentWorkScope::class)->assert($scope, DB::connection());
 
                 return $operation();
             });
@@ -133,8 +133,8 @@ it('accounts for exactly the native Media table drop between purge replay and re
             return $context->actorId === 'actor-1';
         }
     });
-    $native = app(ModuleLifecycle::class);
-    $plans = app(LifecyclePlans::class);
+    $native = resolve(ModuleLifecycle::class);
+    $plans = resolve(LifecyclePlans::class);
     $native->enable($other);
     // Before Media has ever been enabled, the same absent schema has no purge provenance.
     $planOther = fn () => $plans->plan($scope, new ModuleId($other), LifecycleAction::Disable);
@@ -143,10 +143,10 @@ it('accounts for exactly the native Media table drop between purge replay and re
     expect(array_column($missing, 'owner'))->toBe([$media, $media])
         ->and(array_column(array_column($missing, 'scope'), 'workspaceId'))->toBe(['W1', null]);
     $native->enable($media);
-    $library = app(MediaLibrary::class);
-    $context = new MediaContext(app(TenantContextResolver::class)->current(), 'user', 'actor-1');
+    $library = resolve(MediaLibrary::class);
+    $context = new MediaContext(resolve(TenantContextResolver::class)->current(), 'user', 'actor-1');
     $file = $library->store($context, new UploadInput('original-upload', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('receipt.txt', 'original bytes')), 'attachment'));
-    expect(app(BlobPins::class)->countByOwner())->toBe(['corex.media.file' => 1]);
+    expect(resolve(BlobPins::class)->countByOwner())->toBe(['corex.media.file' => 1]);
     $native->disable($media, DisableReason::Manual);
     $purge = $plans->plan($scope, new ModuleId($media), LifecycleAction::Purge);
     $done = $plans->apply($scope, $purge->ref, $purge->digest);
@@ -156,7 +156,7 @@ it('accounts for exactly the native Media table drop between purge replay and re
         ->and($done->receipts)->toHaveCount(1)
         ->and($done->receipts[0]->action->resourceId)->toBe($file->id)
         ->and(json_decode($done->receipts[0]->evidence, true, flags: JSON_THROW_ON_ERROR)['request'])->toBe('original-upload')
-        ->and(app(BlobPins::class)->countByOwner())->toBe([])
+        ->and(resolve(BlobPins::class)->countByOwner())->toBe([])
         ->and($plans->apply($scope, $purge->ref, $purge->digest)->receipts)->toEqual($done->receipts);
     foreach ($tables as $table) {
         expect(DB::connection()->getSchemaBuilder()->hasTable($table))->toBeFalse();
@@ -180,7 +180,7 @@ it('accounts for exactly the native Media table drop between purge replay and re
     $inspectMedia = false;
     expect(fn () => $native->status($media))->toThrow(AuthorizationException::class)
         ->and(fn () => $plans->inspect($scope, $purge->ref))->toThrow(AuthorizationException::class)
-        ->and(fn () => app(MediaModuleReferences::class)->scan(new ModuleRef($other), $scope, null))->toThrow(LifecycleBlocked::class)
+        ->and(fn () => resolve(MediaModuleReferences::class)->scan(new ModuleRef($other), $scope, null))->toThrow(LifecycleBlocked::class)
         ->and($native->status($other)->state)->toBe(ModuleState::Enabled);
     $clear = $planOther();
     $scan = $plans->inspect($scope, $clear->ref);

@@ -32,7 +32,7 @@ $base = '/api/v2';
 switch ($mode) {
     case 'setup':
         $migrated = ScenarioSetup::install('product', true);
-        $migrated['budget'] = app(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
+        $migrated['budget'] = resolve(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
         installCrmGrants($db, Scenario::W1, Scenario::USER_A);
         installCrmGrants(Scenario::connection('b'), Scenario::W2, Scenario::USER_B);
         $workspace = Scenario::workspace(Scenario::W2);
@@ -61,12 +61,12 @@ switch ($mode) {
     case 'enable':
         foreach ([[Scenario::ACCOUNT_A, Scenario::W1, Scenario::USER_A], [Scenario::ACCOUNT_A, Scenario::W2, Scenario::USER_A], [Scenario::ACCOUNT_B, Scenario::W2, Scenario::USER_B]] as [$account, $workspace, $actor]) {
             $after['activations'][] = ScenarioQueue::inScope($account, $workspace, $actor, static function () use ($proof): array {
-                $tenant = app(TenantContextResolver::class)->current();
-                $scope = app(DataScopeFactory::class)->forCurrentPrincipal($tenant);
+                $tenant = resolve(TenantContextResolver::class)->current();
+                $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($tenant);
                 FixtureLifecycleOperators::grant($scope, 'flex/crm', 'enable');
                 FixtureLifecycleOperators::grant($scope, 'flex/crm', 'inspect');
-                app(ModuleLifecycle::class)->enable('flex/crm', cascade: true);
-                $active = app(ModuleRegistry::class)->isActive('flex/crm', $tenant);
+                resolve(ModuleLifecycle::class)->enable('flex/crm', cascade: true);
+                $active = resolve(ModuleRegistry::class)->isActive('flex/crm', $tenant);
                 $proof->same(true, $active, 'Public lifecycle activates the product in the trusted workspace.');
 
                 return ['scope' => $scope, 'active' => $active];

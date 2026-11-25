@@ -5,6 +5,8 @@ declare(strict_types=1);
 use CoreX\Tooling\Rector\Import\SourceSnapshot;
 use CoreX\Tooling\Rector\Import\SubsetImporter;
 
+use function CoreX\Scripts\cliArguments;
+
 require dirname(__DIR__, 3).'/vendor/autoload.php';
 require __DIR__.'/Import/DocumentationVisitor.php';
 require __DIR__.'/Import/SourceSnapshot.php';
@@ -13,7 +15,7 @@ require __DIR__.'/Import/SubsetImporter.php';
 require_once dirname(__DIR__, 2).'/support/cli-arguments.php';
 
 try {
-    $argv = \CoreX\Scripts\cliArguments();
+    $argv = cliArguments();
     $source = __DIR__.'/upstream.json';
     $adjustments = __DIR__.'/native-adjustments.json';
     $destination = __DIR__;

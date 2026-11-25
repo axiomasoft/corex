@@ -433,7 +433,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
         $table->unsignedInteger('available_at');
         $table->unsignedInteger('created_at');
     });
-    $contexts = app(LocalWorkContexts::class);
+    $contexts = resolve(LocalWorkContexts::class);
     $eventWorkspace = new WorkspaceRef((string) Str::uuid7(), 'event', 'team', 'event', null);
     $workerWorkspace = new WorkspaceRef((string) Str::uuid7(), 'worker', 'team', 'worker', null);
     $contexts->setWorkspace($eventWorkspace);
@@ -456,7 +456,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
 
     $job = $queue->pop();
     expect($job)->not->toBeNull();
-    app('queue.worker')->process('database', $job, new WorkerOptions(maxTries: 1));
+    resolve('queue.worker')->process('database', $job, new WorkerOptions(maxTries: 1));
 
     $row = AuditLog::on(AUDIT_TEST_CONNECTION)->sole();
 
@@ -467,15 +467,15 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
 });
 
 it('refuses an audit write under a different workspace without queue restoration', function (): void {
-    $contexts = app(LocalWorkContexts::class);
+    $contexts = resolve(LocalWorkContexts::class);
     $eventWorkspace = new WorkspaceRef((string) Str::uuid7(), 'event', 'team', 'event', null);
     $workerWorkspace = new WorkspaceRef((string) Str::uuid7(), 'worker', 'team', 'worker', null);
     $contexts->setWorkspace($eventWorkspace);
-    $scope = app(WorkScopeFixture::class)->scope();
+    $scope = resolve(WorkScopeFixture::class)->scope();
     $job = new RecordAuditEntry(new AuditEntry(action: 'created', actorType: ActorType::System), $scope);
     $contexts->setWorkspace($workerWorkspace);
 
-    expect(fn () => app()->call([$job, 'handle']))->toThrow(ScopeContextMismatch::class)
+    expect(fn () => app()->call($job->handle(...)))->toThrow(ScopeContextMismatch::class)
         ->and(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0)
         ->and($contexts->current()->workspace)->toBe($workerWorkspace);
 });

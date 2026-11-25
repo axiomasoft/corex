@@ -27,7 +27,7 @@ final class SearchCorpusGrants implements DataScopeAuthorizer, FieldUsePolicy
 
     public function plan(DataScope $scope, EntityHandle $entity, FieldUseRequest $request): FieldUsePlan
     {
-        app(CurrentWorkScope::class)->assert($scope, DB::connection());
+        resolve(CurrentWorkScope::class)->assert($scope, DB::connection());
         $fields = $request->fields->fields ?: ['record'];
 
         if ($entity->value !== ScenarioSearchSchema::ENTITY || $scope->principalKind !== 'service'

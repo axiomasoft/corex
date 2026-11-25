@@ -304,13 +304,8 @@ final readonly class JsonbFieldValues implements FieldValues
             || ($use !== FieldUse::Read && ! $this->access->authorize(scope: $scope, record: $record, fields: $recordSelection, use: $use)->allowed)) {
             return false;
         }
-        foreach ($selection->fields as $id) {
-            if (! $this->access->authorize(scope: $scope, record: $record, fields: new FieldSelection([$id]), use: $use)->allowed) {
-                return false;
-            }
-        }
 
-        return true;
+        return array_all($selection->fields, fn (string $id): bool => $this->access->authorize(scope: $scope, record: $record, fields: new FieldSelection([$id]), use: $use)->allowed);
     }
 
     private function supports(LockedFieldMapping $mapping, FieldSelection $selection, FieldUse $use): bool

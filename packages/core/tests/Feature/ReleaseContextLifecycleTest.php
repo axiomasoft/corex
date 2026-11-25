@@ -42,7 +42,7 @@ it('restores real database queue work in one Laravel daemon after both success a
     app()->forgetInstance(CoreOptions::class);
     $fixture = WorkScopeFixture::install(app());
     $contexts = LocalWorkContexts::install(app());
-    app(WorkQueueHandlers::class)->tenant(LifecycleQueueCommand::class);
+    resolve(WorkQueueHandlers::class)->tenant(LifecycleQueueCommand::class);
     DB::connection()->getSchemaBuilder()->create('jobs', static function (Blueprint $table): void {
         $table->id();
         $table->string('queue')->index();
@@ -53,7 +53,7 @@ it('restores real database queue work in one Laravel daemon after both success a
         $table->unsignedInteger('created_at');
     });
     $attempts = [];
-    app('events')->listen(JobAttempted::class, function (JobAttempted $event) use (&$attempts): void {
+    resolve('events')->listen(JobAttempted::class, function (JobAttempted $event) use (&$attempts): void {
         $attempts[] = $event->exception !== null;
     });
     LifecycleQueueCommand::$observed = [];
@@ -64,7 +64,7 @@ it('restores real database queue work in one Laravel daemon after both success a
         Queue::connection('database')->push(new LifecycleQueueCommand($i === 0 && $failure));
     }
     $contexts->end();
-    $options = app(CoreOptions::class);
+    $options = resolve(CoreOptions::class);
     $async = function_exists('pcntl_async_signals') ? pcntl_async_signals() : null;
     $signals = [];
 
@@ -75,12 +75,12 @@ it('restores real database queue work in one Laravel daemon after both success a
     }
 
     try {
-        $exit = app('queue.worker')->daemon('database', 'default', new WorkerOptions(memory: 512, timeout: 0, sleep: 0, maxTries: 1, stopWhenEmpty: true, maxJobs: 2));
+        $exit = resolve('queue.worker')->daemon('database', 'default', new WorkerOptions(memory: 512, timeout: 0, sleep: 0, maxTries: 1, stopWhenEmpty: true, maxJobs: 2));
         $rows = LifecycleQueueCommand::$observed;
         expect($exit)->toBe(0)->and($attempts)->toBe([$failure, false])->and(array_column($rows, 0))->toBe($ids)
             ->and($rows[0][1])->not->toBe($rows[1][1])->and($rows[0][2])->not->toBe($rows[1][2])
             ->and($rows[0][3])->toContain($ids[0])->and($rows[1][3])->toContain($ids[1])
-            ->and($contexts->context())->toBeNull()->and(app(CoreOptions::class))->toBe($options)
+            ->and($contexts->context())->toBeNull()->and(resolve(CoreOptions::class))->toBe($options)
             ->and(DB::table('jobs')->count())->toBe(0);
     } finally {
         foreach ($signals as $signal => $previous) {

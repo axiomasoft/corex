@@ -18,7 +18,7 @@ final class ReferenceOrigins implements ReferenceOwners
 {
     public function resolve(DataScope $scope, string $producer, string $kind, array $witness): array
     {
-        app(CurrentWorkScope::class)->assert($scope);
+        resolve(CurrentWorkScope::class)->assert($scope);
 
         if ($producer === 'axiomasoft/corex-tenancy' && isset($witness['record'])) {
             $source = Scenario::connection('control')->table('scenario_seed_origins')->where([

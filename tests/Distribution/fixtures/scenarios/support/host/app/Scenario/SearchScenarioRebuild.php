@@ -34,7 +34,7 @@ final class SearchScenarioRebuild
 {
     public static function start(DataScope $scope, string $key): RebuildStatus
     {
-        $rebuilds = app(SearchRebuilds::class);
+        $rebuilds = resolve(SearchRebuilds::class);
         $plan = $rebuilds->plan($scope, new RebuildInput(SearchScenarioData::entity()));
         $ref = $rebuilds->start($scope, $plan->ref, new OperationKey($key, 1));
 
@@ -45,9 +45,9 @@ final class SearchScenarioRebuild
     {
         $start = self::start($scope, $key);
         self::scan($scope, $start);
-        $barrier = app(RebuildWorker::class)->barrier($scope, $start->ref);
+        $barrier = resolve(RebuildWorker::class)->barrier($scope, $start->ref);
         self::confirmed($scope, $barrier->destination, $barrier->barrier ?? throw new RuntimeException('No publish barrier.'));
-        $published = app(RebuildWorker::class)->publish($scope, $start->ref);
+        $published = resolve(RebuildWorker::class)->publish($scope, $start->ref);
 
         if ($published->state !== 'published') {
             throw new RuntimeException('The installed owner failed to publish initial search generation: '.$published->state);
@@ -59,7 +59,7 @@ final class SearchScenarioRebuild
     public static function scan(DataScope $scope, RebuildStatus $start): RebuildStatus
     {
         return SearchScenarioMeili::await('the stable-keyset index scan catches up for rebuild '.$start->ref->id, static function () use ($scope, $start): ?RebuildStatus {
-            $state = app(SearchRebuilds::class)->inspect($scope, $start->ref);
+            $state = resolve(SearchRebuilds::class)->inspect($scope, $start->ref);
 
             if ($state->state === 'catching-up') {
                 return $state;
@@ -76,7 +76,7 @@ final class SearchScenarioRebuild
 
     public static function step(DataScope $scope, int $generation): bool
     {
-        return app(IndexWorker::class)->advance($scope, SearchScenarioData::entity(), $generation);
+        return resolve(IndexWorker::class)->advance($scope, SearchScenarioData::entity(), $generation);
     }
 
     public static function confirmed(DataScope $scope, int $generation, int $sequence): object
@@ -129,24 +129,24 @@ final class SearchScenarioRebuild
 
     public static function inspect(DataScope $scope, string $id): RebuildStatus
     {
-        return app(SearchRebuilds::class)->inspect($scope, new RebuildRef($id));
+        return resolve(SearchRebuilds::class)->inspect($scope, new RebuildRef($id));
     }
 
     public static function change(DataScope $scope, string $id, Closure $mutation): array
     {
         $messageId = (string) Str::uuid7();
         $owner = DB::connection();
-        app(WorkScopeRunner::class)->run($scope, static function () use ($scope, $id, $mutation, $messageId, $owner): void {
+        resolve(WorkScopeRunner::class)->run($scope, static function () use ($scope, $id, $mutation, $messageId, $owner): void {
             $owner->transaction(static function () use ($scope, $id, $mutation, $messageId, $owner): void {
                 $mutation($owner);
-                app(Outbox::class)->append($owner, new MessageEnvelope(
+                resolve(Outbox::class)->append($owner, new MessageEnvelope(
                     messageId: $messageId, source: 'urn:scenario:search-owner', name: 'scenario.search.changed', contractVersion: 2,
-                    occurredAt: app(ScenarioClock::class)->now(), scope: $scope, payload: MessagePayload::empty(),
+                    occurredAt: resolve(ScenarioClock::class)->now(), scope: $scope, payload: MessagePayload::empty(),
                     piiClass: PiiClass::None, subject: SearchScenarioData::record($id), correlationId: $messageId,
                 ));
             });
         });
-        $relay = app(OutboxRelay::class);
+        $relay = resolve(OutboxRelay::class);
         $claims = $relay->lease((string) Str::uuid7(), 10);
         $claim = array_find($claims, static fn ($item): bool => $item->envelope->messageId === $messageId);
 
@@ -155,12 +155,12 @@ final class SearchScenarioRebuild
         }
         $relay->assertClaim($claim);
         Scenario::connection('control')->table('scenario_search_broker')->insert([
-            'id' => $messageId, 'wire' => app(CloudEventCodec::class)->encode($claim->envelope),
+            'id' => $messageId, 'wire' => resolve(CloudEventCodec::class)->encode($claim->envelope),
         ]);
         $consumer = new ConsumerId('scenario.search-index', 1);
-        $broker = app(BrokerReceiver::class);
+        $broker = resolve(BrokerReceiver::class);
         $apply = static function (ConnectionInterface $writer, MessageEnvelope $event) use ($id): void {
-            app(SearchInvalidations::class)->apply($writer, $event, SearchScenarioData::entity(), [SearchScenarioData::record($id)]);
+            resolve(SearchInvalidations::class)->apply($writer, $event, SearchScenarioData::entity(), [SearchScenarioData::record($id)]);
         };
         $receipt = $broker->consume($consumer, $messageId, $apply);
         $duplicate = $broker->consume($consumer, $messageId, $apply);

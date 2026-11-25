@@ -212,9 +212,9 @@ it('reconciles an independent committed sink and replays the exact completed ste
             'stats' => '{}', 'claim_epoch' => '1', 'created_at' => now(), 'updated_at' => now(),
         ]);
         $manifest = new SourceManifest('owner-source', $hash, 84, 'ndjson', '1', 'UTF-8', ',', '"', '', $hash);
-        $source = new class($manifest) implements TransferSource
+        $source = new readonly class($manifest) implements TransferSource
         {
-            public function __construct(private readonly SourceManifest $manifest) {}
+            public function __construct(private SourceManifest $manifest) {}
 
             public function describe(DataScope $scope): SourceManifest
             {

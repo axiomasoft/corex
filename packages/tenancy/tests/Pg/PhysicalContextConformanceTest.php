@@ -83,9 +83,9 @@ beforeEach(function (): void {
     foreach ($this->accounts as $name => $account) {
         $workspace = new WorkspaceRef($this->workspaceId, $name, 'company', $name, null);
         $this->scopes[$name] = resolve(TenancyManager::class)->runFor($account, $workspace, fn () => $host->scope());
-        $this->proofs[$name] = resolve(TenancyManager::class)->runFor($account, $workspace, fn () => app(StoredWorkIssuer::class)->issue($this->scopes[$name], 'test.pg', $name));
+        $this->proofs[$name] = resolve(TenancyManager::class)->runFor($account, $workspace, fn () => resolve(StoredWorkIssuer::class)->issue($this->scopes[$name], 'test.pg', $name));
         $this->wide[$name] = resolve(TenancyManager::class)->runFor($account, null, fn () => $host->scope());
-        $this->wideProof[$name] = resolve(TenancyManager::class)->runFor($account, null, fn () => app(StoredWorkIssuer::class)->issue($this->wide[$name], 'test.pg', 'wide-'.$name));
+        $this->wideProof[$name] = resolve(TenancyManager::class)->runFor($account, null, fn () => resolve(StoredWorkIssuer::class)->issue($this->wide[$name], 'test.pg', 'wide-'.$name));
     }
 
 });

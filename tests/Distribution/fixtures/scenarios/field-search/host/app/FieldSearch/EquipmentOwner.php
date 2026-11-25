@@ -78,8 +78,8 @@ final class EquipmentOwner
             $table->string('quarantine')->nullable();
         });
         self::within(static function () use ($proof): void {
-            app(ModuleLifecycle::class)->enable('equipment/registry', cascade: true);
-            $class = app(EntityRegistry::class)->get(self::ENTITY)->model;
+            resolve(ModuleLifecycle::class)->enable('equipment/registry', cascade: true);
+            $class = resolve(EntityRegistry::class)->get(self::ENTITY)->model;
             $model = new $class;
             $proof->check($model instanceof Model && $model::class === 'Equipment\\Registry\\Equipment' && $model->getKeyName() === 'asset_key', 'The real installed Equipment model declares its custom primary key');
             $model->newQuery()->forceCreate(['asset_key' => self::ASSET, 'name' => 'Registry Pump']);
@@ -113,7 +113,7 @@ final class EquipmentOwner
     public static function records(DataScope $scope): Builder
     {
         $db = DB::connection();
-        app(CurrentWorkScope::class)->assert($scope, $db);
+        resolve(CurrentWorkScope::class)->assert($scope, $db);
 
         if ($scope->accountId !== Scenario::BOXED || $scope->workspaceId !== Scenario::W1) {
             throw new RuntimeException('The equipment owner does not own this logical scope.');
@@ -133,15 +133,15 @@ final class EquipmentOwner
             $field = new FieldDefinition(new FieldId(self::PRIORITY), self::entity(), 'priority', new FieldTypeId($revised ? 'int' : 'text'),
                 'runtime', revision: $revised ? 2 : 1, uses: [FieldUse::Read, FieldUse::Write, FieldUse::Filter]);
             $change = $revised ? FieldSchemaChange::revise($field, 'equipment.priority-integer', 1) : FieldSchemaChange::add($field);
-            $schemas = app(FieldSchemas::class);
-            $snapshot = app(FieldCatalogue::class)->snapshot($scope, self::entity());
+            $schemas = resolve(FieldSchemas::class);
+            $snapshot = resolve(FieldCatalogue::class)->snapshot($scope, self::entity());
             $plan = $schemas->plan($scope, $change, $snapshot->revision);
 
             return $schemas->apply($scope, $plan->ref, $plan->digest, new OperationKey($revised ? 'change-priority-type' : 'add-priority', 1));
         });
 
         return FieldPgWitness::await('the installed schema worker publishes the effective equipment schema', static function () use ($id): ?string {
-            $status = self::within(static fn (DataScope $scope) => app(FieldSchemas::class)->inspect($scope, $id));
+            $status = self::within(static fn (DataScope $scope) => resolve(FieldSchemas::class)->inspect($scope, $id));
 
             if ($status->state === 'completed') {
                 return $id->id;
@@ -158,7 +158,7 @@ final class EquipmentOwner
 
     public static function update(DataScope $scope, array $values, string $key): FieldWriteReceipt
     {
-        $fields = app(FieldValues::class);
+        $fields = resolve(FieldValues::class);
         $record = self::record();
         $prior = $fields->read($scope, $record, new FieldSelection([]));
         $ops = [];
@@ -181,7 +181,7 @@ final class EquipmentOwner
 
     public static function rebuild(DataScope $scope, string $key): IndexTarget
     {
-        $rebuilds = app(SearchRebuilds::class);
+        $rebuilds = resolve(SearchRebuilds::class);
         $plan = $rebuilds->plan($scope, new RebuildInput(self::entity()));
         $ref = $rebuilds->start($scope, $plan->ref, new OperationKey($key, 1));
         $status = $rebuilds->inspect($scope, $ref);
@@ -190,11 +190,11 @@ final class EquipmentOwner
             if ($rebuilds->inspect($scope, $ref)->state === 'catching-up') {
                 return true;
             }
-            app(IndexWorker::class)->advance($scope, self::entity(), $generation);
+            resolve(IndexWorker::class)->advance($scope, self::entity(), $generation);
 
             return null;
         });
-        $worker = app(RebuildWorker::class);
+        $worker = resolve(RebuildWorker::class);
         $barrier = $worker->barrier($scope, $ref);
         self::confirm($scope, $generation, $barrier->barrier ?? throw new RuntimeException('Missing equipment H.'));
 
@@ -220,7 +220,7 @@ final class EquipmentOwner
             if ((int) $row->confirmed_seq >= $seq) {
                 return $row;
             }
-            app(IndexWorker::class)->advance($scope, self::entity(), $generation);
+            resolve(IndexWorker::class)->advance($scope, self::entity(), $generation);
 
             return null;
         });

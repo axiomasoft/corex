@@ -46,7 +46,7 @@ final class NativeSearch
             DB::statement('CREATE TABLE scenario_index_fields(scope text, entity text, field text, PRIMARY KEY(scope,entity,field))');
             DB::table('scenario_service_grants')->insert(['service' => SearchCorpusGrants::SERVICE, 'account' => Scenario::ACCOUNT_B]);
 
-            return app(ScenarioPrincipalAuthority::class)->forService(app(TenantContextResolver::class)->current(), SearchCorpusGrants::SERVICE, static function () use ($proof): array {
+            return resolve(ScenarioPrincipalAuthority::class)->forService(resolve(TenantContextResolver::class)->current(), SearchCorpusGrants::SERVICE, static function () use ($proof): array {
                 $scope = Inventory::scope();
                 foreach (['record', 'marker', 'tenant_a_label', 'tenant_b_label'] as $field) {
                     DB::table('scenario_index_fields')->insert(['scope' => hash('sha256', json_encode($scope, JSON_THROW_ON_ERROR)),
@@ -54,7 +54,7 @@ final class NativeSearch
                 }
                 $first = self::publish($scope, self::start($scope, 'initial'));
                 $second = self::publish($scope, self::start($scope, 'replacement'));
-                $rebuilds = app(SearchRebuilds::class);
+                $rebuilds = resolve(SearchRebuilds::class);
                 $ref = self::start($scope, 'interrupted');
                 $third = $rebuilds->inspect($scope, $ref)->destination;
                 $gen = DB::table('corex_search_generations')->where('generation', $third)->sole();
@@ -63,12 +63,12 @@ final class NativeSearch
                     $ack = DB::table('corex_search_submissions')->where(['uid' => $target->uid, 'state' => 'accepted'])->first();
 
                     if ($ack === null) {
-                        app(IndexWorker::class)->advance($scope, $target->entity, $third);
+                        resolve(IndexWorker::class)->advance($scope, $target->entity, $third);
                     }
 
                     return $ack;
                 });
-                $key = app(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Observe);
+                $key = resolve(MeilisearchCredentialProvider::class)->forTarget($target, MeilisearchAccess::Observe);
                 $task = Http::baseUrl(getenv('MEILISEARCH_HOST'))->withToken($key->reveal())->timeout(3)
                     ->get('/tasks/'.explode('.', $submission->task_ref, 2)[0])->throw()->json();
                 $proof->same([$target->uid, 'settingsUpdate'], [$task['indexUid'], $task['type']], 'The native pending submission has its original scoped Meili task');
@@ -83,7 +83,7 @@ final class NativeSearch
                     if ($row->state === 'confirmed' && $row->control_recorded) {
                         return $row;
                     }
-                    app(IndexWorker::class)->advance($scope, $target->entity, $third);
+                    resolve(IndexWorker::class)->advance($scope, $target->entity, $third);
 
                     return null;
                 });
@@ -105,7 +105,7 @@ final class NativeSearch
 
     private static function start(DataScope $scope, string $key): RebuildRef
     {
-        $owner = app(SearchRebuilds::class);
+        $owner = resolve(SearchRebuilds::class);
         $plan = $owner->plan($scope, new RebuildInput(ScenarioSearchSchema::entity()));
 
         return $owner->start($scope, $plan->ref, new OperationKey('lifecycle.'.$key, 1));
@@ -113,17 +113,17 @@ final class NativeSearch
 
     private static function publish(DataScope $scope, RebuildRef $ref): int
     {
-        $owner = app(SearchRebuilds::class);
+        $owner = resolve(SearchRebuilds::class);
         $status = $owner->inspect($scope, $ref);
         SearchScenarioMeili::await('the installed indexer scans the physical B corpus', static function () use ($scope, $ref, $owner, $status): ?bool {
             if ($owner->inspect($scope, $ref)->state === 'catching-up') {
                 return true;
             }
-            app(IndexWorker::class)->advance($scope, ScenarioSearchSchema::entity(), $status->destination);
+            resolve(IndexWorker::class)->advance($scope, ScenarioSearchSchema::entity(), $status->destination);
 
             return null;
         });
-        $worker = app(RebuildWorker::class);
+        $worker = resolve(RebuildWorker::class);
         $worker->barrier($scope, $ref);
         $published = $worker->publish($scope, $ref);
 

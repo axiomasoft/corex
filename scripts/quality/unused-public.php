@@ -57,7 +57,7 @@ final readonly class MethodDeclaration
 
 final class UsageScanner
 {
-    private const CONTAINERS = [
+    private const array CONTAINERS = [
         \Illuminate\Contracts\Container\Container::class,
         Container::class,
         \Illuminate\Contracts\Foundation\Application::class,

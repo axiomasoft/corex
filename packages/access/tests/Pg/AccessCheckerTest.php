@@ -499,13 +499,13 @@ it('intersects record and stable field permissions for each independent use', fu
     $other = (string) Str::uuid7();
     DB::table('deals')->insert([['id' => $mine, 'owner_id' => $actor->principalId()], ['id' => $other, 'owner_id' => (string) Str::uuid7()]]);
     $fields = new FieldSelection(['title']);
-    $auth = app(DataScopeAuthorizer::class);
+    $auth = resolve(DataScopeAuthorizer::class);
     $read = FieldUse::Read;
     $export = FieldUse::Export;
     foreach ([[$mine, $read, true], [$other, $read, false], [$mine, $export, false]] as [$id, $use, $allowed]) {
         expect($auth->authorize($scope, new RecordRef('crm.deal', $id), $fields, $use)->allowed)->toBe($allowed);
     }
-    $policy = app(FieldUsePolicy::class);
+    $policy = resolve(FieldUsePolicy::class);
     $entity = new EntityHandle('crm.deal');
     $visible = $policy->plan($scope, $entity, new FieldUseRequest($fields, $read));
     expect($visible->kind)->toBe(FieldUsePlanKind::ScopedPredicate)
@@ -526,7 +526,7 @@ it('keeps current field-use decisions in one verified owner snapshot', function 
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $actor->principalId()]);
     $mine = (string) Str::uuid7();
     DB::table('deals')->insert(['id' => $mine, 'owner_id' => $actor->principalId()]);
-    $policy = app(FieldUsePolicy::class);
+    $policy = resolve(FieldUsePolicy::class);
     expect($policy)->toBeInstanceOf(FieldUseSnapshot::class);
     assert($policy instanceof FieldUseSnapshot);
     $entity = new EntityHandle('crm.deal');
@@ -576,7 +576,7 @@ it('refuses a field-use snapshot with an unverified activity provider', function
             return true;
         }
     });
-    $policy = app(FieldUsePolicy::class);
+    $policy = resolve(FieldUsePolicy::class);
     expect($policy)->toBeInstanceOf(FieldUseSnapshot::class);
     assert($policy instanceof FieldUseSnapshot);
 

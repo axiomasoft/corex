@@ -29,7 +29,7 @@ final class InputIdentity
 
     public static function stamp(array $input): array
     {
-        $revision = app('db')->connection()->table('bulk_fixture_revisions')->sole();
+        $revision = resolve('db')->connection()->table('bulk_fixture_revisions')->sole();
 
         return [
             'kind' => $input['kind'],

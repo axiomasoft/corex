@@ -79,7 +79,7 @@ final class Installation
                 foreach (['enable', 'inspect', 'disable'] as $action) {
                     FixtureLifecycleOperators::grant($scope, HostModule::PACKAGE, $action);
                 }
-                app(ModuleLifecycle::class)->enable(Inventory::MODULE);
+                resolve(ModuleLifecycle::class)->enable(Inventory::MODULE);
                 DB::unprepared(<<<'SQL'
                     CREATE TABLE scenario_view_directory_lock(singleton integer PRIMARY KEY CHECK(singleton=1), revision integer NOT NULL);
                     INSERT INTO scenario_view_directory_lock VALUES(1,1);
@@ -112,7 +112,7 @@ final class Installation
                 self::record($account, ExternalResources::provision($scope, $account === Scenario::ACCOUNT_B));
 
                 if ($account === Scenario::ACCOUNT_B) {
-                    $fields = app(FieldCatalogue::class)
+                    $fields = resolve(FieldCatalogue::class)
                         ->snapshot($scope, new EntityHandle(Inventory::ENTITY));
                     self::record('materialized-fields', $fields->revision);
                 }

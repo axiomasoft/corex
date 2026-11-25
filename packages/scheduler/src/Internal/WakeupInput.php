@@ -60,7 +60,7 @@ final readonly class WakeupInput
 
     public static function instant(mixed $value): DateTimeImmutable
     {
-        return (new DateTimeImmutable(Value::text($value), new DateTimeZone('UTC')))->setTimezone(new DateTimeZone('UTC'));
+        return new DateTimeImmutable(Value::text($value), new DateTimeZone('UTC'))->setTimezone(new DateTimeZone('UTC'));
     }
 
     /** @param array<string, mixed> $data */

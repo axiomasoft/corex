@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use function CoreX\Scripts\cliArguments;
+
 require_once __DIR__.'/support/cli-arguments.php';
 
 // Resolve the Laravel matrix while keeping analysis rules bound to the reviewed lockfile.
@@ -47,7 +49,7 @@ foreach ($tools as $tool) {
     echo "CI locked toolchain: {$tool} {$versions[$tool]}\n";
 }
 
-$command = array_merge($command, array_slice(\CoreX\Scripts\cliArguments(), 1));
+$command = array_merge($command, array_slice(cliArguments(), 1));
 $process = proc_open($command, [STDIN, STDOUT, STDERR], $pipes, dirname(__DIR__));
 
 if (! is_resource($process)) {

@@ -166,10 +166,8 @@ final class BulkApiTest extends TestCase
         $this->app->instance(ModuleRegistry::class, $modules);
         BulkRouteRegistrar::register($this->app);
 
-        $send = function (int $rows, ?string $key, string $target = '/api/v2/bulk-operations') {
-            return $this->postJson($target, ['kind' => 'import', 'source' => 'inventory', 'row_limit' => $rows],
-                $key === null ? [] : ['Idempotency-Key' => $key]);
-        };
+        $send = (fn (int $rows, ?string $key, string $target = '/api/v2/bulk-operations') => $this->postJson($target, ['kind' => 'import', 'source' => 'inventory', 'row_limit' => $rows],
+            $key === null ? [] : ['Idempotency-Key' => $key]));
 
         $send(1, null)->assertUnprocessable()->assertJsonPath('code', 'operations.idempotency_key_required');
         $send(1, 'key')->assertStatus(503);
