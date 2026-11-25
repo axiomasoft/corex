@@ -1,39 +1,39 @@
-# Зоны и модули ядра CoreX
+# Kernel zones and modules
 
-`axiomasoft/corex` публикует общие контракты прикладных пакетов. Корень
-`packages/core/src/` содержит `CoreServiceProvider.php` и следующие модули.
+`axiomasoft/corex` publishes the contracts shared by the application packages.
+`packages/core/src/` holds `CoreServiceProvider.php` and the following modules.
 
-| Модуль | Ответственность |
+| Module | Responsibility |
 | --- | --- |
-| `Audit` | Аудит действий и политика хранения журнала. |
-| `Config` | Конфигурация ядра и runtime-проверка привязок. |
-| `Context` | Проверенный контекст, principal, физический binding, restore epoch и допуск работы. |
-| `Data` | DataScope, идентификаторы, записи, поля и их контракт авторизации. |
-| `Database` | Соединение владельца, базовая модель и регистрация модели в каталогах. |
-| `Departments` | Справочник подразделений. |
-| `Errors` | Общие ошибки CoreX и интеграция с каталогом Packman. |
-| `Features` | Прикладные feature flags. |
-| `Foundation` | Композиция ядра, публичный вход lifecycle и допуск ссылок. |
-| `Invocation` | Контракты обработчика и транспорта для доверенного запроса. |
-| `Messaging` | Доменные факты, durable payload, inbox и outbox. |
-| `Observability` | Трассировка, метрики и контекст операции. |
-| `Scheduling` | Контракты планирования отложенной работы. |
-| `Settings` | Метаданные и сохранение настроек. |
-| `Storage` | Контракты tenant storage и scoped runtime. |
-| `Time` | Часы и правила представления времени. |
+| `Audit` | Action audit and the log retention policy. |
+| `Config` | Kernel configuration and runtime binding checks. |
+| `Context` | Verified context, principal, physical binding, restore epoch and work admission. |
+| `Data` | DataScope, identifiers, records, fields and their authorization contract. |
+| `Database` | Owner connection, base model and model registration in catalogues. |
+| `Departments` | Department directory. |
+| `Errors` | Shared CoreX errors and the integration with the Packman catalogue. |
+| `Features` | Application feature flags. |
+| `Foundation` | Kernel composition, the public lifecycle entry and reference admission. |
+| `Invocation` | Handler and transport contracts for a trusted request. |
+| `Messaging` | Domain facts, durable payloads, inbox and outbox. |
+| `Observability` | Tracing, metrics and operation context. |
+| `Scheduling` | Contracts for scheduling deferred work. |
+| `Settings` | Settings metadata and persistence. |
+| `Storage` | Tenant storage contracts and the scoped runtime. |
+| `Time` | Clocks and time presentation rules. |
 
-Runtime namespace соответствует текущему PSR-4 пути. Сканер публичной поверхности
-и его DTO находятся в dev-мосте `CoreX\Foundation\Tooling`. Скрипты используют
-Packman API/SPI attributes. Runtime-зависимости от dev-мостов запрещает R6
-гейта раскладки.
+The runtime namespace follows the PSR-4 path. The public-surface scanner and its
+DTOs live in the dev bridge `CoreX\Foundation\Tooling`. Scripts use the Packman
+API/SPI attributes. Rule R6 of the layout gate forbids runtime dependencies on
+dev bridges.
 
-Ядро использует публичное обнаружение и компиляцию Packman. Lifecycle-допуск
-CoreX удерживает ссылки владельцев до подтверждения их транзакции или эффекта.
-Схемы и фактические переходы выполняют Packman Schema и Packman Modules.
-Сохранённые представления принадлежат Packman Panels, типы денег — Intl,
-прикладные поля — Custom Fields. Laravel-адаптер principal принадлежит Access
-и доступен по пути `CoreX\Access\Laravel\PrincipalIdentity`.
+The kernel uses Packman's public discovery and compilation. CoreX lifecycle
+admission holds owner references until their transaction or effect is
+confirmed. Packman Schema and Packman Modules run the schema and the actual
+transitions. Saved views belong to Packman Panels, money types to Intl and
+application fields to Custom Fields. The Laravel principal adapter belongs to
+Access and lives at `CoreX\Access\Laravel\PrincipalIdentity`.
 
-Правила импорта зон и композиционные входы проверяет `CoreZoneTest`.
-`scripts/module-layout.json` и `scripts/ownership-map.json` задают актуальный
-пакетный каталог. [Раскладка](structure-profiles.md) · [Карта пакетов](package-map.md)
+`CoreZoneTest` checks the zone import rules and the composition entry points.
+`scripts/module-layout.json` and `scripts/ownership-map.json` define the current
+package catalogue. [Layout](structure-profiles.md) · [Package map](package-map.md)
