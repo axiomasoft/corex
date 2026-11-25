@@ -366,3 +366,25 @@ it('pages a policy-filtered inbox in page-sized batches with an unchanged order 
     expect($seen)->toBe($expected)
         ->and(max($limits))->toBeLessThanOrEqual(50);
 });
+
+it('decides inbox visibility and unread counts without reading notification payloads', function (): void {
+    allowNotifications();
+    $center = resolve(NotificationCenter::class);
+    $created = $center->notify(notificationContext(), notificationInput('columns', str_repeat('large payload ', 200)));
+    $selects = [];
+    DB::listen(static function ($query) use (&$selects): void {
+        if (str_starts_with($query->sql, 'select') && str_contains($query->sql, 'ntf_notifications')) {
+            $selects[] = $query->sql;
+        }
+    });
+
+    $page = $center->inbox(notificationContext(), new InboxQuery(before: null));
+    $count = $center->unreadCount(notificationContext());
+
+    expect($page->items[0]->id)->toBe($created->id)
+        ->and($page->items[0]->eventType)->toBe('document.ready')
+        ->and($page->items[0]->related?->id)->toBe('document-1')
+        ->and($count->count)->toBe(1)
+        ->and($selects)->toHaveCount(2)
+        ->and(implode("\n", $selects))->not->toContain('select *')->not->toContain('payload');
+});

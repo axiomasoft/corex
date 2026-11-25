@@ -39,6 +39,12 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 
     private const int InboxBatch = 50;
 
+    /** Columns NotificationVisibility::subject() reads; the payload is never needed to decide visibility. */
+    private const array SubjectColumns = ['id', 'recipient_kind', 'recipient_id', 'related'];
+
+    /** Subject columns plus what reference() projects into a NotificationRef. */
+    private const array InboxColumns = [...self::SubjectColumns, 'event_type', 'revision', 'read_at', 'cancelled_at'];
+
     public function __construct(
         private ConnectionInterface $connection,
         private NotificationPolicy $policy,
@@ -203,7 +209,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
                 ->when($last ?? $before, static fn (Builder $builder, string $id) => $builder->where('id', '<', $id))
                 ->orderByDesc('id')
                 ->limit($batch)
-                ->get();
+                ->get(self::InboxColumns);
             $more = $rows->count() === $batch;
 
             foreach ($rows as $row) {
@@ -227,7 +233,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
     {
         $scope = $this->scopes->of($context);
         $this->current->assert(scope: $scope, connection: $this->connection);
-        $rows = $this->recipient($scope)->whereNull('read_at')->limit(self::ScanLimit + 1)->get();
+        $rows = $this->recipient($scope)->whereNull('read_at')->limit(self::ScanLimit + 1)->get(self::SubjectColumns);
 
         if ($rows->count() > self::ScanLimit) {
             return UnreadCount::unavailable('visibility-scan-limit');
