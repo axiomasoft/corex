@@ -57,6 +57,9 @@ return new class extends PackmanMigration
             $t->foreign(['source_id'], 'crm_deals_source_id_fk')->references(['id'])->on('crm_sources')->onDelete('set null')->onUpdate('no action');
             $t->foreign(['stage_id'], 'crm_deals_stage_id_fk')->references(['id'])->on('crm_stages')->onDelete('restrict')->onUpdate('no action');
             $t->foreign(['workspace_id'], 'crm_deals_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
+            $t->index(['lost_reason_id'], 'crm_deals_lost_reason_id_ix');
+            $t->index(['source_id'], 'crm_deals_source_id_ix');
+            $t->index(['stage_id'], 'crm_deals_stage_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

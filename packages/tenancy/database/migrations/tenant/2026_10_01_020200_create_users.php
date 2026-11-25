@@ -32,6 +32,7 @@ return new class extends PackmanMigration
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
             $table->timestampTz('deleted_at', precision: 6)->nullable();
+            $table->index(['department_id'], 'users_department_id_ix');
         });
 
         // Preserve the existing cross-package integration FK in raw DDL.

@@ -30,6 +30,7 @@ return new class extends PackmanMigration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
 
             $table->foreign('account_id', 'root_account_exports_account_id_fk')->references('id')->on('root_accounts')->cascadeOnDelete();
+            $table->index(['account_id'], 'root_account_exports_account_id_ix');
         });
 
         DB::statement("ALTER TABLE root_account_exports ADD CONSTRAINT root_account_exports_kind_ck CHECK (kind IN ('offboarding','pre_purge','manual'))");

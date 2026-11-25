@@ -729,6 +729,16 @@
             },
             "indexes": [
                 {
+                    "name": "root_account_exports_account_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_account_exports_pk",
                     "kind": "pk",
                     "columns": [
@@ -882,6 +892,16 @@
                         "status"
                     ],
                     "predicate": "((status)::text <> 'ok'::text)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_account_schema_state_batch_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "batch_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -1067,6 +1087,16 @@
                     "kind": "uq",
                     "columns": [
                         "db_name"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_accounts_owner_identity_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_identity_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -1881,10 +1911,30 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "root_impersonation_grants_approved_by_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "approved_by"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_impersonation_grants_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_impersonation_grants_staff_identity_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "staff_identity_id"
                     ],
                     "predicate": null,
                     "method": "btree",

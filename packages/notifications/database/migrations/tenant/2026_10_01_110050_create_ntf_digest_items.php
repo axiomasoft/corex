@@ -23,6 +23,7 @@ return new class extends PackmanMigration
             $table->unique(['notification_id', 'channel'], 'ntf_digest_items_notification_id_channel_uq');
             $table->foreign('run_id', 'ntf_digest_items_run_id_fk')->references('id')->on('ntf_digest_runs')->restrictOnDelete();
             $table->foreign('notification_id', 'ntf_digest_items_notification_id_fk')->references('id')->on('ntf_notifications')->restrictOnDelete();
+            $table->index(['run_id'], 'ntf_digest_items_run_id_ix');
         });
     }
 

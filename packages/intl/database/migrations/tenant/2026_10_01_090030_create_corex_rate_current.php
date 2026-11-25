@@ -23,6 +23,7 @@ return new class extends PackmanMigration
             $table->char('snapshot_id', 26);
             $table->decimal('generation', total: 20, places: 0)->default(0);
             $table->primary(['base', 'quote', 'source'], 'corex_rate_current_pk');
+            $table->index(['snapshot_id'], 'corex_rate_current_snapshot_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
