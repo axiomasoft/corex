@@ -770,8 +770,8 @@ final class UsageScanner
             }
             $ledger = json_decode($bytes, true, 512, JSON_THROW_ON_ERROR);
 
-            if (! is_array($ledger) || array_keys($ledger) !== ['schema', 'entries'] || $ledger['schema'] !== 'unused-public-entrypoints/1' || ! is_array($ledger['entries']) || ! array_is_list($ledger['entries'])) {
-                throw new RuntimeException('expected exact unused-public-entrypoints/1 schema and entries list');
+            if (! is_array($ledger) || array_keys($ledger) !== ['schema', 'entries'] || $ledger['schema'] !== 'unused-public-entrypoints/2' || ! is_array($ledger['entries']) || ! array_is_list($ledger['entries'])) {
+                throw new RuntimeException('expected exact unused-public-entrypoints/2 schema and entries list');
             }
             foreach ($ledger['entries'] as $entry) {
                 if (! is_array($entry) || array_diff(array_keys($entry), ['symbol', 'source', 'source_sha256', 'kind', 'reason', 'root', 'expires']) !== [] || count($entry) !== 7) {
@@ -799,11 +799,17 @@ final class UsageScanner
                     $valid = $valid && $expires !== false && $expires->format('Y-m-d') === $entry['expires'] && $entry['expires'] >= gmdate('Y-m-d');
                 }
 
-                if (! is_array($proof) || array_keys($proof) !== ['path', 'anchor', 'sha256'] || ! is_string($proof['path']) || ! is_string($proof['anchor']) || ! is_string($proof['sha256']) || $proof['anchor'] === '' || preg_match('~^[a-f0-9]{64}$~D', $proof['sha256']) !== 1 || str_contains($proof['path'], '..') || str_starts_with($proof['path'], '/') || str_contains($proof['path'], '*') || $proof['path'] === 'scripts/quality/public-entrypoints.json') {
+                // A repository root is pinned by its hash, so any edit asks for a
+                // new review. A vendor root is proved by its anchor alone: the
+                // lockfile already pins the dependency, and hashing whole vendor
+                // files made every framework patch release a ledger change.
+                $vendorRoot = is_array($proof) && is_string($proof['path'] ?? null) && str_starts_with($proof['path'], 'vendor/');
+
+                if (! is_array($proof) || array_keys($proof) !== ($vendorRoot ? ['path', 'anchor'] : ['path', 'anchor', 'sha256']) || ! is_string($proof['path']) || ! is_string($proof['anchor']) || (! $vendorRoot && (! is_string($proof['sha256']) || preg_match('~^[a-f0-9]{64}$~D', $proof['sha256']) !== 1)) || $proof['anchor'] === '' || str_contains($proof['path'], '..') || str_starts_with($proof['path'], '/') || str_contains($proof['path'], '*') || $proof['path'] === 'scripts/quality/public-entrypoints.json') {
                     $valid = false;
                 } else {
                     $evidence = is_file($this->root.'/'.$proof['path']) ? file_get_contents($this->root.'/'.$proof['path']) : false;
-                    $valid = $valid && $evidence !== false && hash('sha256', $evidence) === $proof['sha256'] && str_contains($evidence, $proof['anchor']);
+                    $valid = $valid && $evidence !== false && ($vendorRoot || hash('sha256', $evidence) === $proof['sha256']) && str_contains($evidence, $proof['anchor']);
 
                     if (in_array($entry['kind'], ['external-api', 'external-spi'], true)) {
                         $valid = $valid && str_ends_with($proof['path'], '.md') && str_contains($proof['anchor'], $method->class);

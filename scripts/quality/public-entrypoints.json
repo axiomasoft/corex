@@ -1,5 +1,5 @@
 {
-    "schema": "unused-public-entrypoints/1",
+    "schema": "unused-public-entrypoints/2",
     "entries": [
         {
             "symbol": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup::__construct",
@@ -22,8 +22,7 @@
             "reason": "AzGuard invokes the registered panel provider to assemble the CoreX policy and permission.",
             "root": {
                 "path": "vendor/axiomasoft/azguard/packages/core/src/Panels/Internal/PanelRegistry.php",
-                "anchor": "$this->provider($providerClass)->panel($builder)",
-                "sha256": "fdba5f2f8d22e1353a663241a80b9cfc7647767fd61c6012434582777b6b4cac"
+                "anchor": "$this->provider($providerClass)->panel($builder)"
             },
             "expires": null
         },
@@ -35,8 +34,7 @@
             "reason": "AzGuard resolves the CoreX panel policy through the container before invoking its bound decision method.",
             "root": {
                 "path": "vendor/axiomasoft/azguard/packages/core/src/Policies/Internal/PolicyDecider.php",
-                "anchor": "$policy = $this->container->make($class)",
-                "sha256": "245fd4eec12d3ba9d2682e9834227a942a2e98d270fef9703a9441d96a9e6fc3"
+                "anchor": "$policy = $this->container->make($class)"
             },
             "expires": null
         },
@@ -48,8 +46,7 @@
             "reason": "AzGuard invokes the decision callback selected from the policy registered by the CoreX matrix panel.",
             "root": {
                 "path": "vendor/axiomasoft/azguard/packages/core/src/Policies/Internal/PolicyDecider.php",
-                "anchor": "$this->invoker->invoke(callback: $callback, inputs: $inputs)",
-                "sha256": "245fd4eec12d3ba9d2682e9834227a942a2e98d270fef9703a9441d96a9e6fc3"
+                "anchor": "$this->invoker->invoke(callback: $callback, inputs: $inputs)"
             },
             "expires": null
         },
@@ -61,8 +58,7 @@
             "reason": "Eloquent invokes this override for model queries. CoreX rejects persistence of its in-memory subject identity.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
-                "anchor": "$this->registerGlobalScopes($this->newModelQuery())",
-                "sha256": "6cc643f12225f160a2005735cb33a33ac248d6834cd396ae99cfd4d1e2b2d4b2"
+                "anchor": "$this->registerGlobalScopes($this->newModelQuery())"
             },
             "expires": null
         },
@@ -191,8 +187,7 @@
             "reason": "CoreX\\Access\\Identity\\Internal\\LowercaseColumn::getValue implements the Illuminate query Expression contract; Grammar::getValue invokes this exact contract method when compiling the expression supplied to the query builder.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Grammar.php",
-                "anchor": "$expression->getValue($this)",
-                "sha256": "d8a8e9148d0bd53fc0cd321d378687196120869970ba8c635678109c1456e98c"
+                "anchor": "$expression->getValue($this)"
             },
             "expires": null
         },
@@ -204,8 +199,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -217,8 +211,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\Role::assignments by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -230,8 +223,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\Role::clonedFrom by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -243,8 +235,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -256,8 +247,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\RoleMatrixRow::role by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -399,8 +389,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -490,8 +479,7 @@
             "reason": "Foundation binds this adapter to ActorResolverInterface; Packman lifecycle asks the current actor when producing audited module transitions.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Lifecycle/DatabaseModuleLifecycle.php",
-                "anchor": "$this->actorResolver?->current()",
-                "sha256": "8b3c7efd390e11648ff5730f6d9e320167c268fe95130106f81e5bc408b64584"
+                "anchor": "$this->actorResolver?->current()"
             },
             "expires": null
         },
@@ -503,8 +491,7 @@
             "reason": "Foundation binds this adapter to FeatureFlagsInterface; Packman module activation defines declared flag defaults through this method.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Lifecycle/DatabaseModuleLifecycle.php",
-                "anchor": "$flags->define($definition)",
-                "sha256": "8b3c7efd390e11648ff5730f6d9e320167c268fe95130106f81e5bc408b64584"
+                "anchor": "$flags->define($definition)"
             },
             "expires": null
         },
@@ -516,8 +503,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -568,8 +554,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -581,8 +566,7 @@
             "reason": "Composer extra.packman.module registers this exact ModuleDefinition; Packman discovery invokes manifest() when compiling the installed module graph.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
-                "anchor": "$module->manifest()",
-                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
+                "anchor": "$module->manifest()"
             },
             "expires": null
         },
@@ -646,8 +630,7 @@
             "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its compile method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$section->compile(",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "$section->compile("
             },
             "expires": null
         },
@@ -659,8 +642,7 @@
             "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its mode method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$section->mode()",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "$section->mode()"
             },
             "expires": null
         },
@@ -672,8 +654,7 @@
             "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its normalize method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "->normalize(manifest: $manifest",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "->normalize(manifest: $manifest"
             },
             "expires": null
         },
@@ -685,8 +666,7 @@
             "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its phase method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$a->phase()",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "$a->phase()"
             },
             "expires": null
         },
@@ -711,8 +691,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -971,8 +950,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -984,8 +962,7 @@
             "reason": "Composer extra.packman.module registers this exact ModuleDefinition; Packman discovery invokes manifest() when compiling the installed module graph.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
-                "anchor": "$module->manifest()",
-                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
+                "anchor": "$module->manifest()"
             },
             "expires": null
         },
@@ -1023,8 +1000,7 @@
             "reason": "This concrete adapter implements PackageRegistrar, which requires the exact register method even when that half of the lifecycle is empty. Its other lifecycle hook is explicitly composed by the owning provider.",
             "root": {
                 "path": "vendor/axiomasoft/packman/packages/core/src/Foundation/Contracts/PackageRegistrar.php",
-                "anchor": "public function register(Application $app): void;",
-                "sha256": "86d27bd56d00131464fde6f2ba236ee51836776ec801419262ded9559d8101cd"
+                "anchor": "public function register(Application $app): void;"
             },
             "expires": null
         },
@@ -1127,8 +1103,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -1140,8 +1115,7 @@
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Console/Command.php",
-                "anchor": "$this->laravel->call([$this, $method])",
-                "sha256": "ae08f9779c96b9c8d9bc3c81c14b7fbca440d318841f65d232d934f54eaacc3d"
+                "anchor": "$this->laravel->call([$this, $method])"
             },
             "expires": null
         },
@@ -1218,8 +1192,7 @@
             "reason": "This public testing fixture implements ModuleRegistry; Packman boot enumerates all declared modules through the registry port, including substituted host test fixtures.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Laravel/ModulesBootRegistrar.php",
-                "anchor": "$registry->all()",
-                "sha256": "444604bc422d7d415625ffd9eb45a2d30786e93bae6b4427d2e00467a978ccef"
+                "anchor": "$registry->all()"
             },
             "expires": null
         },
@@ -1348,8 +1321,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -1361,8 +1333,7 @@
             "reason": "Composer extra.packman.module registers this exact ModuleDefinition; Packman discovery invokes manifest() when compiling the installed module graph.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
-                "anchor": "$module->manifest()",
-                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
+                "anchor": "$module->manifest()"
             },
             "expires": null
         },
@@ -1387,8 +1358,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -1465,8 +1435,7 @@
             "reason": "CoreX\\Search\\Internal\\Postgres\\SearchTextExpression::getValue implements the Illuminate query Expression contract; Grammar::getValue invokes this exact contract method when compiling the expression supplied to the query builder.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Grammar.php",
-                "anchor": "$expression->getValue($this)",
-                "sha256": "d8a8e9148d0bd53fc0cd321d378687196120869970ba8c635678109c1456e98c"
+                "anchor": "$expression->getValue($this)"
             },
             "expires": null
         },
@@ -1478,8 +1447,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -1569,8 +1537,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -1621,8 +1588,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Project\\Internal\\Models\\Project::sprints by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1634,8 +1600,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Project\\Internal\\Models\\Project::stages by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1647,8 +1612,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Project\\Internal\\Models\\Project::tasks by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1660,8 +1624,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Sprint\\Internal\\Models\\Sprint::project by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1673,8 +1636,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Sprint\\Internal\\Models\\Sprint::tasks by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1699,8 +1661,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Stage::project by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1712,8 +1673,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Stage::tasks by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1725,8 +1685,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::children by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1738,8 +1697,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::parent by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1751,8 +1709,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::project by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1764,8 +1721,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::sprint by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1777,8 +1733,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::stage by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1790,8 +1745,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::targets by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1803,8 +1757,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::timeLogs by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1816,8 +1769,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\Task::watchers by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1829,8 +1781,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\TaskTarget::task by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1842,8 +1793,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Task\\Internal\\Models\\TaskWatcher::task by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1855,8 +1805,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Time\\Internal\\Models\\TimeLog::task by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1868,8 +1817,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tasks\\Time\\Internal\\Models\\Timer::task by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1959,8 +1907,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\Account::domains by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1972,8 +1919,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\AccountExport::account by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1985,8 +1931,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\AccountSchemaState::account by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -1998,8 +1943,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\AccountSchemaState::batch by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2128,8 +2072,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\DomainTrust\\Internal\\Models\\Domain::account by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2245,8 +2188,7 @@
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Console/Command.php",
-                "anchor": "$this->laravel->call([$this, $method])",
-                "sha256": "ae08f9779c96b9c8d9bc3c81c14b7fbca440d318841f65d232d934f54eaacc3d"
+                "anchor": "$this->laravel->call([$this, $method])"
             },
             "expires": null
         },
@@ -2258,8 +2200,7 @@
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Console/Command.php",
-                "anchor": "$this->laravel->call([$this, $method])",
-                "sha256": "ae08f9779c96b9c8d9bc3c81c14b7fbca440d318841f65d232d934f54eaacc3d"
+                "anchor": "$this->laravel->call([$this, $method])"
             },
             "expires": null
         },
@@ -2713,8 +2654,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::invitedBy by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2726,8 +2666,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::workspace by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2739,8 +2678,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::children by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2752,8 +2690,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::invitations by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2765,8 +2702,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::parent by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2778,8 +2714,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::user by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2791,8 +2726,7 @@
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::workspace by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2804,8 +2738,7 @@
             "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its compile method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$section->compile(",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "$section->compile("
             },
             "expires": null
         },
@@ -2817,8 +2750,7 @@
             "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its mode method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$section->mode()",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "$section->mode()"
             },
             "expires": null
         },
@@ -2830,8 +2762,7 @@
             "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its normalize method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "->normalize(manifest: $manifest",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "->normalize(manifest: $manifest"
             },
             "expires": null
         },
@@ -2843,8 +2774,7 @@
             "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its phase method while ordering, normalizing and compiling registered manifest sections.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$a->phase()",
-                "sha256": "89023b6c3cefd1da9a29986c48dde61bdfc6c5141e09df48cde680847457d97c"
+                "anchor": "$a->phase()"
             },
             "expires": null
         },
@@ -2908,8 +2838,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -2921,8 +2850,7 @@
             "reason": "This concrete adapter implements PackageRegistrar, which requires the exact register method even when that half of the lifecycle is empty. Its other lifecycle hook is explicitly composed by the owning provider.",
             "root": {
                 "path": "vendor/axiomasoft/packman/packages/core/src/Foundation/Contracts/PackageRegistrar.php",
-                "anchor": "public function register(Application $app): void;",
-                "sha256": "86d27bd56d00131464fde6f2ba236ee51836776ec801419262ded9559d8101cd"
+                "anchor": "public function register(Application $app): void;"
             },
             "expires": null
         },
@@ -2947,8 +2875,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -2960,8 +2887,7 @@
             "reason": "Composer extra.packman.module registers this exact ModuleDefinition; Packman discovery invokes manifest() when compiling the installed module graph.",
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
-                "anchor": "$module->manifest()",
-                "sha256": "7b5e078cc7ab7c0f6a917c9a38f17ee01ff714dc9d87a516c1f8340daa1a90b1"
+                "anchor": "$module->manifest()"
             },
             "expires": null
         },
@@ -2973,8 +2899,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Activity\\Models\\ActivityTarget::entity by its property/relationship name. Its declared MorphTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2986,8 +2911,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Company\\Models\\Company::deals by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -2999,8 +2923,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Contact\\Models\\ContactCompany::company by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3012,8 +2935,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Contact\\Models\\ContactCompany::contact by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3038,8 +2960,7 @@
             "reason": "Eloquent Model::bootTraits derives and invokes the exact bootHasCrmContext method from the HasCrmContext trait name on the CRM models that use this trait.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
-                "anchor": "'boot'.class_basename($trait)",
-                "sha256": "6cc643f12225f160a2005735cb33a33ac248d6834cd396ae99cfd4d1e2b2d4b2"
+                "anchor": "'boot'.class_basename($trait)"
             },
             "expires": null
         },
@@ -3077,8 +2998,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Deal\\Models\\Deal::company by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3090,8 +3010,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Deal\\Models\\Deal::contacts by its property/relationship name. Its declared BelongsToMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3103,8 +3022,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Deal\\Models\\Deal::pipeline by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3116,8 +3034,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Deal\\Models\\Pipeline::deals by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3129,8 +3046,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Deal\\Models\\Stage::deals by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3142,8 +3058,7 @@
             "reason": "Eloquent resolves the exact relationship Flex\\Crm\\Deal\\Models\\Stage::pipeline by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
-                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
+                "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())"
             },
             "expires": null
         },
@@ -3155,8 +3070,7 @@
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
                 "path": "vendor/axiomasoft/packman-schema/packages/schema/src/Internal/Migration/TaggedSchemaSets.php",
-                "anchor": "$provider->sets()",
-                "sha256": "fc51007f903bfeffbd2a6db7fe797379f6df0eb9340b3ae7f169debbd4e7f9fd"
+                "anchor": "$provider->sets()"
             },
             "expires": null
         },
@@ -3376,8 +3290,7 @@
             "reason": "PostgresCandidateDriver wraps ordered null rank in this Expression. Laravel Grammar resolves its getValue when compiling the ordered query.",
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Grammar.php",
-                "anchor": "return $this->getValue($expression->getValue($this));",
-                "sha256": "d8a8e9148d0bd53fc0cd321d378687196120869970ba8c635678109c1456e98c"
+                "anchor": "return $this->getValue($expression->getValue($this));"
             },
             "expires": null
         },

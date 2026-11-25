@@ -17,7 +17,7 @@ function unusedPublicFixture(array $sources, Closure $test): void
             $files->put($root.'/'.$path, $source);
         }
         $files->ensureDirectoryExists($root.'/scripts/quality');
-        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/1', 'entries' => []], JSON_THROW_ON_ERROR));
+        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/2', 'entries' => []], JSON_THROW_ON_ERROR));
         $run = static function () use ($root): Process {
             $process = new Process([PHP_BINARY, dirname(__DIR__, 2).'/scripts/quality/unused-public.php', '--check', '--root='.$root]);
             $process->run();
@@ -79,7 +79,7 @@ it('admits exact documented Api and Spi roots and rejects stale, expired, wildca
     ], function (string $root, Filesystem $files, Closure $run) use ($class, $kind): void {
         $entry = unusedPublicEntrypoint($root, $class, 'external', $kind);
         $write = static function (array $rows) use ($root, $files): void {
-            $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/1', 'entries' => $rows], JSON_THROW_ON_ERROR));
+            $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/2', 'entries' => $rows], JSON_THROW_ON_ERROR));
         };
         $write([$entry]);
         expect($run()->getExitCode())->toBe(0);
@@ -106,7 +106,7 @@ it('checks every ledger row even when a local call makes the exception unnecessa
     ], function (string $root, Filesystem $files, Closure $run): void {
         $entry = unusedPublicEntrypoint($root, 'Demo\\Entry', 'external');
         $entry['source_sha256'] = str_repeat('0', 64);
-        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/1', 'entries' => [$entry]], JSON_THROW_ON_ERROR));
+        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/2', 'entries' => [$entry]], JSON_THROW_ON_ERROR));
         expect($run()->getExitCode())->toBe(1)->and($run()->getErrorOutput())->toContain('ENTRYPOINT-STALE');
     });
 });
@@ -143,13 +143,13 @@ it('binds inherited external roots to the exact marked port method', function ()
         $port = unusedPublicEntrypoint($root, 'Demo\\Port', 'external', 'external-spi');
         $implementation = unusedPublicEntrypoint($root, 'Demo\\Entry', 'external', 'external-implementation');
         $implementation['root']['anchor'] = 'Demo\\Port::external';
-        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/1', 'entries' => [$port, $implementation]], JSON_THROW_ON_ERROR));
+        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/2', 'entries' => [$port, $implementation]], JSON_THROW_ON_ERROR));
         expect($run()->getExitCode())->toBe(0);
         $source = str_replace('#[Spi]', '', $files->get($root.'/packages/demo/src/Entry.php'));
         $files->put($root.'/packages/demo/src/Entry.php', $source);
         $port['source_sha256'] = hash('sha256', $source);
         $implementation['source_sha256'] = hash('sha256', $source);
-        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/1', 'entries' => [$port, $implementation]], JSON_THROW_ON_ERROR));
+        $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/2', 'entries' => [$port, $implementation]], JSON_THROW_ON_ERROR));
         expect($run()->getExitCode())->toBe(1)->and($run()->getErrorOutput())->toContain('ENTRYPOINT-STALE Demo\\Entry::external');
     });
 });
@@ -238,5 +238,47 @@ it('follows typed Packman callbacks without exempting unrelated methods or audit
         $source = $files->get($root.'/packages/demo/src/Entry.php');
         $files->put($root.'/packages/demo/src/Entry.php', str_replace('final class Unrelated { public function execute(): void {} }', '', $source));
         expect($run()->getExitCode())->toBe(0);
+    });
+});
+
+it('proves vendor roots by their anchor and keeps hashing repository roots', function (): void {
+    $class = 'Demo\\Internal\\Entry';
+    unusedPublicFixture([
+        'packages/demo/src/Entry.php' => '<?php namespace Demo\Internal; final class Entry { public function handle(): void {} }',
+        'vendor/laravel/framework/src/Illuminate/Console/Command.php' => '<?php // $this->laravel->call([$this, $method])',
+        'packages/demo/README.md' => 'Artisan calls Demo\\Internal\\Entry::handle.',
+    ], function (string $root, Filesystem $files, Closure $run) use ($class): void {
+        $vendor = 'vendor/laravel/framework/src/Illuminate/Console/Command.php';
+        $entry = unusedPublicEntrypoint($root, $class, 'handle', 'framework');
+        $entry['root'] = ['path' => $vendor, 'anchor' => '$this->laravel->call([$this, $method])'];
+        $write = static function (array $row) use ($root, $files): void {
+            $files->put($root.'/scripts/quality/public-entrypoints.json', json_encode(['schema' => 'unused-public-entrypoints/2', 'entries' => [$row]], JSON_THROW_ON_ERROR));
+        };
+        $write($entry);
+        expect($run()->getExitCode())->toBe(0);
+
+        $files->put($root.'/'.$vendor, '<?php // patch release: $this->laravel->call([$this, $method]) still dispatches');
+        expect($run()->getExitCode())->toBe(0);
+
+        $files->put($root.'/'.$vendor, '<?php // the framework no longer calls the handler');
+        expect($run()->getExitCode())->toBe(1)
+            ->and($run()->getErrorOutput())->toContain('ENTRYPOINT-STALE');
+
+        $files->put($root.'/'.$vendor, '<?php // $this->laravel->call([$this, $method])');
+        $hashed = $entry;
+        $hashed['root']['sha256'] = hash_file('sha256', $root.'/'.$vendor);
+        $write($hashed);
+        expect($run()->getExitCode())->toBe(1);
+
+        $repository = $entry;
+        $repository['root'] = ['path' => 'packages/demo/README.md', 'anchor' => $class.'::handle'];
+        $write($repository);
+        expect($run()->getExitCode())->toBe(1);
+
+        $repository['root']['sha256'] = hash_file('sha256', $root.'/packages/demo/README.md');
+        $write($repository);
+        expect($run()->getExitCode())->toBe(0);
+        $files->put($root.'/packages/demo/README.md', 'Artisan calls Demo\\Internal\\Entry::handle. Edited.');
+        expect($run()->getExitCode())->toBe(1);
     });
 });
