@@ -1,149 +1,255 @@
+# CI is a job graph, not a list:
+#
+#   changes → quality → { tests, PostgreSQL, packages, analysis, gates } → CI gate
+#
+# `changes` skips the PHP lanes when a push touches only Markdown, docs/ or
+# LICENSE; main and workflow_dispatch always run everything. `quality` is the
+# fast fail (audit, manifests, Pint, Rector, actionlint, zizmor): heavier lanes
+# start only after it passes. The supply-chain gates (anti-weakening, gitleaks,
+# contract guard) run in parallel from the start. `CI gate` is the one check a
+# branch rule should require; skipped lanes count as passed, failed or
+# cancelled ones do not. Mutation testing runs on workflow_dispatch with
+# `mutation: true`.
+
 name: CI
 
 on:
   push:
-    branches: [main, 'refactor/**', 'feat/**', 'fix/**', 'chore/**']
+    branches:
+      - main
+      - refactor/**
+      - feat/**
+      - fix/**
+      - hotfix/**
+      - chore/**
   pull_request:
   workflow_dispatch:
+    inputs:
+      mutation:
+        description: Also run the mutation inventory, fragments and registry
+        type: boolean
+        default: false
 
 permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   COMPOSER_ROOT_VERSION: dev-main
+  COMPOSER_NO_INTERACTION: '1'
 
 jobs:
-  anti-weakening-gate:
+
+  changes:
+    name: Changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Anti-weakening gate
+      pull-requests: read
+    outputs:
+      code: ${{ steps.plan.outputs.code }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Filter paths
+        id: filter
+        if: github.event_name != 'workflow_dispatch' && github.ref != 'refs/heads/main'
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            code:
+              - "**"
+              - "!**/*.md"
+              - "!docs/**"
+              - "!LICENSE"
+          predicate-quantifier: every
+      - name: Plan lanes
+        id: plan
+        env:
+          FILTER_CODE: ${{ steps.filter.outputs.code }}
+        run: |
+          code="${FILTER_CODE:-true}"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          printf "### Changes\n\nPHP lanes run: %s\n" "$code" >> "$GITHUB_STEP_SUMMARY"
+
+  lint:
+    name: Quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
+        with:
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+      - name: Manifest policy
+        run: python3 scripts/manifest-check.py
+      - name: Strict validation of every installing root
+        run: |
+          for manifest in composer.json packages/*/composer.json products/*/composer.json; do
+            composer validate --strict --no-check-lock --working-dir="$(dirname "$manifest")"
+          done
+      - name: Pint
+        run: composer lint:check
+      - name: Rector
+        run: composer refactor:check
+      - name: Lint workflows
+        uses: $/.github/actions/lint-workflows
+
+  anti-weakening-gate:
+    name: Anti-weakening gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
-
       - name: Guard against gate-weakening diffs
         run: bash scripts/anti-weakening-gate.sh
 
   secret-scan:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Secret scan (gitleaks)
     env:
       GITLEAKS_VERSION: 8.28.0
       GITLEAKS_SHA256: a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
-
       - name: Install pinned gitleaks
         run: |
           curl -fsSL -o /tmp/gitleaks.tgz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
           echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tgz" | sha256sum -c -
           tar -xzf /tmp/gitleaks.tgz -C /tmp gitleaks
-
       - name: Secret scan gate
         run: GITLEAKS_BIN=/tmp/gitleaks bash scripts/secret-scan-gate.sh
-
       - name: Verify secret scan boundaries
         run: GITLEAKS_BIN=/tmp/gitleaks python3 -m unittest scripts.tests.test_secret_scan_gate
 
-  tests:
+  contract-guard:
+    name: Contract-snapshot guard
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       contents: read
-    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Guard PHP surface snapshots against a CHANGELOG entry
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: bash scripts/contract-guard.sh "$BASE_SHA"
+
+  tests:
+    name: PHP ${{ matrix.php }}
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.4', '8.5']
-        laravel: ['13.*']
-    name: PHP ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
-    env:
-      LARAVEL_VERSION: ${{ matrix.laravel }}
+        php:
+          - '8.4'
+          - '8.5'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Constrain Laravel version
-        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Tests
         run: composer test
-
       - name: Runtime globals gate
         run: composer runtime-globals-gate
-
       - name: Config cache check
         run: composer config-cache-check
-
       - name: Configuration reference
         run: composer configuration-reference
 
   octane-lifecycle:
+    name: Octane source lifecycle · PHP ${{ matrix.php }}
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.4', '8.5']
-    name: Octane source lifecycle · PHP ${{ matrix.php }} · Laravel 13
+        php:
+          - '8.4'
+          - '8.5'
     env:
       OCTANE_PHP: ${{ matrix.php }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-
+          install: 'false'
       - name: Install locked Octane source consumer
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/core/tests/Release/octane-consumer update --prefer-dist --no-interaction --no-progress --no-scripts
-
-      - name: Audit Octane consumer lock
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/core/tests/Release/octane-consumer audit --locked
-
       - name: Receipt integrity controls
         run: python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py
-
       - name: Real Octane Worker handlers
         run: python3 scripts/quality/octane-proof.py --source-root . --matrix "$OCTANE_PHP" --evidence-dir build/quality/octane
 
   tests-pg:
+    name: PG lane (postgres:${{ matrix.postgres }})
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     permissions:
       contents: read
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        laravel: ['13.*']
-        postgres: ['16', '18']
-    name: PG lane (postgres:${{ matrix.postgres }}) · Laravel ${{ matrix.laravel }}
+        postgres:
+          - '16'
+          - '18'
     services:
       postgres:
         image: postgres:${{ matrix.postgres }}
@@ -153,11 +259,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
       meilisearch:
         image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
         env:
@@ -166,35 +268,21 @@ jobs:
           MEILI_ENV: development
         ports:
           - 7700:7700
-    env:
-      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Constrain Laravel version
-        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Prepare PostgreSQL test databases
         run: |
           for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test corex_sink_test; do
             PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
               || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
           done
-
       - name: PG tests
         run: composer test:pg
         env:
@@ -210,148 +298,66 @@ jobs:
           MEILISEARCH_HOST: http://127.0.0.1:7700
           MEILISEARCH_MASTER_KEY: corex-ci-disposable-meilisearch-key
 
-  operations-tests:
+  packages:
+    name: Package · ${{ matrix.package }}
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        laravel: ['13.*']
-    name: Operations package · Laravel ${{ matrix.laravel }}
-    env:
-      LARAVEL_VERSION: ${{ matrix.laravel }}
+        package:
+          - operations
+          - tools
+          - webhooks
+          - media
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-      - name: Constrain Laravel version
-        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
-      - name: Constrain root Laravel version
-        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
-      - name: Install dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/operations audit --locked
-      - name: Operations tests and coverage
-        run: composer --working-dir=packages/operations test:coverage
-      - name: Operations static analysis
-        run: composer --working-dir=packages/operations analyse
-
-  tools-tests:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        laravel: ['13.*']
-    name: Tools package · Laravel ${{ matrix.laravel }}
-    env:
-      LARAVEL_VERSION: ${{ matrix.laravel }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-      - name: Constrain Laravel version
-        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
-      - name: Constrain root Laravel version
-        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
-      - name: Install dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/tools audit --locked
-      - name: Tools tests and coverage
-        run: composer --working-dir=packages/tools test:coverage
-      - name: Tools static analysis
-        run: composer --working-dir=packages/tools analyse
-
-  webhooks-tests:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        laravel: ['13.*']
-    name: Webhooks package · Laravel ${{ matrix.laravel }}
-    env:
-      LARAVEL_VERSION: ${{ matrix.laravel }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-      - name: Constrain Laravel version
-        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
-      - name: Constrain root Laravel version
-        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
-      - name: Install dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/webhooks audit --locked
-      - name: Webhooks tests and coverage
-        run: composer --working-dir=packages/webhooks test:coverage
-      - name: Webhooks static analysis
-        run: composer --working-dir=packages/webhooks analyse
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+          coverage: pcov
+      - name: Install the standalone package
+        env:
+          PACKAGE: ${{ matrix.package }}
+        run: python3 scripts/composer-with-snapshots.py --working-dir="packages/$PACKAGE" update --prefer-dist --no-interaction --no-progress
+      - name: Tests and coverage
+        env:
+          PACKAGE: ${{ matrix.package }}
+        run: composer --working-dir="packages/$PACKAGE" test:coverage
+      - name: Static analysis
+        env:
+          PACKAGE: ${{ matrix.package }}
+        run: composer --working-dir="packages/$PACKAGE" analyse
 
   notifications-wakeup-tests:
+    name: Notifications and wakeup packages
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Notifications and wakeup packages
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Wakeup tests
         run: composer --working-dir=packages/scheduler test
       - name: Notification tests
@@ -362,10 +368,15 @@ jobs:
           composer --working-dir=packages/scheduler analyse
 
   notifications-pg-tests:
+    name: Notifications package (PG18)
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Notifications package (PG18)
     services:
       postgres:
         image: postgres:18
@@ -375,25 +386,16 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: PostgreSQL delivery admission test
         run: composer --working-dir=packages/notifications test:pg
         env:
@@ -404,10 +406,15 @@ jobs:
           PGSQL_PASSWORD: corex
 
   panels-tests:
+    name: Panels package
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Panels package
     services:
       pgsql:
         image: postgres:18-alpine
@@ -415,32 +422,21 @@ jobs:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
           POSTGRES_PASSWORD: corex
-        ports: ['5432:5432']
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+          coverage: pcov
       - name: Install dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/panels audit --locked
       - name: Panels SQLite tests
         run: composer --working-dir=packages/panels test -- --exclude-group=pg
       - name: Panels tests and coverage
@@ -454,41 +450,16 @@ jobs:
       - name: Panels static analysis
         run: composer --working-dir=packages/panels analyse
 
-  media-tests:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    name: Media package
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, gd, xdebug
-          coverage: xdebug
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
-      - name: Install dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/media audit --locked
-      - name: Media tests and coverage
-        run: composer --working-dir=packages/media test:coverage
-      - name: Media static analysis
-        run: composer --working-dir=packages/media analyse
-
   media-pg-tests:
+    name: Media package (PG18)
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Media package (PG18)
     services:
       postgres:
         image: postgres:18
@@ -498,31 +469,18 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Install dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/media audit --locked
       - name: Media PostgreSQL concurrency test
         run: composer --working-dir=packages/media test:pg
         env:
@@ -533,14 +491,15 @@ jobs:
           PGSQL_PASSWORD: corex
 
   tenancy-tests:
+    name: Tenancy package (PG18)
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        laravel: ['13.*']
-    name: Tenancy package (PG18) · Laravel ${{ matrix.laravel }}
     services:
       postgres:
         image: postgres:18
@@ -550,42 +509,18 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    env:
-      LARAVEL_VERSION: ${{ matrix.laravel }}
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Constrain Laravel version
-        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Constrain root Laravel version
-        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Install dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/tenancy audit --locked
-
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
       - name: Install PostgreSQL 18 client
         timeout-minutes: 8
         run: |
@@ -597,7 +532,6 @@ jobs:
           sudo apt-get -o Acquire::Retries=3 -o Acquire::https::Timeout=30 -o Acquire::http::Timeout=30 install -y postgresql-client-18
           echo /usr/lib/postgresql/18/bin >> "$GITHUB_PATH"
           /usr/lib/postgresql/18/bin/pg_dump --version
-
       - name: Tenancy tests
         run: composer --working-dir=packages/tenancy test
         env:
@@ -606,16 +540,21 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
-
       - name: PHPStan (tenancy/src)
-        if: matrix.laravel == '13.*'
         run: composer --working-dir=packages/tenancy analyse
 
   crm-tests:
+    name: Crm package
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Crm package
+    env:
+      PGSQL_PORT: 5432
     services:
       postgres:
         image: postgres:18
@@ -625,93 +564,63 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    env:
-      PGSQL_PORT: 5432
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: pcov
       - name: Install dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm audit --locked
-
       - name: Crm tests
         run: composer --working-dir=products/flex-crm test
-
       - name: Crm PostgreSQL regressions
         run: composer --working-dir=products/flex-crm test:pg
-
-      - name: Crm coverage (P1.27 compensating gate)
+      - name: Crm coverage
         run: composer --working-dir=products/flex-crm test:coverage
 
   packages-tests:
+    name: Remaining cohort package aggregator
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Remaining cohort package aggregator
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+          coverage: pcov
       - name: Install access dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit (access)
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
-
-      - name: Install remaining standalone package harnesses
-        run: |
-          for package in media tasks recurring-tasks panels operations tenancy webhooks tools recurrence; do
-            python3 scripts/composer-with-snapshots.py --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
-            env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir="packages/$package" audit --locked
-          done
-          python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
-          env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm audit --locked
-
       - name: Per-package test aggregator
         run: composer test:packages
-
       - name: Core and modules SQLite suites
         run: vendor/bin/pest --exclude-group=pg packages/core/tests
 
   tasks-tests:
+    name: Tasks package
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Tasks package
     services:
       postgres:
         image: postgres:18
@@ -721,37 +630,21 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: pcov
       - name: Install dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tasks update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/tasks audit --locked
-
       - name: Tasks tests
         run: composer --working-dir=packages/tasks test
-
       - name: Tasks tests (PG18)
         run: composer --working-dir=packages/tasks test:pg
         env:
@@ -760,8 +653,7 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
-
-      - name: Tasks coverage (P1.27 compensating gate)
+      - name: Tasks coverage (floor 92%)
         run: composer --working-dir=packages/tasks test:coverage
         env:
           PGSQL_HOST: 127.0.0.1
@@ -771,10 +663,15 @@ jobs:
           PGSQL_PASSWORD: corex
 
   auth-tests:
+    name: Auth package (AzGuard)
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Auth package (AzGuard)
     services:
       postgres:
         image: postgres:18
@@ -784,37 +681,20 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Install root tooling and shared test dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Install dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
-
       - name: Auth tests
         run: composer --working-dir=packages/access test
-
       - name: Auth tests (PG18, aut_* DDL)
         run: composer --working-dir=packages/access test:pg
         env:
@@ -823,91 +703,67 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
-
       - name: PHPStan (auth/src)
         run: composer --working-dir=packages/access analyse
 
   layer-gate:
+    name: Layer & core-isolation gate
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Layer & core-isolation gate
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
         run: composer test:arch
-
       - name: Source API surface report (classification debt is reported)
         run: composer php-api
-
-      # Architecture tests restore temporary source mutations before scanners run.
       - name: Native Packman monorepo governance and contracts
         run: |
           scripts/php84 vendor/bin/packman gate
           scripts/php84 vendor/bin/packman php-api --check
           scripts/php84 vendor/bin/packman error-codes --check
           scripts/php84 vendor/bin/packman config-schema --check
-
       - name: Typed package error registry and literal gate
         run: composer error-registry
-
       - name: API contract compatibility
         run: composer api-contract
-
-      - name: Feature-module layout (PLAN3.D57)
+      - name: Feature-module layout
         run: |
           composer module-layout-gate
           python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
-
       - name: Migration table ownership
         run: composer table-ownership-gate
-
-      - name: Shipped schema S1–S9 and registry manifest
+      - name: Shipped schema rules and registry manifest
         run: |
           composer schema-gate
           php scripts/schema-gate.php --check
-
-      - name: DATA-003 table write ownership
+      - name: Table write ownership
         run: |
           composer table-write-ownership-gate
           python3 -m unittest discover -s scripts/tests -p 'test_table_write_ownership_gate.py'
 
-  contract-guard:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    name: Contract-snapshot guard
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Guard PHP surface snapshots against a CHANGELOG entry
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: bash scripts/contract-guard.sh "$BASE_SHA"
-
   coverage:
+    name: Root coverage (min 80%)
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Coverage (floor from scripts/coverage-min-floor.txt)
     services:
       postgres:
         image: postgres:18
@@ -917,11 +773,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
       meilisearch:
         image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
         env:
@@ -931,37 +783,28 @@ jobs:
         ports:
           - 7700:7700
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
-          coverage: xdebug
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: pcov
       - name: Prepare PostgreSQL test databases
         run: |
           for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test corex_sink_test; do
             PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
               || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
           done
-
-      - name: Effective coverage floor
-        run: |
-          FLOOR="$(grep -m1 -E '^[0-9]+' scripts/coverage-min-floor.txt)"
-          echo "Effective coverage floor (scripts/coverage-min-floor.txt): --min=${FLOOR}"
-          echo "Return to --min=80 is time-gated item P1.27 (D47)."
-
+      - name: Prepare report directory
+        run: mkdir -p build
       - name: Coverage
-        run: composer test:coverage
+        run: |
+          set -o pipefail
+          composer test:coverage | tee build/coverage.log
+          { echo "### Root coverage"; echo; echo '```'; tail -n 5 build/coverage.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
         env:
           PGSQL_HOST: 127.0.0.1
           PGSQL_PORT: 5432
@@ -974,85 +817,144 @@ jobs:
           PGSQL_PASSWORD: corex
           MEILISEARCH_HOST: http://127.0.0.1:7700
           MEILISEARCH_MASTER_KEY: corex-ci-disposable-meilisearch-key
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: root-coverage
+          path: |
+            build/root-coverage
+            build/coverage.log
+          retention-days: 14
+          if-no-files-found: ignore
 
   quality:
+    name: Static analysis
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Static analysis & code style
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Install reviewed tooling dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Install access dependencies
         run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit (access)
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
-
       - name: PHPStan
         run: composer analyse
-
       - name: Zero PHPStan debt across all packages and consumers
         run: php scripts/quality/release-quality.php --stage=all
-
       - name: Unused public entrypoints
         run: php scripts/quality/unused-public.php --check
-
       - name: Quality gate negative controls and native Rector provenance
         run: vendor/bin/pest tests/Arch/UnusedPublicGateTest.php tests/Arch/QualityReleaseGateTest.php tests/Arch/MigrationToolingGuardTest.php tests/Arch/RectorLaravelSubsetTest.php
-
       - name: Composer source audit controls
         run: python3 -m unittest discover -s scripts/distribution/tests -q
-
       - name: Audit every maintained Composer source root
         run: env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
-
-      # Второй, самостоятельный прогон (P1.28/D48): 9 правил Packman Modules
-      # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
-      # даёт 60 несвязанных property.notFound). Строго ПОСЛЕ основного analyse.
       - name: PHPStan (modules-lint on tests/)
         run: composer analyse:tests-lint
 
-      - name: Pint
-        run: composer lint:check
-
-      - name: Rector
-        run: composer refactor:check
-
-  mutation-inventory:
-    # PLAN3.D133: owner deferred mutation work until kernel stability; re-enable explicitly.
-    if: false
-    name: Mutation inventory and parser controls
+  golden:
+    name: Golden surface and wire contracts
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
-    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
+        with:
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+      - name: Golden snapshots
+        run: composer golden
+
+  ownership:
+    name: Package identifier ownership
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
+        with:
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+      - name: Strict ownership
+        run: php scripts/ownership-gate.php --strict
+      - name: Rename completeness
+        run: php scripts/rename-completeness-gate.php
+
+  dependencies:
+    name: Standalone dependencies and lockfile audits
+    needs:
+      - changes
+      - lint
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
+        with:
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+      - name: Analyse every standalone package
+        run: bash scripts/dependency-analyser.sh --all
+      - name: Audit every standalone package lockfile
+        run: |
+          for manifest in packages/*/composer.json products/*/composer.json; do
+            env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir="$(dirname "$manifest")" audit --locked
+          done
+
+  mutation-inventory:
+    name: Mutation inventory and parser controls
+    if: github.event_name == 'workflow_dispatch' && inputs.mutation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
     outputs:
       matrix: ${{ steps.fragments.outputs.matrix }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install pinned dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
       - name: Exhaustive fragments and AST declaration ledger
         run: python3 scripts/quality/mutation.py --inventory --check
       - name: Strict parser negative controls
@@ -1062,18 +964,24 @@ jobs:
         run: echo "matrix=$(python3 scripts/quality/mutation.py --matrix)" >> "$GITHUB_OUTPUT"
 
   mutation-fragments:
-    # PLAN3.D133: mutation scores are not acceptance gates during the rest of PLAN3.
-    if: false
     name: MSI · ${{ matrix.package }} · ${{ matrix.zone }}
     needs: mutation-inventory
+    if: github.event_name == 'workflow_dispatch' && inputs.mutation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix: ${{ fromJSON(needs.mutation-inventory.outputs.matrix) }}
+    env:
+      MUTATION_PACKAGE: ${{ matrix.package }}
+      MUTATION_ZONE: ${{ matrix.zone }}
+      PGSQL_HOST: 127.0.0.1
+      PGSQL_PORT: '5432'
+      PGSQL_USERNAME: corex
+      PGSQL_PASSWORD: corex
     services:
       postgres:
         image: postgres:18
@@ -1083,29 +991,17 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    env:
-      MUTATION_PACKAGE: ${{ matrix.package }}
-      MUTATION_ZONE: ${{ matrix.zone }}
-      PGSQL_HOST: 127.0.0.1
-      PGSQL_PORT: '5432'
-      PGSQL_USERNAME: corex
-      PGSQL_PASSWORD: corex
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, pcntl, pcov
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, pcntl
           coverage: pcov
-      - name: Install pinned dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
       - name: Measure full package-fragment MSI
         run: python3 scripts/quality/mutation.py --package "$MUTATION_PACKAGE" --zone "$MUTATION_ZONE"
       - name: Retain raw mutant processes and coverage
@@ -1122,12 +1018,12 @@ jobs:
           retention-days: 7
 
   mutation-check:
-    # PLAN3.D133 also defers the fixed sabotage registry.
-    if: false
+    name: Mutation registry (scripts/mutation-check.sh --all)
+    if: github.event_name == 'workflow_dispatch' && inputs.mutation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    name: Mutation registry (scripts/mutation-check.sh --all)
     services:
       postgres:
         image: postgres:18
@@ -1137,32 +1033,17 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      # fetch-depth: 0 (D97): the 3-way fallback in mutation-check.sh needs the
-      # pre-image blob of each patch's `index` line reachable in the object
-      # database — the default shallow (depth-1) checkout doesn't carry it.
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      - name: Set up PHP
+        uses: $/.github/actions/setup-php
         with:
-          php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
       - name: Mutation registry — every case must red under sabotage
         run: bash scripts/mutation-check.sh --all
         env:
@@ -1172,111 +1053,54 @@ jobs:
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
 
-  manifests:
-    name: Manifest policy and strict Composer validation
-    runs-on: ubuntu-latest
+  ci-gate:
+    name: CI gate
+    needs:
+      - changes
+      - lint
+      - anti-weakening-gate
+      - secret-scan
+      - contract-guard
+      - tests
+      - octane-lifecycle
+      - tests-pg
+      - packages
+      - notifications-wakeup-tests
+      - notifications-pg-tests
+      - panels-tests
+      - media-pg-tests
+      - tenancy-tests
+      - crm-tests
+      - packages-tests
+      - tasks-tests
+      - auth-tests
+      - layer-gate
+      - coverage
+      - quality
+      - golden
+      - ownership
+      - dependencies
+      - mutation-inventory
+      - mutation-fragments
+      - mutation-check
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Manifest policy
-        run: python3 scripts/manifest-check.py
-      - name: Strict validation of every installing root
+      - name: Verdict
+        env:
+          NEEDS: ${{ toJSON(needs) }}
         run: |
-          for manifest in composer.json packages/*/composer.json products/*/composer.json; do
-            composer validate --strict --no-check-lock --working-dir="$(dirname "$manifest")"
-          done
-
-  golden:
-    name: Golden surface and wire contracts
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-      - name: Golden snapshots
-        run: composer golden
-
-  ownership:
-    name: Package identifier ownership
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-      - name: Strict ownership
-        run: php scripts/ownership-gate.php --strict
-      - name: Rename completeness
-        run: php scripts/rename-completeness-gate.php
-
-  dependencies:
-    name: Standalone dependencies and lockfile audits
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-      - name: Analyse every standalone package
-        run: bash scripts/dependency-analyser.sh --all
-      - name: Audit every standalone package lockfile
-        run: |
-          for manifest in packages/*/composer.json products/*/composer.json; do
-            env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir="$(dirname "$manifest")" audit --locked
-          done
-
-  zizmor:
-    name: Workflow supply chain security
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
-        with:
-          advanced-security: false
-          persona: regular
-          version: v1.30.1
-          online-audits: false
-          inputs: .github
+          python3 - <<'PY'
+          import json, os, sys
+          needs = json.loads(os.environ["NEEDS"])
+          failed = {name: job["result"] for name, job in needs.items() if job["result"] not in ("success", "skipped")}
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("## CI gate\n\n| Job | Result |\n| --- | --- |\n")
+              summary.writelines(f"| `{name}` | {job['result']} |\n" for name, job in sorted(needs.items()))
+          for name, result in sorted(failed.items()):
+              print(f"::error::{name}: {result}")
+          sys.exit(1 if failed else 0)
+          PY
