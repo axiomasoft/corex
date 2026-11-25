@@ -25,11 +25,11 @@ PSR-4 пути внутри монорепозитория владельца. �
 а остальные снимки используют `dev-main` и числовой branch alias владельца; это
 метаданные разрешения, а не доказательство, что commit находится в опубликованном
 remote `main`. AzGuard source URL указывает на публичный репозиторий
-[`axiomasoft/azguard-private`](https://github.com/axiomasoft/azguard-private).
+[`axiomasoft/azguard`](https://github.com/axiomasoft/azguard).
 Его имя содержит `private`, но для скачивания исходников авторизация не нужна.
 Snapshot metadata требуются из-за дочерних Composer-пакетов внутри монорепозитория,
 а не из-за ограничения доступа. Проверенный commit AzGuard доступен
-в [PR #131](https://github.com/axiomasoft/azguard-private/pull/131) для защищённой ветки.
+в [PR #131](https://github.com/axiomasoft/azguard/pull/131) для защищённой ветки.
 
 При работе с локальными монорепозиториями владельцев до публикации commits в
 remote GitHub чистый CI не сможет получить их только по `composer.lock`.
