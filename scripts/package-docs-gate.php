@@ -14,38 +14,14 @@ use SplFileInfo;
 use ZipArchive;
 
 /**
- * P17.8 — README topic contract, PHP example compile, public-API import check.
+ * Package README contract: required topics, PHP examples that compile, and
+ * examples that import only public API.
  *
- * Does not rewrite package prose. A failing live package is assigned to its
- * producer phase in the JSON report.
+ * Does not rewrite package prose; each violation names its package.
  */
 const EXIT_OK = 0;
 const EXIT_VIOLATION = 1;
 const EXIT_CONFIG = 2;
-
-/** @var array<string, string> */
-const PRODUCER_PHASE = [
-    'axiomasoft/corex-access' => 'P7',
-    'axiomasoft/corex-custom-fields' => 'P10',
-    'axiomasoft/corex' => 'P6',
-    'axiomasoft/corex-intl' => 'P16',
-    'axiomasoft/corex-media' => 'P7',
-    'axiomasoft/corex-notifications' => 'P5',
-    'axiomasoft/corex-operations' => 'P13',
-    'axiomasoft/corex-panels' => 'P11',
-    'axiomasoft/corex-recurrence' => 'P4',
-    'axiomasoft/corex-search' => 'P12',
-    'axiomasoft/corex-search-custom-fields' => 'P12',
-    'axiomasoft/corex-search-intl' => 'P12',
-    'axiomasoft/corex-search-meilisearch' => 'P12',
-    'axiomasoft/corex-tasks' => 'P16',
-    'axiomasoft/corex-tasks-workflow' => 'P16',
-    'axiomasoft/corex-recurring-tasks' => 'P4',
-    'axiomasoft/corex-tenancy' => 'P9',
-    'axiomasoft/corex-import-export' => 'P12',
-    'axiomasoft/corex-scheduler' => 'P5',
-    'axiomasoft/corex-workflow' => 'P11',
-];
 
 const TOPICS = ['installation', 'configuration', 'extension', 'failure'];
 
@@ -94,7 +70,7 @@ function runDocsGate(string $repoRoot, bool $pristine): array
     $ok = $violations === [];
 
     return [
-        'schema_version' => 'corex-package-docs-gate/1',
+        'schema_version' => 'corex-package-docs-gate/2',
         'ok' => $ok,
         'cohort_count' => count($cohort),
         'packages' => $packages,
@@ -216,7 +192,6 @@ function packageResult(array $package, string $readmePath, array $topics, array 
         'package' => $package['name'],
         'path' => $package['path'],
         'readme' => $readmePath,
-        'producer_phase' => PRODUCER_PHASE[$package['name']] ?? 'P1',
         'package_type' => packageType($package['composer']),
         'topics' => $topics,
         'examples' => $examples,
@@ -238,7 +213,6 @@ function violation(array $package, string $path, string $heading, string $matche
         'code_block' => $codeBlock,
         'symbol' => $symbol,
         'detail' => $detail,
-        'producer_phase' => PRODUCER_PHASE[$package['name']] ?? 'P1',
     ];
 }
 
@@ -666,12 +640,11 @@ function formatReport(array $report): string
     $lines = ['package-docs-gate: FAIL'];
     foreach ($report['violations'] as $violation) {
         $lines[] = sprintf(
-            '%s %s heading=%s symbol=%s producer=%s %s',
+            '%s %s heading=%s symbol=%s %s',
             $violation['package'],
             $violation['path'],
             $violation['heading'],
             $violation['symbol'] !== '' ? $violation['symbol'] : '-',
-            $violation['producer_phase'],
             $violation['detail'],
         );
     }
