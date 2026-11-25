@@ -31,6 +31,10 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
+      jobs:
+        description: Only these job ids, comma-separated without spaces (empty runs every job), e.g. tests-pg,panels-tests
+        type: string
+        default: ''
       mutation:
         description: Also run the mutation inventory, fragments and registry
         type: boolean
@@ -116,6 +120,7 @@ jobs:
 
   anti-weakening-gate:
     name: Anti-weakening gate
+    if: (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',anti-weakening-gate,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -131,6 +136,7 @@ jobs:
 
   secret-scan:
     name: Secret scan (gitleaks)
+    if: (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',secret-scan,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -156,6 +162,7 @@ jobs:
 
   contract-guard:
     name: Contract-snapshot guard
+    if: (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',contract-guard,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -176,7 +183,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     permissions:
@@ -211,7 +218,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',octane-lifecycle,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -247,7 +254,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',tests-pg,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -311,7 +318,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',packages,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -352,7 +359,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',notifications-wakeup-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -380,7 +387,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',notifications-pg-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -418,7 +425,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',panels-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -463,7 +470,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',media-pg-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -503,7 +510,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',tenancy-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -556,7 +563,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',crm-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -597,7 +604,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',packages-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -624,7 +631,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',tasks-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -675,7 +682,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',auth-tests,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -719,7 +726,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',layer-gate,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -767,7 +774,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',coverage,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     permissions:
@@ -841,7 +848,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',quality,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -879,7 +886,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',golden,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -901,7 +908,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',ownership,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -925,7 +932,7 @@ jobs:
     needs:
       - changes
       - lint
-    if: needs.changes.outputs.code == 'true'
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || contains(format(',{0},', inputs.jobs), ',dependencies,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:

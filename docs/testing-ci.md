@@ -78,6 +78,13 @@ flowchart LR
   lanes count as passed; failed or cancelled lanes fail it. Its step summary
   lists every job result.
 - Mutation testing runs only on `workflow_dispatch` with `mutation: true`.
+- After fixing a failure, re-check only what broke: re-run the failed jobs
+  (`gh run rerun <run-id> --failed`) or dispatch the workflow with `jobs` set
+  to the job ids, for example
+  `gh workflow run ci.yml --ref <branch> -f jobs=tests-pg,panels-tests`.
+  Changes and Quality always run; every other job outside the list is
+  skipped and the CI gate stays green for it. Run the full workflow once
+  at the end.
 
 Practices: actions pinned by commit SHA, `permissions: {}` at the top with
 read-only grants per job, `persist-credentials: false`, a timeout on every job,
