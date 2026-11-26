@@ -24,7 +24,7 @@ use RuntimeException;
  * seam (null = app default), used by the PG-only test lane — ltree/GIST
  * have no sqlite equivalent.
  *
- * @internal spec: B-10 §2/§3.1/§5.7, D12
+ * @internal Department tree persistence.
  */
 #[Internal]
 final readonly class DatabaseDepartmentRepository implements DepartmentRepository
@@ -79,7 +79,7 @@ final readonly class DatabaseDepartmentRepository implements DepartmentRepositor
             //     so it can be read before the lock; the raw (soft-delete-blind)
             //     query still returns it for a row mid-deletion, so we always
             //     serialize on the right workspace. Absent row → explicit throw,
-            //     never a silent no-op (A5 If-then).
+            //     never a silent no-op.
             $lockWorkspaceId = $this->db()->table('sys_departments')
                 ->where('id', $departmentId)
                 ->value('workspace_id');
@@ -88,14 +88,14 @@ final readonly class DatabaseDepartmentRepository implements DepartmentRepositor
                 throw (new ModelNotFoundException)->setModel(Models\Department::class, [$departmentId]);
             }
 
-            // (2) Advisory lock BEFORE reading the mutable path (A5). Xact-scoped,
+            // (2) Advisory lock BEFORE reading the mutable path. Xact-scoped,
             //     released on commit — no session-level lock.
             $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$lockWorkspaceId]);
 
             // (3) RE-READ the moving row UNDER the lock — fresh path/parent_id.
             //     Eloquent (SoftDeletes) excludes a concurrently soft-deleted row,
             //     so firstOrFail() throws instead of running a no-op UPDATE that
-            //     matches nothing (A5/A24 If-then). All downstream maths use THIS
+            //     matches nothing. All downstream maths use THIS
             //     row, never the pre-lock read.
             /** @var Models\Department $moving */
             $moving = Models\Department::on($this->connection)->where('id', $departmentId)->firstOrFail();
@@ -154,7 +154,7 @@ final readonly class DatabaseDepartmentRepository implements DepartmentRepositor
                 [$newParentPath, $oldPath, $departmentId, $newParentId, $oldPath, $lockWorkspaceId],
             );
 
-            // A6: dispatch AFTER the transaction commits, not inside it — the
+            // Dispatch AFTER the transaction commits, not inside it — the
             // dept_tree cache invalidator (entity-scoped RBAC) must not
             // read uncommitted paths, and a rollback must not leak the event.
             $this->db()->afterCommit(fn () => $this->events->dispatch(
