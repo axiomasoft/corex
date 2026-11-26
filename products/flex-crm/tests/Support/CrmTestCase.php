@@ -18,7 +18,7 @@ use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
- * Package-local Testbench base for CRM suites (D94).
+ * Package-local Testbench base for CRM suites.
  */
 abstract class CrmTestCase extends Orchestra
 {

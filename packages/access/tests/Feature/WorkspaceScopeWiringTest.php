@@ -17,7 +17,7 @@ use Packman\Modules\Testing\ArrayEntityRegistry;
 // one factory function would collapse all call sites onto the SAME
 // generated class and defeat that isolation.
 
-// D115 — WorkspaceScopeWiring registers the REAL global scope class, not a marker.
+// WorkspaceScopeWiring registers the REAL global scope class, not a marker.
 it('wires the workspace global scope onto every model whose entity declares WorkspaceScoped', function (): void {
     $model = new class extends Model
     {
@@ -44,7 +44,7 @@ it('wires the workspace global scope onto every model whose entity declares Work
     expect($model->getGlobalScopes())->toHaveKey(FakeWorkspaceScope::class);
 });
 
-// Negative first (Code Guidance) — a model whose entity does NOT declare the capability is left untouched.
+// Negative first — a model whose entity does NOT declare the capability is left untouched.
 it('does not wire the workspace global scope onto a model without the WorkspaceScoped capability', function (): void {
     $model = new class extends Model
     {
@@ -71,7 +71,7 @@ it('does not wire the workspace global scope onto a model without the WorkspaceS
     expect($model->getGlobalScopes())->toBe([]);
 });
 
-// AC-28 — boxed profile: no effective scope class ⇒ explicitly nothing wired, never an error.
+// boxed profile: no effective scope class ⇒ explicitly nothing wired, never an error.
 it('wires nothing when the effective scope class is null (boxed profile)', function (): void {
     $model = new class extends Model
     {

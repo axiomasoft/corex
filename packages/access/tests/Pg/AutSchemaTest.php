@@ -34,7 +34,7 @@ function autConstraintDef(string $constraint): string
     return (string) $def;
 }
 
-// AC-28 / D102 — boxed: tenant/ carries no cross-package FK, must apply on
+// boxed: tenant/ carries no cross-package FK, must apply on
 // a schema that never had users/wsp_workspaces.
 it('applies the tenant/ aut_* migrations on a clean schema without users or wsp_workspaces', function (): void {
     $this->resetPgSchema();
@@ -46,7 +46,7 @@ it('applies the tenant/ aut_* migrations on a clean schema without users or wsp_
         ->and(Schema::hasTable('aut_direct_grants'))->toBeTrue();
 });
 
-// AC-32 — DDL parity against findings/P2.8-spec-source-2026-07-26.md §1/§2.
+// DDL parity against the access schema contract.
 it('matches DB_SCHEMA §3.5 aut_roles column-by-column', function (): void {
     $this->resetPgSchema();
     $this->migrateAutSchema();
@@ -127,7 +127,7 @@ it('matches DB_SCHEMA §3.5 aut_role_assignments column-by-column', function ():
     expect($comment)->not->toBeNull();
 });
 
-// D102 — cross-package FK live only in the cloud migration.
+// cross-package FK live only in the cloud migration.
 it('adds both cross-package FKs only via the tenant-cloud migration', function (): void {
     $this->resetPgSchema();
     $this->migrateCloudFks();

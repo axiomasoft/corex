@@ -217,7 +217,7 @@ it('resolves allowed() from a native matrix row and denies scope none', function
         ->and($checker->allowed($identity, 'crm.deal', 'export'))->toBeFalse();
 });
 
-// AC-23 — scopeFor() resolves each of the six compiled scope values on its own.
+// scopeFor() resolves each of the six compiled scope values on its own.
 it('resolves each of the six scope values from a single matching matrix row', function (Scope $scope): void {
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $scope->value]);
@@ -230,7 +230,7 @@ it('resolves each of the six scope values from a single matching matrix row', fu
     expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope);
 })->with(fn () => Scope::cases());
 
-// B-11 §5.5 — several roles resolve to the MAX weight of their base rows.
+// several roles resolve to the MAX weight of their base rows.
 it('resolves the max weight across multiple roles held by the same principal', function (): void {
     $roleLow = ($this->newRole)();
     $roleHigh = ($this->newRole)();
@@ -246,7 +246,7 @@ it('resolves the max weight across multiple roles held by the same principal', f
     expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
 });
 
-// B-11 §5.5 — a context row REPLACES the base row for its own context, including narrowing it to none.
+// a context row REPLACES the base row for its own context, including narrowing it to none.
 it('lets a context row override, and narrow, the base scope for its own context only', function (): void {
     $role = ($this->newRole)();
     $stageId = (string) Str::uuid7();
@@ -426,7 +426,7 @@ it('does not grant a system owner role with an empty matrix', function (): void 
     expect(resolve(MatrixPermissions::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
 });
 
-// D103 — a clone of `owner` is not system-flagged and does NOT inherit the wildcard.
+// a clone of `owner` is not system-flagged and does NOT inherit the wildcard.
 it('does not extend owner-wildcard capability to a non-system clone of owner', function (): void {
     Role::withSystemMutationAllowed(fn () => (new SystemRolesSeeder)->run());
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
@@ -440,7 +440,7 @@ it('does not extend owner-wildcard capability to a non-system clone of owner', f
     expect(resolve(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
 });
 
-// D101 — a role assigned to one workspace grants ONLY inside that workspace at the source level.
+// a role assigned to one workspace grants ONLY inside that workspace at the source level.
 it('grants allowed() inside the workspace the role was assigned to', function (): void {
     $workspace = new WorkspaceRef((string) Str::uuid7(), 'a', 'team', 'a', null);
     app()->instance(TenancyManager::class, new FakeTenancyManager($workspace));

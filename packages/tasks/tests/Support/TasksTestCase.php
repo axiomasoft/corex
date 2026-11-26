@@ -30,7 +30,7 @@ use Packman\Schema\Testing\MigratesSchemaSets;
 use RuntimeException;
 
 /**
- * Package-local Testbench base for Tasks suites (D94).
+ * Package-local Testbench base for Tasks suites.
  */
 abstract class TasksTestCase extends Orchestra
 {

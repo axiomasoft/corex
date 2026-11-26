@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-// P2.22 — PrincipalUserProvider (D125, OQ-18 variant A): the boxed-and-cloud
+// PrincipalUserProvider: the boxed-and-cloud
 // login lane's own UserProvider, entirely config-driven (table/columns), no
 // dependency on axiomasoft/corex-tenancy's `users` model. `tests/database/migrations`
 // (loaded by CoreAuthTestCase) does not carry a `users` fixture — every test
