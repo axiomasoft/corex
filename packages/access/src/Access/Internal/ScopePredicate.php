@@ -28,7 +28,6 @@ final readonly class ScopePredicate
         private TenancyManager $tenancyManager,
         private EffectiveWorkspaceScope $workspaceScope,
         private ConnectionResolverInterface $connections,
-        private ExistingTables $tables,
     ) {}
 
     /**
@@ -82,7 +81,7 @@ final readonly class ScopePredicate
             return $this->applyNone($q);
         }
 
-        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasDepartmentTables()) {
             return $this->applyNone($q);
         }
 
@@ -129,7 +128,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasDepartmentTables()) {
             return false;
         }
 
@@ -164,7 +163,7 @@ final readonly class ScopePredicate
                 ->on('principal_department.id', '=', 'principal.department_id')
                 ->whereNull('principal_department.deleted_at'))
             ->where('owner.id', $ownerId)
-            ->whereRaw('owner_department.path <@ principal_department.path')
+            ->whereColumn('owner_department.path', '<@', 'principal_department.path')
             ->exists();
     }
 
@@ -261,11 +260,14 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->hasTable('wsp_workspaces')) {
+        /** @var Connection $connection */
+        $connection = $this->connections->connection();
+
+        if (! $connection->getSchemaBuilder()->hasTable('wsp_workspaces')) {
             return false;
         }
 
-        $flag = $this->connections->connection()->table('wsp_workspaces')
+        $flag = $connection->table('wsp_workspaces')
             ->where('id', $ctxWorkspace->id)
             ->selectRaw("settings->>'cascade_view' as cascade_view")
             ->value('cascade_view');
@@ -295,11 +297,26 @@ final readonly class ScopePredicate
         return $q;
     }
 
-    private function hasTable(string $table): bool
+    private function hasDepartmentTables(): bool
     {
-        /** @var Connection */
+        /** @var Connection $connection */
         $connection = $this->connections->connection();
 
-        return $this->tables->has(connection: $connection, table: $table);
+        if ($connection->getDriverName() === 'pgsql') {
+            // Match Laravel's current-schema and relation-kind checks in a single round trip.
+            $prefix = $connection->getTablePrefix();
+
+            $tableCount = $connection->scalar(
+                "select count(*) from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid = c.relnamespace
+                 where n.nspname = current_schema() and c.relkind in ('r', 'p') and c.relname in (?, ?)",
+                [$prefix.'users', $prefix.DepartmentQueries::table()],
+            );
+
+            return $tableCount === 2 || $tableCount === '2';
+        }
+
+        $schema = $connection->getSchemaBuilder();
+
+        return $schema->hasTable('users') && $schema->hasTable(DepartmentQueries::table());
     }
 }

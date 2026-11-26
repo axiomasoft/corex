@@ -2,8 +2,8 @@
 
 ## Unreleased — access checks and retention
 
-- Remove `DepartmentQueries::contains()`. Access record checks now resolve dept_tree membership in a single joined statement and no caller is left; use `DepartmentQueries::subtreeIds()` to build a subtree predicate.
-- `outbox:prune` and the pub/sub prune command accept `--batch` and delete in bounded batches.
+- Deprecate `CoreX\Departments\Laravel\DepartmentQueries::contains()` for new callers. The SPI remains available with the original parameter names and boolean result. Use `DepartmentQueries::subtreeIds($path)->where('id', $id)->exists()` for new containment checks.
+- `corex:messaging:prune` and `corex:messaging:prune-pubsub` accept `--batch` and delete in bounded batches.
 
 ## CoreX 2.0 — Scope errors
 
@@ -138,7 +138,7 @@
 
 ## Unreleased — P04.2
 
-- Закрыта API/SPI-поверхность: скалярные контракты, JSON-документы и снимки CoreOptions; конкретные реализации принадлежат Internal.
+- Defined the API and SPI through scalar contracts, JSON documents and `CoreOptions` snapshots. Concrete implementations belong to `Internal`.
 
 
 ## Unreleased — source API metadata (PLAN3.P04.1)
@@ -168,8 +168,7 @@
 
 - Added immutable `DataScope`, `RecordRef`, and `WriteToken` boundary DTOs for optional data services.
 
-Все заметные изменения `corex/core` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
+All notable changes to `corex/core` are recorded here following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Before 1.0, minor releases may introduce breaking changes to public contracts (D17).
 
 ## [Unreleased]
 
@@ -212,76 +211,50 @@
   widened by a new additive migration (closed P1.8 file untouched). `CurrentActor` now resolves
   the impersonation contract from the container: `type()`/`id()`/`context()` distinguish a
   support actor from `user`/`system`.
-- `FeatureFlagDefinition::make()` — статическая фабрика (+ `module()`/`payload()` fluent-сеттеры),
-  зеркалит `SettingDefault`-канон; конструктор не тронут (P3.6).
+- Added the static factory `FeatureFlagDefinition::make()` and fluent `module()` and `payload()` setters, following `SettingDefault`. Existing constructor calls continue to work (P3.6).
 
 ### Changed
 
-- Публичные тексты пакета продукт-нейтральны: composer-`description` («… for the Flex ecosystem»
-  → «… for any Laravel application») и шапка `README.md` — уровень 0 доктрины (D91) не несёт
-  привязки к продукту-потребителю (P2.17).
-- Продуктовые докблоки публичной поверхности `Contracts/**`: убраны внутренние спека-ссылки
-  (B-10 §…) из основного текста, перенесены в трейлинг `@internal spec: …`; `ModuleRegistrar`
-  получил контрактный докблок (аддитивность регистрации, канонический путь динамического
-  выключения через lifecycle-FSM corex/modules + рестарт воркера) (P3.6).
+- Made the level 0 package description and README product-neutral (D91). The Composer description changed from “for the Flex ecosystem” to “for any Laravel application” (P2.17).
+- Moved specification references (B-10 sections) from public `Contracts/**` docblock prose to trailing `@internal spec` tags. Documented additive module registration and dynamic disable through the `corex/modules` lifecycle state machine and a worker restart in `ModuleRegistrar` (P3.6).
 
 ## [0.1.0] - 2026-07-15
 
-Первый тегированный релиз. Реализует roadmap-фазу P0 / блупринт B-10 (примитивы ядра).
+First tagged release. It implements the kernel primitives in roadmap phase P0 and blueprint B-10.
 
 ### Requires
 
-- **PostgreSQL 16** для тенантской БД. Миграции ядра (`sys_*`) используют `ltree`, BRIN-индексы,
-  `jsonb`, `UNIQUE NULLS NOT DISTINCT`, `pg_advisory_xact_lock` — PG-нативные конструкции без
-  SQLite-эквивалента. SQLite-лейн (`composer test`) покрывает только pure-PHP код пакета для
-  удобства unit-тестирования — это **не заявленная поддержка SQLite в продакшене** (OQ-12). Все
-  гарантии целостности/конкурентности проверяются исключительно на PG-лейне (`composer test:pg`).
+- Tenant databases require **PostgreSQL 16**. The `sys_*` migrations use `ltree`, BRIN indexes, `jsonb`, `UNIQUE NULLS NOT DISTINCT` and `pg_advisory_xact_lock`. SQLite tests (`composer test`) exercise pure PHP code. PostgreSQL is the supported production database. Integrity and concurrency guarantees are tested with `composer test:pg` (OQ-12).
 
 ### Added
 
-- Конфигурируемая ID-стратегия: `IdStrategy::Uuid7` добавлена и стала дефолтом (нативный PG `uuid`,
-  time-sortable), наряду с существующими `ulid`/`int`-швами (P1.1, P1.20).
-- `TenantContext`/`AccountRef`/`WorkspaceRef` — контракты для модели tenancy P2 (реализация — фаза P2) (P1.12).
-- Settings v2: namespaced, scoped (`sys_settings`), обработка sensitive-значений, события изменений (P1.7);
-  каскад скоупов и payload-фолбэк (P1.22).
-- Audit v2: очередной `AuditEntry`, `sys_audit_log`, авто-observer, sensitive-фильтр колонок,
-  killswitch-guard на шве записи, монотонный курсор `seq`, retention-шов (P1.8, P1.21).
-- `DomainEvent` база (eventId/occurredAt/tenant), заменяет пустой маркер `CoreEvent`;
-  `Cancellable` — отдельный опциональный интерфейс (P1.9, P1.25).
-- FeatureFlags: персистентные `sys_feature_flags`/`sys_feature_overrides` вместо config-driven резолвера (P1.9, P1.22).
-- Departments (`sys_departments`, `ltree`): `DepartmentRepository` с lock-then-read `move()`,
-  after-commit доменные события, soft-delete (P1.10, P1.23).
-- PubSub-контракт + драйверы `redis`/`db-poll`/`sync-null`, рантайм-guard, курсор/retention-шов (P1.11, P1.24).
-- Новое доменное исключение `CrossWorkspaceMoveException` (guard в `Departments::move()`, P1.29).
+- Added `IdStrategy::Uuid7` as the default identifier strategy, using a time-sortable native PostgreSQL `uuid`. The configurable `ulid` and `int` alternatives remain available in this release (P1.1, P1.20).
+- Added `TenantContext`, `AccountRef` and `WorkspaceRef` contracts for the tenancy model planned for P2 (P1.12).
+- Settings v2 adds namespaced, scoped `sys_settings`, sensitive-value handling and change events (P1.7), plus scope inheritance and payload fallback (P1.22).
+- Audit v2 adds queued `AuditEntry`, `sys_audit_log`, an automatic observer, sensitive-column filtering, a write-time kill switch, a monotonic `seq` cursor and an extension point for retention (P1.8, P1.21).
+- `DomainEvent` replaces the empty `CoreEvent` marker and carries the event ID, timestamp and tenant. `Cancellable` is a separate optional interface (P1.9, P1.25).
+- Feature flags now use persistent `sys_feature_flags` and `sys_feature_overrides` (P1.9, P1.22).
+- Added `DepartmentRepository` for `sys_departments` (`ltree`), with lock-then-read `move()`, after-commit domain events and soft deletion (P1.10, P1.23).
+- Added the PubSub contract, `redis`, `db-poll` and `sync-null` drivers, runtime validation, a cursor and a retention extension point (P1.11, P1.24).
+- Added `CrossWorkspaceMoveException` to guard `Departments::move()` (P1.29).
 
 ### Changed
 
-- Старый `EntityRegistry` (`CoreX\Registry\EntityRegistry`/`CoreX\Contracts\EntityRegistry`) **удалён** —
-  заменён `EntityRegistry` v2 из `flex/modules` (см. его CHANGELOG). Breaking, легально pre-1.0 (P1.2).
-- `IdColumns` эмитят нативные PG-типы по сконфигурированной стратегии (P1.20).
+- Removed `CoreX\Registry\EntityRegistry` and `CoreX\Contracts\EntityRegistry` in favor of `EntityRegistry` v2 in `flex/modules`. See that package's changelog for this pre-1.0 breaking change (P1.2).
+- `IdColumns` produces native PostgreSQL types for the configured strategy (P1.20).
 
 ### Fixed
 
-- `Audit`: sensitive-фильтр больше не пропускает помеченные атрибуты в `sys_audit_log`;
-  killswitch теперь гардит непосредственно шов записи (P1.21).
-- `Departments::move()`: теперь проверяет `workspace_id` нового родителя под уже взятым advisory-локом
-  до перемещения — устраняет тихий cross-workspace перенос поддерева (M-2, P1.29).
+- Audit filters marked attributes before writing to `sys_audit_log` and checks its kill switch at the point of persistence (P1.21).
+- `Departments::move()` checks the new parent's `workspace_id` under the existing advisory lock before moving a subtree, preventing silent cross-workspace moves (M-2, P1.29).
 
 ### Deprecated / Will break in 0.2
 
-- **Row-level tenancy** — `CoreX\Concerns\BelongsToTenant`, `CoreX\Scopes\TenantScope`,
-  `CoreX\Contracts\TenantService`. Реализуют **опциональную row-level** мульти-тенантность и
-  **замещаются физической DB-per-account моделью**, спроектированной для фазы P2 (ADR-004,
-  stancl/tenancy v4). В 0.1.0 остаются рабочими (on-prem/boxed-инсталляции могут по-прежнему
-  биндить `TenantService`), но новые фичи на этот шов строить не стоит — в 0.2 он будет заменён, не расширен.
-- `AuditEntry`, `SettingsScope`, `TenantContext` — контракты расширены волной и будут расширены P2;
-  считать их текущую форму предварительной.
-- **`int`-стратегия ID** — ожидаемо конфликтует с DB-per-account (у каждой аккаунт-БД своя
-  последовательность); избегать для новых tenant-scoped моделей.
+- **Row-level tenancy.** `CoreX\Concerns\BelongsToTenant`, `CoreX\Scopes\TenantScope` and `CoreX\Contracts\TenantService` implement optional row-level isolation. They remain available in 0.1.0 for existing installations, including boxed applications that bind `TenantService`. Version 0.2 is planned to replace them with physical database-per-account tenancy (P2, ADR-004, stancl/tenancy v4). Avoid building new features on the deprecated contracts.
+- `AuditEntry`, `SettingsScope` and `TenantContext` were expanded in this release. Their shape is provisional pending further P2 changes.
+- **Integer identifiers.** Each account database has an independent sequence. Avoid the `int` strategy for new tenant-scoped models.
 
 ### Known limitations
 
-- Каскад скоупов `FeatureFlags` (`findOverride()`) — single-scope exact-match; narrow→wide не
-  реализован (ждёт P2 tenancy).
-- Secret-колонки вне `password`/`remember_token` (`api_token`, `two_factor_secret`) на
-  `$guarded=[]`-моделях могут утекать в аудит, если хост не объявил `auditSensitive()`.
+- `FeatureFlags::findOverride()` matches one scope exactly. Inheritance from narrower to wider scopes is deferred until P2 tenancy.
+- On models with `$guarded=[]`, sensitive columns other than `password` and `remember_token`, such as `api_token` and `two_factor_secret`, can enter the audit unless the host declares `auditSensitive()`.

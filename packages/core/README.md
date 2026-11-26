@@ -1,71 +1,35 @@
 # axiomasoft/corex
 
-Ядро CoreX для любого Laravel-приложения: `BaseModel` (ключи UUIDv7), `Settings` (каскад
-System→Tenant→User), append-only `Audit`, tenant-контекст, департаменты (ltree),
-фичефлаги, PubSub-контракт, адаптация реестра сущностей Packman и контракты отложенного пробуждения
-`CoreX\Scheduling` (исполнение — пакет `corex-scheduler`). MIT.
+The CoreX kernel provides UUIDv7 models, settings inherited from system to tenant to user, append-only auditing, tenant context, department trees, feature flags and a PubSub contract. It integrates with the Packman entity registry and defines the deferred wakeup contracts in `CoreX\Scheduling`. Install `corex-scheduler` to execute them. CoreX uses the MIT license.
 
-Пакет ставится как зависимость приложения-потребителя; публичные контракты —
-в `<Module>/Contracts/`; DTO помечены `#[Api]`, адаптеры интеграции — `#[Spi]`.
-Классы под `Internal` принадлежат своему модулю и не являются контрактом приложения.
-Атрибуты импортируются из `Packman\Attributes`; `#[Internal]` явно обозначает
-реализацию. Общие config/error contracts также импортируются из Packman напрямую.
-`php artisan packman:config:validate` объединяет отчёты установленных пакетов,
-проверяет runtime configuration и скрывает значения секретов.
+Install the package as an application dependency. Modules expose their public contracts under `<Module>/Contracts/`. Packman attributes mark API DTOs (`#[Api]`), integration adapters (`#[Spi]`) and module-owned implementations (`#[Internal]`). CoreX imports shared configuration and error contracts directly from Packman. Run `php artisan packman:config:validate` to validate runtime configuration for the installed packages. The report redacts secret values.
 
-## Требование к СУБД
+## Database requirements
 
-Ядро **требует PostgreSQL 16** для тенантской БД: `sys_*`-миграции используют
-`ltree`/BRIN/`jsonb`/`UNIQUE NULLS NOT DISTINCT`/`pg_advisory_xact_lock` —
-PG-нативные конструкции без SQLite-эквивалента. SQLite-лейн (`composer test`)
-покрывает только pure-PHP код пакета для удобства unit-тестирования — это
-НЕ заявленная поддержка SQLite в продакшене (OQ-12). Все гарантии
-целостности/конкурентности проверяются исключительно на PG-лейне
-(`composer test:pg`).
+Tenant databases require PostgreSQL 16 or later. The `sys_*` migrations use `ltree`, BRIN indexes, `jsonb`, `UNIQUE NULLS NOT DISTINCT` and `pg_advisory_xact_lock`. The SQLite suite (`composer test`) exercises portable behavior. Run `composer test:pg` to check data integrity and concurrency on the supported production database.
 
-## Установка схемы
+## Schema installation
 
-Настройки публикуются через `php artisan vendor:publish --tag=corex-config`.
-Набор `sys_*` принадлежит CoreX; `mod_*` — Packman Modules. Оба исполняет Packman на PostgreSQL tenant-соединении:
+Publish configuration with `php artisan vendor:publish --tag=corex-config`. Packman applies both the CoreX `sys_*` tables and the Packman Modules `mod_*` tables on the tenant PostgreSQL connection.
 
 ```bash
 php artisan packman:schema:migrate --scope=tenant --database=<tenant>
 php artisan packman:schema:status --scope=tenant --database=<tenant>
 ```
 
-В single-DB установке можно опустить `--database`: используется default connection.
-В DB-per-account tenant-схема создаётся только на базе аккаунта; central-схема принадлежит tenancy.
-Модульные наборы создаёт `ModuleLifecycle::enable()`; `--modules` явно включает их при подготовке шаблона.
-Для production команда требует подтверждения или `--force`. Обычный `artisan migrate` создаёт только схему приложения.
+Single-database installations can omit `--database` to use the default connection. In database-per-account deployments, install the tenant schema in each account database. Tenancy owns the central schema. Enable module schema sets through `ModuleLifecycle::enable()`, or pass `--modules` when preparing a template. Production migration requires confirmation or `--force`. The application's own migrations run through `artisan migrate`.
 
-### Версия схемы и апгрейды
+### Schema versions and upgrades
 
-Поколение каждого набора доступно через `Packman\Schema\Data\Migration\SchemaSet::version` в реестре
-`Packman\Schema\Contracts\Migration\SchemaSets`. Файлы исполняются из пакета; копии в приложении не нужны.
-После фиксации baseline изменение схемы поставляется новым файлом с повышением версии набора.
-Повторный `packman:schema:migrate` применяет только отсутствующие в журнале Laravel `migrations` файлы.
+Inspect `Packman\Schema\Data\Migration\SchemaSet::version` in the `Packman\Schema\Contracts\Migration\SchemaSets` registry. Packman runs migration files from each installed package. After publishing a baseline, ship subsequent changes in new migration files and increment the set version. Running `packman:schema:migrate` again applies only the files missing from Laravel's `migrations` journal.
 
-## Доверенный scope для worker
+## Trusted scope for workers
 
-Задайте `corex.scope.deployment_id` и подключение `corex.scope.control_connection`.
-Control store должен находиться за пределами backup и restore тенантской БД, в том числе
-в boxed-установке. Установите его схему через `ScopeControlSchema::install()` и
-зарегистрируйте активную привязку каждого аккаунта у владельца `ScopeAuthority`.
-Хост реализует `ControlStoreIsolation` и проверку владельца физического соединения.
-В cloud-профиле реализацию проверки связывает Tenancy через `TenantBindingAuthority`.
+Configure `corex.scope.deployment_id` and `corex.scope.control_connection`. Keep the control store outside the tenant backup and restore process, including in boxed installations. Install it with `ScopeControlSchema::install()` and register each account's active binding with its `ScopeAuthority`. The host implements `ControlStoreIsolation` and verifies ownership of the physical connection. In cloud deployments, Tenancy binds this verifier through `TenantBindingAuthority`.
 
-`DataScopeFactory` выдаёт scope от аутентифицированного principal текущего account/workspace.
-Хост проверяет живое членство и именованные service grants через `WorkPrincipalAuthority`.
-Для операций из консоли или центрального обработчика хост явно устанавливает именованный
-grant через `NamedWorkPrincipal`. Декларируйте tenant и central job handlers в
-`corex.scope.tenant_jobs` и `corex.scope.central_jobs` или в `WorkQueueHandlers`.
-Локальная durable работа сохраняет proof от `StoredWorkIssuer` вместе со своей записью.
+`DataScopeFactory` issues a scope for the authenticated principal in the current account and workspace. The host verifies current membership and named service grants through `WorkPrincipalAuthority`. Console operations and central handlers explicitly set a grant through `NamedWorkPrincipal`. Declare job handlers in `corex.scope.tenant_jobs` and `corex.scope.central_jobs` or through `WorkQueueHandlers`. Store the proof from `StoredWorkIssuer` with each durable local job.
 
-Перед переносом или восстановлением закройте admission в control store, дождитесь
-завершения tickets и разрешите все неизвестные результаты. После проверки новой
-физической привязки откройте admission с новым поколением или restore epoch.
-Worker проверяет эту границу до получения доступа к обработчику.
-
+Before moving or restoring a database, close admission in the control store, wait for active tickets to settle and resolve unknown outcomes. Verify the new physical binding and reopen admission with a new generation or restore epoch. Each worker validates that binding before invoking its handler.
 
 ## Mandatory support audit
 
@@ -74,14 +38,9 @@ The stock writer commits directly to the configured audit table, requires an eve
 snapshot and rejects ambient transactions. It bypasses the optional audit logger and queue.
 Custom implementations must provide the same committed, fail-closed behavior.
 
-## Точность времени
+## Timestamp precision
 
-Все `timestamptz`-колонки объявлены с явной микросекундной точностью
-(`precision: 6`): PostgreSQL при `timestamp(0)` **округляет** значение, что
-исказило бы хронологический порядок в юридически значимом append-only аудите
-(`sys_audit_log`). `sys_audit_log.seq bigserial` — монотонный курсор аудита:
-keyset-пагинация и tie-break сортировки идут **только по `seq`**, а не по
-`id`/`occurred_at` (часы принявшего узла монотонности не дают).
+All `timestamptz` columns use microsecond precision (`precision: 6`). PostgreSQL rounds `timestamp(0)`, which could reorder events in the append-only `sys_audit_log`. Keyset pagination and audit ordering use the monotonic `sys_audit_log.seq` (`bigserial`). Event IDs and timestamps from individual nodes do not provide that ordering.
 
 ## Provider composition
 
@@ -115,13 +74,9 @@ Consumer tests can create messaging adapters through
 
 The module runtime belongs to `axiomasoft/packman-modules`; CoreX contributes context, audit and feature adapters. See the [package map](../../docs/architecture/package-map.md).
 
-## JSON в публичных DTO
+## JSON in public DTOs
 
-Произвольные JSON-данные передаются как неизменяемый `CoreX\Data\Data\JsonDocument`.
-Интеграционный адаптер `CoreX\Data\Laravel\JsonDocuments` проверяет входное дерево
-и сохраняет различие целых и дробных чисел. Объекты, ресурсы и бесконечные числа
-не принимаются. Сохранённый JSON и HTTP-представление продолжают содержать обычные
-JSON-значения.
+`CoreX\Data\Data\JsonDocument` carries immutable JSON values. The integration adapter `CoreX\Data\Laravel\JsonDocuments` validates the input tree and preserves the distinction between integers and floats. Objects, resources and infinite numbers are rejected. Persistence and HTTP APIs use ordinary JSON values.
 
 ```php
 use CoreX\Data\Laravel\JsonDocuments;
@@ -130,9 +85,7 @@ $document = JsonDocuments::capture(['enabled' => true, 'weight' => 1.5]);
 $value = JsonDocuments::map($document);
 ```
 
-`SettingsRepository::get()`/`FeatureFlags::value()` возвращают JSON-документ;
-`SettingsRepository::set()` принимает его. `CoreOptions` — неизменяемый снимок
-текущей конфигурации: новое разрешение из контейнера видит её актуальное состояние.
+`SettingsRepository::get()` and `FeatureFlags::value()` return a JSON document. Pass it to `SettingsRepository::set()` to store it. `CoreOptions` is an immutable configuration snapshot. Resolve it again from the container to read the current configuration.
 
 ## Typed errors
 
@@ -141,6 +94,6 @@ Error constructors require `ErrorCode`; descriptors keep scoped string wire code
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
 
-## Схема
+## Tenant schema
 
-Набор `tenant`, baseline v1 (PostgreSQL). Он содержит таблицы `sys_*`; `mod_*` предоставляет `axiomasoft/packman-modules:tenant`; исполнение — `packman:schema:migrate --scope=tenant`. Миграции не публикуются.
+The PostgreSQL `tenant` set started at baseline v1 and owns the `sys_*` tables. The `mod_*` tables belong to `axiomasoft/packman-modules:tenant`. Run `packman:schema:migrate --scope=tenant` to apply the migrations directly from their packages.

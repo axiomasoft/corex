@@ -72,3 +72,4 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 | 2026-11-26 | Index referencing columns (commit 9747991962519525f88d2d886a3cf3de51235ffb) | schema | Support lookups from referenced parent rows. |
 | 2026-11-26 | Install lookup indexes on existing schemas | schema | Full referencing indexes cover inactive and soft-deleted child rows. The scheduler uses a dedicated runnable due-time index. |
 | 2026-11-26 | Record owned PHP declarations and explicit composition | php-surface | Freeze directly declared methods, constants and properties together with traits, trait adaptations, direct interfaces and enum backing types. |
+| 2026-11-26 | Restore the department query SPI and refresh scope probes | php-surface | Keep the boolean DepartmentQueries containment contract and replace cached table existence with live probes. |

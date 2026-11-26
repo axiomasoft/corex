@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
-use CoreX\Access\Access\Internal\ExistingTables;
 use CoreX\Access\Access\Internal\ScopePredicate;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
@@ -23,6 +22,7 @@ use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Enums\PrincipalType;
+use CoreX\Departments\Laravel\DepartmentQueries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -432,48 +432,51 @@ it('matches real department records to the same IDs through ScopeResolver and Ac
     'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
 ]);
 
-it('checks a record against dept and dept_tree in one statement once the tables are known', function (Scope $scope): void {
-    $workspaceId = ($this->makeWorkspace)('oneStatement');
-    $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'oneStatement.parent');
-    $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'oneStatement.parent.child');
-    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentDepartmentId));
-    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($scope === Scope::Dept ? $parentDepartmentId : $childDepartmentId)]);
+it('checks both department tables and matches a record in two statements', function (Scope $scope): void {
+    $workspaceId = ($this->makeWorkspace)('departmentCheck');
+    $departmentId = ($this->makeDepartment)($workspaceId, null, 'departmentCheck.parent');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($departmentId));
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($departmentId)]);
     $queries = 0;
     DB::listen(static function () use (&$queries): void {
         $queries++;
     });
-    $count = static function () use (&$queries, $scope, $record, $identity): int {
-        $queries = 0;
-        expect(resolve(ScopePredicate::class)->matches($scope, $record, $identity))->toBeTrue();
 
-        return $queries;
-    };
+    expect(resolve(ScopePredicate::class)->matches($scope, $record, $identity))->toBeTrue()
+        ->and($queries)->toBe(2);
+})->with([Scope::Dept, Scope::DeptTree]);
 
-    // The first check of a request probes users and sys_departments; later
-    // checks in the same request only run the joined lookup. A new request
-    // (scoped instances forgotten) probes again.
-    expect($count())->toBe(3)
-        ->and($count())->toBe(1);
-    app()->forgetScopedInstances();
-    expect($count())->toBe(3);
-})->with([
-    'dept' => [Scope::Dept],
-    'dept_tree' => [Scope::DeptTree],
-]);
+it('checks the active PostgreSQL schema again after a host changes the search path', function (): void {
+    $workspaceId = ($this->makeWorkspace)('liveSchema');
+    $departmentId = ($this->makeDepartment)($workspaceId, null, 'liveSchema.parent');
+    $principal = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($departmentId));
+    $record = (object) ['owner_id' => $principal->principalId()];
+    $predicate = resolve(ScopePredicate::class);
 
-it('remembers only tables that exist, so one created later in the request is found', function (): void {
-    $tables = resolve(ExistingTables::class);
-    $connection = DB::connection();
-
-    expect($tables->has(connection: $connection, table: 'late_access_probe'))->toBeFalse();
-    Schema::create('late_access_probe', static function (Blueprint $table): void {
-        $table->id();
+    DB::transaction(function () use ($predicate, $principal, $record): void {
+        expect($predicate->matches(Scope::Dept, $record, $principal))->toBeTrue();
+        DB::statement('SET LOCAL search_path TO pg_catalog');
+        expect($predicate->matches(Scope::Dept, $record, $principal))->toBeFalse();
     });
+});
+
+it('compares department paths through prefixed table aliases', function (): void {
+    $workspaceId = ($this->makeWorkspace)('prefixed');
+    $parentId = ($this->makeDepartment)($workspaceId, null, 'prefixed.parent');
+    $childId = ($this->makeDepartment)($workspaceId, $parentId, 'prefixed.parent.child');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentId));
+    $record = (object) ['owner_id' => ($this->makeUser)($childId)];
+    $connection = DB::connection();
+    $connection->statement('CREATE TABLE prefix_users AS TABLE users');
+    $connection->statement('CREATE TABLE prefix_sys_departments AS TABLE sys_departments');
+    $connection->setTablePrefix('prefix_');
 
     try {
-        expect($tables->has(connection: $connection, table: 'late_access_probe'))->toBeTrue();
+        expect(resolve(ScopePredicate::class)->matches(Scope::DeptTree, $record, $identity))->toBeTrue();
+        expect(DepartmentQueries::contains(id: $childId, path: 'prefixed.parent'))->toBeTrue()
+            ->and(DepartmentQueries::contains(id: $parentId, path: 'prefixed.parent.child'))->toBeFalse();
     } finally {
-        Schema::drop('late_access_probe');
+        $connection->setTablePrefix('');
     }
 });
 
