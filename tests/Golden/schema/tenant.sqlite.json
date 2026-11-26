@@ -4959,6 +4959,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "pruned_at": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
                 "read_at": {
                     "type": "datetime",
                     "nullable": true,
@@ -5022,7 +5027,7 @@
                         "recipient_id",
                         "id"
                     ],
-                    "predicate": null,
+                    "predicate": "pruned_at IS NULL",
                     "method": "btree"
                 },
                 {
@@ -5039,6 +5044,19 @@
                         "template_action"
                     ],
                     "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "ntf_notifications_retention_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "read_at",
+                        "id"
+                    ],
+                    "predicate": "read_at IS NOT NULL AND pruned_at IS NULL",
                     "method": "btree"
                 },
                 {

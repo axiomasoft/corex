@@ -945,7 +945,7 @@
         {
             "symbol": "CoreX\\Notifications\\Internal\\NotificationsSchemaSets::sets",
             "source": "packages/notifications/src/Internal/NotificationsSchemaSets.php",
-            "source_sha256": "58236bea3ccde7e5db71baf1db281b0fd680d9d056160a0eacca118c1b4fa774",
+            "source_sha256": "ae94ae200c2e6e246bd4f6d668aaa0092409062c1fd6acd6ce232c72cfe4ced0",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {
@@ -3168,9 +3168,9 @@
         {
             "symbol": "CoreX\\Notifications\\Runtime\\Internal\\Commands\\PruneNotifications::handle",
             "source": "packages/notifications/src/Runtime/Internal/Commands/PruneNotifications.php",
-            "source_sha256": "69484816fec4f64e885d0f8ff8617ea959bd2f395f2d60f51857a09ecfef5c14",
+            "source_sha256": "3258fbf459d6ae2b2a665b47bd9d144edc0bdbd71a688d8fb58ff71c6b165ecc",
             "kind": "framework",
-            "reason": "NotificationsServiceProvider resolves the Artisan command that prunes settled notifications past their retention window.",
+            "reason": "Laravel invokes this registered Artisan command to compact eligible notifications within the current tenant scope.",
             "root": {
                 "path": "packages/notifications/src/NotificationsServiceProvider.php",
                 "anchor": "PruneNotifications::class])",

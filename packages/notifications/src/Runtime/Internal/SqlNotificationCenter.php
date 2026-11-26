@@ -11,6 +11,7 @@ use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Data\CancelResult;
+use CoreX\Notifications\Inbox\Data\EntityReference;
 use CoreX\Notifications\Inbox\Data\InboxPage;
 use CoreX\Notifications\Inbox\Data\InboxQuery;
 use CoreX\Notifications\Inbox\Data\NotificationAction;
@@ -128,7 +129,8 @@ final readonly class SqlNotificationCenter implements NotificationCenter
                 }
             }
 
-            return $this->reference($row);
+            // The verified digest also binds the related reference on a compacted replay.
+            return $this->reference(row: $row, replayRelated: $input->related);
         });
     }
 
@@ -160,8 +162,8 @@ final readonly class SqlNotificationCenter implements NotificationCenter
             ]);
             $this->connection->table('ntf_deliveries')
                 ->where('notification_id', $notificationId)
-                ->whereIn('state', ['pending', 'retry-scheduled', 'claimed'])
-                ->update(['state' => 'cancelled', 'next_attempt' => null, 'lease_until' => null, 'claim_token' => null]);
+                ->whereIn('state', [DeliveryState::Pending, DeliveryState::RetryScheduled, DeliveryState::Claimed])
+                ->update(['state' => DeliveryState::Cancelled, 'next_attempt' => null, 'lease_until' => null, 'claim_token' => null]);
 
             return new CancelResult(cancelled: true, alreadyDispatched: $this->dispatchedChannels($notificationId));
         });
@@ -251,7 +253,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 
     private function notifications(DataScope $scope): Builder
     {
-        return $this->connection->table('ntf_notifications')->where(NotificationScope::logical($scope));
+        return $this->connection->table('ntf_notifications')->where(NotificationScope::logical($scope))->whereNull('pruned_at');
     }
 
     private function recipient(DataScope $scope): Builder
@@ -296,7 +298,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         return $matches[2];
     }
 
-    private function reference(object $row): NotificationRef
+    private function reference(object $row, ?EntityReference $replayRelated = null): NotificationRef
     {
         $subject = $this->visibility->subject($row);
 
@@ -307,7 +309,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
             revision: NotificationValue::text(NotificationValue::field(row: $row, name: 'revision')),
             readAt: $this->date(NotificationValue::field(row: $row, name: 'read_at')),
             cancelledAt: $this->date(NotificationValue::field(row: $row, name: 'cancelled_at')),
-            related: $subject->related,
+            related: $subject->related ?? $replayRelated,
         );
     }
 
@@ -329,7 +331,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
     {
         return array_values($this->connection->table('ntf_deliveries')
             ->where('notification_id', $notificationId)
-            ->whereIn('state', ['accepted', 'completed', 'unknown', 'sending'])
+            ->whereIn('state', [DeliveryState::Accepted, DeliveryState::Completed, DeliveryState::Unknown, DeliveryState::Sending])
             ->orderBy('channel')
             ->pluck('channel')->map(NotificationValue::text(...))
             ->all());

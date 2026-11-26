@@ -6117,6 +6117,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "pruned_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
                 "read_at": {
                     "type": "timestamp(0) with time zone",
                     "nullable": true,
@@ -6180,7 +6185,7 @@
                         "recipient_id",
                         "id"
                     ],
-                    "predicate": null,
+                    "predicate": "(pruned_at IS NULL)",
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -6208,6 +6213,20 @@
                         "id"
                     ],
                     "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "ntf_notifications_retention_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "read_at",
+                        "id"
+                    ],
+                    "predicate": "((read_at IS NOT NULL) AND (pruned_at IS NULL))",
                     "method": "btree",
                     "nulls_not_distinct": false
                 },

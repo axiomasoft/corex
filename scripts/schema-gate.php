@@ -20,6 +20,7 @@ final class SchemaGate
     private const array VERSION_THREE_TENANT_PATHS = [
         'axiomasoft/corex:tenant' => 'packages/core/database/migrations/tenant',
         'axiomasoft/corex-import-export:tenant' => 'packages/import-export/database/migrations/tenant',
+        'axiomasoft/corex-notifications:tenant' => 'packages/notifications/database/migrations/tenant',
         'axiomasoft/corex-media:tenant' => 'packages/media/database/migrations/tenant',
         'axiomasoft/corex-operations:tenant' => 'packages/operations/database/migrations/tenant',
     ];

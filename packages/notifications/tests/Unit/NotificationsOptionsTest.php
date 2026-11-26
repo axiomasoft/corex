@@ -26,3 +26,13 @@ it('accumulates violations across the digest and delivery sections', function ()
         ]);
     }
 });
+
+it('rejects invalid supplied retention settings before scheduling a destructive operation', function (array $config): void {
+    expect(fn () => NotificationsOptions::fromArray($config))->toThrow(InvalidConfiguration::class);
+})->with([
+    'scalar section' => [['retention' => '365']],
+    'null section' => [['retention' => null]],
+    'null window' => [['retention' => ['settled_days' => null]]],
+    'misspelled window' => [['retention' => ['settled_day' => 365]]],
+    'negative window' => [['retention' => ['settled_days' => -1]]],
+]);

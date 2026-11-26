@@ -40439,18 +40439,6 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "defaultRetentionDays",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
             "handle": {
                 "params": [
                     {
@@ -40462,7 +40450,13 @@
                     {
                         "byRef": false,
                         "name": "connections",
-                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "retention",
+                        "type": "CoreX\\Notifications\\Runtime\\Internal\\NotificationRetention",
                         "variadic": false
                     }
                 ],
@@ -40828,6 +40822,122 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState": {
+        "abstract": false,
+        "backing_type": "string",
+        "constants": {
+            "Accepted": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Accepted",
+                    "value": "accepted"
+                }
+            },
+            "Cancelled": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Cancelled",
+                    "value": "cancelled"
+                }
+            },
+            "Claimed": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Claimed",
+                    "value": "claimed"
+                }
+            },
+            "Completed": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Completed",
+                    "value": "completed"
+                }
+            },
+            "Exhausted": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Exhausted",
+                    "value": "exhausted"
+                }
+            },
+            "Pending": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Pending",
+                    "value": "pending"
+                }
+            },
+            "PermanentlyFailed": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "PermanentlyFailed",
+                    "value": "permanently-failed"
+                }
+            },
+            "Quarantined": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Quarantined",
+                    "value": "quarantined"
+                }
+            },
+            "RetryScheduled": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "RetryScheduled",
+                    "value": "retry-scheduled"
+                }
+            },
+            "Sending": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Sending",
+                    "value": "sending"
+                }
+            },
+            "Skipped": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Skipped",
+                    "value": "skipped"
+                }
+            },
+            "Unknown": {
+                "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                    "case": "Unknown",
+                    "value": "unknown"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "enum",
+        "methods": {
+            "finalStates": {
+                "params": [],
+                "return": "array",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Notifications\\Runtime\\Internal\\DeliveryStore": {
         "abstract": false,
         "constants": [],
@@ -40936,9 +41046,13 @@
                     },
                     {
                         "byRef": false,
-                        "default": "claimed",
+                        "default": {
+                            "enum": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
+                            "case": "Claimed",
+                            "value": "claimed"
+                        },
                         "name": "state",
-                        "type": "string",
+                        "type": "CoreX\\Notifications\\Runtime\\Internal\\DeliveryState",
                         "variadic": false
                     }
                 ],
@@ -41675,6 +41789,86 @@
         },
         "parent": null,
         "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Notifications\\Runtime\\Internal\\NotificationRetention": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "current",
+                        "type": "CoreX\\Context\\Contracts\\CurrentWorkScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scopes",
+                        "type": "CoreX\\Context\\Contracts\\DataScopeFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "tenants",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "defaultRetentionDays",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "prune": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "now",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cutoff",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "batch",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "defaultRetentionDays": {
+                "name": "defaultRetentionDays",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            }
+        },
         "readonly": true
     },
     "CoreX\\Notifications\\Runtime\\Internal\\NotificationScope": {

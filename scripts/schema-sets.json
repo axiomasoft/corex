@@ -123,7 +123,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/notifications/database/migrations/tenant",
-            "version": 2,
+            "version": 3,
             "drivers": [
                 "pgsql",
                 "sqlite"

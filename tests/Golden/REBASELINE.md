@@ -74,3 +74,4 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 | 2026-11-26 | Record owned PHP declarations and explicit composition | php-surface | Freeze directly declared methods, constants and properties together with traits, trait adaptations, direct interfaces and enum backing types. |
 | 2026-11-26 | Restore the department query SPI and refresh scope probes | php-surface | Keep the boolean DepartmentQueries containment contract and replace cached table existence with live probes. |
 | 2026-11-26 | Recheck the current CRM admission | php-surface | Remove the positive transaction memo and read the current user, workspace and membership when admitting a write. |
+| 2026-11-26 | Compact read notifications within the verified tenant scope | php-surface, schema | Introduce the retention service, typed delivery states and archive marker. Retain request identity and delivery evidence for retries. |
