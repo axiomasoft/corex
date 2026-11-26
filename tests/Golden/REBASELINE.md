@@ -75,3 +75,4 @@ Each baseline change records its rationale and affected layers. A later entry mu
 | 2026-11-26 | Restore the department query SPI and refresh scope probes | php-surface | Keep the boolean DepartmentQueries containment contract and replace cached table existence with live probes. |
 | 2026-11-26 | Recheck the current CRM admission | php-surface | Remove the positive transaction memo and read the current user, workspace and membership when admitting a write. |
 | 2026-11-26 | Compact read notifications within the verified tenant scope | php-surface, schema | Introduce the retention service, typed delivery states and archive marker. Retain request identity and delivery evidence for retries. |
+| 2026-11-26 | Describe the recorded module renames | rename map | Replace private planning references in explanatory text. All source and target symbols and the projection algorithm are identical. |
