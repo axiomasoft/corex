@@ -8,10 +8,9 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Маркер durable-ack реализации для outbox relay (D99).
- *
- * Core не связывает lossy PubSub/null/Redis PUBLISH с outbox. Хост обязан
- * зарегистрировать `scoped`-реализацию, реализующую этот интерфейс.
+ * Marks an outbox publisher whose acknowledgement guarantees durable handoff.
+ * The host must register a scoped implementation. Lossy transports such as
+ * Redis PUBLISH cannot acknowledge durable delivery.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface DurableMessagePublisher extends MessagePublisher {}

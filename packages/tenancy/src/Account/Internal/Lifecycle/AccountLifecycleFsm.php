@@ -8,7 +8,7 @@ use Packman\Attributes\Internal;
 use RuntimeException;
 
 /**
- * Pure transition-validation for `root_accounts.status` (B-11 §5.1). Single
+ * Pure transition-validation for `root_accounts.status`. Single
  * source of truth for the state graph — {@see AccountLifecycle} is the only
  * consumer allowed to mutate `root_accounts.status`, and every mutation
  * routes through {@see assertTransition()} first.
@@ -20,7 +20,7 @@ use RuntimeException;
  * grace → (active | exporting)
  * exporting → deleted
  *
- * @internal spec: B-11 §5.1
+ * @internal
  */
 #[Internal]
 final class AccountLifecycleFsm

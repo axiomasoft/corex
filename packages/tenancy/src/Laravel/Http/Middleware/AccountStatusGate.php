@@ -16,7 +16,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * B-11 §5.1 access rules, status read from the current {@see AccountRef}; the owner identity is
+ * Account access rules read the status from the current {@see AccountRef}; the owner identity is
  * read through the central {@see AccountRead} port. Fail-closed: `match` carries no
  * default-pass branch, an unknown status (including `pending`/`provisioning`, which
  * should never reach this middleware — cache/domain already reject them)

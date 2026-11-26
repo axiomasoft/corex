@@ -9,7 +9,7 @@ use Packman\Attributes\Api;
 
 /**
  * Snapshot of an active impersonation session — resolved from the claimed
- * `root_impersonation_grants` row (D143), never re-derived from the id_token.
+ * `root_impersonation_grants` row, never re-derived from the id_token.
  */
 #[Api(since: '1.0')]
 final readonly class ImpersonationState

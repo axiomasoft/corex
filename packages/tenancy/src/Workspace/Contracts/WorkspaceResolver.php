@@ -10,7 +10,7 @@ use Packman\Attributes\SpiKind;
 
 /**
  * Resolves `/w/{slug}` to a workspace, checking the current user's
- * membership (B-11 §3.2). A null slug resolves to the user's default
+ * membership. A null slug resolves to the user's default
  * workspace.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

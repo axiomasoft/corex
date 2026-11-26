@@ -28,15 +28,15 @@ use Psr\Clock\ClockInterface;
 use Throwable;
 
 /**
- * Cloud implementation of support impersonation (B-11 §5.9, D139). Rebound
+ * Cloud implementation of support impersonation. Rebound
  * over the boxed `NullImpersonationService` in `TenancyServiceProvider`
- * under `corex-tenancy.oidc.impersonation.enabled` (D10). `start()`/`stop()`
- * follow research/12 §4 EXACTLY — atomic claim → dual-log mirror BEFORE the
- * session opens (D146) → session state + login; `stop()` reverses the
+ * under `corex-tenancy.oidc.impersonation.enabled`. `start()`/`stop()`
+ * follow an atomic claim → dual-log mirror BEFORE the
+ * session opens → session state + login; `stop()` reverses the
  * mirror order (session first) because the tenant session, not the audit
  * mirror, is the safety-critical half of the pair.
  *
- * @internal spec: B-11 §5.9
+ * @internal
  */
 #[Internal]
 final class DatabaseImpersonationService implements ImpersonationService
@@ -52,7 +52,7 @@ final class DatabaseImpersonationService implements ImpersonationService
     private const string SESSION_REASON = 'corex.impersonation.reason';
 
     /**
-     * Request-scoped memo (D139 docblock) — this service is bound as a
+     * Request-scoped memo — this service is bound as a
      * scoped service, so the container gives one instance per request; `state()`
      * reads the session ONCE and caches the result (or its absence) instead
      * of re-parsing on every {@see CurrentActor} call.

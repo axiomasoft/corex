@@ -21,10 +21,9 @@ use SensitiveParameter;
 use stdClass;
 
 /**
- * The boxed-and-cloud login lane's own {@see UserProvider} (D125, OQ-18
- * variant A): reads a users-shaped table through query-builder, entirely by
+ * The boxed-and-cloud login lane's own {@see UserProvider} reads a users-shaped table through query-builder, entirely by
  * {@see AuthOptions} identity fields — connection/table/column names — so
- * `axiomasoft/corex-access` never imports a model from `axiomasoft/corex-tenancy` (AC-28). Every
+ * `axiomasoft/corex-access` never imports a model from `axiomasoft/corex-tenancy`. Every
  * lookup goes through {@see query()}, which always applies the "live user"
  * filter (active = true AND deleted_at IS NULL): without it in
  * retrieveById() too, a session survives the very deactivation meant to end
@@ -51,8 +50,7 @@ final readonly class PrincipalUserProvider implements UserProvider
     }
 
     /**
-     * No `remember_token` column exists on the configured table (frozen
-     * DB_SCHEMA) — remember-me sessions are not supported.
+     * No `remember_token` column exists on the configured table; remember-me sessions are not supported.
      */
     #[Override]
     public function retrieveByToken($identifier, #[SensitiveParameter] mixed $token): ?Authenticatable

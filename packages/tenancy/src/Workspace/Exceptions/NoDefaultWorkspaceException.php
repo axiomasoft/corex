@@ -11,7 +11,7 @@ use Packman\Errors\Enums\ErrorCategory;
 use Packman\Errors\Exceptions\CodedException;
 
 /**
- * The current user has no default-workspace membership (B-11 §5.4, D132).
+ * The current user has no default-workspace membership.
  * Extends {@see RuntimeException} so the existing test
  * (`WorkspaceResolverTest::toThrow(RuntimeException::class)`) stays green —
  * a distinct subclass lets callers (`Http\Middleware\ResolveWorkspace`)

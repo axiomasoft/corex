@@ -17,13 +17,13 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Third step of B-11 §5.4 request resolution: narrows the already-
- * initialized tenant context down to a workspace (AC-18). Registered as the
- * `tenancy.workspace` ALIAS (D131) — not a member of the `'tenant'` group —
+ * Narrows the already-
+ * initialized tenant context down to a workspace. Registered as the
+ * `tenancy.workspace` ALIAS — not a member of the `'tenant'` group —
  * so a route without the alias keeps the account-wide admin context, while
  * `->middleware(['tenant', 'tenancy.workspace'])` narrows AFTER `'tenant'`
  * has already proven the session belongs to this account. Every failure is
- * fail-closed 403 (D134): a pass-through would leave {@see
+ * fail-closed 403: a pass-through would leave {@see
  * \CoreX\Tenancy\Laravel\Scopes\WorkspaceScope} unfiltered, showing every workspace
  * in the account.
  */

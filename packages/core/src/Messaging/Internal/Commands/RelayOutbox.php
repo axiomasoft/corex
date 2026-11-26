@@ -22,14 +22,11 @@ use Packman\Attributes\Internal;
 use Throwable;
 
 /**
- * Публикует ожидающие сообщения outbox текущего доверенного соединения.
+ * Publishes pending messages for the trusted connection supplied by the container.
+ * The host schedules work across accounts and decides their priority and backoff.
  *
- * Работает на ОДНОМ соединении — том, которое дал контейнер. Планирование по многим
- * аккаунтам (round-robin, приоритет по возрасту, backoff по аккаунту) — вход P9
- * (research/P5-design.md §5.6).
- *
- * `--once` выполняет один проход и выходит: это режим планировщика. Без него команда
- * работает циклом и завершается по SIGTERM/SIGINT после текущего сообщения.
+ * `--once` runs a single scheduler pass. In continuous mode, the relay finishes
+ * the current message before exiting on SIGTERM or SIGINT.
  *
  * @internal Console commands are outside the supported PHP API.
  */

@@ -19,7 +19,7 @@ use Packman\Attributes\Internal;
  *    (a typo or a missing tenancy package is a boot-time error, never an
  *    unscoped install);
  * 2. otherwise the kernel {@see WorkspaceScopeProvider} (bound by tenancy);
- * 3. otherwise explicitly none — boxed profile without workspaces (AC-28).
+ * 3. otherwise explicitly none — boxed profile without workspaces.
  *
  * @internal
  */

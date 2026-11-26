@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Packman\Attributes\Internal;
 
 /**
- * One fan-out unit ({@see IdentitySyncer::fanOut()}, AC-16 г) — each account
+ * One fan-out unit ({@see IdentitySyncer::fanOut()}) — each account
  * gets its own queued job, so one failing sync sets that account's
  * `sync_status=failed` without blocking the others (they are independent
  * queue entries, not a single loop).

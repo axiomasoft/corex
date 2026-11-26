@@ -26,7 +26,7 @@ use Psr\Clock\ClockInterface;
  * moment). Boxed/CLI installs (SingleAccountResolver) carry workspaceId = null
  * — an honest null, not a foreign tenant.
  *
- * @internal spec: B-10 §7.1
+ * @internal
  */
 #[Internal]
 final readonly class QueuedAuditLogger implements AuditLogger

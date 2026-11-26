@@ -14,7 +14,7 @@ use Packman\Attributes\SpiKind;
 
 /**
  * Fired after {@see CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle::startGrace()} has transitioned into
- * `grace` and mirrored `root_account_events` (B-11 §5.1). Built with an
+ * `grace` and mirrored `root_account_events`. Built with an
  * explicit {@see TenantContext} — see {@see TrialStarted}'s docblock for
  * why.
  */

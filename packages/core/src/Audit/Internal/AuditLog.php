@@ -12,7 +12,7 @@ use Packman\Attributes\Internal;
 
 /**
  * Append-only audit entry (sys_audit_log). No updated_at:
- * DB_SCHEMA.md §Конфликт-2 (resolved 2026-07-13) — an append-only class
+ * An append-only class
  * keeps updated_at only if it has ≥1 legitimate post-insert field; this
  * table has none.
  *
@@ -27,7 +27,7 @@ use Packman\Attributes\Internal;
  * @property array<string, mixed>|null $changes
  * @property array<string, mixed> $context
  *
- * @internal spec: B-10 §2
+ * @internal
  */
 #[Internal]
 final class AuditLog extends Model

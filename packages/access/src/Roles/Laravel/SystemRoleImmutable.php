@@ -14,7 +14,7 @@ use Packman\Attributes\SpiKind;
 /**
  * @corex-model-extension Exact Role/RoleMatrixRow saving(), deleting(), affectsSystemRole() hooks.
  *
- * Blocks save()/delete() on a row that affects a system role (AC-21) —
+ * Blocks save()/delete() on a row that affects a system role —
  * the seeder and any future release path bypass it explicitly via
  * {@see withSystemMutationAllowed()}, everything else gets a 403-class
  * exception. Each class using this trait carries its own toggle: flagging

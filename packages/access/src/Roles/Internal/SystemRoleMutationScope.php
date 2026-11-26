@@ -9,7 +9,7 @@ use CoreX\Access\Roles\Laravel\SystemRoleImmutable;
 use Packman\Attributes\Internal;
 
 /**
- * Per-cycle state of the system-role mutation exemption (AC-21). Each model class that
+ * Per-cycle state of the system-role mutation exemption. Each model class that
  * carries {@see SystemRoleImmutable} has its own toggle: allowing
  * `Role` does not unlock `RoleMatrixRow`. Scoped, so a resident worker never carries the flag
  * from one request into the next.

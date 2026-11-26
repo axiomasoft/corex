@@ -12,7 +12,7 @@ use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaul
  * Boxed-default: no manifest registry wired in — every key is undeclared
  * (no default) and non-sensitive.
  *
- * @internal spec: D10
+ * @internal
  */
 #[Internal]
 final class NullSettingDefaultsProvider implements SettingDefaultsProvider

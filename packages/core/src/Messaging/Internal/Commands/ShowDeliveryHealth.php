@@ -9,10 +9,7 @@ use Illuminate\Console\Command;
 use Packman\Attributes\Internal;
 
 /**
- * Печатает четыре агрегата здоровья outbox и разрез возраста по контракту.
- *
- * Экспорт в OpenTelemetry, имена спанов и метрики messaging.* — обязательство P12, не P5
- * (research/P5-design.md §9.4).
+ * Reports the four outbox health measures and the age of pending messages by contract.
  *
  * @internal Console commands are outside the supported PHP API.
  */

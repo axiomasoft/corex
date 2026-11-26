@@ -14,13 +14,13 @@ use Packman\Attributes\Internal;
 
 /**
  * Cloud-default driver — `illuminate/redis` PUBLISH/SUBSCRIBE. Never
- * `LISTEN`/`NOTIFY` on the PG connection (R-15). Redis PUBLISH/SUBSCRIBE
+ * `LISTEN`/`NOTIFY` on the PG connection. Redis PUBLISH/SUBSCRIBE
  * has no message history at all (unlike the database-poll driver's table) —
  * a subscriber that was down misses everything published during the outage,
  * by design of the transport. No durable cursor is possible here — that is
  * out of scope for this driver, the database driver provides it instead.
  *
- * @internal spec: B-10 §6.1, D44
+ * @internal
  */
 #[Internal]
 final readonly class RedisPubSub implements PubSub

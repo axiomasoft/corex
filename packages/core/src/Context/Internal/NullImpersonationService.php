@@ -11,12 +11,11 @@ use Override;
 use Packman\Attributes\Internal;
 
 /**
- * Boxed-install default: impersonation does not exist there at all (B-11
- * §6.1 "Impersonation | IdP-грант | отсутствует"). `stop()`/`active()`/
+ * Boxed-install default: impersonation does not exist there. `stop()`/`active()`/
  * `state()` are safe no-ops so ambient callers (CurrentActor) never branch
  * on the install profile; `start()` throws — there is no grant to claim.
  *
- * @internal spec: B-11 §6.1, D10
+ * @internal
  */
 #[Internal]
 final class NullImpersonationService implements ImpersonationService

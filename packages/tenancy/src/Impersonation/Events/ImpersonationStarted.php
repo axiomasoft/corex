@@ -12,7 +12,7 @@ use Packman\Attributes\SpiKind;
 /**
  * Fired after {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService::start()}
  * has claimed the grant, mirrored `root_account_events`, and opened the
- * tenant session (B-11 §3.4).
+ * tenant session.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ImpersonationStarted extends DomainEvent

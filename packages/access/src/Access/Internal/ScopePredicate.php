@@ -105,7 +105,7 @@ final readonly class ScopePredicate
             return $this->applyNone($q);
         }
 
-        // ONE `path <@` subquery (premortem A6) — no recursive traversal: the
+        // ONE `path <@` subquery — no recursive traversal: the
         // department subtree resolves in the same statement as the owning
         // users lookup, never per-row.
         $deptIds = DepartmentQueries::subtreeIds($principalPath);
@@ -117,9 +117,9 @@ final readonly class ScopePredicate
 
     /**
      * dept/dept_tree resolve the record owner's department against the
-     * principal's own, via `users.department_id` (DB_SCHEMA §3.4) and
+     * principal's own, via `users.department_id` and
      * `sys_departments.path` (ltree). Absent in boxed profiles — no
-     * `users`/`sys_departments` there (AC-28) — fails closed rather than
+     * `users`/`sys_departments` there — fails closed rather than
      * silently granting.
      */
     private function matchesDepartment(object $record, Principal $p, bool $tree): bool
@@ -179,7 +179,7 @@ final readonly class ScopePredicate
         $ctxWorkspace = $this->tenancyManager->context()?->workspace;
 
         // No workspace narrowed in context: only account-wide rows are
-        // visible (D107) — mirrors matchesWorkspace()'s own no-context denial
+        // visible — mirrors matchesWorkspace()'s own no-context denial
         // of a workspace-carrying record.
         if ($ctxWorkspace === null) {
             $q->getQuery()->whereNull($column);
@@ -195,7 +195,7 @@ final readonly class ScopePredicate
     }
 
     /**
-     * `workspace` carries an EXPLICIT predicate (D107) rather than relying on
+     * `workspace` carries an EXPLICIT predicate rather than relying on
      * `WorkspaceScope` already being applied — that global scope is not
      * registered on any model in the tree today, and even once
      * {@see WorkspaceScopeWiring} wires it, a double identical WHERE is
@@ -222,7 +222,7 @@ final readonly class ScopePredicate
     /**
      * `[ctxWorkspace->id]` by default; the ctx workspace's own subtree
      * (`path <@`) when its `settings->>'cascade_view'` is strictly `'true'`
-     * (D117) — a hierarchical "parent sees children" view, never the reverse
+     * — a hierarchical "parent sees children" view, never the reverse
      * (cascade always reads DOWN from the ctx workspace's own path).
      *
      * @return list<string>
@@ -249,8 +249,8 @@ final readonly class ScopePredicate
     }
 
     /**
-     * Fail-closed by construction (D117): no `wsp_workspaces` table (boxed
-     * profile, AC-28) · no row for the ctx workspace · flag absent or not
+     * Fail-closed by construction: no `wsp_workspaces` table (boxed
+     * profile) · no row for the ctx workspace · flag absent or not
      * strictly `'true'` · empty `path` ⇒ cascade off. Default `settings =
      * '{}'` means cascade is off unless explicitly turned on.
      */
@@ -279,7 +279,7 @@ final readonly class ScopePredicate
 
     /**
      * No predicate of its own; additionally lifts the workspace global scope
-     * resolved by EffectiveWorkspaceScope (D109) — never `withoutGlobalScopes()`, which would
+     * resolved by EffectiveWorkspaceScope — never `withoutGlobalScopes()`, which would
      * also strip SoftDeletes and any other unrelated scope a model carries.
      */
     /**

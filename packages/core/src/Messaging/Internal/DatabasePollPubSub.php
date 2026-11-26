@@ -19,7 +19,7 @@ use Psr\Clock\ClockInterface;
 /**
  * Boxed fallback driver for installs without Redis — polls
  * `sys_pubsub_messages` by an auto-increment cursor instead of `LISTEN`/
- * `NOTIFY` (forbidden under PgBouncer transaction pooling, R-15). `id` is a
+ * `NOTIFY` (forbidden under PgBouncer transaction pooling). `id` is a
  * plain bigint (not UUIDv7/ADR-003) — this table is an internal delivery
  * cursor, not a domain entity.
  *
@@ -41,7 +41,7 @@ use Psr\Clock\ClockInterface;
  * finite count lets tests observe delivery without blocking — it does NOT
  * bypass the worker-context guard (SubscribeGuard runs regardless).
  *
- * @internal spec: B-10 §6.1
+ * @internal
  */
 #[Internal]
 final readonly class DatabasePollPubSub implements PubSub

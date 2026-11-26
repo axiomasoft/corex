@@ -14,9 +14,9 @@ use Packman\Attributes\Internal;
 
 /**
  * `wsp_invitations` — invitation into a workspace (or the account, when
- * `workspace_id` is null). `role_id` is a soft-ref with no FK (D21): the
+ * `workspace_id` is null). `role_id` is a soft-ref with no FK: the
  * role is only resolved/applied on acceptance, application-side. No soft
- * deletes — the table carries no `deleted_at` (B-11 §2.2).
+ * deletes — the table carries no `deleted_at`.
  *
  * @property string $id
  * @property string $email
@@ -72,7 +72,7 @@ final class Invitation extends Model
     }
 
     /**
-     * Accept the invitation as `$userId` (AC-19): revoked/already-accepted/
+     * Accept the invitation as `$userId`: revoked/already-accepted/
      * (persisted-or-lazily) expired → not acceptable; `$usersMax` (from the
      * account's `limits`) is checked against the workspace's active member
      * count before creating the membership. Role assignment lands with

@@ -9,7 +9,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Physical DB-per-account drop/export (B-11 §5.1/§7.3, D13/AC-7). Lives in
+ * Physical DB-per-account drop/export. Lives in
  * axiomasoft/corex so `AccountLifecycle` (core-level FSM consumer) can depend on
  * the seam without importing physical database/S3/`pg_dump` — those belong to the host-selected physical resource owner.
  */
@@ -22,7 +22,7 @@ interface TenantDatabaseLifecycle
     /**
      * Physically drops the account's tenant database. Implementations MUST
      * refuse (throw) unless the account's most recent export is `ready`
-     * (D13/AC-7, compliance-critical — export-before-DROP invariant).
+     * (compliance-critical — export-before-DROP invariant).
      */
     public function drop(AccountRef $account): void;
 }

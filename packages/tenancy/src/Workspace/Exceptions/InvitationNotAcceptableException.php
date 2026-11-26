@@ -13,7 +13,7 @@ use Packman\Errors\Exceptions\CodedException;
 /**
  * Thrown by {@see CoreX\Tenancy\Workspace\Internal\Models\Invitation::accept()} for a
  * revoked, already-accepted, or (persisted-or-lazily) expired invitation —
- * the domain-level counterpart of the HTTP 410 in B-11 §2.2/AC-19 (mapping
+ * the domain-level counterpart of the HTTP 410 returned by the HTTP endpoint (mapping
  * to an actual response is the route layer's concern, out of this item's
  * scope).
  */

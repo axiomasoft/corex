@@ -12,11 +12,10 @@ use Illuminate\Support\Carbon;
 use Packman\Attributes\Internal;
 
 /**
- * `aut_role_assignments` — a role granted to a principal (user/agent/api_key,
- * D101), optionally scoped to one workspace (`null` = whole account) and
+ * `aut_role_assignments` — a role granted to a principal (user, agent or API key), optionally scoped to one workspace (`null` = whole account) and
  * optionally time-limited (`expires_at`, TTL). No soft deletes — the table
  * carries no `deleted_at`. workspace_id/granted_by carry no FK here — the
- * cross-package cloud migration adds both (D102).
+ * cross-package cloud migration adds both.
  *
  * @property string $id
  * @property string $role_id

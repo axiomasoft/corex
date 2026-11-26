@@ -18,11 +18,11 @@ use Packman\Attributes\Internal;
  * `eloquent.restoring` reject a write on EVERY model — including ones that
  * do not exist in the tree yet — while an impersonation is active, except
  * the two models a compliance session cannot function without. NOT a
- * hermetic gate (D142, RAG:✅ Laravel 13 `eloquent.md`): mass-update/delete
+ * hermetic gate (Eloquent model events): mass-update/delete
  * and the `DB` facade never dispatch these events at all; L1 (web) and L3
  * (privileged core services) cover what L2 structurally cannot.
  *
- * @internal spec: B-11 §5.9
+ * @internal
  */
 #[Internal]
 final class ImpersonatedModelWriteGuard
@@ -64,7 +64,7 @@ final class ImpersonatedModelWriteGuard
 
     /**
      * Scoped escape hatch for an intentional write under impersonation
-     * (premortem A8/A9) — the flag is reset in `finally` even if `$callback`
+     * — the flag is reset in `finally` even if `$callback`
      * throws, so a failed intentional write never leaves the guard
      * permanently open for the rest of the request.
      *

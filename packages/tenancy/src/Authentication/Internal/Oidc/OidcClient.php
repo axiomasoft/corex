@@ -15,7 +15,7 @@ use SensitiveParameter;
  * Builds the authorize-URL (`state` + `nonce` + PKCE S256 `code_challenge`,
  * all written to the session exactly once) and exchanges an
  * authorization `code` for tokens on `token_endpoint`. Endpoints always come
- * from {@see OidcDiscovery}, never hardcoded (D123). `client_secret`/
+ * from {@see OidcDiscovery}, never hardcoded. `client_secret`/
  * `code_verifier` are marked {@see SensitiveParameter} so neither reaches a
  * stack trace.
  *

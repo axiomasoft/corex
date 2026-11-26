@@ -14,7 +14,7 @@ use Packman\Attributes\Internal;
  * come from Discovery, never hardcoded), cached under a configurable
  * store/TTL so a real login does not round-trip the AS on every request.
  * Uses {@see HttpFactory} (not a raw Guzzle/PSR-18 client) so `Http::fake()` works
- * in tests (D130).
+ * in tests.
  *
  * @internal
  */

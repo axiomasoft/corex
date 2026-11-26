@@ -17,10 +17,9 @@ use Override;
 use Packman\Attributes\Internal;
 
 /**
- * Membership-checked `/w/{slug}` → {@see WorkspaceRef} resolver (B-11 §3.2,
- * AC-18). Membership is looked up against the EXACT workspace being
+ * Membership-checked `/w/{slug}` → {@see WorkspaceRef} resolver. Membership is looked up against the EXACT workspace being
  * resolved — a partner-workspace membership never grants implicit access to
- * its parent (B-11 §5.4), because no path-based traversal happens here.
+ * its parent, because no path-based traversal happens here.
  *
  * @internal
  */

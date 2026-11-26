@@ -12,7 +12,7 @@ use Packman\Attributes\Internal;
 
 /**
  * Adapts the cloud {@see TenancyManager} to the
- * {@see TenantContextResolver} contract (B-11 §3.2): `current()` reads
+ * {@see TenantContextResolver} contract: `current()` reads
  * whatever context `TenantRuntimeManager::initialize()` last set, throwing
  * when called outside any initialized tenant.
  */

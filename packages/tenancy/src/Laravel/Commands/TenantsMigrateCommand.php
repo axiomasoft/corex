@@ -10,11 +10,10 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Runs one `root_migration_batches` wave (B-11 §5.6). `-p`/
+ * Runs one `root_migration_batches` wave. `-p`/
  * `--skip-failing` are accepted pass-through flags, logged only —
  * {@see MigrationWaveOrchestrator::runBatch()} already never aborts a batch
- * on a single account's failure (AC-11); real parallel worker dispatch is
- * Scope Excluded.
+ * on a single account's failure; the command dispatches migrations sequentially.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenantsMigrateCommand extends Command

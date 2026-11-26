@@ -14,11 +14,10 @@ use Override;
 use Packman\Attributes\Internal;
 
 /**
- * `aut_role_matrix` — one row of role × entity × action × scope[, context]
- * (B-11 §2.3/§5.5). No soft deletes — the table carries no `deleted_at`.
+ * `aut_role_matrix` — one row of role × entity × action × scope[, context]. No soft deletes — the table carries no `deleted_at`.
  * Immutable for a system role's matrix outside the seeder/module-merge path
- * (AC-21) — a system role ships with an empty matrix; modules populate it
- * via `Extend\Permissions` (B-11 §4 п.2).
+ * — a system role ships with an empty matrix; modules populate it
+ * via `Extend\Permissions`.
  *
  * @property string $id
  * @property string $role_id

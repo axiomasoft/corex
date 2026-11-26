@@ -17,9 +17,9 @@ use RuntimeException;
 
 /**
  * TTL, revocation and banner for an active impersonated session. Registered in the `'tenant'` group AFTER `EnforceSessionLifetime`
- * (same idiom, AC-15) — a session that has outlived either check must die
+ * (same idiom) — a session that has outlived either check must die
  * on THIS request, not on a scheduler's next tick. `revoked_at` is read
- * from root on EVERY request without caching (D144): it is the compliance
+ * from root on EVERY request without caching: it is the compliance
  * kill-switch, and a cached answer would survive the revocation for the
  * length of the cache TTL.
  */

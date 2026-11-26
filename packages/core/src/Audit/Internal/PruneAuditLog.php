@@ -20,7 +20,7 @@ use Packman\Attributes\Internal;
  * `--database` targets a specific connection (sys_audit_log is PG-only);
  * omit it for the app default.
  *
- * @internal spec: B-10 §7.4 п.8, D12
+ * @internal
  */
 #[Internal]
 final class PruneAuditLog extends Command

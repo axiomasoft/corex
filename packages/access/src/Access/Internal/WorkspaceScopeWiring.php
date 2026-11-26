@@ -19,14 +19,14 @@ use Packman\Modules\Enums\Entities\Capability;
  *
  * $scopeClass comes from {@see EffectiveWorkspaceScope} (fail-closed: a
  * configured class must exist). null ⇒ boxed profile without
- * axiomasoft/corex-tenancy (AC-28), explicitly nothing to wire: boxed has no
- * workspaces, and the RBAC `workspace` scope ({@see ScopePredicate}, D107)
+ * axiomasoft/corex-tenancy, explicitly nothing to wire: boxed has no
+ * workspaces, and the RBAC `workspace` scope ({@see ScopePredicate})
  * stays correct on its own.
  *
  * Called from {@see AccessServiceProvider::boot()}, the same
  * precedent as `CoreX\Audit\Internal\ModuleAuditHook`.
  *
- * @internal spec: B-11 §5.4(5)
+ * @internal
  */
 #[Internal]
 final class WorkspaceScopeWiring

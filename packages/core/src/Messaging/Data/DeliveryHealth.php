@@ -7,13 +7,9 @@ namespace CoreX\Messaging\Data;
 use Packman\Attributes\Api;
 
 /**
- * Здоровье доставки: вход для таксономии наблюдаемости P12.
- *
- * Возраст старейшего ожидающего идёт первым намеренно: глубина измеряет накопленную
- * работу, возраст — нарушенное обещание доставки (research/P5-design.md §9.1).
- *
- * Частота дублей здесь отсутствует: её нельзя прочитать из таблиц, она считается
- * потребителем по возврату Inbox::claim() === false.
+ * Outbox delivery health. The oldest pending message age measures delivery delay,
+ * while queue depth measures outstanding work. Consumers track duplicates when
+ * `Inbox::claim()` returns false. The outbox tables cannot supply that count.
  */
 #[Api(since: '1.0')]
 final readonly class DeliveryHealth
