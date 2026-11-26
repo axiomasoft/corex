@@ -44,7 +44,7 @@ final class SubscribeGuard
         if (! $runtime->runningInConsole()) {
             throw new LogicException(sprintf(
                 '%s::subscribe() polls/blocks forever — call it only from a queue worker or console command, '.
-                'never inside an HTTP request cycle (B-10 §3.1).',
+                'never inside an HTTP request cycle.',
                 $driverClass,
             ));
         }
