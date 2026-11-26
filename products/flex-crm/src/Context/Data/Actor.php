@@ -13,7 +13,7 @@ final readonly class Actor
     public function __construct(public string $source, public string $id, public string $name)
     {
         if (! in_array($source, ['user', 'agent', 'api', 'workflow', 'import', 'system'], true) || trim($id) === '' || trim($name) === '') {
-            throw ValidationException::withMessages(['actor' => 'A verified B-13 actor source, id and name are required.']);
+            throw ValidationException::withMessages(['actor' => 'A verified actor source, id and name are required.']);
         }
     }
 

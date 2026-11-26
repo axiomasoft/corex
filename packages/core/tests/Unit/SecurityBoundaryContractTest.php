@@ -135,11 +135,11 @@ final class SecurityBoundaryContractTest extends TestCase
             $guard->assertAllowed(ImpersonationRestrictedAction::Payment);
             self::fail('Active impersonation admitted a payment.');
         } catch (ImpersonationRestrictedException $exception) {
-            self::assertSame('Action restricted under impersonation: Payment (B-11 §5.9 п.3).', $exception->getMessage());
+            self::assertSame('Action restricted under impersonation: Payment.', $exception->getMessage());
         }
         foreach (ImpersonationRestrictedAction::cases() as $action) {
             $exception = ImpersonationRestrictedException::forAction($action);
-            self::assertSame('Action restricted under impersonation: '.$action->name.' (B-11 §5.9 п.3).', $exception->getMessage());
+            self::assertSame('Action restricted under impersonation: '.$action->name.'.', $exception->getMessage());
             self::assertSame(CoreErrorCode::ImpersonationRestrictedException->value, $exception->errorDescriptor()->code);
             self::assertSame(ErrorCategory::Authorization, $exception->errorDescriptor()->category);
             self::assertFalse($exception->errorDescriptor()->retryable);

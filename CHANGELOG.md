@@ -11,6 +11,8 @@ Notable changes to the CoreX monorepo follow [Keep a Changelog](https://keepacha
 
 ### Changed
 
+- Validation messages for impersonation, department moves, settings, the tenant lifecycle and CRM actors now describe the failed condition directly. Use the exception class or registered error code when matching a failure. PostgreSQL upgrades publish English descriptions for the affected Access and Tenancy tables and columns.
+
 - The outbox command `corex:messaging:prune` and the pub/sub command `corex:messaging:prune-pubsub` delete eligible rows in bounded statements. Both accept `--batch` from 1 through 10,000, default 1,000.
 - Forward migrations install lookup and foreign-key indexes on existing databases as well as fresh installations. Index coverage includes `users.department_id`, `tsk_tasks`, CRM, workspace invitations and tenancy control-plane tables. A partial index that excludes referencing rows cannot serve as the only foreign-key index. `tests/Arch/ForeignKeyIndexTest.php` checks the catalogs.
 - CRM rechecks the principal's user, workspace and membership at each protected write. A joined query takes shared locks and observes a revocation made earlier in the same transaction, including after a savepoint. CRM model primary keys are documented as UUIDv7.

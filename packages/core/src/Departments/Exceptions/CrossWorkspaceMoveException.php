@@ -23,7 +23,7 @@ final class CrossWorkspaceMoveException extends CodedException
     public function __construct(string $departmentId, string $newParentId)
     {
         parent::__construct(sprintf(
-            'Cannot move department %s under %s — the new parent belongs to a different workspace (B-10 §5.7 tenant isolation).',
+            'Cannot move department %s under %s — the new parent belongs to a different workspace.',
             $departmentId,
             $newParentId,
         ));
