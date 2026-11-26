@@ -3,7 +3,7 @@
   "provenance": {
     "audit_assertions": 25,
     "plan_assertions": 2,
-    "decision": "D95",
+    "decision": "release-acceptance-criteria",
     "audit_ids": "DOD-01..DOD-25",
     "plan_ids": "DOD-26..DOD-27"
   },
@@ -12,8 +12,7 @@
       "id": "DOD-01",
       "statement": "Every live package has a one-sentence purpose.",
       "owner": [
-        "P1.2",
-        "P17.8"
+        "package documentation"
       ],
       "mode": "live-command",
       "negative_fixture": "missing-purpose",
@@ -28,7 +27,7 @@
       "id": "DOD-02",
       "statement": "Package taxonomy is machine-checked.",
       "owner": [
-        "P3.3"
+        "package graph"
       ],
       "mode": "live-command",
       "negative_fixture": "taxonomy-drift",
@@ -43,7 +42,7 @@
       "id": "DOD-03",
       "statement": "`axiomasoft/corex` is foundation-only, not a capability warehouse.",
       "owner": [
-        "P6.1"
+        "kernel architecture"
       ],
       "mode": "live-command",
       "negative_fixture": "foundation-warehouse",
@@ -58,8 +57,7 @@
       "id": "DOD-04",
       "statement": "Every public symbol is present in the declared API map.",
       "owner": [
-        "P1.2",
-        "P3.3"
+        "PHP API owners"
       ],
       "mode": "live-command",
       "negative_fixture": "missing-api-symbol",
@@ -74,7 +72,7 @@
       "id": "DOD-05",
       "statement": "Cross-package imports of implementation internals are forbidden.",
       "owner": [
-        "P3.2"
+        "package graph"
       ],
       "mode": "live-command",
       "negative_fixture": "internal-import",
@@ -89,8 +87,7 @@
       "id": "DOD-06",
       "statement": "Every owned table has one declared owner.",
       "owner": [
-        "P2.3",
-        "P3.5"
+        "table ownership"
       ],
       "mode": "live-command",
       "negative_fixture": "table-owner",
@@ -105,7 +102,7 @@
       "id": "DOD-07",
       "statement": "Configuration is validated and injected as typed options.",
       "owner": [
-        "P7.11"
+        "configuration"
       ],
       "mode": "live-command",
       "negative_fixture": "config-injection",
@@ -120,8 +117,7 @@
       "id": "DOD-08",
       "statement": "Contextual state is safe across Octane/request/queue boundaries.",
       "owner": [
-        "P4.7",
-        "P11.3"
+        "runtime and tenancy"
       ],
       "mode": "live-command",
       "negative_fixture": "context-boundary",
@@ -136,7 +132,7 @@
       "id": "DOD-09",
       "statement": "Durable messages are scalar-serializable and versioned.",
       "owner": [
-        "P5.11"
+        "messaging"
       ],
       "mode": "live-command",
       "negative_fixture": "message-version",
@@ -151,7 +147,7 @@
       "id": "DOD-10",
       "statement": "Attributes do not depend on model/table identity.",
       "owner": [
-        "P10.8"
+        "custom fields"
       ],
       "mode": "live-command",
       "negative_fixture": "attribute-identity",
@@ -166,7 +162,7 @@
       "id": "DOD-11",
       "statement": "Attribute definition source is replaceable through a public contract.",
       "owner": [
-        "P10.8"
+        "custom fields"
       ],
       "mode": "live-command",
       "negative_fixture": "attribute-source",
@@ -181,7 +177,7 @@
       "id": "DOD-12",
       "statement": "Transfer proves resume, idempotency and partial-failure behavior.",
       "owner": [
-        "P12.8"
+        "import and export"
       ],
       "mode": "live-command",
       "negative_fixture": "transfer-resume",
@@ -196,7 +192,7 @@
       "id": "DOD-13",
       "statement": "Search has at least two independently tested provider implementations.",
       "owner": [
-        "P12.5"
+        "search"
       ],
       "mode": "live-command",
       "negative_fixture": "search-providers",
@@ -211,7 +207,7 @@
       "id": "DOD-14",
       "statement": "Meilisearch is optional.",
       "owner": [
-        "P17.6"
+        "distribution profiles"
       ],
       "mode": "candidate-receipt",
       "negative_fixture": "omitted-meilisearch-profile",
@@ -224,7 +220,7 @@
       "id": "DOD-15",
       "statement": "Search Intl is removable.",
       "owner": [
-        "P17.6"
+        "distribution profiles"
       ],
       "mode": "live-command",
       "negative_fixture": "omitted-search-intl",
@@ -239,8 +235,7 @@
       "id": "DOD-16",
       "statement": "Bridge packages own no foreign data.",
       "owner": [
-        "P2.3",
-        "P3.5"
+        "package graph"
       ],
       "mode": "live-command",
       "negative_fixture": "bridge-ownership",
@@ -255,8 +250,7 @@
       "id": "DOD-17",
       "statement": "Large packages match their bounded-context-first structural profile.",
       "owner": [
-        "P16.11",
-        "P9.8"
+        "package maintainers"
       ],
       "mode": "live-command",
       "negative_fixture": "omitted-profile-b",
@@ -271,7 +265,7 @@
       "id": "DOD-18",
       "statement": "Service providers remain composition roots.",
       "owner": [
-        "P8.6"
+        "service providers"
       ],
       "mode": "live-command",
       "negative_fixture": "provider-composition",
@@ -286,7 +280,7 @@
       "id": "DOD-19",
       "statement": "FlexCRM and an independent non-CRM/CMS/Store consumer use the same public lower-level contracts.",
       "owner": [
-        "P17.5"
+        "equipment consumer"
       ],
       "mode": "live-command",
       "negative_fixture": "shared-contract",
@@ -301,7 +295,7 @@
       "id": "DOD-20",
       "statement": "Custom external extensions pass the reusable contract suite.",
       "owner": [
-        "P17.2"
+        "module extensions"
       ],
       "mode": "live-command",
       "negative_fixture": "extension-contract",
@@ -316,7 +310,7 @@
       "id": "DOD-21",
       "statement": "Upgrade from every applicable previous supported package version is reproduced.",
       "owner": [
-        "P17.7"
+        "release validation"
       ],
       "mode": "candidate-receipt",
       "negative_fixture": "stale-receipt",
@@ -329,8 +323,7 @@
       "id": "DOD-22",
       "statement": "PHP/API/schema compatibility diff is part of the release gate.",
       "owner": [
-        "P3.4",
-        "P17.1"
+        "release compatibility"
       ],
       "mode": "live-command",
       "negative_fixture": "bc-unclassified",
@@ -345,7 +338,7 @@
       "id": "DOD-23",
       "statement": "Accepted architecture decisions and current code do not diverge.",
       "owner": [
-        "P15.13"
+        "architecture decisions"
       ],
       "mode": "live-command",
       "negative_fixture": "decision-drift",
@@ -360,8 +353,7 @@
       "id": "DOD-24",
       "statement": "Examples use only supported public API.",
       "owner": [
-        "P13.12",
-        "P17.8"
+        "API clients"
       ],
       "mode": "live-command",
       "negative_fixture": "public-api-example",
@@ -376,7 +368,7 @@
       "id": "DOD-25",
       "statement": "Every package README covers minimal install, configuration, extension and failure semantics.",
       "owner": [
-        "P17.8"
+        "package documentation"
       ],
       "mode": "live-command",
       "negative_fixture": "readme-contract",
@@ -391,7 +383,7 @@
       "id": "DOD-26",
       "statement": "Every supported install profile boots from split archives in a pristine consumer.",
       "owner": [
-        "P17.6"
+        "distribution profiles"
       ],
       "mode": "candidate-receipt",
       "negative_fixture": "workspace-autoload",
@@ -404,7 +396,7 @@
       "id": "DOD-27",
       "statement": "A useful application with no Flex/CRM/CMS/Store dependency passes its behavioral smoke suite.",
       "owner": [
-        "P17.5"
+        "equipment consumer"
       ],
       "mode": "live-command",
       "negative_fixture": "consumer-smoke",

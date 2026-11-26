@@ -207,7 +207,7 @@ it('serves the claim and next-due queries from the due index without sorting fut
     expect($queries)->toHaveCount(2);
     foreach ($queries as [$sql, $bindings]) {
         $plan = (string) DB::scalar('explain (format json) '.$sql, $bindings);
-        expect($plan)->toContain('"Index Name": "sys_wakeup_requests_due_ix"')
+        expect($plan)->toContain('"Index Name": "sys_wakeup_requests_runnable_due_ix"')
             ->and($plan)->not->toContain('"Node Type": "Sort"');
     }
 });

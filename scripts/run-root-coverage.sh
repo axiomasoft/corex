@@ -2,7 +2,8 @@
 # Keep resource-budget suites out of the large instrumented process; merge every lane.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
-minimum="${1:---min=80}"
+floor="$(command grep -o '^[0-9]*' scripts/coverage-min-floor.txt | head -1)"
+minimum="${1:---min=$floor}"
 [[ "$minimum" =~ ^--min=([0-9]+)$ ]] || { echo 'coverage: expected --min=<integer>' >&2; exit 2; }
 minimum="${BASH_REMATCH[1]}"
 reports=build/root-coverage

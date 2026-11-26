@@ -1,17 +1,8 @@
-# Chatom в приложении CoreX
+# Using Chatom in a CoreX application
 
-CoreX messaging доставляет доменные события через outbox. `axiomasoft/chatom` хранит
-пользовательские сообщения, участников, пространства и каналы. Замены одного другим
-нет; отдельный пустой пакет `corex-chatom` не нужен.
+CoreX delivers domain events through the outbox. Chatom owns user messages, channel membership, spaces and channels. The host installs `axiomasoft/chatom` and registers its module with Packman. The application owns any references that connect a domain entity to a conversation, space or channel. Use `Chatom\Spaces\Contracts\Spaces`, `Chatom\Channels\Contracts\Channels` and `Chatom\Messages\Contracts\Messages` to access Chatom data.
 
-Приложение устанавливает Chatom и регистрирует свой модуль через Packman. Оно связывает
-прикладную сущность с conversation/space/channel через публичные `Chatom\Spaces\Contracts\Spaces`,
-`Chatom\Channels\Contracts\Channels` и `Chatom\Messages\Contracts\Messages`. Ссылки на
-conversation принадлежат приложению; тело сообщений и членство в каналах — Chatom.
-
-Chatom принимает уже установленный контекст через
-`Chatom\Spaces\Contracts\TenantContext`. Это чтение текущей идентичности без I/O,
-инициализации tenant или переключения соединения. Пример класса приложения:
+The host adapts its established tenant identity to `Chatom\Spaces\Contracts\TenantContext`. This lookup must perform no I/O and must never initialize tenancy or switch connections.
 
 ```php
 use Chatom\Spaces\Contracts\TenantContext;
@@ -31,20 +22,12 @@ final readonly class ChatTenantContext implements TenantContext
 }
 ```
 
-Класс задаётся в конфигурации приложения:
+Register the adapter in the host configuration.
 
 ```php
 'chatom.tenancy.context' => ChatTenantContext::class,
 ```
 
-Host `AccountIsolationMapper::context()` должен быть чистой проекцией уже проверенного
-состояния Tenant, иначе этот адаптер нарушит запрет Chatom на I/O. Workspace visibility
-определяется политикой приложения и членством Chatom, а не подменой account tenant key.
-Chatom использует этот ключ для cache/lock/realtime/queued-job изоляции; сам ключ не
-авторизует чтение сообщения и не устанавливает физический tenant.
+`AccountIsolationMapper::context()` must project previously verified tenant state. Chatom uses the account key to isolate caches, locks, realtime events and queued jobs. The application policy and Chatom membership determine workspace visibility and message read access.
 
-Входящий HTTP-запрос и очередь сначала проходят общую инициализацию Tenant. Затем
-Chatom получает тот же активный account. По завершении область закрывает единственный
-владелец runtime. Модуль не вызывает `initialize()` из `current()` и не читает
-внутренние таблицы Chatom. Публичные события и `SearchProjectionSink` используются для
-проекций поиска и уведомлений с идемпотентностью на стороне получателя.
+Initialize tenancy before the HTTP request or queue worker reaches Chatom. The same runtime owner closes the scope on completion. The module reads the active account through the adapter, independently of the request or queue transport.

@@ -18,7 +18,7 @@ const RESIDENT_TENANT_B = '0198a000-0000-7000-8000-00000000000b';
 /**
  * Resident worker model: one application, many requests. The lifecycle boundary
  * between two requests is Application::forgetScopedInstances() (what Octane and
- * queue workers run); P05 bindings that hold tenant state must be scoped, so a
+ * queue workers run); bindings that hold tenant state must be scoped, so a
  * service resolved for tenant A can never be handed to tenant B.
  */
 function residentEnterTenant(Application $app, string $accountId): void

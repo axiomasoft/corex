@@ -6,7 +6,6 @@ namespace CoreX\Access\Laravel;
 
 use Closure;
 use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
-use CoreX\Access\Access\Internal\ExistingTables;
 use CoreX\Access\Access\Internal\MatrixPermissions;
 use CoreX\Access\Access\Internal\PanelAccessChecker;
 use CoreX\Access\Access\Internal\ScopeAvailability;
@@ -59,7 +58,6 @@ final class AccessBindingsRegistrar implements PackageRegistrar
         $app->when(MatrixPermissions::class)->needs(Closure::class)->give(
             static fn (): Closure => static fn (EntityActivity $activity): bool => $activity instanceof ActiveEntityFilter,
         );
-        $app->scoped(ExistingTables::class);
         $app->scoped(PanelAccessChecker::class);
         $app->alias(PanelAccessChecker::class, AccessChecker::class);
         $app->alias(PanelAccessChecker::class, ScopeResolver::class);

@@ -77,7 +77,7 @@ final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
 
         if ($latestExport === null || $latestExport->status !== 'ready') {
             throw new RuntimeException(
-                "Refusing to drop account [{$account->id}]'s database: no ready export on record (export-before-DROP invariant, D13/AC-7).",
+                "Refusing to drop account [{$account->id}]'s database: no ready export on record.",
             );
         }
 

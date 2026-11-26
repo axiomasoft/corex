@@ -65,7 +65,7 @@ final class OperationContractTest extends TestCase
     protected function defineEnvironment($app): void
     {
         parent::defineEnvironment($app);
-        $app['config']->set('corex-operations.routes.middleware', [P13VerifiedClient::class]);
+        $app['config']->set('corex-operations.routes.middleware', [NotesVerifiedClient::class]);
     }
 
     protected function setUp(): void
@@ -88,11 +88,11 @@ final class OperationContractTest extends TestCase
         ]);
         $asyncInput = self::schema(['format' => ['type' => 'string']]);
 
-        // The P14 consumer declaration uses only the frozen module extender and handler contract.
-        $command = P14FrozenConsumer::declaration($input, $output);
-        $query = Api::operation('notes.read', 'GET', '/notes/{id}', P13QueryHandler::class, 'notes.read', self::schema(), $output, version: 'v2')
+        // The consumer declaration uses only the frozen module extender and handler contract.
+        $command = FrozenNotesConsumer::declaration($input, $output);
+        $query = Api::operation('notes.read', 'GET', '/notes/{id}', NotesQueryHandler::class, 'notes.read', self::schema(), $output, version: 'v2')
             ->asQuery()->fields(read: ['/id', '/title', '/actor', '/account'], write: []);
-        $async = Api::operation('notes.export', 'POST', '/notes/export', P13AsyncHandler::class, 'notes.write', $asyncInput, $asyncOutput, version: 'v2', successStatus: 202)
+        $async = Api::operation('notes.export', 'POST', '/notes/export', NotesAsyncHandler::class, 'notes.write', $asyncInput, $asyncOutput, version: 'v2', successStatus: 202)
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
         $tool = Api::exposeTool('notes.create', 'v2', 'notes.create', 'v2', 'write', 'domain-key', $input, $output, ['title' => 'title']);
         $asyncTool = Api::exposeTool('notes.export', 'v2', 'notes.export', 'v2', 'write', 'domain-key', $asyncInput, $asyncOutput, ['format' => 'format']);
@@ -138,7 +138,7 @@ final class OperationContractTest extends TestCase
                 return $effect();
             }
         });
-        P13QueryHandler::$calls = P13CommandHandler::$calls = P13AsyncHandler::$calls = 0;
+        NotesQueryHandler::$calls = NotesCommandHandler::$calls = NotesAsyncHandler::$calls = 0;
     }
 
     public function test_real_routes_and_exposed_tool_share_compiled_contract_and_guards(): void
@@ -175,41 +175,41 @@ final class OperationContractTest extends TestCase
         $command = $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
-            'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
+            'HTTP_IDEMPOTENCY_KEY' => 'notes-command-1',
         ], content: '{"title":"Created","account":"forged"}');
         $command->assertForbidden()->assertJsonPath('code', 'operations.access_denied')->assertJsonPath('path', '/account');
         $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
-            'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
+            'HTTP_IDEMPOTENCY_KEY' => 'notes-command-1',
         ], content: '{"title":42}')->assertUnprocessable()->assertJsonPath('code', 'operations.validation_failed');
-        self::assertSame(0, P13CommandHandler::$calls);
+        self::assertSame(0, NotesCommandHandler::$calls);
 
         $command = $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
-            'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
+            'HTTP_IDEMPOTENCY_KEY' => 'notes-command-1',
         ], content: '{"title":"Created"}');
         $command->assertOk()->assertJsonPath('data.account', 'account-a');
         $replay = $this->call('POST', '/api/v2/notes', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
-            'HTTP_IDEMPOTENCY_KEY' => 'p13-command-1',
+            'HTTP_IDEMPOTENCY_KEY' => 'notes-command-1',
         ], content: '{"title":"Created"}');
         $replay->assertOk();
-        self::assertSame(1, P13CommandHandler::$calls);
+        self::assertSame(1, NotesCommandHandler::$calls);
 
         $async = $this->call('POST', '/api/v2/notes/export', server: [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_ACCEPT' => 'application/json',
-            'HTTP_IDEMPOTENCY_KEY' => 'p13-export-1',
+            'HTTP_IDEMPOTENCY_KEY' => 'notes-export-1',
         ], content: '{}');
         $async->assertStatus(202)->assertHeader('Location', '/api/v2/notes/export/status');
 
         $asyncDeclaration = $this->toolDeclaration('notes.export');
         $asyncTool = $this->app->make(ToolInvoker::class)->invoke(
-            $this->toolContext('p13-export-tool', 'notes.export'),
-            new ToolCall('notes.export', 'v2', ToolDescriptorFactory::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'p13-export-tool', operationKey: 'p13-export-1'),
+            $this->toolContext('notes-export-tool', 'notes.export'),
+            new ToolCall('notes.export', 'v2', ToolDescriptorFactory::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'notes-export-tool', operationKey: 'notes-export-1'),
         );
         self::assertSame(ToolOutcome::Committed, $asyncTool->outcome, (string) $asyncTool->errorCode);
         self::assertTrue($asyncTool->replayed);
@@ -217,23 +217,23 @@ final class OperationContractTest extends TestCase
 
         $declaration = $this->toolDeclaration('notes.create');
         $descriptor = ToolDescriptorFactory::fromDeclaration($declaration);
-        $context = $this->toolContext('p13-tool', 'notes.create');
+        $context = $this->toolContext('notes-tool', 'notes.create');
         $tool = $this->app->make(ToolInvoker::class)->invoke($context, new ToolCall(
             'notes.create', 'v2', $descriptor->contractHash,
-            new JsonObject(JsonCanonical::encode(['title' => 'Tool'])), 'p13-tool', operationKey: 'p13-tool-1',
+            new JsonObject(JsonCanonical::encode(['title' => 'Tool'])), 'notes-tool', operationKey: 'notes-tool-1',
         ));
         self::assertSame(ToolOutcome::Committed, $tool->outcome, (string) $tool->errorCode);
         self::assertSame('account-a', json_decode((string) $tool->structuredData?->canonicalJson, true)['account']);
-        self::assertSame(1, P13QueryHandler::$calls);
-        self::assertSame(2, P13CommandHandler::$calls);
-        self::assertSame(1, P13AsyncHandler::$calls);
+        self::assertSame(1, NotesQueryHandler::$calls);
+        self::assertSame(2, NotesCommandHandler::$calls);
+        self::assertSame(1, NotesAsyncHandler::$calls);
         self::assertContains('account-a', $this->modules->visitedAccounts);
         self::assertNotContains('forged', $this->modules->visitedAccounts);
     }
 
     public function test_snapshot_check_rejects_stale_bytes_without_rewriting_them(): void
     {
-        $directory = sys_get_temp_dir().'/corex-p13-freeze-'.bin2hex(random_bytes(6));
+        $directory = sys_get_temp_dir().'/corex-notes-freeze-'.bin2hex(random_bytes(6));
 
         try {
             foreach (['v1', 'v3'] as $unsupported) {
@@ -258,7 +258,7 @@ final class OperationContractTest extends TestCase
         }
     }
 
-    public function test_p14_consumer_compiles_against_frozen_public_surface(): void
+    public function test_notes_consumer_compiles_against_frozen_public_surface(): void
     {
         $operation = array_find($this->modules->registry->api, fn ($candidate) => $candidate->mode === 'operation' && $candidate->operationId === 'notes.create');
         self::assertInstanceOf(Api::class, $operation);
@@ -268,7 +268,7 @@ final class OperationContractTest extends TestCase
 
         $profile = $this->app->make(ApiProfileFactory::class)->make($this->modules->compiled(), $this->app->make(ApiOptions::class));
         $cursor = new CursorPayload(1, 'notes.by_id', 'asc', ['n-1'], 'scope', 1, 2, 'k1');
-        self::assertSame($profile->fingerprint().'|notes.by_id', P14FrozenConsumer::signature($profile, $cursor));
+        self::assertSame($profile->fingerprint().'|notes.by_id', FrozenNotesConsumer::signature($profile, $cursor));
     }
 
     /**
@@ -284,7 +284,7 @@ final class OperationContractTest extends TestCase
     {
         return new AuthenticatedRequestContext(
             new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata($requestId, 'v2', $operation, 'POST')),
-            P13VerifiedClient::ID,
+            NotesVerifiedClient::ID,
         );
     }
 
@@ -300,7 +300,7 @@ final class OperationContractTest extends TestCase
     }
 }
 
-final class P13QueryHandler implements OperationHandler
+final class NotesQueryHandler implements OperationHandler
 {
     public static int $calls = 0;
 
@@ -312,7 +312,7 @@ final class P13QueryHandler implements OperationHandler
     }
 }
 
-final class P13CommandHandler implements OperationHandler
+final class NotesCommandHandler implements OperationHandler
 {
     public static int $calls = 0;
 
@@ -324,7 +324,7 @@ final class P13CommandHandler implements OperationHandler
     }
 }
 
-final class P13AsyncHandler implements OperationAcceptance, OperationHandler
+final class NotesAsyncHandler implements OperationAcceptance, OperationHandler
 {
     public static int $calls = 0;
 
@@ -341,9 +341,9 @@ final class P13AsyncHandler implements OperationAcceptance, OperationHandler
     }
 }
 
-final class P13VerifiedClient
+final class NotesVerifiedClient
 {
-    public const string ID = 'test-p13-client';
+    public const string ID = 'test-notes-client';
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -353,8 +353,8 @@ final class P13VerifiedClient
     }
 }
 
-/** A P14-shaped consumer: this class names only exported modules and API symbols. */
-final class P14FrozenConsumer
+/** This consumer uses only exported modules and API symbols. */
+final class FrozenNotesConsumer
 {
     /**
      * @param  array<string, mixed>  $input
@@ -362,7 +362,7 @@ final class P14FrozenConsumer
      */
     public static function declaration(array $input, array $output): Api
     {
-        return Api::operation('notes.create', 'POST', '/notes', P13CommandHandler::class, 'notes.write', $input, $output, ['title' => ['required', 'string']], version: 'v2')
+        return Api::operation('notes.create', 'POST', '/notes', NotesCommandHandler::class, 'notes.write', $input, $output, ['title' => ['required', 'string']], version: 'v2')
             ->asCommand()->idempotency('required')->effect('tenant_transactional')
             ->fields(read: ['/id', '/title', '/actor', '/account'], write: ['/title']);
     }

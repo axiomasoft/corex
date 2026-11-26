@@ -26,7 +26,7 @@ function makeSurface(ArrayEntityRegistry $registry, FakeModuleRegistry $modules)
 
 // isScopeable() ⇒ every declared action row, scopes normalized per-entity capability.
 // 'projects' (tests/database/migrations) has no owner_id/workspace_id, so own/dept/
-// dept_tree/workspace collapse to account (D114) — only none/account survive dedup.
+// dept_tree/workspace collapse to account — only none/account survive dedup.
 it('lists every declared action with the entity scope set for an active scopeable declaration', function (): void {
     $registry = new ArrayEntityRegistry;
     $registry->register(new EntityDefinition(
@@ -112,7 +112,7 @@ it('includes every distinct scope when the entity declares both ownable and work
     expect($rows[0]['scopes'])->toBe([Scope::None, Scope::Own, Scope::Dept, Scope::DeptTree, Scope::Workspace, Scope::Account]);
 });
 
-// AC-27 parity with the compiler/catalog filter — an inactive module's
+// parity with the compiler/catalog filter — an inactive module's
 // declarations never reach the UI-matrix surface either.
 it('excludes a declaration whose owning module is inactive', function (): void {
     $registry = new ArrayEntityRegistry;
@@ -136,7 +136,7 @@ it('excludes a declaration whose owning module is inactive', function (): void {
     expect(makeSurface($registry, $modules)->forActiveModules())->toBeEmpty();
 });
 
-// D113 — a declaration whose entity is unknown to EntityRegistry cannot be
+// a declaration whose entity is unknown to EntityRegistry cannot be
 // attributed to any module; fail-closed, same as PermissionsMerger.
 it('excludes a declaration whose entity is unknown to EntityRegistry', function (): void {
     $registry = new ArrayEntityRegistry;

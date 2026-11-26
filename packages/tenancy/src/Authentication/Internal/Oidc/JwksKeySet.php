@@ -12,7 +12,7 @@ use Illuminate\Http\Client\Factory as HttpFactory;
 use Packman\Attributes\Internal;
 
 /**
- * JWKS fetch/cache WITHOUT `Firebase\JWT\CachedKeySet` (D130 — no PSR-6 in
+ * JWKS fetch/cache WITHOUT `Firebase\JWT\CachedKeySet` (no PSR-6 in
  * this tree, and a raw PSR-18 client would not be `Http::fake()`-able).
  * `$http->get($jwksUri)` → `JWK::parseKeySet()` → `$cache->store()->put()`.
  * On an unknown `kid` (AS rotated its signing key), exactly ONE forced

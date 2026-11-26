@@ -11,7 +11,7 @@ use Packman\Attributes\SpiKind;
 
 /**
  * Fired after {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService::stop()}
- * has ended the session and mirrored `root_account_events` (B-11 §3.4) —
+ * has ended the session and mirrored `root_account_events` —
  * on explicit `stop()`, TTL expiry, or an externally-set `revoked_at`.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

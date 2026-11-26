@@ -58,9 +58,6 @@ return new class extends PackmanMigration
             $table->foreign(['sprint_id'], 'tsk_tasks_sprint_id_fk')->references(['id'])->on('tsk_sprints')->onDelete('set null')->onUpdate('no action');
             $table->foreign(['stage_id'], 'tsk_tasks_stage_id_fk')->references(['id'])->on('tsk_stages')->onDelete('set null')->onUpdate('no action');
             $table->foreign(['workspace_id'], 'tsk_tasks_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
-            $table->index(['parent_id'], 'tsk_tasks_parent_id_ix');
-            $table->index(['stage_id'], 'tsk_tasks_stage_id_ix');
-            $table->index(['workspace_id'], 'tsk_tasks_workspace_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

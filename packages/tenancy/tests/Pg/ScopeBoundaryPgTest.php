@@ -15,7 +15,7 @@ use Tenant\Exceptions\TenantFailure;
 uses(TestCase::class)->group('pg');
 
 /**
- * D95 п.3 on real databases: the scope boundary is the tenant boundary. Two account databases and
+ * on real databases: the scope boundary is the tenant boundary. Two account databases and
  * the central one each own a `scope_markers` table; a scoped service resolved in a context writes
  * only there, and never into a database of another context.
  */

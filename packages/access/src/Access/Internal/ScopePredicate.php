@@ -28,7 +28,6 @@ final readonly class ScopePredicate
         private TenancyManager $tenancyManager,
         private EffectiveWorkspaceScope $workspaceScope,
         private ConnectionResolverInterface $connections,
-        private ExistingTables $tables,
     ) {}
 
     /**
@@ -82,7 +81,7 @@ final readonly class ScopePredicate
             return $this->applyNone($q);
         }
 
-        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasDepartmentTables()) {
             return $this->applyNone($q);
         }
 
@@ -106,7 +105,7 @@ final readonly class ScopePredicate
             return $this->applyNone($q);
         }
 
-        // ONE `path <@` subquery (premortem A6) — no recursive traversal: the
+        // ONE `path <@` subquery — no recursive traversal: the
         // department subtree resolves in the same statement as the owning
         // users lookup, never per-row.
         $deptIds = DepartmentQueries::subtreeIds($principalPath);
@@ -118,9 +117,9 @@ final readonly class ScopePredicate
 
     /**
      * dept/dept_tree resolve the record owner's department against the
-     * principal's own, via `users.department_id` (DB_SCHEMA §3.4) and
+     * principal's own, via `users.department_id` and
      * `sys_departments.path` (ltree). Absent in boxed profiles — no
-     * `users`/`sys_departments` there (AC-28) — fails closed rather than
+     * `users`/`sys_departments` there — fails closed rather than
      * silently granting.
      */
     private function matchesDepartment(object $record, Principal $p, bool $tree): bool
@@ -129,7 +128,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasDepartmentTables()) {
             return false;
         }
 
@@ -164,7 +163,7 @@ final readonly class ScopePredicate
                 ->on('principal_department.id', '=', 'principal.department_id')
                 ->whereNull('principal_department.deleted_at'))
             ->where('owner.id', $ownerId)
-            ->whereRaw('owner_department.path <@ principal_department.path')
+            ->whereColumn('owner_department.path', '<@', 'principal_department.path')
             ->exists();
     }
 
@@ -180,7 +179,7 @@ final readonly class ScopePredicate
         $ctxWorkspace = $this->tenancyManager->context()?->workspace;
 
         // No workspace narrowed in context: only account-wide rows are
-        // visible (D107) — mirrors matchesWorkspace()'s own no-context denial
+        // visible — mirrors matchesWorkspace()'s own no-context denial
         // of a workspace-carrying record.
         if ($ctxWorkspace === null) {
             $q->getQuery()->whereNull($column);
@@ -196,7 +195,7 @@ final readonly class ScopePredicate
     }
 
     /**
-     * `workspace` carries an EXPLICIT predicate (D107) rather than relying on
+     * `workspace` carries an EXPLICIT predicate rather than relying on
      * `WorkspaceScope` already being applied — that global scope is not
      * registered on any model in the tree today, and even once
      * {@see WorkspaceScopeWiring} wires it, a double identical WHERE is
@@ -223,7 +222,7 @@ final readonly class ScopePredicate
     /**
      * `[ctxWorkspace->id]` by default; the ctx workspace's own subtree
      * (`path <@`) when its `settings->>'cascade_view'` is strictly `'true'`
-     * (D117) — a hierarchical "parent sees children" view, never the reverse
+     * — a hierarchical "parent sees children" view, never the reverse
      * (cascade always reads DOWN from the ctx workspace's own path).
      *
      * @return list<string>
@@ -250,10 +249,10 @@ final readonly class ScopePredicate
     }
 
     /**
-     * Fail-closed by construction (D117): no `wsp_workspaces` table (boxed
-     * profile, AC-28) · no row for the ctx workspace · flag absent or not
+     * Fail-closed by construction: no `wsp_workspaces` table (boxed
+     * profile) · no row for the ctx workspace · flag absent or not
      * strictly `'true'` · empty `path` ⇒ cascade off. Default `settings =
-     * '{}'` (DDL P2.6) means cascade is off unless explicitly turned on.
+     * '{}'` means cascade is off unless explicitly turned on.
      */
     private function cascadeEnabled(WorkspaceRef $ctxWorkspace): bool
     {
@@ -261,11 +260,14 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->hasTable('wsp_workspaces')) {
+        /** @var Connection $connection */
+        $connection = $this->connections->connection();
+
+        if (! $connection->getSchemaBuilder()->hasTable('wsp_workspaces')) {
             return false;
         }
 
-        $flag = $this->connections->connection()->table('wsp_workspaces')
+        $flag = $connection->table('wsp_workspaces')
             ->where('id', $ctxWorkspace->id)
             ->selectRaw("settings->>'cascade_view' as cascade_view")
             ->value('cascade_view');
@@ -277,7 +279,7 @@ final readonly class ScopePredicate
 
     /**
      * No predicate of its own; additionally lifts the workspace global scope
-     * resolved by EffectiveWorkspaceScope (D109) — never `withoutGlobalScopes()`, which would
+     * resolved by EffectiveWorkspaceScope — never `withoutGlobalScopes()`, which would
      * also strip SoftDeletes and any other unrelated scope a model carries.
      */
     /**
@@ -295,11 +297,26 @@ final readonly class ScopePredicate
         return $q;
     }
 
-    private function hasTable(string $table): bool
+    private function hasDepartmentTables(): bool
     {
-        /** @var Connection */
+        /** @var Connection $connection */
         $connection = $this->connections->connection();
 
-        return $this->tables->has(connection: $connection, table: $table);
+        if ($connection->getDriverName() === 'pgsql') {
+            // Match Laravel's current-schema and relation-kind checks in a single round trip.
+            $prefix = $connection->getTablePrefix();
+
+            $tableCount = $connection->scalar(
+                "select count(*) from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid = c.relnamespace
+                 where n.nspname = current_schema() and c.relkind in ('r', 'p') and c.relname in (?, ?)",
+                [$prefix.'users', $prefix.DepartmentQueries::table()],
+            );
+
+            return $tableCount === 2 || $tableCount === '2';
+        }
+
+        $schema = $connection->getSchemaBuilder();
+
+        return $schema->hasTable('users') && $schema->hasTable(DepartmentQueries::table());
     }
 }

@@ -15,7 +15,7 @@ use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
- * Global logout (AC-15): revokes every unrevoked `root_idp_sessions` row of
+ * Global logout: revokes every unrevoked `root_idp_sessions` row of
  * the current identity, cascades into `root_oauth_refresh_tokens` by
  * `session_id`, then ends the tenant-local session. Both tables are
  * audited — this UPDATEs `revoked_at`, it NEVER `DELETE`s a row.

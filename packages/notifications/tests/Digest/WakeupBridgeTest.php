@@ -21,6 +21,7 @@ use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Preferences\Data\NotificationPreference;
 use CoreX\Notifications\Runtime\Internal\DigestTick;
 use CoreX\Notifications\Runtime\Internal\DigestWakeupAdapter;
+use CoreX\Notifications\Runtime\Internal\DigestWakeupHandler;
 use CoreX\Notifications\Runtime\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
@@ -267,4 +268,53 @@ it('recovers the concrete frozen run after terminal history longer than the sour
     wakeup_bridge_sweep(digestContext()->tenant, 1);
     expect(DB::table('ntf_deliveries')->where('digest_run_id', $new->id)->count())->toBe(1)
         ->and($source->nextDue(digestContext()->tenant))->toBeNull();
+});
+
+it('refuses a wakeup that is not a windowed notification digest tick', function (string $kind, bool $windowed): void {
+    $seen = null;
+    $context = new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'digest-test', 'active', [], []));
+    $window = new WakeupWindow(new DateTimeImmutable('2026-09-16T09:00:00Z'), new DateTimeImmutable('2026-09-16T10:00:00Z'), 'hourly');
+    $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($context);
+    $request = new WakeupRequest($scope, $kind, 'notification-digest/1', 'digest:2026-09-16T09', new DateTimeImmutable('2026-09-16T10:00:00Z'), $windowed ? $window : null, JsonDocuments::capture([]));
+    $adapter = new DigestWakeupAdapter(function (DigestTick $tick) use (&$seen): void {
+        $seen = $tick;
+    });
+
+    expect(fn () => $adapter->handle(new WakeupDelivery($request, $context, 1, 1, 'digest-tick')))->toThrow(RuntimeException::class)
+        ->and($seen)->toBeNull();
+})->with([
+    'another kind' => ['search.reindex.v1', true],
+    'no window' => ['notification.digest.v1', false],
+]);
+
+it('refuses a digest tick whose request key does not name a run', function (string $requestKey): void {
+    app()->instance(SettingsRepository::class, new DigestBridgeSettingsRepository);
+    $context = digestContext()->tenant;
+    $window = new WakeupWindow(new DateTimeImmutable('2026-09-16T09:00:00Z'), new DateTimeImmutable('2026-09-16T10:00:00Z'), 'hourly');
+    $tick = new DigestTick(tenant: $context, scope: resolve(DataScopeFactory::class)->forCurrentPrincipal($context), window: $window, requestKey: $requestKey);
+
+    expect(fn () => resolve(DigestWakeupHandler::class)($tick))->toThrow(RuntimeException::class, 'Digest wakeup key');
+})->with([
+    'foreign prefix' => ['search.digest:run-1'],
+    'empty run id' => ['notification.digest:'],
+]);
+
+it('refuses to recover a digest whose scope fingerprint was replaced', function (): void {
+    $digest = freezeDigest('tampered-fingerprint');
+    DB::table('sys_wakeup_requests')->delete();
+    DB::table('ntf_digest_runs')->where('id', $digest->id)->update(['scope_key' => hash('sha256', 'another scope')]);
+
+    $result = resolve(NotificationDigestDueSource::class)->sweep(digestContext()->tenant, new DateTimeImmutable, 10);
+
+    expect($result->failed)->toBe(1)
+        ->and(DB::table('sys_wakeup_requests')->count())->toBe(0);
+});
+
+it('refuses a digest tick that carries a real run id behind a foreign prefix', function (): void {
+    $digest = freezeDigest('foreign-prefix');
+    $context = digestContext()->tenant;
+    $window = new WakeupWindow(new DateTimeImmutable('2026-09-16T09:00:00Z'), new DateTimeImmutable('2026-09-16T10:00:00Z'), 'hourly');
+    $tick = new DigestTick(tenant: $context, scope: resolve(DataScopeFactory::class)->forCurrentPrincipal($context), window: $window, requestKey: str_repeat('x', strlen('notification.digest:')).$digest->id);
+
+    expect(fn () => resolve(DigestWakeupHandler::class)($tick))->toThrow(RuntimeException::class, 'Digest wakeup key is invalid.');
 });

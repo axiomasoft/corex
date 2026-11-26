@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Flex\Crm;
 
 use CoreX\Foundation\Contracts\ModuleReferences;
-use Flex\Crm\Context\Internal\LockedAdmissions;
 use Flex\Crm\Internal\CrmModuleReferences;
 use Flex\Crm\Internal\Value;
 use Flex\Crm\Support\CrmOptions;
@@ -21,7 +20,6 @@ final class CrmServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->scoped(CrmModuleReferences::class);
-        $this->app->scoped(LockedAdmissions::class);
         $this->app->tag(CrmModuleReferences::class, ModuleReferences::class);
 
         $this->app->tag((new CrmModule)->schemaSetProviders(), SchemaSetProvider::class);

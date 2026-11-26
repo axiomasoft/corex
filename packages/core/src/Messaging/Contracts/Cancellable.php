@@ -8,8 +8,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Opt-in for pre-action `DomainEvent`s a listener can abort (Architecture_CoreX
- * §7.3, e.g. a `ProductCreating`-style hook). Kept separate from `DomainEvent`
+ * Opt-in for pre-action `DomainEvent`s a listener can abort (such as a `ProductCreating` hook). Kept separate from `DomainEvent`
  * itself — most domain events are informational and never cancellable.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

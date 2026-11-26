@@ -29,6 +29,16 @@
                         }
                     },
                     "additionalProperties": false
+                },
+                "retention": {
+                    "type": "object",
+                    "properties": {
+                        "settled_days": {
+                            "type": "integer",
+                            "default": 90
+                        }
+                    },
+                    "additionalProperties": false
                 }
             },
             "additionalProperties": false

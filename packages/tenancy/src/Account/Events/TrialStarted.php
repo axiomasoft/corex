@@ -14,7 +14,7 @@ use Packman\Attributes\SpiKind;
 
 /**
  * Fired after {@see CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle::startTrial()} has transitioned
- * `provisioning → trial` and mirrored `root_account_events` (B-11 §5.1).
+ * `provisioning → trial` and mirrored `root_account_events`.
  * Built with an explicit {@see TenantContext} (not the container-resolved
  * default `DomainEvent` falls back to) — the FSM mutates `root_accounts`
  * from the CENTRAL scope, no tenancy is initialized at the point this

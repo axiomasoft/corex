@@ -27,9 +27,9 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
-// P2.11 — grant validation (D143) + read-only-session effects, through the
-// REAL callback() lane (D145 imp branch). Negative-first per Code Guidance.
-// Letters per phases/P2.md P2.11 Validation. Reuses OidcLoginTest.php's
+// grant validation and read-only-session effects, through the
+// REAL callback() lane (imp branch). Negative-first per Code Guidance.
+// Reuses OidcLoginTest.php's
 // approach but with its own "IM"-suffixed helpers (Pest loads every test
 // file into the same process — a shared function name would fatal-collide).
 uses()->group('pg');
@@ -112,7 +112,7 @@ function trackDbIM(string $db): void
 
 /**
  * Overrides `auth.providers.users` ('oidc-test-stub') for ONE test: unlike
- * StubIdentityProvider (which always resolves, by design — P2.22 parity
+ * StubIdentityProvider (which always resolves, by design — parity
  * proof, premortem C4), this always returns null — models a target-user id
  * that Auth::loginUsingId() cannot resolve, so the caller sees `false`
  * without throwing (case к).
@@ -257,7 +257,7 @@ function initAccountWithTenantIM(): Account
     return $account;
 }
 
-/** Seeds a tenant `users` row directly — impersonation never calls IdentitySyncer (D145), so a target/owner must pre-exist as it would from an earlier ordinary login. */
+/** Seeds a tenant `users` row directly — impersonation never calls IdentitySyncer, so a target/owner must pre-exist as it would from an earlier ordinary login. */
 function seedTenantUserIM(Account $account, string $id, array $overrides = []): void
 {
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
@@ -504,7 +504,7 @@ it('и: regulated profile requires a separate staff approver', function (): void
     expect(auth('web')->id())->toBe($account->owner_identity_id);
 });
 
-it('й: два start одного гранта → ровно один успех (одноразовость, D143)', function (): void {
+it('й: два start одного гранта → ровно один успех (одноразовость)', function (): void {
     $account = initAccountWithTenantIM();
     $staffId = makeStaffIdentityIM();
     $targetId = $account->owner_identity_id;
@@ -535,7 +535,7 @@ it('й: два start одного гранта → ровно один успе�
 });
 
 it('к/н: target-пользователя не существует → 403, но used_at выставлен ДО этого отказа', function (): void {
-    // StubIdentityProvider always resolves an id (P2.22 parity proof) — a
+    // StubIdentityProvider always resolves an id (parity proof) — a
     // one-off provider models retrieveById() returning null instead, the
     // real precondition for `loginUsingId()` to answer `false`.
     Auth::provider('oidc-test-stub', static fn (): MissingUserProvider => new MissingUserProvider);
@@ -723,7 +723,7 @@ it('я: revoked_at выставлен извне mid-session → следующ�
     test()->get('/auth/login')->assertStatus(401);
 });
 
-it('а: imp в токене при impersonation.enabled=false → 403 (регресс P2.22)', function (): void {
+it('а: imp в токене при impersonation.enabled=false → 403', function (): void {
     config(['corex-tenancy.oidc.impersonation.enabled' => false]);
     app()->forgetInstance(TenancyOptions::class);
 

@@ -17,7 +17,7 @@ use Packman\Attributes\Internal;
  * plus the `LARAVEL_OCTANE` env var Octane's server process exports to every
  * worker it spawns.
  *
- * @internal spec: Implementation Rules, P1.24
+ * @internal
  */
 #[Internal]
 final readonly class DefaultWorkerRuntime implements WorkerRuntime

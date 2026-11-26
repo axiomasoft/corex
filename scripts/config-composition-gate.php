@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 /**
- * Blocking configuration-read composition gate (P3.6 scanner, P7.11 blocking bit, P05.1 D69 p.6).
+ * Blocking configuration-read composition gate.
  *
  * Reports configuration reads outside allowlisted composition paths:
  * C1 `config()`, C2 any config repository access, C3 the removed static

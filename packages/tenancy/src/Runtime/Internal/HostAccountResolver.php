@@ -14,7 +14,7 @@ use Packman\Attributes\Internal;
 
 /**
  * Resolves `Request::getHost()` to an account id through `root_domains` (verified, not deleted)
- * and `root_accounts` (not deleted, slug set — §7.3 п.9: a pending shell has neither a verified
+ * and `root_accounts` (not deleted, slug set — a pending shell has neither a verified
  * domain nor a slug, so it is unreachable by host). Positive entries are fenced by a
  * shared generation; the explicit host store lives outside the tenant cache stores.
  */

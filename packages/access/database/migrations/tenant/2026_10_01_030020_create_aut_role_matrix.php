@@ -6,10 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Packman\Schema\Laravel\PackmanMigration;
 
-// Tenant-DB migration (B-11 §2.3, D14/D16) — UI-матрица role × entity ×
-// action × scope, источник истины компилятора (DatabaseRoleMatrixCompiler,
-// P2.8). entity_key — handle EntityRegistry (логическая связь, без FK —
-// EntityRegistry не персистентен). См. DB_SCHEMA.md §3.5 aut_role_matrix.
+// Tenant role matrix used by DatabaseRoleMatrixCompiler. Each row associates a
+// role, entity and action with a scope. EntityRegistry supplies entity keys at
+// runtime, so entity_key has no foreign key.
 return new class extends PackmanMigration
 {
     protected function hasTables(): bool
@@ -40,8 +39,6 @@ return new class extends PackmanMigration
         DB::statement('ALTER TABLE aut_role_matrix ADD CONSTRAINT aut_role_matrix_uq UNIQUE NULLS NOT DISTINCT (role_id, entity_key, action, context_type, context_id)');
 
         DB::statement('CREATE INDEX aut_role_matrix_entity_ix ON aut_role_matrix (entity_key)');
-
-        DB::statement("COMMENT ON TABLE aut_role_matrix IS 'Семантика (Б24, R-08 §2.6): несколько ролей → max-scope-wins по базовым строкам; контекстная строка (context_type NOT NULL) СИЛЬНЕЕ базовой для записей своего контекста, включая сужение — так реализуются «стадийные права». Отсутствие строки = none'");
     }
 
     public function down(): void

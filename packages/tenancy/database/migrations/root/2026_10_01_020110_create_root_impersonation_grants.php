@@ -32,13 +32,9 @@ return new class extends PackmanMigration
             $table->foreign('staff_identity_id', 'root_impersonation_grants_staff_identity_id_fk')->references('id')->on('root_identities')->cascadeOnDelete();
             $table->foreign('account_id', 'root_impersonation_grants_account_id_fk')->references('id')->on('root_accounts')->cascadeOnDelete();
             $table->foreign('approved_by', 'root_impersonation_grants_approved_by_fk')->references('id')->on('root_identities')->nullOnDelete();
-            $table->index(['approved_by'], 'root_impersonation_grants_approved_by_ix');
-            $table->index(['staff_identity_id'], 'root_impersonation_grants_staff_identity_id_ix');
         });
 
         DB::statement('CREATE INDEX root_impersonation_grants_account_created_ix ON root_impersonation_grants (account_id, created_at)');
-
-        DB::statement("COMMENT ON COLUMN root_impersonation_grants.target_user_id IS 'users.id тенантской БД — cross-DB, без FK (D14/DB_SCHEMA §1)'");
     }
 
     public function down(): void

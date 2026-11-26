@@ -13,19 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-// P2.11 — root-harness coverage (D81: ядровые ACTOR/CHECK/boxed-дефолт cases
-// live here, not in packages/tenancy/tests, since ImpersonationService/
-// ActorType/CurrentActor are axiomasoft/corex, not axiomasoft/corex-tenancy). Cases а–бб per
-// phases/P2.md P2.11 Validation; letters noted per test.
-//
-// Only the two CHECK-widening tests need PG (CHECK constraints are Postgres
-// DDL, D12) — tagged individually with ->group('pg') rather than file-wide,
-// so the boxed-default/CurrentActor cases stay sqlite-lane green (AC-28,
-// case аа) and each grouped test resets its own schema inline (no shared
-// beforeEach — a file-wide one would drag PG into the ungrouped tests too).
+// The root suite owns the CurrentActor and boxed-default cases. Only the two
+// PostgreSQL CHECK-constraint tests select the pg group and reset their schema.
 
 /**
- * Controllable double for CurrentActor's CONSUMPTION of the contract (D139)
+ * Controllable double for CurrentActor's consumption of the contract
  * — not the real DatabaseImpersonationService (PG/session-bound,
  * corex/tenancy-only, exercised by packages/tenancy/tests/Feature/
  * ImpersonationTest.php instead). This file tests axiomasoft/corex's own branch
@@ -59,13 +51,13 @@ final readonly class FakeImpersonationService implements ImpersonationService
     }
 }
 
-it('boxed default: ImpersonationService binds to NullImpersonationService — no grants exist (аа, AC-28)', function (): void {
+it('boxed default: ImpersonationService binds to NullImpersonationService — no grants exist', function (): void {
     expect(resolve(ImpersonationService::class))->toBeInstanceOf(NullImpersonationService::class)
         ->and(resolve(ImpersonationService::class)->state())->toBeNull()
         ->and(resolve(ImpersonationService::class)->active())->toBeNull();
 });
 
-it('NullImpersonationService::start() throws — boxed installs have no grants (B-11 §6.1)', function (): void {
+it('NullImpersonationService::start() throws — boxed installs have no grants', function (): void {
     (new NullImpersonationService)->start('grant-id', 'staff-id');
 })->throws(LogicException::class);
 
@@ -163,7 +155,7 @@ it('mod_lifecycle_log_actor_ck accepts support under impersonation', function ()
     expect(DB::connection('pgsql')->table('mod_lifecycle_log')->where('operation', 'enable')->first()->actor_type)->toBe('system');
 
     // Under impersonation — DatabaseModuleLifecycle:798 writes
-    // CurrentActor::type()->value into THIS table's own (independent, D138)
+    // CurrentActor::type()->value into THIS table's own (independent)
     // CHECK; without the widening migration this insert would violate it.
     $staffId = (string) Str::uuid7();
     $state = new ImpersonationState((string) Str::uuid7(), $staffId, (string) Str::uuid7(), new DateTimeImmutable('+1 hour'));

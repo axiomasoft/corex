@@ -320,7 +320,7 @@ def prove_clients(snapshots: Path, reports: Path) -> dict:
     with_temp(snapshots, "graphql")
     return {
         "schema_version": "corex-api-client-receipt/1",
-        "item": "P17.3",
+        "item": json.loads(Path(__file__).with_name("legacy-receipt-items.json").read_text())["corex-api-client-receipt/1"],
         "result": "PASS",
         "snapshots": rest_report["digests"],
         "contract_fingerprint": json.loads((snapshots / "manifest.json").read_text(encoding="utf-8"))["contract_fingerprint"],

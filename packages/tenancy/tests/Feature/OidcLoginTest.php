@@ -18,8 +18,8 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
-// AC-14 — authorization-code + PKCE + nonce (D129), Implementation Rule 5
-// order (research/10 §3). Negative-first per the P2.22 pre-mortem (§7): each
+// authorization code with PKCE and a nonce
+// order (research/10 §3). Negative-first per the pre-mortem (§7): each
 // case below fails if its corresponding check in IdTokenVerifier/
 // OidcLoginController is removed — asserted by the specific claim/step each
 // test forges, not by the mere presence of a `->assertStatus(403)`.
@@ -259,7 +259,7 @@ function baseClaimsOL(string $sub, string $acct, string $nonce, array $overrides
  * are captured BY REFERENCE so a test can mutate what's served WITHOUT a
  * second Http::fake() call — Http::fake() resets Http::recorded()
  * (Illuminate\Http\Client\Factory::fake()), which would break the
- * request-counter assertions (test п, D130 anti-self-deception).
+ * request-counter assertions (test п, anti-self-deception).
  *
  * @param  array<string, mixed>  $jwksDoc
  * @param  array<string, mixed>  $idTokenResponse
@@ -360,7 +360,7 @@ it('г: id_token без kid → 403', function (): void {
     callbackOL($state, $nonce)->assertStatus(403);
 });
 
-// (г) kid present but unknown to the JWKS — even after JwksKeySet's own one forced refetch, D130.
+// (г) kid present but unknown to the JWKS — even after JwksKeySet's own one forced refetch.
 it('г: неизвестный kid → один принудительный рефетч JWKS, но всё равно 403', function (): void {
     $state = Str::random(40);
     $nonce = Str::random(40);
@@ -557,7 +557,7 @@ it('м: членства нет вовсе → 403', function (): void {
     callbackOL($state, $nonce)->assertStatus(403);
 });
 
-// (н) `imp` claim present while `corex-tenancy.oidc.impersonation.enabled` stays at its false default (P2.11 fail-closed gate).
+// (н) `imp` claim present while `corex-tenancy.oidc.impersonation.enabled` stays at its false default (fail-closed gate).
 it('н: imp в токене при impersonation.enabled=false → 403', function (): void {
     expect(config('corex-tenancy.oidc.impersonation.enabled'))->toBeFalse();
 
@@ -612,7 +612,7 @@ it('о: happy-path — users создан IdentitySyncer, Auth::id()===sub, се
         ->and($row->is_active)->toBeTrue();
 });
 
-// (п) JWKS caching (D130): second login makes 0 requests to jwks_uri; after
+// (п) JWKS caching: second login makes 0 requests to jwks_uri; after
 // an AS key rotation (new kid, same JWKS doc mutated in place, NO
 // Cache::flush()), the next login succeeds with exactly ONE additional
 // jwks_uri request — proven via Http::recorded() counters, not Cache::has().

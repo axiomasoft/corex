@@ -19,7 +19,7 @@ use Illuminate\Session\Store;
 use Packman\Attributes\Internal;
 
 /**
- * Kernel early-identification (B-11 §5.4 п.1–2). Host is read ONLY from
+ * Kernel early-identification. Host is read ONLY from
  * {@see Request::getHost()} — the edge (Caddy) is not a source of truth,
  * client-supplied `X-Account-*`/`X-Forwarded-Host` are never consulted.
  *

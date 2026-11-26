@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Tests\Support\SingletonInjectionGate;
 
-// P4.12 — singleton registrations must not capture Application / Request / Config
-// in constructors of monorepo implementations (Octane-safe lifetime; A19).
+// singleton registrations must not capture Application / Request / Config
+// in constructors of monorepo implementations (Octane-safe lifetime).
 
 test('singleton injection gate passes on clean tree with allowlist', function (): void {
     $violations = SingletonInjectionGate::violations(SingletonInjectionGate::allowlistPath());
@@ -131,7 +131,7 @@ PHP;
         ->and($joined)->toContain('SingletonInjectionRegistrarProbe');
 });
 
-test('singleton injection allowlist is empty since P05.3', function (): void {
+test('singleton injection allowlist is empty', function (): void {
     $allowlist = json_decode((string) file_get_contents(SingletonInjectionGate::allowlistPath()), true, flags: JSON_THROW_ON_ERROR);
 
     expect($allowlist['entries'])->toBe([]);

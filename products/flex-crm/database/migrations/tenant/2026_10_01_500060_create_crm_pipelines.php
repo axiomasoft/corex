@@ -31,7 +31,6 @@ return new class extends PackmanMigration
             $t->addColumn('timestampTz', 'deleted_at', ['precision' => null])->nullable();
 
             $t->foreign(['workspace_id'], 'crm_pipelines_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
-            $t->index(['workspace_id'], 'crm_pipelines_workspace_id_ix');
         });
 
         $index = 'CREATE UNIQUE INDEX crm_pipelines_code_uq ON crm_pipelines';

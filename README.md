@@ -71,7 +71,7 @@ configuration, usage, errors, testing and CI, and the improvement proposals.
 ```bash
 composer install
 composer test          # Pest + Testbench on SQLite
-composer test:pg       # PostgreSQL lane (docker compose up -d pgsql)
+composer test:pg       # PostgreSQL lane (docker compose up -d; see docs/testing-ci.md)
 composer analyse       # PHPStan, max level
 composer lint:check    # Pint
 composer refactor:check

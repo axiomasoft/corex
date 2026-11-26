@@ -60,8 +60,7 @@ Disjoint from archive; proves install optionality without every unselected sibli
 ## Consumer obligations
 
 - **Discover/invoke authority** stays in consumer `ToolPolicy`; this map is not a grant.
-- **Mutations** require consumer `ToolExecutionGuard` with domain-key or provider-key semantics
-  from P8.4; default `ReadOnlyToolExecutionGuard` admits reads only.
+- **Mutations** require consumer `ToolExecutionGuard` with domain-key or provider-key semantics; default `ReadOnlyToolExecutionGuard` admits reads only.
 - **Missing producer** or unselected contract → tool unavailable; no inference from convenient
   CRUD, UI, recipients, CRM booking defaults, or RUB/FX fallbacks.
 - **Deployment** (credential validation, fleet DNS/TLS/IAM and control-plane operations) stays with

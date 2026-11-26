@@ -9,15 +9,13 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Назначение публикации арендованного сообщения.
+ * Publishes a leased outbox message outside the database transaction.
+ * A successful return confirms durable handoff even if the consumer is offline.
+ * Implementations must accept redelivery or deduplicate by message ID.
  *
- * Выполняется ВНЕ транзакции БД. Успешный return подтверждает durable handoff,
- * переживающий offline consumer (D99). Реализация идемпотентна по messageId или
- * терпит повтор; окно дублей остаётся at-least-once.
- *
- * Публикует байты CloudEventCodec::encode() — CloudEvents 1.0 structured JSON
- * с media type application/cloudevents+json. Отображение — message-policy.md.
- * Канал публикации берётся из объявления контракта в реестре.
+ * Publish the bytes from `CloudEventCodec::encode()` as CloudEvents 1.0 structured
+ * JSON with the `application/cloudevents+json` media type. The contract registry
+ * selects the channel. See the message policy for the field mapping.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface MessagePublisher

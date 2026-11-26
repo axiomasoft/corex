@@ -6,11 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Packman\Schema\Laravel\PackmanMigration;
 
-// Tenant-DB migration (B-11 §2.3, D14/D16) — назначение роли принципалу
-// (user/agent/api_key, D101). Cross-package FK (workspace_id → wsp_workspaces,
-// granted_by → users) — отдельной cloud-миграцией (D102): эти таблицы
-// принадлежат axiomasoft/corex-tenancy, отсутствующему в boxed-профиле (AC-28). См.
-// DB_SCHEMA.md §3.5 aut_role_assignments.
+// Grants a role to a user, agent or API key. A separate cloud migration adds
+// the foreign keys from workspace_id to wsp_workspaces and granted_by to users.
+// The optional tenancy package owns those tables.
 return new class extends PackmanMigration
 {
     protected function hasTables(): bool
@@ -33,16 +31,12 @@ return new class extends PackmanMigration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
 
             $table->foreign('role_id', 'aut_role_assignments_role_id_fk')->references('id')->on('aut_roles')->cascadeOnDelete();
-            $table->index(['granted_by'], 'aut_role_assignments_granted_by_ix');
-            $table->index(['workspace_id'], 'aut_role_assignments_workspace_id_ix');
         });
 
         DB::statement("ALTER TABLE aut_role_assignments ADD CONSTRAINT aut_role_assignments_principal_type_ck CHECK (principal_type IN ('user','agent','api_key'))");
         DB::statement('ALTER TABLE aut_role_assignments ADD CONSTRAINT aut_role_assignments_uq UNIQUE NULLS NOT DISTINCT (role_id, principal_type, principal_id, workspace_id)');
 
         DB::statement('CREATE INDEX aut_role_assignments_principal_ix ON aut_role_assignments (principal_type, principal_id)');
-
-        DB::statement("COMMENT ON TABLE aut_role_assignments IS 'twenty roleTarget: агент и api_key — полноправные principal. Права агента при запуске от пользователя = intersection(права инициатора, права роли агента) — enforcement в corex/ai (B-13); здесь только модель'");
     }
 
     public function down(): void

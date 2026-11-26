@@ -1,0 +1,11 @@
+--- a/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
+@@ -20,7 +20,7 @@
+         $this->create($table, function (Blueprint $table): void {
+             $table->uuid('id');
+             $table->primary(['id'], 'sys_audit_log_pk');
+-            $table->timestampTz('occurred_at', precision: 6)->useCurrent();
++            $table->timestampTz('occurred_at')->useCurrent();
+             $table->string('actor_type', 16);
+             $table->uuid('actor_id')->nullable();
+             $table->uuid('workspace_id')->nullable();

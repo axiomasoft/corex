@@ -13,7 +13,7 @@ use Packman\Attributes\SpiKind;
 
 /**
  * Fired after {@see CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle::suspend()} has transitioned
- * `active → suspended` and mirrored `root_account_events` (B-11 §5.1). Built
+ * `active → suspended` and mirrored `root_account_events`. Built
  * with an explicit {@see TenantContext} — see {@see TrialStarted}'s
  * docblock for why.
  */

@@ -13,7 +13,7 @@ use Packman\Attributes\Internal;
  * supplies the configured central connection when resolving an instance;
  * callers of Eloquent's static API must select that connection explicitly.
  * The one-time atomic claim itself is a query-builder `UPDATE` in
- * {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationGrantStore} (D143),
+ * {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationGrantStore},
  * not an Eloquent write — this model exists for the L2 exempt-list
  * (`ImpersonatedModelWriteGuard`) and read access after the claim.
  *

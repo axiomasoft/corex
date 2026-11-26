@@ -31,16 +31,12 @@ return new class extends PackmanMigration
 
             $table->foreign('workspace_id', 'wsp_invitations_workspace_id_fk')->references('id')->on('wsp_workspaces')->cascadeOnDelete();
             $table->foreign('invited_by', 'wsp_invitations_invited_by_fk')->references('id')->on('users')->restrictOnDelete();
-            $table->index(['invited_by'], 'wsp_invitations_invited_by_ix');
-            $table->index(['workspace_id'], 'wsp_invitations_workspace_id_ix');
         });
 
         DB::statement("ALTER TABLE wsp_invitations ADD CONSTRAINT wsp_invitations_status_ck CHECK (status IN ('pending','accepted','revoked','expired'))");
         DB::statement("ALTER TABLE wsp_invitations ALTER COLUMN expires_at SET DEFAULT (now() + interval '7 days')");
 
         DB::statement('CREATE INDEX wsp_invitations_email_ix ON wsp_invitations (lower(email)) WHERE status = \'pending\'');
-
-        DB::statement("COMMENT ON COLUMN wsp_invitations.role_id IS 'Soft-ref, NO FK (D21): aut_roles lands later with axiomasoft/corex-access (P2.8); cleanup on accept is application-level, not ON DELETE SET NULL'");
     }
 
     public function down(): void

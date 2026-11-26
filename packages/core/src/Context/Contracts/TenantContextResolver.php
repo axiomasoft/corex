@@ -9,7 +9,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Resolves the active TenantContext. Real (P2) implementations live in
+ * Resolves the active TenantContext. Cloud implementations live in
  * axiomasoft/corex-tenancy; boxed installs default to SingleAccountResolver.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

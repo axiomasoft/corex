@@ -22,6 +22,7 @@ use CoreX\Notifications\Internal\DigestSchedulerCheck;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Runtime\Internal\ChannelDrivers;
+use CoreX\Notifications\Runtime\Internal\Commands\PruneNotifications;
 use CoreX\Notifications\Runtime\Internal\DeliveryCoordinator;
 use CoreX\Notifications\Runtime\Internal\DeliveryIntents;
 use CoreX\Notifications\Runtime\Internal\DeliveryReceiptProjector;
@@ -29,6 +30,7 @@ use CoreX\Notifications\Runtime\Internal\DeliveryStore;
 use CoreX\Notifications\Runtime\Internal\DenyNotificationPolicy;
 use CoreX\Notifications\Runtime\Internal\InAppChannelDriver;
 use CoreX\Notifications\Runtime\Internal\NotificationModuleReferences;
+use CoreX\Notifications\Runtime\Internal\NotificationRetention;
 use CoreX\Notifications\Runtime\Internal\NotificationScope;
 use CoreX\Notifications\Runtime\Internal\NotificationVisibility;
 use CoreX\Notifications\Runtime\Internal\NullRecipientResolver;
@@ -58,7 +60,7 @@ final class NotificationsBindingsRegistrar implements PackageRegistrar
 
         DeliveryPortBindings::register($app);
 
-        $app->singleton(NotificationsOptions::class, static fn (Application $app): NotificationsOptions => NotificationsOptions::fromArray(
+        $app->scoped(NotificationsOptions::class, static fn (Application $app): NotificationsOptions => NotificationsOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-notifications', []),
         ));
         $app->tag([DigestSchedulerCheck::class], RuntimeConfigCheck::class);
@@ -75,6 +77,13 @@ final class NotificationsBindingsRegistrar implements PackageRegistrar
             drivers: $app->make(ChannelDrivers::class),
             clock: $app->make(ClockInterface::class),
         ));
+        $app->scoped(NotificationRetention::class, static fn (Application $app): NotificationRetention => new NotificationRetention(
+            current: $app->make(CurrentWorkScope::class),
+            scopes: $app->make(DataScopeFactory::class),
+            tenants: $app->make(TenantContextResolver::class),
+            defaultRetentionDays: $app->make(NotificationsOptions::class)->retentionSettledDays,
+        ));
+        $app->scoped(PruneNotifications::class);
         $app->scoped(DeliveryReceiptProjector::class);
         $app->tag(DeliveryReceiptProjector::class, ProviderReceiptProjector::class);
         $app->scoped(DeliveryStore::class, static fn (Application $app): DeliveryStore => new DeliveryStore(

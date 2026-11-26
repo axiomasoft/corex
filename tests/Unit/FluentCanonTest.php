@@ -14,7 +14,7 @@ use Packman\Modules\Data\Extenders\Routes;
 use Packman\Modules\Data\Extenders\Workflow;
 use Packman\Modules\Data\Settings\DefaultSettingDefinition;
 
-// Fluent-canon pin (P3.6, A13): a manifest-authoring DTO in Contracts/Extend
+// Fluent-canon pin: a manifest-authoring DTO in Contracts/Extend
 // is never built with `new` by a module author — it exposes at least one
 // public static factory constructor instead. Add new manifest DTOs here
 // when they are introduced; a class landing on this list without a factory

@@ -16,7 +16,7 @@ use Packman\Attributes\SpiKind;
  * Base for ecosystem domain models: UUIDv7 key, soft deletes, and an
  * audit trail that only records when the model also implements Auditable.
  *
- * Tenant isolation is physical (DB-per-account, B-11): a model loaded here
+ * Tenant isolation is physical (DB-per-account): a model loaded here
  * already comes from its account's database, so no row-level scope is applied.
  * Models that cannot extend this base (e.g. an Authenticatable User) compose
  * the same traits directly.

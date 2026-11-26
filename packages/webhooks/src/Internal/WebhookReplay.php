@@ -407,7 +407,7 @@ final readonly class WebhookReplay
     }
 }
 
-/** @internal Metadata-only handler class for the shared P13 cursor registry. */
+/** @internal Metadata-only handler class for the shared cursor registry. */
 #[Internal]
 final class WebhookReplayCursorOperationHandler implements OperationHandler
 {

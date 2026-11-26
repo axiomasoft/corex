@@ -3,22 +3,10 @@
 declare(strict_types=1);
 use CoreX\Tenancy\Internal\TenancySchemaSets;
 
-// B-11 §7.3 п.2 / AC-29 — тенантские таблицы не ссылаются на root и наоборот.
-//
-// Cross-DB FK физически невозможен (root-БД и БД аккаунта — разные базы, D14),
-// поэтому объявленный FK через границу не падает на код-ревью, а падает на
-// провижининге аккаунта или, хуже, молча ломает клон golden-шаблона. Ловим
-// статически.
-//
-// Плюс arch-тест «migration-path partition» (pre-mortem A4, Scope Included
-// P2.13): файл миграции классифицируется root|tenant ПО ДИРЕКТОРИИ, множества
-// путей central- и tenant-раннеров дизъюнктны, `corex:tenancy:migrate` грузит только
-// tenant-пути — так root_-таблица в тенант-БД (и наоборот) невозможна по
-// конструкции, а не по внимательности автора миграции.
-//
-// Разрешение имён — по строковым литералам и известным таблицам моделей.
-// Любая динамическая цель требует ручного разбора и краснит гейт, если её нет
-// в явном allowlist ниже. После D112 конфиг-driven целей в миграциях нет.
+// Tenant and root databases cannot share foreign keys. Check literal and model
+// targets statically, and require review for any unrecognized dynamic target.
+// Migration directories identify the layer. The path sets are disjoint and
+// the tenant migration runner loads only tenant files.
 
 $packageRoot = \dirname(__DIR__, 2);
 $repoRoot = \dirname($packageRoot, 2);
@@ -164,7 +152,7 @@ $createdTables = static function (string $source): array {
     return $matches[2];
 };
 
-// D112: shipped migrations use literal targets; no dynamic exceptions remain.
+// shipped migrations use literal targets; no dynamic exceptions remain.
 $allowedDynamicTargets = [];
 
 /**
@@ -224,7 +212,7 @@ test('the migration inventory is not empty in either layer', function () use ($m
 });
 
 // ---------------------------------------------------------------------------
-// AC-29 (п.2) — нет FK через границу БД.
+// нет FK через границу БД.
 // ---------------------------------------------------------------------------
 
 test('root-layer migrations declare foreign keys only to root_ tables', function () use ($migrationFiles, $rootLayerDir, $foreignKeyTargets): void {
@@ -286,7 +274,7 @@ test('tenant-layer migrations declare no foreign key to a root_ table', function
 });
 
 // ---------------------------------------------------------------------------
-// Pre-mortem A4 — migration-path partition.
+// Pre-mortem migration-path partition.
 // ---------------------------------------------------------------------------
 
 test('every axiomasoft/corex-tenancy migration is classified root or tenant by its directory', function () use ($packageRoot, $migrationFiles, $rootLayerDir, $tenantLayerDir): void {

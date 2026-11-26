@@ -1,5 +1,6 @@
 {
     "schema": "corex-infection-compatibility-policy/v2",
+    "legacy_confirmation_review_item": "P09.8",
     "package": "tenancy",
     "versions": {
         "infection/infection": "0.35.6",

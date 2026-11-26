@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-// P2.11 — L1/L2/L3 read-only-invariant layers (D141/D142), tested directly
+// L1/L2/L3 read-only invariants, tested directly
 // against the middleware/listener/guard classes rather than through the
 // package's own boot()-time conditional registration (that registration is
 // gated by `corex-tenancy.oidc.impersonation.enabled`, which — like `oidc.enabled`
@@ -277,7 +277,7 @@ it('ь: L3 ImpersonationGuard::assertAllowed() throws under impersonation and st
 
 // ── аа — boxed/oidc-off profile carries zero impersonation surface ──────
 
-it('аа: with oidc disabled, no impersonation middleware in the tenant group and no Eloquent listeners are registered (AC-28)', function (): void {
+it('аа: with oidc disabled, no impersonation middleware in the tenant group and no Eloquent listeners are registered', function (): void {
     expect(config('corex-tenancy.oidc.enabled'))->toBeFalse()
         ->and(config('corex-tenancy.oidc.impersonation.enabled'))->toBeFalse();
 

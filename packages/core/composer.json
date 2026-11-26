@@ -7,7 +7,7 @@
         "laravel",
         "kernel",
         "multi-tenancy",
-        "ulid",
+        "uuid",
         "entity-registry",
         "audit",
         "settings"

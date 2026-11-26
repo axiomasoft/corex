@@ -56,7 +56,7 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
     }
 
     /**
-     * Registers the `corex-principal` Laravel auth driver (D125) — never
+     * Registers the `corex-principal` Laravel auth driver — never
      * touches `config('auth.*')` itself (a package does not impose the
      * consuming app's guard wiring); a consumer opts in with
      * `auth.providers.users.driver = 'corex-principal'` (see README).

@@ -13,12 +13,12 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * L1 — HTTP layer of the read-only invariant (D141, research/12 §2): an
+ * HTTP layer of the read-only invariant: an
  * unsafe method under an active impersonation is denied UNLESS the matched
  * route carries the {@see AllowImpersonatedWrites} marker (by alias or
  * FQCN). Reuses `corex-tenancy.status_gate.read_only_methods` (already the
  * project's one definition of "these HTTP methods are read-only") rather
- * than inventing a second config surface for the same fact (D116/D121).
+ * than inventing a second config surface for the same fact.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class DenyImpersonatedWrites

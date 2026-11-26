@@ -17,7 +17,7 @@ use Packman\Attributes\SpiKind;
  * the implementation of `axiomasoft/corex-tenancy` — the choice is a container
  * binding, never an `if(cloud)` branch.
  *
- * Switching semantics of the cloud implementation (PLAN3.D95):
+ * Switching semantics of the cloud implementation:
  * - `initialize()` of another account ends the current one first; the same account is a no-op;
  * - every switch — `initialize()`, `end()`, leaving `runFor()` — forgets the container's scoped
  *   instances, so a scoped service resolved inside a context holds that context's connection and

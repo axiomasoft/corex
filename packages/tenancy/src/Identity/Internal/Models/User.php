@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 use Packman\Attributes\Internal;
 
 /**
- * Tenant-DB projection of `root_identities` (B-11 §2.2, full denorm D4/C6).
+ * Tenant-DB projection of `root_identities` (fully denormalized).
  * Cannot extend `CoreX\Database\Laravel\BaseModel` (its own docblock carves out
  * exactly this case): `id` is external (= root_identities.id, no generated
  * default) — automatic UUID generation would fight that.

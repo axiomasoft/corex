@@ -66,7 +66,7 @@ function seedDepartment(?string $parentId, ?string $parentPath, string $name, st
 }
 
 beforeEach(function (): void {
-    // D12: sys_departments/sys_department_user are PG-only (ltree/GIST).
+    // sys_departments/sys_department_user are PG-only (ltree/GIST).
     // Reset to a clean public schema, same pattern as SettingsTest/AuditLogTest/FeatureFlagsTest.
     departmentsPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
     departmentsPg()->statement('CREATE SCHEMA public');
@@ -75,7 +75,7 @@ beforeEach(function (): void {
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], DEPARTMENTS_TEST_CONNECTION);
 });
 
-it('AC-24a: reparents the whole subtree in EXACTLY ONE UPDATE (query count, A25/A27)', function (): void {
+it('reparents the whole subtree in EXACTLY ONE UPDATE (query count)', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $branchA = seedDepartment($root['id'], $root['path'], 'Branch A');
     $moving = seedDepartment($branchA['id'], $branchA['path'], 'Moving');
@@ -84,7 +84,7 @@ it('AC-24a: reparents the whole subtree in EXACTLY ONE UPDATE (query count, A25/
 
     // Count UPDATEs against sys_departments during the move — a recursive /
     // per-row (N+1) rewrite would issue more than one and turn this red, which
-    // the old "compare final paths" assertion could not distinguish (A25/A27).
+    // the old "compare final paths" assertion could not distinguish.
     $updates = [];
     DB::listen(function ($query) use (&$updates): void {
         if ($query->connectionName === DEPARTMENTS_TEST_CONNECTION
@@ -107,7 +107,7 @@ it('AC-24a: reparents the whole subtree in EXACTLY ONE UPDATE (query count, A25/
         ->and($siblingRow->path)->toBe($branchA['path']);
 });
 
-it('AC-24b: move() waits on the workspace advisory lock — a holder blocks it, another workspace does not', function (): void {
+it('move() waits on the workspace advisory lock — a holder blocks it, another workspace does not', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $childA = seedDepartment($root['id'], $root['path'], 'A');
     $childB = seedDepartment($root['id'], $root['path'], 'B');
@@ -135,7 +135,7 @@ it('AC-24b: move() waits on the workspace advisory lock — a holder blocks it, 
     expect($row->path)->toBe($childA['path']);
 });
 
-it('AC-24c: a committed move() dispatches DepartmentMoved with the old and new path', function (): void {
+it('a committed move() dispatches DepartmentMoved with the old and new path', function (): void {
     Event::fake([DepartmentMoved::class]);
 
     $root = seedDepartment(null, null, 'Root');
@@ -153,7 +153,7 @@ it('AC-24c: a committed move() dispatches DepartmentMoved with the old and new p
     );
 });
 
-it('AC-24c (after-commit): a move rolled back by an outer transaction emits NO event (A6)', function (): void {
+it('a move rolled back by an outer transaction emits NO event', function (): void {
     // Laravel's Foundation testing manager runs afterCommit callbacks at level 1
     // (it assumes a RefreshDatabase wrapping transaction); these PG tests migrate
     // by hand and have no such wrapper, so swap in the PRODUCTION manager to
@@ -164,8 +164,7 @@ it('AC-24c (after-commit): a move rolled back by an outer transaction emits NO e
     $branchA = seedDepartment($root['id'], $root['path'], 'Branch A');
 
     // The move dispatches via afterCommit; wrapped in an outer transaction that
-    // rolls back, the event must NOT leak — consumers (dept_tree invalidation,
-    // P2.9) would otherwise act on a subtree that never committed. If event()
+    // rolls back, the event must NOT leak — consumers of dept_tree invalidation would otherwise act on a subtree that never committed. If event()
     // fired inside the transaction instead, this assertion would catch it.
     Event::fake([DepartmentMoved::class]);
 
@@ -182,7 +181,7 @@ it('AC-24c (after-commit): a move rolled back by an outer transaction emits NO e
     Event::assertNotDispatched(DepartmentMoved::class);
 });
 
-it('AC-24d: a second primary department for the same user is rejected (partial-unique)', function (): void {
+it('a second primary department for the same user is rejected (partial-unique)', function (): void {
     $deptA = seedDepartment(null, null, 'A');
     $deptB = seedDepartment(null, null, 'B');
     $userId = (string) Str::uuid7();
@@ -200,7 +199,7 @@ it('AC-24d: a second primary department for the same user is rejected (partial-u
     ]))->toThrow(QueryException::class);
 });
 
-it('AC-24e: subtree() and primaryOf() return the correct rows', function (): void {
+it('subtree() and primaryOf() return the correct rows', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $child = seedDepartment($root['id'], $root['path'], 'Child');
     $other = seedDepartment(null, null, 'Other');
@@ -220,7 +219,7 @@ it('AC-24e: subtree() and primaryOf() return the correct rows', function (): voi
         ->and(departments()->find($other['id'])?->name)->toBe('Other');
 });
 
-it('AC-24 (cycle): moving into its own subtree is rejected and leaves the DB unchanged (A26)', function (): void {
+it('moving into its own subtree is rejected and leaves the DB unchanged', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $child = seedDepartment($root['id'], $root['path'], 'Child');
     $grandchild = seedDepartment($child['id'], $child['path'], 'Grandchild');
@@ -234,7 +233,7 @@ it('AC-24 (cycle): moving into its own subtree is rejected and leaves the DB unc
         ->and($rootRow->parent_id)->toBeNull();
 });
 
-it('AC-24 (root move): move($id, null) reparents the subtree to the workspace root (A26)', function (): void {
+it('move($id, null) reparents the subtree to the workspace root', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $child = seedDepartment($root['id'], $root['path'], 'Child');
     $grand = seedDepartment($child['id'], $child['path'], 'Grand');
@@ -249,7 +248,7 @@ it('AC-24 (root move): move($id, null) reparents the subtree to the workspace ro
         ->and($grandRow->path)->toBe(departmentLabel($child['id']).'.'.departmentLabel($grand['id']));
 });
 
-it('AC-24 (soft-delete): a removed department drops out of find/subtree/primaryOf (A24)', function (): void {
+it('a removed department drops out of find/subtree/primaryOf', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $child = seedDepartment($root['id'], $root['path'], 'Child');
     $userId = (string) Str::uuid7();
@@ -267,7 +266,7 @@ it('AC-24 (soft-delete): a removed department drops out of find/subtree/primaryO
         ->and(departments()->primaryOf($userId))->toBeNull();
 });
 
-it('AC-24 (re-read guard): move() on a soft-deleted department throws instead of a silent no-op (A5 If-then)', function (): void {
+it('move() on a soft-deleted department throws instead of a silent no-op', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $target = seedDepartment(null, null, 'Target');
     $moving = seedDepartment($root['id'], $root['path'], 'Moving');
@@ -283,11 +282,11 @@ it('AC-24 (re-read guard): move() on a soft-deleted department throws instead of
         ->and($raw->deleted_at)->not->toBeNull();
 });
 
-it('AC-24 (workspace scope): subtree() excludes a same-path row from another workspace', function (): void {
+it('subtree() excludes a same-path row from another workspace', function (): void {
     $root = seedDepartment(null, null, 'Root');
 
     // A row in ANOTHER workspace whose ltree path is a descendant of root's path
-    // (paths are globally unique but the contract is per-workspace, B-10 §5.7).
+    // (paths are globally unique but the contract is per-workspace).
     $intruderId = (string) Str::uuid7();
     Department::on(DEPARTMENTS_TEST_CONNECTION)->create([
         'id' => $intruderId,
@@ -302,12 +301,12 @@ it('AC-24 (workspace scope): subtree() excludes a same-path row from another wor
     expect(array_map(fn ($d) => $d->id, $subtree))->toBe([$root['id']]);
 });
 
-it('AC-24 (workspace scope): move() rewrites ONLY the moving workspace, never a same-path row in another (D63/D67)', function (): void {
+it('move() rewrites ONLY the moving workspace, never a same-path row in another', function (): void {
     $root = seedDepartment(null, null, 'Root');
     $target = seedDepartment(null, null, 'Target');
 
     // A row in ANOTHER workspace whose ltree path is a descendant of root's
-    // (globally-unique paths, per-workspace contract — B-10 §5.7). The
+    // (globally-unique paths, per-workspace contract ). The
     // `path <@ root.path` predicate matches it too; without the workspace_id
     // filter, move()'s ONE-UPDATE would rewrite this foreign row's path.
     $intruderId = (string) Str::uuid7();
@@ -330,13 +329,13 @@ it('AC-24 (workspace scope): move() rewrites ONLY the moving workspace, never a 
         ->and($intruder->parent_id)->toBeNull();
 });
 
-it('AC-24 (workspace scope): move() into a parent in ANOTHER workspace is rejected and moves nothing (P1.29 M-2, symmetric to D67)', function (): void {
+it('move() into a parent in ANOTHER workspace is rejected and moves nothing', function (): void {
     $moving = seedDepartment(null, null, 'Moving', DEPARTMENTS_WORKSPACE_1);
 
     // A parent that lives in a DIFFERENT workspace. Its ltree path is globally
     // unique, so the cycle check and the FK layer pass — only the parent-side
     // workspace guard stops the cross-tenant reparent (the symmetric hole to
-    // the descendant-side D67 filter).
+    // the descendant-side filter).
     $foreignParent = seedDepartment(null, null, 'Foreign parent', DEPARTMENTS_WORKSPACE_2);
 
     expect(fn () => departments()->move($moving['id'], $foreignParent['id']))
@@ -351,7 +350,7 @@ it('AC-24 (workspace scope): move() into a parent in ANOTHER workspace is reject
         ->and($row->workspace_id)->toBe(DEPARTMENTS_WORKSPACE_1);
 });
 
-it('AC-24 (DTO): the read-DTO carries sort_order', function (): void {
+it('the read-DTO carries sort_order', function (): void {
     $id = (string) Str::uuid7();
     Department::on(DEPARTMENTS_TEST_CONNECTION)->create([
         'id' => $id,

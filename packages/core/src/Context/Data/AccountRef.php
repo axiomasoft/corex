@@ -9,8 +9,6 @@ use Packman\Attributes\Api;
 /**
  * Immutable reference to an account: identity, slug, lifecycle status, and
  * its enabled features/limits.
- *
- * Contract: B-10 §3.1, B-11 §3.1 (owner: B-11).
  */
 #[Api(since: '1.0')]
 final readonly class AccountRef

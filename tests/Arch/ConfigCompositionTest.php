@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P7.11 — blocking config() composition gate. The plant must name the file.
+// blocking config() composition gate. The plant must name the file.
 
 test('config composition gate exits 0 on a clean tree', function (): void {
     $repoRoot = dirname(__DIR__, 2);

@@ -16,6 +16,6 @@ interface RoleMatrixCompiler
 {
     public function compile(string $roleId): void;
 
-    /** Re-runs compile() for every non-deleted role — after a module install/enable (B-11 §4 п.2). */
+    /** Re-runs compile() for every non-deleted role — after a module install/enable. */
     public function recompileAll(): void;
 }

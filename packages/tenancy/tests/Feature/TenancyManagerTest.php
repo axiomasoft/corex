@@ -79,7 +79,7 @@ function makeAccountTM(string $clusterId, array $overrides = []): Account
     ], $overrides));
 }
 
-it('cloud initialize()/end() switches connection+session and context() reflects the active account (AC-28 а)', function (): void {
+it('cloud initialize()/end() switches connection+session and context() reflects the active account', function (): void {
     $account = makeAccountTM(makeClusterRowTM());
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
@@ -124,7 +124,7 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
     expect($reader->currentDefault())->toBe('pgsql');
 });
 
-it('runFor() initializes, runs the closure, and always ends — nesting restores the outer account (AC-28 б)', function (): void {
+it('runFor() initializes, runs the closure, and always ends — nesting restores the outer account', function (): void {
     $accountA = makeAccountTM(makeClusterRowTM());
 
     $secondClusterId = makeClusterRowTM();
@@ -145,7 +145,7 @@ it('runFor() initializes, runs the closure, and always ends — nesting restores
         $inner = $manager->runFor($refB, null, fn (): string => $manager->context()->account->id);
 
         expect($inner)->toBe($refB->id)
-            // nesting restored the outer account (AC-28 б), not the central scope.
+            // nesting restored the outer account, not the central scope.
             ->and($manager->context()->account->id)->toBe($refA->id)
             ->and($manager->context()->workspace)->toEqual($workspace);
 
@@ -175,7 +175,7 @@ it('a callback that throws inside runFor() still ends tenancy (unconditional rev
     expect($manager->initialized())->toBeFalse();
 });
 
-it('TenancyManagerContextResolver::current() throws CentralContextException outside any tenant (AC-28 в)', function (): void {
+it('TenancyManagerContextResolver::current() throws CentralContextException outside any tenant', function (): void {
     /** @var TenantContextResolver $resolver */
     $resolver = resolve(TenantContextResolver::class);
 
@@ -192,6 +192,6 @@ it('TenancyManagerContextResolver::current() throws CentralContextException outs
     $manager->end();
 });
 
-it('is wired via the TenancyManager contract binding, not a hardcoded concrete (D10)', function (): void {
+it('is wired via the TenancyManager contract binding, not a hardcoded concrete ', function (): void {
     expect(resolve(TenancyManager::class))->toBeInstanceOf(TenantRuntimeManager::class);
 });

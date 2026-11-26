@@ -1,42 +1,30 @@
-# Карта пакетов CoreX
+# CoreX package map
 
-CoreX — набор прикладных Laravel-компонентов. Каждый пакет должен решать понятную задачу
-без FlexCRM, FlexCMS или другого продукта. Composer-пакет является границей владения
-кодом, публичными контрактами, конфигурацией и таблицами. Продукт собирает нужные пакеты
-и задаёт авторизацию, источники данных и интеграции.
+CoreX packages are Laravel components that can be used independently of FlexCRM, FlexCMS or another product. A Composer package owns its code, public contracts, configuration and tables. The product selects packages and supplies its authorization rules, data sources and integrations.
 
-## Общая платформа и прикладное ядро
+## Platform and application kernel
 
-`axiomasoft/packman`, `axiomasoft/packman-modules` и `axiomasoft/packman-schema` владеют
-обнаружением и компиляцией модулей, lifecycle и исполнением объявленных наборов схемы.
-CoreX использует их контракты и предоставляет адаптеры своего контекста, feature flags
-и аудита. Допуск lifecycle и ссылки владельцев координирует CoreX через публичные контракты Packman.
-`axiomasoft/packman-panels` владеет панелями и saved views, включая их таблицы;
-`corex-panels` только регистрирует этот движок и адаптирует доверенный контекст.
+`axiomasoft/packman`, `axiomasoft/packman-modules` and `axiomasoft/packman-schema` own module discovery and compilation, the module lifecycle, and execution of declared schema sets. CoreX supplies adapters for its context, feature flags and audit, and coordinates lifecycle admission and owner references through public Packman contracts. `axiomasoft/packman-panels` owns panels, saved views and their tables. `corex-panels` registers that engine and supplies trusted context.
 
-`axiomasoft/corex` содержит общие для прикладных пакетов контекст, идентичность,
-область данных, ошибки, конфигурацию, время, базовую модель, storage-порты,
-settings, audit, messaging/outbox, feature flags и departments. Это прикладное ядро,
-а не универсальная библиотека PHP. Оно не зависит от других пакетов CoreX.
+`axiomasoft/corex` provides context, identity, data scope, errors, configuration, time, the base model, storage ports, settings, audit, messaging/outbox, feature flags and departments. This application kernel is independent of the other CoreX packages.
 
-`CoreX\Foundation` соединяет контекст CoreX с Packman. Определения и lifecycle модулей
-используют `Packman\Modules`; декларации схемы — `Packman\Schema`.
+`CoreX\Foundation` connects the CoreX context to Packman. Module definitions and lifecycle use `Packman\Modules`. Schema declarations use `Packman\Schema`.
 
 ```mermaid
 flowchart TB
-    subgraph platform[Внешние владельцы]
-        packman[Packman: модули, схема, панели]
-        azguard[AzGuard: роли, grants, verdict]
-        tenant[Tenant: изоляция и physical owner]
-        vaulter[Vaulter: байты, pins, GC]
-        chatom[Chatom: сообщения и каналы]
+    subgraph platform[External owners]
+        packman[Packman: modules, schema, panels]
+        azguard[AzGuard: roles, grants, verdicts]
+        tenant[Tenant: isolation and physical ownership]
+        vaulter[Vaulter: bytes, pins, garbage collection]
+        chatom[Chatom: messages and channels]
     end
-    subgraph libraries[Библиотеки и прикладное ядро]
-        core[corex: контекст и общие контракты]
-        recurrence[recurrence: вычисление повторений]
-        intl[intl: локали, деньги, справочники]
+    subgraph libraries[Libraries and application kernel]
+        core[corex: context and shared contracts]
+        recurrence[recurrence: occurrence calculation]
+        intl[intl: locales, money, reference data]
     end
-    subgraph modules[Прикладные модули и исполнители]
+    subgraph modules[Application modules and executors]
         tasks[tasks]
         recurring[recurring-tasks]
         scheduler[scheduler]
@@ -50,16 +38,16 @@ flowchart TB
         tenancy[tenancy]
         workflow[workflow]
     end
-    subgraph adapters[Адаптеры и расширения]
+    subgraph adapters[Adapters and extensions]
         searchfields[search-custom-fields]
         tasksworkflow[tasks-workflow]
         searchintl[search-intl]
         meili[search-meilisearch]
         tools[tools]
         webhooks[webhooks]
-        panels[panels: контекст для Packman Panels]
+        panels[panels: context for Packman Panels]
     end
-    product[Приложение / продукт] --> modules
+    product[Application or product] --> modules
     product --> adapters
     modules --> core
     core --> packman
@@ -82,154 +70,96 @@ flowchart TB
     product --> chatom
 ```
 
-Стрелка обозначает направление зависимости. Схема показывает роли компонентов;
-полный список обязательных зависимостей определяется Composer-манифестами.
-Доступ к scheduling-контрактам ядра не требует установки исполнителя `scheduler`.
-При включённой функции хост обязан предоставить реализацию соответствующего порта.
+An arrow points toward a dependency. The diagram shows component roles. Each Composer manifest gives the full set of required dependencies. Applications can consume the kernel scheduling contracts independently of the `scheduler` executor. A host that enables a feature must provide its required port.
 
-## Имена и ответственность
+## Package responsibilities
 
-Для строк таблицы, кроме `corex`, Composer-имя имеет вид `axiomasoft/corex-<имя>`.
+The kernel is `axiomasoft/corex`. Other Composer names use `axiomasoft/corex-<name>`.
 
-| Имя | PHP namespace | Ответственность |
-|---|---|---|
-| `corex` | `CoreX` | Общие прикладные контракты и адаптация Packman |
-| `access` | `CoreX\Access` | Проверка доступа и видимости записей по контексту CoreX |
-| `custom-fields` | `CoreX\CustomFields` | Типизированные пользовательские поля, хранение, фильтры и операции их схемы |
-| `intl` | `CoreX\Intl` | Локали, переводы, форматирование, валюты и географические справочники |
-| `media` | `CoreX\Media` | Приватные ссылки и связи, policy и преобразования; байты и GC — Vaulter |
-| `notifications` | `CoreX\Notifications` | Notification intents, inbox, доставки, предпочтения и дайджесты |
-| `operations` | `CoreX\Operations` | Исполнение объявленных операций, HTTP, OpenAPI, idempotency, cost и bulk admission |
-| `panels` | `CoreX\Panels` | Адаптация доверенного контекста для Packman Panels и saved views |
-| `recurrence` | `CoreX\Recurrence` | Ограниченное вычисление occurrence по правилам повторения |
-| `recurring-tasks` | `CoreX\RecurringTasks` | Идемпотентное создание задач из occurrence и сохранение прогресса |
-| `scheduler` | `CoreX\Scheduler` | Долговечное исполнение одноразовой работы в заданный UTC instant |
-| `search` | `CoreX\Search` | Поисковые запросы, policy-проверка результатов и порт поискового провайдера |
-| `search-custom-fields` | `CoreX\SearchCustomFields` | Типизированная проекция полей и передача совершённых изменений в Search |
-| `search-intl` | `CoreX\SearchIntl` | Локализованная поисковая проекция |
-| `search-meilisearch` | `CoreX\SearchMeilisearch` | Реализация поискового провайдера через Meilisearch |
-| `tasks` | `CoreX\Tasks` | Задачи, проекты, стадии, планирование и учёт времени |
-| `tasks-workflow` | `CoreX\TasksWorkflow` | Передача первого завершения задачи в Workflow внутри транзакции Tasks |
-| `tenancy` | `CoreX\Tenancy` | Аккаунты, workspace membership и адаптация Tenant; физические операции через порты владельца |
-| `tools` | `CoreX\Tools` | Объявленные tool-вызовы поверх операций, schema validation и MCP projection |
-| `import-export` | `CoreX\ImportExport` | Импорт и экспорт прикладных записей, checkpoints и sealed manifests |
-| `webhooks` | `CoreX\Webhooks` | Подписки, подпись, доставка и replay исходящих webhook-событий |
-| `workflow` | `CoreX\Workflow` | Durable intent и порт отдельно выбранного workflow engine |
+| Name | PHP namespace | Responsibility |
+| --- | --- | --- |
+| `corex` | `CoreX` | Shared application contracts and Packman integration |
+| `access` | `CoreX\Access` | Authorization and record visibility in the current CoreX context |
+| `custom-fields` | `CoreX\CustomFields` | Typed custom fields, persistence, filters and schema operations |
+| `intl` | `CoreX\Intl` | Locales, translations, formatting, currencies and geographical reference data |
+| `media` | `CoreX\Media` | Private references and attachments, policies and conversions. Vaulter owns the bytes and garbage collection. |
+| `notifications` | `CoreX\Notifications` | Notification intents, inbox, delivery, preferences and digests |
+| `operations` | `CoreX\Operations` | Execution of declared operations, HTTP, OpenAPI, idempotency, cost and bulk admission |
+| `panels` | `CoreX\Panels` | Trusted CoreX context for Packman Panels and saved views |
+| `recurrence` | `CoreX\Recurrence` | Bounded computation of occurrences from recurrence rules |
+| `recurring-tasks` | `CoreX\RecurringTasks` | Idempotent task creation from occurrences and durable progress tracking |
+| `scheduler` | `CoreX\Scheduler` | Durable execution of one-time work at a specified UTC instant |
+| `search` | `CoreX\Search` | Search queries, result visibility and the search provider port |
+| `search-custom-fields` | `CoreX\SearchCustomFields` | Typed field projections and propagation of committed changes to Search |
+| `search-intl` | `CoreX\SearchIntl` | Localized search projections |
+| `search-meilisearch` | `CoreX\SearchMeilisearch` | Meilisearch implementation of the search provider |
+| `tasks` | `CoreX\Tasks` | Tasks, projects, stages, planning and time tracking |
+| `tasks-workflow` | `CoreX\TasksWorkflow` | Captures the first task completion for Workflow inside the Tasks transaction |
+| `tenancy` | `CoreX\Tenancy` | Accounts, workspace membership and Tenant integration. Physical operations use the resource owner's ports. |
+| `tools` | `CoreX\Tools` | Declared tool calls backed by operations, schema validation and MCP projection |
+| `import-export` | `CoreX\ImportExport` | Import and export of application records, checkpoints and sealed manifests |
+| `webhooks` | `CoreX\Webhooks` | Outgoing webhook subscriptions, signing, delivery and replay |
+| `workflow` | `CoreX\Workflow` | Durable intent and a port for a separately selected workflow engine |
 
-Тип Composer `packman-module` обозначает участие в lifecycle, а не отдельный архитектурный
-слой. Адаптер зависит от владельцев соединяемых контрактов; владелец не зависит от адаптера.
+The Composer type `packman-module` identifies lifecycle participants. An adapter depends on the packages that own the contracts it connects. Those owners remain independent of the adapter.
 
-## Различия, которые должны оставаться явными
+## Boundaries between packages
 
-- `recurrence` вычисляет даты. `recurring-tasks` превращает occurrence в задачи.
-  `scheduler` исполняет отложенную работу. `workflow` фиксирует intent для внешнего движка.
-- `import-export` переносит выбранные прикладные записи. Backup, восстановление базы,
-  перенос физической tenant-базы и резервирование media относятся к инфраструктуре хоста.
-  Restore epoch является защитой от устаревшей работы после восстановления, а не backup API.
-- `intl` шире локализации: пакет содержит деньги, курсы и географию. Имя `localization`
-  допустимо только для отдельно выделенной ответственности локалей и переводов.
-- `operations` обозначает объявленную исполняемую операцию независимо от транспорта.
-  HTTP API и OpenAPI являются проекциями этого контракта; tool-вызовы используют тот же
-  обработчик и правила допуска. Имя `api` скрывало бы эту общую ответственность.
-- `tools` отвечает за безопасный вызов объявленных инструментов. MCP является одной
-  проекцией, поэтому весь пакет не называется `mcp`.
-- `custom-fields` прямо обозначает пользовательские поля прикладных сущностей.
-  Слово `attributes` также используется для PHP-атрибутов API/SPI и создавало бы неоднозначность.
-- `panels` адаптирует доверенный контекст CoreX. Дескрипторы, admission и saved views
-  принадлежат Packman Panels. Rendering и оболочка принадлежат UI-фреймворку или хосту.
-- `access` устанавливает движок авторизации как зависимость Composer. Приложение
-  вызывает контракты CoreX для проверки прав и ограничения выборок.
+- `recurrence` calculates dates. `recurring-tasks` turns occurrences into tasks. `scheduler` executes deferred work. `workflow` records intent for an external engine.
+- `import-export` transfers selected application records. The host owns database backups, restoration, physical tenant migration and media backups. The restore epoch fences out stale work after a restore.
+- `intl` covers localization, money, exchange rates and geography. The name `localization` would apply to a separate component limited to locales and translations.
+- `operations` executes declared operations independently of transport. HTTP and OpenAPI expose that contract. Tool calls use the same handler and admission rules. The name `api` would omit those other entry points.
+- `tools` safely invokes declared tools. MCP is one projection of that responsibility.
+- `custom-fields` represents user-defined fields on application entities. The term `attributes` already refers to PHP API/SPI attributes.
+- `panels` supplies trusted context. Packman Panels owns descriptors, admission and saved views. The UI framework or host owns rendering and the surrounding shell.
+- `access` installs its authorization engine through Composer. Applications call CoreX contracts to check permissions and restrict queries.
 
-Operations включается явной регистрацией `CoreX\Operations\OperationsServiceProvider`.
-Для Bulk он публикует нейтральные `BulkExecutor` и `BulkOwner`. ImportExport
-владеет source, sink, checkpoint и публикацией export. Equipment регистрирует
-Operations и scoped host adapter с обоими портами. При отсутствии transfer adapter
-другие объявленные операции доступны. Recurrence обнаруживается Laravel через
-`CoreX\Recurrence\RecurrenceServiceProvider` и остаётся вычислительной библиотекой.
+Explicitly register `CoreX\Operations\OperationsServiceProvider` to enable Operations. It exposes neutral `BulkExecutor` and `BulkOwner` contracts. ImportExport owns the source, sink, checkpoints and export publication. Equipment registers Operations and a scoped host adapter implementing both ports. Other declared operations work without the transfer adapter. Laravel discovers `CoreX\Recurrence\RecurrenceServiceProvider` for the standalone computation library.
 
-## Правила расширения и именования
+## Naming and extension rules
 
-1. Каталог, Composer suffix, config key и provider обозначают одну функцию:
-   `packages/import-export`, `axiomasoft/corex-import-export`, `corex-import-export`,
-   `CoreX\ImportExport\ImportExportServiceProvider`.
-2. Namespace использует PascalCase из имени пакета. Провайдер называется
-   `<PackageName>ServiceProvider`; `corex` использует `CoreServiceProvider`.
-3. Подмодули именуются по предметной ответственности. `Internal` принадлежит одному
-   Composer-пакету; приложение и соседние пакеты его не импортируют.
-4. Публичный API должен позволять выполнить полный сценарий без записи в чужие таблицы:
-   создать операцию, продолжить её, прочитать результат и обработать ошибку.
-   Реализация порта потребителем не заменяет доступный публичный вход в штатный движок.
-5. Новую библиотеку выделяют при независимой ответственности и сценарии использования.
-   Вынос нескольких DTO в отдельный пакет сам по себе не уменьшает связанность.
-6. Изменение имени требует согласованного обновления Composer, PSR-4, config, provider,
-   команд, manifest identity, тестов, документации и контрактных снимков. Физические
-   таблицы переименовываются только отдельным решением об их схеме.
+1. Use the same capability name for the directory, Composer suffix, configuration key and provider. For example, `packages/import-export`, `axiomasoft/corex-import-export`, `corex-import-export` and `CoreX\ImportExport\ImportExportServiceProvider` all refer to the same package.
+2. Form the namespace from the PascalCase package name. Use `<PackageName>ServiceProvider` for the provider. The kernel uses `CoreServiceProvider`.
+3. Name submodules for their domain responsibility. Each `Internal` namespace belongs to one Composer package. Applications and neighboring packages may import only supported public types.
+4. The public API must support the complete operation, including creation, resumption, reading results and handling errors. Supply an entry point for the stock engine so consumers can use it without implementing a port or writing to another owner's tables.
+5. Extract a library when it has an independent responsibility and use case. Moving a few DTOs alone does not reduce coupling.
+6. Coordinate package renames across Composer, PSR-4, config, providers, commands, manifest identities, tests, documentation and contract snapshots. A physical table rename requires a separate schema decision.
 
-Публичность конкретных типов задают атрибуты API/SPI, а не сам namespace.
-Проверки графа, владения таблицами и публичной поверхности дополняют эту карту.
+API/SPI attributes determine whether individual types are public. Package graph, table ownership and public surface checks enforce additional boundaries.
 
-## Стиль публичного API
+## Public API examples
 
-Приложение получает исполняемые сервисы через экспортированные контракты DI, передаёт
-типизированные входные значения и читает типизированный результат. Доверенный tenant,
-principal и scope формируются на границе приложения; поля HTTP-запроса не выбирают
-соединение или исполняемый класс. При вызове с несколькими параметрами предпочтительны
-именованные аргументы.
+Applications resolve executable services through exported DI contracts, pass typed inputs and receive typed results. The application boundary supplies trusted tenant, principal and scope. HTTP request fields cannot select a connection or executable class. Prefer named arguments for calls with multiple parameters.
 
-| Семейство | Пример входа | Где находится полная композиция |
-|---|---|---|
-| Объявления модулей | `ModuleManifest::make('vendor/notes')` | Packman `ModuleDefinition`; [модули CoreX](../../packages/core/docs/modules/README.md) |
-| Вычислительная библиотека | `$expander->expand(set: $set, window: $window, limits: $limits)` | `CoreX\Recurrence\Contracts\RecurrenceExpander` |
-| Предметная команда | `$createTask->handle($draft)` | `CoreX\Tasks\Task\Contracts\CreateTaskCommand`; [tasks](../../packages/tasks/README.md) |
-| Durable scheduling | `$scheduler->schedule($request)` | `CoreX\Scheduling\Contracts\WakeupScheduler`; [scheduler](../../packages/scheduler/README.md) |
-| Импорт/экспорт | `$factory->openImport(scope: $scope, transfer: $ref, source: $source, mapper: $mapper, target: $target, mapping: $mapping, conflicts: $rule)` | `CoreX\ImportExport\Contracts\ImportExportFactory`; [import-export](../../packages/import-export/README.md) |
-| Transport adapter | `Api::operation(id: 'notes.create', ...)` | Packman declaration и CoreX `OperationHandler`; [operations](../../packages/operations/README.md) |
-| UI integration | `PanelContexts::forUser($requestContext)` | CoreX trusted context → Packman Panels; [panels](../../packages/panels/README.md) |
-| Изоляция исполнения | `$tenancy->runFor($account, $workspace, $callback)` | CoreX `TenancyManager` → Tenant runtime; [tenancy](../../packages/tenancy/README.md) |
+| Contract family | Example | Implementation or integration |
+| --- | --- | --- |
+| Module declaration | `ModuleManifest::make('vendor/notes')` | Packman `ModuleDefinition` and the [CoreX modules guide](../../packages/core/docs/modules/README.md) |
+| Computation | `$expander->expand(set: $set, window: $window, limits: $limits)` | `CoreX\Recurrence\Contracts\RecurrenceExpander` |
+| Domain command | `$createTask->handle($draft)` | `CoreX\Tasks\Task\Contracts\CreateTaskCommand`. See [Tasks](../../packages/tasks/README.md). |
+| Durable scheduling | `$scheduler->schedule($request)` | `CoreX\Scheduling\Contracts\WakeupScheduler`. See [Scheduler](../../packages/scheduler/README.md). |
+| Import/export | `$factory->openImport(scope: $scope, transfer: $ref, source: $source, mapper: $mapper, target: $target, mapping: $mapping, conflicts: $rule)` | `CoreX\ImportExport\Contracts\ImportExportFactory`. See [ImportExport](../../packages/import-export/README.md). |
+| Transport adapter | `Api::operation(id: 'notes.create', ...)` | Packman declaration and CoreX `OperationHandler`. See [Operations](../../packages/operations/README.md). |
+| UI integration | `PanelContexts::forUser($requestContext)` | Trusted CoreX context for [Packman Panels](../../packages/panels/README.md) |
+| Execution isolation | `$tenancy->runFor($account, $workspace, $callback)` | CoreX `TenancyManager` and the Tenant runtime. See [Tenancy](../../packages/tenancy/README.md). |
 
-Для durable-сценария библиотека предоставляет создание, повторное открытие и чтение результата
-через поддерживаемый API. Например, import factory возвращает сессию с runner, token и result
-reader: для продолжения не требуется конструировать внутренний executor или вставлять строки
-в его таблицы. Policy/source/target порты реализуются хостом там, где ему принадлежит предметное
-решение; внутреннюю механику пакета он повторно не реализует.
+Durable operations support creation, reopening and reading results through the public API. An import factory, for example, returns a session with a runner, token and result reader. Callers can resume work directly through that session. Hosts implement policy, source and target ports where they own a domain decision.
 
+## External engines and adapters
 
-## Соседние движки и адаптеры
+The Composer manifests and public engine contracts identify the current owners. Earlier designs kept Tenant and ModuleLoader embedded and used `axioma-studio/azguard-core` and earlier Vaulter names. The current integrations use `axiomasoft/tenant`, Packman, `axiomasoft/azguard` and `axiomasoft/vaulter-*`.
 
-Владельцы подтверждены текущими Composer-манифестами и публичными контрактами соседних
-репозиториев. Исторические заметки Brain с `KEEP_EMBEDDED` для Tenant/ModuleLoader,
-`axioma-studio/azguard-core` и прежними именами Vaulter описывают предыдущую архитектуру.
-В текущем коде это `axiomasoft/tenant`, Packman, `axiomasoft/azguard` и `axiomasoft/vaulter-*`.
-Правки этой карты не синхронизируют Brain и не меняют соседние репозитории.
+| Owner | What CoreX adapts | Public contract | Integration |
+| --- | --- | --- | --- |
+| Packman | Module context, audit, feature flags and lifecycle participation | `Packman\Modules`, `Packman\Schema`, `Packman\Panels` | Packman supplies the module loader and schema executor. |
+| AzGuard 2 | Principal, account, workspace and CoreX entity activity | `PanelAccess::decide()`, `Visibility::visibleTo()`, `AccessRequest` | `corex-access` calls the engine's public contracts. |
+| Tenant | Account and workspace to verified isolation selection, account lifecycle to resource owner | `TenantRuntime`, `Selection`, `ContextState`, and for physical hosting, `PostgresLifecycle` and `ResourceBindings` | `corex-tenancy` uses the external runtime with host-provided mapping and resource adapters. |
+| Chatom | Entities to conversation spaces/channels, host visibility, tenant keys, search and notification events | `Spaces`, `Channels`, `Messages`, `Spaces\Contracts\TenantContext`, `SearchProjectionSink` | The host wires the integration through the [Chatom recipe](chatom-host-composition.md). |
+| Vaulter | Entity attachments and references to blobs/documents, policy, context and retention by the reference owner | `BlobStore`, `BlobPins`, `FileOperations`, `DocumentType`, `PermissionDriver` | `corex-media` uses BlobStore and BlobPins in a shared VaulterDatabase transaction. |
 
-| Владелец | Что адаптирует CoreX | Подтверждённая публичная граница | Состояние |
-|---|---|---|---|
-| Packman | Контекст, аудит и feature flags модулей; участие пакетов в lifecycle | `Packman\Modules`, `Packman\Schema`, `Packman\Panels` | Используется; второго loader/schema executor нет |
-| AzGuard 2 | Principal/account/workspace, активность CoreX entity | `PanelAccess::decide()`, `Visibility::visibleTo()`, `AccessRequest` | `corex-access` вызывает публичные контракты движка |
-| Tenant | Account/workspace → verified isolation selection; account lifecycle → resource owner | `TenantRuntime`, `Selection`, `ContextState`; `PostgresLifecycle`, `ResourceBindings` для physical host | `corex-tenancy` использует внешний runtime; host mapper и resource adapters обязательны |
-| Chatom | Entity → conversation space/channel, host visibility, tenant key, события в поиске/уведомлениях | `Spaces`, `Channels`, `Messages`, `Spaces\Contracts\TenantContext`, `SearchProjectionSink` | Host composition через [Chatom recipe](chatom-host-composition.md); отдельный пустой bridge-пакет не нужен |
-| Vaulter | Entity attachment/reference → blob/document, policy/context, удержание байтов владельцем ссылки | `BlobStore`, `BlobPins`, `FileOperations`, `DocumentType`, `PermissionDriver` | `corex-media` использует BlobStore/BlobPins и общий VaulterDatabase transaction; отдельный wrapper-пакет не нужен |
+A `corex-chatom-forum` adapter is appropriate when CoreX mounts public `axiomasoft/chatom-forum` as a module. Chatom owns message bodies and tables. A single integration covers this responsibility without separate `messenger`, `chat` and `chatom` packages.
 
-`corex-chatom-forum` допустим, если CoreX монтирует публичный `axiomasoft/chatom-forum`
-как свой модуль; он не владеет телом сообщения или таблицами Chatom. Не нужны параллельные
-`messenger`, `chat` и `chatom` пакеты с одинаковыми обязанностями.
+The CoreX outbox delivers domain events and integration facts. Chatom stores user messages, participants, channels and read state. A chat table cannot replace the domain outbox. The bridge reads the active Tenant context via Chatom's `TenantContext::current()` and preserves the existing isolation. It projects Chatom events into CoreX Search and Notifications idempotently through public ports.
 
-CoreX messaging/outbox и Chatom messages имеют разное назначение. Первое доставляет
-доменные события и интеграционные факты; второе хранит пользовательские сообщения,
-участников, каналы и прочтения. Domain outbox нельзя заменять таблицей чата. Мост читает
-уже активный Tenant context через Chatom's `TenantContext::current()` и не переключает
-изоляцию. Доменные события Chatom превращаются в CoreX search/notification проекции
-идемпотентно через публичные порты, без запросов в чужие таблицы.
+CoreX Media owns references, attachment purpose, policies and conversion jobs. Vaulter owns content-addressed bytes, deduplication, pins and garbage collection. Drive/Documents adds a file tree, revisions and collaborative editing. `TenantStorage` remains a filesystem port for other consumers. Media stores its files through Vaulter.
 
-CoreX media хранит прикладные ссылки, purpose, policy и задания преобразования. Vaulter
-владеет CAS байтами, dedup, pins и сборкой мусора; Drive/Documents добавляют файловое дерево,
-ревизии и совместное редактирование. `TenantStorage` остаётся filesystem-портом для других
-потребителей, но media не использует его для хранения файлов.
-
-`corex-media` записывает owner reference и `BlobPins::pin()` одной транзакцией
-`VaulterDatabase`. CoreX и Vaulter обязаны использовать один и тот же Laravel Connection;
-несовпадение отклоняется до I/O. Порядок блокировок: owner row → blob. Конверсии публикуются
-после проверки claim/version тем же протоколом. Purge снимает pins оригинала и конверсий
-вместе с удалением ссылок; физический GC и его grace period остаются у Vaulter. Scope dedup
-строится из trusted account id. CoreX не пишет Vaulter tables и не хранит собственные пути
-к байтам. [Media API и установка](../../packages/media/README.md) описывают host composition.
+`corex-media` writes the owner reference and calls `BlobPins::pin()` in one `VaulterDatabase` transaction. CoreX and Vaulter must share the same Laravel Connection. A mismatch is rejected before I/O. Lock the owner row first, then the blob. Conversion publication follows the same protocol after checking the claim and version. Purge removes the original and conversion pins together with their references. Vaulter handles physical garbage collection and its grace period. Deduplication uses the trusted account ID. CoreX writes through Vaulter's contracts and stores no independent paths to the bytes. See the [Media integration guide](../../packages/media/README.md).

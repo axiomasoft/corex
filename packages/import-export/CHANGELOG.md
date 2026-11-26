@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — unused codecs removed
+
+- Removed the Internal `CsvCodec` and `NdjsonCodec`, which no runtime path used. `TransferSource` implementations decode their own input; export output still goes through the Internal `CanonicalExportCodec`.
+
 ## Unreleased — owner-scoped bulk transfer
 
 - Added durable transfer step receipts, independent sink reconciliation, and scoped publication and reads of verified export manifests.
@@ -32,7 +36,7 @@
 
 ## Unreleased — baseline v1
 
-- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+- The initial `tenant` baseline replaced the unreleased migration chain for fresh installations.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 

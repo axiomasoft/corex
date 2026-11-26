@@ -32,7 +32,7 @@ use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /**
- * The account FSM (B-11 §5.1/§5.2, P2.12) — `root_accounts.status` MUST be
+ * The account FSM — `root_accounts.status` MUST be
  * mutated ONLY through this class. Every transition writes one
  * `root_account_events` row ({@see writeEvent()}); the transitions that own
  * a dedicated {@see DomainEvent} subclass also fire it
@@ -40,10 +40,9 @@ use RuntimeException;
  * `startGrace`→GraceStarted; `AccountPurged`/`ExportReady` are fired by
  * {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle}, not
  * here — see that class's docblock). `activate()`/`resume()`/
- * `requestExport()` have no dedicated event class in this item's scope
- * (Files list, P2.12) — they still write a `root_account_events` row.
+ * `requestExport()` write a `root_account_events` row without a dedicated event class.
  *
- * D151 — every mutating method asserts {@see ImpersonationGuard} first
+ * Every mutating method asserts {@see ImpersonationGuard} first
  * (before `activateFromPool`'s pool claim only, per that method's own
  * ordering note).
  *
@@ -68,12 +67,11 @@ final readonly class AccountLifecycle
     ) {}
 
     /**
-     * Claims a pending-pool row (premortem A6 — atomic via
+     * Claims a pending-pool row (atomic via
      * {@see PendingPool::pullPending()}'s own `SELECT … FOR UPDATE SKIP
      * LOCKED`), then races-safely claims it for THIS caller with a
      * `WHERE status='provisioning'`-guarded update, then transitions
-     * `provisioning → trial` via {@see startTrial()} (AC-13 platform
-     * domain).
+     * `provisioning → trial` via {@see startTrial()} and provisions the platform domain.
      */
     public function activateFromPool(string $slug, string $ownerIdentityId, ?string $vertical): AccountRef
     {
@@ -111,7 +109,7 @@ final readonly class AccountLifecycle
 
     /**
      * `provisioning → trial`; sets `trial_ends_at` and provisions the
-     * platform domain (AC-13) — the only transition into `trial`.
+     * platform domain — the only transition into `trial`.
      */
     public function startTrial(AccountRef $account): void
     {
@@ -246,7 +244,7 @@ final readonly class AccountLifecycle
 
     /**
      * `exporting → deleted`; ONLY when the account's most recent export is
-     * `ready` (D13/AC-7). Drops the physical database, then soft-deletes
+     * `ready`. Drops the physical database, then soft-deletes
      * `root_accounts` and hard-deletes its `root_domains` rows.
      */
     public function purge(AccountRef $account): void
@@ -268,7 +266,7 @@ final readonly class AccountLifecycle
 
             if ($latestExportStatus !== 'ready') {
                 throw ValidationException::withMessages([
-                    'account' => "Account [{$account->id}] has no ready export on record — cannot purge (export-before-DROP invariant, D13/AC-7).",
+                    'account' => "Account [{$account->id}] has no ready export on record — cannot purge.",
                 ]);
             }
 

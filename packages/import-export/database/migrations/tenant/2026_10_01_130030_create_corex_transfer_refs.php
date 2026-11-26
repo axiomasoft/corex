@@ -33,7 +33,6 @@ return new class extends PackmanMigration
             $table->timestampsTz();
             $table->unique(['logical_scope', 'entity', 'external_system', 'external_id'], 'corex_transfer_refs_entity_external_system_external_id_uq');
             $table->foreign('job_id', 'corex_transfer_refs_job_id_fk')->references('id')->on('corex_transfer_jobs')->restrictOnDelete();
-            $table->index(['job_id'], 'corex_transfer_refs_job_id_ix');
         });
     }
 

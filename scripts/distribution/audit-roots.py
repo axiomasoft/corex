@@ -180,7 +180,7 @@ def inventory(root: Path) -> list[dict]:
             owner_path = root / owner
             if not owner_path.is_file() or anchor not in owner_path.read_text(encoding="utf-8"):
                 raise AuditError(f"stale release-only classification: {name}")
-            row.update({"classification": "release-only", "reason": "D125: dist candidate consumer; no source install/lock", "owner": owner, "owner_sha256": digest(owner_path), "anchor": anchor})
+            row.update({"classification": "release-only", "reason": "Distribution candidate consumer without a source install or lock", "owner": owner, "owner_sha256": digest(owner_path), "anchor": anchor})
         rows.append(row)
     return rows
 

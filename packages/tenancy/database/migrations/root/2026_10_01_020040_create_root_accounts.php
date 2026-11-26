@@ -44,7 +44,6 @@ return new class extends PackmanMigration
 
             $table->foreign('cluster_id', 'root_accounts_cluster_id_fk')->references('id')->on('root_clusters')->restrictOnDelete();
             $table->foreign('owner_identity_id', 'root_accounts_owner_identity_id_fk')->references('id')->on('root_identities')->restrictOnDelete();
-            $table->index(['owner_identity_id'], 'root_accounts_owner_identity_id_ix');
         });
 
         DB::statement("ALTER TABLE root_accounts ADD CONSTRAINT root_accounts_status_ck CHECK (status IN ('pending','provisioning','trial','active','suspended','grace','exporting','deleted'))");
@@ -61,7 +60,6 @@ return new class extends PackmanMigration
         DB::statement('CREATE INDEX root_accounts_purge_ix ON root_accounts (purge_after) WHERE purge_after IS NOT NULL');
 
         DB::statement("COMMENT ON COLUMN root_accounts.db_name IS 'acc_||hex(id); UNIQUE, никогда не переименовывается'");
-        DB::statement("COMMENT ON COLUMN root_accounts.embedding_model IS 'Контракт провижининга R-16: одна активная embedding-модель на БД; смена dim = ALTER+реиндекс, вне happy-path'");
     }
 
     public function down(): void

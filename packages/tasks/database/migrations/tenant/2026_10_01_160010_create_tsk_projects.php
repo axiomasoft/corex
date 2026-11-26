@@ -34,7 +34,6 @@ return new class extends PackmanMigration
 
             $table->foreign(['owner_id'], 'tsk_projects_owner_id_fk')->references(['id'])->on('users')->onDelete('set null')->onUpdate('no action');
             $table->foreign(['workspace_id'], 'tsk_projects_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
-            $table->index(['owner_id'], 'tsk_projects_owner_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

@@ -31,13 +31,12 @@ use Throwable;
 
 /**
  * Reads `root_identities` (central) and writes the denormalized `users`
- * projection inside the target account's tenant database (B-11 §2.2/§3.2,
- * D4/C6). A version-guard (premortem C3/C6) skips the write once the
+ * projection inside the target account's tenant database. A version-guard skips the write once the
  * account's projection is already at least as fresh as the source, so two
  * concurrent {@see fanOut()} waves converge on the latest state instead of
  * an older job clobbering a newer one. Any failure — missing identity,
  * missing account, a tenant-context error — is swallowed into
- * `sync_status=failed` (AC-16 г): retried later by `corex:tenancy:reconcile-identities`,
+ * `sync_status=failed`: retried later by `corex:tenancy:reconcile-identities`,
  * never left to throw across the whole fan-out.
  */
 #[Internal]

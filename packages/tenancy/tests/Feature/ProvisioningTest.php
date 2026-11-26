@@ -88,8 +88,7 @@ function makeClusterRow(array $overrides = []): string
         'pgbouncer_host' => 'pgbouncer-a.local',
         'status' => 'active',
         'template_version' => 1,
-        // Pre-existing PG role assumed (cell-provisioning is out of P2.3
-        // scope) — 'corex' is the superuser the docker fixture already has.
+        // Provision the PostgreSQL role before running the test — 'corex' is the superuser the docker fixture already has.
         'app_db_user' => 'corex',
     ], $overrides));
 
@@ -215,7 +214,7 @@ it('re-provisioning an already-created database is idempotent (replayable pipeli
     expect($count)->toBe(1);
 });
 
-it('refuses to clone a template that is not ready (template-parity gate, D24)', function (): void {
+it('refuses to clone a template that is not ready (template-parity gate)', function (): void {
     $clusterId = makeClusterRow();
 
     DB::table('root_templates')->insert([
@@ -277,7 +276,7 @@ it('rejects an untrusted template before changing provisioning parameters or dis
         ->and(DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$targetDb]))->toBeNull();
 });
 
-it('fixes embedding_model/dim and other provisioning params onto the account row (AC-10)', function (): void {
+it('fixes embedding_model/dim and other provisioning params onto the account row', function (): void {
     $clusterId = makeClusterRow();
     makeReadyTemplate(1);
     $accountId = makeAccountRow($clusterId, [

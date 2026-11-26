@@ -2,7 +2,16 @@
 
 declare(strict_types=1);
 
+use AzGuard\Kernel\Decision\AccessRequest;
+use AzGuard\Kernel\Identity\PermissionKey;
+use AzGuard\Kernel\Identity\SubjectRef;
+use CoreX\Access\Access\Internal\CoreXAccessContextMapper;
+use CoreX\Access\Access\Internal\MatrixCell;
+use CoreX\Access\Access\Internal\MatrixPanel;
+use CoreX\Access\Access\Internal\MatrixPermission;
 use CoreX\Access\Access\Internal\MatrixPermissions;
+use CoreX\Access\Access\Internal\MatrixPolicy;
+use CoreX\Access\Access\Internal\MatrixSubject;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Database\Seeders\SystemRolesSeeder;
@@ -36,6 +45,7 @@ use CoreX\Data\Enums\FieldUsePlanKind;
 use CoreX\Tests\Support\LocalWorkContexts;
 use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
@@ -207,7 +217,7 @@ it('resolves allowed() from a native matrix row and denies scope none', function
         ->and($checker->allowed($identity, 'crm.deal', 'export'))->toBeFalse();
 });
 
-// AC-23 — scopeFor() resolves each of the six compiled scope values on its own.
+// scopeFor() resolves each of the six compiled scope values on its own.
 it('resolves each of the six scope values from a single matching matrix row', function (Scope $scope): void {
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $scope->value]);
@@ -220,7 +230,7 @@ it('resolves each of the six scope values from a single matching matrix row', fu
     expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope);
 })->with(fn () => Scope::cases());
 
-// B-11 §5.5 — several roles resolve to the MAX weight of their base rows.
+// several roles resolve to the MAX weight of their base rows.
 it('resolves the max weight across multiple roles held by the same principal', function (): void {
     $roleLow = ($this->newRole)();
     $roleHigh = ($this->newRole)();
@@ -236,7 +246,7 @@ it('resolves the max weight across multiple roles held by the same principal', f
     expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
 });
 
-// B-11 §5.5 — a context row REPLACES the base row for its own context, including narrowing it to none.
+// a context row REPLACES the base row for its own context, including narrowing it to none.
 it('lets a context row override, and narrow, the base scope for its own context only', function (): void {
     $role = ($this->newRole)();
     $stageId = (string) Str::uuid7();
@@ -413,10 +423,10 @@ it('does not grant a system owner role with an empty matrix', function (): void 
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $owner->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
-    expect(resolve(AccessChecker::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
+    expect(resolve(MatrixPermissions::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
 });
 
-// D103 — a clone of `owner` is not system-flagged and does NOT inherit the wildcard.
+// a clone of `owner` is not system-flagged and does NOT inherit the wildcard.
 it('does not extend owner-wildcard capability to a non-system clone of owner', function (): void {
     Role::withSystemMutationAllowed(fn () => (new SystemRolesSeeder)->run());
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
@@ -430,7 +440,7 @@ it('does not extend owner-wildcard capability to a non-system clone of owner', f
     expect(resolve(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
 });
 
-// D101 — a role assigned to one workspace grants ONLY inside that workspace at the source level.
+// a role assigned to one workspace grants ONLY inside that workspace at the source level.
 it('grants allowed() inside the workspace the role was assigned to', function (): void {
     $workspace = new WorkspaceRef((string) Str::uuid7(), 'a', 'team', 'a', null);
     app()->instance(TenancyManager::class, new FakeTenancyManager($workspace));
@@ -582,4 +592,121 @@ it('refuses a field-use snapshot with an unverified activity provider', function
 
     expect($policy->inSnapshot($scope, new EntityHandle('crm.deal'), static fn (): never => throw new RuntimeException('Unverified activity was used.')))
         ->toBeNull();
+});
+
+it('denies a workspace-bound record when no workspace is in context', function (): void {
+    app()->instance(TenancyManager::class, new FakeTenancyManager(null));
+
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'workspace']);
+    ($this->compileRole)($role->id);
+
+    $principalId = (string) Str::uuid7();
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
+
+    $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
+    $bound = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => (string) Str::uuid7()]);
+
+    expect(resolve(AccessChecker::class)->canOnRecord($identity, 'read', $bound))->toBeFalse();
+});
+
+it('keeps cascade off for a context workspace without a path, even when its row enables cascade', function (): void {
+    $workspaceId = (string) Str::uuid7();
+    $otherWorkspaceId = (string) Str::uuid7();
+    DB::table('wsp_workspaces')->insert([
+        ['id' => $workspaceId, 'path' => 'cascadeRoot', 'settings' => json_encode(['cascade_view' => true], JSON_THROW_ON_ERROR)],
+        ['id' => $otherWorkspaceId, 'path' => 'unrelated', 'settings' => '{}'],
+    ]);
+    app()->instance(TenancyManager::class, new FakeTenancyManager(new WorkspaceRef($workspaceId, 'w', 'team', '', null)));
+
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'workspace']);
+    ($this->compileRole)($role->id);
+
+    $principalId = (string) Str::uuid7();
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
+
+    $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
+    $foreign = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $otherWorkspaceId]);
+
+    expect(resolve(AccessChecker::class)->canOnRecord($identity, 'read', $foreign))->toBeFalse();
+});
+
+it('denies a matrix permission once the entity module is no longer active', function (): void {
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+    ($this->compileRole)($role->id);
+
+    $principalId = (string) Str::uuid7();
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
+    app()->forgetScopedInstances();
+
+    expect(resolve(MatrixPermissions::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
+});
+
+it('evaluates a matrix cell only for the subject and scope the request carries', function (): void {
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+    ($this->compileRole)($role->id);
+
+    $principalId = (string) Str::uuid7();
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
+
+    $granted = new PrincipalIdentity(PrincipalType::User, $principalId);
+    $stranger = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $contexts = resolve(CoreXAccessContextMapper::class);
+    $scope = $contexts->scope();
+    expect($scope)->not->toBeNull();
+
+    $request = static function (PrincipalIdentity $subject, PrincipalIdentity $cellPrincipal) use ($contexts, $scope): AccessRequest {
+        $model = MatrixSubject::fromPrincipal($subject);
+
+        return AccessRequest::for(SubjectRef::of($model->getMorphClass(), $contexts->subject($subject)->key()), PermissionKey::of(MatrixPanel::getId(), MatrixPermission::Evaluate->value))
+            ->on(null, new MatrixCell(principal: $cellPrincipal, entity: 'crm.deal', action: 'read', scope: $scope))
+            ->withSubjectModel($model);
+    };
+    $policy = resolve(MatrixPolicy::class);
+
+    expect($policy->evaluate($request($granted, $granted)))->toBeTrue()
+        ->and($policy->evaluate($request($stranger, $granted)))->toBeFalse();
+});
+
+it('releases only a serialization failure from a field-use snapshot and rethrows other query errors', function (): void {
+    $actor = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $owner = LocalWorkContexts::install(app());
+    $owner->initialize(new AccountRef('field-account', 'fields', 'active', [], []));
+    $scope = WorkScopeFixture::install(app(), $actor->principalId())->scope();
+    $this->actingAs($actor);
+    $policy = resolve(FieldUsePolicy::class);
+    assert($policy instanceof FieldUseSnapshot);
+    $entity = new EntityHandle('crm.deal');
+    $failure = static fn (string $state): QueryException => new QueryException('pgsql', 'select 1', [], new class($state) extends RuntimeException
+    {
+        public function __construct(string $state)
+        {
+            parent::__construct('injected');
+            $this->code = $state;
+        }
+    });
+
+    expect($policy->inSnapshot($scope, $entity, fn () => throw $failure('40001')))->toBeNull()
+        ->and(fn () => $policy->inSnapshot($scope, $entity, fn () => throw $failure('23505')))->toThrow(QueryException::class);
+});
+
+it('treats cascade as off when the workspace table is absent', function (): void {
+    $workspaceId = (string) Str::uuid7();
+    app()->instance(TenancyManager::class, new FakeTenancyManager(new WorkspaceRef($workspaceId, 'w', 'team', 'boxed', null)));
+
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'workspace']);
+    ($this->compileRole)($role->id);
+
+    $principalId = (string) Str::uuid7();
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
+
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $workspaceId]);
+    DB::statement('DROP TABLE wsp_workspaces CASCADE');
+
+    expect(resolve(AccessChecker::class)->canOnRecord(new PrincipalIdentity(PrincipalType::User, $principalId), 'read', $record))->toBeTrue();
 });

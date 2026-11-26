@@ -14,7 +14,7 @@ use Packman\Attributes\Internal;
  * lookup, no workspace. Real resolvers (host/root, axiomasoft/corex-tenancy) land
  * later.
  *
- * @internal spec: D10
+ * @internal
  */
 #[Internal]
 final class SingleAccountResolver implements TenantContextResolver

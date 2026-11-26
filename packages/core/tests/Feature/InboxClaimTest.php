@@ -7,7 +7,9 @@ require_once __DIR__.'/../Support/Messaging.php';
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\ConsumerId;
+use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Exceptions\InboxRefused;
+use CoreX\Messaging\Exceptions\InvalidMessage;
 use CoreX\Messaging\Laravel\InboxRetention;
 use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Support\Facades\DB;
@@ -106,4 +108,32 @@ it('stores processed_at from FrozenClock', function (): void {
 
     expect($row)->not->toBeNull()
         ->and(new DateTimeImmutable((string) $row->processed_at)->getTimestamp())->toBe($frozen->getTimestamp());
+});
+
+it('refuses a derived fact that does not name its cause', function (): void {
+    $contract = outboxAppendDeclaredContract();
+    outboxAppendBindRegistry(new MessageContract(
+        name: $contract->name,
+        version: $contract->version,
+        class: $contract->class,
+        owner: $contract->owner,
+        maxPiiClass: $contract->maxPiiClass,
+        channel: $contract->channel,
+        derived: true,
+    ));
+
+    expect(fn (): bool => DB::transaction(fn (): bool => resolve(Inbox::class)->claim(
+        connection: DB::connection(), consumer: new ConsumerId('search.projection', 1), message: messagingSampleEnvelope(['messageId' => 'uncaused', 'causationId' => null]),
+    )))->toThrow(InvalidMessage::class)
+        ->and(DB::table('sys_inbox_messages')->count())->toBe(0);
+});
+
+it('refuses a replayed message id that carries a different fact', function (): void {
+    $claim = static fn (string $correlationId): bool => DB::transaction(fn (): bool => resolve(Inbox::class)->claim(
+        connection: DB::connection(), consumer: new ConsumerId('search.projection', 1), message: messagingSampleEnvelope(['messageId' => 'replayed', 'correlationId' => $correlationId]),
+    ));
+
+    expect($claim('corr-1'))->toBeTrue()
+        ->and($claim('corr-1'))->toBeFalse()
+        ->and(fn (): bool => $claim('corr-2'))->toThrow(InboxRefused::class, 'Conflicting fact');
 });

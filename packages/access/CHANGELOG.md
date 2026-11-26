@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Check the current database schema when applying department access rules and resolve department-tree joins on prefixed connections.
+
 ## CoreX 2.0 — Metadata authorization
 
 - Resolve metadata field permissions against one verified PostgreSQL snapshot for local Access policies.
@@ -57,7 +61,7 @@
 
 ## Unreleased — baseline v1
 
-- Схема: наборы `tenant` и `tenant-cloud`, baseline v1. Cloud FK требуют tenancy; boxed использует только `tenant`. Baseline заменяет невыпущенную upgrade-цепочку.
+- The `tenant` and `tenant-cloud` schema sets started at baseline v1, which replaced the unreleased upgrade sequence. Cloud foreign keys require tenancy. Boxed installations use only `tenant`.
 
 ## Unreleased — deterministic schema (P08.2)
 
@@ -105,8 +109,7 @@
 
 - Breaking before 1.0: Rename config and publish identifiers to `corex-access` and environment variables to `COREX_ACCESS_*`.
 
-Все заметные изменения `corex/auth` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
+All notable changes to `corex/auth` are recorded here following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Before 1.0, minor releases may introduce breaking changes to public contracts (D17).
 
 ## [Unreleased]
 
@@ -115,17 +118,15 @@
 ### Changed
 
 - Password rehash delegates to the identity table owner's `IdentityPasswordRehasher` port with compare-and-swap inputs; auth no longer updates `users` directly.
-- P7.7: `DefaultAccessChecker`, matrix/access helpers и компилятор матрицы
-  получают `AuthOptions` вместо прямых вызовов `config('corex-auth.*')`.
-- P7.6: `AuthOptions::fromArray` валидирует снимок `corex-auth`; провайдер и
-  `PrincipalUserProvider` читают identity и pins из Options.
+- `DefaultAccessChecker`, the matrix and access helpers, and the matrix compiler now receive `AuthOptions` in place of direct `config('corex-auth.*')` calls (P7.7).
+- `AuthOptions::fromArray` validates the `corex-auth` snapshot. The provider and `PrincipalUserProvider` read identity settings and configuration pins from those options (P7.6).
 - Released metadata no longer declares development `path` repositories or an
   unconfirmed AzGuard remote. Private AzGuard resolution is a consumer-owned,
   canonical immutable channel; credentials are never stored in this package.
 
 ## [0.1.0] - 2026-07-27
 
-First tagged release — roadmap-фаза P1 / B-11 (AzGuard-мост, entity-scoped RBAC, OIDC).
+First tagged release, covering the AzGuard bridge, entity-scoped RBAC and OIDC in roadmap phase P1 and blueprint B-11.
 Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror configured).
 
 ### Added
@@ -155,85 +156,32 @@ Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror conf
   this same provider — `Auth::attempt()` locally, `Auth::loginUsingId($sub)` after a successful
   OIDC callback (premortem C4).
 
-- Схема `aut_*` (роль-надстройка над AzGuard, D15): 3 тенантские миграции (`aut_roles`,
-  `aut_role_matrix`, `aut_role_assignments`) + отдельная cloud-миграция cross-package FK
-  (`workspace_id → wsp_workspaces`, `granted_by → users`, D102).
-- Контракты `Contracts\{Principal,RoleMatrixCompiler}` + enum'ы `Enums\{Scope,PrincipalType}`.
-- Модели `Models\{Role,RoleMatrixRow,RoleAssignment}`; немутируемость системных ролей и их
-  матричных строк (`Roles\SystemRoleImmutable`, AC-21) + `Roles\RoleCloner`.
-- `Matrix\DatabaseRoleMatrixCompiler` — компилирует `aut_role_matrix` в
-  `az_guard_role_permissions` (ключ `{panel}.{entity_key}.{action}`, D100) одной транзакцией,
-  бамп версии scope-карты последним шагом (`Matrix\ScopeMapVersion`, tenant-солёный ключ, D103).
-- `Matrix\MatrixPermissionCatalogBuilder` — регистрирует скомпилированные ключи в каталоге
-  AzGuard (иначе резолвер/валидатор их вырезают, findings/P2.8-azguard-inventory §7).
-- `Matrix\MatrixValidator` — предупреждение (не исключение) для роли с `assignable_to ⊇
-  agent|api_key`, чья матрица использует own/dept/dept_tree.
-- `database/seeders/SystemRolesSeeder` — сидирует owner/admin/employee с пустой матрицей;
-  наполнение матрицы — задача модулей (`Extend\Permissions`, P2.9).
-- `config/corex-auth.php` — панель UI-матрицы + конфиг-пины AzGuard (`table_names.roles`,
-  `column_names.morph_type = uuid`, D104), применяются на `az-guard.*` в
-  `AccessServiceProvider` без правки самого пакета AzGuard.
-- Второй (PG16) тест-лейн пакета: `tests/Pg` + `PgTestCase`, скрипты `test`/`test:pg`
-  (D105) — существующий sqlite-лейн (7 тестов) не тронут.
-- `Contracts\AccessChecker` (+`RecordContext`) — двухфазная проверка прав (B-11 §5.5):
-  `allowed()` (capability, AzGuard-кеш), `scopeFor()` (эффективный scope по матрице,
-  контекстная строка замещает базовую) и `canOnRecord()` (предикат по записи ИЛИ активный
-  `direct_grant`). Реализация — `Access\DefaultAccessChecker`.
-- `Access\AutMatrixGrantSource implements AzGuard\Registry\Contracts\GrantSource` (priority 85,
-  D101) — читает `aut_role_assignments` с учётом workspace/`expires_at` (AC-26); действующее
-  назначение системной роли `owner` даёт `PermissionSet::wildcard()` без хранения `'*'` (D103).
-- `Access\PrincipalIdentity implements Principal, Authenticatable,
-  AzGuard\Contracts\HasPermissions` — носитель принципала `user`/`agent`/`api_key` без строки
-  `users` (AC-25); `allowed()` проверяет права через НЕЁ и настоящий публичный путь AzGuard.
-- `Access\WorkspacePermissionLayer implements AzGuard\Contracts\PermissionLayer` — дискриминатор
-  кеша AzGuard по активному workspace; биндинг за конфиг-ключом `corex-auth.bind_permission_layer`
-  (слот `PermissionLayer` в AzGuard один).
-- `own`/`dept`/`dept_tree` вырождаются в `Scope::None` для принципалов `agent`/`api_key`
-  (ENFORCE, B-11 §5.5).
-- `Contracts\ScopeResolver` (+ `Access\DefaultScopeResolver`) — Builder-аналог `canOnRecord()`
-  (B-11 §5.5): накладывает WHERE по эффективному scope на листинг, зеркаля двухфазность
-  `canOnRecord()` (direct-grant обход → capability-гейт → предикат), пятый опциональный параметр
-  `?RecordContext` сверх снипета спеки (D116).
-- `Access\ScopePredicate` — единственный владелец семантики 6 скоупов (`applyTo()` для Builder,
-  `matches()` для записи); `DefaultAccessChecker` переведён на делегирование в него без изменения
-  наблюдаемого поведения (D110). `workspace`-предикат явный (не полагается на глобальный scope,
-  D107) и несёт модификатор `cascade_view` — иерархический просмотр родитель→потомки по
-  `wsp_workspaces.path`, флаг читается строго `=== 'true'` у самого ctx-workspace (D117).
-- `Access\DirectGrantLookup` — вынесенная из `DefaultAccessChecker` проверка активного
-  AzGuard direct grant, общая для record- и builder-пути.
-- `Access\ScopeAvailability` + `Exceptions\ScopeCapabilityMismatch` — нормализация scope по
-  capability сущности на builder-пути: нет capability и нет колонки ⇒ `account`; нет capability,
-  колонка ЕСТЬ ⇒ fail-closed исключение (declaration drift, D114), никогда не тихое расширение прав.
-- `Access\WorkspaceScopeWiring` — автоматическая регистрация `WorkspaceScope` (глобальный scope)
-  на моделях с capability `workspace_scoped` (прецедент `AuditCapabilityWiring`, D115); конфиг-пин
-  `corex-auth.workspace_scope_class` (строка — `corex/auth` не зависит от `corex/tenancy`, D109).
-- `Matrix\MatrixValidator` — второе правило-предупреждение: строка матрицы со scope, недопустимым
-  для capability сущности (колонка есть, capability не объявлена), попадает в список предупреждений.
-- PG-фикстуры `users.department_id` + `wsp_workspaces.settings`/`path` + хелпер
-  `PgTestCase::migrateCoreDepartments()` (реальная миграция `sys_departments` из `corex/core`) —
-  закрывают долг P2.20 «dept/dept_tree не прогнаны против реальных таблиц».
-- `Matrix\ActiveEntityFilter` (P2.21, AC-27) — единственный владелец предиката «даёт ли
-  entity_key ключ прямо сейчас»: entity_key неизвестен `EntityRegistry` ИЛИ его модуль неактивен
-  (`ModuleRegistry::isActive()`) ⇒ fail-closed исключение из компиляции. `Matrix\DatabaseRoleMatrixCompiler`
-  и `Matrix\MatrixPermissionCatalogBuilder` фильтруют через НЕГО (один шов, не два расходящихся
-  условия); строки `aut_role_matrix` неактивного модуля не удаляются — только перестают давать
-  ключ, восстанавливаются на re-enable без правки матрицы (D113).
-- `Extend\PermissionsMerger` — листенер `ModuleEnabled`/`ModuleDisabled` (`AccessServiceProvider::boot()`),
-  на каждое enable/disable перекомпилирует всю матрицу (`RoleMatrixCompiler::recompileAll()`);
-  строк матрицы сам не создаёт (D113 — это дело модулей). `merge()` также валидирует декларации
-  `Packman\Modules\Data\Extenders\Permissions` против `EntityRegistry`: сущность, неизвестная реестру,
-  игнорируется fail-closed и попадает в возвращаемый список предупреждений (никогда не в лог).
-- `Access\PermissionSurface` — read-only читатель декларированной поверхности прав
-  `(entity_key, action, допустимые scope)` активных модулей для UI-матрицы, поверх
-  `Access\ScopeAvailability` (P2.9): `isScopeable() === false` ⇒ единственный допустимый scope —
-  `account`.
-- `Contracts\RoleMatrixCompiler` теперь забинжен в контейнере на `Matrix\DatabaseRoleMatrixCompiler`
-  (`AccessServiceProvider::register()`) — ранее ничего не резолвило интерфейс, только прямое
-  конструирование класса.
+- Added three tenant migrations for the role layer above AzGuard (`aut_roles`, `aut_role_matrix`, `aut_role_assignments`, D15). A separate cloud migration installs cross-package foreign keys from `workspace_id` to `wsp_workspaces` and from `granted_by` to `users` (D102).
+- Added `Contracts\{Principal,RoleMatrixCompiler}` and `Enums\{Scope,PrincipalType}`.
+- Added `Models\{Role,RoleMatrixRow,RoleAssignment}` and `Roles\RoleCloner`. `Roles\SystemRoleImmutable` protects system roles and their matrix rows (AC-21).
+- `Matrix\DatabaseRoleMatrixCompiler` compiles `aut_role_matrix` into `az_guard_role_permissions` in a single transaction using `{panel}.{entity_key}.{action}` keys (D100). The last step increments the tenant-specific scope map version in `Matrix\ScopeMapVersion` (D103).
+- `Matrix\MatrixPermissionCatalogBuilder` registers compiled keys in AzGuard's catalog so its resolver and validator retain them (findings/P2.8-azguard-inventory §7).
+- `Matrix\MatrixValidator` warns when a role assignable to `agent` or `api_key` uses `own`, `dept` or `dept_tree` in its matrix.
+- `database/seeders/SystemRolesSeeder` creates owner, admin and employee roles with an empty matrix. Modules populate the matrix through `Extend\Permissions` (P2.9).
+- `config/corex-auth.php` defines the matrix UI panel and AzGuard configuration pins (`table_names.roles`, `column_names.morph_type = uuid`, D104). `AccessServiceProvider` applies them to `az-guard.*`.
+- Added the PostgreSQL 16 suite in `tests/Pg` with `PgTestCase`. The `test` and `test:pg` scripts retain the existing seven SQLite tests (D105).
+- `Contracts\AccessChecker` and `RecordContext` provide two-phase permission checks (B-11 §5.5). `allowed()` uses AzGuard's capability cache. `scopeFor()` resolves the effective matrix scope, with a context row overriding the base row. `canOnRecord()` checks the record predicate or an active direct grant. `Access\DefaultAccessChecker` implements the contract.
+- `Access\AutMatrixGrantSource` implements `AzGuard\Registry\Contracts\GrantSource` at priority 85 (D101). It reads `aut_role_assignments` subject to workspace and expiry (AC-26). An active system `owner` assignment grants `PermissionSet::wildcard()` without storing a literal `'*'` (D103).
+- `Access\PrincipalIdentity` implements `Principal`, `Authenticatable` and `AzGuard\Contracts\HasPermissions` for `user`, `agent` and `api_key` principals without a `users` row (AC-25). `allowed()` passes this identity to the public AzGuard permission check.
+- `Access\WorkspacePermissionLayer` implements `AzGuard\Contracts\PermissionLayer` and partitions the AzGuard cache by active workspace. `corex-auth.bind_permission_layer` controls the binding because AzGuard has a single `PermissionLayer` slot.
+- For `agent` and `api_key` principals, `own`, `dept` and `dept_tree` resolve to `Scope::None` (ENFORCE, B-11 §5.5).
+- `Contracts\ScopeResolver`, implemented by `Access\DefaultScopeResolver`, applies the effective scope to listing queries. It mirrors the record check by considering a direct grant first, then checking the capability and predicate. The fifth optional `?RecordContext` parameter extends the specification example (B-11 §5.5, D116).
+- `Access\ScopePredicate` implements all six scopes for queries (`applyTo()`) and records (`matches()`). `DefaultAccessChecker` delegates both paths to it (D110). The explicit `workspace` predicate works independently of global scopes (D107). When the context workspace has `cascade_view === 'true'`, it includes descendants along `wsp_workspaces.path` (D117).
+- Extracted active AzGuard direct-grant lookup from `DefaultAccessChecker` into `Access\DirectGrantLookup`, shared by record and query checks.
+- `Access\ScopeAvailability` normalizes query scopes against entity capabilities. If both the capability and its column are absent, it resolves to `account`. A column present without its declared capability raises `Exceptions\ScopeCapabilityMismatch`, preventing a silent grant when the declaration drifts (D114).
+- `Access\WorkspaceScopeWiring` automatically registers the global `WorkspaceScope` on `workspace_scoped` models, following `AuditCapabilityWiring` (D115). `corex-auth.workspace_scope_class` accepts a class name so `corex/auth` can operate independently of `corex/tenancy` (D109).
+- `Matrix\MatrixValidator` also warns about matrix scopes whose entity column exists without the required capability.
+- PostgreSQL fixtures add `users.department_id` and `wsp_workspaces.settings` and `path`. `PgTestCase::migrateCoreDepartments()` runs the actual `sys_departments` migration from `corex/core` to test `dept` and `dept_tree` against real tables (P2.20).
+- `Matrix\ActiveEntityFilter` owns the decision to compile an `entity_key` (P2.21, AC-27). Keys missing from `EntityRegistry` or belonging to an inactive module (`ModuleRegistry::isActive()`) are excluded. `Matrix\DatabaseRoleMatrixCompiler` and `Matrix\MatrixPermissionCatalogBuilder` share the filter. An inactive module's `aut_role_matrix` rows remain stored and take effect again on enable (D113).
+- `Extend\PermissionsMerger` listens for `ModuleEnabled` and `ModuleDisabled` in `AccessServiceProvider::boot()`. Each transition calls `RoleMatrixCompiler::recompileAll()`; modules own the rows (D113). `merge()` checks `Packman\Modules\Data\Extenders\Permissions` declarations against `EntityRegistry`, ignores unknown entities and reports them through the returned warnings.
+- `Access\PermissionSurface` exposes the active modules' declared entity keys, actions and permitted scopes to the matrix UI. It uses `Access\ScopeAvailability` (P2.9). When `isScopeable() === false`, the only permitted scope is `account`.
+- `AccessServiceProvider::register()` now binds `Contracts\RoleMatrixCompiler` to `Matrix\DatabaseRoleMatrixCompiler`, making the interface resolvable through the container.
 
 ### Requires
 
-- **PostgreSQL 16** для `aut_*` DDL (`jsonb`, `CHECK`, `UNIQUE NULLS NOT DISTINCT`,
-  `COMMENT ON` — без sqlite-эквивалента). `composer test` (sqlite) покрывает только существующий
-  мост `TenantContextGuard`; гарантии DDL-парити и транзакционности компилятора проверяются
-  исключительно на `composer test:pg`.
+- The `aut_*` schema requires **PostgreSQL 16** for `jsonb`, `CHECK`, `UNIQUE NULLS NOT DISTINCT` and `COMMENT ON`. At this release `composer test` on SQLite covers the `TenantContextGuard` bridge. Run `composer test:pg` to verify DDL parity and compiler transaction behavior.

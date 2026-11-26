@@ -6,7 +6,7 @@ declare(strict_types=1);
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Blocking provider-size gate (P8.6, D45; thin providers P05.2, D70).
+ * Blocking provider-size gate.
  *
  * S1: singleton|scoped|bind|bindIf call sites only inside classes that extend
  * Illuminate\Support\ServiceProvider; a foreach body is one call site; at most

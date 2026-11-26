@@ -25,7 +25,6 @@ return new class extends PackmanMigration
             $table->json('cursor')->nullable();
             $table->char('restore_epoch', 64);
             $table->decimal('generation', total: 20, places: 0)->default(0);
-            $table->index(['series_key', 'active_revision'], 'corex_task_series_state_series_key_active_revision_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

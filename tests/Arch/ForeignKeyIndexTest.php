@@ -14,7 +14,7 @@ const FOREIGN_KEY_INDEX_VENDOR_TABLES = ['sys_saved_views'];
 /** @return list<string> */
 function foreignKeysWithoutLeadingIndex(string $golden): array
 {
-    /** @var array{tables: array<string, array{indexes: list<array{columns: list<string>}>, foreign_keys: list<array{name: string, columns: list<string>}>}>} $schema */
+    /** @var array{tables: array<string, array{indexes: list<array{columns: list<string>, predicate: ?string, method: string}>, foreign_keys: list<array{name: string, columns: list<string>}>}>} $schema */
     $schema = json_decode((string) file_get_contents($golden), true, flags: JSON_THROW_ON_ERROR);
     $offenders = [];
 
@@ -24,10 +24,15 @@ function foreignKeysWithoutLeadingIndex(string $golden): array
         }
 
         foreach ($definition['foreign_keys'] as $foreignKey) {
-            $width = count($foreignKey['columns']);
+            $columns = $foreignKey['columns'];
+            // An equality lookup on every FK column also implies each is non-null.
+            // Other partial predicates can hide referencing rows (including soft deletes).
+            $safePredicates = array_map(static fn (string $column): string => '('.$column.' IS NOT NULL)', $columns);
             $covered = array_any(
                 $definition['indexes'],
-                static fn (array $index): bool => array_slice($index['columns'], 0, $width) === $foreignKey['columns'],
+                static fn (array $index): bool => $index['method'] === 'btree'
+                    && array_slice($index['columns'], 0, count($columns)) === $columns
+                    && ($index['predicate'] === null || in_array($index['predicate'], $safePredicates, true)),
             );
 
             if (! $covered) {

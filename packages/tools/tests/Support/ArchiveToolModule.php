@@ -12,7 +12,7 @@ use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
-/** Selected P3–P6 archive cohort contributions for CONTRIB qualification. */
+/** Selected archive cohort contributions for CONTRIB qualification. */
 final class ArchiveToolModule implements ModuleRegistry
 {
     public const string COMPOSER_NAME = 'example/archive-tools';
@@ -31,6 +31,8 @@ final class ArchiveToolModule implements ModuleRegistry
         $input = self::inputSchema();
         $output = self::outputSchema();
 
+        $descriptions = self::approvedDescriptions();
+
         return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Archive tools')
@@ -45,14 +47,20 @@ final class ArchiveToolModule implements ModuleRegistry
                     Api::tool('accounts.list_menu', CountingHandler::class, 'accounts.list', $input, $output, 'read', 'read-only')
                         ->titled('List account menu', 'Archive-lab account list read port'),
                     Api::tool('panels.render_slot', CountingHandler::class, 'panels.read', $input, $output, 'read', 'read-only')
-                        ->titled('Render panel slot', 'Approved P4 panel contribution'),
+                        ->titled('Render panel slot', $descriptions['panels.render_slot']),
                     Api::tool('workflow.wakeup_local', CountingHandler::class, 'workflow.wakeup', $input, $output, 'read', 'read-only')
-                        ->titled('Local workflow wakeup', 'Approved P5 wakeup contribution'),
+                        ->titled('Local workflow wakeup', $descriptions['workflow.wakeup_local']),
                     Api::tool('search.query', CountingHandler::class, 'search.read', $input, $output, 'read', 'read-only')
-                        ->titled('Search query', 'Approved P6 search contribution'),
+                        ->titled('Search query', $descriptions['search.query']),
                     Api::entity('archive.file'),
                 ]),
         ], installedPackages: []);
+    }
+
+    /** @return array<string, string> Descriptions included in the archived producer contract hashes. */
+    public static function approvedDescriptions(): array
+    {
+        return json_decode((string) file_get_contents(__DIR__.'/../fixtures/tool-contribution/approved-descriptions.json'), true, flags: JSON_THROW_ON_ERROR);
     }
 
     /** @return array<string, mixed> */

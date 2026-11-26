@@ -14,7 +14,7 @@ use RuntimeException;
 use SplFileInfo;
 
 /**
- * Public API naming gate (P3.6 · P1-design §5.3).
+ * Public API naming gate.
  *
  * Blocks *new* generic short names in source-derived Api/Spi symbols.
  * Existing matches are frozen in naming-gate-grandfather.json.

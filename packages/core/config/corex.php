@@ -24,20 +24,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Tenant context (B-10 §3.1 / B-11 §3.1)
+    | Tenant context
     |--------------------------------------------------------------------------
     | TenantContextResolver binding. Boxed installs default to
     | SingleAccountResolver (constant context, no real tenancy). Real
-    | resolvers (host/root, axiomasoft/corex-tenancy) land in P2.
+    | resolvers (host/root, axiomasoft/corex-tenancy) are provided by the tenancy package.
     |
-    | `manager` (P2.5): TenancyManager binding — single switch point for
+    | `manager`: TenancyManager binding — single switch point for
     | connection/cache/queue/fs. Boxed default is a null-manager (no-op,
     | constant context via `resolver` above); axiomasoft/corex-tenancy rebinds this to
-    | DatabaseTenancyManager when the package is present (D10 — container
+    | DatabaseTenancyManager when the package is present (container
     | binding, never an `if(cloud)` branch).
     |
-    | `impersonation` (P2.11, D139): ImpersonationService binding — boxed
-    | default has no grants at all (B-11 §6.1); axiomasoft/corex-tenancy rebinds this to
+    | `impersonation`: ImpersonationService binding — boxed
+    | default has no grants at all; axiomasoft/corex-tenancy rebinds this to
     | DatabaseImpersonationService under `tenancy.oidc.impersonation.enabled`.
     */
     'tenant_context' => [
@@ -93,13 +93,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | PubSub (B-10 §3.1/§6.1/§7.3 — no LISTEN/NOTIFY, R-15)
+    | PubSub (no LISTEN/NOTIFY)
     |--------------------------------------------------------------------------
     | 'null' is the boxed-safe default (no infra dependency). 'redis' is the
-    | cloud default (B-10 §6.1); 'database' is the boxed fallback when Redis
+    | cloud default; 'database' is the boxed fallback when Redis
     | is unavailable.
     |
-    | `octane_worker_opt_in` (D44/A29): a dedicated worker command sets this
+    | `octane_worker_opt_in`: a dedicated worker command sets this
     | to true before calling subscribe() under Octane — runningInConsole()
     | alone cannot tell an HTTP request from a worker command apart there.
     | Never set it from request-handling code.
@@ -108,7 +108,7 @@ return [
     | sys_pubsub_messages. Schedule it (e.g. daily, php artisan schedule)
     | longer than the worst-case subscriber downtime — pruning a message
     | before every durable cursor behind it has passed it is a silent,
-    | permanent invalidation loss (D44).
+    | permanent invalidation loss.
     */
     'pubsub' => [
         'driver' => PubSubDriver::Null,
@@ -121,25 +121,21 @@ return [
     |--------------------------------------------------------------------------
     | Messaging (MSG-001 … MSG-008)
     |--------------------------------------------------------------------------
-    | Transactional outbox и inbox идемпотентного потребителя.
+    | Transactional outbox and idempotent consumer inbox.
     |
-    | `lease_seconds` обязан превышать максимальную ожидаемую длительность
-    | публикации: истёкшая аренда означает перезахват, то есть дубль. `batch_size`
-    | ограничивает один ход relay — это же ограничение не даёт одному аккаунту
-    | занять воркер целиком.
+    | Set `lease_seconds` above the longest expected publish duration. When a
+    | lease expires, another worker can claim and publish the same message.
+    | `batch_size` limits one relay pass and caps the work per account.
     |
-    | `max_attempts` и `backoff_cap_seconds` задают ограниченный экспоненциальный
-    | backoff min(cap, 2 ** attempt) секунд — та же формула, что у
-    | packages/scheduler (SweepRunner). Jitter не добавляется: детерминизм важнее,
-    | пока на один аккаунт приходится один relay (research/P5-design.md §5.8).
+    | Retries wait min(backoff_cap_seconds, 2 ** attempt) seconds up to
+    | `max_attempts`. Like the scheduler's SweepRunner, the relay uses
+    | deterministic backoff with one relay per account.
     |
-    | `outbox_retention` — окно хранения ОПУБЛИКОВАННЫХ строк. Мёртвые строки
-    | хранятся отдельным, более длинным окном `dead_retention`: они нужны
-    | расследованию, а не доставке.
+    | `outbox_retention` controls how long published rows are kept for
+    | reconciliation. `dead_retention` keeps dead rows for investigation.
     |
-    | `inbox_retention` по умолчанию null — inbox НЕ чистится. Удаление отметки
-    | заново открывает окно дублей, поэтому включать чистку можно только там, где
-    | объявлен конечный горизонт повтора (research/P5-design.md §7.3, D29).
+    | A null `inbox_retention` keeps deduplication records indefinitely.
+    | Set a finite retention period only when redelivery has a known limit.
     */
     'messaging' => [
         'lease_seconds' => 120,

@@ -24,7 +24,7 @@ use Stringable;
  * depend on axiomasoft/corex (axiomasoft/corex already requires axiomasoft/corex, a
  * reverse dependency would cycle).
  *
- * @internal spec: B-10 §4.4, D22
+ * @internal
  */
 #[Internal]
 final readonly class AuditObserver
@@ -41,7 +41,7 @@ final readonly class AuditObserver
      *
      * @var list<string>
      *
-     * @internal spec: D63, P1.21
+     * @internal
      */
     private const array ALWAYS_EXCLUDED = ['password', 'remember_token'];
 

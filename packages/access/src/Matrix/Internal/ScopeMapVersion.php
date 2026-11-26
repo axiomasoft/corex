@@ -16,9 +16,8 @@ use Packman\Attributes\Internal;
 use UnexpectedValueException;
 
 /**
- * Versioned cache key for one role's compiled scope-map (B-11 §5.5) — bumped
- * as the LAST step of {@see DatabaseRoleMatrixCompiler::compile()} (§7.3
- * п.8), never before the transaction that published the matrix event
+ * Versioned cache key for one role's compiled scope-map — bumped
+ * as the LAST step of {@see DatabaseRoleMatrixCompiler::compile()}, never before the transaction that published the matrix event
  * commits. Carries an explicit tenant salt (the account id) rather than
  * relying on a cache-store prefix bootstrapper: `axiomasoft/corex-access` runs in boxed installs too,
  * where no such bootstrapper is wired.

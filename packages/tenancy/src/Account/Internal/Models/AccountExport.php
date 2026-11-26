@@ -11,10 +11,9 @@ use Packman\Attributes\Internal;
 
 /**
  * `root_account_exports` — offboarding/pre-purge/manual data-export
- * bookkeeping (central connection, B-11 §7.3). {@see
+ * bookkeeping (central connection). {@see
  * \CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::drop()} refuses
- * to run unless the account's most recent row here is `status=ready`
- * (D13/AC-7).
+ * to run unless the account's most recent row here is `status=ready`.
  *
  * @property string $id
  * @property string $account_id

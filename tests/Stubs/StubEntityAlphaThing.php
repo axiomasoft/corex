@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Minimal Eloquent model used by RegistryCompilerTest to exercise
- * Extend\Entity's `$casts` introspection fallback (P1.4).
+ * Extend\Entity's `$casts` introspection fallback.
  */
 final class StubEntityAlphaThing extends Model
 {

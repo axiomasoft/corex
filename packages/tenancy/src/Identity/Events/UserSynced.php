@@ -11,7 +11,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Fired from inside the target account's tenant context (B-11 §3.2) — the
+ * Fired from inside the target account's tenant context — the
  * ambient {@see TenantContextResolver} resolves the
  * account this projection was synced into.
  */

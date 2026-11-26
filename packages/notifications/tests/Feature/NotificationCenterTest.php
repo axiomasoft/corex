@@ -388,3 +388,33 @@ it('decides inbox visibility and unread counts without reading notification payl
         ->and($selects)->toHaveCount(2)
         ->and(implode("\n", $selects))->not->toContain('select *')->not->toContain('payload');
 });
+
+it('refuses to cancel when the consumer policy denies cancellation', function (): void {
+    app()->instance(NotificationPolicy::class, new class implements NotificationPolicy
+    {
+        public function allows(NotificationContext $context, NotificationAction $action, NotificationSubject $subject): bool
+        {
+            return $action !== NotificationAction::Cancel;
+        }
+    });
+    app()->forgetScopedInstances();
+    $center = resolve(NotificationCenter::class);
+    $notification = $center->notify(notificationContext(), notificationInput('cancel-denied'));
+
+    expect(fn (): mixed => $center->cancel(notificationContext(), $notification->id))->toThrow(NotificationAccessDenied::class)
+        ->and(DB::table('ntf_deliveries')->where('notification_id', $notification->id)->value('state'))->toBe('pending');
+});
+
+it('refuses inbox and digest work for a context other than the active principal', function (?string $actorId): void {
+    allowNotifications();
+    $context = new NotificationContext(tenant: notificationContext()->tenant, actorKind: 'user', actorId: $actorId);
+    $now = new DateTimeImmutable('now');
+    $window = new DigestWindow(start: $now->modify('-59 minutes'), end: $now->add(new DateInterval('PT1M')), period: 'hourly');
+
+    expect(fn (): mixed => resolve(NotificationCenter::class)->unreadCount($context))->toThrow(NotificationAccessDenied::class)
+        ->and(fn (): mixed => resolve(DigestBuilder::class)->build($context, $window))->toThrow(NotificationAccessDenied::class)
+        ->and(DB::table('ntf_digest_runs')->count())->toBe(0);
+})->with([
+    'another user' => ['11111111-1111-7111-8111-111111111199'],
+    'anonymous' => [null],
+]);

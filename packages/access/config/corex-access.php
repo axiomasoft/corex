@@ -32,11 +32,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Workspace scope class override (D109)
+    | Workspace scope class override
     |--------------------------------------------------------------------------
     | null (default) = use the scope named by the kernel
     | CoreX\Context\Laravel\WorkspaceScopeProvider, which axiomasoft/corex-tenancy
-    | binds; no binding = boxed profile, explicitly no workspace scope (AC-28).
+    | binds; no binding = boxed profile, explicitly no workspace scope.
     | A class set here overrides the provider and MUST exist — a missing
     | class fails at boot instead of silently leaving models unscoped.
     | WorkspaceScopeWiring registers it on every Capability::WorkspaceScoped
@@ -46,15 +46,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Local login lane (D125 — OQ-18 variant A)
+    | Local login lane
     |--------------------------------------------------------------------------
     | `Identity\PrincipalUserProvider` reads this table via query-builder and
     | returns a CoreX\Access\Laravel\PrincipalIdentity(user, <id>) — the shared seam BOTH login
-    | lanes construct through (parity, premortem C4): the OIDC lane
+    | lanes construct through: the OIDC lane
     | (axiomasoft/corex-tenancy) ends in `Auth::loginUsingId($sub)`, which resolves
     | through this exact provider. `connection`/`table` name a table by
     | STRING, never an imported model — axiomasoft/corex-access does not depend on
-    | axiomasoft/corex-tenancy (AC-28), so a boxed profile without it points `table` at
+    | axiomasoft/corex-tenancy, so a boxed profile without it points `table` at
     | its own users table instead. `enabled=false` skips registering the
     | `corex-principal` auth driver entirely.
     */

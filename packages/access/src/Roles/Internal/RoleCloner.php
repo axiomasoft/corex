@@ -11,10 +11,10 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Packman\Attributes\Internal;
 
 /**
- * Customization path for a system role (AC-21): creates an editable,
+ * Customization path for a system role: creates an editable,
  * non-system copy with `cloned_from_id` set and the source matrix copied
  * row-by-row. The clone does NOT inherit the `owner` wildcard — that grant
- * is keyed to the system `owner` slug at the source-of-truth layer (D103),
+ * is keyed to the system `owner` slug at the source-of-truth layer,
  * not to any flag a clone could carry — so cloning `owner` yields a role
  * with no capability at all until its (now-editable) matrix is filled in.
  * Cloning `admin`/`employee` is the supported customization path for v1.

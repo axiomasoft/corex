@@ -42,7 +42,7 @@ use Throwable;
 #[Internal]
 final readonly class SweepRunner implements DueWakeupSweeper
 {
-    /** Indexed by sys_wakeup_requests_due_ix: keep it identical to the expression in the migration. */
+    /** Indexed by sys_wakeup_requests_runnable_due_ix: keep it identical to the expression in the migration. */
     private const string DUE_TIME = "case when status in ('running', 'cancel-requested') then lease_until when status = 'retry-scheduled' then retry_at else fire_at end";
 
     /**
@@ -125,7 +125,7 @@ final readonly class SweepRunner implements DueWakeupSweeper
     private function runnable(Connection $db, DataScope $owner): Builder
     {
         // The flat status list repeats what the OR below already implies; PostgreSQL needs it
-        // spelled out to prove the partial sys_wakeup_requests_due_ix covers this query.
+        // spelled out to prove the partial sys_wakeup_requests_runnable_due_ix covers this query.
         return $db->table('sys_wakeup_requests')->where('account_id', $owner->accountId)
             ->whereIn('status', ['pending', 'retry-scheduled', 'running', 'cancel-requested'])
             ->where(function (Builder $rows): void {

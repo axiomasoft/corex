@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P3.6 — naming gate (blocking). Config composition blocking lives in ConfigCompositionTest.
+// naming gate (blocking). Config composition blocking lives in ConfigCompositionTest.
 
 test('naming gate reports no violations on clean tree', function (): void {
     $repoRoot = dirname(__DIR__, 2);

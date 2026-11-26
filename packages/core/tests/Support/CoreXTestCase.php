@@ -11,7 +11,7 @@ use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
  * Dev-only Testbench base for the core suite and the monorepo root.
- * Other packages keep a local tests/Support harness (D94).
+ * Other packages keep a local tests/Support harness.
  */
 abstract class CoreXTestCase extends Orchestra
 {

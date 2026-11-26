@@ -47,9 +47,6 @@ return new class extends PackmanMigration
             $table->timestamps();
             $table->foreign('file_id', 'med_operations_file_id_fk')->references('id')->on('med_files')->restrictOnDelete();
             $table->index(['state', 'next_attempt_at'], 'med_operations_state_next_attempt_at_ix');
-            // Purge claims and conversion supersession look operations up by file; without this
-            // index each of them scanned every operation of the tenant.
-            $table->index(['file_id', 'kind'], 'med_operations_file_kind_ix');
         });
     }
 

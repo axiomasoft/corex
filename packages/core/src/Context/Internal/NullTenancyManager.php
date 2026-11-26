@@ -18,7 +18,7 @@ use Packman\Attributes\Internal;
  * present) rebind {@see TenancyManager} to its own database engine — same
  * pattern as the module-activation-gate boxed/cloud seam.
  *
- * @internal spec: D10, B-11 §6.1 L892–907
+ * @internal
  */
 #[Internal]
 final readonly class NullTenancyManager implements TenancyManager

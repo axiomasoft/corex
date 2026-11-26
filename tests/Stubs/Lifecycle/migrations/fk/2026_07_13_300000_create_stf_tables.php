@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 // Parent BEFORE child in the SAME migration: their pg_class oids encode
 // creation order, so the auto-claim wrapper assigns the child a higher `seq`
-// and purge drops it first — FK-safe (Blocker A3). No hand-written claim().
+// and purge drops it first — FK-safe. No hand-written claim().
 return new class extends Migration
 {
     public function up(): void

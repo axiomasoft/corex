@@ -1,4 +1,4 @@
-"""P17.2 external extension fixture matrix."""
+"""External extension fixture matrix."""
 from __future__ import annotations
 
 import importlib.util

@@ -7,10 +7,10 @@ namespace CoreX\Context\Enums;
 use Packman\Attributes\Api;
 
 /**
- * The five operations B-11 §5.9 п.3 forbids under an impersonated session
- * (L3 — semantic layer, for privileged paths that reach neither L1's HTTP
- * method check nor L2's Eloquent event). CLOSED vocabulary from the spec —
- * not a capability-key list (no such keys exist in the tree, D141/D150).
+ * The five operations forbidden during an impersonated session
+ * (Semantic layer, for privileged paths that reach neither L1's HTTP
+ * method check nor L2's Eloquent event). Closed action set —
+ * not a capability-key list (no such keys exist in the tree).
  */
 #[Api(since: '1.0')]
 enum ImpersonationRestrictedAction

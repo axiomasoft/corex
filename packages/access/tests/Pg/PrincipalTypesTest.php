@@ -51,7 +51,7 @@ beforeEach(function (): void {
     ]));
 });
 
-// AC-25 — agent/api_key work with no `users` row at all: assignment, allowed() and
+// agent/api_key work with no `users` row at all: assignment, allowed() and
 // scopeFor() all resolve purely off aut_role_assignments.principal_id.
 it('resolves allowed()/scopeFor() for an agent principal with no users row', function (): void {
     $role = ($this->newRole)(PrincipalType::Agent);
@@ -81,7 +81,7 @@ it('resolves allowed() for an api_key principal with no users row', function ():
     expect(resolve(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
 });
 
-// B-11 §5.5 — own/dept/dept_tree degrade to none for agent/api_key (ENFORCE); workspace/account do not.
+// own/dept/dept_tree degrade to none for agent/api_key (ENFORCE); workspace/account do not.
 it('degrades own/dept/dept_tree to none for an agent principal, but leaves workspace/account untouched', function (Scope $degraded): void {
     $role = ($this->newRole)(PrincipalType::Agent);
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $degraded->value]);
@@ -106,7 +106,7 @@ it('leaves workspace and account scope untouched for an agent principal', functi
     expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($undegraded);
 })->with([Scope::Workspace, Scope::Account]);
 
-// AC-26 — an expired assignment is excluded from both capability and scope without any manual pruning.
+// an expired assignment is excluded from both capability and scope without any manual pruning.
 it('excludes an expired assignment from allowed() and scopeFor()', function (): void {
     $role = ($this->newRole)(PrincipalType::User);
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);

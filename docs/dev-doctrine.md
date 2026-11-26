@@ -1,72 +1,28 @@
-# CoreX — правила разработки
+# CoreX development rules
 
-## Границы пакетов
+## Package boundaries
 
-CoreX — монорепозиторий переиспользуемых Laravel-пакетов. `corex/*` должен быть полезен
-проекту без CRM, CMS и продуктов Flex. Зависимости направлены от продукта к пакетам;
-ядро `axiomasoft/corex` не зависит от других пакетов монорепозитория.
+CoreX packages serve Laravel applications independently of CRM, CMS and Flex products. Products depend on packages. The kernel `axiomasoft/corex` has no dependency on sibling packages. A package keeps its code and tests in `packages/<name>/`. Products live in `products/`. Root tests cover integration, architecture and shared quality gates. Composer manifests and `scripts/package-graph-gate.json` specify dependency rules. Import only another package's public contracts.
 
-Код и тесты пакета находятся в `packages/<name>/`. Продукты находятся в `products/`.
-Корневые тесты проверяют интеграцию, архитектуру и общее качество. Списки пакетов и
-допустимые зависимости задаются Composer-манифестами и
-`scripts/package-graph-gate.json`. Импорт чужого `Internal` запрещён.
+Packman owns the module, schema and panel runtimes. Tenant owns isolation and physical resources. AzGuard owns its authorization engine. CoreX supplies account and workspace adapters, application policies and host contracts. Chatom handles conversation messages and the CoreX outbox handles domain events. Create a separate integration package when a consumer needs it. [Package map](architecture/package-map.md)
 
-Packman владеет module/schema/panels runtime, Tenant — изоляцией и физическими
-ресурсами, AzGuard — своим движком ролей. CoreX адаптирует account/workspace,
-прикладные политики и контракты хоста через публичные API владельцев. Chatom
-conversation messages и CoreX domain outbox имеют разное назначение; пустой
-пакет-обёртка без реального потребителя не создаётся.
-См. [карту пакетов](architecture/package-map.md).
+## Public contracts
 
-## Публичные контракты
+Review changes to APIs, SPIs, service providers, schema and exported behavior for compatibility and record them in the affected package CHANGELOG. Commit `resources/contracts/php-api.json` and Golden snapshots. A stable release also requires an independent compatibility comparison against an approved baseline. [API policy](architecture/api-policy.md) · [Version policy](architecture/semver-policy.md)
 
-Публичный API и SPI — поверхности SemVer. Изменения интерфейсов, service providers,
-схем и экспортируемого поведения требуют проверки совместимости и записи в CHANGELOG
-затронутого пакета. Правила описаны в [политике API](architecture/api-policy.md) и
-[политике версий](architecture/semver-policy.md).
+The domain kernel uses the `corex` configuration namespace and `corex-config` publish tag. Packman supplies module runtime configuration (`modules`, `PACKMAN_MODULES_*` and `modules:*`). `flex/crm` identifies the product.
 
-Снимки `resources/contracts/php-api.json` и Golden baseline — проверяемые контракты,
-они хранятся в Git. Обновление снимка само по себе не доказывает совместимость.
-Перед стабильной публикацией нужен независимый BC-дифф против утверждённой базы.
+## Modules and schema
 
-Конфигурация доменного ядра — `corex`, publish-тег — `corex-config`.
-Модульный runtime принадлежит Packman: конфигурация `modules`, переменные
-`PACKMAN_MODULES_*`, команды `modules:*`.
-`flex/crm` — имя продукта, а не устаревшее имя ядра.
+A module declares Composer type `packman-module`, extends `Packman\Modules\Contracts\Definition\ModuleDefinition` and sets `extra.packman.module`. Composer metadata supplies its version. A module rename requires data migration.
 
-## Модули и схема
+Extension mechanisms are events, extenders, components, capabilities and dependency-injected contracts. The closed extender set is Entity, EntityField, Permissions, Api, Filament, Menu, Routes and Workflow. Extending this set requires an architecture decision. CoreX integrates Packman's compiler, registries and lifecycle through public contracts. Its adapters add account context, audit and feature flags. Packman supplies shared attributes, configuration validation and the problem registry. CoreX supplies domain Options and error definitions. Providers use `WithSchema`, `OwnsSchema` and `schemaSetProviders()` and fit within 80 lines. Compiler tests can require upstream Internal test seams while those seams lack a public alternative.
 
-Модуль — Composer-пакет `type: packman-module` с наследником
-`Packman\Modules\Contracts\Definition\ModuleDefinition` и `extra.packman.module`.
-Версия берётся из Composer metadata. Изменение имени модуля требует миграции данных.
+Declare `Packman\Schema\Data\Migration\SchemaSet` through `Packman\Schema\Contracts\Migration\SchemaSetProvider`. Packman's `SchemaMigrator` executes the sets. Packman Modules owns `mod_*` control tables in `axiomasoft/packman-modules:tenant`. CoreX owns only its domain tables. Use `packman:schema:status` and `packman:schema:migrate` with an explicit scope and supply `--force` in production. Packages keep migrations in their source sets. [Schema policy](architecture/schema-policy.md) · [Table ownership](architecture/table-ownership.md)
 
-Механизмы расширения: события, extenders, компоненты, capabilities и Contracts/DI.
-Набор extenders закрыт: Entity, EntityField, Permissions, Api, Filament, Menu, Routes,
-Workflow. Новый механизм требует отдельного архитектурного решения.
-CoreX не копирует compiler, registry или lifecycle и не сохраняет BC aliases.
-Адаптеры CoreX связывают Packman с account-контекстом, аудитом и feature flags.
-Рабочие пакеты используют только публичные API/SPI Packman.
-Общие attributes, configuration validation и problem registry также принадлежат
-Packman; CoreX добавляет доменные Options и error definitions. Модули объявляют
-схему через `WithSchema`/`OwnsSchema`, и provider регистрирует результат
-`schemaSetProviders()`. ServiceProvider содержит не более 80 строк.
-В текущем upstream некоторые constructor DTO и compiler test seams ещё находятся
-в `Internal`; проверки компиляции могут использовать их как временную тестовую
-границу, но production-код CoreX от них не зависит.
+## Verification
 
-Схему объявляют `Packman\Schema\Data\Migration\SchemaSet` через
-`Packman\Schema\Contracts\Migration\SchemaSetProvider`; исполняет её Packman
-`SchemaMigrator`. Контрольные таблицы `mod_*` принадлежат
-`axiomasoft/packman-modules:tenant`; CoreX объявляет только свою доменную схему.
-Пакеты не публикуют миграции и не вызывают `loadMigrationsFrom`.
-Используются `packman:schema:migrate` и `packman:schema:status` с явным scope;
-в production для изменения схемы нужен `--force`.
-См. [политику схемы](architecture/schema-policy.md) и
-[каталог владения таблицами](architecture/table-ownership.md).
-
-## Проверки
-
-Стек разработки: PHP 8.4–8.5 и Laravel 13. Команды запускаются через `scripts/php84`:
+The development matrix covers PHP 8.4 and 8.5 with Laravel 13.
 
 ```bash
 scripts/php84 composer lint:check
@@ -75,18 +31,8 @@ scripts/php84 composer test
 scripts/php84 composer test:pg
 ```
 
-Для затронутого пакета выполняются его проверки и соответствующие архитектурные,
-API/schema-гейты. SQLite и PostgreSQL проверяют разные сценарии; успешный один лейн
-не заменяет другой. PostgreSQL-тесты запускаются только на явно изолированной тестовой БД.
-Root line-coverage floor — 80%, пакетные пороги могут быть строже.
+Run the affected package suites, architecture checks and relevant API and schema gates. Run PostgreSQL tests in an isolated test database. SQLite and PostgreSQL exercise different behaviors. Root line coverage uses the configured 80% floor for its source directories. Packages may require higher coverage. CI checks the mutation inventory for changed code. Dispatch a mutation run to execute the full fragments. [Testing and CI](testing-ci.md)
 
-Мутационные прогоны остаются отложенными до отдельного запроса владельца;
-удаление старых планов не возобновляет Infection, probes или fixed mutation checks.
-Текущие проверки и их CI-проводка находятся в `composer.json` и `.github/workflows/ci.yml`.
+## Local tooling
 
-## Локальные инструменты
-
-Планы, аудиты, временные отчёты и окружения AI-провайдеров не входят в исходники пакета.
-Окружение устанавливается локально через swissknifeman. Сторонние skills подключаются
-через коннектор, без копирования в проект. Машинные настройки и generated state
-перечислены в `.gitignore`. Исторические решения и отчёты доступны в истории Git.
+Keep private plans, audit scratch files, generated reports and per-user development tools outside package sources. Local tooling can be installed through swissknifeman. Keep third-party skills in their connector. Machine-specific settings are listed in `.gitignore`.

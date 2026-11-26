@@ -1,24 +1,14 @@
-# Владение таблицами
+# Table ownership
 
-Инварианты — статьи `DATA-001` … `DATA-007`. Процедура —
-[data-ownership-policy.md](data-ownership-policy.md); наборы и исполнение —
-[schema-policy.md](schema-policy.md). Эта страница — каталог текущего состояния.
+Articles DATA-001 through DATA-007 govern this catalogue. The [ownership policy](data-ownership-policy.md) defines the procedure. The [schema policy](schema-policy.md) covers schema sets and execution.
 
-Каждая shipped-таблица создаётся набором её владельца. `tenant_scope` согласован со scope
-набора: `root` → `Central` (`root`), `tenant` → `Tenant` (`tenant` или `tenant-cloud`),
-`shared-budget` → `Dedicated` (`budget`). `composer schema-gate` → S9 проверяет владельца
-и это соответствие. Миграции исполняются из исходных каталогов наборов.
+Each shipped table is created by its owner's set. The `tenant_scope` column maps `root` to Central, `tenant` to Tenant (the tenant or tenant-cloud set), and `shared-budget` to Dedicated. The S9 check in `composer schema-gate` validates the owner and scope against the source migrations.
 
-Поле со значением `unobserved` означает: дерево не дало факта. Это долг
-документирования, а не разрешение считать поле пустым.
-`tenant_scope=test` обозначает только disposable-таблицы reference consumer'ов:
-их создают тестовые fixture, в shipped-наборы они не входят.
+`unobserved` means the repository provides no evidence for that field. `tenant_scope=test` denotes disposable consumer fixtures. `tenant_scope=control` covers authoritative host state outside the restorable tenant database. Hosts using the SQL implementation create it through `ScopeControlSchema::install()` during provisioning.
 
-`tenant_scope=control` обозначает хранилище полномочий хоста за пределами восстанавливаемой БД арендатора. Хост, использующий SQL-реализацию CoreX, устанавливает его через `ScopeControlSchema::install()` при подготовке развёртывания.
+Several owners use the `sys_` prefix. Look up individual tables in the catalogue when assigning ownership.
 
-Префикс `sys_` не является владельцем. Сегодня его делят:
-
-| Таблицы | Владелец |
+| Tables | Owner |
 |:--|:--|
 | `sys_api_budget_buckets`, `sys_api_budget_reservations`, `sys_api_bulk_operations`, `sys_api_idempotency` | `axiomasoft/corex-operations` |
 | `sys_attribute_backfills`, `sys_attribute_definitions`, `sys_attribute_documents`, `sys_attribute_key_reservations`, `sys_attribute_schema_operations`, `sys_attribute_write_tokens`, `sys_field_schema_heads` | `axiomasoft/corex-custom-fields` |
@@ -28,31 +18,26 @@
 | `sys_wakeup_requests` | `axiomasoft/corex-scheduler` |
 | `sys_workflow_intents` | `axiomasoft/corex-workflow` |
 
-Строки ниже — источник правды по таблице. Расхождение префикса со строкой — дефект сканера либо новой миграции, а не повод «починить» префикс.
+A mismatch between the catalogue and a prefix-based scanner requires reviewing the scanner or migration.
 
-## Внешние владельцы
+## External owners
 
-`axiomasoft/packman-modules` владеет `mod_modules`, `mod_records` и `mod_lifecycle_log`.
-`axiomasoft/packman-panels` владеет `sys_saved_view_scopes` и `sys_saved_views`.
-CoreX не поставляет их DDL и не пишет эти таблицы в обход публичных контрактов владельца.
-Они исключены из локального каталога ниже; runtime integration проверяет единственного
-владельца зарегистрированного schema set.
+`axiomasoft/packman-modules` owns `mod_modules`, `mod_records` and `mod_lifecycle_log`. `axiomasoft/packman-panels` owns `sys_saved_view_scopes` and `sys_saved_views`. CoreX uses the owners' public contracts. Their DDL belongs to the external packages. Runtime integration verifies that each registered schema set has one owner.
 
-`axiomasoft/corex-access` объявляет свои таблицы через набор `tenant`. За таблицы
-движка авторизации и их миграции отвечает зависимость `axiomasoft/azguard`.
+`axiomasoft/corex-access` declares its own tables in the tenant set. Its dependency `axiomasoft/azguard` owns the authorization engine's tables and migrations.
 
-## Каталог таблиц
+## Table catalogue
 
 | table | owning_package | tenant_scope | writers | readers | pii_class | cross_package_access | indexes | restore_policy | retention_policy | upgrade_strategy | object_class | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | tool_effects | axiomasoft/corex-operations | test | axiomasoft/corex-operations | | unobserved | forbidden | | disposable | test-only | fixture-only | private | Testing\\MutatingHandler fixture, created only by isolated operations tests. |
 | sys_api_idempotency | axiomasoft/corex-operations | tenant | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_idempotency_lookup_ix`; `sys_api_idempotency_retention_ix`; `sys_api_idempotency_scope_key_uq` | tenant-backup | finite terminal retention; started rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | Scoped keys are HMACs. The committed result can carry the independent budget reservation receipt. |
-| sys_api_budget_buckets | axiomasoft/corex-operations | shared-budget | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_budget_buckets_pk`; `sys_api_budget_buckets_counts_ck` | shared-budget-backup | active bucket retained; opaque HMAC key only | expand-migrate-contract (policy-default) | operation-state | isolated shared connection; no tenant payload or raw identity keys (D76) |
-| sys_api_budget_reservations | axiomasoft/corex-operations | shared-budget | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_budget_reservations_pk`; `sys_api_budget_reservations_retention_ix`; `sys_api_budget_reservations_counts_ck`; `sys_api_budget_reservations_keys_ck`; `sys_api_budget_reservations_state_ck` | shared-budget-backup | expired terminal reservations pruned; held rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | exactly four opaque HMAC budget keys; no tenant payload (D76) |
-| sys_api_bulk_operations | axiomasoft/corex-operations | tenant | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_bulk_operations_claim_ix`; `sys_api_bulk_operations_pk`; `sys_api_bulk_operations_submission_uq`; `sys_api_bulk_operations_counts_ck`; `sys_api_bulk_operations_status_ck`; `sys_api_bulk_operations_terminal_status_ck` | tenant-backup | terminal metadata and owned result refs retained until expires_at | expand-migrate-contract (policy-default) | operation-state | tenant-local resumable operation state and typed storage refs (D76) |
-| sys_api_webhook_subscriptions | axiomasoft/corex-webhooks | tenant | axiomasoft/corex-webhooks | axiomasoft/corex-webhooks | pii-indirect | forbidden | `sys_api_webhook_subscriptions_lookup_ix`; `sys_api_webhook_subscriptions_pk`; `sys_api_webhook_subscriptions_counts_ck`; `sys_api_webhook_subscriptions_status_ck` | tenant-backup | disabled subscription metadata retained by tenant policy | expand-migrate-contract (policy-default) | operation-state | endpoint snapshot policy and secret references; secret values are never stored (D76) |
+| sys_api_budget_buckets | axiomasoft/corex-operations | shared-budget | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_budget_buckets_pk`; `sys_api_budget_buckets_counts_ck` | shared-budget-backup | active bucket retained; opaque HMAC key only | expand-migrate-contract (policy-default) | operation-state | isolated shared connection; no tenant payload or raw identity keys |
+| sys_api_budget_reservations | axiomasoft/corex-operations | shared-budget | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_budget_reservations_pk`; `sys_api_budget_reservations_retention_ix`; `sys_api_budget_reservations_counts_ck`; `sys_api_budget_reservations_keys_ck`; `sys_api_budget_reservations_state_ck` | shared-budget-backup | expired terminal reservations pruned; held rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | exactly four opaque HMAC budget keys; no tenant payload |
+| sys_api_bulk_operations | axiomasoft/corex-operations | tenant | axiomasoft/corex-operations | axiomasoft/corex-operations | pii-pseudonymous | forbidden | `sys_api_bulk_operations_claim_ix`; `sys_api_bulk_operations_pk`; `sys_api_bulk_operations_submission_uq`; `sys_api_bulk_operations_counts_ck`; `sys_api_bulk_operations_status_ck`; `sys_api_bulk_operations_terminal_status_ck` | tenant-backup | terminal metadata and owned result refs retained until expires_at | expand-migrate-contract (policy-default) | operation-state | tenant-local resumable operation state and typed storage refs |
+| sys_api_webhook_subscriptions | axiomasoft/corex-webhooks | tenant | axiomasoft/corex-webhooks | axiomasoft/corex-webhooks | pii-indirect | forbidden | `sys_api_webhook_subscriptions_lookup_ix`; `sys_api_webhook_subscriptions_pk`; `sys_api_webhook_subscriptions_counts_ck`; `sys_api_webhook_subscriptions_status_ck` | tenant-backup | disabled subscription metadata retained by tenant policy | expand-migrate-contract (policy-default) | operation-state | endpoint snapshot policy and secret references; secret values are never stored |
 | sys_api_webhook_deliveries | axiomasoft/corex-webhooks | tenant | axiomasoft/corex-webhooks | axiomasoft/corex-webhooks | pii-direct | forbidden | `sys_api_webhook_deliveries_claim_ix`; `sys_api_webhook_deliveries_effect_uq`; `sys_api_webhook_deliveries_event_uq`; `sys_api_webhook_deliveries_pk`; `sys_api_webhook_deliveries_reclaim_ix`; `sys_api_webhook_deliveries_counts_ck`; `sys_api_webhook_deliveries_status_ck` | tenant-backup | payload body 7 days; delivery metadata/replay authority 30 days | expand-migrate-contract (policy-default) | operation-state | Logical scope, subscription, event source/id and replay id identify the delivery. Subscription deletion does not cascade its receipt. |
-| sys_api_webhook_attempts | axiomasoft/corex-webhooks | tenant | axiomasoft/corex-webhooks | axiomasoft/corex-webhooks | pii-pseudonymous | forbidden | `sys_api_webhook_attempts_delivery_ix`; `sys_api_webhook_attempts_number_uq`; `sys_api_webhook_attempts_pk`; `sys_api_webhook_attempts_counts_ck` | tenant-backup | attempt metadata follows 30-day delivery retention | expand-migrate-contract (policy-default) | operation-state | transport outcome only; no response body or credentials (D76) |
+| sys_api_webhook_attempts | axiomasoft/corex-webhooks | tenant | axiomasoft/corex-webhooks | axiomasoft/corex-webhooks | pii-pseudonymous | forbidden | `sys_api_webhook_attempts_delivery_ix`; `sys_api_webhook_attempts_number_uq`; `sys_api_webhook_attempts_pk`; `sys_api_webhook_attempts_counts_ck` | tenant-backup | attempt metadata follows 30-day delivery retention | expand-migrate-contract (policy-default) | operation-state | transport outcome only; no response body or credentials |
 | sys_attribute_documents | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden | `sys_attribute_documents_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_definitions | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden | `sys_attribute_definitions_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Immutable definition revisions |
 | sys_attribute_key_reservations | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden | `sys_attribute_key_reservations_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Machine keys reserved within logical scope and entity |
@@ -60,8 +45,8 @@ CoreX не поставляет их DDL и не пишет эти таблиц�
 | sys_attribute_schema_operations | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden | `sys_attribute_schema_operations_due_ix`; `sys_attribute_schema_operations_key_uq`; `sys_attribute_schema_operations_lease_ix`; `sys_attribute_schema_operations_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Immutable plans, claim fencing and DDL receipts |
 | sys_attribute_write_tokens | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden | `sys_attribute_write_tokens_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_field_schema_heads | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields | axiomasoft/corex-custom-fields | unobserved | forbidden | `sys_field_schema_heads_pk` | tenant-backup | active and pending mapping retained by schema owner | expand-migrate-contract (policy-default) | private | Logical scope and entity own the effective revision, mapping digest and pending operation. |
-| aut_role_assignments | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | exception | `aut_role_assignments_pk`; `aut_role_assignments_principal_ix`; `aut_role_assignments_uq`; `aut_role_assignments_granted_by_fk`; `aut_role_assignments_role_id_fk`; `aut_role_assignments_workspace_fk`; `aut_role_assignments_principal_type_ck` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | D102 cross-package FK exception (DATA-004) |
-| aut_direct_grants | axiomasoft/corex-access | tenant | axiomasoft/corex-access | axiomasoft/corex-access | unobserved | forbidden | `aut_direct_grants_lookup_ix`; `aut_direct_grants_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Native direct grants; P07.4 |
+| aut_role_assignments | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | exception | `aut_role_assignments_pk`; `aut_role_assignments_principal_ix`; `aut_role_assignments_uq`; `aut_role_assignments_granted_by_fk`; `aut_role_assignments_role_id_fk`; `aut_role_assignments_workspace_fk`; `aut_role_assignments_principal_type_ck` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Cloud role-assignment foreign-key exception (DATA-004) |
+| aut_direct_grants | axiomasoft/corex-access | tenant | axiomasoft/corex-access | axiomasoft/corex-access | unobserved | forbidden | `aut_direct_grants_lookup_ix`; `aut_direct_grants_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Native direct grants |
 | aut_role_matrix | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden | `aut_role_matrix_entity_ix`; `aut_role_matrix_pk`; `aut_role_matrix_uq`; `aut_role_matrix_role_id_fk`; `aut_role_matrix_action_ck`; `aut_role_matrix_context_ck`; `aut_role_matrix_scope_ck` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | aut_roles | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden | `aut_roles_pk`; `aut_roles_slug_uq`; `aut_roles_cloned_from_fk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_audit_log | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_audit_log_actor_ix`; `sys_audit_log_entity_ix`; `sys_audit_log_occurred_brin_ix`; `sys_audit_log_pk`; `sys_audit_log_seq_ix`; `sys_audit_log_workspace_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
@@ -69,7 +54,7 @@ CoreX не поставляет их DDL и не пишет эти таблиц�
 | sys_departments | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_departments_path_gist_ix`; `sys_departments_path_uq`; `sys_departments_pk`; `sys_departments_workspace_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_feature_flags | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_feature_flags_key_uq`; `sys_feature_flags_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_feature_overrides | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_feature_overrides_flag_scope_uq`; `sys_feature_overrides_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
-| sys_inbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_inbox_messages_pk`; `sys_inbox_messages_processed_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
+| sys_inbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_inbox_messages_pk`; `sys_inbox_messages_processed_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | Tenant migration owns this table outside the original frozen catalogue. |
 | sys_lifecycle_plans | axiomasoft/corex | tenant | axiomasoft/corex | axiomasoft/corex | pii-pseudonymous | forbidden | `sys_lifecycle_plans_pk`; `sys_lifecycle_plans_scope_request_uq`; `sys_lifecycle_plans_scope_state_ix` | tenant-backup | retain plan, cleanup and prior-effect evidence through owner retention | expand-migrate-contract (policy-default) | operation-state | Scoped action, digest, inventory, blockers, cleanup receipts, leases and cursor persist the resumable lifecycle boundary. |
 | sys_outbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_outbox_messages_claim_ix`; `sys_outbox_messages_dead_ix`; `sys_outbox_messages_fact_uq`; `sys_outbox_messages_pk`; `sys_outbox_messages_published_ix`; `sys_outbox_messages_reclaim_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | Receipt identity is account, incarnation, workspace scope, source and message ID. |
 | sys_pubsub_cursors | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_pubsub_cursors_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |

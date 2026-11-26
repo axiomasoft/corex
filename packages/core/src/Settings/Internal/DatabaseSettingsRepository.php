@@ -37,7 +37,7 @@ use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaul
  * name — same seam as DatabaseRecordsRegistrar, used by the PG-only test
  * lane since `sys_settings` has no sqlite equivalent.
  *
- * @internal spec: B-10 §3.1, P1.7 (Scope Excluded), D38, P1.6, D12
+ * @internal
  */
 #[Internal]
 final readonly class DatabaseSettingsRepository implements SettingsRepository

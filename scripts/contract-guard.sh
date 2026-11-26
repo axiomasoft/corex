@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Contract-snapshot gate (P3.5 · ADR-008 · warn-mode per D17, pre-1.0).
+# Contract-snapshot changelog check (ADR-008).
 #
 # Deterministic proxy for BC discipline: the job goes RED only when a diff touches
 # `packages/<pkg>/resources/contracts/php-api.json` WITHOUT a matching `packages/<pkg>/CHANGELOG.md`
@@ -47,7 +47,7 @@ done
 if [[ $fail -ne 0 ]]; then
   echo
   echo "contract-guard: a PHP surface change must carry a CHANGELOG entry in the same package"
-  echo "                (ADR-008; breaking→CHANGELOG until v1.0 — D17)."
+  echo "                (ADR-008: document public contract changes before v1.0)."
   exit 1
 fi
 

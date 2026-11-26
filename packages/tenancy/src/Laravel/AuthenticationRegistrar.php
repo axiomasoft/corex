@@ -131,7 +131,7 @@ final class AuthenticationRegistrar implements PackageRegistrar
             ),
         );
 
-        // P2.11 (D139/D10) — rebind the boxed NullImpersonationService
+        // Rebind the boxed NullImpersonationService
         // to the cloud implementation whenever the OIDC lane itself is
         // active; DatabaseImpersonationService::start() is only ever
         // reached when `oidc.impersonation.enabled` ALSO gates it open

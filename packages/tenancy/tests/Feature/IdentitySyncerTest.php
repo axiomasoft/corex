@@ -16,7 +16,7 @@ use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 uses()->group('pg');
 
-// P2.6's integration-FK migration (C4/D14) needs sys_departments — owned by
+// integration-FK migration for the tenant schema needs sys_departments — owned by
 // axiomasoft/corex, assembled here the same way a real golden-template build would.
 
 const TENANT_DB_IS = 'acc_is_test';
@@ -137,7 +137,7 @@ it('rehashes only an active owned users row with its expected hash', function ()
     });
 });
 
-it('syncToAccount() creates a denormalized users row keyed by the identity id (AC-16 а)', function (): void {
+it('syncToAccount() creates a denormalized users row keyed by the identity id', function (): void {
     $account = makeAccountIS(makeClusterIS());
     migrateUsersTableIS(accountRefIS($account));
 
@@ -208,7 +208,7 @@ it('keeps distinct UUID identities separate when their phone values match', func
         ->and($rows[$secondIdentityId])->toBe('+70000000000');
 });
 
-it('fanOut() reaches every account membership (AC-16 в)', function (): void {
+it('fanOut() reaches every account membership', function (): void {
     $clusterId = makeClusterIS();
     $accountA = makeAccountIS($clusterId);
 
@@ -233,7 +233,7 @@ it('fanOut() reaches every account membership (AC-16 в)', function (): void {
     DB::statement('DROP DATABASE IF EXISTS acc_is_test_b');
 });
 
-it('a failure syncing one account does not block another (AC-16 г)', function (): void {
+it('a failure syncing one account does not block another', function (): void {
     $clusterId = makeClusterIS();
     $accountA = makeAccountIS($clusterId);
     migrateUsersTableIS(accountRefIS($accountA));
@@ -413,7 +413,7 @@ it('preserves source ordering independently of delivery time', function (bool $d
     DB::purge('identity_writer_test');
 })->with([false, true]);
 
-it('corex:tenancy:reconcile-identities re-syncs failed and stale rows (AC-16 з)', function (): void {
+it('corex:tenancy:reconcile-identities re-syncs failed and stale rows', function (): void {
     $account = makeAccountIS(makeClusterIS());
     migrateUsersTableIS(accountRefIS($account));
 

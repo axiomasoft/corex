@@ -35,7 +35,7 @@ it('keeps membership event payloads UUID-only and reason-enumerated', function (
         ->and(get_object_vars($event))->not->toHaveKeys(['email', 'phone', 'name']);
 });
 
-// D8 local-reference tests. Existing public client tests above remain unchanged.
+// local-reference tests. Existing public client tests above remain unchanged.
 it('reference transport emits exact scalar GET bytes and mutual TLS options', function (): void {
     $fixture = new TransportFixture;
 

@@ -11,7 +11,7 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 
 /**
- * Filesystem helpers for architecture/layer gates (P3.5) — resolves monorepo
+ * Filesystem helpers for architecture/layer gates — resolves monorepo
  * package paths and scans PHP sources for import patterns, independent of the
  * composer autoloader (so gates read raw `use` statements, not resolved classes).
  */
@@ -57,7 +57,7 @@ final class SourceScanner
     /**
      * Line-level counterpart of filesMatching(): every line under $dir (in files
      * with one of $extensions) matching $pattern, reported repo-relatively as
-     * `path:line: text` so a red gate names the exact offending site (P2.17).
+     * `path:line: text` so a red gate names the exact offending site.
      *
      * @param  list<string>  $extensions
      * @return list<string>

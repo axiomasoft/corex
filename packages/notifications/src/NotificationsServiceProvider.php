@@ -8,6 +8,7 @@ use CoreX\Context\Laravel\WorkQueueHandlers;
 use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Notifications\Laravel\NotificationsBindingsRegistrar;
 use CoreX\Notifications\Laravel\NotificationsDigestRegistrar;
+use CoreX\Notifications\Runtime\Internal\Commands\PruneNotifications;
 use CoreX\Notifications\Runtime\Internal\Commands\SweepNotificationDeliveries;
 use CoreX\Notifications\Runtime\Internal\Jobs\DeliverNotification;
 use Illuminate\Console\Events\ArtisanStarting;
@@ -42,7 +43,7 @@ final class NotificationsServiceProvider extends ServiceProvider
         }
 
         if ($this->app->runningInConsole()) {
-            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([SweepNotificationDeliveries::class]));
+            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([SweepNotificationDeliveries::class, PruneNotifications::class]));
         }
     }
 

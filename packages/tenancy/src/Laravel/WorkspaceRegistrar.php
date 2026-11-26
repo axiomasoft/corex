@@ -24,9 +24,7 @@ final class WorkspaceRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        // P2.23 (D136) — P2.6 left this interface unbound; no config-flagged
-        // choice of implementation (a second one doesn't exist — a switch
-        // key without a consumer is a fabricated contract, D116/D121).
+        // Resolve workspaces through the database implementation.
         $app->singleton(WorkspaceResolver::class, DatabaseWorkspaceResolver::class);
         $app->bindIf(PrincipalWorkspaceResolver::class, DatabaseWorkspaceResolver::class);
         // Access wires/lifts this scope through the kernel contract (no class-name string).

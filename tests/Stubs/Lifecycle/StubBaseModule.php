@@ -10,7 +10,7 @@ use Packman\Modules\Data\Lifecycle\ModuleManifest;
 /**
  * No-dependency module used across ModuleLifecycleTest: two migrations
  * (claiming their tables via RecordsRegistrar) + idempotent hooks — enough
- * to exercise enable/disable/archive/purge (AC-5, AC-8..AC-11).
+ * to exercise enable/disable/archive/purge.
  */
 final class StubBaseModule extends ModuleDefinition
 {

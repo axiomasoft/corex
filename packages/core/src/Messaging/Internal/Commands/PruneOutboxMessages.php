@@ -13,16 +13,14 @@ use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
- * Удаляет терминальные строки sys_outbox_messages старше порога.
+ * Prunes terminal outbox rows. Published messages are retained for
+ * reconciliation. Dead messages are kept separately for investigation.
+ * Pending and publishing rows still require delivery.
  *
- * Два окна, а не одно: опубликованные записи нужны сверке, мёртвые — расследованию,
- * и второе обычно длиннее. Строки в pending и publishing не удаляются никогда — это
- * недоставленная работа, а не история.
+ * Inbox deduplication records are retained because deleting them allows the
+ * same message to be processed again.
  *
- * sys_inbox_messages эта команда НЕ трогает: удаление отметки дедупликации заново
- * открывает окно дублей (research/P5-design.md §7.3, D29).
- *
- * @internal spec: P5.15 — console command is not a supported API
+ * @internal Console commands are outside the supported PHP API.
  */
 #[Internal]
 final class PruneOutboxMessages extends Command

@@ -7,14 +7,14 @@ namespace CoreX\Tests\PHPStan\Data\Billing;
 use Illuminate\Support\Facades\DB;
 
 /**
- * A35 (findings/P1-audit-2026-07-13.md): негативные фикстуры правила 6 —
+ * Negative fixtures for the foreign-prefix SQL rule:
  * чужой префикс детектится ТОЛЬКО на позиции имени таблицы, не на любом
  * вхождении `xx_yyy` в SQL-литерале (колонка/алиас/строковое значение).
  */
 final class ForeignPrefixSqlFixture
 {
     /**
-     * A35 repro: строковое значение 'mod_pending' похоже на чужой префикс,
+     * repro: строковое значение 'mod_pending' похоже на чужой префикс,
      * но это ЗНАЧЕНИЕ колонки status, а не таблица — легально.
      */
     public function stringValueLookingLikeForeignPrefix(): void

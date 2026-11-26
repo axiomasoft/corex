@@ -1,4 +1,4 @@
-Raw Infection 0.35.6 JSON from the P09.9 PHP8.4/Laravel13 SQLite spike.
+Raw Infection 0.35.6 JSON from the PHP 8.4/Laravel 13 SQLite compatibility run.
 Source: build/quality/infection-spike-laravel13/rows/php8.4-laravel13-sqlite/mutants.json
 The original paths/output are retained; tests remap originalFilePath into a temporary fixture.
 This includes actual Pest assertion failure, escaped, uncovered, timeout and process exit137.

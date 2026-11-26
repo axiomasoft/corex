@@ -8,7 +8,7 @@ use CoreX\CoreServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-/** Package-local Testbench base for the search-intl suite (D94). */
+/** Package-local Testbench base for the search-intl suite. */
 abstract class SearchIntlTestCase extends Orchestra
 {
     use IsolatesDatabasePath;

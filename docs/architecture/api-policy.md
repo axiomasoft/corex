@@ -1,244 +1,136 @@
-# Политика публичной поверхности CoreX
+# CoreX public API policy
 
-**Версия:** 1.0.0 · **Статус:** нормативный · **Уровень:** 0 (`corex/*`)
+**Version** 1.0.0 · **Status** Normative · **Level** 0 (`corex/*`)
 
-Процедуры статей `API-001` … `API-008` конституции. Инварианты — в
-[constitution.md](constitution.md); уровни зрелости `extra.corex.stability` — в
-[taxonomy.md](taxonomy.md).
+This policy implements articles `API-001` through `API-008`. The constitution defines the invariants. The taxonomy defines the maturity levels in `extra.corex.stability`. [Constitution](constitution.md) · [Taxonomy](taxonomy.md)
 
-## Чем объявляется публичная поверхность
+## Declaring the public surface
 
-Единственный source owner публичности — атрибут на объявлении class/interface/trait/enum:
-`#[Api(since: '1.0')]` или `#[Spi(kind: SpiKind::Implement|Call, since: '1.0')]`.
-Метка не наследуется; разрешена ровно одна. `since` обозначает введённую версию,
-а не доказательство опубликованного релиза. `@api`, имя каталога и generated JSON
-не разрешают импорт. Атрибуты принадлежат `Packman\Attributes`. Каждый тип в `Internal`
-явно помечается `#[Internal]`; одновременно `Api`/`Spi` запрещены. Метка `Internal`
-также обозначает private implementation вне одноимённого каталога.
+A class, interface, trait or enum declares its supported use through exactly one attribute on the declaration. Attributes belong to `Packman\Attributes`. Public types use `#[Api(since: '1.0')]` or `#[Spi(kind: SpiKind::Implement|Call, since: '1.0')]`. Attributes are not inherited. The `since` value records the version that introduced the symbol. Publication of a release requires separate evidence. An `@api` tag, a directory name or generated JSON cannot authorize an import.
 
-| Слой | Поддерживаемый способ использования |
+Every type under `Internal` must explicitly declare `#[Internal]` and cannot also declare `Api` or `Spi`. Types outside that directory can use the same attribute to mark private implementation.
+
+| Layer | Supported use |
 |:--|:--|
-| Api | Вызов, чтение, catch; внешняя реализация/наследование запрещены |
-| Spi Implement | Реализация/наследование документированного контракта, включая protected hooks |
-| Spi Call | Вызов, подписка и документированная интеграция |
-| Internal | Только реализация пакета-владельца; обещания BC нет |
+| Api | Call, read or catch. Consumers cannot implement or extend the type. |
+| Spi Implement | Implement or extend the documented contract, including its protected hooks. |
+| Spi Call | Call, subscribe or integrate as documented. |
+| Internal | Implementation of the owning package only. No backward-compatibility guarantee. |
 
-`composer php-api` запускает `scripts/php-api.php --strict --check`: исходная классификация,
-замыкание native/PHPDoc типов, immutable DTO, imports и свежесть снимков проверяются вместе.
-Модели и Collection не входят в Api payload. Типы `Internal` не входят ни в одну
-публичную или SPI-сигнатуру, включая типы собственного пакета. Model extension SPI допускается
-только в документированной Laravel-поверхности. Product проверяется как потребитель.
+`composer php-api` runs `scripts/php-api.php --strict --check`. It checks source classifications, all reachable native and PHPDoc types, immutable DTOs, imports and snapshot freshness. API payloads exclude models and collections. Public and SPI signatures must exclude Internal types, including the package's own. Model extension SPI is allowed only on the documented Laravel surface. The product is checked as a consumer.
 
-`packages/<name>/resources/contracts/php-api.json` и [public-api](../reference/public-api.md)
-генерируются из одной исходной классификации: Packman владеет JSON serialization,
-CoreX — полным графом типов и Markdown-справочником. Native JSON хранит `layer: spi`
-и отдельный `spi_kind`; внешние inherited members не копируются. CoreX продолжает
-проверять унаследованные контракты в source graph. Граф пакетов читает тот же source owner index: R4 проверяет
-конкретный символ, R4b — классификацию и свежесть снимков. R1/R2/R3/R5 остаются независимыми.
-`@internal` не обеспечивает межпакетную границу при общем корне `CoreX`; её обеспечивает граф.
+The generated `packages/<name>/resources/contracts/php-api.json` and public reference share the source classifications. Packman serializes JSON. CoreX checks the complete type graph and generates the Markdown reference. Native JSON stores `layer: spi` and a separate `spi_kind`. External inherited members stay in the source-graph checks and are omitted from the JSON. The package graph uses the same index of declaring owners. R4 checks individual symbols, R4b checks classification and snapshot freshness, and R1/R2/R3/R5 remain independent. The graph enforces package boundaries under the shared `CoreX` namespace. A PHPDoc `@internal` tag does not enforce them. [Public API reference](../reference/public-api.md)
 
-[SemVer policy](semver-policy.md) определяет правила слоёв и BC selection отдельно для
-base/candidate revision. Namespace metadata удалена из manifests; произвольный JSON
-не может сделать неизвестный или Internal символ публичным.
+The SemVer policy defines the layers and selects the relevant contracts independently at the base and candidate revisions. Manifests no longer carry namespace metadata. JSON cannot grant public status to an unknown or Internal symbol. [SemVer policy](semver-policy.md)
 
-## Переход между уровнями зрелости
+## Maturity transitions
 
-Значения и обещания поля `extra.corex.stability` — в [taxonomy.md](taxonomy.md) (таблица
-`stability`). Здесь — только процедура перехода между уровнями.
+The `stability` table defines the guarantees of `extra.corex.stability`. [Taxonomy](taxonomy.md)
 
-| Переход | Что обязано произойти |
+| Transition | Requirements |
 |:--|:--|
-| `experimental` → `stable` | BC-дифф в CI зелёный; поддерживаемые символы не менялись в последнем минорном релизе; есть внешний потребитель, подтвердивший работоспособность |
-| `stable` → `deprecated` | Названа замена и мажорная версия удаления; запись в `CHANGELOG.md` пакета |
-| любой → `internal` | Пакет исключён из перечня поставки; потребители уведомлены |
-| `deprecated` → удаление | Только в мажоре, не раньше объявленной версии |
+| `experimental` → `stable` | CI passes the compatibility diff, the supported symbols were unchanged in the last minor release, and an external consumer confirms the package works. |
+| `stable` → `deprecated` | Name the replacement and the major release that will remove the package. Record both in the package's `CHANGELOG.md`. |
+| Any level → `internal` | Remove the package from the distribution list and notify consumers. |
+| `deprecated` → removal | Remove only in a major release, at or after the announced version. |
 
-Обратный переход `stable` → `experimental` не выполняется: это и есть ломающее изменение,
-о котором `stable` обещал предупредить мажором.
+A stable package cannot return to `experimental`. Withdrawing the stability guarantee requires a major release.
 
-## Что считается ломающим изменением
+## Breaking changes
 
-Внутри поддерживаемой мажорной версии допускаются только аддитивные изменения. Новый
-параметр обязан быть необязательным, а его значение по умолчанию обязано сохранять прежнее
-поведение.
+Only additive changes are allowed within a supported major version. New parameters must be optional and their defaults must preserve existing behaviour. The following changes are prohibited.
 
-Запрещено (закрытый список):
+1. Remove a public symbol, method, property or constant.
+2. Remove or rename a field of a public data type.
+3. Add a required parameter or make an optional parameter required.
+4. Narrow a parameter type or widen a return type.
+5. Change nullability in either direction in a public signature.
+6. Remove an enum case used by a public type.
+7. Remove or rename a stable error code, change its category, RFC 6901 `path` semantics or `retryable` value, or remove a documented detail key.
+8. Change pagination or the ordering of results.
+9. Remove a webhook topic or change its payload without a new version.
+10. Move a public symbol to another namespace without preserving the old symbol.
 
-1. Удаление публичного символа, метода, свойства или константы.
-2. Удаление или переименование поля в публичном типе данных.
-3. Добавление обязательного параметра и превращение необязательного в обязательный.
-4. Сужение типа параметра и расширение типа возвращаемого значения.
-5. Смена допустимости `null` в любую сторону на публичной сигнатуре.
-6. Удаление случая enum, входящего в публичный тип.
-7. Удаление или переименование стабильного кода ошибки, смена его category,
-   семантики RFC 6901 `path`, `retryable`, либо удаление документированного detail key.
-8. Смена контракта пагинации и порядка выдачи.
-9. Удаление темы webhook либо смена её payload'а без новой версии.
-10. Перенос публичного символа в другой неймспейс без сохранения прежнего.
+Compatibility checks must cover this list. Any rule without a machine check must be identified explicitly.
 
-Этот список — вход гейта P3 и P13, а не пожелание. Каждый пункт обязан быть проверяем
-машинно либо назван как непроверяемый явно.
+## Public API v2 contract
 
-## Публичный контракт API v2
+The compiled Packman `ModuleRegistry` contains operation and tool declarations. `OperationRegistry`, `ApiProfile` and the `api/v2` snapshots project these declarations. The profile hash reflects installed code and contract settings. The invoker evaluates account and workspace activation on each call.
 
-Скомпилированный Packman `ModuleRegistry` содержит объявления операций и
-инструментов. `OperationRegistry`, `ApiProfile` и снимки `api/v2` проецируют эти
-объявления. Хеш профиля зависит от установленного кода и настроек контракта.
-Текущая активация для account/workspace вычисляется при вызове.
+HTTP serves operations under `/api/v2`. The host connects an MCP endpoint with the same principal and client checks. Exposed tools and HTTP share an `OperationInvoker`. Before invoking the handler it checks activation, scope, action permissions, record access and field access. Reusing a key for the same logical request returns the original result after checking current permissions for the action, record and returned fields. Replay restores accounting from the original `BudgetReceipt` without charging again. Reusing the key for a different logical request returns a conflict. A cursor binds the version, scope, ordering and signing key.
 
-HTTP размещает операции под `/api/v2`. Хост подключает MCP endpoint с той же
-проверкой principal и client. Exposed tool и HTTP вызывают один `OperationInvoker`.
-Перед обработчиком он проверяет активацию, scope, права действия, записи и поля.
-Тот же ключ и логический запрос возвращают исходный результат после проверки
-текущих прав на действие, запись и выпуск полей. Replay восстанавливает расчёт
-по исходному `BudgetReceipt` и не создаёт новый платёж. При смене смыслового
-запроса с тем же ключом возвращается конфликт. Cursor связан с версией, scope,
-порядком и ключом подписи.
+OpenAPI publishes `Idempotency-Key` for operations that accept it and marks it required when declared. Exposed tools validate arguments against the published schema before execution. For an unknown outcome, MCP returns `outcome: unknown` with the original Problem code. Repeating the request with the same key reads or reconciles the original outcome.
 
-OpenAPI публикует `Idempotency-Key` для разрешающих его операций и отмечает
-обязательность по декларации. Exposed tool проверяет опубликованную схему
-аргументов перед исполнением. При неизвестном результате MCP возвращает
-`outcome: unknown` с исходным Problem code. Повтор с тем же ключом читает или
-сверяет уже принятый результат.
+Successful JSON responses contain `data` and `meta`. Errors use stable descriptors and RFC 9457 Problem Details. An async command returns 202, a `Location` header and a matching `data.status_url`. Result links and per-row errors require a fresh check of owner permissions. A conditional metadata request checks current authorization before computing a private ETag or returning 304. The metadata policy provider supports `FieldUseSnapshot` so all disclosure decisions come from one fresh owner snapshot. Search checks index readiness before taking the snapshot and verifies its generation again inside it. A host unable to supply the snapshot must withhold metadata.
 
-Успешный JSON-ответ содержит `data` и `meta`. Ошибки используют стабильный
-descriptor и формат RFC 9457 Problem Details. Async command возвращает 202, заголовок `Location` и
-согласованный `data.status_url`. Ссылки на результат и ошибки строк доступны
-после текущей проверки разрешений владельца. Условный запрос метаданных
-проверяет текущую авторизацию до вычисления private ETag и ответа 304.
-Провайдер политики метаданных поддерживает `FieldUseSnapshot`, чтобы все
-решения по выдаваемым полям читались из одного свежего снимка владельца.
-Search проверяет готовность индекса до снимка и сверяет поколение снова внутри
-него. Если хост не может предоставить такой снимок, выдача метаданных закрыта.
+The five published files under `api/v2` are `errors.json`, `manifest.json`, `openapi.json`, `operations.json` and `webhooks.json`. Earlier versions are available in Git history. Verification uses `tests/Feature/OperationContractTest.php`, `tests/Arch/ApiContractTest.php`, `corex:operations:snapshot --check` and `composer api-contract`. Changes to the public surface require a compatibility decision. Passing these checks alone does not authorize release or baseline updates.
 
-Пять опубликованных файлов `api/v2` имеют имена `errors.json`, `manifest.json`,
-`openapi.json`, `operations.json` и `webhooks.json`. Для сравнения с ранним
-состоянием разработки используйте файлы из истории Git.
+`scripts/check-api-contract.php` compares the parsed `operations.json` and `errors.json` against the committed baseline. OpenAPI is the HTTP projection. The generator writes snapshots in a separate step. Deprecation does not permit removal within the same major version.
 
-Зелёный контракт проверяют `tests/Feature/OperationContractTest.php`,
-`tests/Arch/ApiContractTest.php`, `corex:operations:snapshot --check` и
-`composer api-contract`. Изменение публичной поверхности требует нового решения
-о совместимости; эта запись не разрешает релиз или автоматическое обновление
-baseline.
-
-`scripts/check-api-contract.php` сравнивает разобранные `operations.json` и
-`errors.json` с committed baseline. OpenAPI остаётся HTTP-проекцией. Гейт не
-обновляет baseline: запись снимка — отдельная команда генератора. Маркер
-deprecation не разрешает удаление внутри major.
-
-| Правило | Вердикт | Допустимое добавление |
+| Rule | Breaking change | Allowed addition |
 |:--|:--|:--|
-| `operation-removal` | удаление operation id либо смена method/path | новая operation |
-| `response-field-removal` | удаление поля ответа | новое поле ответа |
-| `required-input-addition` | новое обязательное входное поле | необязательное входное поле |
-| `type-change` | смена `type` | — |
-| `nullability-change` | смена `nullable` в любую сторону | — |
-| `enum-removal` | удаление значения enum | новое значение enum |
-| `error-contract-drift` | удаление code, смена category/path/retryable, удаление detail key | новый code, новый detail key |
-| `pagination-reinterpretation` | смена envelope, cursor format или ordering id | — |
+| `operation-removal` | Remove an operation ID or change its method or path | New operation |
+| `response-field-removal` | Remove a response field | New response field |
+| `required-input-addition` | Add a required input field | Optional input field |
+| `type-change` | Change `type` | — |
+| `nullability-change` | Change `nullable` in either direction | — |
+| `enum-removal` | Remove an enum value | New enum value |
+| `error-contract-drift` | Remove a code, change its category/path/retryable value or remove a detail key | New code or detail key |
+| `pagination-reinterpretation` | Change the envelope, cursor format or ordering ID | — |
 
-Неизвестный ключ снимка или схемы закрывается `unknown-schema` и JSON pointer.
-P14 добавляет `webhooks.json` в тот же generator и manifest. Гейт также отвергает
-удаление topic, required payload input addition, response-field removal,
-type/nullability change, PII widening, signature/id semantics drift, major rebind
-и смену default cost enforcement. Новые optional topics/fields допустимы.
-Baseline не обновляется автоматически; механическая регенерация проходит сравнение
-с прежним кандидатом и byte-check. Наличие пустого topic list не означает,
-что приложение объявило или разрешило webhook topics.
+The gate rejects unknown snapshot or schema keys with `unknown-schema` and a JSON Pointer. The same generator and manifest include `webhooks.json`. The gate also rejects topic removal, new required payload input, response-field removal, type or nullability changes, widening PII exposure, changed signature or ID semantics, rebinding a major version and changing default cost enforcement. New optional topics and fields are allowed. Regeneration requires comparison with the previous candidate and a byte-for-byte check. An empty topic list grants no topic declaration or authorization.
 
-## Нагрузочный контракт API
+## API cost and bulk-operation contract
 
-`operation-cost/1`, `bulk-operation/1` и `webhook-delivery/1` потребляют тот же
-compiled module registry, P13 invoker, P5 сообщения и P4 scope/Clock. Cost recipe
-объявляется только через `Api::cost()`. Legacy default: base=1, остальные веса=0,
-max_units=10000. Формула — base + row×max(pageRows,exportRows) + field×selectedFields
-+ relation×relationNodes + attribute_filter×attributeFilters + highlight×flag
-+ side_effect×sideEffects. Structural caps и проверка overflow действуют до handler
-и в observe mode; bulk требует явную recipe и bounded input.
+`operation-cost/1`, `bulk-operation/1` and `webhook-delivery/1` use the compiled module registry, operation invoker, messaging contracts, scope and clock. Declare costs only through `Api::cost()`. The legacy defaults are base 1, all other weights 0 and `max_units` 10000.
 
-При включённом cost control global всегда enforce; account/client/actor по умолчанию
-observe. Capacity=10000 и refill=1000 units/sec — локальные defaults, не тариф или SLO.
-Shipped `cost.enabled=false` требует явного setup и activation: этот флаг не означает
-observe и не доказывает работающую защиту. После activation отсутствие shared SQL
-authority запрещает handler. Все узлы используют один installation budget store;
-tenant payload остаётся физически tenant-local. Две explicit connection identities
-проверяются до SQL; scopes берутся из trusted context, keys — HMAC, metrics без ids.
+```text
+base + row × max(pageRows, exportRows) + field × selectedFields
+     + relation × relationNodes + attribute_filter × attributeFilters
+     + highlight × flag + side_effect × sideEffects
+```
 
-Atomic reserve всех ancestors предшествует эффекту. Terminal settlement возвращает
-units однократно; actual>estimate создаёт debt, отсутствие server counters означает
-actual=estimate. Pre-handler reject возвращает estimate, crash/unknown/expiry не даёт
-refund. Replay обслуживается за base=1. HTTP/tool metadata совпадают; 429 несёт
-расчётный Retry-After, инфраструктурный отказ не выдаётся за исчерпание бюджета.
+Structural limits and overflow checks apply before the handler, including in observe mode. Bulk operations need an explicit recipe and bounded input.
 
-Transfer остаётся единственным import/export engine. Optional factory — installed
-host DI, public transfer ports; API не пишет чужие таблицы и не исполняет class names
-из payload. Literal bulk routes требуют уже admitted scope/client/definition и host
-auth/field-policy adapter. Worker rechecks scope, authorization, restore epoch и
-extension stamp на каждом bounded step; polling pending rows переживает потерю queue.
-Cancellation ждёт не более одного bounded batch и сохраняет уже committed effects.
-Import resumes committed checkpoint; unsealed export restart — новый полный capture.
-Unknown outcomes требуют reconciliation; rollback не отменяет network effects.
-Current result access проверяет scope/field policy/hash; foreign ids скрыты за 404.
+When cost control is enabled, the global budget always enforces its limit. Account, client and actor budgets default to observe. Capacity 10000 and refill 1000 units/second are local defaults, without pricing or SLO implications. The shipped `cost.enabled=false` requires explicit setup and activation. Disabled cost control provides no observation or protection. After activation the handler requires a shared SQL authority. Every node uses one installation budget store. Tenant payload stays physically tenant-local. Both explicit connection identities are checked before SQL. Budget scopes come from trusted context, keys use HMAC, and metrics omit IDs.
 
-Hard profile transfer: 1 GiB/source, 1 MiB/row, 256 fields, depth32, batch500,
-errors1000, runtime30s, memory128MiB по умолчанию; host config `corex-import-export.limits.max_memory_mib` допускает 1..1024MiB для полного PHP процесса. Проверки cooperative; один read/write call не
-preemptible. Host process limits, edge/body/request-rate/concurrency caps остаются
-обязательной частью установки. Input parameters≤20KiB, failures page≤100,
-result TTL24h≤metadata TTL30d; active jobs не prune. Retention не воскрешает cancelled
-job и не превращает unknown в success. Ни billing, GraphQL, hard real-time cap,
-универсального exactly-once, ни cross-account scheduler этот контракт не обещает.
+Reserve atomically across every ancestor before the effect. Terminal settlement returns unused units once. Actual cost above estimate creates debt. In the absence of server counters, actual cost equals the estimate. Rejection before the handler returns the estimate. A crash, unknown outcome or expiry gives no refund. Replay costs one base unit. HTTP and tools expose matching metadata. A 429 carries a calculated Retry-After. Infrastructure failures must remain distinct from exhausted budgets.
 
-Schema ownership, PII и retention — [table-ownership.md](table-ownership.md).
-Миграции публикуются budget/tenant tags и применяются host явно; boot не исполняет DDL.
-Remote webhook delivery выключена по умолчанию и требует key/worker/transport readiness.
-Local grants и synthetic tests не разрешают production migration/rotation или live sends.
-Setup, endpoint semantics и оставшиеся host boundaries —
-[API README](../../packages/operations/README.md); текущие commands/hashes/negative fixtures —
+Transfer owns import and export. An optional factory installed through host DI uses the public transfer ports. The API cannot write another owner's tables or execute class names from input. Literal bulk routes require an admitted scope, client and definition, plus a host authorization and field-policy adapter. At each bounded step the worker rechecks scope, authorization, restore epoch and extension stamp. Polling pending rows permits recovery from queue loss. Cancellation waits at most one bounded batch and retains committed effects. Import resumes from its committed checkpoint. Restarting an unsealed export starts a fresh, complete capture. Unknown outcomes require reconciliation. Transaction rollback cannot undo network effects. Reading a result checks current scope, field policy and hash. Foreign IDs return 404.
 
-## Контракт ошибки
+The transfer profile allows 1 GiB per source, 1 MiB per row, 256 fields, depth 32, batches of 500, 1000 errors and 30 seconds of runtime. The default memory limit is 128 MiB. Hosts may set `corex-import-export.limits.max_memory_mib` from 1 to 1024 MiB for the entire PHP process. Checks are cooperative. An individual read or write cannot be preempted. Hosts must enforce process, edge, body, request-rate and concurrency limits. Input parameters are limited to 20 KiB and failure pages to 100 entries. Result TTL is 24 hours, within the metadata TTL of 30 days. Active jobs cannot be pruned. Retention preserves cancellation and unknown outcomes. Billing, GraphQL, hard real-time limits, universal exactly-once execution and cross-account scheduling are outside this contract.
 
-Общий словарь — `ErrorCategory`, `UnavailabilityReason`, неизменяемый `ErrorDescriptor`
-и интерфейс `DescribesError`. Код остаётся у пакета-владельца: центрального enum кодов нет.
-Исключение реализует интерфейс на публичной границе; типизированный result может нести
-тот же descriptor без исключения. Базовой иерархии `CoreXException` нет.
+The table registry records schema ownership, PII and retention. The host explicitly applies migrations published under the budget and tenant tags. Boot must not run DDL. Remote webhook delivery defaults to disabled and requires key, worker and transport readiness. Local grants and synthetic tests cannot authorize production migrations, key rotation or live sends. The package guide covers setup, endpoint semantics and host responsibilities. [Table ownership](table-ownership.md) · [API README](../../packages/operations/README.md)
 
-Стабильные поля — `code`, `category`, RFC 6901 `path`, `retryable` и документированные
-ключи `details`. Сообщение, класс исключения и stack trace в контракт не входят. HTTP-статус
-— проекция транспорта; его не хранит descriptor.
+## Error contract
 
-`path` равен `null` либо JSON Pointer: пустая строка — корень документа, непустой путь
-начинается с `/`, экранирование только `~0` и `~1`. `retryable=true` значит лишь то, что
-тот же semantic input может успеть позже. Это не разрешение на автоматический повтор:
-вызывающий ещё проверяет идемпотентность и `Retry-After`.
+`ErrorCategory`, `UnavailabilityReason`, the immutable `ErrorDescriptor` and the `DescribesError` interface form the shared vocabulary. Each package owns its error codes. There is no central code enum or common `CoreXException` hierarchy. An exception implements the interface at the public boundary. A typed result can carry the same descriptor.
 
-| Reason | Смысл | Category | Default retryable |
+Stable fields are `code`, `category`, RFC 6901 `path`, `retryable` and documented `details` keys. Messages, exception classes and stack traces are outside the contract. The transport maps the descriptor to an HTTP status.
+
+A `path` is `null` or a JSON Pointer. An empty string identifies the document root. A nonempty path starts with `/` and permits only `~0` and `~1` escapes. `retryable=true` means that the same logical input might succeed later. Callers must check idempotency and `Retry-After` before retrying.
+
+| Reason | Meaning | Category | Default retryable |
 |:--|:--|:--|:--|
-| `capability_unavailable` | пакет, provider или backend отсутствует либо недоступен | `unavailable` | решает producer |
-| `capability_disabled` | capability есть, но выключена конфигурацией или активацией | `unavailable` | `false` |
-| `operation_unsupported` | выбранный driver не реализует операцию | `unsupported` | `false` |
-| `access_denied` | actor или policy запрещает действие | `authorization` | `false` |
-| `feature_not_entitled` | authoritative edition или license не даёт feature | `authorization` | `false` |
+| `capability_unavailable` | Package, provider or backend is missing or unavailable | `unavailable` | Producer decides |
+| `capability_disabled` | Configuration or activation disables an installed capability | `unavailable` | `false` |
+| `operation_unsupported` | The selected driver does not implement the operation | `unsupported` | `false` |
+| `access_denied` | Actor permissions or policy deny the action | `authorization` | `false` |
+| `feature_not_entitled` | The authoritative edition or license excludes the feature | `authorization` | `false` |
 
-Пять reason не склеиваются. `feature_not_entitled` не эмитится без источника entitlement.
-Это не шестой статус и не синоним отказа доступа.
+Keep the five reasons distinct. Emitting `feature_not_entitled` requires an authoritative entitlement source. It does not introduce a sixth status.
 
-Ломающее изменение контракта ошибки: удалить или переименовать code, сменить meaning,
-category, семантику path или retryability, удалить документированный detail key.
-Аддитивное: новый code, новый необязательный detail key, более точное человеческое сообщение.
+Removing or renaming a code, changing its meaning, category, path semantics or retryability, or removing a documented detail key breaks the error contract. A new code, a new optional detail key or a more precise human-readable message is additive.
 
 | Situation | Form |
 |:--|:--|
-| Expected business denial | Typed result/decision with stable reason |
-| Normal query absence | nullable/optional result |
-| Programmer/configuration defect | typed exception |
-| Infrastructure failure | typed exception with safe descriptor |
-| Optimistic/concurrent conflict | domain conflict exception or explicit typed conflict |
-| Batch partial failure | report with per-record descriptors; do not throw away successes |
+| Expected business denial | Typed result or decision with a stable reason |
+| Normal query absence | Nullable or optional result |
+| Programmer or configuration defect | Typed exception |
+| Infrastructure failure | Typed exception with a safe descriptor |
+| Optimistic or concurrent conflict | Domain conflict exception or explicit typed conflict |
+| Batch partial failure | Report with per-record descriptors that preserves successes |
 
-## Правило межпакетного импорта
+## Cross-package imports
 
-Пакет-потребитель вправе импортировать конкретный Api/Spi символ пакета-владельца
-при объявленной зависимости и допустимом направлении типов пакетов. Foreign Internal
-получает R2; неизвестный либо неразмеченный символ — R4; неклассифицированное объявление — R4b.
-Снимок не является разрешением: stale manifest получает `API-STALE`, source ошибки остаются RED.
-Именованные composition edges конечны, проверяются отдельно и не расширяют публичность.
+A consumer may import an Api or Spi symbol only if it declares the owning package as a dependency and the dependency direction is allowed. Foreign Internal symbols fail R2. Unknown or unmarked symbols fail R4. Unclassified declarations fail R4b. A stale manifest yields `API-STALE` and source errors still fail the checks. The finite set of named composition edges is checked independently. These edges grant no additional public access.

@@ -9,7 +9,7 @@
                 "bound(EntityRegistry::class)",
                 "bound(ModuleRegistry::class)"
             ],
-            "reason": "EntityRegistry and ModuleRegistry resolved only when both are bound in the container (P12.7 receipt)."
+            "reason": "EntityRegistry and ModuleRegistry resolved only when both are bound in the container."
         },
         {
             "from": "axiomasoft/corex-custom-fields",
@@ -20,7 +20,7 @@
                 "bound(EntityRegistry::class)",
                 "bound(ModuleRegistry::class)"
             ],
-            "reason": "ModuleFieldCatalogue is constructed only from the guarded FieldCatalogue binding in CustomFieldsServiceProvider (P12.7 receipt)."
+            "reason": "ModuleFieldCatalogue is constructed only from the guarded FieldCatalogue binding in CustomFieldsServiceProvider."
         }
     ],
     "undeclared_dependency_exceptions": [],
@@ -28,7 +28,7 @@
         {
             "from": "axiomasoft/corex-notifications",
             "to": "axiomasoft/corex-scheduler",
-            "reason": "Scheduling contracts live in the kernel; notifications must not depend on wakeup (D96.11)."
+            "reason": "Scheduling contracts live in the kernel; notifications must not depend on wakeup."
         },
         {
             "from": "flex/crm",

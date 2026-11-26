@@ -24,22 +24,19 @@ use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
- * Authorization-code + PKCE RP endpoints (AC-14). `callback()` runs the
- * checks EXACTLY in the order of research/10 §3 / Implementation Rule 5,
- * extended by D145 (P2.11) for the `imp` branch: one-time `state` → code
+ * Authorization-code + PKCE RP endpoints. `callback()` runs the
+ * checks in the following order, including the `imp` branch: one-time `state` → code
  * exchange → id_token header/signature/`iss`/`aud`/`nonce`/`sub` (all inside
  * {@see IdTokenVerifier}) → `acct` === current tenant (BOTH lanes) → `imp`
  * claim: present ⇒ {@see ImpersonationService::start()} (membership NOT
- * checked — support is not a member, D145) BEFORE `IdentitySyncer` ever
+ * checked — support is not a member) BEFORE `IdentitySyncer` ever
  * runs; absent ⇒ `root_identity_accounts.status === 'active'` (RIGID
  * equality — the enum is three-valued, `invited` must NOT pass) →
  * {@see IdentitySyncer::syncToAccount()}. Both lanes converge on
  * `session()->regenerate()` → `Guard::loginUsingId()` (the ONLY seam that
- * constructs the Principal — never a class from `axiomasoft/corex-access`, D125) →
- * `_corex_auth_at` marker (AC-15, read by `EnforceSessionLifetime`). Any
- * failure is an {@see OidcAuthenticationException} — no partial login. The
- * ordinary (non-`imp`) lane is UNCHANGED from P2.22 — its own Validation
- * suite must stay green without edits (D145).
+ * constructs the Principal — never a class from `axiomasoft/corex-access`) →
+ * `_corex_auth_at` marker (read by `EnforceSessionLifetime`). Any
+ * failure is an {@see OidcAuthenticationException} and prevents a partial login.
  */
 #[Internal]
 final readonly class OidcLoginController
@@ -94,7 +91,7 @@ final readonly class OidcLoginController
         $grantId = $this->impersonationClaim($claims);
 
         if ($grantId !== null) {
-            // D145 — support is NOT a member of this account: membership is
+            // Support is NOT a member of this account: membership is
             // NOT checked (authorization is the grant itself) and
             // IdentitySyncer is NOT called (it would project a staff
             // identity into the client's own `users` table).
@@ -132,7 +129,7 @@ final readonly class OidcLoginController
 
     /**
      * Reads `state` from the session and forgets the key IMMEDIATELY
-     * (Implementation Rule 5) before even comparing it — a repeated
+     * before even comparing it — a repeated
      * callback with the same query string can never replay it. Returns the
      * `code_verifier` consumed in the same pass (also one-time).
      */
@@ -140,7 +137,7 @@ final readonly class OidcLoginController
     {
         // pull() reads AND removes the key in one call — the one-time
         // secret is gone from the session the instant it is read, before
-        // it is even compared (Implementation Rule 5).
+        // it is even compared.
         $sessionState = $request->session()->pull(OidcClient::SESSION_STATE_KEY);
 
         $queryState = $request->query('state');
@@ -185,7 +182,7 @@ final readonly class OidcLoginController
     }
 
     /**
-     * `acct` sanity check — BOTH lanes (D145): impersonation is authorized
+     * `acct` sanity check — BOTH lanes: impersonation is authorized
      * by the grant, not by membership, but the id_token still names the
      * account it was issued for.
      *
@@ -201,7 +198,7 @@ final readonly class OidcLoginController
     }
 
     /**
-     * Ordinary (non-`imp`) lane only (D145) — support is never a member of
+     * Ordinary (non-`imp`) lane only — support is never a member of
      * the client's account, so this check must not run on the impersonation
      * branch.
      */
@@ -213,7 +210,7 @@ final readonly class OidcLoginController
             ->where('account_id', $account->id)
             ->first();
 
-        // RIGID equality (Implementation Rule 5) — the enum is three-valued
+        // RIGID equality — the enum is three-valued
         // (invited/active/blocked); `<> 'blocked'` would let an
         // un-onboarded `invited` identity in.
         if ($membership === null || $membership->status !== 'active') {
@@ -234,9 +231,7 @@ final readonly class OidcLoginController
             return null;
         }
 
-        // Fail-closed gate kept from P2.22 (D145 does not change this
-        // outcome, only what runs AFTER it): an `imp` claim while the
-        // feature is off is rejected, never silently accepted.
+        // Reject impersonation claims when the feature is disabled.
         if (! $this->impersonationPolicy->enabled) {
             throw OidcAuthenticationException::impersonationDenied();
         }

@@ -71,13 +71,12 @@
             <directory>packages/intl/tests</directory>
         </testsuite>
 
-        <!-- Layer & isolation gates (P3.5): pure static assertions, no DB/container. -->
+        <!-- Layer and isolation checks read source files without booting the application. -->
         <testsuite name="Arch">
             <directory>tests/Arch</directory>
         </testsuite>
 
-        <!-- flex/modules-lint (P1.13): PHPStan-правила. data/* — фикстуры-нарушения,
-             они анализируются правилом, а не исполняются раннером. -->
+        <!-- PHPStan analyzes the intentionally invalid fixtures in data/. -->
         <testsuite name="PHPStan">
             <directory>tests/PHPStan</directory>
             <exclude>tests/PHPStan/data</exclude>
@@ -101,7 +100,7 @@
     </source>
 
     <php>
-        <!-- PHPStan RuleTestCase поднимает свой контейнер и парсер — 128M ему мало. -->
+        <!-- PHPStan RuleTestCase loads its own container and parser. -->
         <ini name="memory_limit" value="1G"/>
 
         <env name="APP_ENV" value="testing"/>
@@ -109,9 +108,7 @@
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
 
-        <!-- pg-lane (D12): tests tagged ->group('pg') switch to this connection
-             (docker-compose.yml pgsql service). Sqlite stays the default for
-             pure-PHP tests. -->
+        <!-- The pg group uses the PostgreSQL service from docker-compose.yml. -->
         <env name="PGSQL_HOST" value="127.0.0.1"/>
         <env name="PGSQL_PORT" value="5434"/>
         <env name="PGSQL_DATABASE" value="corex_test"/>

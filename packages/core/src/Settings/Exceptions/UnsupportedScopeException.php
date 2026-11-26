@@ -24,7 +24,7 @@ final class UnsupportedScopeException extends CodedException
     public function __construct(SettingScope $scope)
     {
         parent::__construct(sprintf(
-            'SettingsRepository does not support scope "%s" — sys_settings only accepts account/workspace/user (D38).',
+            'SettingsRepository does not support scope "%s" — sys_settings only accepts account/workspace/user.',
             $scope->value,
         ));
     }

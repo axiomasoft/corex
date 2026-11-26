@@ -19,7 +19,7 @@ use Packman\Attributes\Internal;
  * `config('corex.pubsub.octane_worker_opt_in')`, set only by a dedicated
  * worker command — never by request-handling code.
  *
- * @internal spec: P1.24, D44, A29, D16
+ * @internal
  */
 #[Internal]
 final class SubscribeGuard
@@ -34,7 +34,7 @@ final class SubscribeGuard
             throw new LogicException(sprintf(
                 '%s::subscribe() detected an Octane runtime. Octane workers stay in the same long-running '.
                 'CLI process across requests, so runningInConsole() cannot tell an HTTP request from a worker '.
-                'command apart (A29) — subscribe() called from an HTTP handler would block that worker forever. '.
+                'command apart — subscribe() called from an HTTP handler would block that worker forever. '.
                 'Call it only from a dedicated worker command that explicitly sets '.
                 "config(['corex.pubsub.octane_worker_opt_in' => true]) before subscribing.",
                 $driverClass,
@@ -44,7 +44,7 @@ final class SubscribeGuard
         if (! $runtime->runningInConsole()) {
             throw new LogicException(sprintf(
                 '%s::subscribe() polls/blocks forever — call it only from a queue worker or console command, '.
-                'never inside an HTTP request cycle (B-10 §3.1).',
+                'never inside an HTTP request cycle.',
                 $driverClass,
             ));
         }

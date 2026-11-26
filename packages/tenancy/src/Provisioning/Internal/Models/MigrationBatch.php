@@ -10,7 +10,7 @@ use Packman\Attributes\Internal;
 
 /**
  * `root_migration_batches` — a wave of tenant-schema migrations targeting
- * `to_version` (central connection, B-11 §5.6/P2.12).
+ * `to_version` (central connection).
  *
  * @property string $id
  * @property int $from_version

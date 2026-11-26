@@ -1,14 +1,12 @@
-# CoreX 2.0 · Переход от этапа 7 к этапу 8
+# CoreX 2.0 HTTP v2 transition
 
-База сравнения — `7509928697cfaf7acc289a7ca53a5164599077c0`. Мажор HTTP меняется с v1 на v2. Каждый fingerprint связан с декларацией, проверкой или сценарием из этапа 8. Договорённости для выпуска относительно 1.x находятся в основном решении о совместимости.
-
-[Границы совместимости](corex-2.md)
+The comparison starts at `7509928697cfaf7acc289a7ca53a5164599077c0`, the revision before the HTTP major changed from v1 to v2. Each fingerprint below identifies a change covered by a declaration, check or scenario for that transition. The [CoreX 2.0 compatibility decision](corex-2.md) covers the release-wide comparison with 1.x.
 
 ```corex-contract-decisions
 [
   {
     "id": "literal-http-v2",
-    "plan": "§§1, 11.4, 14.4, 15 этап 8 — one installed HTTP major and five native declaration carriers",
+    "plan": "§ one installed HTTP major and five native declaration carriers",
     "tests": [
       "tests/Arch/ApiContractTest.php",
       "scripts/distribution/tests/test_compare_contracts.py",
@@ -178,7 +176,7 @@
   },
   {
     "id": "transport-invocation-replay",
-    "plan": "§§14.4–14.5, 15 этап 8 — typed transport admission and one scoped receipt and settlement",
+    "plan": "§ typed transport admission and one scoped receipt and settlement",
     "tests": [
       "tests/Feature/OperationContractTest.php",
       "tests/Distribution/fixtures/scenarios/bulk-transfer/probe.php",
@@ -216,7 +214,7 @@
   },
   {
     "id": "authorized-search-metadata",
-    "plan": "§§13.3, 14.4, 15 этап 8 — typed metadata and a current-policy denial",
+    "plan": "§ typed metadata and a current-policy denial",
     "tests": [
       "tests/Distribution/fixtures/scenarios/transport/equipment.php"
     ],
@@ -226,7 +224,7 @@
   },
   {
     "id": "scope-errors-final",
-    "plan": "§§12.1–12.3, 15 named/final — distinct final mismatch and stale errors",
+    "plan": "§ distinct final mismatch and stale errors",
     "tests": [
       "packages/core/tests/Feature/WorkUnitIsolationTest.php",
       "tests/Distribution/fixtures/scenarios/binding-restore/probe.php"
@@ -238,7 +236,7 @@
   },
   {
     "id": "named-message-callers",
-    "plan": "§§12.1–12.2, 15 named/final — exact argument names in established envelope and receipt callers",
+    "plan": "§ exact argument names in established envelope and receipt callers",
     "tests": [
       "packages/core/tests/Pg/DeliveryGuaranteesTest.php"
     ],

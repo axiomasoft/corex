@@ -130,11 +130,11 @@ final class ToolContributionsTest extends TestCase
     }
 
     /** @return list<array<string, mixed>> */
-    private function contributionsForPhase(string $phase): array
+    private function contributionsForContracts(string ...$contracts): array
     {
         return array_values(array_filter(
             $this->selectedContributions['contributions'],
-            static fn (array $row): bool => ($row['phase'] ?? '') === $phase && ($row['disposition'] ?? '') === 'included',
+            static fn (array $row): bool => in_array($row['contract'] ?? '', $contracts, true) && ($row['disposition'] ?? '') === 'included',
         ));
     }
 
@@ -159,10 +159,10 @@ final class ToolContributionsTest extends TestCase
         self::assertNotContains('identity.grant_membership', $this->codes(array_values($this->descriptorIndex(new ArchiveToolModule(ArchiveToolModule::compile())))));
     }
 
-    public function test_selected_p3_receipts_map_to_actual_mechanics_contrib_02(): void
+    public function test_selected_archive_receipts_map_to_actual_mechanics_contrib_02(): void
     {
         $index = $this->descriptorIndex(new ArchiveToolModule(ArchiveToolModule::compile()));
-        foreach ($this->contributionsForPhase('P3') as $row) {
+        foreach ($this->contributionsForContracts('storage-context/1', 'claim-maintenance/1', 'identity-transport/1', 'account-list/1') as $row) {
             self::assertArrayHasKey($row['tool_code'], $index);
             $descriptor = $index[$row['tool_code']];
             self::assertSame($row['side_effect'], $descriptor->sideEffect);
@@ -172,9 +172,9 @@ final class ToolContributionsTest extends TestCase
         }
     }
 
-    public function test_only_approved_p4_receipts_add_finite_contributions_contrib_03(): void
+    public function test_only_approved_panel_receipts_add_finite_contributions_contrib_03(): void
     {
-        $rows = $this->contributionsForPhase('P4');
+        $rows = $this->contributionsForContracts('panel/1');
         self::assertCount(1, $rows);
         self::assertSame('panel/1', $rows[0]['contract']);
         $index = $this->descriptorIndex(new ArchiveToolModule(ArchiveToolModule::compile()));
@@ -182,9 +182,9 @@ final class ToolContributionsTest extends TestCase
         self::assertNotContains('media.attach', array_keys($index));
     }
 
-    public function test_selected_p5_wakeup_binding_without_control_plane_edge_contrib_04(): void
+    public function test_selected_wakeup_binding_without_control_plane_edge_contrib_04(): void
     {
-        $rows = $this->contributionsForPhase('P5');
+        $rows = $this->contributionsForContracts('wakeup/1');
         self::assertCount(1, $rows);
         self::assertSame('wakeup/1', $rows[0]['contract']);
         $index = $this->descriptorIndex(new ArchiveToolModule(ArchiveToolModule::compile()));
@@ -192,9 +192,9 @@ final class ToolContributionsTest extends TestCase
         self::assertNotContains('tenancy.get_account_status', array_keys($index));
     }
 
-    public function test_p6_search_import_limits_bound_without_bypass_contrib_05(): void
+    public function test_search_import_limits_bound_without_bypass_contrib_05(): void
     {
-        $rows = $this->contributionsForPhase('P6');
+        $rows = $this->contributionsForContracts('search/1');
         self::assertCount(1, $rows);
         self::assertSame('search/1', $rows[0]['contract']);
         $index = $this->descriptorIndex(new ArchiveToolModule(ArchiveToolModule::compile()));
@@ -202,10 +202,10 @@ final class ToolContributionsTest extends TestCase
         self::assertSame('read-only', $index['search.query']->idempotency);
     }
 
-    public function test_p7_utilities_keep_optional_semantics_contrib_06(): void
+    public function test_lab_utilities_keep_optional_semantics_contrib_06(): void
     {
         $index = $this->descriptorIndex(new LabToolModule(LabToolModule::compile()));
-        foreach ($this->contributionsForPhase('P7') as $row) {
+        foreach ($this->contributionsForContracts('locale/1', 'fx/1', 'geo/1', 'recurrence/1') as $row) {
             self::assertArrayHasKey($row['tool_code'], $index);
             self::assertSame($row['contract_hash'], $index[$row['tool_code']]->contractHash);
             self::assertNotSame('RUB', $index[$row['tool_code']]->code);

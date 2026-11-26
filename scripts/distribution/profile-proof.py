@@ -1096,7 +1096,7 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
         portable = [cell for cell in passed_profiles if cell["profile"] == "search-portable"]
         return {
             "schema_version": "corex-profile-receipt/1",
-            "item": "P17.6",
+            "item": json.loads(Path(__file__).with_name("legacy-receipt-items.json").read_text())["corex-profile-receipt/1"],
             "result": "PASS",
             **binding,
             "mode": mode,

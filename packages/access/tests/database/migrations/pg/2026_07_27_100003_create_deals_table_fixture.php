@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-// Test-only fixture (D105) — a minimal record shape (owner_id/workspace_id)
+// Test-only fixture — a minimal record shape (owner_id/workspace_id)
 // for AccessChecker::canOnRecord() scope-predicate tests (own/workspace/
 // account). dept/dept_tree are not exercised against a real record here —
 // they require users/sys_departments, a documented boxed-profile limitation

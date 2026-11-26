@@ -1,10 +1,8 @@
 # Mutation quality gates
 
-PLAN3.D133 (owner, 2026-10-07): mutation work is deferred until kernel stability.
-Do not run Infection, mutation scores, probes, parser self-tests or the fixed
-`scripts/mutation-check.sh` registry during the rest of PLAN3. Their CI jobs are
-disabled. The commands and policy below are retained for a future explicitly
-authorized resumption; historical reports do not establish current acceptance.
+Ordinary CI checks the mutation inventory and parser controls on code changes.
+Full fragment measurements and the fixed mutation registry run when a CI
+dispatch enables `mutation`.
 
 Run commands through `scripts/php84` in the development checkout. The locked
 stack is Infection 0.35.6, Pest 5.2.1 and PHPUnit 13.3.4. Initial runs cover the
@@ -39,7 +37,7 @@ security anchors. After an intentional source addition/removal, regenerate with
 immutable storage without value expressions or branches. The zero ledger binds
 each such file to its exact source hash and AST reason. Behavioral files must
 generate valid mutants. A completely declarative fragment is N/A only after the
-independent P09.8 review confirms its ledger; it never receives numeric MSI100.
+independent review confirms its ledger with a `corex-mutation-confirmation/1` report; it never receives numeric MSI100.
 
 The score uses only test kills. Timeouts, escaped and uncovered mutants remain
 in the denominator. Unknown errors, bootstrap/discovery failures, DB connection
@@ -55,7 +53,7 @@ The default mutator profile remains enabled, with three additional operators:
 null returns, non-null typed forwarded returns, and object-default string arguments.
 
 Equivalents need an exact mutant identity, source hash, rationale, hashed replay
-and independent P09.8 confirmation. They may not exceed 5% in any fragment or
+and independent confirmation. They may not exceed 5% in any fragment or
 globally. The cap uses integer arithmetic; 1/19 fails, 1/20 is the boundary.
 Source changes expire every exception and measurement.
 
@@ -68,9 +66,12 @@ The runner is serial (`threads=1`), initial tests have a 600s limit, mutants 10s
 and CI workers a 60 minute job budget with at most four concurrent workers.
 Existing fixed sabotage cases remain a separate `scripts/mutation-check.sh` gate.
 
-Tenancy's native Redis and S3 conformance tests require `P3_REDIS_PORT` and
-`COREX_P3_STORAGE_CONFIG`. The latter must name a JSON configuration file inside
+Set `COREX_TEST_REDIS_PORT` for the isolated Redis endpoint and
+`COREX_TEST_STORAGE_CONFIG` for native S3 conformance. The latter must name a JSON configuration file inside
 the repository; its content is hashed into every receipt. The root development
 dependencies include Tenancy's exact S3 adapter pin so these tests run without
-optional-SDK skips. Use the same native environment for all fragments: any
+optional-SDK skips. Package tests also accept `COREX_TEST_SDK_AUTOLOAD` for a separate SDK loader.
+The previous `P3_REDIS_PORT`, `COREX_P3_STORAGE_CONFIG` and
+`COREX_P3_SDK_AUTOLOAD` environment names remain accepted.
+Use the same native environment for all fragments: any
 source, test, tooling, lock or native-configuration change invalidates all receipts.
