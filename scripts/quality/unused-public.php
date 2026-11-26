@@ -22,6 +22,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use PhpToken;
 use Psr\Container\ContainerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -756,6 +757,35 @@ final class UsageScanner
         }
     }
 
+    /** Match complete PHP tokens so formatting can change and a comment cannot stand in for a call. */
+    private static function containsPhpAnchor(string $source, string $anchor): bool
+    {
+        $tokens = static function (string $php): array {
+            $result = [];
+            foreach (PhpToken::tokenize($php) as $token) {
+                if (! $token->isIgnorable()) {
+                    $result[] = $token->text;
+                }
+            }
+
+            return $result;
+        };
+        $needle = $tokens('<?php '.$anchor);
+        $length = count($needle);
+        if ($length === 0) {
+            return false;
+        }
+
+        $haystack = $tokens($source);
+        foreach ($haystack as $offset => $token) {
+            if ($token === $needle[0] && array_slice($haystack, $offset, $length) === $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /** @return array<string, true> */
     private function ledger(): array
     {
@@ -809,7 +839,9 @@ final class UsageScanner
                     $valid = false;
                 } else {
                     $evidence = is_file($this->root.'/'.$proof['path']) ? file_get_contents($this->root.'/'.$proof['path']) : false;
-                    $valid = $valid && $evidence !== false && ($vendorRoot || hash('sha256', $evidence) === $proof['sha256']) && str_contains($evidence, $proof['anchor']);
+                    $valid = $valid && $evidence !== false && ($vendorRoot
+                        ? self::containsPhpAnchor($evidence, $proof['anchor'])
+                        : hash('sha256', $evidence) === $proof['sha256'] && str_contains($evidence, $proof['anchor']));
 
                     if (in_array($entry['kind'], ['external-api', 'external-spi'], true)) {
                         $valid = $valid && str_ends_with($proof['path'], '.md') && str_contains($proof['anchor'], $method->class);

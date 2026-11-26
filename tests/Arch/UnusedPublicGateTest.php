@@ -245,7 +245,7 @@ it('proves vendor roots by their anchor and keeps hashing repository roots', fun
     $class = 'Demo\\Internal\\Entry';
     unusedPublicFixture([
         'packages/demo/src/Entry.php' => '<?php namespace Demo\Internal; final class Entry { public function handle(): void {} }',
-        'vendor/laravel/framework/src/Illuminate/Console/Command.php' => '<?php // $this->laravel->call([$this, $method])',
+        'vendor/laravel/framework/src/Illuminate/Console/Command.php' => '<?php $this->laravel->call([$this, $method]);',
         'packages/demo/README.md' => 'Artisan calls Demo\\Internal\\Entry::handle.',
     ], function (string $root, Filesystem $files, Closure $run) use ($class): void {
         $vendor = 'vendor/laravel/framework/src/Illuminate/Console/Command.php';
@@ -257,14 +257,14 @@ it('proves vendor roots by their anchor and keeps hashing repository roots', fun
         $write($entry);
         expect($run()->getExitCode())->toBe(0);
 
-        $files->put($root.'/'.$vendor, '<?php // patch release: $this->laravel->call([$this, $method]) still dispatches');
+        $files->put($root.'/'.$vendor, '<?php $this->laravel->call( /* changed in a patch */ [ $this, $method ] );');
         expect($run()->getExitCode())->toBe(0);
 
-        $files->put($root.'/'.$vendor, '<?php // the framework no longer calls the handler');
+        $files->put($root.'/'.$vendor, '<?php // historical invocation: $this->laravel->call([$this, $method])');
         expect($run()->getExitCode())->toBe(1)
             ->and($run()->getErrorOutput())->toContain('ENTRYPOINT-STALE');
 
-        $files->put($root.'/'.$vendor, '<?php // $this->laravel->call([$this, $method])');
+        $files->put($root.'/'.$vendor, '<?php $this->laravel->call([$this, $method]);');
         $hashed = $entry;
         $hashed['root']['sha256'] = hash_file('sha256', $root.'/'.$vendor);
         $write($hashed);
