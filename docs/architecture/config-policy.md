@@ -1,69 +1,46 @@
-# Политика конфигурации
+# Configuration policy
 
-Инварианты — статьи `CFG-001` … `CFG-006` конституции. Здесь — классификация и процедуры.
+The [constitution](constitution.md) defines configuration invariants CFG-001 through CFG-006.
 
-## Четыре класса ключа
+## Key ownership
 
-| Класс | Кто задаёт | Когда меняется | Где живёт |
-|:--|:--|:--|:--|
-| `deployment` | Администратор установки | При развёртывании | Файл конфигурации и переменные окружения |
-| `product-policy` | Разработчик пакета | В релизе | Файл конфигурации пакета со значением по умолчанию |
-| `runtime-settings` | Пользователь или администратор аккаунта | В любой момент работы | Слой настроек (System → Tenant → User) |
-| `secret` | Администратор установки | По ротации | Только окружение или хранилище секретов |
+| Class | Owner | When it changes | Storage |
+| --- | --- | --- | --- |
+| `deployment` | Installation administrator | At deployment | Configuration file and environment variables |
+| `product-policy` | Package developer | At release | Package configuration file with a default |
+| `runtime-settings` | User or account administrator | During operation | Settings hierarchy (System → Tenant → User) |
+| `secret` | Installation administrator | At rotation | Environment or secret store |
 
-Ключ, отнесённый к двум классам, — дефект: он означает, что одно значение имеет двух
-владельцев. Выбирается более строгий класс.
+Assign exactly one class to each key. If two classes appear to apply, resolve the ownership conflict in favor of the stricter class.
 
-## Процедура введения нового ключа
+## Adding a key
 
-1. Отнести ключ к одному классу.
-2. Задать значение по умолчанию, при котором установка работает.
-3. Объявить ключ в типизированном объекте опций пакета, а не читать по строке в сервисе.
-4. Завести строку в `scripts/configuration-classes.json` (`rows`: owner, secret, mode, reloadable,
-   validation, deprecated_aliases, notes) и выполнить `php scripts/configuration-reference.php --write`:
-   `docs/architecture/configuration.md` генерируется, руками не правится. Ключ, который не принимает ни одно
-   поле Options-класса, — ошибка генератора; не-runtime ключ (pin Composer) помечается явно как
-   `(reference)`, чтение в registrar без поля Options — `(registrar-read)`.
-5. Для `secret` — значение по умолчанию в реестре печатается как `***`.
+1. Assign its class.
+2. Provide a default that allows an unconfigured installation to start.
+3. Declare the key on the package's typed options object. Services receive the value through their constructors.
+4. Add the key to `rows` in `scripts/configuration-classes.json`, including owner, secret, mode, reloadable, validation, deprecated_aliases and notes. Run `php scripts/configuration-reference.php --write` to regenerate [the configuration reference](configuration.md). The generator reports keys without a corresponding options field. Mark reference-only entries such as Composer pins with `(reference)`. Use `(registrar-read)` for keys that a registrar reads directly.
+5. Mask the default of a secret as `***` in the reference.
 
-## Где допустим вызов конфигурации
+## Reading configuration
 
-Только на границе сборки объектов: service provider пакета и консольная команда. Сервис
-получает значения конструктором. Причина не стилистическая: значение, прочитанное глубоко
-внутри, невозможно ни подменить в тесте, ни увидеть в дампе конфигурации, ни провалидировать
-при загрузке.
+Read configuration at the point where the package assembles dependencies, in a service provider or a console command. Passing values into services makes them available for startup validation, diagnostics and substitution in tests.
 
-## Валидация
+## Validation
 
-Невалидная конфигурация обязана обнаруживаться при загрузке приложения. Проверка, срабатывающая
-в момент первого использования, превращает ошибку администратора в инцидент пользователя.
+Detect invalid configuration during application startup. Waiting for the first use exposes the administrator's configuration error to the user who triggers that feature.
 
-### Слои
+1. **Shape.** `<Pkg>Options::fromArray()` checks types, ranges, permitted values and `class-string` values. It supplies defaults and accepts an empty configuration without environment variables. The public provider resolves its options in `boot()` so a shape error fails startup.
+2. **Runtime checks.** Tagged `RuntimeConfigCheck` implementations report `violations(bool $production)` for dangerous modes and missing secrets required by enabled features. Check after boot for HTTP and on `CommandStarting` for console work. Image builds, including `package:discover` and `config:cache`, can run without production secrets.
+3. **Deployment check.** `php artisan packman:config:validate --production` always runs the same production checks.
 
-1. **Форма** — `<Pkg>Options::fromArray()`: типы, диапазоны, допустимые значения, `class-string`. Дефолты
-   живут здесь; `fromArray` на пустой конфигурации без переменных окружения обязан пройти. Публичный provider
-   резолвит свой Options в `boot()`, поэтому ошибка формы — ошибка загрузки.
-2. **Runtime-проверки** — теги `RuntimeConfigCheck` (`violations(bool $production)`): наличие секрета у
-   включённой функции и опасные режимы. Они запускаются до приёма работы процессом (HTTP — после boot,
-   console — на `CommandStarting`), но не при сборке образа: `package:discover`, `config:cache` и другие
-   build-команды секретов не требуют. Секрет формой не проверяется — иначе сборка образа потребовала бы
-   продовые секреты.
-3. **Deploy-gate** — `php artisan packman:config:validate --production` выполняет те же проверки всегда.
+### Acknowledging dangerous modes
 
-### Опасные режимы и подтверждение
+In production, `corex-workflow.enforce_declarations = false` requires its exact configuration path in `corex.acknowledged_dangerous_modes`. An unacknowledged dangerous mode raises `InvalidConfiguration` during startup. The list accepts literal paths only. The validation command reports an acknowledged mode as a warning.
 
-Режим `corex-workflow.enforce_declarations = false` требует точного подтверждения в production.
-В `production` включённый опасный режим останавливает старт (`InvalidConfiguration`), если его точный
-путь не перечислен в `corex.acknowledged_dangerous_modes`. Шаблоны и «подтвердить всё» не
-поддерживаются; подтверждённый режим виден в `packman:config:validate` как предупреждение.
-`corex-operations.require_physical_tenancy = false` в список не входит: это явный opt-out штатного
-boxed-режима, отчёт показывает его как уведомление.
+`corex-operations.require_physical_tenancy = false` explicitly selects the supported boxed deployment mode. The report shows it as a notice and requires no acknowledgement.
 
-### Кэш конфигурации и резидентный режим
+### Configuration caching and resident workers
 
-`php artisan config:cache` сериализует конфигурацию через `var_export`: в config-файле нет замыканий и
-объектов, кроме case'ов enum. Это проверяет `composer config-cache-check` (`tests/Feature/ConfigCacheTest.php`):
-каждый `packages/*/config/*.php` переживает `var_export` → `eval` без потерь, а приложение загружается из
-кэшированного репозитория. Options — ленивые singleton'ы, не зависящие от запроса; всё, что держит состояние
-tenant или соединение, — `scoped` (границу задаёт `Application::forgetScopedInstances()`), что доказывают
-`ResidentLifecycleTest` и `ResidentTenantSwitchPgTest` (статья RUN-005).
+`php artisan config:cache` serializes configuration with `var_export`. Configuration files may contain scalar values, arrays and enum cases. Closures and other objects cannot be included. `composer config-cache-check` runs `tests/Feature/ConfigCacheTest.php`, round-trips every `packages/*/config/*.php` through `var_export` and `eval`, and boots the application from the cached repository.
+
+A lazy singleton is suitable for immutable deployment options that are independent of the request. Options that vary by scope and services holding tenant state or a connection use `scoped` bindings. `Application::forgetScopedInstances()` marks the boundary. `ResidentLifecycleTest` and `ResidentTenantSwitchPgTest` exercise this requirement under RUN-005.

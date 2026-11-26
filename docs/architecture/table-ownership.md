@@ -1,24 +1,14 @@
-# Владение таблицами
+# Table ownership
 
-Инварианты — статьи `DATA-001` … `DATA-007`. Процедура —
-[data-ownership-policy.md](data-ownership-policy.md); наборы и исполнение —
-[schema-policy.md](schema-policy.md). Эта страница — каталог текущего состояния.
+Articles DATA-001 through DATA-007 govern this catalogue. The [ownership policy](data-ownership-policy.md) defines the procedure. The [schema policy](schema-policy.md) covers schema sets and execution.
 
-Каждая shipped-таблица создаётся набором её владельца. `tenant_scope` согласован со scope
-набора: `root` → `Central` (`root`), `tenant` → `Tenant` (`tenant` или `tenant-cloud`),
-`shared-budget` → `Dedicated` (`budget`). `composer schema-gate` → S9 проверяет владельца
-и это соответствие. Миграции исполняются из исходных каталогов наборов.
+Each shipped table is created by its owner's set. The `tenant_scope` column maps `root` to Central, `tenant` to Tenant (the tenant or tenant-cloud set), and `shared-budget` to Dedicated. The S9 check in `composer schema-gate` validates the owner and scope against the source migrations.
 
-Поле со значением `unobserved` означает: дерево не дало факта. Это долг
-документирования, а не разрешение считать поле пустым.
-`tenant_scope=test` обозначает только disposable-таблицы reference consumer'ов:
-их создают тестовые fixture, в shipped-наборы они не входят.
+`unobserved` means the repository provides no evidence for that field. `tenant_scope=test` denotes disposable consumer fixtures. `tenant_scope=control` covers authoritative host state outside the restorable tenant database. Hosts using the SQL implementation create it through `ScopeControlSchema::install()` during provisioning.
 
-`tenant_scope=control` обозначает хранилище полномочий хоста за пределами восстанавливаемой БД арендатора. Хост, использующий SQL-реализацию CoreX, устанавливает его через `ScopeControlSchema::install()` при подготовке развёртывания.
+Several owners use the `sys_` prefix. Look up individual tables in the catalogue when assigning ownership.
 
-Префикс `sys_` не является владельцем. Сегодня его делят:
-
-| Таблицы | Владелец |
+| Tables | Owner |
 |:--|:--|
 | `sys_api_budget_buckets`, `sys_api_budget_reservations`, `sys_api_bulk_operations`, `sys_api_idempotency` | `axiomasoft/corex-operations` |
 | `sys_attribute_backfills`, `sys_attribute_definitions`, `sys_attribute_documents`, `sys_attribute_key_reservations`, `sys_attribute_schema_operations`, `sys_attribute_write_tokens`, `sys_field_schema_heads` | `axiomasoft/corex-custom-fields` |
@@ -28,20 +18,15 @@
 | `sys_wakeup_requests` | `axiomasoft/corex-scheduler` |
 | `sys_workflow_intents` | `axiomasoft/corex-workflow` |
 
-Строки ниже — источник правды по таблице. Расхождение префикса со строкой — дефект сканера либо новой миграции, а не повод «починить» префикс.
+A mismatch between the catalogue and a prefix-based scanner requires reviewing the scanner or migration.
 
-## Внешние владельцы
+## External owners
 
-`axiomasoft/packman-modules` владеет `mod_modules`, `mod_records` и `mod_lifecycle_log`.
-`axiomasoft/packman-panels` владеет `sys_saved_view_scopes` и `sys_saved_views`.
-CoreX не поставляет их DDL и не пишет эти таблицы в обход публичных контрактов владельца.
-Они исключены из локального каталога ниже; runtime integration проверяет единственного
-владельца зарегистрированного schema set.
+`axiomasoft/packman-modules` owns `mod_modules`, `mod_records` and `mod_lifecycle_log`. `axiomasoft/packman-panels` owns `sys_saved_view_scopes` and `sys_saved_views`. CoreX uses the owners' public contracts. Their DDL belongs to the external packages. Runtime integration verifies that each registered schema set has one owner.
 
-`axiomasoft/corex-access` объявляет свои таблицы через набор `tenant`. За таблицы
-движка авторизации и их миграции отвечает зависимость `axiomasoft/azguard`.
+`axiomasoft/corex-access` declares its own tables in the tenant set. Its dependency `axiomasoft/azguard` owns the authorization engine's tables and migrations.
 
-## Каталог таблиц
+## Table catalogue
 
 | table | owning_package | tenant_scope | writers | readers | pii_class | cross_package_access | indexes | restore_policy | retention_policy | upgrade_strategy | object_class | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
@@ -69,7 +54,7 @@ CoreX не поставляет их DDL и не пишет эти таблиц�
 | sys_departments | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_departments_path_gist_ix`; `sys_departments_path_uq`; `sys_departments_pk`; `sys_departments_workspace_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_feature_flags | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_feature_flags_key_uq`; `sys_feature_flags_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_feature_overrides | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_feature_overrides_flag_scope_uq`; `sys_feature_overrides_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
-| sys_inbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_inbox_messages_pk`; `sys_inbox_messages_processed_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
+| sys_inbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_inbox_messages_pk`; `sys_inbox_messages_processed_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | Tenant migration owns this table outside the original frozen catalogue. |
 | sys_lifecycle_plans | axiomasoft/corex | tenant | axiomasoft/corex | axiomasoft/corex | pii-pseudonymous | forbidden | `sys_lifecycle_plans_pk`; `sys_lifecycle_plans_scope_request_uq`; `sys_lifecycle_plans_scope_state_ix` | tenant-backup | retain plan, cleanup and prior-effect evidence through owner retention | expand-migrate-contract (policy-default) | operation-state | Scoped action, digest, inventory, blockers, cleanup receipts, leases and cursor persist the resumable lifecycle boundary. |
 | sys_outbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_outbox_messages_claim_ix`; `sys_outbox_messages_dead_ix`; `sys_outbox_messages_fact_uq`; `sys_outbox_messages_pk`; `sys_outbox_messages_published_ix`; `sys_outbox_messages_reclaim_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | Receipt identity is account, incarnation, workspace scope, source and message ID. |
 | sys_pubsub_cursors | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_pubsub_cursors_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |

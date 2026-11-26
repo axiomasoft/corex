@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 /**
- * Configuration reference generator (P05.4, D69 p.9).
+ * Configuration reference generator.
  *
  * Writes (`--write`) or verifies byte-for-byte (`--check`) docs/architecture/configuration.md.
  *
@@ -189,16 +189,14 @@ function renderDocument(string $repoRoot): string
     ksort($output, SORT_STRING);
 
     $lines = [
-        '# Реестр конфигурации',
+        '# Configuration reference',
         '',
-        'Инварианты — статьи `CFG-001` … `CFG-006`. Процедура — `config-policy.md`.',
-        'Страница генерируется: `php scripts/configuration-reference.php --write`, сверка — `--check`',
-        '(composer `configuration-reference`, шаг CI). Набор ключей, тип и значение по умолчанию',
-        'читаются из `packages/*/config/*.php`; `typed_options_field` — свойство Options-класса,',
-        'которое принимает ключ; остальные колонки хранятся в `scripts/configuration-classes.json`.',
-        'Ключ пакетного config без поля Options — ошибка генератора.',
+        'Rules CFG-001 through CFG-006 are defined in the [configuration policy](config-policy.md).',
+        'Run `php scripts/configuration-reference.php --write` to regenerate this page and `--check` to verify it.',
+        'Keys, types and defaults come from `packages/*/config/*.php`. Each package key must map to a typed options field.',
+        'The remaining fields come from `scripts/configuration-classes.json`.',
         '',
-        '## Каталог ключей',
+        '## Keys',
         '',
         '| '.implode(' | ', COLUMNS).' |',
         '|'.implode('|', array_fill(0, count(COLUMNS), ':--')).'|',

@@ -1,63 +1,44 @@
-# Политика владения данными
+# Data ownership policy
 
-Инварианты — статьи `DATA-001` … `DATA-007` конституции. Здесь — процедуры.
+Articles `DATA-001` through `DATA-007` of the constitution define the invariants. This policy explains how to apply them.
 
-## Как объявляется владелец таблицы
+## Declaring a table owner
 
-Владение объявляется по **таблице**, а не по префиксу её имени. Префикс — соглашение об
-именовании, а не граница владения: сегодня префикс `sys_` разделён между четырьмя пакетами
-(`axiomasoft/corex`, `axiomasoft/corex-custom-fields`, `axiomasoft/corex-workflow`, `axiomasoft/corex-scheduler`), и это нормально.
+Assign an owner to each table. A prefix is a naming convention and can span packages. For example, `axiomasoft/corex`, `axiomasoft/corex-custom-fields`, `axiomasoft/corex-workflow` and `axiomasoft/corex-scheduler` all own tables with the `sys_` prefix.
 
-Запись владения живёт в [table-ownership.md](table-ownership.md) и несёт на каждую
-таблицу: имя, владельца, каталог миграции, классификацию, допущенных потребителей,
-исключения по внешним ключам, политику хранения и класс персональных данных.
+Record the table name, owner, migration directory, classification, permitted consumers, foreign key exceptions, retention policy and personal data classification in the [table ownership catalogue](table-ownership.md).
 
-Классификация объекта — закрытый набор:
-
-| Класс | Значение |
+| Classification | Meaning |
 |:--|:--|
-| `private` | Деталь реализации владельца; читать извне нельзя |
-| `projection` | Проекция, которую владелец объявил читаемой извне |
-| `outbox` | Очередь исходящих сообщений владельца |
-| `reporting` | Объект только для отчётности, вне транзакционного пути |
+| `private` | The owner's implementation detail. Other packages cannot read the table. |
+| `projection` | A projection that the owner explicitly exposes for external reads. |
+| `outbox` | The owner's outgoing message queue. |
+| `reporting` | An object used only for reporting, outside the transaction path. |
 
-Каталог «общих» таблиц не заводится. Если данные действительно общие, у них есть владелец —
-пакет с явно названной возможностью, а не пакет с именем «core», «common» или «shared».
+Shared data still requires an owner with a named capability. There is no category for ownerless tables or for tables assigned to a generic “common” package.
 
-## Как получить эффект в чужих данных
+## Working with data owned by another package
 
-Потребитель вправе **попросить результат**, но не вправе получить его сам:
+1. Call the owner's contract when the operation needs immediate consistency.
+2. Publish or consume an event when eventual consistency is sufficient.
+3. Maintain a local projection from events for frequent reads.
 
-1. вызвать контракт владельца, если нужна немедленная согласованность;
-2. опубликовать или потребить событие, если согласованность может быть отложенной;
-3. вести собственную проекцию из событий, если чтение требуется часто.
+An ORM relationship across a package boundary is subject to the same direct-access restriction as a SQL query.
 
-Связь ORM через границу пакета — тот же самый запрещённый прямой доступ. Правило говорит о
-том, **что** делается с данными, а не о том, каким синтаксисом.
+## Cross-package foreign keys
 
-## Внешний ключ через границу пакета
+By default, reference an external record through a typed identifier without a database constraint. The owning contract, event processing or reconciliation maintains integrity. A cross-package foreign key requires **all** of the following:
 
-Запрещён по умолчанию. Через границу используется типизированный идентификатор без
-физического ограничения; целостность обеспечивает контракт владельца, обработка событий или
-сверка.
+- The packages are always installed together in practice.
+- The relationship is fundamental and both sides share a lifecycle.
+- Omitting the constraint causes a concrete integrity or security defect.
+- Both owners accept the coordinated schema change.
+- A decision records the owner and the condition for removing the exception.
 
-Исключение принимается, только если выполнены **все** условия:
+A permanent exception requires a named decision that takes responsibility for it.
 
-- пакеты фактически не устанавливаются независимо;
-- связь фундаментальна и разделяет жизненный цикл;
-- отсутствие ключа даёт реальный дефект целостности или безопасности;
-- оба владельца принимают согласованное изменение схемы;
-- исключение записано решением с владельцем и условием снятия.
+## Changing an existing schema
 
-Постоянное исключение допустимо только при явно названном решении-владельце.
+The schema policy defines sets, scopes, commands and the baseline format (`DATA-007`). `composer schema-gate` checks that the set matches the ownership record's `tenant_scope` (S9). `composer table-ownership-gate` checks cross-package foreign keys (T4). `composer table-write-ownership-gate` checks writes to tables owned by another package. See the [schema policy](schema-policy.md).
 
-## Изменение существующей схемы
-
-Механика наборов, scope, команды и форма baseline определены в
-[schema-policy.md](schema-policy.md) (`DATA-007`). Набор и `tenant_scope` записи владения
-должны совпадать; это проверяет `composer schema-gate` → S9. Межпакетные FK проверяет
-`composer table-ownership-gate` → T4, записи в чужие таблицы — `composer table-write-ownership-gate`.
-
-Выпущенные миграции неизменны с `1.0.0-rc.1` (`DATA-005`). Новая форма — новый файл
-набора и version + 1 в том же commit. Новая таблица вводится только там, где фаза
-плана объявила это явно, и получает запись владения в том же item'е (`DATA-006`).
+Released migration files are immutable starting with `1.0.0-rc.1` (`DATA-005`). Ship a schema change in a new migration file and increment the set version in the same commit. Introduce a table only when the relevant plan phase explicitly calls for it, and register ownership in the same work item (`DATA-006`).
