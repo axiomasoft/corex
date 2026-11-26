@@ -156,7 +156,7 @@
         {
             "symbol": "CoreX\\Access\\Enums\\Scope::weight",
             "source": "packages/access/src/Enums/Scope.php",
-            "source_sha256": "f9853d862995f0c114c8b8f902245428c9cc085fa20446869a7afb7205b35006",
+            "source_sha256": "2c7d4bd0ad18d9597c5cd3991cd8b3e2bb7cf509dfa36656f74dc8da22b4d467",
             "kind": "external-api",
             "reason": "Host native role-matrix tools compare Scope values using the documented none→own→department→workspace→account ordering.",
             "root": {
@@ -169,13 +169,13 @@
         {
             "symbol": "CoreX\\Access\\Extend\\Internal\\PermissionsMerger::__invoke",
             "source": "packages/access/src/Extend/Internal/PermissionsMerger.php",
-            "source_sha256": "0a5d3941dda0f0f0e2845e18ec7e8c2a6accdf55c105bd2b0bab4df6d89dc901",
+            "source_sha256": "a151588dde20b7c268ee66231c0cc0ffcb2743d048ebadcfe41dccb66186dd5a",
             "kind": "framework",
             "reason": "Laravel's event dispatcher invokes this exact invokable listener registered for module lifecycle permission-surface recompilation.",
             "root": {
                 "path": "packages/access/src/Laravel/AccessIntegrationRegistrar.php",
                 "anchor": "->listen(ModuleEnabled::class, PermissionsMerger::class)",
-                "sha256": "b08aa795cb68a839519b5bf9308139d55cabc13f15879542efc94dc9fa2883e4"
+                "sha256": "0bdde3673bd004bd23bf916a788afb090c3d27aef926b0ec8b732231ed13761c"
             },
             "expires": null
         },
@@ -230,7 +230,7 @@
         {
             "symbol": "CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role",
             "source": "packages/access/src/Roles/Internal/Models/RoleAssignment.php",
-            "source_sha256": "fd02bca6424e18af72e0f9d1b286edea5ae8d3b135b2a18f0b66f58621e6f1de",
+            "source_sha256": "0262263e2f9fb3c1356eeffcfe46dd6ce62551f82b5147ce6e1a1bbafe7aa0b9",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -242,7 +242,7 @@
         {
             "symbol": "CoreX\\Access\\Roles\\Internal\\Models\\RoleMatrixRow::role",
             "source": "packages/access/src/Roles/Internal/Models/RoleMatrixRow.php",
-            "source_sha256": "e4ba927da39d7105171dde8314ae3fa4679f53888ae24f94aa5f6c5903f5f6a1",
+            "source_sha256": "00ee8031ba0c4bbd3569fe61dab6ebb0dc4e01d814231cbb64e842f94dd4a35c",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\RoleMatrixRow::role by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -254,7 +254,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::created",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
+            "source_sha256": "5ffd8ea3fd865ab0cdccb36f2d1ab12f44d29778151719fbd2777ac26da3f17d",
             "kind": "framework",
             "reason": "Eloquent dispatches its created lifecycle event to the created method of this exact registered observer.",
             "root": {
@@ -267,7 +267,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::deleted",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
+            "source_sha256": "5ffd8ea3fd865ab0cdccb36f2d1ab12f44d29778151719fbd2777ac26da3f17d",
             "kind": "framework",
             "reason": "Eloquent dispatches its deleted lifecycle event to the deleted method of this exact registered observer.",
             "root": {
@@ -280,7 +280,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::forceDeleted",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
+            "source_sha256": "5ffd8ea3fd865ab0cdccb36f2d1ab12f44d29778151719fbd2777ac26da3f17d",
             "kind": "framework",
             "reason": "Eloquent SoftDeletes dispatches its forceDeleted lifecycle event to this exact registered observer's forceDeleted method.",
             "root": {
@@ -293,7 +293,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::restored",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
+            "source_sha256": "5ffd8ea3fd865ab0cdccb36f2d1ab12f44d29778151719fbd2777ac26da3f17d",
             "kind": "framework",
             "reason": "Eloquent SoftDeletes dispatches its restored lifecycle event to this exact registered observer's restored method.",
             "root": {
@@ -306,7 +306,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::updated",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
+            "source_sha256": "5ffd8ea3fd865ab0cdccb36f2d1ab12f44d29778151719fbd2777ac26da3f17d",
             "kind": "framework",
             "reason": "Eloquent dispatches its updated lifecycle event to the updated method of this exact registered observer.",
             "root": {
@@ -319,7 +319,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\PruneAuditLog::handle",
             "source": "packages/core/src/Audit/Internal/PruneAuditLog.php",
-            "source_sha256": "df540bb92e79141ff07e42052ddc443291212b95b235910e3cc6e2ed56adca09",
+            "source_sha256": "34b02d16cabc85021d90c24f564e3956f64ba647a307e0f5fb255323a52b4bbd",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Audit\\Internal\\PruneAuditLog::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -332,7 +332,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\RecordAuditEntry::handle",
             "source": "packages/core/src/Audit/Internal/RecordAuditEntry.php",
-            "source_sha256": "c6857a5e62c6a219958b95920a9476b7e73597bd0341ebbd1a3ad068e912a545",
+            "source_sha256": "142f2d00e6b3e2fbd5fa6198415f88635bd5b84e0633b6512bb218d02f87f7bf",
             "kind": "framework",
             "reason": "AuditRegistrar registers the tenant job; the signed queue invokes handle after QueuedAuditLogger dispatches the AuditEntry with the scoped proof.",
             "root": {
@@ -345,7 +345,7 @@
         {
             "symbol": "CoreX\\Audit\\Laravel\\HasAuditLog::bootHasAuditLog",
             "source": "packages/core/src/Audit/Laravel/HasAuditLog.php",
-            "source_sha256": "6eacde039bb704a7b2ac7ef23fb6376a4ae9252a57e15136d422cb97f32f4c03",
+            "source_sha256": "eabb76b248929d7051ed6f208db39f9edd14b2900f0f2a2ef64cb75aef60ede7",
             "kind": "external-spi",
             "reason": "Eloquent boots this trait on consumer models and registers the audit observer before model lifecycle events are emitted.",
             "root": {
@@ -409,7 +409,7 @@
         {
             "symbol": "CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException::errorDescriptor",
             "source": "packages/core/src/Departments/Exceptions/CrossWorkspaceMoveException.php",
-            "source_sha256": "322f76cd98c788a18593c1e7b77a230f38b7d74e3592cdfe504cebda0b057a95",
+            "source_sha256": "8c856dbf64593be88ae3d3b27a8f861b86ba0389f570b80bff5bc707764fdb44",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -422,7 +422,7 @@
         {
             "symbol": "CoreX\\Departments\\Exceptions\\DepartmentCycleException::errorDescriptor",
             "source": "packages/core/src/Departments/Exceptions/DepartmentCycleException.php",
-            "source_sha256": "d1c69385e7e18ea404cf706f77231c83341868c69d5c03450bb2694faa7b8041",
+            "source_sha256": "27ead3287fb2a4d035eef90a908e355230cd4923f275a12b918125c6aa7d742a",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -698,7 +698,7 @@
         {
             "symbol": "CoreX\\Messaging\\Contracts\\Cancellable::cancel",
             "source": "packages/core/src/Messaging/Contracts/Cancellable.php",
-            "source_sha256": "b635e00a2b43b96d5c3e00720b5421136e4d1b7a609bef55abeea359bd348803",
+            "source_sha256": "534cb02e3e822948fbba40ecadbfd176919969add8a2d59f78c8f142212ae900",
             "kind": "external-spi",
             "reason": "Host pre-action event listeners cancel opted-in DomainEvents; the initiating application checks isCancelled before committing the action.",
             "root": {
@@ -711,7 +711,7 @@
         {
             "symbol": "CoreX\\Messaging\\Contracts\\Cancellable::isCancelled",
             "source": "packages/core/src/Messaging/Contracts/Cancellable.php",
-            "source_sha256": "b635e00a2b43b96d5c3e00720b5421136e4d1b7a609bef55abeea359bd348803",
+            "source_sha256": "534cb02e3e822948fbba40ecadbfd176919969add8a2d59f78c8f142212ae900",
             "kind": "external-spi",
             "reason": "Host pre-action event listeners cancel opted-in DomainEvents; the initiating application checks isCancelled before committing the action.",
             "root": {
@@ -789,7 +789,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
-            "source_sha256": "7577c96898ed0a77931dbba94b7c5d2834c4bbea0fc8bf4b17c637606657f35f",
+            "source_sha256": "fe1b573e2be1552eda3cc7ed02d4fa26ba534c348a541c80ac9ab73e0c759224",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -802,7 +802,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\RelayOutbox::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
-            "source_sha256": "b9b07fa5d9b2d0435fc673e90636c44cc2b2cf78a19f6c3290f104372b753cda",
+            "source_sha256": "520e7a3d8fbfaa34298a243e4ce46506cb1e3a1315712eef2c955cec2a89f835",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\RelayOutbox::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -815,7 +815,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\ShowDeliveryHealth::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
-            "source_sha256": "f6b92f16802c72f1b27720eeaddc2a773c272f57b078910d7c924d4bc981c628",
+            "source_sha256": "a78a2539ff1691154238d49e5dd5047462e462e6fdce48532fbc5ac303a07824",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\ShowDeliveryHealth::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -1467,7 +1467,7 @@
         {
             "symbol": "CoreX\\Settings\\Exceptions\\SettingValueTooLargeException::errorDescriptor",
             "source": "packages/core/src/Settings/Exceptions/SettingValueTooLargeException.php",
-            "source_sha256": "436f094e8fe5c5fadb753a7780b9a6b56a25d0c8fcc6d29dfb646a87bc70a23a",
+            "source_sha256": "c2a7a1a72a39e45d545dbd5ce6fa87af00801db517d9591633aec6a1b9b680e9",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -1480,7 +1480,7 @@
         {
             "symbol": "CoreX\\Settings\\Exceptions\\UnsupportedScopeException::errorDescriptor",
             "source": "packages/core/src/Settings/Exceptions/UnsupportedScopeException.php",
-            "source_sha256": "4fab3ba19aef2c3af5559d1777353a0ffaa4f60bea1ad7524f5ea6add5445b97",
+            "source_sha256": "65ef07373af0f2cf3ee73e9d535f2b3c15ffd683f6505d99cc86325a9ff551c8",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -1837,7 +1837,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Events\\AccountSuspended::name",
             "source": "packages/tenancy/src/Account/Events/AccountSuspended.php",
-            "source_sha256": "025a8f28d95e3fba986c9c0f9007397339dddc198bf6aa4bc4dcb528ec2472a2",
+            "source_sha256": "c4e634872d6359ffba0dd660c3653c83f94f92f56d09e51ecc65925fd07e3faf",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -1850,7 +1850,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Events\\ExportReady::name",
             "source": "packages/tenancy/src/Account/Events/ExportReady.php",
-            "source_sha256": "ab2372587fcdc4e3a2cbd3bc3e0500ec5f80f43c8fbf3527d7ad88e9cf6ac45f",
+            "source_sha256": "04c2fbd5efece1cc0a6f01a92ebf83c8ca2e7650537cdbbe6b05dbc31ae6b289",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -1863,7 +1863,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Events\\GraceStarted::name",
             "source": "packages/tenancy/src/Account/Events/GraceStarted.php",
-            "source_sha256": "e9644fb6c7c494f12a71f279a5964e80e55cf5bb983716d872d56b9cf853cfed",
+            "source_sha256": "7e132f9985abaac9b13b04ef1bf396f65d08d102864c088391405ddff8a9e05d",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -1876,7 +1876,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Events\\TrialStarted::name",
             "source": "packages/tenancy/src/Account/Events/TrialStarted.php",
-            "source_sha256": "5435dc4bc5867a5f63d0af89bb1d6f9769d013a458d11ce962016b364f7c009f",
+            "source_sha256": "16dbdb08158a6177584efed8b8f12f10ef1abe7173bf51105e3d885d0c3401b5",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -1914,7 +1914,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Internal\\Models\\AccountExport::account",
             "source": "packages/tenancy/src/Account/Internal/Models/AccountExport.php",
-            "source_sha256": "96e4c561e6d95192e26d348660d7ca1a5491cb3c81add9f9a196ced6db5844e4",
+            "source_sha256": "15025f8b481ea2243ca9602fecc587913addaede1009a642c12cba4527e27884",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\AccountExport::account by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -1926,7 +1926,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Internal\\Models\\AccountSchemaState::account",
             "source": "packages/tenancy/src/Account/Internal/Models/AccountSchemaState.php",
-            "source_sha256": "556961ac3ab14a4b39932511e3a3132f3893800b8caf23c3477522b7335771a2",
+            "source_sha256": "a04ce1a7e8277c89105526d97d56ba33d3a0116bf20ffba5ca0705fe884e15fe",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\AccountSchemaState::account by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -1938,7 +1938,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Account\\Internal\\Models\\AccountSchemaState::batch",
             "source": "packages/tenancy/src/Account/Internal/Models/AccountSchemaState.php",
-            "source_sha256": "556961ac3ab14a4b39932511e3a3132f3893800b8caf23c3477522b7335771a2",
+            "source_sha256": "a04ce1a7e8277c89105526d97d56ba33d3a0116bf20ffba5ca0705fe884e15fe",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Account\\Internal\\Models\\AccountSchemaState::batch by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -1950,7 +1950,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException::errorDescriptor",
             "source": "packages/tenancy/src/Authentication/Exceptions/OidcAuthenticationException.php",
-            "source_sha256": "760eb3eddbd3b67938e14124b1e62a0784282ff188221c3791563bb1e7a1745d",
+            "source_sha256": "59af4919859643ac8eebd8707f45fb5cd989fb57b296ccfbfcbba0a8d7758806",
             "kind": "external-spi",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -1963,7 +1963,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException::render",
             "source": "packages/tenancy/src/Authentication/Exceptions/OidcAuthenticationException.php",
-            "source_sha256": "760eb3eddbd3b67938e14124b1e62a0784282ff188221c3791563bb1e7a1745d",
+            "source_sha256": "59af4919859643ac8eebd8707f45fb5cd989fb57b296ccfbfcbba0a8d7758806",
             "kind": "external-spi",
             "reason": "Laravel exception rendering invokes this exception response hook when OIDC authentication fails.",
             "root": {
@@ -2067,7 +2067,7 @@
         {
             "symbol": "CoreX\\Tenancy\\DomainTrust\\Internal\\Models\\Domain::account",
             "source": "packages/tenancy/src/DomainTrust/Internal/Models/Domain.php",
-            "source_sha256": "2d06296c20db032b71df75d5b419589fad85d716c19f0bcf416514acab99b7ad",
+            "source_sha256": "1f57022dfd3d26b5880bf1c6dac3978ad9faf5650cd326b2c511cbc0a01d41a7",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\DomainTrust\\Internal\\Models\\Domain::account by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2079,7 +2079,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Identity\\Events\\UserSynced::name",
             "source": "packages/tenancy/src/Identity/Events/UserSynced.php",
-            "source_sha256": "daee16fb4a073850a0d47126eea23210fa69c05312ad1a8cd9cba58714c340d5",
+            "source_sha256": "f11235c6d8dd782d14ada3884cf9aa3c78f0cb4df7cc9e99bf4948832110c192",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -2092,20 +2092,20 @@
         {
             "symbol": "CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount::__construct",
             "source": "packages/tenancy/src/Identity/Internal/Jobs/SyncIdentityToAccount.php",
-            "source_sha256": "9b72934cf0556725e23bbf23e4e515b6f2f08168d1eb19ec67eef5ab0e057dba",
+            "source_sha256": "0b0f9d45a44dd9a31cb5b3caf18c815a69353249ab6606f49c8b53cf01b0bc2a",
             "kind": "framework",
             "reason": "Identity reconciliation dispatches this exact tenant job with the identity ID and verified work scope.",
             "root": {
                 "path": "packages/tenancy/src/Identity/Internal/DatabaseIdentitySyncer.php",
                 "anchor": "SyncIdentityToAccount::dispatch($identityId, $scope);",
-                "sha256": "059d259c3b66173adb2a889cf31c477a982f4008f545c0254024acb9cc53ff01"
+                "sha256": "62c2bdd00538c5a4809109af84edb4cd05e7c3cf7e78846c166ce8829c5e5b16"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount::handle",
             "source": "packages/tenancy/src/Identity/Internal/Jobs/SyncIdentityToAccount.php",
-            "source_sha256": "9b72934cf0556725e23bbf23e4e515b6f2f08168d1eb19ec67eef5ab0e057dba",
+            "source_sha256": "0b0f9d45a44dd9a31cb5b3caf18c815a69353249ab6606f49c8b53cf01b0bc2a",
             "kind": "framework",
             "reason": "RuntimeRegistrar registers the verified tenant job so the signed queue can invoke handle in the destination tenant frame.",
             "root": {
@@ -2118,7 +2118,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationEnded::name",
             "source": "packages/tenancy/src/Impersonation/Events/ImpersonationEnded.php",
-            "source_sha256": "f518e3b1ec2967179dd77f734c8f5c8c1ba836350cf5534e0f4650b04c44b9aa",
+            "source_sha256": "f55339870b7033881582f5ba499a521af7be0dc922187ed299f2abe82209dad1",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -2131,7 +2131,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationStarted::name",
             "source": "packages/tenancy/src/Impersonation/Events/ImpersonationStarted.php",
-            "source_sha256": "2939d2edf9f296589dd4256bdacba5ffb395800f8d35e172e4b948a37aa93f1d",
+            "source_sha256": "a461eb79c4364618c04cc1cd08da731c63878305fc5e9af2b9439b73edc972f0",
             "kind": "external-spi",
             "reason": "Host domain-event subscriptions and serialization read the stable event name through the DomainEvent contract.",
             "root": {
@@ -2170,7 +2170,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand::handle",
             "source": "packages/tenancy/src/Laravel/Commands/IdentitiesReconcileCommand.php",
-            "source_sha256": "1f6d04170cb6d865fdec60162efbb79d84a4722202d498bcabcef0b2d4697313",
+            "source_sha256": "b688ebf3159d5ccd9e3025bebbd09666a3fd7955af8800d13c6800612c067c75",
             "kind": "external-spi",
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
@@ -2195,7 +2195,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Commands\\PendingCreateCommand::handle",
             "source": "packages/tenancy/src/Laravel/Commands/PendingCreateCommand.php",
-            "source_sha256": "8bd94c0f74b99730feab3d3c5e7a11a5ca871126ea5aec5cfd4c8f6399e457e2",
+            "source_sha256": "213cdb44352c0078a063ce0f4b076142902354ae6cdc35209eaba52b3f453649",
             "kind": "framework",
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
@@ -2207,7 +2207,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand::handle",
             "source": "packages/tenancy/src/Laravel/Commands/TenantsMigrateCommand.php",
-            "source_sha256": "10f6044aac46f38cc95b2bf9d5c2c0c80b69812780927670bfad6d062900ac3d",
+            "source_sha256": "dc90a1d002e7ea3e77052146b85344c7f9ca9b63722a03d10d18a8c46a11b31e",
             "kind": "external-spi",
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
@@ -2311,7 +2311,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites::handle",
             "source": "packages/tenancy/src/Laravel/Http/Middleware/DenyImpersonatedWrites.php",
-            "source_sha256": "ba33d5f42a3d229c635edee7f6a8ae817e383b39f9a08a4d89119e5387b0786b",
+            "source_sha256": "6fd57cef67c1b6220e0ba4d61c174f4116cd10d5d4e90bdd81d15bc5ddba0a5c",
             "kind": "external-spi",
             "reason": "The host adds this middleware to its route/session stack; Laravel Pipeline invokes handle() around the next request handler.",
             "root": {
@@ -2324,7 +2324,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime::handle",
             "source": "packages/tenancy/src/Laravel/Http/Middleware/EnforceSessionLifetime.php",
-            "source_sha256": "f8e484c4738f62fbcedcb5b48965bae3dd29613d3aba652da8e62250d0527cc6",
+            "source_sha256": "6edf473b534f5a12a0c59492fe95660bea45e3f56789be096a07feed9745668c",
             "kind": "external-spi",
             "reason": "The host adds this middleware to its route/session stack; Laravel Pipeline invokes handle() around the next request handler.",
             "root": {
@@ -2337,7 +2337,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard::handle",
             "source": "packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php",
-            "source_sha256": "cb740bedd2c640c4f35ca7aaa195168abe7d1a30b4a409564f1c070ffcedc7db",
+            "source_sha256": "c9944cca677c30a751824121227f8fed3f60c99b4ac662d33421e6b3405bbef8",
             "kind": "external-spi",
             "reason": "The host adds this middleware to its route/session stack; Laravel Pipeline invokes handle() around the next request handler.",
             "root": {
@@ -2389,7 +2389,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope::apply",
             "source": "packages/tenancy/src/Laravel/Scopes/WorkspaceScope.php",
-            "source_sha256": "f67fd2f068f81a297683a249a560f2c880c925fa67be06bcaedb05618029b4d7",
+            "source_sha256": "665a9eab557214e86a8e8bfab6ab1bc349cd3dd8beb4977ac51c91121e74daba",
             "kind": "external-spi",
             "reason": "Consumer Eloquent models install the exported workspace scope; Eloquent invokes apply when building scoped queries.",
             "root": {
@@ -2610,7 +2610,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException::errorDescriptor",
             "source": "packages/tenancy/src/Workspace/Exceptions/InvitationNotAcceptableException.php",
-            "source_sha256": "0c22d3be58c0f58760c2adc888a1ebc943168efef76ba890d12c48940a4d6355",
+            "source_sha256": "2a1d92e6529f186a8ab6e330eb33e462ca90e37223f3d52dd29ec2130e749a0b",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -2623,7 +2623,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException::errorDescriptor",
             "source": "packages/tenancy/src/Workspace/Exceptions/NoDefaultWorkspaceException.php",
-            "source_sha256": "5183b9b23e21651add1624b5549c61e1f2f03d22d8e54e0710d74d89ceea7042",
+            "source_sha256": "308c9e4a8f804a32a2b43b1744bce488be08e32470bb0973ea78db63f7b41b4e",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -2636,7 +2636,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::accept",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
-            "source_sha256": "2364ce8a7224131115ba6391ee7549efa7bf2f1366aa7f8a79cfeb28e37c3e83",
+            "source_sha256": "cd32e828ce13265d5782767cc983a8c9d6aa844319c36931e99e5990bb525703",
             "kind": "dynamic",
             "reason": "WorkspaceResolverTest creates this exact Invitation through Eloquent's model builder and invokes accept on the returned invitation. The query builder's generic model result is the precise receiver root.",
             "root": {
@@ -2649,7 +2649,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::invitedBy",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
-            "source_sha256": "2364ce8a7224131115ba6391ee7549efa7bf2f1366aa7f8a79cfeb28e37c3e83",
+            "source_sha256": "cd32e828ce13265d5782767cc983a8c9d6aa844319c36931e99e5990bb525703",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::invitedBy by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2661,7 +2661,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::workspace",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
-            "source_sha256": "2364ce8a7224131115ba6391ee7549efa7bf2f1366aa7f8a79cfeb28e37c3e83",
+            "source_sha256": "cd32e828ce13265d5782767cc983a8c9d6aa844319c36931e99e5990bb525703",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::workspace by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2673,7 +2673,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::children",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Workspace.php",
-            "source_sha256": "6a99fcd8ab9d03788e3e7fb0ce37641251f6b01acc97c28681bfa6e09cd5570b",
+            "source_sha256": "64f0c0c59dff7b728e896fe107c10c99feb2df7423dc897ef43d3ed7cc334421",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::children by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2685,7 +2685,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::invitations",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Workspace.php",
-            "source_sha256": "6a99fcd8ab9d03788e3e7fb0ce37641251f6b01acc97c28681bfa6e09cd5570b",
+            "source_sha256": "64f0c0c59dff7b728e896fe107c10c99feb2df7423dc897ef43d3ed7cc334421",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::invitations by its property/relationship name. Its declared HasMany return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2697,7 +2697,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::parent",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Workspace.php",
-            "source_sha256": "6a99fcd8ab9d03788e3e7fb0ce37641251f6b01acc97c28681bfa6e09cd5570b",
+            "source_sha256": "64f0c0c59dff7b728e896fe107c10c99feb2df7423dc897ef43d3ed7cc334421",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Workspace::parent by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2709,7 +2709,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::user",
             "source": "packages/tenancy/src/Workspace/Internal/Models/WorkspaceMember.php",
-            "source_sha256": "fb3c48d69d64b17660e0f5ff7a76068f22140e15a6848f0313b0d3cac005a14d",
+            "source_sha256": "3a567c417191d2120ca798cea609c1d7a705e415c1e583e557a81178dcd5e541",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::user by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2721,7 +2721,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::workspace",
             "source": "packages/tenancy/src/Workspace/Internal/Models/WorkspaceMember.php",
-            "source_sha256": "fb3c48d69d64b17660e0f5ff7a76068f22140e15a6848f0313b0d3cac005a14d",
+            "source_sha256": "3a567c417191d2120ca798cea609c1d7a705e415c1e583e557a81178dcd5e541",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::workspace by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
