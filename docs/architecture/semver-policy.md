@@ -1,29 +1,20 @@
-# Совместимость PHP API/SPI
+# PHP API and SPI compatibility
 
-Публичная поверхность определяется source атрибутом типа (PLAN3.D63/D64).
-`since` — версия введения символа; опубликованный релиз подтверждается отдельно.
+A type's source attribute declares its supported surface (PLAN3.D63/D64). The `since` value identifies the version that introduced the symbol. A published release requires separate verification.
 
-| Слой | Потребитель | Пример breaking change |
+| Layer | Consumer use | Examples of breaking changes |
 |:--|:--|:--|
-| Api | Вызов, чтение, catch | Удаление типа/member, переименование параметра, сужение input, расширение output, nullability/default drift, required DTO field, удаление или смена backing value enum |
-| Spi Implement | Реализация/наследование | Новый обязательный interface/abstract member, изменение protected hook, construction contract или consumer signature |
-| Spi Call | Вызов/подписка/документированная интеграция | Изменение payload, constructor/default, declared subscription/data schema |
-| Internal | Только владелец | Внешнего BC обещания нет; foreign import запрещён |
+| Api | Calling, reading, catching exceptions | Removing a type or member, renaming a parameter, narrowing an input, widening an output, changing nullability or a default, requiring a new DTO field, removing an enum case or changing its backing value |
+| Spi Implement | Implementing or extending the type | Adding a required interface or abstract member, changing a protected hook, construction contract or consumer signature |
+| Spi Call | Calling, subscribing or integrating as documented | Changing a payload, constructor, default, declared subscription or data schema |
+| Internal | Owning package only | External imports are prohibited. The owner makes no external compatibility commitment. |
 
-Новый необязательный параметр сохраняет прежнее поведение default. Добавление callable
-метода в Api interface не создаёт обязательства внешнего implementer: внешняя реализация
-Api запрещена. Protected hooks обещаются только Spi Implement.
-Имена параметров входят в контракт named arguments. Native и вложенные PHPDoc типы,
-properties, enum values, константы и defaults входят в `php-api/1` snapshots.
+A new optional parameter must preserve existing behavior through its default. An Api interface permits callers only. Adding a callable method imposes no new implementation requirement because external implementations are prohibited. Only Spi Implement guarantees protected hooks.
 
-Автоматического BC-диффа (Roave, `composer bc-check`) сейчас нет.
-Изменения публичной поверхности проверяются `php-api/1` snapshots (`composer php-api`)
-и Golden php-surface; изменение фиксируется в CHANGELOG пакета.
-**До стабильного релиза** обязателен независимый BC-дифф против утверждённой базы,
-а затем против опубликованного тега. Сохранённые отчёты прошлых проверок его не заменяют.
-Проверка свежести snapshot не доказывает совместимость; обновление snapshot вместе
-с кодом и CHANGELOG не авторизует breaking change поддерживаемого релиза.
+Named argument calls depend on parameter names. The `php-api/1` snapshots include native and nested PHPDoc types, properties, enum values, constants and defaults.
 
-Snapshots и behavioral tests дополняют друг друга. Семантика ошибок,
-pagination, wire/schema, authorization и транзакций проверяется соответствующими
-поведенческими gates и [API policy](api-policy.md).
+This repository currently has no automated Roave compatibility diff or `composer bc-check` command. Review public surface changes using `composer php-api` and the golden PHP surface. Record each change in the package CHANGELOG.
+
+**Before a stable release**, run an independent compatibility comparison against the approved baseline. For subsequent releases, compare against the published tag. A historical report or a newly generated snapshot cannot establish compatibility by itself. Changing the snapshot and CHANGELOG alongside the code does not authorize a breaking change in a supported release.
+
+Behavioral checks cover error semantics, pagination, wire and schema contracts, authorization and transactions. See the [API policy](api-policy.md).
