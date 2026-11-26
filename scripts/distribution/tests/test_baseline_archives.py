@@ -22,7 +22,7 @@ SPEC.loader.exec_module(MODULE)
 class BaselineArchivesTest(unittest.TestCase):
     def test_latest_release_is_newer_than_older_tag(self) -> None:
         latest = MODULE.select_latest([
-            {"tag": "v0.1.0-p4.3", "asset": "old.zip"},
+            {"tag": "v0.1.0-alpha.3", "asset": "old.zip"},
             {"tag": "0.4.0-alpha.20260918", "asset": "new.zip"},
         ])
         self.assertEqual(latest["tag"], "0.4.0-alpha.20260918")

@@ -33,7 +33,7 @@ class FakeTransport:
 
 class PublicationBoundaryTest(unittest.TestCase):
     def setUp(self):
-        self.operation = Operation("axiomasoft/corex-core", "tag", "v0.1.0-p4.3", "exact-tag-object")
+        self.operation = Operation("axiomasoft/corex-core", "tag", "v0.1.0-alpha.3", "exact-tag-object")
         self.evidence = Evidence(self.operation, "sealed-source", "sealed-zip", "exact-grant")
         self.admission = Admission(frozenset({self.evidence}), frozenset({self.operation.repository}), True)
 
