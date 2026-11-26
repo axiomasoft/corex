@@ -141,7 +141,7 @@ it('deletes a retention backlog in bounded statements', function (): void {
         ->and(array_map(count(...), $deletes))->each->toBeLessThanOrEqual(4); // status, cutoff and at most two ids
 });
 
-it('rejects a batch size that is not a positive integer', function (): void {
-    expect(fn () => Artisan::call('corex:messaging:prune', ['--batch' => '0']))
+it('rejects a batch size outside the supported range', function (string $batch): void {
+    expect(fn () => Artisan::call('corex:messaging:prune', ['--batch' => $batch]))
         ->toThrow(InvalidArgumentException::class);
-});
+})->with(['0', '10001', '9999999']);

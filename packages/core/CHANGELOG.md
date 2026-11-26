@@ -3,7 +3,7 @@
 ## Unreleased — access checks and retention
 
 - Deprecate `CoreX\Departments\Laravel\DepartmentQueries::contains()` for new callers. The SPI remains available with the original parameter names and boolean result. Use `DepartmentQueries::subtreeIds($path)->where('id', $id)->exists()` for new containment checks.
-- `corex:messaging:prune` and `corex:messaging:prune-pubsub` accept `--batch` and delete in bounded batches.
+- `corex:messaging:prune` and `corex:messaging:prune-pubsub` accept `--batch` from 1 to 10000 (default 1000) to keep statements within the database parameter budget.
 
 ## CoreX 2.0 — Scope errors
 

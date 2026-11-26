@@ -20,10 +20,12 @@ final class BatchedDelete
 {
     public const int DEFAULT_BATCH = 1000;
 
+    private const int MAX_BATCH = 10_000;
+
     public static function run(Builder $query, string $key, int $batch): int
     {
-        if ($batch < 1) {
-            throw new InvalidArgumentException('Batch size must be a positive integer.');
+        if ($batch < 1 || $batch > self::MAX_BATCH) {
+            throw new InvalidArgumentException('Batch size must be between 1 and 10000.');
         }
 
         $deleted = 0;
@@ -47,8 +49,8 @@ final class BatchedDelete
             return self::DEFAULT_BATCH;
         }
 
-        if (! is_string($value) || preg_match('/^[1-9][0-9]{0,6}$/D', $value) !== 1) {
-            throw new InvalidArgumentException('--batch must be a positive integer.');
+        if (! is_string($value) || preg_match('/^[1-9][0-9]{0,4}$/D', $value) !== 1 || (int) $value > self::MAX_BATCH) {
+            throw new InvalidArgumentException('--batch must be between 1 and 10000.');
         }
 
         return (int) $value;
