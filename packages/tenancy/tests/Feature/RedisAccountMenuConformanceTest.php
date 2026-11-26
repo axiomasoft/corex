@@ -25,7 +25,7 @@ function p3RedisRepository(): Repository
         test()->markTestSkipped('Redis account menu conformance requires the optional ext-redis extension.');
     }
 
-    $port = getenv('P3_REDIS_PORT');
+    $port = getenv('COREX_TEST_REDIS_PORT');
 
     if (! is_string($port) || filter_var($port, FILTER_VALIDATE_INT) === false) {
         test()->markTestSkipped('P3 native Redis proof requires an explicitly supplied isolated Redis endpoint.');
@@ -73,7 +73,7 @@ function p3RedisKey(string $namespace, AccountsQuery $query, string $version): s
 function p3RedisClient(): Redis
 {
     $client = new Redis;
-    $client->connect('127.0.0.1', (int) getenv('P3_REDIS_PORT'));
+    $client->connect('127.0.0.1', (int) getenv('COREX_TEST_REDIS_PORT'));
     $client->select(15);
 
     return $client;

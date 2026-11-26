@@ -1,22 +1,5 @@
-# CI is a job graph, not a list:
-#
-#   changes → quality → { tests, PostgreSQL, packages, analysis, gates } → CI gate
-#
-# `changes` skips the PHP lanes when the branch differs from main only in
-# Markdown, docs/ or LICENSE. It compares with main rather than with the
-# previous push, so a cancelled run never hides a code change. Pushes to main
-# and workflow_dispatch always run everything.
-#
-# `quality` is the fast fail (audit, manifest policy, strict validate, Pint,
-# actionlint, zizmor); the PHP lanes start only after it passes. Rector and
-# PHPStan take minutes, so they run in the parallel `Static analysis` lane.
-# The supply-chain gates (anti-weakening, gitleaks, contract guard) start
-# immediately.
-#
-# `CI gate` is the one check a branch rule should require: skipped lanes count
-# as passed, failed or cancelled ones do not. Mutation testing runs on
-# workflow_dispatch with `mutation: true`.
-
+# Full CI publishes the required check. A targeted dispatch has its own check
+# and concurrency group so it can run alongside the full suite on the same ref.
 name: CI
 
 on:
@@ -24,6 +7,7 @@ on:
     branches:
       - main
       - refactor/**
+      - verify/**
       - feat/**
       - fix/**
       - hotfix/**
@@ -32,18 +16,18 @@ on:
   workflow_dispatch:
     inputs:
       jobs:
-        description: Only these job ids, comma-separated without spaces (empty runs every job), e.g. tests-pg,panels-tests
+        description: Regular lane IDs separated by commas (empty runs full CI), e.g. tests-pg,panels-tests
         type: string
         default: ''
       mutation:
-        description: Also run the mutation inventory, fragments and registry
+        description: Run mutation fragments and the mutation registry
         type: boolean
         default: false
 
 permissions: {}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.jobs && 'selected' || 'full' }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
@@ -131,8 +115,13 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: Verify history and CI gate controls
+        run: python3 -m unittest scripts.tests.test_anti_weakening scripts.tests.test_ci_verdict
       - name: Guard against gate-weakening diffs
-        run: bash scripts/anti-weakening-gate.sh
+        env:
+          # On a default-branch push origin/main already points to HEAD.
+          COMPARISON_BASE: ${{ github.event.pull_request.base.sha || (github.ref == 'refs/heads/main' && github.event.before) || '' }}
+        run: bash scripts/anti-weakening-gate.sh "$COMPARISON_BASE"
 
   secret-scan:
     name: Secret scan (gitleaks)
@@ -274,7 +263,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
       meilisearch:
         image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
         env:
@@ -283,6 +272,7 @@ jobs:
           MEILI_ENV: development
         ports:
           - 7700:7700
+        options: --health-cmd "curl -fsS http://127.0.0.1:7700/health" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -401,7 +391,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -439,7 +429,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -484,7 +474,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -524,7 +514,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
       redis:
         image: redis:8-alpine
         ports:
@@ -560,7 +550,7 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
-          P3_REDIS_PORT: 6379
+          COREX_TEST_REDIS_PORT: 6379
       - name: PHPStan (tenancy/src)
         run: composer --working-dir=packages/tenancy analyse
 
@@ -585,7 +575,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -651,7 +641,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -702,7 +692,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -776,7 +766,7 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_table_write_ownership_gate.py'
 
   coverage:
-    name: Root coverage (min 80%)
+    name: Root coverage
     needs:
       - changes
       - lint
@@ -794,7 +784,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
       meilisearch:
         image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
         env:
@@ -803,6 +793,7 @@ jobs:
           MEILI_ENV: development
         ports:
           - 7700:7700
+        options: --health-cmd "curl -fsS http://127.0.0.1:7700/health" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -962,7 +953,8 @@ jobs:
 
   mutation-inventory:
     name: Mutation inventory and parser controls
-    if: github.event_name == 'workflow_dispatch' && inputs.mutation
+    needs: [changes, lint]
+    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || inputs.mutation || contains(format(',{0},', inputs.jobs), ',mutation-inventory,'))
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -983,6 +975,7 @@ jobs:
       - name: Strict parser negative controls
         run: python3 scripts/quality/mutation.py --self-test
       - name: Materialize package-fragment shards
+        if: inputs.mutation
         id: fragments
         run: echo "matrix=$(python3 scripts/quality/mutation.py --matrix)" >> "$GITHUB_OUTPUT"
 
@@ -1014,7 +1007,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -1041,6 +1034,7 @@ jobs:
           retention-days: 7
 
   mutation-check:
+    needs: [mutation-inventory]
     name: Mutation registry (scripts/mutation-check.sh --all)
     if: github.event_name == 'workflow_dispatch' && inputs.mutation
     runs-on: ubuntu-24.04
@@ -1056,7 +1050,7 @@ jobs:
           POSTGRES_PASSWORD: corex
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
+        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -1077,7 +1071,7 @@ jobs:
           PGSQL_PASSWORD: corex
 
   ci-gate:
-    name: CI gate
+    name: ${{ inputs.jobs && 'Selected CI lanes' || 'CI gate' }}
     needs:
       - changes
       - lint
@@ -1112,18 +1106,13 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Verdict
         env:
           NEEDS: ${{ toJSON(needs) }}
-        run: |
-          python3 - <<'PY'
-          import json, os, sys
-          needs = json.loads(os.environ["NEEDS"])
-          failed = {name: job["result"] for name, job in needs.items() if job["result"] not in ("success", "skipped")}
-          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
-              summary.write("## CI gate\n\n| Job | Result |\n| --- | --- |\n")
-              summary.writelines(f"| `{name}` | {job['result']} |\n" for name, job in sorted(needs.items()))
-          for name, result in sorted(failed.items()):
-              print(f"::error::{name}: {result}")
-          sys.exit(1 if failed else 0)
-          PY
+          SELECTED: ${{ inputs.jobs }}
+          MUTATION: ${{ inputs.mutation && 'true' || 'false' }}
+        run: python3 .github/scripts/ci-verdict.py
