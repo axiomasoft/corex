@@ -1,57 +1,46 @@
-# CoreX 2.0 · Границы совместимости
+# CoreX 2.0 compatibility boundaries
 
-Статус — принято для реализации. База независимого сравнения — `1c11e0e35961409631cf68ebb28c7d2cd53ebb91`. SHA фактически установленного 1.x артефакта и digest его поставки фиксируются отдельно перед переносом.
+Accepted for implementation. The independent comparison starts at `1c11e0e35961409631cf68ebb28c7d2cd53ebb91`. Before a transfer, record the SHA of the installed 1.x artifact and the digest of its distribution separately.
 
-## Решение
+## Release decision
 
-CoreX 2.0 перевыпускает 20 пакетов на общей Composer-линии. Мосты Search Custom Fields и Tasks Workflow увеличивают состав до 22 пакетов в этапах 5 и 6. FlexCRM сохраняет собственный мажор. Публичный distribution fixture устанавливает выпущенную версию Tasks 2.x с PHP `^8.4`, Illuminate `^13.0` и `minimum-stability: stable`. CoreX устанавливает в чистой целевой базе через Packman точные версии из `scripts/schema-sets.json`; tenant-наборы Core, Media, Operations и ImportExport используют версию 3 после этапа 7. FlexCRM ведёт версию своего набора отдельно. Старые сообщения, данные и журнал читаются одноразовым инструментом переноса.
+CoreX 2.0 initially reissued 20 packages on a common Composer release line. The Search Custom Fields and Tasks Workflow bridges brought the total to 22. FlexCRM keeps its own major version. The public distribution fixture installs a released Tasks 2.x package with PHP `^8.4`, Illuminate `^13.0` and `minimum-stability: stable`. Packman installs the exact schema set versions from `scripts/schema-sets.json` into a clean target database. By the lifecycle and bulk integration milestone, the Core, Media, Operations and ImportExport tenant sets had reached generation 3. FlexCRM versions its schema set independently. A one-time transfer tool reads legacy messages, data and migration history.
 
-Следующие границы входят в CoreX 2.0. Названия строк отсылают к карте замен §11.4 и уточнениям §§7, 12–14 плана. При реализации этапа соответствующие конкретные изменения и тесты записываются в блок доказательств.
-
-| Этап | Строки плана и изменение для потребителя | Проверка |
+| Release milestone | Change for consumers | Verification |
 | --- | --- | --- |
-| 0 | §§11.1, 11.3, 15.3 · Новые Composer constraints, branch aliases и разрешение path repositories. CoreX schema sets версии 2, с прежними IDs и scopes. | Детерминированная split-сборка, standalone consumers, реестр и установщик schema sets. |
-| 1 | §§12.1–12.3, 14.1–14.2 · `DataScopeFactory` выдаёт scope v3 от текущего principal. `StoredWorkRunner` сверяет proof владельца и immutable reference. Хост хранит допуск, tickets и использованные epochs вне tenant backup. `DataScopeAuthorizer` проверяет typed use. Scheduler сохраняет scope, версию обработчика и digest запроса. | `worker-scope` проверяет A→B→A, вложенные jobs, root sweep и очистку контекста. `binding-restore` проверяет rebind, restore и ожидание активных tickets. `workspace-sweep` проверяет W1/W2, рестарт после claim и rollback на просроченном token. |
-| 2 | §§12.1–12.3, 13.5, 14.2–14.3 · Envelope v2 с подтверждённым происхождением, явная connection у Inbox/Outbox и Workflow capture. Notifications возвращает typed page и exact/unavailable count. Webhook replay имеет собственный effect key. Внешний control store хранит provider evidence. | Same-connection rollback и дедупликация на PostgreSQL, отзыв доступа к related record, потеря подтверждения у провайдера и сверка исходного effect key. |
-| 3 | Custom Fields (§§13.1–13.2, 13.5) · `FieldValues`, `FieldSchemas`, `FieldCatalogue`, `FieldFilter` и версионированный `FieldType`. Слоты JSONB по FieldId и storage revision. Три факта Fields v2. | Установленный `vendor.type`, scoped write/read/filter, backfill с конкурентной записью, смена head и восстановление CIC на PostgreSQL. |
-| 4 | Search и Search Intl (§§13.3–13.5) · Прикладной `Search::query()`, отдельные SPI projection, candidate и index, opaque cursor, SQL-указатель поколения. | Драйверы PostgreSQL и Meilisearch, отдельные ACL поля и способа использования, барьер H/H+1 и независимый install Search. |
-| 5 | Search Custom Fields (§§13.1–13.5) · Мост связывает факты и effective schema полей с Search projection. | Установочные профили с мостом и автономный Search, локализация, изменение поля и смена mapping. |
-| 6 | Tasks, Recurring Tasks, Workflow (§14.3) · Typed capture admission и scoped receipts, `TaskPlanning` и `transition()`. Completion contributor живёт в Tasks Workflow. | Три установочных состава, первый Done, повторный Done после reopen, конфликт и rollback. |
-| 7 | Access/Core, Media и Bulk (§§14.1, 14.4–14.5) · FQCN `PrincipalIdentity` и scanner tooling, Packman discovery, scoped lifecycle, `MediaAttachments`, durable `requestConversion()` и host SPI `BulkExecutor`. | Fencing и lifecycle blockers, readiness обязательных интеграций, standalone Operations и host-адаптер Import/Export. |
-| 8 | Operations и Tools (§14.4) · `HttpOperationDispatcher`, REST v2 с типизированными metadata, host-mounted MCP на общем `OperationInvoker`. Старые HTTP маршруты и произвольный version matcher удаляются. | API v2 carriers, маршруты и MCP transport, replay authorization, Equipment и FlexCRM из split archives. |
+| Package distribution | New Composer constraints, branch aliases and path repository resolution. The CoreX schema sets moved to generation 2 under their existing IDs and scopes. | Deterministic split builds, standalone consumers, schema set registry and installer. |
+| Scope and work admission | `DataScopeFactory` creates scope v3 for the current principal. `StoredWorkRunner` checks the owner's proof and immutable reference. The host stores admission, tickets and used epochs outside tenant backups. `DataScopeAuthorizer` checks typed uses. Scheduler stores scope, handler version and request digest. | `worker-scope` covers A→B→A, nested jobs, root sweeps and context cleanup. `binding-restore` covers rebinding, restoration and active ticket drainage. `workspace-sweep` covers W1/W2, restart after claim and rollback on an expired token. |
+| Messaging and notifications | Envelope v2 carries verified provenance. Inbox, Outbox and Workflow capture receive an explicit connection. Notifications returns a typed page and an exact count or an unavailability reason. Webhook replay has its own effect key. An external control store retains provider evidence. | Same-connection rollback and deduplication on PostgreSQL, revocation of related-record access, lost provider confirmation and reconciliation with the original effect key. |
+| Custom Fields | `FieldValues`, `FieldSchemas`, `FieldCatalogue`, `FieldFilter` and versioned `FieldType`. JSONB slots use field IDs and a storage revision. Fields emits three v2 facts. | An installed `vendor.type`, scoped write/read/filter, backfill during concurrent writes, schema head changes and recovery of concurrent index creation on PostgreSQL. |
+| Search and Search Intl | Application-facing `Search::query()`, separate projection, candidate and index SPIs, opaque cursors and an index generation pointer in SQL. | PostgreSQL and Meilisearch drivers, separate permissions for the field and its intended use, an H/H+1 barrier and an independent Search install. |
+| Search Custom Fields | A bridge connects field facts and the effective field schema to the Search projection. | Installation with and without the bridge, localization, field changes and mapping changes. |
+| Tasks, Recurring Tasks and Workflow | Typed capture admission and scoped receipts, `TaskPlanning` and `transition()`. Tasks Workflow supplies the task completion contributor. | Three installation profiles, first completion, completion after reopening, conflict and rollback. |
+| Access, lifecycle, Media and bulk operations | Relocated `PrincipalIdentity` and scanner types, Packman discovery, scoped lifecycle, `MediaAttachments`, durable `requestConversion()` and the host `BulkExecutor` SPI. | Fencing and lifecycle blockers, readiness of required integrations, standalone Operations and the Import/Export host adapter. |
+| Operations and Tools | `HttpOperationDispatcher`, REST v2 with typed metadata, and host-mounted MCP use the same `OperationInvoker`. The release removes the old HTTP routes and arbitrary version matcher. | API v2 declarations, routes, MCP transport, replay authorization, and Equipment and FlexCRM running from split archives. |
 
-## Потребители и внешние владельцы
+## Consumers and external owners
 
-Equipment Registry, публичный Laravel consumer, Octane, пять extension fixtures и `products/flex-crm` проверяются в репозитории. Расширения Custom Fields, Search, Transfer и Workflow используют PHP `^8.4` вместе с пакетами CoreX 2.0.
+The repository exercises Equipment Registry, the public Laravel consumer, Octane, five extension fixtures and `products/flex-crm`. Custom Fields, Search, Transfer and Workflow extensions use PHP `^8.4` with CoreX 2.0 packages.
 
-При подключении внешних расширений их владельцы сверяют API/SPI с установленным составом пакетов и проверяют собственные декларации. Packman Panels подтверждает SavedViews, хост Tenancy — physical tenant binding, Vaulter — CAS blobs и pins, AzGuard — решения авторизации.
+External extension owners check their declarations and API/SPI compatibility against the installed set of packages. Packman Panels supplies the SavedViews contract, the Tenancy host verifies physical tenant bindings, Vaulter owns content-addressed blobs and pins, and AzGuard supplies authorization decisions.
 
-## Доказательства конкретных изменений
+## Evidence for contract changes
 
-HTTP major 2 использует буквальный маршрут `/api/v2` и одну точку исполнения
-`OperationInvoker` для HTTP и MCP. Исходное состояние разработки доступно в истории Git.
-`api/v2` генерируется из установленного Packman-каталога и реестра Problem
-Definitions. Одна исходная tenant receipt связывает результат и расчёт бюджета.
-Повтор запроса проверяет текущие права и восстанавливает расчёт по тому же
-`BudgetReceipt`. За повтор отдельный резерв не создаётся. Это правило действует
-и при смене транспорта между REST и MCP, и при входе через Bulk gateway.
-`ScopeContextMismatch` и `ScopeStale` являются отдельными final-исключениями.
-Они сохраняют собственные коды и политику повторов. Обработчики восстановления,
-которым нужны обе причины отказа, перечисляют оба типа явно.
+HTTP major 2 uses the literal `/api/v2` route. HTTP and MCP share the `OperationInvoker` execution path. Git history records the original development state. The installed Packman catalog and Problem Definitions registry generate `api/v2`. The original tenant receipt ties the result to its budget settlement. A retry checks current permissions and resumes settlement with the same `BudgetReceipt`. It creates no additional reservation, including when the caller switches between REST and MCP or enters through the Bulk gateway. `ScopeContextMismatch` and `ScopeStale` are distinct final exceptions with their own codes and retry policies. Recovery handlers that cover both list the two types explicitly.
 
-Custom Fields регистрирует версии codec и определения через Tagged-провайдеры. Для concurrent DDL хост предоставляет через `AccountConnectionResolver` прямой PostgreSQL writer и управляемую схему. Worker сверяет `corex_fields_ddl_transport=direct-v1`, `corex_fields_ddl_namespace`, физический scope, исходную Laravel-декларацию, роль и фактическое подключение. Он удерживает session advisory lock на проверенном `Pdo\Pgsql` по PID и времени старта backend через выполнение CIC и запись результата под актуальным claim. При потере writer или неподтверждённом снятии блокировки worker удаляет недействительный handle из менеджера соединений. Обычные pooled connections проверяет штатное правило PHPStan Packman.
+Custom Fields registers codec and definition versions through tagged providers. For concurrent DDL, the host supplies a direct PostgreSQL writer and a managed schema via `AccountConnectionResolver`. The worker checks `corex_fields_ddl_transport=direct-v1`, `corex_fields_ddl_namespace`, physical scope, the original Laravel connection declaration, the role and the actual connection. It verifies the `Pdo\Pgsql` session by backend PID and start time, holds a session advisory lock during concurrent index creation, and records the result under the current claim. If the writer is lost or unlock cannot be confirmed, the worker removes the invalid handle from the connection manager. Packman's standard PHPStan rule checks ordinary pooled connections.
 
-Стабильные коды Custom Fields сериализуются по грамматике закреплённого Packman. Именам плана `schema-revision-mismatch`, `field-type-unavailable`, `idempotency-conflict` и `claim-lost` в публичном каталоге соответствуют `custom-fields.schema_revision_mismatch`, `custom-fields.field_type_unavailable`, `custom-fields.idempotency_conflict` и `custom-fields.claim_lost`.
+Custom Fields serializes stable errors using the grammar of the pinned Packman release. The public codes for schema revision mismatch, unavailable field type, idempotency conflict and lost claim are `custom-fields.schema_revision_mismatch`, `custom-fields.field_type_unavailable`, `custom-fields.idempotency_conflict` and `custom-fields.claim_lost`. Their descriptive names are `schema-revision-mismatch`, `field-type-unavailable`, `idempotency-conflict` and `claim-lost`, respectively.
 
-Search хранит активное поколение и верхнюю границу барьера в SQL. `corex-search.cluster` связывает поколение с backend, а `corex-search.retention_seconds` задаёт окно для возврата к сохранённому поколению. Хост Meilisearch разрешает credential по проверенному `IndexTarget` и роли запроса, записи или сверки. Search проверяет актуальный witness каждого поля, участвующего в поиске по тексту, перед выдачей результата.
+Search stores the active generation and the upper bound of its publication barrier in SQL. `corex-search.cluster` binds the generation to a backend. `corex-search.retention_seconds` sets the window for returning to a retained generation. The Meilisearch host resolves credentials from the verified `IndexTarget` and the query, write or reconciliation role. Before returning a result, Search checks a current witness for every field used in the text search.
 
-`search-custom-fields` подключается параметром `corex-search-custom-fields.enabled`. Владелец Fields передаёт стабильные ID, допустимые операции и fingerprint effective schema. Search проверяет права на предикаты до обращения к backend. Смена schema head закрывает несовместимый mapping до доставки события. Потребитель факта v2 использует транзакцию Inbox и сохраняет порядковую запись для значения или заявку на новый mapping для схемы. Search публикует текущий mapping и подтверждает заявку в одной транзакции. Для каждой поисковой линии действует одна ожидающая заявка, а receipts сохраняют исходные ревизии доставленных фактов.
+Enable `search-custom-fields` through `corex-search-custom-fields.enabled`. The Fields owner supplies stable IDs, permitted operations and the effective schema fingerprint. Search authorizes predicates before querying the backend. A schema head change closes incompatible mappings before event delivery. The v2 fact consumer uses an Inbox transaction to store an ordered record for a value change or a request for a new schema mapping. Search publishes the current mapping and acknowledges its request in one transaction. Each search lane has at most one pending request. Receipts retain the original revisions of delivered facts.
 
-Search Intl связывает stable field ID и canonical locale с детерминированным backend key. Fingerprint включает форму поля и fallback policy. Допуск к предикату проверяет исходное поле и локализованную форму. В fixture сохранённого представления Packman компилирует фильтр, сортировку и проекцию по стабильному ID после смены имени. Композиция сверяет текущую ревизию и закрывает masked field.
+Search Intl maps a stable field ID and canonical locale to a deterministic backend key. The fingerprint includes the field shape and fallback policy. Predicate admission checks both the underlying field and its localized form. In the saved-view fixture, Packman still compiles filtering, sorting and projection by stable field ID after the field is renamed. The integration checks the current revision and denies access to a masked field.
 
-Tasks удерживает блокировку строки во время первого завершения. Workflow записывает intent через ту же connection, а Tasks сохраняет квитанцию и статус задачи одной транзакцией. После reopen повторное завершение использует квитанцию по стабильному ключу и сохраняет один intent за жизнь задачи. `tasks-workflow` подключается отдельно и фиксирует версию определения. Recurring Tasks сохраняет материализацию серий со своим Packman module ID. Синхронный Workflow-переход вызывается через `transition()`.
+Tasks holds a row lock during first completion. Workflow writes its intent on the same connection. Tasks records the receipt and task status in the same transaction. Completion after reopening reuses the receipt under its stable key, leaving one intent across the task's lifetime. `tasks-workflow` installs separately and pins the definition version. Recurring Tasks persists series materialization under its own Packman module ID. Call `transition()` for a synchronous Workflow transition.
 
-При включении Tasks мост сохраняет решение внешнего `ModuleActivationGate` и проверяет trigger, definition и version через scoped `EngineAdapter::provider(DefinitionRequest)`. Неподдерживаемый pin оставляет модуль available и не создаёт Task, receipt или intent. Холодные config cache и compile проверяют декларации до разрешения tenant policy и engine. Декоратор сохраняется после сброса scoped host policy.
+On Tasks activation, the bridge preserves the external `ModuleActivationGate` decision and checks the trigger, definition and version through scoped `EngineAdapter::provider(DefinitionRequest)`. An unsupported pin leaves the module available without creating a task, receipt or intent. A cold configuration cache and a cold compile check declarations before resolving tenant policy and engine. The decorator survives a scoped host policy reset.
 
 ```bash
 python3 scripts/distribution/compare_contracts.py \
@@ -60,21 +49,21 @@ python3 scripts/distribution/compare_contracts.py \
 scripts/php84 php scripts/php-api.php --strict --check
 ```
 
-Diff содержит SHA и digest каждого прочитанного носителя, прежние и новые значения, категорию, затронутых потребителей и решение для каждого обязательного изменения. PHP route и message sources, а также config PHP проверяются по digest с приложением исходного diff. Provider/worker probes и behavioral tests подтверждают семантику затронутых веток. Проверка candidate PHP snapshot через установленный код запускается отдельно.
+The diff records the SHA and digest of each input, the original and replacement values, category, affected consumers and a decision for every required change. It checks the PHP route and message sources and PHP configuration by digest, alongside their source diffs. Provider and worker probes and behavioral tests exercise the changed paths. A separate check verifies the candidate PHP snapshot against the installed code.
 
-Lifecycle использует публичные `LifecyclePlans::plan/inspect/apply` и typed plan digest. План хранит blockers, checkpoints и cleanup receipts, охватывает физические владельцы и workspace inventory и проверяет текущие полномочия оператора. Независимый control store закрывает запись для целевых модулей до повторного сканирования. `ReferenceAdmission` удерживает допуск до завершения настоящей внешней транзакции; ссылка, появившаяся после предварительного сканирования, не обходит fence. Повторный запуск продолжает сохранённый план, включая переход Packman и подтверждённую очистку внешних ресурсов.
+Lifecycle uses public `LifecyclePlans::plan/inspect/apply` and a typed plan digest. A plan records blockers, checkpoints and cleanup receipts, covers physical owners and workspace inventory, and checks the operator's current grants. Before a second scan, an independent control store closes writes to the target modules. `ReferenceAdmission` holds admission until the actual outer transaction completes, covering references that appear after the initial scan. A retry resumes the stored plan, including the Packman transition and confirmed external resource cleanup.
 
-Media разделяет `Files`, `Attachments` и `Conversions`. Запрос конверсии возвращает durable reference; чтение готового результата проверяет текущую область и receipt. Удаление таблиц модуля сохраняет обязательства освобождения blob и квитанции внешних эффектов. Scanner tooling находится в `Foundation/Tooling` и вызывается инструментами разработки; `PrincipalIdentity` находится в `CoreX\Access\Laravel`.
+Media separates `Files`, `Attachments` and `Conversions`. A conversion request returns a durable reference. Reading a ready result checks current scope and the receipt. Purging module tables preserves the obligations to release blobs and the receipts for external effects. Development tools invoke the scanner in `Foundation/Tooling`. `PrincipalIdentity` lives in `CoreX\Access\Laravel`.
 
-Operations публикует нейтральный `BulkExecutor::step` и opaque owner reference. Его runtime не зависит от ImportExport. Host подключает optional адаптер, а владелец импорта сохраняет стабильный step token и receipt вместе с изменением строки. Экспорт удерживает согласованный snapshot и sealed manifest; текущие права и `ExportSchemaWitness` проверяются перед известным результатом и чтением private parts. Отдельный бюджетный владелец подтверждает списание после завершения бизнес-транзакции.
+Operations exposes transport-independent `BulkExecutor::step` and opaque owner references. ImportExport integrates through an optional host adapter. The import owner records a stable step token and receipt alongside the row change. Export holds a consistent snapshot and sealed manifest. It checks current permissions and `ExportSchemaWitness` before returning a known result or reading private parts. A separate budget owner confirms the charge after the business transaction completes.
 
-`changes` связывает решение с точными fingerprints отдельных изменений. `group` фиксирует количество и SHA-256 канонического JSON-массива отсортированных fingerprints всех breaking changes данной категории. Любой добавленный или изменённый fingerprint требует обновлённого решения и проверки. `plan` указывает строку плана, `tests` указывает проверку из candidate tree.
+In the machine-readable evidence below, `changes` lists individual change fingerprints. For breaking changes in one category, `group` records the count and SHA-256 of the canonical JSON array of sorted fingerprints. Any new or changed fingerprint requires an updated decision and verification. `plan` names the contract decision and `tests` points to the checks in the candidate tree.
 
 ```corex-contract-decisions
 [
   {
     "id": "composer-cohort-2",
-    "plan": "§§11.1, 11.3, 15.3 — CoreX cohort and external consumer install requirements",
+    "plan": "§ CoreX cohort and external consumer install requirements",
     "tests": [
       "scripts/distribution/tests/test_release_candidate.py",
       "scripts/distribution/tests/test_profile_proof.py"
@@ -161,7 +150,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "composer-resolution-2",
-    "plan": "§§11.1, 15.3 — branch aliases, path versions and public fixture stability",
+    "plan": "§ branch aliases, path versions and public fixture stability",
     "tests": [
       "scripts/distribution/tests/test_release_candidate.py",
       "scripts/distribution/tests/test_profile_proof.py"
@@ -230,7 +219,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "clean-schema-sets-2",
-    "plan": "§§11.1, 14.4–14.5, 16.1 — clean target schema sets; Core/Media/Operations/ImportExport tenant v3 retain lifecycle, conversion and transfer evidence; dedicated budget v2",
+    "plan": "§ clean target schema sets; Core/Media/Operations/ImportExport tenant v3 retain lifecycle, conversion and transfer evidence; dedicated budget v2",
     "tests": [
       "tests/Feature/SchemaSetsTest.php",
       "tests/Feature/SchemaSetsPgTest.php",
@@ -247,7 +236,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "trusted-work-v3",
-    "plan": "§§11.4, 12.1, 14.1 — DataScope v3, host binding admission and declared queue work",
+    "plan": "§ DataScope v3, host binding admission and declared queue work",
     "tests": [
       "packages/core/tests/Unit/DataScopeCodecTest.php",
       "packages/core/tests/Unit/WorkScopeRunnerTest.php",
@@ -289,7 +278,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "verified-field-use",
-    "plan": "§§11.4, 12.3, 14.1 — checked scope, field selection and use at owners",
+    "plan": "§ checked scope, field selection and use at owners",
     "tests": [
       "packages/custom-fields/tests/Pg/AttributeWriteAuthorizationTest.php",
       "packages/search/tests/Unit/PolicySearchHydratorTest.php",
@@ -309,7 +298,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "scoped-wakeup-admission",
-    "plan": "§§11.4, 12.1–12.2, 14.2 — scoped Scheduler inputs, canonical window and stored fresh stamps",
+    "plan": "§ scoped Scheduler inputs, canonical window and stored fresh stamps",
     "tests": [
       "packages/scheduler/tests/Feature/WakeupSchedulerTest.php",
       "packages/scheduler/tests/Pg/WakeupClaimTest.php",
@@ -348,7 +337,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "sealed-transactional-facts",
-    "plan": "§§12.1–12.3, 13.5, 14.5 — sealed Envelope v2, scoped receipt identity and owner transaction",
+    "plan": "§ sealed Envelope v2, scoped receipt identity and owner transaction",
     "tests": [
       "packages/core/tests/Unit/CloudEventCodecTest.php",
       "packages/core/tests/Pg/OutboxAppendPgTest.php",
@@ -415,7 +404,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "notification-receipt-visibility",
-    "plan": "§§12.2–12.3, 13.5, 14.2 — common visibility, typed counts and provider reconciliation",
+    "plan": "§ common visibility, typed counts and provider reconciliation",
     "tests": [
       "packages/notifications/tests/Pg/DeliveryAdmissionTest.php",
       "tests/Distribution/fixtures/scenarios/notification-visibility/probe.php",
@@ -436,7 +425,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "scoped-operation-receipts",
-    "plan": "§§12.2, 13.5 — scoped replay authorization and recovery of the isolated budget settlement",
+    "plan": "§ scoped replay authorization and recovery of the isolated budget settlement",
     "tests": [
       "packages/operations/tests/Feature/IdempotentInvocationTest.php",
       "packages/operations/tests/Feature/CostInvocationTest.php"
@@ -460,7 +449,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "workflow-capture-and-execution",
-    "plan": "§§12.2–12.3, 13.5, 14.3 — same-connection capture, scoped engine receipts and explicit owned namespaces",
+    "plan": "§ same-connection capture, scoped engine receipts and explicit owned namespaces",
     "tests": [
       "packages/workflow/tests/Feature/WorkflowBindingTest.php",
       "packages/workflow/tests/Feature/WorkflowExecutionTest.php",
@@ -490,7 +479,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "canonical-field-values-and-types",
-    "plan": "§§11.4, 13.1–13.2, 13.5 — typed FieldValues, versioned codecs and canonical JSONB",
+    "plan": "§ typed FieldValues, versioned codecs and canonical JSONB",
     "tests": [
       "packages/custom-fields/tests/Pg/AttributeWriteAuthorizationTest.php",
       "tests/Distribution/fixtures/scenarios/field-write/probe.php",
@@ -554,7 +543,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "field-schema-operations",
-    "plan": "§§13.1–13.2, 13.5 — immutable plans, scoped schema heads and PostgreSQL claim recovery",
+    "plan": "§ immutable plans, scoped schema heads and PostgreSQL claim recovery",
     "tests": [
       "tests/Distribution/fixtures/scenarios/field-write/probe.php",
       "tests/Distribution/fixtures/scenarios/ddl-claim/probe.php",
@@ -577,7 +566,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "transactional-fields-v2-facts",
-    "plan": "§§12.1–12.2, 13.2, 13.5 — same-connection, sealed Fields v2 facts",
+    "plan": "§ same-connection, sealed Fields v2 facts",
     "tests": [
       "packages/custom-fields/tests/Pg/AttributeOutboxTest.php",
       "tests/Distribution/fixtures/scenarios/field-write/probe.php"
@@ -589,7 +578,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "authorized-search-query",
-    "plan": "§§7, 11.4, 12.3, 13.3 — typed Search query, per-use policy and authenticated cursors",
+    "plan": "§ typed Search query, per-use policy and authenticated cursors",
     "tests": [
       "packages/search/tests/Unit/PolicySearchHydratorTest.php",
       "packages/search/tests/Unit/AuthorizedPostgresTest.php",
@@ -624,7 +613,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "durable-search-generations",
-    "plan": "§§12.1–12.3, 13.4–13.5 — owner journal, immutable UIDs and SQL publication barrier",
+    "plan": "§ owner journal, immutable UIDs and SQL publication barrier",
     "tests": [
       "packages/search/tests/Pg/IndexLifecyclePgTest.php",
       "tests/Distribution/fixtures/scenarios/generation/probe.php"
@@ -643,7 +632,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "typed-search-drivers-and-locale",
-    "plan": "§§7, 11.4, 13.3–13.5 — PostgreSQL and Meilisearch drivers and optional locale projection",
+    "plan": "§ PostgreSQL and Meilisearch drivers and optional locale projection",
     "tests": [
       "packages/search/tests/Pg/PostgresSearchProviderTest.php",
       "packages/search-meilisearch/tests/Feature/IndexLifecycleTest.php",
@@ -666,7 +655,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "localized-shapes-and-saved-field-identity",
-    "plan": "§§7, 11.4, 13.3 and Stage 5 — canonical locale shapes and saved-view field IDs",
+    "plan": "§ canonical locale shapes and saved-view field IDs",
     "tests": [
       "packages/search-intl/tests/Unit/OptionalBridgesTest.php",
       "fixtures/extensions/custom-search-provider/bin/field-search-compile.php",
@@ -681,7 +670,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "optional-search-custom-fields-package",
-    "plan": "§§11.1–11.3, 15.3 and Stage 5 — optional independent participant in the split cohort",
+    "plan": "§ optional independent participant in the split cohort",
     "tests": [
       "scripts/distribution/tests/test_release_candidate.py",
       "scripts/distribution/tests/test_profile_proof.py",
@@ -693,7 +682,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "tasks-completion-lifetime",
-    "plan": "§§7, 11.4, 14.3, 14.5 and Stage 6 — typed completion admission and lifetime receipt",
+    "plan": "§ typed completion admission and lifetime receipt",
     "tests": [
       "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
       "packages/tasks/tests/Pg/PlanningConcurrencyTest.php"
@@ -732,7 +721,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "recurring-tasks-without-workflow",
-    "plan": "§§11.3–11.4, 14.3 and Stage 6 — separate RecurringTasks owner and its materialization receipt",
+    "plan": "§ separate RecurringTasks owner and its materialization receipt",
     "tests": [
       "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
       "packages/recurring-tasks/tests/Pg/MaterializationPgTest.php"
@@ -754,7 +743,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "workflow-transition-port",
-    "plan": "§§11.4, 14.3, 14.5 and Stage 6 — synchronous transition, durable capture and scoped definition validation before activation",
+    "plan": "§ synchronous transition, durable capture and scoped definition validation before activation",
     "tests": [
       "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
       "packages/workflow/tests/Feature/WorkflowBindingTest.php"
@@ -769,7 +758,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "optional-tasks-workflow-package",
-    "plan": "§§11.1–11.3, 15.3 and Stage 6 — optional independent Tasks Workflow package",
+    "plan": "§ optional independent Tasks Workflow package",
     "tests": [
       "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
       "scripts/distribution/tests/test_release_candidate.py",
@@ -782,7 +771,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "foundation-discovery-and-access-identity",
-    "plan": "§§3, 14.1 — canonical Access/Laravel PrincipalIdentity and config caller; Foundation/Tooling owns development scanner, Core drops Attributes ownership and retains native Packman discovery",
+    "plan": "§ canonical Access/Laravel PrincipalIdentity and config caller; Foundation/Tooling owns development scanner, Core drops Attributes ownership and retains native Packman discovery",
     "tests": [
       "packages/access/tests/Unit/PrincipalIdentityTest.php",
       "packages/access/tests/Feature/PrincipalUserProviderTest.php",
@@ -797,7 +786,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "scoped-lifecycle-problem-codes",
-    "plan": "§14.4 — explicit lifecycle_blocked and lifecycle_plan_conflict 409 codes for current-grant, closure, inventory and stale-plan refusal",
+    "plan": "§ explicit lifecycle_blocked and lifecycle_plan_conflict 409 codes for current-grant, closure, inventory and stale-plan refusal",
     "tests": [
       "packages/core/tests/Modules/Feature/PackmanLifecyclePgTest.php",
       "tests/fixtures/public-error-contract.php",
@@ -810,7 +799,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "media-owned-domains-and-conversion-intent",
-    "plan": "§14.4 — move Files and Attachments ports to owners; replace ready-output conversion DTO with durable intent id/file/profile and inspect/read status; Vaulter keeps blob/pin ownership and retained purge receipts; native package metadata explicitly owns Files/Attachments/Conversions",
+    "plan": "§ move Files and Attachments ports to owners; replace ready-output conversion DTO with durable intent id/file/profile and inspect/read status; Vaulter keeps blob/pin ownership and retained purge receipts; native package metadata explicitly owns Files/Attachments/Conversions",
     "tests": [
       "packages/media/tests/Feature/MediaLifecycleTest.php",
       "packages/media/tests/Feature/MediaLifecycleEdgeCasesTest.php",
@@ -830,7 +819,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "neutral-bulk-and-optional-transfer-owner",
-    "plan": "§14.5 — neutral BulkExecutor/BulkOwner, typed checkpoint and opaque owner result/failure refs, ownsClaim fencing, bounded rows/time; remove built-in TransferFactory/session and Operations ImportExport dev/path edges; equipment explicitly composes Operations and UUID helper",
+    "plan": "§ neutral BulkExecutor/BulkOwner, typed checkpoint and opaque owner result/failure refs, ownsClaim fencing, bounded rows/time; remove built-in TransferFactory/session and Operations ImportExport dev/path edges; equipment explicitly composes Operations and UUID helper",
     "tests": [
       "packages/operations/tests/Feature/BulkStoreTest.php",
       "packages/operations/tests/Feature/BulkTransferTest.php",
@@ -877,7 +866,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "reference-fenced-transactional-facts",
-    "plan": "§§12.1–12.3, 14.4 — preserve the already adopted Envelope v2, logical receipt and owner transaction; enlist Inbox/Outbox producer package/subject/consumer targets through the actual outer transaction before SQL",
+    "plan": "§ preserve the already adopted Envelope v2, logical receipt and owner transaction; enlist Inbox/Outbox producer package/subject/consumer targets through the actual outer transaction before SQL",
     "tests": [
       "packages/core/tests/Pg/OutboxAppendPgTest.php",
       "packages/core/tests/Pg/OutboxRelayTest.php",
@@ -892,7 +881,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "literal-http-v2",
-    "plan": "§§1, 11.4, 14.4, 15 этап 8 — one installed HTTP major and five native declaration carriers",
+    "plan": "§ one installed HTTP major and five native declaration carriers",
     "tests": [
       "tests/Arch/ApiContractTest.php",
       "scripts/distribution/tests/test_compare_contracts.py",
@@ -1046,7 +1035,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "transport-invocation-replay",
-    "plan": "§§14.4–14.5, 15 этап 8 — typed transport admission and one scoped receipt and settlement",
+    "plan": "§ typed transport admission and one scoped receipt and settlement",
     "tests": [
       "tests/Feature/OperationContractTest.php",
       "tests/Distribution/fixtures/scenarios/bulk-transfer/probe.php",
@@ -1082,7 +1071,7 @@ Operations публикует нейтральный `BulkExecutor::step` и opa
   },
   {
     "id": "authorized-search-metadata",
-    "plan": "§§13.3, 14.4, 15 этап 8 — typed metadata and a current-policy denial",
+    "plan": "§ typed metadata and a current-policy denial",
     "tests": [
       "tests/Distribution/fixtures/scenarios/transport/equipment.php"
     ],

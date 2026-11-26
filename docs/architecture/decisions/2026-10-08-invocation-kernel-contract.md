@@ -2,92 +2,34 @@
 id: DR-2026-10-08-invocation
 date: 2026-10-08
 status: superseded
-supersedes: [D32 (только для шести алиасов ниже)]
 source: git commit fb9acbe6826be0f1786bea5da4efa5a4a605fe43
 ---
 
-# Контракт обработчика операций переезжает в ядро (`CoreX\Invocation`)
+# Moving the operation handler contracts to the kernel
 
-> Обновление 2026-11-17: владелец разрешил несовместимый редизайн до первого использования.
-> Алиасы удалены; используются только канонические контракты ядра. Описанное ниже
-> исключение для `class_alias` — историческое решение, больше не действующее.
+On October 8, 2026 the owner approved moving four operation types into the kernel and temporarily keeping six deprecated aliases. The branch review confirmed the exact aliases below. On November 17 the owner approved a breaking redesign before first use. The aliases have since been removed. Consumers use the canonical kernel names.
 
-
-**Решение владельца (2026-10-08):** «Implement the operations hybrid: move the 4 types into the kernel, keep BC via class_alias (deprecated)».
-
-Перенос и закрытый список из шести алиасов повторно приняты при
-ревью ветки (historical record in Git) по текущему
-поручению владельца принять, доработать или откатить изменения. Запись бота о
-предыдущих согласованиях сама по себе не служит полномочием.
-
-## Что меняется
-
-| Старое имя (deprecated, удаляется в 2.0) | Новое имя (ядро `axiomasoft/corex`) |
+| Historical alias | Kernel name |
 |---|---|
 | `CoreX\Operations\Definition\Contracts\OperationHandler` | `CoreX\Invocation\Contracts\OperationHandler` |
 | `CoreX\Operations\Invocation\Contracts\RequestContext` | `CoreX\Invocation\Contracts\RequestContext` |
-| `CoreX\Operations\Authorization\Contracts\Principal` | `CoreX\Context\Contracts\Principal` (см. «Единый Principal») |
+| `CoreX\Operations\Authorization\Contracts\Principal` | `CoreX\Context\Contracts\Principal` |
 | `CoreX\Access\Contracts\Principal` | `CoreX\Context\Contracts\Principal` |
 | `CoreX\Access\Enums\PrincipalType` | `CoreX\Context\Enums\PrincipalType` |
 | `CoreX\Operations\Invocation\Data\InvocationMetadata` | `CoreX\Invocation\Data\InvocationMetadata` |
 
-- Старые имена — `class_alias` (тот же тип, не подтип) в
-  `packages/operations/src/Invocation/Internal/deprecated-aliases.php` и
-  `packages/access/src/Internal/deprecated-aliases.php`, загружаются через composer `autoload.files`.
-- `flex/crm` больше не требует `axiomasoft/corex-operations` в prod (`require-dev` + `suggest`); ребро
-  `flex/crm → axiomasoft/corex-operations` запрещено в `scripts/package-graph-gate.json`.
-- `tools` и `webhooks` остаются расширениями operations (законные зависимые), новый ранг платформы не вводится.
+## Dependency and identity decisions
 
-## Единый Principal
+The aliases were registered through Composer `autoload.files` in `packages/operations/src/Invocation/Internal/deprecated-aliases.php` and `packages/access/src/Internal/deprecated-aliases.php`. FlexCRM could then move Operations to `require-dev` and `suggest`. The package graph forbids a production dependency from `flex/crm` to `axiomasoft/corex-operations`. Tools and Webhooks remain extensions of Operations.
 
-До ветки в репо было два понятия «аутентифицированный субъект»: `CoreX\Access\Contracts\Principal`
-(`principalType(): PrincipalType`, `principalId(): string`; реализует `PrincipalIdentity`, на нём
-работают AccessChecker, ScopeResolver, grant-lookup и проверка записей) и
-`CoreX\Operations\Authorization\Contracts\Principal` (`id(): string`; реализуют только хостовые
-`PrincipalResolver` и тестовые fixtures). Первая версия переноса сделала второе ядерным типом
-(`CoreX\Invocation\Contracts\Principal`), и в ядре появился дубль. Исправлено так:
+Access previously defined a principal with `principalType()` and `principalId()`. Operations had a separate principal with `id()`. An intermediate implementation moved the latter to `CoreX\Invocation\Contracts\Principal`, duplicating the kernel identity. The accepted design puts `Principal` and `PrincipalType` in Context, alongside tenant and impersonation identity. `RequestContext::principal()` returns the canonical principal. The unpublished intermediate interface was removed.
 
-- В ядре одно понятие: `CoreX\Context\Contracts\Principal` (форма access: тип + id) и
-  `CoreX\Context\Enums\PrincipalType` (`user`, `agent`, `api_key`). Модуль Context уже владеет
-  «кто и где исполняется» (TenantContext, impersonation, `IdentityPasswordRehasher`), Invocation от него
-  зависит законно (зона TenancyContracts).
-- `RequestContext::principal()` возвращает этот тип. `CoreX\Invocation\Contracts\Principal` удалён
-  (он не существовал на базе и нигде не был опубликован).
-- Имена access — deprecated alias того же типа: методы совпадают, BC полный, `PrincipalIdentity`
-  сразу годится как caller операции без адаптера.
-- Старое имя operations тоже alias ядерного типа, но метод `id()` заменён на `principalId()`
-  (плюс `principalType()`). Это единственная поломка: её нельзя избежать при слиянии двух форм,
-  и она допустима, потому что пакет не опубликован.
+Access checks, grant lookups, seeders and PostgreSQL tests use the pair of type and ID. The type distinguishes identities with equal ID values across `user`, `agent` and `api_key`. Existing Access implementations, including `PrincipalIdentity`, could be passed to operations directly. Operations callers using `id()` had to adopt `principalId()` and `principalType()`. At the time, repository callers of `id()` were test fixtures.
 
-Почему форма access, а не `id()`:
-- identity в платформе — пара (type, id): grants, morph-тип `PrincipalIdentity`, DB-ограничения
-  access. Один `id()` неоднозначен между user/agent/api_key.
-- у формы access больше реализаций и потребителей (access, seeders, pg-тесты);
-  у `id()` в репо только тестовые fixtures.
+The review considered three other designs. Extending the Access principal from a kernel interface with `id()` would retain the ambiguous ID and affect parameter variance for `AccessChecker` implementations. Passing a plain `principalId` through `RequestContext` would discard the principal type. Reusing `Audit\Enums\ActorType` would introduce `system` and `support`, which are valid audit actors but cannot hold roles.
 
-Отвергнутые варианты:
-- (1) Ядерный `Principal { id() }`, который `extends` access-интерфейс. Остаются два типа и
-  неоднозначный `id()`; параметры `AccessChecker` пришлось бы расширять, ломая LSP у реализаторов.
-- (2) `RequestContext` без principal (только `principalId(): string`). Handler теряет тип субъекта,
-  а понятие «субъект» в ядре всё равно нужно access.
-- (3) Ядро использует `Audit\Enums\ActorType` вместо `PrincipalType`. Отвергнуто: actor включает
-  `system` и `support`, которые не могут держать роли. `PrincipalType` — строгое подмножество
-  значений `ActorType` (это записано в docblock), но это разные понятия: actor аудита против
-  аутентифицированного субъекта.
+## Historical compatibility exception
 
-## Почему `class_alias`, а не `extends`
+Thirty-four handlers accepted `RequestContext` as a parameter. Making its former name a subinterface would narrow the parameter and cause PHP signature errors. The six aliases preserved runtime type identity during the transition.
 
-`RequestContext` стоит в позиции параметра `handle()`. Старое имя как подынтерфейс нового сузило бы параметр у
-34 существующих обработчиков (нарушение LSP — фатальная ошибка PHP). Только alias сохраняет и старые, и новые
-сигнатуры совместимыми.
-
-## Отступление от D32
-
-D32 запрещает `class_alias`, потому что Roave/BetterReflection и PHPStan не дают по нему полного BC-сигнала.
-Для этих типов (4 типа контракта handler'а и 2 типа principal из access) D32 сознательно отменён владельцем. Последствия:
-
-- Roave видел старые классы как «deleted», а сигнатуры — как «non-contravariant» (ложноположительно: в
-  рантайме это один тип, см. `DeprecatedInvocationAliasesTest` и `DeprecatedPrincipalAliasesTest`). Пока
-  bc-check существовал, эти строки были одобрены поимённо; 2026-10-08 владелец удалил bc-check целиком.
-- PHPStan не выдаёт предупреждение deprecation по alias; сигнал о депрекации — CHANGELOG operations/access и этот файл.
-- Новые alias вне этого списка по-прежнему запрещены D32.
+Static analysis could not fully verify the alias behavior. Roave reported deleted classes and non-contravariant signatures, while `DeprecatedInvocationAliasesTest` and `DeprecatedPrincipalAliasesTest` checked runtime compatibility. The former BC gate listed the specific exceptions until its removal on October 8. PHPStan did not issue alias deprecation warnings, so the Operations and Access changelogs documented the migration. The exception applied only to the listed names.
