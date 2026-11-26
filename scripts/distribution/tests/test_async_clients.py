@@ -1,4 +1,4 @@
-"""P17.4 external bulk and webhook clients."""
+"""External bulk and webhook clients."""
 from __future__ import annotations
 
 import importlib.util

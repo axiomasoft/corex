@@ -346,7 +346,7 @@ def prove(snapshots: Path = SNAPSHOTS) -> dict:
 
     return {
         "schema_version": "corex-async-client-receipt/1",
-        "item": "P17.4",
+        "item": json.loads(Path(__file__).with_name("legacy-receipt-items.json").read_text())["corex-async-client-receipt/1"],
         "result": "PASS",
         "snapshots": bulk_report["digests"],
         "bulk": {"import_effect": effects["import"], "cancel_effect": effects["cancel-demo"], "cancel_status": bulk_report["cancel"]["status"]},

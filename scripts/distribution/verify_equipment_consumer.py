@@ -137,7 +137,7 @@ def prove(candidate: Path | None, *, php: str | None = None, postgres: int | Non
         raise SystemExit(f"worker restart lost the equipment result: {result}")
     return {
         "schema_version": "corex-equipment-consumer-receipt/1",
-        "item": "P17.5",
+        "item": json.loads(Path(__file__).with_name("legacy-receipt-items.json").read_text())["corex-equipment-consumer-receipt/1"],
         "result": "PASS",
         **binding,
         **installed_dist,
