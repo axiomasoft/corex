@@ -63,8 +63,8 @@ snapshots until they are published; set them up first as described in
 
 ## Documentation
 
-Start at [docs/index.md](docs/index.md): installation, architecture,
-configuration, usage, errors, testing and CI, and the improvement proposals.
+The [documentation index](docs/index.md) covers installation, architecture,
+configuration, usage, errors, testing and CI.
 
 ## Development
 

@@ -12,7 +12,6 @@ control, schema, auditing, messaging, tasks, search, webhooks and more.
 | [Usage](usage.md) | The supported PHP API and the common integration calls |
 | [Errors](errors.md) | Typed error codes, problem definitions and how failures reach the wire |
 | [Testing and CI](testing-ci.md) | Running the suites locally, PostgreSQL lanes, the CI job graph |
-| [Proposals](proposals/roadmap.md) | Open improvement proposals with priorities |
 
 ## Reference
 
