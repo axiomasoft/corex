@@ -18,9 +18,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
+use PhpToken;
 use Psr\Container\ContainerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -57,7 +59,7 @@ final readonly class MethodDeclaration
 
 final class UsageScanner
 {
-    private const CONTAINERS = [
+    private const array CONTAINERS = [
         \Illuminate\Contracts\Container\Container::class,
         Container::class,
         \Illuminate\Contracts\Foundation\Application::class,
@@ -65,7 +67,7 @@ final class UsageScanner
         ContainerInterface::class,
     ];
 
-    /** @var array<string, array{node: Stmt\ClassLike, parents: list<string>, properties: array<string, list<string>>, methods: array<string, MethodDeclaration>}> */
+    /** @var array<string, array{parents: list<string>, properties: array<string, list<string>>, methods: array<string, MethodDeclaration>}> */
     private array $classes = [];
 
     /** @var array<string, MethodDeclaration> */
@@ -109,7 +111,8 @@ final class UsageScanner
     public function scan(): array
     {
         $parser = new ParserFactory()->createForNewestSupportedVersion();
-        $trees = [];
+        $parse = static fn (string $source): array => array_values(new NodeTraverser(new NameResolver)->traverse($parser->parse($source) ?? []));
+        $parsed = [];
         $jsonFiles = [];
         foreach ($this->files() as $file) {
             $source = file_get_contents($this->root.'/'.$file);
@@ -127,10 +130,8 @@ final class UsageScanner
             }
 
             try {
-                $tree = $parser->parse($source) ?? [];
-                $tree = array_values(new NodeTraverser(new NameResolver)->traverse($tree));
-                $trees[$file] = $tree;
-                $this->declarations($tree, $file, hash('sha256', $source));
+                $this->declarations($parse($source), $file, hash('sha256', $source));
+                $parsed[] = $file;
             } catch (Throwable $error) {
                 $this->errors[] = 'SOURCE-PARSE '.$file.': '.$error->getMessage();
             }
@@ -148,7 +149,12 @@ final class UsageScanner
                 $this->dispatch[$receiver] = array_values(array_unique([...$this->dispatch[$receiver], ...$this->relatives($class)]));
             }
         }
-        foreach ($trees as $file => $tree) {
+        // Re-parse instead of holding every tree from the first pass: test files
+        // are mostly top-level closures that no declaration keeps alive, and
+        // retaining all of them pushed the scan past a 1 GB memory limit.
+        foreach ($parsed as $file) {
+            $tree = $parse((string) file_get_contents($this->root.'/'.$file));
+            $this->classNames($tree, $file);
             $this->currentFile = $file;
             $variables = [];
             $this->visit($tree, $file, null, $variables);
@@ -186,6 +192,19 @@ final class UsageScanner
         }
 
         return ['methods' => $methods, 'errors' => $this->errors];
+    }
+
+    private static function className(Stmt\ClassLike $node, string $file): string
+    {
+        return $node->name !== null && isset($node->namespacedName) ? $node->namespacedName->toString() : 'Anonymous\\Source_'.substr(hash('sha256', $file), 0, 16).'_Line'.$node->getStartLine().'_Offset'.$node->getStartFilePos();
+    }
+
+    /** @param list<Node> $tree */
+    private function classNames(array $tree, string $file): void
+    {
+        foreach (new NodeFinder()->findInstanceOf($tree, Stmt\ClassLike::class) as $node) {
+            $node->setAttribute('unusedPublicClass', self::className(node: $node, file: $file));
+        }
     }
 
     /** @return list<string> */
@@ -245,7 +264,7 @@ final class UsageScanner
             }
 
             if ($node instanceof Stmt\ClassLike) {
-                $class = $node->name !== null && isset($node->namespacedName) ? $node->namespacedName->toString() : 'Anonymous\\Source_'.substr(hash('sha256', $file), 0, 16).'_Line'.$node->getStartLine().'_Offset'.$node->getStartFilePos();
+                $class = self::className(node: $node, file: $file);
                 $node->setAttribute('unusedPublicClass', $class);
                 $this->classImports[$class] = $this->imports[$file] ?? [];
                 $parents = [];
@@ -300,7 +319,7 @@ final class UsageScanner
                         }
                     }
                 }
-                $this->classes[$class] = ['node' => $node, 'parents' => $parents, 'properties' => $properties, 'methods' => $methods];
+                $this->classes[$class] = ['parents' => $parents, 'properties' => $properties, 'methods' => $methods];
             }
             $children = get_object_vars($node);
             foreach ($node->getSubNodeNames() as $field) {
@@ -738,6 +757,32 @@ final class UsageScanner
         }
     }
 
+    /** Match complete PHP tokens so formatting can change and a comment cannot stand in for a call. */
+    private static function containsPhpAnchor(string $source, string $anchor): bool
+    {
+        $tokens = static function (string $php): array {
+            $result = [];
+            foreach (PhpToken::tokenize($php) as $token) {
+                if (! $token->isIgnorable()) {
+                    $result[] = $token->text;
+                }
+            }
+
+            return $result;
+        };
+        $needle = $tokens('<?php '.$anchor);
+        $length = count($needle);
+
+        if ($length === 0) {
+            return false;
+        }
+
+        $haystack = $tokens($source);
+
+        return array_any($haystack, static fn (string $token, int $offset): bool => $token === $needle[0]
+            && array_slice($haystack, $offset, $length) === $needle);
+    }
+
     /** @return array<string, true> */
     private function ledger(): array
     {
@@ -752,8 +797,8 @@ final class UsageScanner
             }
             $ledger = json_decode($bytes, true, 512, JSON_THROW_ON_ERROR);
 
-            if (! is_array($ledger) || array_keys($ledger) !== ['schema', 'entries'] || $ledger['schema'] !== 'unused-public-entrypoints/1' || ! is_array($ledger['entries']) || ! array_is_list($ledger['entries'])) {
-                throw new RuntimeException('expected exact unused-public-entrypoints/1 schema and entries list');
+            if (! is_array($ledger) || array_keys($ledger) !== ['schema', 'entries'] || $ledger['schema'] !== 'unused-public-entrypoints/2' || ! is_array($ledger['entries']) || ! array_is_list($ledger['entries'])) {
+                throw new RuntimeException('expected exact unused-public-entrypoints/2 schema and entries list');
             }
             foreach ($ledger['entries'] as $entry) {
                 if (! is_array($entry) || array_diff(array_keys($entry), ['symbol', 'source', 'source_sha256', 'kind', 'reason', 'root', 'expires']) !== [] || count($entry) !== 7) {
@@ -781,11 +826,19 @@ final class UsageScanner
                     $valid = $valid && $expires !== false && $expires->format('Y-m-d') === $entry['expires'] && $entry['expires'] >= gmdate('Y-m-d');
                 }
 
-                if (! is_array($proof) || array_keys($proof) !== ['path', 'anchor', 'sha256'] || ! is_string($proof['path']) || ! is_string($proof['anchor']) || ! is_string($proof['sha256']) || $proof['anchor'] === '' || preg_match('~^[a-f0-9]{64}$~D', $proof['sha256']) !== 1 || str_contains($proof['path'], '..') || str_starts_with($proof['path'], '/') || str_contains($proof['path'], '*') || $proof['path'] === 'scripts/quality/public-entrypoints.json') {
+                // A repository root is pinned by its hash, so any edit asks for a
+                // new review. A vendor root is proved by its anchor alone: the
+                // lockfile already pins the dependency, and hashing whole vendor
+                // files made every framework patch release a ledger change.
+                $vendorRoot = is_array($proof) && is_string($proof['path'] ?? null) && str_starts_with($proof['path'], 'vendor/');
+
+                if (! is_array($proof) || array_keys($proof) !== ($vendorRoot ? ['path', 'anchor'] : ['path', 'anchor', 'sha256']) || ! is_string($proof['path']) || ! is_string($proof['anchor']) || (! $vendorRoot && (! is_string($proof['sha256']) || preg_match('~^[a-f0-9]{64}$~D', $proof['sha256']) !== 1)) || $proof['anchor'] === '' || str_contains($proof['path'], '..') || str_starts_with($proof['path'], '/') || str_contains($proof['path'], '*') || $proof['path'] === 'scripts/quality/public-entrypoints.json') {
                     $valid = false;
                 } else {
                     $evidence = is_file($this->root.'/'.$proof['path']) ? file_get_contents($this->root.'/'.$proof['path']) : false;
-                    $valid = $valid && $evidence !== false && hash('sha256', $evidence) === $proof['sha256'] && str_contains($evidence, $proof['anchor']);
+                    $valid = $valid && $evidence !== false && ($vendorRoot
+                        ? self::containsPhpAnchor($evidence, $proof['anchor'])
+                        : hash('sha256', $evidence) === $proof['sha256'] && str_contains($evidence, $proof['anchor']));
 
                     if (in_array($entry['kind'], ['external-api', 'external-spi'], true)) {
                         $valid = $valid && str_ends_with($proof['path'], '.md') && str_contains($proof['anchor'], $method->class);

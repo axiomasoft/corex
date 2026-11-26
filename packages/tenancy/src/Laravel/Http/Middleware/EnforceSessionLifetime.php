@@ -14,7 +14,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * AC-15: a tenant-local session must not outlive
+ * A tenant-local session must not outlive
  * `oidc.max_session_lifetime_minutes` (720 = 12h) after the `_corex_auth_at`
  * marker {@see CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController} sets on login — independent of whatever
  * `session.lifetime` the consuming app configures. A request without the

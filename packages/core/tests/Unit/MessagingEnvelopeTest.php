@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__.'/../Support/Messaging.php';
 
 use CoreX\Data\Data\RecordRef;
+use CoreX\Messaging\Data\ConsumerId;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\MessageClass;
@@ -123,3 +124,42 @@ it('round trips distinct empty objects and lists in durable JSON', function (): 
     expect($map->encode())->toBe('{"x":{}}')->and($list->encode())->toBe('{"x":[]}')
         ->and(messagingSampleEnvelope(['payload' => $map])->digest())->not->toBe(messagingSampleEnvelope(['payload' => $list])->digest());
 });
+
+it('rejects an envelope with an invalid contract version, lineage or seal', function (array $override): void {
+    messagingSampleEnvelope($override);
+})->throws(InvalidMessage::class)->with([
+    'contract version 0' => [['contractVersion' => 0]],
+    'empty correlation' => [['correlationId' => '']],
+    'empty causation' => [['causationId' => '']],
+    'short seal' => [['seal' => 'abc']],
+    'uppercase seal' => [['seal' => str_repeat('A', 64)]],
+]);
+
+it('rejects a contract with an invalid version, owner, channel, handler or name', function (array $override): void {
+    new MessageContract(...array_merge([
+        'name' => 'membership.expired',
+        'version' => 1,
+        'class' => MessageClass::IntegrationEvent,
+        'owner' => 'acme/widgets',
+        'maxPiiClass' => PiiClass::None,
+        'channel' => 'default',
+    ], $override));
+})->throws(InvalidMessage::class)->with([
+    'version 0' => [['version' => 0]],
+    'owner without vendor' => [['owner' => 'widgets']],
+    'uppercase owner' => [['owner' => 'Acme/widgets']],
+    'empty channel' => [['channel' => '']],
+    'control character in channel' => [['channel' => "de\x01fault"]],
+    'empty handler' => [['handler' => '']],
+    'overlong handler' => [['handler' => str_repeat('h', 121)]],
+    'undotted name' => [['name' => 'membership']],
+    'uppercase name' => [['name' => 'Membership.expired']],
+]);
+
+it('rejects a consumer with an invalid version or name', function (string $name, int $version): void {
+    new ConsumerId($name, $version);
+})->throws(InvalidMessage::class)->with([
+    'version 0' => ['search.indexer', 0],
+    'uppercase name' => ['Search', 1],
+    'overlong name' => ['s'.str_repeat('x', 120), 1],
+]);

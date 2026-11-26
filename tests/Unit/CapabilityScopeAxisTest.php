@@ -7,7 +7,7 @@ use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Entities\EntityDefinition;
 use Packman\Modules\Enums\Entities\Capability;
 
-// P2.9/A9 — introducing Ownable/WorkspaceScoped must not shift the existing
+// introducing Ownable/WorkspaceScoped must not shift the existing
 // 7 cases' values or ordinal position; a mistake here would silently rewrite
 // every already-compiled registry file's capability bitmask-by-position
 // assumptions (there are none today, but toArray() persists by value, not

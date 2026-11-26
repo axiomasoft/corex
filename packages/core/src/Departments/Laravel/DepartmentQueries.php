@@ -31,9 +31,9 @@ final class DepartmentQueries
             ->whereRaw('path <@ ?::ltree', [$path])->select('id');
     }
 
+    /** @deprecated Use subtreeIds($path)->where('id', $id)->exists(). */
     public static function contains(string $id, string $path): bool
     {
-        return Department::query()->toBase()
-            ->where('id', $id)->whereRaw('path <@ ?::ltree', [$path])->exists();
+        return self::subtreeIds($path)->where('id', $id)->exists();
     }
 }

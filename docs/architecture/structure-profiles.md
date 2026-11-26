@@ -1,58 +1,25 @@
-# Раскладка модулей пакетов CoreX
+# CoreX package module layout
 
-**Версия:** 2.0.0 · **Статус:** нормативный · **Уровень:** 0 (`axiomasoft/corex*`)
+**Version** 2.0.0 · **Status** normative · **Level** 0 (`axiomasoft/corex*`)
 
-Статьи [STR-002…STR-006](constitution.md#группа-str--структура) задают единую раскладку
-модулей для всех пакетов независимо от числа файлов. Решения — PLAN3.D57 и PLAN3.D58;
-термины и закрытый список модулей ядра —
-glossary (historical record in Git), N5.
-Продукт `products/flex-crm` сохраняет собственную раскладку (N8).
+Articles STR-002 through STR-006 define a common package layout regardless of the number of files. The historical glossary in Git defines the terms and the closed list of kernel modules. The product in `products/flex-crm` retains its own layout. See the [constitution](constitution.md#str-package-structure).
 
-## Корневой и feature modules
+## Root and feature modules
 
-Корень `src/` пакета — его корневой модуль. Он содержит публичные категории
-`Contracts/`, `Data/`, `Enums/`, `Events/`, `Exceptions/`; мосты `Internal/`, `Laravel/`,
-`Testing/`, `PHPStan/`, `Tooling/`; provider(ы), `<Pkg>Module.php` и каталоги feature modules.
-Каждый feature module использует те же категории и мосты непосредственно под своим корнем.
-Provider feature module живёт прямо в модуле; `<Pkg>Module.php` — только в корне пакета.
+A package's `src/` directory is its root module. It contains the public categories `Contracts/`, `Data/`, `Enums/`, `Events/` and `Exceptions/`, and the bridges `Internal/`, `Laravel/`, `Testing/`, `PHPStan/` and `Tooling/`. Providers, `<Pkg>Module.php` and feature module directories also live here. Each feature module uses the same categories and bridges directly under its own root. A feature module's provider belongs in that module. Only the package root may contain `<Pkg>Module.php`.
 
-Ядро `axiomasoft/corex` не имеет корневого модуля: в `src/` разрешены только
-`CoreServiceProvider.php` и модули [закрытого списка ядра](core-zones.md). Путь каждого PHP-файла
-соответствует его namespace относительно PSR-4 корня пакета.
+The `axiomasoft/corex` kernel has no root module. Its `src/` directory permits only `CoreServiceProvider.php` and the approved kernel modules. Every PHP file's path must match its namespace relative to the package's PSR-4 root. See the [kernel module list](core-zones.md).
 
-## Процедуры по статьям STR-002…STR-006
+## Applying STR-002 through STR-006
 
-- **STR-002 — один use case, один модуль.** Назвать use case и его корневой или feature module.
-  Разместить публичные типы в категориях этого модуля, реализацию — в его `Internal/`.
-  Принадлежность задаче проверяется ревью; структурная часть — гейтом раскладки.
-- **STR-003 — корень пакета и модули ядра.** Проверить PSR-4 путь, разрешённые категории,
-  мосты и точки композиции. У ядра сверить имя модуля с закрытым списком glossary.
-  Enforcement: `composer module-layout-gate`, R0–R3.
-- **STR-004 — каталог из одного класса.** Допустим, если каталог выражает границу,
-  которую заполнит названный item; иначе класс живёт уровнем выше в разрешённой категории
-  или мосте своего модуля. Проверяется ревью.
-- **STR-005 — Internal модуля.** Размещать `Internal/` непосредственно под модулем.
-  Из других пакетов ссылки запрещены (`package-graph-gate` R2); из других модулей того же
-  пакета — запрещены (`module-layout-gate` R5), кроме composition roots: provider(ы),
-  корневой `<Pkg>Module.php` и `Laravel/` непосредственно под модулем. Вложенные
-  `Internal/Laravel/` и `Data/Laravel/` исключения не получают. R4 запрещает вложенный Internal.
-- **STR-006 — публичные категории.** Выбрать `Contracts`, `Data`, `Enums`, `Events`
-  или `Exceptions` по роли типа и разместить категорию ровно под модулем. Слоевые
-  каталоги `Support`, `Models`, `Commands` и другие корзины из `scripts/module-layout.json`
-  запрещены на уровне модулей. Реализация может сохранять группировку корзиной внутри
-  `Internal/`. Enforcement: `composer module-layout-gate`, R1–R3.
+- **STR-002. One use case per module.** Identify the use case and its root or feature module. Place public types in that module's public categories and implementations in its `Internal/`. Reviewers check whether the code belongs to the use case. The layout gate checks its placement.
+- **STR-003. Package roots and kernel modules.** Check the PSR-4 path and the permitted categories, bridges and composition roots. Check kernel module names against the closed glossary list. `composer module-layout-gate` enforces rules R0–R3.
+- **STR-004. Single-class directories.** Reviewers may accept a single-class directory if it represents a boundary that a named work item will populate. Otherwise place the class one level higher in an allowed category or bridge.
+- **STR-005. Module internals.** Put `Internal/` directly under its module. `package-graph-gate` R2 prohibits references from other packages. `module-layout-gate` R5 prohibits references from other modules of the same package, except in composition roots. The permitted roots are providers, the package-root `<Pkg>Module.php` and `Laravel/` directly under the module. Nested `Internal/Laravel/` and `Data/Laravel/` do not qualify. R4 prohibits nested `Internal` directories.
+- **STR-006. Public categories.** Choose `Contracts`, `Data`, `Enums`, `Events` or `Exceptions` to match the type's role and place that category directly under the module. Module-level `Support`, `Models`, `Commands` and the other directories listed in `scripts/module-layout.json` are prohibited. Implementations can use these groupings inside `Internal/`. `composer module-layout-gate` enforces rules R1–R3.
 
-## Проверка и остаточный долг
+## Verification and existing exceptions
 
-`composer module-layout-gate` сканирует `packages/*/src/` и проверяет правила R0–R5.
-Конфигурация — `scripts/module-layout.json`; полный отчёт:
-`python3 scripts/module-layout-gate.py --report`.
+`composer module-layout-gate` scans `packages/*/src/` for R0–R5. Its configuration is in `scripts/module-layout.json`. For a full report, run `python3 scripts/module-layout-gate.py --report`. The baseline in `scripts/module-layout-baseline.json` records existing exceptions. The gate detects new violations and stale entries.
 
-`scripts/module-layout-baseline.json` хранит существующие исключения раскладки.
-Гейт обнаруживает новые и устаревшие записи.
-
-Dev-мосты `Tooling/`, `PHPStan/` и `Testing/` предназначены для инструментов и тестов.
-Сканер поверхности находится в `CoreX\Foundation\Tooling`. R6 запрещает ссылки
-на dev-мосты из runtime-кода. Laravel-адаптер текущего principal находится в
-`CoreX\Access\Laravel\PrincipalIdentity`. Обе границы следуют PSR-4 и не
-публикуют альтернативные имена.
+`Tooling/`, `PHPStan/` and `Testing/` provide bridges for development tools and tests. R6 prohibits references to these bridges in runtime code. The surface scanner lives in `CoreX\Foundation\Tooling`. Laravel's adapter for the current principal is `CoreX\Access\Laravel\PrincipalIdentity`. Both follow PSR-4 naming without aliases.

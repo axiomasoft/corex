@@ -35,7 +35,7 @@ final readonly class RecurringTasksOptions
         return new self(wakeupEnabled: $wakeupEnabled, wakeupHandlerKind: $handlerKind, wakeupHandlerVersion: $handlerVersion, wakeupHandler: $handler);
     }
 
-    /** Versioned durable registration of the materialization handler (D96 §C.9). */
+    /** Versioned durable registration of the materialization handler. */
     public function wakeupHandlerDefinition(): WakeupHandlerDefinition
     {
         return new WakeupHandlerDefinition(kind: $this->wakeupHandlerKind, version: $this->wakeupHandlerVersion, handler: $this->wakeupHandler);

@@ -1,4 +1,4 @@
-"""P17.1 deterministic release-candidate boundary tests."""
+"""Deterministic release-candidate boundary tests."""
 from __future__ import annotations
 
 import copy

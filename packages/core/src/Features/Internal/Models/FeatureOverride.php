@@ -20,7 +20,7 @@ use Packman\Attributes\Internal;
  * @property bool $is_enabled
  * @property array<array-key, mixed>|bool|float|int|string|null $payload
  *
- * @internal spec: B-10 §2
+ * @internal
  */
 #[Internal]
 final class FeatureOverride extends Model

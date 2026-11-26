@@ -189,7 +189,7 @@ switch ($mode) {
     case 'delivery':
     case 'duplicate':
         $id = Scenario::barrierRead('equipment-committed')['message'];
-        $result = delivery($proof, $id, $mode === 'delivery' ? 'applied' : 'duplicate');
+        $result = delivery($proof, $id);
         $proof->same(1, $database->table('sys_inbox_messages')->where('message_id', $id)->count(), 'Both deliveries observe one real Inbox claim');
         $seq = $database->table('corex_search_dirty')->where('event_id', $id)->sole();
         $proof->same(Owner::ASSET, $seq->record_id, 'The owner dirty row preserves the opaque custom PK');
@@ -306,7 +306,7 @@ switch ($mode) {
     case 'schema-delivery':
     case 'schema-duplicate':
         $state = Scenario::barrierRead('equipment-switched');
-        $received = delivery($proof, $state['message'], $mode === 'schema-delivery' ? 'applied' : 'duplicate');
+        $received = delivery($proof, $state['message']);
         $requests = $database->table('corex_search_rebuilds')->where('state', 'requested');
         $row = $requests->sole();
         $proof->same($state['head']['revision'], $row->source_revision, 'One real durable request records the current Fields schema revision');

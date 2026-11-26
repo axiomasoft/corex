@@ -7,7 +7,7 @@ namespace CoreX\Tenancy\Account;
 use CoreX\Scheduler\Contracts\WakeupScheduleHint;
 
 /**
- * Negative fixture for P9.7: a wakeup contract import outside
+ * Negative fixture for a wakeup contract import outside
  * Integration/Wakeup must fail the package-graph allowlist.
  */
 final class WakeupForeignContextProbe

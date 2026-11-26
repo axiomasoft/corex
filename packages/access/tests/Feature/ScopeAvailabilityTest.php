@@ -13,7 +13,7 @@ use Packman\Modules\Data\Entities\EntityDefinition;
 use Packman\Modules\Enums\Entities\Capability;
 use Packman\Modules\Testing\ArrayEntityRegistry;
 
-// D114 — no capability declared AND no matching physical column: nothing to
+// no capability declared AND no matching physical column: nothing to
 // narrow by, so the letter of §4 п.3 applies literally: normalize to account.
 it('normalizes own/dept/dept_tree/workspace to account when neither the capability nor the column exists', function (Scope $scope): void {
     $registry = new ArrayEntityRegistry;
@@ -32,7 +32,7 @@ it('normalizes own/dept/dept_tree/workspace to account when neither the capabili
     expect(new ScopeAvailability($registry, resolve(ConnectionResolverInterface::class))->normalize('availability.bare', $scope))->toBe(Scope::Account);
 })->with(fn (): array => [Scope::Own, Scope::Dept, Scope::DeptTree, Scope::Workspace]);
 
-// D114 — declaration drift: the column DOES exist, so the missing capability
+// declaration drift: the column DOES exist, so the missing capability
 // is a bug in the entity's own registration, not a case to silently widen.
 it('throws ScopeCapabilityMismatch when the column exists but the capability was never declared', function (): void {
     Schema::create('availability_drift_probe', function (Blueprint $table): void {

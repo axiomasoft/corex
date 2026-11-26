@@ -3,6 +3,10 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Internal\WorkAuthManager;
+use CoreX\CustomFields\Schemas\Contracts\FieldProjectionCatalogue;
+use CoreX\CustomFields\Schemas\Internal\DatabaseFieldProjectionCatalogue;
+use CoreX\Foundation\Internal\LifecycleCatalogue;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Testing\ExtensionContract;
@@ -27,7 +31,7 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  */
 $classification = [
     // Projects the installed owner roster used by lifecycle reference probes.
-    'CoreX\\Foundation\\Internal\\LifecycleCatalogue' => 'projection',
+    LifecycleCatalogue::class => 'projection',
     'CoreX\\Tenancy\\Runtime\\Internal\\TenantRuntimeManager' => 'runtime manager',
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',
     'CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry' => 'projection',
@@ -39,15 +43,15 @@ $classification = [
     'CoreX\Operations\Definition\Internal\OperationRegistry' => 'projection',
     'CoreX\\CustomFields\\Internal\\FieldMessageRegistry' => 'boot-built catalogue',
     'CoreX\\CustomFields\\Schemas\\Contracts\\FieldCatalogue' => 'data catalogue',
-    'CoreX\\CustomFields\\Schemas\\Contracts\\FieldProjectionCatalogue' => 'data catalogue',
+    FieldProjectionCatalogue::class => 'data catalogue',
     'CoreX\\CustomFields\\Schemas\\Internal\\DatabaseFieldCatalogue' => 'data catalogue',
-    'CoreX\\CustomFields\\Schemas\\Internal\\DatabaseFieldProjectionCatalogue' => 'data catalogue',
+    DatabaseFieldProjectionCatalogue::class => 'data catalogue',
     'CoreX\\CustomFields\\Schemas\\Internal\\IndexCatalogue' => 'data catalogue',
     'CoreX\\Messaging\\Contracts\\MessageContractRegistry' => 'authority',
     'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry' => 'authority',
     'CoreX\\Context\\Contracts\\TenancyManager' => 'runtime manager',
     'CoreX\Context\Internal\NullTenancyManager' => 'runtime manager',
-    'CoreX\Context\Internal\WorkAuthManager' => 'runtime manager',
+    WorkAuthManager::class => 'runtime manager',
     'CoreX\Search\Internal\SearchManager' => 'driver factory',
     'CoreX\\Scheduler\\Internal\\WakeupHandlerRegistry' => 'authority',
 ];

@@ -1,118 +1,77 @@
-# Политика сообщений
+# Messaging policy
 
-Инварианты — статьи `MSG-001` … `MSG-008` конституции. Здесь — форма и процедуры.
+This policy gives the formats and procedures for constitutional articles `MSG-001` through `MSG-008`. [Constitution](constitution.md)
 
-## Три класса сообщений
+## Message classes
 
-| Класс | Смысл | Получатель | Обработчиков | Доставка | Имя |
+| Class | Meaning | Recipient | Handlers | Delivery | Name |
 |:--|:--|:--|:--|:--|:--|
-| Команда | Намерение изменить состояние | Один владелец | Ровно один | Синхронно или через очередь; успех не подразумевается | Повелительный глагол: `EnableModule` |
-| Доменное событие | Свершившийся факт внутри одного контекста | Внутренняя подписка | Ноль или больше | Обычно в процессе, в той же единице работы | Прошедшее время: `ModuleEnabled` |
-| Интеграционное событие | Опубликованный факт и контракт совместимости | Независимые потребители за границей | Ноль или больше | Асинхронно, «не менее одного раза» | Прошедшее время плюс стабильное версионированное имя |
+| Command | Intent to change state | One owner | Exactly one | Synchronous or queued, with no implied success | Imperative verb, e.g. `EnableModule` |
+| Domain event | A fact within one context | Internal subscribers | Zero or more | Usually in-process in the same unit of work | Past tense, e.g. `ModuleEnabled` |
+| Integration event | A published fact with a compatibility contract | Independent consumers across a boundary | Zero or more | Asynchronous, at least once | Past tense with a stable, versioned name |
 
-Событие фреймворка не становится интеграционным контрактом от того, что кто-то на него
-подписался. Интеграционным событие делает явное объявление, и с этого момента его имя и
-схема связывают нас обещанием совместимости.
+A framework event needs an explicit declaration to become an integration event. Its published name and schema then carry a compatibility guarantee.
 
-## Конверт опубликованного сообщения
+## Published message envelope
 
-Wire — **CloudEvents 1.0 structured JSON**, media type `application/cloudevents+json`.
-Публичный `CloudEventCodec` кодирует внутренний профиль, внешний профиль и строго декодирует
-внутренний. Порядок ключей фиксирован; отсутствующие необязательные поля не выводятся.
+The wire format is **CloudEvents 1.0 structured JSON**, with media type `application/cloudevents+json`. The public `CloudEventCodec` encodes the internal and external profiles and strictly decodes the internal profile. Key order is fixed. Absent optional attributes are omitted.
 
-| Атрибут | Источник / формат |
+| Attribute | Source or format |
 |:--|:--|
 | `specversion` | `"1.0"` |
-| `id` | `messageId`, непустая строка ≤128 байт |
-| `source` | непустой RFC 3986 URI-reference ≤128 байт |
-| `type` | `name.vN`, объявленный контракт |
-| `subject` | каноническая JSON-строка `RecordRef` или `EntityHandle` |
-| `time` | `occurredAt`, UTC RFC 3339 с шестью знаками микросекунд |
+| `id` | `messageId`, a nonempty string of at most 128 bytes |
+| `source` | Nonempty RFC 3986 URI-reference, at most 128 bytes |
+| `type` | The declared `name.vN` |
+| `subject` | Canonical JSON string containing a `RecordRef` or `EntityHandle` |
+| `time` | `occurredAt` in UTC RFC 3339 with six fractional-second digits |
 | `datacontenttype` | `application/json` |
-| `dataschema` | необязательный `MessageContract::$dataSchema`, абсолютный URI без fragment |
-| `corexscope` | каноническая JSON-строка объекта scope с рекурсивной сортировкой ключей |
-| `corexpii` | `none`, `pseudonymous` или `personal` |
-| `corexenvelope` | целое `envelopeVersion`, сейчас 2 |
-| `corexproof` | HMAC, выданный при записи в outbox и сохранённый вместе с фактом |
-| `corexcorrelation`, `corexcausation` | correlation обязательна, causation необязательна. Обе идентичности ≤128 байт |
-| `traceparent`, `tracestate` | только эти ключи metadata; tracestate требует traceparent |
-| `data` | ограниченный объект payload: ≤8 уровней, ≤256 ключей на уровень, ≤64 KiB |
+| `dataschema` | Optional `MessageContract::$dataSchema`, an absolute URI without a fragment |
+| `corexscope` | Canonical JSON string of the scope object with keys sorted recursively |
+| `corexpii` | `none`, `pseudonymous` or `personal` |
+| `corexenvelope` | Integer `envelopeVersion`, currently 2 |
+| `corexproof` | HMAC issued when appending to the outbox and stored with the fact |
+| `corexcorrelation`, `corexcausation` | Correlation is required, causation is optional. Each identity is at most 128 bytes. |
+| `traceparent`, `tracestate` | The only supported metadata keys. Tracestate requires traceparent. |
+| `data` | Payload object limited to 8 levels, 256 keys per level and 64 KiB |
 
-Extensions — скаляры. Неизвестный атрибут, `data_base64`, неверная версия, тип без `.vN`,
-время без зоны и scope не в форме JSON-объекта отвергаются как `InvalidMessage`.
-Внешний профиль содержит ровно `specversion,id,source,type,time,datacontenttype,data`.
-`data` — объект проектора. В нём нет внутренних scope, PII, subject, correlation/causation или
-trace; `dataschema` также отсутствует, поскольку redacting projector может удалить поля,
-обязательные во внутренней схеме. Подпись считается по сохранённым байтам, без пересериализации.
+Extensions are scalar. Unknown attributes, `data_base64`, an invalid version, a type without `.vN`, a timestamp without a time zone or a scope other than a JSON object raise `InvalidMessage`. The external profile contains exactly `specversion,id,source,type,time,datacontenttype,data`. Its `data` object comes from the projector. The profile omits internal scope, PII metadata, subject, correlation, causation and traces. It also omits `dataschema` because the redacting projector can remove fields required by the internal schema. Sign the stored bytes without reserializing them.
 
-Имя `type` — стабильное публичное имя, не имя PHP-класса. Ломающее изменение payload требует
-новой версии `name.vN` и новой ссылки `dataschema`; версия схемы независима от версии конверта.
+The `type` is a stable public name independent of PHP class names. Breaking payload changes require a new `name.vN` and a new `dataschema` reference. Schema and envelope versions are independent.
 
-## Обязательные правила
+## Mandatory rules
 
-1. Идентичность факта включает account, incarnation, workspace scope, source и message ID.
-   Inbox добавляет стабильное имя потребителя. Мажор обработчика хранится для диагностики.
-   Повтор с тем же digest использует сохранённый receipt, а другой digest под тем же ключом
-   даёт конфликт.
-2. Модель Eloquent в payload не сериализуется; передаются неизменяемые версионированные
-   значения.
-3. Сообщение несёт объявленный класс персональных данных и не превышает объявленный лимит
-   размера.
-4. Интеграционное событие публикуется только после фиксации изменения, которое оно
-   описывает.
-5. Политика повторов и «мёртвых» сообщений объявляется для каждого класса сообщений, а не
-   наследуется молча от настроек очереди.
-6. Изменение схемы опубликованного сообщения проверяется тестом совместимости со старой
-   версией; wire и round-trip закреплены `packages/core/tests/Unit/CloudEventCodecTest.php`.
+1. A fact's identity includes the account, incarnation, workspace scope, source and message ID. The inbox adds the stable consumer name. It stores the handler major version for diagnostics. The same digest reuses the stored receipt. A different digest at the same key is a conflict.
+2. Payloads contain immutable, versioned values. Do not serialize Eloquent models.
+3. Declare the message's PII classification and enforce the declared size limit.
+4. Publish an integration event only after the change it describes has committed.
+5. Declare retries and dead-message handling for each message class. Queue defaults cannot substitute for this policy.
+6. Check changes to published schemas against the previous version. `packages/core/tests/Unit/CloudEventCodecTest.php` covers the wire format and round trip.
 
-## Как объявляется новый интеграционный контракт
+## Declaring an integration contract
 
-Запись в реестре объявленных контрактов — единственный способ сделать факт публикуемым (D24,
-`MSG-002`). Процедура:
+Only a registry declaration makes a fact publishable under `MSG-002`.
 
-1. Выбрать имя по правилу сегментов `[a-z][a-z0-9]*` через точку, от двух до четырёх
-   сегментов; опубликованная идентичность — одна строка `name.vN`.
-2. Определить класс: `integration-event` или `command`. Доменное событие (`domain-event`)
-   через эту процедуру объявить нельзя.
-3. Назвать владельца composer-именем пакета, который публикует контракт.
-4. Объявить максимально допустимый класс персональных данных для payload'а.
-5. Добавить запись в реестр своего пакета, переопределив привязку `MessageContractRegistry` в
-   собственном service provider.
+1. Use two to four dot-separated name segments matching `[a-z][a-z0-9]*`. The published identity is one string, `name.vN`.
+2. Choose `integration-event` or `command`. A `domain-event` cannot be declared by this procedure.
+3. Name the owner using the publishing package's Composer name.
+4. Declare the maximum PII classification allowed in the payload.
+5. Register the entry by overriding the `MessageContractRegistry` binding in the package's service provider.
 
-`type` — единственная граница совместимости: совместимое изменение сохраняет его, ломающее
-меняет. Ломающее изменение схемы payload'а — **новая** запись реестра с версией `N+1`, живущая
-рядом со старой в течение объявленного окна миграции, а не правка существующей записи.
+The `type` defines the compatibility boundary. Compatible changes keep it. A breaking payload change requires a new registry entry at version `N+1`, alongside the existing entry for the announced migration window.
 
-Ломающими считаются: удаление или переименование поля; смена типа; превращение необязательного
-поля в обязательное; смена единиц, семантики, точности или nullability; изменение перечисления
-так, что старые потребители его отвергают; переиспользование поля под другой смысл. Аддитивное
-добавление поля безопасно только если контракт потребителя его терпит.
+Removing or renaming a field, changing its type, making an optional field mandatory, changing units, meaning, precision or nullability, reusing the field for another purpose or changing an enum so older consumers reject it are breaking changes. A new field is compatible only if the consumer contract tolerates it.
 
-## Чего механизм не обещает
+## Delivery guarantees
 
-1. **Порядок доставки.** Гарантия порядка не даётся: захват строк outbox через `SKIP LOCKED`
-   повышает пропускную способность ценой того, что сообщения могут быть обработаны не в порядке
-   записи. Per-key порядок требует отдельной машинерии и в базовый механизм не входит (D28).
-2. **Exactly-once.** Доставка «не менее одного раза» (`at-least-once`): окно между успешной
-   публикацией и отметкой потребителя неустранимо, дубли неизбежны. Ответ — стабильный
-   идентификатор сообщения и идемпотентный потребитель, а не попытка exactly-once.
-3. **`dispatch()->afterCommit()` и outbox.** `dispatch()->afterCommit()` (и `after_commit =>
-   true` у очереди) **не является** реализацией `MSG-008`, потому что гарантирует только порядок
-   видимости — не отправлять до коммита и отбросить при откате, — а не долговременное намерение
-   опубликовать. После коммита бизнес-изменения остаётся окно: процесс умер, деплой прервал
-   работу или публикация провалилась, и локальной записи, из которой можно сверить и повторить,
-   нет (D25).
+1. **Ordering.** Claiming outbox rows with `SKIP LOCKED` increases throughput and can process messages out of insertion order. Per-key ordering requires a separate mechanism.
+2. **Duplicates.** Delivery is `at-least-once`. Failure between publication and recording consumption can produce duplicates. Consumers must be idempotent and use stable message IDs.
+3. **Durability.** `dispatch()->afterCommit()` and the queue setting `after_commit => true` delay publication until commit and discard work on rollback. They cannot satisfy `MSG-008` on their own. After a successful business commit, interruption or failed publication would leave no durable local record to reconcile and retry.
 
-## Транзакции производителя и потребителя
+## Producer and consumer transactions
 
-Производитель передаёт в `Outbox::append(connection: $connection, message: $envelope)`
-тот же объект соединения Laravel с открытой транзакцией, в которой зафиксировано изменение.
-Outbox проверяет допуск и сохраняет факт до коммита. Poller подбирает готовые строки при потере
-сигнала после коммита. Повтор публикации после потери ACK сохраняет исходный message ID.
+Pass the same Laravel connection object and open transaction used for the business change to `Outbox::append(connection: $connection, message: $envelope)`. The outbox checks admission and stores the fact before commit. A poller picks up ready rows if the post-commit signal is lost. Republishing after a lost acknowledgement preserves the original message ID.
 
-При повторной доставке потребитель подтверждает доставку, не применяя бизнес-логику снова; не
-подтверждает брокеру успех до коммита локальной транзакции; не переиздаёт побочные эффекты из-за
-повтора.
+A consumer must acknowledge a duplicate without reapplying business logic or repeating side effects. Acknowledge the broker only after the local transaction commits.
 
 ```php
 $this->connection->transaction(function () use ($envelope): void {
@@ -121,108 +80,39 @@ $this->connection->transaction(function () use ($envelope): void {
         consumer: new ConsumerId(name: 'search.projection', version: 1),
         message: $envelope,
     )) {
-        return; // дубликат: доставка подтверждается, бизнес-эффект не повторяется
+        return; // The original transaction already applied this delivery.
     }
 
     $this->apply($envelope);
 });
 ```
 
-Внешний broker adapter передаёт `ConsumerId`, закрытый reference доставки и обработчик
-в `BrokerReceiver::consume()`. Receiver читает оригинальные байты через
-`BrokerDeliverySource`, проверяет происхождение и передаёт обработчику открытую транзакцию.
-Результат `Applied` или `Duplicate` возвращается после локального коммита. Неизвестный
-контракт помещается в журнал карантина брокера с SHA-256 исходных байтов и закрытым
-reference для авторизованной сверки.
+An external broker adapter passes the `ConsumerId`, an opaque delivery reference and the handler to `BrokerReceiver::consume()`. The receiver reads original bytes through `BrokerDeliverySource`, verifies provenance and supplies the handler with an open transaction. It returns `Applied` or `Duplicate` after the local commit. Unknown contracts enter the broker quarantine journal with the original bytes' SHA-256 and an opaque reference for authorized reconciliation.
 
-Владелец собственного consumer entrypoint передаёт декодированный `DataScope` v3 и `$envelope->workProof()` в
-`StoredWorkRunner::runStored()` (`RUN-002`, `RUN-003`). Proof связывает scope с владельцем
-и digest принятого факта. Runner проверяет proof и допуск во внешнем control store,
-восстанавливает tenant context и principal и проверяет физическое соединение до разрешения
-обработчика. Прямой вызов из аутентифицированного контекста использует `WorkScopeRunner::run()`.
+A custom consumer entrypoint passes the decoded `DataScope` v3 and `$envelope->workProof()` to `StoredWorkRunner::runStored()` under `RUN-002` and `RUN-003`. The proof binds the scope to the owner and digest of the admitted fact. The runner checks proof and admission in the external control store, restores tenant context and principal and verifies the physical connection before resolving the handler. A direct call from an authenticated context uses `WorkScopeRunner::run()`.
 
-Владелец внешнего эффекта резервирует попытку в control store до сетевого вызова. Срок lease
-определяет следующего обработчика, а токен claim и epoch ограничивают запись результата.
-Наблюдение провайдера сохраняется вне tenant snapshot до записи локального receipt.
-После потери ответа переход из `unknown` опирается на подтверждённое наблюдение провайдера
-или журнал авторизованной операторской сверки. Ответ «не найдено» внутри окна eventual
-consistency оставляет эффект в `unknown`. На закрывающемся route право записать
-подтверждённый локальный receipt проверяет `ProviderRecoveryAuthority`; recovery
-запускает зарегистрированный projector владельца под исходным fence.
-Control store сохраняет первую ссылку вместе с полным журналом наблюдений. Workflow
-закрепляет идентификатор запуска из первого `Accepted` или `Confirmed` и переводит
-попытку в карантин при другой положительной ссылке. Драйвер может объявить отдельные
-идентификаторы приёма и подтверждения. Последующие подтверждения сохраняются в журнале.
-Решение об изоляции требует полномочий оператора. Reopen проверяет unresolved tickets
-под блокировкой route перед сменой fence.
+The owner of an external effect reserves the attempt in the control store before calling the network. Lease expiry determines when another worker can claim it. The claim token and epoch fence result writes. Store the provider observation outside the tenant snapshot before writing a local receipt. Following a lost response, leaving `unknown` requires a confirmed provider observation or an authorized operator reconciliation record. A provider's “not found” within its eventual-consistency window leaves the effect `unknown`.
+
+On a closing route, `ProviderRecoveryAuthority` validates the right to write a confirmed local receipt. Recovery runs the owner's registered projector under the original fence. The control store retains the first reference and the complete observation history. Workflow pins the run ID from the first `Accepted` or `Confirmed` observation. A conflicting positive reference quarantines the attempt. A driver may declare separate acceptance and confirmation IDs. Later confirmations remain in the journal. Isolation requires operator authority. Reopening checks unresolved tickets under the route lock before changing the fence.
 
 ## Retention
 
-Outbox несёт **два** окна хранения терминальных строк: опубликованные строки — после срока
-`outbox_retention` (дефолт установки — 14 суток); мёртвые строки (`dead`) — отдельное, более
-длинное окно `dead_retention` (дефолт — 90 суток), потому что они нужны расследованию и аудиту.
+Terminal outbox rows have two retention windows. Published rows use `outbox_retention`, with an installation default of 14 days. Dead rows (`dead`) use `dead_retention`, with a default of 90 days for investigation and auditing.
 
-Inbox по умолчанию **не чистится**: `inbox_retention` по умолчанию `null`, и команда prune inbox
-не трогает. Retention отметки inbox — горизонт корректности дедупликации, а не уборка: отметку
-хранят не меньше максимального времени, в течение которого тот же `message_id` может появиться
-снова (D29). Это сознательно отличается от дефолта `sys_pubsub_messages` (30 суток): у
-pubsub-сообщений удаление теряет **недоставленное**, а у inbox-отметок — **защиту от повтора уже
-доставленного**; вторая потеря обнаруживается позже и тише. Включить чистку inbox можно только
-осознанно — с записью в политике конкретной установки, а не правкой конфигурации в одиночку.
+`inbox_retention` defaults to `null`, so the prune command leaves the inbox intact. Retain an inbox marker for at least as long as its `message_id` can reappear. The `sys_pubsub_messages` default is 30 days. Deleting a pub/sub message can lose an undelivered message. Deleting an inbox marker can allow an already-delivered effect to run a second time. Enabling inbox pruning requires a recorded installation policy as well as a configuration change.
 
-## Webhook projection и внешняя доставка
+## Webhook projection and external delivery
 
-Webhook topics — immutable projection объявленных P5 contracts через explicit installed
-projectors, а не подписки на произвольный Laravel event или второй message registry.
-Projection применяет field allow-list и текущую PII policy: personal/restricted требуют
-явной sensitive ability; secret запрещён всегда. Canonical UTF-8 body ≤ 20 KiB,
-active subscriptions/account ≤ 100 и matching subscriptions/event ≤ 100.
-Переполнение сохраняется как dead с safe code, без truncation или произвольного URL.
-Шифрование хранения принадлежит deployment; crypto-shredding не обещается.
+Installed projectors produce immutable webhook topics from declared message contracts. Arbitrary Laravel events cannot become topics through subscriptions or a second registry. Each projection applies a field allowlist and current PII policy. Personal or restricted data requires an explicit sensitive ability. Secret data is prohibited. A canonical UTF-8 body is limited to 20 KiB, active subscriptions to 100 per account and matching subscriptions to 100 per event. Overflow is recorded as dead with a safe code. Do not truncate or select an arbitrary destination URL. Deployment owns encryption at rest. Cryptographic erasure is outside the delivery contract.
 
-Inbox claim и deliveries коммитятся в одной tenant transaction. Уникальный ключ
-логической области, подписки, исходного source/event ID и replay ID исключает повтор
-fan-out. Snapshot включает подписки при первой успешной материализации. Сеть вызывается
-после коммита claim. `event_id` сохраняет идентификатор факта, `webhook-id` идентифицирует
-конкретную доставку. Повтор попытки сохраняет raw body, hash, destination и оба
-идентификатора. Receiver фиксирует inbox и effect атомарно. Истечение lease лишает
-worker права записать результат. Уже отправленный запрос может завершиться у receiver.
+Commit the inbox claim and deliveries in one tenant transaction. The logical scope, subscription, original source/event ID and replay ID form the unique fan-out key. The subscription snapshot is taken at first successful materialization. Network delivery begins after the claim commits. `event_id` identifies the fact and `webhook-id` identifies the delivery. Retries preserve raw body, hash, destination and both IDs. The receiver commits its inbox and effect atomically. Lease expiry revokes the worker's authority to record the result. An in-flight request can still complete at the receiver.
 
-Standard Webhooks HMAC-SHA256 подписывает `delivery-id.timestamp.raw-body`;
-`whsec_` содержит strict base64 ровно 32 bytes. Timestamp и подпись свежие на каждой
-попытке, headers — webhook-id/webhook-timestamp/webhook-signature. Receiver проверяет
-constant-time signature, ±300s и durable dedup. До 2 keys в overlap дают space-delimited
-signatures. Перед revoke нужна explicit readiness нового key, не произвольный 2xx;
-скомпрометированный key допускает immediate revoke с явной потерей zero-downtime.
-SecretRef хранится без resolved secret; raw payload/response/signature/secret не попадают
-в attempts, management responses или logs. Live rotation требует host authority.
+Standard Webhooks HMAC-SHA256 signs `delivery-id.timestamp.raw-body`. A `whsec_` secret must strictly base64-decode to exactly 32 bytes. Each attempt gets a fresh timestamp and signature. The headers are webhook-id, webhook-timestamp and webhook-signature. The receiver checks the signature in constant time, enforces a ±300-second window and deduplicates durably. During overlap, at most two keys produce space-separated signatures. Revocation requires explicit evidence of readiness for the new key. An arbitrary 2xx is insufficient. A compromised key may be revoked immediately with an explicit loss of zero-downtime rotation. Store the SecretRef without the resolved secret. Raw payloads, responses, signatures and secrets must stay out of attempt records, management responses and logs. Live rotation requires host authority.
 
-Production accepts HTTPS:443 и canonical DNS host без userinfo/query/fragment/IP literals.
-Каждый attempt проверяет весь A/AAAA set, bounded CNAME и deny-ranges, включая mixed sets,
-IPv4-mapped IPv6 и organization ranges. Vetted socket address pinned до connect;
-TLS hostname/SNI и peer verification сохраняются. Redirects/proxies/fallback DNS запрещены.
-Timeouts 3/10 s; response body discarded ≤ 64 KiB, headers ≤ 16 KiB. Local-only TLS tests
-отделены от production policy, которая не получает localhost exception.
+Production destinations require HTTPS on port 443 and a canonical DNS hostname, without userinfo, query, fragment or IP literals. Every attempt checks the entire A/AAAA set, bounded CNAME resolution and denied ranges, including mixed sets, IPv4-mapped IPv6 and organization-specific ranges. Pin the approved socket address before connecting. Preserve TLS hostname/SNI and peer verification. Redirects, proxies and fallback DNS are forbidden. Timeouts are 3 and 10 seconds. Discard response bodies within the 64 KiB limit and limit headers to 16 KiB. Local TLS tests grant no localhost exception in production.
 
-Lease 30 s. 2xx подтверждает доставку, 410 отключает подписку. Retry с исходным
-effect key допустим после подтверждённого отсутствия эффекта. Потеря ACK оставляет
-доставку в `unknown` до авторизованной сверки. Full jitter base 5 s / cap 3600 s /
-min 1 s, Retry-After ≤ 24 h, цикл ≤ 12 attempts / 72 h. Worker восстанавливает
-проверенный scope до отправки. Remote delivery по умолчанию отключена.
+The lease is 30 seconds. A 2xx confirms delivery and a 410 disables the subscription. Retry with the original effect key only after confirming the effect did not occur. A lost acknowledgement leaves delivery `unknown` until authorized reconciliation. Use full jitter with a 5-second base, a 3600-second cap and a 1-second minimum. Retry-After is limited to 24 hours and the cycle to 12 attempts within 72 hours. The worker restores a verified scope before sending. Remote delivery defaults to disabled.
 
-Операторский replay создаёт отдельную доставку с новым effect key, ссылкой на
-исходную доставку и тем же фактом. Replay доступен для подтверждённого terminal
-исхода. Повтор успешной доставки требует явного подтверждения и причины для аудита.
-До трёх replay в горизонте 7 d. Range replay требует
-subscription, UTC window ≤ 24 h, fixed upper bound, max 100 и scoped continuation;
-idempotency возвращает прежний selection/outcome. Disabled/changed endpoint,
-revoked policy, expired body или removed topic дают отказ.
+An operator replay creates a separate delivery with a new effect key, a link to the original delivery and the same fact. Replay requires a confirmed terminal outcome. Replaying a success also requires explicit confirmation and an audit reason. Allow at most three replays in seven days. A range replay must specify the subscription, a UTC window of at most 24 hours, a fixed upper bound, at most 100 deliveries and a scoped continuation. Idempotent repetition returns the original selection and outcome. A disabled or changed endpoint, revoked policy, expired body or removed topic prevents replay.
 
-Body TTL 7 d, history/attempts 30 d; shortened PII body TTL и replay horizon уменьшаются
-вместе. Active deliveries не prune. Delivery dedup tombstone живёт весь горизонт
-повторного поступления P5 event; webhook inbox нельзя удалить раньше tombstone.
-Default indefinite P5 inbox остаётся границей корректности: старый outbox event
-не создаёт нового send после уборки body. Prune ≤ 100, tenant-scoped, Clock-based;
-expiry и отсутствие reservation никогда не разрешают refund.
-
-Владельцы схем и правила хранения перечислены в [реестре таблиц](table-ownership.md).
+Bodies live for seven days and delivery history and attempts for 30 days. Shortening the PII body TTL also shortens the replay window. Active deliveries cannot be pruned. A delivery deduplication tombstone lives for the entire period in which the source event could recur. Keep the webhook inbox at least as long as the tombstone. The default indefinite message inbox prevents an old outbox event from triggering another send after body cleanup. Pruning is tenant-scoped, uses the clock and processes at most 100 rows at a time. Neither expiry nor a missing reservation authorizes a refund. [Table ownership and retention](table-ownership.md)

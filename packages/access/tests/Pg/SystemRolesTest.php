@@ -16,7 +16,7 @@ beforeEach(function (): void {
     $this->migrateAutSchema();
 });
 
-// AC-21 — seeds exactly the 3 system roles, each is_system with an empty matrix.
+// seeds exactly the 3 system roles, each is_system with an empty matrix.
 it('seeds exactly the 3 system roles with an empty matrix', function (): void {
     (new SystemRolesSeeder)->run();
 
@@ -38,7 +38,7 @@ it('is idempotent — running the seeder twice does not duplicate roles', functi
     expect(Role::query()->count())->toBe(3);
 });
 
-// AC-21 — editing a system role outside the seeder/release path throws.
+// editing a system role outside the seeder/release path throws.
 it('throws when saving an existing system role through the normal path', function (): void {
     (new SystemRolesSeeder)->run();
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
@@ -85,7 +85,7 @@ it('throws when saving a matrix row that belongs to a system role, unless flagge
     expect($row->exists)->toBeTrue();
 });
 
-// AC-21 — allows saving/deleting the system role itself through the flagged path (release/seeder).
+// allows saving/deleting the system role itself through the flagged path (release/seeder).
 it('allows editing a system role through the flagged path', function (): void {
     (new SystemRolesSeeder)->run();
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
@@ -98,7 +98,7 @@ it('allows editing a system role through the flagged path', function (): void {
     expect($owner->refresh()->description)->toBe('Updated by a release migration');
 });
 
-// AC-21 — cloning creates an editable, non-system copy carrying cloned_from_id and the copied matrix.
+// cloning creates an editable, non-system copy carrying cloned_from_id and the copied matrix.
 it('clones a system role into an editable copy with cloned_from_id and a copied matrix', function (): void {
     (new SystemRolesSeeder)->run();
     $admin = Role::query()->where('slug', 'admin')->firstOrFail();
@@ -122,7 +122,7 @@ it('clones a system role into an editable copy with cloned_from_id and a copied 
     expect($clone->refresh()->description)->toBe('Customized');
 });
 
-// D103 — cloning 'owner' does not carry any stored wildcard; the clone starts with the same empty/copied matrix as any other clone.
+// cloning 'owner' does not carry any stored wildcard; the clone starts with the same empty/copied matrix as any other clone.
 it('does not grant owner-wildcard capability to a clone of owner', function (): void {
     (new SystemRolesSeeder)->run();
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();

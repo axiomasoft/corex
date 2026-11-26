@@ -12,15 +12,14 @@
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
+            <file>tests/ConfigReportSectionTest.php</file>
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
             <directory>tests/Authorization</directory>
         </testsuite>
 
-        <!-- PG-only DDL (jsonb/CHECK/UNIQUE NULLS NOT DISTINCT/COMMENT ON,
-             D105) — no sqlite equivalent; ->group('pg') per test, run via
-             the composer test:pg script. -->
+        <!-- composer test:pg exercises PostgreSQL DDL, including jsonb and UNIQUE NULLS NOT DISTINCT. -->
         <testsuite name="Pg">
             <directory>tests/Pg</directory>
         </testsuite>
@@ -38,7 +37,7 @@
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
 
-        <!-- pg-lane (D105): tests tagged ->group('pg') switch to this connection. -->
+        <!-- The pg group uses this connection. -->
         <env name="PGSQL_HOST" value="127.0.0.1"/>
         <env name="PGSQL_PORT" value="5434"/>
         <env name="PGSQL_DATABASE" value="corex_test"/>

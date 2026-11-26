@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redis;
  * Records every publish() call it receives — swapped into the container in
  * place of the real driver class so driver-selection tests observe behavior
  * through the public PubSub contract (PubSubManager::publish()) instead of
- * reflecting into PubSubManager's private driver() method (A32/A34).
+ * reflecting into PubSubManager's private driver() method.
  */
 final class RecordingPubSub implements PubSub
 {
@@ -34,7 +34,7 @@ final class RecordingPubSub implements PubSub
     }
 }
 
-/** Test-only WorkerRuntime double — the seam Implementation Rules requires so a negative guard test can fake "running under Octane" without installing laravel/octane (A78). */
+/** Test-only WorkerRuntime double — the seam Implementation Rules requires so a negative guard test can fake "running under Octane" without installing laravel/octane. */
 final readonly class FakeWorkerRuntime implements WorkerRuntime
 {
     public function __construct(
@@ -84,7 +84,7 @@ it('(е) publish → subscribe delivers through app(PubSub::class) on the null d
     expect($received)->toBe([['module' => 'crm']]);
 });
 
-it('AC-25(b)/(в) PubSubManager delegates publish() to the null driver selected by corex.pubsub.driver — behavioral, no reflection', function (): void {
+it('PubSubManager delegates publish() to the null driver selected by corex.pubsub.driver — behavioral, no reflection', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Null]);
     app()->forgetInstance(CoreOptions::class);
     $spy = new RecordingPubSub;
@@ -95,7 +95,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the null driver selected 
     expect($spy->published)->toBe([['channel' => 'module.enabled', 'payload' => ['module' => 'crm']]]);
 });
 
-it('AC-25(b)/(в) PubSubManager delegates publish() to the redis driver selected by corex.pubsub.driver — behavioral, no live Redis call', function (): void {
+it('PubSubManager delegates publish() to the redis driver selected by corex.pubsub.driver — behavioral, no live Redis call', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Redis]);
     app()->forgetInstance(CoreOptions::class);
     $spy = new RecordingPubSub;
@@ -106,7 +106,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the redis driver selected
     expect($spy->published)->toBe([['channel' => 'module.enabled', 'payload' => ['module' => 'crm']]]);
 });
 
-it('AC-25(b)/(в) PubSubManager delegates publish() to the database driver selected by corex.pubsub.driver — behavioral, no live DB call', function (): void {
+it('PubSubManager delegates publish() to the database driver selected by corex.pubsub.driver — behavioral, no live DB call', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Database]);
     app()->forgetInstance(CoreOptions::class);
     $spy = new RecordingPubSub;
@@ -117,7 +117,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the database driver selec
     expect($spy->published)->toBe([['channel' => 'module.enabled', 'payload' => ['module' => 'crm']]]);
 });
 
-it('(a) P1.24/A29: subscribe() refuses a faked Octane runtime without explicit opt-in (negative guard test)', function (): void {
+it('(a) subscribe() refuses a faked Octane runtime without explicit opt-in (negative guard test)', function (): void {
     Redis::shouldReceive('connection')->never();
     $pubsub = app()->make(RedisPubSub::class, ['runtime' => new FakeWorkerRuntime(octane: true, console: true)]);
 
@@ -125,14 +125,14 @@ it('(a) P1.24/A29: subscribe() refuses a faked Octane runtime without explicit o
         ->toThrow(LogicException::class, 'Octane runtime');
 });
 
-it('P1.24: subscribe() refuses a non-console, non-Octane runtime (HTTP request cycle)', function (): void {
+it('subscribe() refuses a non-console, non-Octane runtime (HTTP request cycle)', function (): void {
     $pubsub = app()->make(RedisPubSub::class, ['runtime' => new FakeWorkerRuntime(octane: false, console: false)]);
 
     expect(fn () => $pubsub->subscribe('module.enabled', function (): void {}))
         ->toThrow(LogicException::class, 'never inside an HTTP request cycle');
 });
 
-it('P1.24: SubscribeGuard allows an Octane runtime that explicitly opted in', function (): void {
+it('SubscribeGuard allows an Octane runtime that explicitly opted in', function (): void {
     expect(fn () => SubscribeGuard::assert(new FakeWorkerRuntime(octane: true, console: true), octaneWorkerOptIn: true, driverClass: RedisPubSub::class))
         ->not->toThrow(LogicException::class);
 });

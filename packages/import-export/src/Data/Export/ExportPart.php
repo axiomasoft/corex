@@ -18,9 +18,9 @@ final readonly class ExportPart
         public int $byteLength,
         public array $rowCounts,
     ) {
-        if (preg_match('/^(0|[1-9][0-9]*)$/', $number) !== 1
+        if (preg_match('/^(0|[1-9][0-9]*)$/D', $number) !== 1
             || $immutableRef === ''
-            || preg_match('/^[a-f0-9]{64}$/', $sha256) !== 1
+            || preg_match('/^[a-f0-9]{64}$/D', $sha256) !== 1
             || $byteLength < 0) {
             throw new InvalidArgumentException('Export part is invalid.');
         }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 use CoreX\Audit\Internal\AuditLog;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\AdmissionTicket;
+use CoreX\Context\Data\ProviderAttempt;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Messaging\Events\DomainEvent;
@@ -16,7 +18,7 @@ use CoreX\Settings\Enums\SettingScope;
 use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Support\SourceScanner;
 
-// P6.2 — zone arch gate (D32/D101). Matrix is copied from the design, not read at runtime.
+// zone arch gate. Matrix is copied from the design, not read at runtime.
 // Modules and package-owned adapters are classified by their current runtime paths.
 // Foundation contracts may name the explicit current-scope admission DTOs below.
 
@@ -84,14 +86,14 @@ const CORE_ZONE_COMPOSITION = [
 const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php';
 
 /**
- * Closed public edges (D116). Not an ALLOWED widening: any other symbol stays R-Z1.
+ * Closed public edges. Not an ALLOWED widening: any other symbol stays R-Z1.
  *
  * @var array<string, list<string>>
  */
 const CORE_ZONE_EXACT_IMPORTS = [
     'packages/core/src/Foundation/Contracts/ReferenceAdmission.php' => [
-        'CoreX\Context\Data\AdmissionTicket',
-        'CoreX\Context\Data\ProviderAttempt',
+        AdmissionTicket::class,
+        ProviderAttempt::class,
     ],
     'packages/core/src/Context/Internal/ImpersonationGuard.php' => [AuditLog::class],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
@@ -142,7 +144,7 @@ const CORE_ZONE_EXACT_IMPORTS = [
 ];
 
 /**
- * Exact Foundation support types (D101). Any other unclassified Support file is R-Z0.
+ * Exact Foundation support types. Any other unclassified Support file is R-Z0.
  *
  * @var list<string>
  */
@@ -185,7 +187,7 @@ const CORE_ZONE_PREFIX = [
 ];
 
 /**
- * Mixed catalogues from the normative map (design §3.2 plus files classified by P6.1).
+ * Mixed catalogues from the normative map from the source inventory.
  *
  * @var array<string, string>
  */

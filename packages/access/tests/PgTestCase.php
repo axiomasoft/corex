@@ -21,7 +21,7 @@ use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
  * PG16 lane for `aut_*` DDL (jsonb, CHECK, UNIQUE NULLS NOT DISTINCT,
- * COMMENT ON — no sqlite equivalent, D105). Schema is reset and assembled
+ * COMMENT ON — no sqlite equivalent). Schema is reset and assembled
  * per test via explicit `--path` migrate calls (same golden-template
  * composition as packages/tenancy/tests/Feature/WorkspaceResolverTest.php)
  * rather than RefreshDatabase: `--path` migrate runs ONLY the given path.
@@ -82,13 +82,13 @@ abstract class PgTestCase extends CoreAuthTestCase
         $this->migrateSchemaSets(['axiomasoft/corex-access:tenant'], 'pgsql');
     }
 
-    /** Cloud-only cross-package FK (D102) — requires the users/wsp_workspaces fixtures below to already exist. */
+    /** Cloud-only cross-package FK — requires the users/wsp_workspaces fixtures below to already exist. */
     protected function migrateCloudFks(): void
     {
         $this->migrateSchemaSets(['axiomasoft/corex-access:tenant-cloud'], 'pgsql');
     }
 
-    /** Minimal users/wsp_workspaces fixtures (D105) — real axiomasoft/corex-tenancy is not a dependency (boxed doctrine). */
+    /** Minimal users/wsp_workspaces fixtures — real axiomasoft/corex-tenancy is not a dependency (boxed doctrine). */
     protected function migrateFixtures(): void
     {
         $this->migratePath(__DIR__.'/database/migrations/pg');
@@ -96,8 +96,8 @@ abstract class PgTestCase extends CoreAuthTestCase
 
     /**
      * The REAL `sys_departments` migration from axiomasoft/corex (not a fixture) —
-     * closes the P2.20 debt of dept/dept_tree never running against a real
-     * ltree-backed table (P2.9). Requires {@see migrateFixtures()} to have
+     * closes the debt of dept/dept_tree never running against a real
+     * ltree-backed table. Requires {@see migrateFixtures()} to have
      * already created `users` (department_id's FK target column, though the
      * FK itself is cross-package and lives elsewhere) and `wsp_workspaces`
      * (sys_departments.workspace_id's loose reference).

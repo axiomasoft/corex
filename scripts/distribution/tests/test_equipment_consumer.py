@@ -1,4 +1,4 @@
-"""P17.5 equipment registry consumer scans."""
+"""Equipment registry consumer scans."""
 from __future__ import annotations
 
 import importlib.util

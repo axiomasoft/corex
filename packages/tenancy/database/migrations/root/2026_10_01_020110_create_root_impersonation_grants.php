@@ -35,8 +35,6 @@ return new class extends PackmanMigration
         });
 
         DB::statement('CREATE INDEX root_impersonation_grants_account_created_ix ON root_impersonation_grants (account_id, created_at)');
-
-        DB::statement("COMMENT ON COLUMN root_impersonation_grants.target_user_id IS 'users.id тенантской БД — cross-DB, без FK (D14/DB_SCHEMA §1)'");
     }
 
     public function down(): void

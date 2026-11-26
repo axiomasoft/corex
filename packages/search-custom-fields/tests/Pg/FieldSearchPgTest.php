@@ -114,9 +114,9 @@ final class FieldSearchPgTest extends SchemaPgTestCase
         $this->writeValue($field, $record->id, $exact);
         $caller = jsonbScope();
         CallerWorkScopeFixture::bind($this->app);
-        $policy = new class($field->id->value, $record->id) implements DataScopeAuthorizer, FieldUsePolicy
+        $policy = new readonly class($field->id->value, $record->id) implements DataScopeAuthorizer, FieldUsePolicy
         {
-            public function __construct(private readonly string $field, private readonly string $record) {}
+            public function __construct(private string $field, private string $record) {}
 
             public function plan(DataScope $scope, EntityHandle $entity, FieldUseRequest $request): FieldUsePlan
             {
@@ -153,9 +153,9 @@ final class FieldSearchPgTest extends SchemaPgTestCase
         $mapping = $projection->describe(new ProjectionContext($this->scope, $this->entity))->revision;
         self::assertSame($mapping, $projection->describe(new ProjectionContext($caller, $this->entity))->revision);
 
-        $this->app->instance(SearchSource::class, new class($record) implements SearchSource
+        $this->app->instance(SearchSource::class, new readonly class($record) implements SearchSource
         {
-            public function __construct(private readonly RecordRef $record) {}
+            public function __construct(private RecordRef $record) {}
 
             public function page(DataScope $scope, EntityHandle $entity, ?RecordRef $after, int $limit): RecordBatch
             {
@@ -169,9 +169,9 @@ final class FieldSearchPgTest extends SchemaPgTestCase
                 return new SourceRecords($rows);
             }
         });
-        $this->app->instance(ActiveGenerations::class, new class($mapping) implements ActiveGenerations
+        $this->app->instance(ActiveGenerations::class, new readonly class($mapping) implements ActiveGenerations
         {
-            public function __construct(private readonly string $mapping) {}
+            public function __construct(private string $mapping) {}
 
             public function active(DataScope $scope, EntityHandle $entity): IndexTarget
             {

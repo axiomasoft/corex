@@ -326,3 +326,95 @@ it('keeps an admitted digest effect when a later preference change disables futu
     expect(DB::table('ntf_deliveries')->where('id', $deliveryId)->value('state'))->toBe('completed')
         ->and(DB::table('ntf_digest_runs')->where('id', $digest->id)->value('state'))->toBe('sent');
 });
+
+it('pages a policy-filtered inbox in page-sized batches with an unchanged order and cursor', function (): void {
+    app()->instance(NotificationPolicy::class, new class implements NotificationPolicy
+    {
+        public function allows(NotificationContext $context, NotificationAction $action, NotificationSubject $subject): bool
+        {
+            return $action !== NotificationAction::Read || (int) $subject->related?->id % 3 !== 0;
+        }
+    });
+    app()->forgetScopedInstances();
+    $center = resolve(NotificationCenter::class);
+    $recipient = new RecipientReference(kind: 'user', id: '11111111-1111-7111-8111-111111111112');
+    foreach (range(1, 130) as $index) {
+        $center->notify(notificationContext(), new NotificationInput(
+            requestKey: "page-{$index}", eventType: 'document.ready', recipient: $recipient, templateKey: 'document-ready',
+            payload: JsonDocuments::capture(['message' => 'page']), related: new EntityReference(handle: 'document', id: (string) $index),
+        ));
+    }
+    $expected = DB::table('ntf_notifications')->orderByDesc('id')->get(['id', 'related'])
+        ->filter(static fn (object $row): bool => (int) json_decode((string) $row->related, true, flags: JSON_THROW_ON_ERROR)['id'] % 3 !== 0)
+        ->pluck('id')->values()->all();
+    $limits = [];
+    DB::listen(static function ($query) use (&$limits): void {
+        if (str_contains($query->sql, 'ntf_notifications') && preg_match('/limit (\d+)/', $query->sql, $match) === 1) {
+            $limits[] = (int) $match[1];
+        }
+    });
+
+    $seen = [];
+    $cursor = null;
+    do {
+        $page = $center->inbox(notificationContext(), new InboxQuery(before: $cursor, limit: 7));
+        array_push($seen, ...array_map(static fn ($ref): string => $ref->id, $page->items));
+        $cursor = $page->cursor;
+    } while ($cursor !== null);
+
+    // A seven-item page must not load the whole thousand-row visibility scan budget.
+    expect($seen)->toBe($expected)
+        ->and(max($limits))->toBeLessThanOrEqual(50);
+});
+
+it('decides inbox visibility and unread counts without reading notification payloads', function (): void {
+    allowNotifications();
+    $center = resolve(NotificationCenter::class);
+    $created = $center->notify(notificationContext(), notificationInput('columns', str_repeat('large payload ', 200)));
+    $selects = [];
+    DB::listen(static function ($query) use (&$selects): void {
+        if (str_starts_with($query->sql, 'select') && str_contains($query->sql, 'ntf_notifications')) {
+            $selects[] = $query->sql;
+        }
+    });
+
+    $page = $center->inbox(notificationContext(), new InboxQuery(before: null));
+    $count = $center->unreadCount(notificationContext());
+
+    expect($page->items[0]->id)->toBe($created->id)
+        ->and($page->items[0]->eventType)->toBe('document.ready')
+        ->and($page->items[0]->related?->id)->toBe('document-1')
+        ->and($count->count)->toBe(1)
+        ->and($selects)->toHaveCount(2)
+        ->and(implode("\n", $selects))->not->toContain('select *')->not->toContain('payload');
+});
+
+it('refuses to cancel when the consumer policy denies cancellation', function (): void {
+    app()->instance(NotificationPolicy::class, new class implements NotificationPolicy
+    {
+        public function allows(NotificationContext $context, NotificationAction $action, NotificationSubject $subject): bool
+        {
+            return $action !== NotificationAction::Cancel;
+        }
+    });
+    app()->forgetScopedInstances();
+    $center = resolve(NotificationCenter::class);
+    $notification = $center->notify(notificationContext(), notificationInput('cancel-denied'));
+
+    expect(fn (): mixed => $center->cancel(notificationContext(), $notification->id))->toThrow(NotificationAccessDenied::class)
+        ->and(DB::table('ntf_deliveries')->where('notification_id', $notification->id)->value('state'))->toBe('pending');
+});
+
+it('refuses inbox and digest work for a context other than the active principal', function (?string $actorId): void {
+    allowNotifications();
+    $context = new NotificationContext(tenant: notificationContext()->tenant, actorKind: 'user', actorId: $actorId);
+    $now = new DateTimeImmutable('now');
+    $window = new DigestWindow(start: $now->modify('-59 minutes'), end: $now->add(new DateInterval('PT1M')), period: 'hourly');
+
+    expect(fn (): mixed => resolve(NotificationCenter::class)->unreadCount($context))->toThrow(NotificationAccessDenied::class)
+        ->and(fn (): mixed => resolve(DigestBuilder::class)->build($context, $window))->toThrow(NotificationAccessDenied::class)
+        ->and(DB::table('ntf_digest_runs')->count())->toBe(0);
+})->with([
+    'another user' => ['11111111-1111-7111-8111-111111111199'],
+    'anonymous' => [null],
+]);

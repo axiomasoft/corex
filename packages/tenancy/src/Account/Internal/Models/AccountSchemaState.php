@@ -12,7 +12,7 @@ use Packman\Attributes\Internal;
 
 /**
  * `root_account_schema_state` — single source of truth for "which tenant
- * schema version is this account on" (central connection, B-11 §5.6). PK is
+ * schema version is this account on" (central connection). PK is
  * `account_id`, not `id` (one row per account).
  *
  * @property string $account_id

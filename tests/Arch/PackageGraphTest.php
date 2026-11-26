@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P12.3 / P12A.4 / P3.3 — executable package graph gate (R1–R5, D41).
+// Executable package graph gate (R1–R5).
 
 // Gate runs (incl. tampered probes) must never rewrite or delete the tracked report artifact.
 function packageGraphTestReport(): string

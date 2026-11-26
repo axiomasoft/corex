@@ -17,14 +17,9 @@ use DateTimeZone;
 use Packman\Attributes\Api;
 
 /**
- * Конверт опубликованного сообщения (MSG-003).
- *
- * `envelopeVersion` — версия формата ЭТОГО конверта; `contractVersion` — мажорная
- * версия схемы содержимого. Их смешение — типовая и дорогая ошибка, поэтому это два
- * независимых свойства (см. research/P5-design.md §2.2).
- *
- * Наружу публикуется одна идентичность контракта — contract(), то есть `name.vN`:
- * подписка на имя без версии однажды получит следующую мажорную версию (D24).
+ * Published message envelope (MSG-003). The envelope version describes the wire
+ * format. The contract version describes the payload schema. Subscribers use
+ * `contract()` (`name.vN`) so a new major version cannot silently change the payload.
  */
 #[Api(since: '2.0.0')]
 final readonly class MessageEnvelope implements DurablePayload

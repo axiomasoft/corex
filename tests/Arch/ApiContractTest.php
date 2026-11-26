@@ -5,19 +5,19 @@ declare(strict_types=1);
 use CoreX\Tests\Support\SourceScanner;
 
 test('operation contract has one compiled authority and one guarded execution boundary', function (): void {
-    expect(p13ApiArchitectureViolations())->toBe([]);
+    expect(apiArchitectureViolations())->toBe([]);
 });
 
 test('operation contract ratchet detects a second registry and a direct HTTP handler call', function (): void {
     $directory = SourceScanner::packagePath('operations', 'src');
-    $registry = $directory.'/P13RogueOperationRegistry.php';
-    $adapter = $directory.'/P13RogueHttpAdapter.php';
-    file_put_contents($registry, '<?php final class P13RogueOperationRegistry {}');
-    file_put_contents($adapter, '<?php final class P13RogueHttpAdapter { public function run($handler) { return $handler->handle(); } }');
+    $registry = $directory.'/RogueOperationRegistry.php';
+    $adapter = $directory.'/RogueHttpAdapter.php';
+    file_put_contents($registry, '<?php final class RogueOperationRegistry {}');
+    file_put_contents($adapter, '<?php final class RogueHttpAdapter { public function run($handler) { return $handler->handle(); } }');
 
     try {
-        expect(p13ApiArchitectureViolations())->toContain('second-operation-registry: packages/operations/src/P13RogueOperationRegistry.php')
-            ->toContain('direct-adapter-handler: packages/operations/src/P13RogueHttpAdapter.php');
+        expect(apiArchitectureViolations())->toContain('second-operation-registry: packages/operations/src/RogueOperationRegistry.php')
+            ->toContain('direct-adapter-handler: packages/operations/src/RogueHttpAdapter.php');
     } finally {
         unlink($registry);
         unlink($adapter);
@@ -26,14 +26,14 @@ test('operation contract ratchet detects a second registry and a direct HTTP han
 
 test('operation contract ratchet detects a second invoker and tenant hash input', function (): void {
     $directory = SourceScanner::packagePath('operations', 'src');
-    $invoker = $directory.'/P13RogueOperationInvoker.php';
-    $hash = $directory.'/P13TenantProfileHash.php';
-    file_put_contents($invoker, '<?php final class P13RogueOperationInvoker implements OperationInvoker {}');
+    $invoker = $directory.'/RogueOperationInvoker.php';
+    $hash = $directory.'/TenantProfileHashProbe.php';
+    file_put_contents($invoker, '<?php final class RogueOperationInvoker implements OperationInvoker {}');
     file_put_contents($hash, '<?php $contractFingerprint = hash("sha256", $tenant->id);');
 
     try {
-        expect(p13ApiArchitectureViolations())->toContain('unreviewed-operation-invoker: packages/operations/src/P13RogueOperationInvoker.php')
-            ->toContain('tenant-profile-hash: packages/operations/src/P13TenantProfileHash.php');
+        expect(apiArchitectureViolations())->toContain('unreviewed-operation-invoker: packages/operations/src/RogueOperationInvoker.php')
+            ->toContain('tenant-profile-hash: packages/operations/src/TenantProfileHashProbe.php');
     } finally {
         unlink($invoker);
         unlink($hash);
@@ -41,26 +41,26 @@ test('operation contract ratchet detects a second invoker and tenant hash input'
 });
 
 test('operation contract ratchet detects a direct handler path without field policy', function (): void {
-    $path = SourceScanner::packagePath('operations', 'src/P13FieldBypassOperationInvoker.php');
-    file_put_contents($path, '<?php final class P13FieldBypassOperationInvoker implements OperationInvoker { public function invoke($handler) { return $handler->handle(); } }');
+    $path = SourceScanner::packagePath('operations', 'src/FieldBypassOperationInvoker.php');
+    file_put_contents($path, '<?php final class FieldBypassOperationInvoker implements OperationInvoker { public function invoke($handler) { return $handler->handle(); } }');
 
     try {
-        expect(p13ApiArchitectureViolations())->toContain('field-policy-bypass: packages/operations/src/P13FieldBypassOperationInvoker.php');
+        expect(apiArchitectureViolations())->toContain('field-policy-bypass: packages/operations/src/FieldBypassOperationInvoker.php');
     } finally {
         unlink($path);
     }
 });
 
 test('operation contract ratchet detects GraphQL source, dependency, capability and snapshot', function (): void {
-    $source = SourceScanner::packagePath('operations', 'src/P13GraphqlProbe.php');
+    $source = SourceScanner::packagePath('operations', 'src/GraphqlProbe.php');
     $snapshot = SourceScanner::repoRoot().'/api/v2/graphql.json';
     file_put_contents($source, '<?php $capability = "graphql.query";');
     file_put_contents($snapshot, '{}');
 
     try {
-        expect(p13ApiArchitectureViolations())->toContain('graphql-source: packages/operations/src/P13GraphqlProbe.php')
+        expect(apiArchitectureViolations())->toContain('graphql-source: packages/operations/src/GraphqlProbe.php')
             ->toContain('graphql-snapshot: api/v2/graphql.json');
-        expect(p13ApiArchitectureViolations(composer: '{"require":{"webonyx/graphql-php":"^15"}}'))
+        expect(apiArchitectureViolations(composer: '{"require":{"webonyx/graphql-php":"^15"}}'))
             ->toContain('graphql-dependency: packages/operations/composer.json');
     } finally {
         unlink($source);
@@ -69,7 +69,7 @@ test('operation contract ratchet detects GraphQL source, dependency, capability 
 });
 
 /** @return list<string> */
-function p13ApiArchitectureViolations(?string $composer = null): array
+function apiArchitectureViolations(?string $composer = null): array
 {
     $root = SourceScanner::repoRoot();
     $src = SourceScanner::packagePath('operations', 'src');

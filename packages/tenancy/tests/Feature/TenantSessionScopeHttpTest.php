@@ -33,7 +33,7 @@ afterAll(static function (): void {
 
 /**
  * Full HTTP stack on the real kernel priority: ResolveTenantFromHost wraps StartSession, so the
- * session handler is built for the account and the session is saved inside it (PLAN3.D100).
+ * session handler is built for the account and the session is saved inside it.
  */
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');

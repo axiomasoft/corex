@@ -8,6 +8,6 @@ use Packman\Modules\Contracts\Compiler\Extender;
 
 /**
  * Implements the Extender marker but is NOT one of the closed 8 classes —
- * used to exercise RegistryCompiler's RFC-referral rejection (AC-19).
+ * used to exercise RegistryCompiler's RFC-referral rejection.
  */
 final class StubRogueExtender implements Extender {}

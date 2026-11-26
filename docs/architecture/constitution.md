@@ -1,588 +1,701 @@
-# Архитектурная конституция CoreX
+# CoreX architectural constitution
 
-**Версия:** 1.0.0 · **Статус:** нормативный · **Уровень:** 0 (`corex/*`)
+**Version** 1.0.0 · **Status** Normative · **Level** 0 (`corex/*`)
 
-Этот документ — реестр архитектурных инвариантов CoreX. Он отвечает на вопрос
-«что обязан и чего не вправе делать участник сегодня», и только на него.
+This register defines the architectural invariants that CoreX contributors must follow. Architecture decision records explain the reasoning. Individual policies describe implementation and cite the applicable article ID. The enforcement field identifies the evidence for each rule. Rules without an automated check require review.
 
--  **Почему так решили** — решения: ADR в `../03_Dev/ADR/` и Decision Log планов.
-  Конституция не пересказывает их аргументацию и не отменяет их.
--  **Как именно выполнить** — документы политик этого каталога (`api-policy.md`,
-  `config-policy.md`, `data-ownership-policy.md`, `message-policy.md`,
-  `extension-policy.md`, `structure-profiles.md`, `naming.md`, `taxonomy.md`).
-  Политика не повторяет инвариант, а ссылается на его идентификатор.
--  **Чем правило доказано** — поле `Enforcement` каждой статьи. Если там написано
-  `нет`, правило сегодня держится ревью, и это сказано прямо, а не умолчанием.
+Each requirement has one authoritative home. Other documents cite its article ID so that readers can identify the rule that applies. See the policies on the [public API](api-policy.md), [configuration](config-policy.md), [data ownership](data-ownership-policy.md), [messages](message-policy.md), [extension points](extension-policy.md), [structure](structure-profiles.md), [naming](naming.md) and [taxonomy](taxonomy.md).
 
-Каждое нормативное утверждение CoreX имеет ровно один канонический дом. Другой документ
-вправе сослаться на статью по её идентификатору, но не вправе изложить то же правило
-как самостоятельную норму: два текста об одном правиле рано или поздно разойдутся, и
-читатель не сможет узнать, какой из них действует.
+## Reading an article
 
-## Как читать статью
-
-| Поле | Значение |
+| Field | Meaning |
 |:--|:--|
-| Идентификатор | Стабильный `<ГРУППА>-<NNN>`. Не переиспользуется после отмены статьи. |
-| Правило | Одно нормативное утверждение. «Обязан», «запрещено», «только». |
-| Владелец | Этот документ либо внешний документ, чьё правило статья лишь индексирует. |
-| Enforcement | Точная команда и её каденция, либо `нет — <фаза> (<item>)`. |
-| Исключения | Путь к записям исключений либо `—`. |
-| Почему | Одно-два предложения. Полная аргументация — в названном решении. |
-
-Группы идентификаторов: `PKG` границы пакета · `STR` структура · `API` публичная
-поверхность · `DATA` владение данными · `RUN` runtime · `CFG` конфигурация ·
-`MSG` сообщения · `EXT` расширение · `NON` анти-цели.
-
-## Исключение из статьи
-
-Исключение — не «легаси освобождается». Запись исключения обязана назвать: нарушаемую
-статью, затронутые пути, владельца, причину, компенсирующий контроль, **дату или условие
-снятия** и способ проверить, что исключение снято. Исключение без условия снятия
-становится фактической архитектурой и поэтому не принимается.
-
-Дом записей — `exceptions/<RULE-ID>/<краткое-имя>.md`. Существующие машинные исключения
-(`scripts/package-graph-gate.json`) остаются в своём файле: он и есть их дом, дублировать
-их в Markdown запрещено статьёй о единственном владельце.
-
-## Группа PKG — границы пакета
-
-
-### PKG-001 — Каждый живой пакет `packages/*` объявляет своё назначение одним предложением в…
-**Правило.** Каждый живой пакет `packages/*` объявляет своё назначение одним предложением в первой
-  строке своего `README.md`. Предложение называет решаемую задачу, а не перечень технологий и не
-  список классов.
-**Владелец.** Этот документ.
-**Enforcement.** Нет — P3 (гейт scorecard'а читает первую строку README и падает на пустой либо на
-  перечислении). До P3 правило держится ревью.
-**Исключения.** —
-**Почему.** Пакет, чьё назначение нельзя выразить одним предложением, не имеет границы: в него
-  добавляют всё, что «тоже про это». Это первый и самый дешёвый тест границы.
-
-### PKG-002 — Зависимости идут строго вниз по уровням: `corex/*` не зависит от `flex/*`
-**Правило.** Зависимости идут строго вниз по уровням: `corex/*` не зависит от `flex/*`
-**Владелец.** ../dev-doctrine.md §1 (D70/D91)
-**Enforcement.** `composer test:arch` → `tests/Arch/LayerTest.php` («foundation packages do not
-  import flex/* namespaces», «foundation packages declare no upward composer dependencies»),
-  CI-джоб `layer-gate`, на каждый PR
-**Исключения.** —
-**Почему.** Уровень 0 обязан быть полезен проекту без CRM/CMS/Store
-
-### PKG-003 — `axiomasoft/corex` не зависит ни от одного пакета монорепо
-**Правило.** `axiomasoft/corex` не зависит ни от одного пакета монорепо
-**Владелец.** ../dev-doctrine.md §1
-**Enforcement.** `composer test:arch` → «axiomasoft/corex declares no monorepo package dependencies»,
-  «axiomasoft/corex source imports no sibling package namespace»
-**Исключения.** —
-**Почему.** Ядро — низ пирамиды; зависимость вверх делает его непереиспользуемым
-
-### PKG-004 — Любая межпакетная зависимость объявлена в `composer.json` пакета-потребителя
-**Правило.** Любая межпакетная зависимость объявлена в `composer.json` пакета-потребителя
-**Владелец.** Этот документ.
-**Enforcement.** `composer package-graph-gate` → правило R1, на каждый PR. Ребро `axiomasoft/corex-notifications → axiomasoft/corex-scheduler` запрещено (R6): контракты пробуждения живут в `CoreX\Scheduling`, пакет notifications их не импортирует из `corex-scheduler`.
-**Исключения.** —
-**Почему.** Неявная зависимость ломает установку по профилю (boxed без tenancy)
-
-### PKG-005 — Необязательная интеграция не ломает bootstrap: регистрация закрыта проверкой наличия…
-**Правило.** Необязательная интеграция не ломает bootstrap: регистрация закрыта проверкой наличия
-  (`interface_exists`/`bound`), а связка внесена в allowlist гейта с полем `guard_contains`
-**Владелец.** Этот документ.
-**Enforcement.** `composer package-graph-gate` → allowlist с валидацией guard'а
-**Исключения.** —
-**Почему.** Опциональность, не проверенная машинно, — обещание, а не свойство
-
-### PKG-006 — Bridge-пакет декорирует контракты своих хостов и не владеет предметным контрактом…
-**Правило.** Bridge-пакет декорирует контракты своих хостов и не владеет предметным контрактом хоста
-**Владелец.** ../dev-doctrine.md §5 «Bridge-пакеты»
-**Enforcement.** `composer package-graph-gate` → R2 плюс ревью `Contracts/` bridge-пакета
-**Исключения.** —
-**Почему.** Иначе предметная область расползается по адаптерам
-
-### PKG-007 — В `packages/{core,tenancy,access,tasks}` нет `flex`-литералов…
-**Правило.** В `packages/{core,tenancy,access,tasks}` нет `flex`-литералов (php/json/md/sql),
-  кроме явного allow-list
-**Владелец.** ../dev-doctrine.md §1 (D94)
-**Enforcement.** `composer test:arch` → «foundation packages carry no flex product literals»
-**Исключения.** —
-**Почему.** Запрет уровня буквален и в тексте, не только в коде
-
-### PKG-008 — Каждый пакет включён в проверки монорепозитория
-**Правило.** Новый пакет получает Composer-манифест, собственный тестовый сьют и проверки
-  применимых архитектурных, API и schema-контрактов по `dev-doctrine.md`.
-**Владелец.** [Доктрина разработки](../dev-doctrine.md), раздел «Проверки».
-**Enforcement.** `composer test:packages` перечисляет пакеты и продукты с `phpunit.xml`;
-  состав CI определяется `.github/workflows/ci.yml`.
-**Исключения.** —
-**Почему.** Новый пакет должен проходить те же проверки, что и существующие.
-
-### PKG-009 — Отменена: исторический каталог import-export
-Статья о пустом историческом каталоге отменена при перестройке экосистемы.
-`packages/import-export` теперь содержит действующий `axiomasoft/corex-import-export`,
-включённый в тесты, анализ и дистрибуцию. Идентификатор статьи не переиспользуется.
-
-## Группа STR — структура
-
-
-### STR-002 — Один use case живёт в одном feature module
-**Правило.** Один use case живёт в одном feature module пакета (корневом или `<Module>/`), а не в слоевых каталогах.
-**Владелец.** Этот документ.
-**Enforcement.** `composer module-layout-gate` (CI, PLAN3.D57); ревью принадлежности use case модулю.
-**Исключения.** `scripts/module-layout-baseline.json` — ratchet: новые и устаревшие записи запрещены; P04 сокращает остаток.
-**Почему.** Группировка по задаче сохраняет её код в одной границе.
-
-### STR-003 — Корень пакета — его корневой модуль
-**Правило.** Корень `src/` пакета — его корневой модуль: публичные категории, `Internal/`, `Laravel/`, `Testing/`, `PHPStan/`, `Tooling/`, provider(ы), `<Pkg>Module.php` и каталоги feature modules; у ядра — только `CoreServiceProvider.php` и модули закрытого списка glossary.
-**Владелец.** Этот документ.
-**Enforcement.** `composer module-layout-gate` → R0–R3 (CI, PLAN3.D57).
-**Исключения.** `scripts/module-layout-baseline.json` — ratchet: новые и устаревшие записи запрещены; P04 сокращает остаток.
-**Почему.** Путь отражает namespace и владельца модуля; перечень модулей ядра закрыт.
-
-### STR-004 — Каталог, содержащий один класс и не выражающий границу, не создаётся
-**Правило.** Каталог, содержащий один класс и не выражающий границу, не создаётся
-**Владелец.** Этот документ.
-**Enforcement.** нет — ревью
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### STR-005 — Internal живёт ровно под модулем
-**Правило.** `Internal/` живёт ровно под модулем (`<Module>/Internal/`), закрыт для других пакетов и других модулей пакета. Composition roots — provider(ы), `<Pkg>Module.php` и `Laravel/` непосредственно под модулем — могут ссылаться на Internal других модулей своего пакета.
-**Владелец.** Этот документ.
-**Enforcement.** `composer package-graph-gate` → R2 (межпакетная граница); `composer module-layout-gate` → R4/R5 (CI, PLAN3.D57, PLAN3.D58).
-**Исключения.** `scripts/module-layout-baseline.json` — ratchet: новые и устаревшие записи запрещены; P04 сокращает остаток.
-**Почему.** Реализация принадлежит модулю; композиция связывает модули через явно разрешённые точки.
-
-### STR-006 — Публичные категории расположены ровно под модулем
-**Правило.** Публичные категории модуля — только `Contracts`, `Data`, `Enums`, `Events`, `Exceptions`, ровно под модулем; слоевые каталоги (`Support`, `Models`, `Commands`, …) запрещены.
-**Владелец.** Этот документ.
-**Enforcement.** `composer module-layout-gate` → R1–R3 (CI, PLAN3.D57).
-**Исключения.** `scripts/module-layout-baseline.json` — ratchet: новые и устаревшие записи запрещены; P04 сокращает остаток.
-**Почему.** Категория выражает публичную роль; реализация группируется внутри Internal своего модуля.
-
-## Группа API — публичная поверхность
-
-
-### API-001 — Публичная поверхность определяется атрибутом на конкретном символе
-**Правило.** Ровно один `Api` либо `Spi(Implement|Call)` на объявлении типа; метка не наследуется.
-**Владелец.** api-policy.md
-**Enforcement.** `composer php-api` → strict source classification и snapshots; graph R4/R4b.
-**Исключения.** Product является потребителем, без своего PHP API manifest.
-**Почему.** Namespace не выражает замыкание сигнатур и допустимый способ использования.
-
-### API-002 — Internal не имеет обещания BC и не импортируется чужим пакетом
-**Правило.** В Internal отсутствуют Api/Spi; `@internal` сохраняет намерение для PHP tooling.
-**Владелец.** api-policy.md
-**Enforcement.** `composer php-api`; `composer package-graph-gate` → R2.
-**Исключения.** Конечные source-bound composition edges в конфигурации графа.
-**Почему.** Общий корень CoreX не даёт PHPDoc tooling межпакетной границы.
-
-### API-003 — Межпакетный импорт требует конкретного source Api/Spi символа
-**Правило.** Только source membership, объявленная зависимость и допустимое направление пакетов.
-**Владелец.** api-policy.md
-**Enforcement.** `composer package-graph-gate` → R1/R4/R5; stale generated surface → R4b.
-**Исключения.** —
-**Почему.** Generated manifest не может авторизовать неизвестный символ.
-
-### API-004 — Импорт чужого `Internal`-неймспейса запрещён
-**Правило.** Импорт чужого `Internal`-неймспейса запрещён
-**Владелец.** Этот документ.
-**Enforcement.** `composer package-graph-gate` → R2
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### API-005 — Уровни зрелости публичной поверхности: `stable`, `experimental`, `internal`,…
-**Правило.** Уровни зрелости публичной поверхности: `stable`, `experimental`, `internal`,
-  `deprecated`; `experimental` живёт ограниченное число минорных релизов и каждое его BC-изменение
-  объявляется в `CHANGELOG.md` пакета
-**Владелец.** api-policy.md
-**Enforcement.** `composer php-api` (snapshot публичной поверхности) и CHANGELOG пакета; автоматический BC-дифф (Roave) удалён 2026-10-08 (аудит, решение владельца).
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### API-006 — Внутри поддерживаемой мажорной версии изменения только аддитивные; закрытый список…
-**Правило.** Внутри поддерживаемой мажорной версии изменения только аддитивные; закрытый список
-  запрещённых изменений — в `api-policy.md`
-**Владелец.** api-policy.md
-**Enforcement.** нет — P3/P13
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### API-007 — Удаление публичного символа и удаление операции внешнего API происходят только в…
-**Правило.** Удаление публичного символа и удаление операции внешнего API происходят только в
-  мажоре и только после объявленной депрекации
-**Владелец.** api-policy.md` + `../03_Dev/ADR/ADR-008 Versioning.md
-**Enforcement.** `scripts/contract-guard.sh` (warn-прокси на диффе `src/Contracts/**`)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### API-008 — Snapshot схемы внешнего API и BC-дифф PHP-символов — два разных контракта; один не…
-**Правило.** Snapshot схемы внешнего API и BC-дифф PHP-символов — два разных контракта; один не
-  заменяет другой
-**Владелец.** api-policy.md
-**Enforcement.** `composer api-contract` (wire snapshot), `composer php-api` + golden php-surface (PHP-поверхность; Roave BC-дифф удалён 2026-10-08).
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### API-009 — Контракт — только интерфейс в `packages/<pkg>/src/Contracts/`; реализация скрыта
-**Правило.** Контракт — только интерфейс в `packages/<pkg>/src/Contracts/`; реализация скрыта
-**Владелец.** ../dev-doctrine.md §5
-**Enforcement.** ревью + `scripts/contract-guard.sh`
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-## Группа DATA — владение данными
-
-
-### DATA-001 — У каждой таблицы ровно один владелец-пакет. Владение объявляется **по таблице**, а…
-**Правило.** У каждой таблицы ровно один владелец-пакет. Владение объявляется **по таблице**, а не
-  по префиксу имени
-**Владелец.** data-ownership-policy.md
-**Enforcement.** `composer table-ownership-gate`; `composer schema-gate` → S9 (владелец и scope)
-**Исключения.** —
-**Почему.** Префикс `sys_` разделён между `core`, `attributes`, `workflow` и `wakeup` (`RAG:—`,
-  N10); владение объявляется по таблице, а не по префиксу.
-
-### DATA-002 — Миграция пакета создаёт и изменяет только таблицы, которыми он владеет
-**Правило.** Миграция пакета создаёт и изменяет только таблицы, которыми он владеет
-**Владелец.** data-ownership-policy.md
-**Enforcement.** `composer schema-gate` → S9 для создаваемых таблиц; `composer table-ownership-gate`; ревью ALTER существующих таблиц
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### DATA-003 — Пакет не пишет в чужую таблицу — ни SQL, ни связью ORM; эффект достигается вызовом…
-**Правило.** Пакет не пишет в чужую таблицу — ни SQL, ни связью ORM; эффект достигается вызовом
-  контракта владельца либо событием
-**Владелец.** data-ownership-policy.md
-**Enforcement.** `composer table-write-ownership-gate`
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### DATA-004 — Внешний ключ через границу пакета запрещён, кроме именованного исключения, у…
-**Правило.** Внешний ключ через границу пакета запрещён, кроме именованного исключения, у которого
-  есть владелец, причина и условие снятия
-**Владелец.** data-ownership-policy.md
-**Enforcement.** `composer table-ownership-gate` → T4
-**Исключения.** exceptions/DATA-004/aut-role-assignments-cloud-fk.md
-**Почему.** Именованное исключение существует:
-  `exceptions/DATA-004/aut-role-assignments-cloud-fk.md` (постоянное по D102).
-
-### DATA-005 — Выпущенная миграция набора неизменна с `1.0.0-rc.1`
-**Правило.** Выпущенная миграция набора неизменна с `1.0.0-rc.1`; новая форма вводится новым
-  файлом и повышением `SchemaSet::version` на 1 в том же commit.
-**Владелец.** [schema-policy.md](schema-policy.md)
-**Enforcement.** Golden-схема (`tests/Golden/SchemaGoldenTest.php`, `SchemaSqliteGoldenTest.php`)
-  проверяет результат DDL; `composer schema-gate` → S8 закрепляет baseline до rc.
-  Golden не проверяет байтовую неизменность файла; сохранность выпущенных файлов проверяется при выпуске.
-**Исключения.** —
-**Почему.** Один и тот же выпущенный файл должен давать одну форму схемы; изменения исполняются
-  как новые шаги через существующий журнал Laravel `migrations`.
-
-### DATA-006 — Новая таблица вводится только там, где фаза плана объявила это явно, и сразу…
-**Правило.** Новая таблица вводится только там, где фаза плана объявила это явно, и сразу получает
-  запись владения
-**Владелец.** data-ownership-policy.md
-**Enforcement.** owner-gate фазы (G-DDL)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### DATA-007 — Форма baseline
-**Правило.** Baseline набора имеет version = 1 и файлы с датой `2026_10_01`: одна таблица на
-  файл, явные литеральные имена объектов ≤ 63 байта, без DB enum/set, счётчики bigint,
-  ключи uuid, явная полиморфная пара string(64), чистый `up()` и сохранённые драйверы.
-  Детальные правила и конечные исключения меньших целочисленных типов — в schema-policy.md.
-**Владелец.** [schema-policy.md](schema-policy.md)
-**Enforcement.** `composer schema-gate` → S1–S9; Golden-схема проверяет итоговую форму
-  и драйверы, ревью проверяет правила раскладки и типов, не выраженные статическим гейтом.
-**Исключения.** `scripts/schema-gate-allowlist.json` — таблица.колонка с причиной для S6.
-**Почему.** Детерминированная схема и явные имена делают baseline проверяемым независимо
-  от приложения-потребителя и его конфигурации.
-
-## Группа RUN — runtime
-
-
-### RUN-001 — Глобального изменяемого «текущего тенанта» не существует: контекст передаётся явно…
-**Правило.** Глобального изменяемого «текущего тенанта» не существует: контекст передаётся явно
-  либо резолвится на границе запроса/джоба
-**Владелец.** Этот документ.
-**Enforcement.** нет — P4
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### RUN-002 — Тип, пересекающий durable-границу (очередь, outbox, чекпойнт, wakeup, bulk), состоит…
-**Правило.** Тип, пересекающий durable-границу (очередь, outbox, чекпойнт, wakeup, bulk), состоит
-  только из скаляров, `null`, backed-enum, `DateTimeImmutable` и массивов из них
-**Владелец.** Этот документ.
-**Enforcement.** нет — P3 (гейт сериализуемости), P4
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### RUN-003 — `Closure`, модель Eloquent, объект запроса, объект контейнера и объект контекста не…
-**Правило.** `Closure`, модель Eloquent, объект запроса, объект контейнера и объект контекста не
-  пересекают durable-границу
-**Владелец.** Этот документ.
-**Enforcement.** нет — P3
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### RUN-004 — Текущее время берётся из инъектируемого источника времени, а не из глобального хелпера
-**Правило.** Текущее время берётся из инъектируемого источника времени, а не из глобального хелпера
-**Владелец.** Этот документ.
-**Enforcement.** `composer runtime-globals-gate` → G2 (глобальные хелперы, включая `now()`) и G3 (статические часы:
-  `Carbon::now()`, `new DateTime()` без аргумента, `time()`) вне Laravel-моста; baseline — только
-  `packages/tenancy/src/Impersonation/` (обнуляет P07)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### RUN-005 — Состояние не переживает границу запроса и границу джоба: резидентный режим (Octane)…
-**Правило.** Состояние не переживает границу запроса и границу джоба: резидентный режим (Octane) не
-  должен менять поведение
-**Владелец.** Этот документ.
-**Enforcement.** `composer runtime-globals-gate` → G4 (static-свойства и `static $x`); `composer test:arch` →
-  `tests/Arch/SingletonInjectionTest.php` (L1–L3 при пустом allowlist: singleton не захватывает
-  `Application`/`Request`/репозиторий конфигурации, scoped-тип и соединение); `tests/Feature/ResidentLifecycleTest.php` (scoped-экземпляры и контекст tenant
-  не переживают `forgetScopedInstances()`); `packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php`
-  (группа `pg`: запись после смены tenant попадает в фактическую базу текущего tenant)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### RUN-006 — Граница scoped-экземпляров равна границе tenant: сервис не держит соединение через смену контекста…
-**Правило.** Граница scoped-экземпляров равна границе tenant. Каждая смена контекста (`initialize`,
-  `end`, выход из `runFor`) сбрасывает scoped-экземпляры, поэтому scoped- или transient-сервис,
-  разрешённый внутри контекста, захватывает соединение этого контекста. Разрешённый scoped-сервис не
-  удерживается через смену контекста (локальная переменная, переживающая `runFor`); сервис с параметром
-  `Connection|ConnectionInterface` не регистрируется как singleton
-**Владелец.** Этот документ.
-**Enforcement.** `packages/tenancy/tests/Pg/ScopeBoundaryPgTest.php` (группа `pg`: сервис, разрешённый до
-  `runFor`, и сервис, разрешённый внутри, пишут в разные базы; мутация `P07-scope-boundary` без единственного
-  `forgetScopedInstances()` в `resetScope()` краснит тест); `tests/Arch/SingletonInjectionTest.php` (L1–L3:
-  singleton не захватывает соединение)
-**Исключения.** —
-**Почему.** Решение PLAN3.D95 п.3: 60 сервисов принимают соединение в конструкторе; без явной границы
-  захват соединения при смене tenant неопределён.
-
-## Группа CFG — конфигурация
-
-
-### CFG-001 — Каждый ключ конфигурации отнесён ровно к одному классу: `deployment`,…
-**Правило.** Каждый ключ конфигурации отнесён ровно к одному классу: `deployment`,
-  `product-policy`, `runtime-settings`, `secret`
-**Владелец.** config-policy.md
-**Enforcement.** нет — P2 (реестр), P7
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### CFG-002 — `config()` вызывается только на границе composition (service provider, консольная…
-**Правило.** `config()` вызывается только на границе composition (service provider, консольная
-  команда); сервис получает значения через конструктор
-**Владелец.** config-policy.md
-**Enforcement.** `composer config-composition-gate` → C1 (`config()`), C2 (доступ к репозиторию конфигурации),
-  C3 (статический `Config`), C4 (`env()`) вне allowlist composition-путей (`scripts/composition-boundary.json`)
-**Исключения.** —
-**Почему.** Блокирующий гейт введён в P05.1: чтение конфигурации вне границы сборки невозможно
-  вернуть незамеченным.
-
-### CFG-003 — Значения конфигурации передаются типизированным неизменяемым объектом опций, а не…
-**Правило.** Значения конфигурации передаются типизированным неизменяемым объектом опций, а не
-  массивом и не строкой ключа
-**Владелец.** config-policy.md
-**Enforcement.** `composer test:arch` → `tests/Arch/OptionsSingletonTest.php` (Options — lazy singleton, ни один
-  источник не биндит Options eagerly); `composer configuration-reference` (в каждой строке реестра
-  `typed_options_field` называет поле Options, ключ без поля — ошибка генератора)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### CFG-004 — Невалидная конфигурация обнаруживается при загрузке приложения, а не в момент…
-**Правило.** Невалидная конфигурация обнаруживается при загрузке приложения, а не в момент первого
-  использования
-**Владелец.** config-policy.md
-**Enforcement.** валидация формы Options в `boot()` и runtime-проверки `RuntimeConfigGate` (`php artisan
-  packman:config:validate --production`); `composer config-cache-check` → `tests/Feature/ConfigCacheTest.php`
-  (каждый `packages/*/config/*.php` переживает `var_export` → `eval`, приложение загружается из кэша)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### CFG-005 — Секрет не читается как обычная конфигурация и не попадает в дампы, логи и сообщения…
-**Правило.** Секрет не читается как обычная конфигурация и не попадает в дампы, логи и сообщения об
-  ошибках
-**Владелец.** config-policy.md
-**Enforcement.** секрет не входит в форму Options: наличие проверяет runtime-проверка `RuntimeConfigGate`, значение
-  по умолчанию секретного ключа в реестре — `***` (`composer configuration-reference`)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### CFG-006 — Публичные идентификаторы конфигурации `corex/*` — только `corex`-имена (конфиг, env,…
-**Правило.** Публичные идентификаторы конфигурации `corex/*` — только `corex`-имена (конфиг, env,
-  artisan, publish-теги)
-**Владелец.** ../dev-doctrine.md §3 (D82)
-**Enforcement.** ревью
-**Исключения.** —
-**Почему.** `corex-search-intl` соответствует имени пакета `axiomasoft/corex-search-intl`;
-  переименование конфигурации объявлено в CHANGELOG пакета (PLAN3.D45).
-
-## Группа MSG — сообщения
-
-
-### MSG-001 — Сообщение относится ровно к одному из трёх классов: доменное событие, интеграционное…
-**Правило.** Сообщение относится ровно к одному из трёх классов: доменное событие, интеграционное
-  событие, команда
-**Владелец.** message-policy.md
-**Enforcement.** нет — P5
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### MSG-002 — Событие фреймворка не становится опубликованным контрактом автоматически:…
-**Правило.** Событие фреймворка не становится опубликованным контрактом автоматически:
-  интеграционным событие делает явное объявление
-**Владелец.** message-policy.md
-**Enforcement.** нет — P5
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### MSG-003 — Конверт опубликованного сообщения — CloudEvents 1.0 structured JSON
-**Правило.** Конверт опубликованного сообщения — CloudEvents 1.0 structured JSON;
-  отображение и профили — в `message-policy.md`.
-**Владелец.** message-policy.md
-**Enforcement.** `packages/core/tests/Unit/CloudEventCodecTest.php`
-**Исключения.** —
-**Почему.** Стандартный wire и закрытые внутренний/внешний профили (PLAN3.D90, PLAN3.D92).
-
-### MSG-004 — Имя опубликованного события версионировано и не равно имени PHP-класса
-**Правило.** Имя опубликованного события версионировано и не равно имени PHP-класса
-**Владелец.** message-policy.md
-**Enforcement.** нет — P5
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### MSG-005 — Модель Eloquent не сериализуется в payload сообщения
-**Правило.** Модель Eloquent не сериализуется в payload сообщения
-**Владелец.** этот документ (частный случай RUN-003)
-**Enforcement.** нет — P3
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### MSG-006 — Доставка считается «не менее одного раза»; потребитель обязан быть идемпотентным
-**Правило.** Доставка считается «не менее одного раза»; потребитель обязан быть идемпотентным
-**Владелец.** message-policy.md
-**Enforcement.** нет — P5
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### MSG-007 — Сообщение несёт класс персональных данных и не превышает объявленный лимит размера
-**Правило.** Сообщение несёт класс персональных данных и не превышает объявленный лимит размера
-**Владелец.** message-policy.md
-**Enforcement.** нет — P5
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### MSG-008 — Интеграционное событие публикуется только после фиксации изменения, которое оно…
-**Правило.** Интеграционное событие публикуется только после фиксации изменения, которое оно
-  описывает
-**Владелец.** message-policy.md
-**Enforcement.** нет — P5 (outbox)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-## Группа EXT — расширение
-
-
-### EXT-001 — Набор механизмов расширения закрыт; новый механизм и девятый extender вводятся…
-**Правило.** Набор механизмов расширения закрыт; новый механизм и девятый extender вводятся только
-  через RFC/ADR
-**Владелец.** ../dev-doctrine.md §4 (ADR-011, ADR-014)
-**Enforcement.** `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью; webhook outgoing-call enforcement: `WebhookEgressPolicyTest`, mutation `P06-egress-skip-on-delivery`, [webhooks threat model](webhooks-threat-model.md)
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-002 — Реестры типизированы по роду вклада; единого универсального реестра «всего» не…
-**Правило.** Реестры типизированы по роду вклада; единого универсального реестра «всего» не
-  заводится
-**Владелец.** extension-policy.md
-**Enforcement.** ревью
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-003 — Каждый реестр объявляет: тип идентификатора, политику дубликата, момент заморозки,…
-**Правило.** Каждый реестр объявляет: тип идентификатора, политику дубликата, момент заморозки,
-  порядок, правило инвалидации кеша и отношение к тенанту
-**Владелец.** extension-policy.md
-**Enforcement.** нет — P11
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-004 — Реестр проходит фазы `collecting → compiled → frozen`; после заморозки регистрация…
-**Правило.** Реестр проходит фазы `collecting → compiled → frozen`; после заморозки регистрация
-  невозможна
-**Владелец.** extension-policy.md
-**Enforcement.** нет — P11
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-005 — Порядок вкладов детерминирован и объявлен; равный приоритет не является механизмом…
-**Правило.** Порядок вкладов детерминирован и объявлен; равный приоритет не является механизмом
-  разрешения конфликта
-**Владелец.** extension-policy.md
-**Enforcement.** нет — P11
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-006 — Дубликат идентификатора в точке расширения — ошибка компиляции, а не молчаливое…
-**Правило.** Дубликат идентификатора в точке расширения — ошибка компиляции, а не молчаливое
-  переопределение
-**Владелец.** extension-policy.md
-**Enforcement.** `corex-scheduler` объединяет `corex-scheduler.handlers` с тегом `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`); повтор `kind` → `InvalidConfiguration` при boot. Источники срока — тег `DueWakeupSource::TAG` (`corex.scheduling.due-sources`).
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-007 — Durable-решение, зависящее от состава расширений, сохраняет отпечаток реестра либо…
-**Правило.** Durable-решение, зависящее от состава расширений, сохраняет отпечаток реестра либо
-  идентификатор и версию использованного расширения
-**Владелец.** extension-policy.md
-**Enforcement.** нет — P11
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-008 — Monkey-patching чужого модуля запрещён
-**Правило.** Monkey-patching чужого модуля запрещён
-**Владелец.** ../dev-doctrine.md §4
-**Enforcement.** ревью
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-### EXT-009 — Идентификатор модуля равен composer-имени пакета и хранится в `mod_*`; его смена —…
-**Правило.** Идентификатор модуля равен composer-имени пакета и хранится в `mod_*`; его смена —
-  миграция данных, а не правка манифеста
-**Владелец.** ../dev-doctrine.md §3 (D82)
-**Enforcement.** ревью
-**Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
-
-## Анти-цели
-
-Перечисленное ниже не делается. Каждый пункт называет, чем он отменяется, если когда-нибудь
-станет нужным: без такого решения возврат к пункту — нарушение конституции, а не инициатива.
-
-| ID | Что не делается | Отменяется |
+| ID | Stable `<GROUP>-<NNN>`. A retired ID must never be reused. |
+| Rule | The normative requirement. |
+| Owner | This constitution or the external document that owns the rule. |
+| Enforcement | The check and its cadence where known. “Review” identifies a human check. |
+| Exceptions | The exception register or a dash for none. |
+| Rationale | The reason for the rule, where stated. The owning policy or decision supplies the full reasoning. |
+
+The groups are PKG (package boundaries), STR (structure), API (public surface), DATA (data ownership), RUN (runtime), CFG (configuration), MSG (messages), EXT (extensions) and NON (non-goals).
+
+## Exceptions
+
+An exception must identify the affected article and paths, owner, reason, compensating control, expiry date or removal condition, and the check that proves its removal. Existing code has no blanket exemption. An exception without a removal condition cannot be accepted.
+
+Store exception records under `exceptions/<RULE-ID>/<short-name>.md`. Machine-readable exceptions already held in `scripts/package-graph-gate.json` stay there. Do not duplicate these records in Markdown.
+
+## PKG Package boundaries
+
+### PKG-001 — State the package purpose
+
+**Rule.** The first line of every active `packages/*/README.md` must state in one sentence the problem the package solves. A list of technologies or classes does not meet this requirement.
+
+**Owner.** This constitution.
+
+**Enforcement.** Review the first line for an empty description or a list in place of a purpose statement.
+
+**Exceptions.** —
+
+**Rationale.** A clear purpose defines which changes belong in the package.
+
+### PKG-002 — Dependencies point down the layers
+
+**Rule.** The `corex/*` layer cannot depend on `flex/*`.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §1.
+
+**Enforcement.** On every PR, CI job `layer-gate` runs `composer test:arch`. `tests/Arch/LayerTest.php` checks “foundation packages do not import flex/* namespaces” and “foundation packages declare no upward composer dependencies”.
+
+**Exceptions.** —
+
+**Rationale.** Level 0 must work for projects without CRM, CMS or Store.
+
+### PKG-003 — The kernel is independent
+
+**Rule.** `axiomasoft/corex` cannot depend on any other monorepo package.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §1.
+
+**Enforcement.** `composer test:arch` checks “axiomasoft/corex declares no monorepo package dependencies” and “axiomasoft/corex source imports no sibling package namespace”.
+
+**Exceptions.** —
+
+**Rationale.** An upward dependency would prevent reuse of the kernel in isolation.
+
+### PKG-004 — Declare cross-package dependencies
+
+**Rule.** Every cross-package dependency must appear in the consuming package’s `composer.json`.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer package-graph-gate` checks R1 on every PR. R6 prohibits the edge from `axiomasoft/corex-notifications` to `axiomasoft/corex-scheduler`. Wakeup contracts belong to `CoreX\Scheduling`.
+
+**Exceptions.** —
+
+**Rationale.** Undeclared dependencies break profile-specific installations such as boxed deployments without tenancy.
+
+### PKG-005 — Guard optional integrations
+
+**Rule.** An absent optional integration must not break bootstrap. Guard registration with `interface_exists` or `bound` and record the integration in the gate allowlist with `guard_contains`.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer package-graph-gate` validates the guard on allowlisted edges.
+
+**Exceptions.** —
+
+**Rationale.** Boot must work both with and without the optional dependency.
+
+### PKG-006 — Keep domain contracts with the host
+
+**Rule.** A bridge package decorates its hosts’ contracts and cannot own their domain contracts.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §5, bridge packages.
+
+**Enforcement.** `composer package-graph-gate` checks R2. Review the bridge package’s `Contracts/` directory.
+
+**Exceptions.** —
+
+**Rationale.** A host domain must remain independent of its adapters.
+
+### PKG-007 — Keep product literals out of foundation packages
+
+**Rule.** PHP, JSON, Markdown and SQL under `packages/{core,tenancy,access,tasks}` must contain no `flex` literals outside the explicit allowlist.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §1.
+
+**Enforcement.** `composer test:arch` checks “foundation packages carry no flex product literals”.
+
+**Exceptions.** —
+
+**Rationale.** The layer boundary also applies to text and configuration.
+
+### PKG-008 — Include every package in the monorepo checks
+
+**Rule.** Every new package needs a Composer manifest, its own test suite and the applicable architecture, API and schema contract checks.
+
+**Owner.** [Development doctrine](../dev-doctrine.md), verification section.
+
+**Enforcement.** `composer test:packages` enumerates packages and products with `phpunit.xml`. CI coverage is defined in `.github/workflows/ci.yml`.
+
+**Exceptions.** —
+
+**Rationale.** New and existing packages have the same verification obligations.
+
+### PKG-009 — Retired historical import-export directory rule
+
+The rule for an empty historical directory was retired during the ecosystem redesign. `packages/import-export` now contains the active `axiomasoft/corex-import-export` package and participates in tests, analysis and distribution. The article ID remains retired.
+
+## STR Package structure
+
+### STR-002 — Keep each use case in one feature module
+
+**Rule.** A use case belongs to one package feature module, either the root or `<Module>/`. Do not split it across layer directories.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer module-layout-gate` in CI and review of use-case ownership.
+
+**Exceptions.** The ratchet in `scripts/module-layout-baseline.json` rejects new and obsolete entries. Existing exceptions must be retired as the layout is corrected.
+
+**Rationale.** Related implementation stays inside one boundary.
+
+### STR-003 — The package root is its root module
+
+**Rule.** The package’s `src/` root contains its public categories, `Internal/`, `Laravel/`, `Testing/`, `PHPStan/`, `Tooling/`, service providers, `<Pkg>Module.php` and feature modules. The kernel root contains only `CoreServiceProvider.php` and the modules listed in the glossary.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer module-layout-gate` checks R0–R3 in CI.
+
+**Exceptions.** The ratchet in `scripts/module-layout-baseline.json` rejects new and obsolete entries. Existing exceptions must be retired as the layout is corrected.
+
+**Rationale.** Paths identify namespaces and module owners. The kernel module list is closed.
+
+### STR-004 — Give directories a boundary
+
+**Rule.** Do not create a single-class directory unless it represents a boundary.
+
+**Owner.** This constitution.
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### STR-005 — Scope Internal to its module
+
+**Rule.** `Internal/` lives directly under its owning module (`<Module>/Internal/`). Other packages and other modules of the same package cannot import it. Composition roots may reference Internal types from another module of the same package. These roots are service providers, `<Pkg>Module.php` and the `Laravel/` directory directly under a module.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer package-graph-gate` checks the cross-package boundary in R2. `composer module-layout-gate` checks R4/R5 in CI.
+
+**Exceptions.** The ratchet in `scripts/module-layout-baseline.json` rejects new and obsolete entries. Existing exceptions must be retired as the layout is corrected.
+
+**Rationale.** Modules own their implementations and expose explicit composition points.
+
+### STR-006 — Place public categories directly under their module
+
+**Rule.** Only `Contracts`, `Data`, `Enums`, `Events` and `Exceptions` are public module categories. Layer directories such as `Support`, `Models` or `Commands` are forbidden in that position.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer module-layout-gate` checks R1–R3 in CI.
+
+**Exceptions.** The ratchet in `scripts/module-layout-baseline.json` rejects new and obsolete entries. Existing exceptions must be retired as the layout is corrected.
+
+**Rationale.** Public categories describe supported roles. Internal implementation belongs inside the module.
+
+## API Public surface
+
+### API-001 — Classify each public symbol at its declaration
+
+**Rule.** A public type declares exactly one `Api` or `Spi(Implement|Call)` attribute. The attribute is not inherited.
+
+**Owner.** [Public API policy](api-policy.md)
+
+**Enforcement.** `composer php-api` checks source classifications and snapshots. The package graph applies R4/R4b.
+
+**Exceptions.** The product is a consumer and has no PHP API manifest of its own.
+
+**Rationale.** A namespace alone cannot describe reachable signature types or supported use.
+
+### API-002 — Internal types carry no backward-compatibility guarantee
+
+**Rule.** An Internal declaration cannot carry Api or Spi and cannot be imported by another package. `@internal` communicates intent to PHP tools.
+
+**Owner.** [Public API policy](api-policy.md)
+
+**Enforcement.** `composer php-api` and `composer package-graph-gate` R2.
+
+**Exceptions.** The finite set of source-bound composition edges in the graph configuration.
+
+**Rationale.** A shared CoreX namespace prevents PHPDoc alone from enforcing package boundaries.
+
+### API-003 — Require a declared symbol for cross-package imports
+
+**Rule.** An import needs a concrete source Api/Spi declaration, a declared dependency and an allowed package direction.
+
+**Owner.** [Public API policy](api-policy.md)
+
+**Enforcement.** `composer package-graph-gate` applies R1/R4/R5. A stale generated surface fails R4b.
+
+**Exceptions.** —
+
+**Rationale.** A generated manifest cannot authorize an unknown symbol.
+
+### API-004 — Keep foreign Internal namespaces private
+
+**Rule.** A package cannot import another package’s `Internal` namespace.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer package-graph-gate` checks R2.
+
+**Exceptions.** —
+
+### API-005 — Declare public maturity
+
+**Rule.** The maturity levels are `stable`, `experimental`, `internal` and `deprecated`. Experimental status lasts a limited number of minor releases. Announce every experimental compatibility change in the package’s `CHANGELOG.md`.
+
+**Owner.** [Public API policy](api-policy.md)
+
+**Enforcement.** `composer php-api` checks the public snapshot. Review the package changelog. The automatic Roave BC diff was removed following the owner’s audit on 2026-10-08.
+
+**Exceptions.** —
+
+### API-006 — Preserve compatibility within a supported major version
+
+**Rule.** Within a supported major version only additive changes are allowed. The public API policy lists every prohibited change.
+
+**Owner.** [Public API policy](api-policy.md)
+
+**Enforcement.** Review the list of prohibited changes. No single automated check for the complete list is specified.
+
+**Exceptions.** —
+
+### API-007 — Deprecate before removal
+
+**Rule.** A public symbol or external API operation may be removed only in a major release following announced deprecation.
+
+**Owner.** [Public API policy](api-policy.md) and the versioning decision (ADR-008).
+
+**Enforcement.** `scripts/contract-guard.sh` requires a change to the owning package’s `CHANGELOG.md` when its `resources/contracts/php-api.json` changes. Review the deprecation and release version separately.
+
+**Exceptions.** —
+
+### API-008 — Verify the wire and PHP contracts independently
+
+**Rule.** An external API schema snapshot and a backward-compatibility diff of PHP symbols cover distinct contracts. Each requires its own check.
+
+**Owner.** [Public API policy](api-policy.md)
+
+**Enforcement.** `composer api-contract` checks the wire snapshot. `composer php-api` and the golden PHP surface check PHP. The Roave BC diff was removed on 2026-10-08.
+
+**Exceptions.** —
+
+### API-009 — Hide contract implementations
+
+**Rule.** A contract in `packages/<pkg>/src/Contracts/` must be an interface. Keep the implementation private.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §5.
+
+**Enforcement.** Review and `scripts/contract-guard.sh`.
+
+**Exceptions.** —
+
+## DATA Data ownership
+
+### DATA-001 — Assign a single owner to every table
+
+**Rule.** Register ownership per table. Each table has exactly one owning package.
+
+**Owner.** [Data ownership policy](data-ownership-policy.md)
+
+**Enforcement.** `composer table-ownership-gate` and `composer schema-gate` S9 check owner and scope.
+
+**Exceptions.** —
+
+**Rationale.** The `core`, `attributes`, `workflow` and `wakeup` domains share the `sys_` prefix. A prefix cannot determine table ownership.
+
+### DATA-002 — Limit migrations to owned tables
+
+**Rule.** A package migration may create or alter only tables owned by that package.
+
+**Owner.** [Data ownership policy](data-ownership-policy.md)
+
+**Enforcement.** `composer schema-gate` checks S9 for new tables. Run `composer table-ownership-gate` and review ALTER operations on existing tables.
+
+**Exceptions.** —
+
+### DATA-003 — Route foreign writes through the owner
+
+**Rule.** A package must use the owner’s contract or an event for an effect on another package’s data. Direct SQL and ORM relationship writes into foreign tables are prohibited.
+
+**Owner.** [Data ownership policy](data-ownership-policy.md)
+
+**Enforcement.** `composer table-write-ownership-gate`.
+
+**Exceptions.** —
+
+### DATA-004 — Name cross-package foreign key exceptions
+
+**Rule.** A cross-package foreign key requires a named exception with an owner, reason and removal condition.
+
+**Owner.** [Data ownership policy](data-ownership-policy.md)
+
+**Enforcement.** `composer table-ownership-gate` checks T4.
+
+**Exceptions.** [Cloud role assignment foreign key](exceptions/DATA-004/aut-role-assignments-cloud-fk.md), a permanent named exception.
+
+### DATA-005 — Keep released migrations immutable
+
+**Rule.** From `1.0.0-rc.1`, a released schema-set migration is immutable. Introduce a new shape in a new file and increment `SchemaSet::version` by one in the same commit.
+
+**Owner.** [Schema policy](schema-policy.md)
+
+**Enforcement.** `tests/Golden/SchemaGoldenTest.php` and `SchemaSqliteGoldenTest.php` check the resulting DDL. `composer schema-gate` S8 pins the pre-RC baseline. Release verification separately checks the bytes of released files.
+
+**Exceptions.** —
+
+**Rationale.** Laravel’s `migrations` journal must be able to apply each new shape as a new step.
+
+### DATA-006 — Declare and register new tables
+
+**Rule.** A new table requires explicit approval in the change that introduces it and an ownership entry at introduction.
+
+**Owner.** [Data ownership policy](data-ownership-policy.md)
+
+**Enforcement.** Review the proposed DDL and its ownership entry (G-DDL).
+
+**Exceptions.** —
+
+### DATA-007 — Define a deterministic baseline
+
+**Rule.** Original schema sets start at version 1. The consolidated CoreX 2.0 baseline is generation 2 and the FlexCRM baseline is generation 1. Baseline files are dated `2026_10_01` with one table per file. Use explicit literal object names of at most 63 bytes, bigint counters, UUID keys and an explicit polymorphic pair with string(64). Database enum/set types are forbidden. Keep `up()` pure and preserve supported drivers. The schema policy lists the finite exceptions for smaller integer types.
+
+**Owner.** [Schema policy](schema-policy.md)
+
+**Enforcement.** `composer schema-gate` checks S1–S9. Golden schemas verify the final shape and drivers. Review the layout and type rules outside the static gate.
+
+**Exceptions.** `scripts/schema-gate-allowlist.json` records table.column and reason for S6.
+
+**Rationale.** Deterministic schema and naming allow baseline verification independently of consumer configuration.
+
+## RUN Runtime
+
+### RUN-001 — Scope the current tenant
+
+**Rule.** Pass context explicitly or resolve it at the request or job boundary. A global mutable current tenant is prohibited.
+
+**Owner.** This constitution.
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### RUN-002 — Keep durable data serializable
+
+**Rule.** Only scalars, `null`, backed enums, `DateTimeImmutable` and arrays of these may cross a durable boundary, including queues, outboxes, checkpoints, wakeups and bulk work.
+
+**Owner.** This constitution.
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### RUN-003 — Keep runtime objects inside their process
+
+**Rule.** A `Closure`, Eloquent model, request, container or context object cannot cross a durable boundary.
+
+**Owner.** This constitution.
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### RUN-004 — Inject the time source
+
+**Rule.** Obtain the current time from an injected clock. Global time helpers are prohibited outside the Laravel bridge.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer runtime-globals-gate` checks G2 for global helpers including `now()` and G3 for clock access such as `Carbon::now()`, argumentless `new DateTime()` and `time()`. The historical exceptions under `packages/tenancy/src/Impersonation/` have been retired. `scripts/runtime-globals-baseline.json` is empty.
+
+**Exceptions.** —
+
+### RUN-005 — Isolate requests and jobs in resident workers
+
+**Rule.** Mutable state must not survive request or job boundaries. Octane must preserve the behaviour of isolated requests.
+
+**Owner.** This constitution.
+
+**Enforcement.** `composer runtime-globals-gate` G4 checks static properties and `static $x`. `composer test:arch` runs `tests/Arch/SingletonInjectionTest.php` L1–L3 with an empty allowlist. A singleton cannot capture `Application`, `Request`, the configuration repository, a scoped type or a connection. `tests/Feature/ResidentLifecycleTest.php` verifies that `forgetScopedInstances()` clears scoped instances and tenant context. `packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php` (group `pg`) checks that a write after a tenant switch reaches the current tenant’s physical database.
+
+**Exceptions.** —
+
+### RUN-006 — Align scoped instances with the tenant lifetime
+
+**Rule.** Clear scoped instances on every context change, including `initialize`, `end` and exit from `runFor`. A scoped or transient service resolved inside the context captures its connection. Do not retain a resolved scoped service across a context change, even in a local variable that survives `runFor`. A service taking `Connection|ConnectionInterface` cannot be a singleton.
+
+**Owner.** This constitution.
+
+**Enforcement.** `packages/tenancy/tests/Pg/ScopeBoundaryPgTest.php` (group `pg`) proves that services resolved outside and inside `runFor` write to different databases. Removing `forgetScopedInstances()` from `resetScope()` makes this test fail. `tests/Arch/SingletonInjectionTest.php` L1–L3 forbids singleton capture of a connection.
+
+**Exceptions.** —
+
+**Rationale.** Services receive connections in their constructors. Tenant transitions must give each new service the correct physical connection.
+
+## CFG Configuration
+
+### CFG-001 — Give each configuration key one class
+
+**Rule.** Classify every configuration key as exactly one of `deployment`, `product-policy`, `runtime-settings` or `secret`.
+
+**Owner.** [Configuration policy](config-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### CFG-002 — Read configuration at the composition boundary
+
+**Rule.** Only a composition boundary such as a service provider or console command may call `config()`. Pass values to services through their constructors.
+
+**Owner.** [Configuration policy](config-policy.md)
+
+**Enforcement.** `composer config-composition-gate` rejects C1 (`config()`), C2 (configuration repository access), C3 (static `Config`) and C4 (`env()`) outside the composition paths in `scripts/composition-boundary.json`.
+
+**Exceptions.** —
+
+**Rationale.** The gate blocks reintroduction of direct configuration reads in services.
+
+### CFG-003 — Use typed, immutable options
+
+**Rule.** Pass configuration to services in an immutable typed options object. Arrays and string keys cannot substitute for the options type.
+
+**Owner.** [Configuration policy](config-policy.md)
+
+**Enforcement.** `composer test:arch` runs `tests/Arch/OptionsSingletonTest.php` to ensure Options are lazy singletons and never eagerly bound. `composer configuration-reference` requires each registry row’s `typed_options_field` to name an options field.
+
+**Exceptions.** —
+
+### CFG-004 — Validate during application boot
+
+**Rule.** Detect invalid configuration while the application loads, before the first use.
+
+**Owner.** [Configuration policy](config-policy.md)
+
+**Enforcement.** Validate the Options shape in `boot()`. Run `RuntimeConfigGate` via `php artisan packman:config:validate --production`. `composer config-cache-check` runs `tests/Feature/ConfigCacheTest.php`, checks `var_export` → `eval` for every `packages/*/config/*.php` and boots the app from its cache.
+
+**Exceptions.** —
+
+### CFG-005 — Protect secret values
+
+**Rule.** Do not read secrets as ordinary configuration or include them in dumps, logs or error messages.
+
+**Owner.** [Configuration policy](config-policy.md)
+
+**Enforcement.** Secrets are excluded from Options. `RuntimeConfigGate` checks presence and `composer configuration-reference` records the secret default as `***`.
+
+**Exceptions.** —
+
+### CFG-006 — Use CoreX public configuration names
+
+**Rule.** Public configuration identifiers in `corex/*` must use CoreX names, including configuration keys, environment variables, Artisan commands and publish tags.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §3.
+
+**Enforcement.** Review.
+
+**Exceptions.** —
+
+**Rationale.** `corex-search-intl` matches the package name `axiomasoft/corex-search-intl`. Announce configuration renames in the package changelog.
+
+## MSG Messaging
+
+### MSG-001 — Classify each message
+
+**Rule.** Each message belongs to exactly one class: domain event, integration event or command.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### MSG-002 — Declare integration events
+
+**Rule.** A framework event becomes a published integration contract only through explicit declaration.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### MSG-003 — Use the published envelope format
+
+**Rule.** Use CloudEvents 1.0 structured JSON. The messaging policy specifies the mapping and profiles.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** `packages/core/tests/Unit/CloudEventCodecTest.php`.
+
+**Exceptions.** —
+
+**Rationale.** The wire format is standardized and the internal and external profiles have fixed fields.
+
+### MSG-004 — Version published event names
+
+**Rule.** A published event must have a versioned name independent of its PHP class name.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### MSG-005 — Exclude Eloquent models from payloads
+
+**Rule.** A message payload cannot contain a serialized Eloquent model.
+
+**Owner.** This constitution, as a specific case of RUN-003.
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### MSG-006 — Make at-least-once consumption idempotent
+
+**Rule.** Consumers must tolerate repeated delivery of the same message.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### MSG-007 — Enforce classification and size limits
+
+**Rule.** A message must carry its personal-data classification and stay within its declared size limit.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### MSG-008 — Publish only committed facts
+
+**Rule.** Publish an integration event only after the change it describes commits.
+
+**Owner.** [Messaging policy](message-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+## EXT Extensions
+
+### EXT-001 — Change the closed extension set only by decision
+
+**Rule.** Introducing a new extension mechanism or a ninth extender requires an RFC/ADR.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §4 (ADR-011 and ADR-014).
+
+**Enforcement.** Packman’s `Packman\Modules\Contracts\Compiler\Extender` documents the closed set. Its registry compiler rejects unknown extenders. For outgoing webhooks, `vendor/bin/pest --exclude-group=pg packages/webhooks/tests/Feature/WebhookEgressPolicyTest.php --filter=revocation` and its guard-removal control verify the egress policy. [Webhook threat model](webhooks-threat-model.md)
+
+**Exceptions.** —
+
+### EXT-002 — Type registries by contribution
+
+**Rule.** Maintain a registry per contribution kind. A universal registry for unrelated contributions is prohibited.
+
+**Owner.** [Extension policy](extension-policy.md)
+
+**Enforcement.** Review.
+
+**Exceptions.** —
+
+### EXT-003 — Specify the registry contract
+
+**Rule.** Every registry must declare the identifier type, duplicate policy, freeze point, ordering, cache invalidation and relationship to the tenant.
+
+**Owner.** [Extension policy](extension-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### EXT-004 — Freeze registrations
+
+**Rule.** A registry progresses through `collecting → compiled → frozen`. Registration after freezing is forbidden.
+
+**Owner.** [Extension policy](extension-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### EXT-005 — Define deterministic contribution order
+
+**Rule.** Declare a deterministic ordering. Equal priorities cannot resolve conflicts.
+
+**Owner.** [Extension policy](extension-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### EXT-006 — Reject duplicate extension IDs
+
+**Rule.** A duplicate identifier at an extension point must cause a compilation error. Silent overrides are forbidden.
+
+**Owner.** [Extension policy](extension-policy.md)
+
+**Enforcement.** `corex-scheduler` combines `corex-scheduler.handlers` with `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`). A duplicate `kind` raises `InvalidConfiguration` at boot. Due-time sources use `DueWakeupSource::TAG` (`corex.scheduling.due-sources`).
+
+**Exceptions.** —
+
+### EXT-007 — Record extension identity in durable decisions
+
+**Rule.** A durable decision that depends on installed extensions must store the registry fingerprint or the identifier and version of the extension used.
+
+**Owner.** [Extension policy](extension-policy.md)
+
+**Enforcement.** Review. No automated check is listed.
+
+**Exceptions.** —
+
+### EXT-008 — Keep changes within the module owner
+
+**Rule.** Monkey-patching another module is forbidden.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §4.
+
+**Enforcement.** Review.
+
+**Exceptions.** —
+
+### EXT-009 — Treat module renames as data migrations
+
+**Rule.** The module ID equals the package’s Composer name and is stored in `mod_*`. Changing it requires a data migration. Editing the manifest alone is insufficient.
+
+**Owner.** [Development doctrine](../dev-doctrine.md) §3.
+
+**Enforcement.** Review.
+
+**Exceptions.** —
+
+## NON Non-goals
+
+The following work is excluded. Reconsidering a non-goal requires the stated condition or a new recorded architecture decision that supersedes the existing policy.
+
+| ID | Excluded work | Condition or governing decision |
 |:--|:--|:--|
-| NON-001 | Перенос каталогов и переименование символов раньше, чем зафиксирована семантика | D1 |
-| NON-002 | Физические каталоги `packages/capabilities/`, `packages/integrations/`, `packages/kernel/` | новое решение при радикальном росте числа пакетов (A24) |
-| NON-003 | Выделение `Money`, `Features`, `Departments`, `Settings`, `Audit`, `PubSub`, `Storage`, `Views` в отдельные Composer-пакеты | D8: отдельный release lifecycle либо внешний потребитель без остального ядра |
-| NON-004 | Переименование `Extend`→`Extension(s)` и `Gate`→`Activation` в `axiomasoft/corex` | A45: имя закреплено ADR-011/ADR-014 и доктриной |
-| NON-005 | Date-based версии внешнего API (`YYYY-MM`) как основной механизм совместимости | D2 |
-| NON-006 | Квартальный cadence выпуска версий внешнего API | следствие D2 |
-| NON-007 | GraphQL как канонический транспорт, схема GraphQL, адаптер и его зависимость | D7 |
-| NON-008 | Выделение транспортных подпакетов (`operations-http`, `operations-tools`) | S34: измеренное dependency pressure |
-| NON-009 | Рукописный список всех публичных символов (`api/public.php`) | D4 |
-| NON-010 | Второй инструмент границ рядом с существующим гейтом графа вместо правила внутри него | A85; допускается только правилом, которое существующий гейт выразить не может (Q5) |
-| NON-011 | Новые runtime-зависимости Composer в `corex/*` | решение фазы, вводящей зависимость; dev-зависимость — только названная в решении |
-| NON-012 | Тройка `SubjectType`/`SubjectId`/`SubjectRef` поверх существующей opaque-идентичности записи | A52: требование уже выполнено |
-| NON-013 | SaaS-лимиты стоимости запросов, включённые по умолчанию в self-hosted установке | Q4 в P14 |
-| NON-014 | Генерация доменной модели из схемы внешнего API | S39 |
-| NON-015 | Загрузка Eloquent-моделей из резолверов транспортного слоя | S39 |
-| NON-016 | Глобальный изменяемый «текущий тенант» как способ передачи контекста | RUN-001 |
-| NON-017 | Обход реестра сущностей прямым обращением к классу модели | EXT-008 |
-| NON-018 | Подписки на события, хранимые в базе данных | доктрина §4, урок Битрикса |
-| NON-019 | Строковые точки расширения с числовыми приоритетами в стиле hooks | доктрина §4, урок WordPress |
-| NON-020 | Override компонента по alias вместо стабильного handle | доктрина §4, урок October |
-| NON-021 | Рост числа extenders за пределы закрытого набора без RFC | EXT-001, урок Flarum |
-| NON-022 | Runtime-конструктор таблиц в стиле инфоблоков | доктрина §4, урок Битрикса |
+| NON-001 | Move directories or rename symbols before the underlying semantics are fixed | Settle the semantics first. |
+| NON-002 | Create physical `packages/capabilities/`, `packages/integrations/` or `packages/kernel/` directories | Review if the package count grows radically. |
+| NON-003 | Extract `Money`, `Features`, `Departments`, `Settings`, `Audit`, `PubSub`, `Storage` or `Views` into separate Composer packages | A separate release lifecycle or an external consumer independent of the rest of the kernel. |
+| NON-004 | Rename `Extend` to `Extension(s)` or `Gate` to `Activation` in `axiomasoft/corex` | Names are governed by ADR-011, ADR-014 and the development doctrine. |
+| NON-005 | Use date-based external API versions (`YYYY-MM`) as the primary compatibility mechanism | Supersede the API versioning decision. |
+| NON-006 | Release external API versions on a quarterly cadence | Supersede the API versioning decision. |
+| NON-007 | Make GraphQL canonical or add its schema, adapter and dependency | Requires a new transport decision. |
+| NON-008 | Split out transport packages (`operations-http`, `operations-tools`) | Demonstrate dependency pressure. |
+| NON-009 | Maintain a handwritten public symbol list (`api/public.php`) | Supersede the source-based public API policy. |
+| NON-010 | Add a second boundary tool alongside the package graph gate | Identify a rule that the existing gate cannot express. |
+| NON-011 | Add runtime Composer dependencies to `corex/*` | An explicit decision must introduce the dependency. Development dependencies also require a named decision. |
+| NON-012 | Add `SubjectType`/`SubjectId`/`SubjectRef` on top of the existing opaque record identity | The opaque identity already fulfils this requirement. |
+| NON-013 | Enable SaaS request-cost limits by default on self-hosted installations | Change the cost-enforcement policy explicitly. |
+| NON-014 | Generate the domain model from the external API schema | Requires a new domain-ownership decision. |
+| NON-015 | Load Eloquent models in transport-layer resolvers | Requires a new transport-boundary decision. |
+| NON-016 | Pass context through a mutable global current tenant | RUN-001. |
+| NON-017 | Bypass the entity registry through direct access to the model class | EXT-008. |
+| NON-018 | Store event subscriptions in the database | Development doctrine §4, informed by Bitrix. |
+| NON-019 | Use string-based hooks with numerical priorities | Development doctrine §4, informed by WordPress. |
+| NON-020 | Override components by alias in place of a stable handle | Development doctrine §4, informed by October. |
+| NON-021 | Expand the closed extender set without an RFC | EXT-001, informed by Flarum. |
+| NON-022 | Construct database tables at runtime using an information-block model | Development doctrine §4, informed by Bitrix. |
 
-Runtime-код не ссылается на dev-мосты `Tooling/`, `PHPStan/`, `Testing/` своего или другого пакета. Гейт `module-layout` R6 проверяет namespace-ссылки; общая runtime-часть размещается в `Internal/`.
+Runtime code cannot reference its own or another package’s development bridges in `Tooling/`, `PHPStan/` or `Testing/`. The `module-layout` gate checks namespace references in R6. Shared runtime implementation belongs in `Internal/`.

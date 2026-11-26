@@ -25,4 +25,6 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/contracts; shipped component imports retain their standalone constraint
     ->ignoreErrorsOnPackage('illuminate/contracts', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/database; shipped component imports retain their standalone constraint
-    ->ignoreErrorsOnPackage('illuminate/database', [ErrorType::UNUSED_DEPENDENCY]);
+    ->ignoreErrorsOnPackage('illuminate/database', [ErrorType::UNUSED_DEPENDENCY])
+    // Shared monorepo fixtures from tests/Support, loaded by tests/Support/autoload.php; not a Composer package.
+    ->ignoreUnknownClassesRegex('~^CoreX\\\\Tests\\\\Support\\\\~');

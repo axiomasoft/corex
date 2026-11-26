@@ -181,3 +181,33 @@ it('quarantines modified principals and transplanted seals before admission whil
         ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')
             ->where('operation_id', 'like', 'wakeup:%')->pluck('operation_id')->all())->toBe(['wakeup:'.$refs['valid']]);
 });
+
+it('serves the claim and next-due queries from the due index without sorting future wakeups', function (): void {
+    $scheduler = resolve(WakeupScheduler::class);
+    $due = $scheduler->schedule(pgWakeup('due-now'));
+    // Thousands of not-yet-due rows of the same account: without the expression index both queries
+    // read every one of them and sort by due time before they can return the first due row.
+    DB::statement(<<<'SQL'
+        insert into sys_wakeup_requests (id, account_id, account_incarnation, data_scope, scope_seal, workspace_scope_key, kind,
+            request_key, request_digest, fire_at, payload, status, generation, attempt, created_at, updated_at)
+        select gen_random_uuid(), account_id, account_incarnation, data_scope, scope_seal, workspace_scope_key, kind,
+            'future-'||g, request_digest, fire_at + make_interval(mins => g), payload, 'pending', 0, 0, created_at, updated_at
+        from sys_wakeup_requests, generate_series(1, 5000) g where id = ?
+        SQL, [$due->id]);
+    DB::statement('analyze sys_wakeup_requests');
+    $queries = [];
+    DB::listen(static function ($query) use (&$queries): void {
+        if (str_contains($query->sql, 'sys_wakeup_requests') && str_contains($query->sql, 'case when status')) {
+            $queries[] = [$query->sql, $query->bindings];
+        }
+    });
+
+    $this->artisan('corex:scheduler:sweep --limit=1')->expectsOutputToContain('completed 1')->assertSuccessful();
+
+    expect($queries)->toHaveCount(2);
+    foreach ($queries as [$sql, $bindings]) {
+        $plan = (string) DB::scalar('explain (format json) '.$sql, $bindings);
+        expect($plan)->toContain('"Index Name": "sys_wakeup_requests_runnable_due_ix"')
+            ->and($plan)->not->toContain('"Node Type": "Sort"');
+    }
+});

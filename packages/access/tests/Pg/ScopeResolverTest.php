@@ -22,6 +22,7 @@ use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Enums\PrincipalType;
+use CoreX\Departments\Laravel\DepartmentQueries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -121,7 +122,7 @@ beforeEach(function (): void {
     };
 });
 
-// AC-23 — own.
+// own.
 it('own scope on the builder narrows to only the rows the principal owns', function (): void {
     $role = ($this->newRole)();
     ($this->grantScope)($role, Scope::Own);
@@ -139,7 +140,7 @@ it('own scope on the builder narrows to only the rows the principal owns', funct
     expect($ids)->toBe([$mine->id]);
 });
 
-// AC-23 — dept, against a real users/sys_departments fixture.
+// dept, against a real users/sys_departments fixture.
 it("dept scope on the builder narrows to rows owned by users in the principal's own department", function (): void {
     $workspaceId = ($this->makeWorkspace)('wsDept');
     $deptA = ($this->makeDepartment)($workspaceId, null, 'deptA');
@@ -163,7 +164,7 @@ it("dept scope on the builder narrows to rows owned by users in the principal's 
     expect($ids)->toBe([$inDept->id]);
 });
 
-// AC-23 — dept_tree, ONE `path <@` subquery, no recursion (premortem A6).
+// dept_tree, ONE `path <@` subquery, no recursion.
 it('dept_tree scope on the builder narrows via the department subtree in a single path <@ predicate', function (): void {
     $workspaceId = ($this->makeWorkspace)('wsTree');
     $parentDept = ($this->makeDepartment)($workspaceId, null, 'deptRoot');
@@ -192,7 +193,7 @@ it('dept_tree scope on the builder narrows via the department subtree in a singl
         ->and(collect($queries)->filter(fn (array $q): bool => str_contains((string) $q['query'], '<@'))->count())->toBe(1);
 });
 
-// AC-23/AC-20 — workspace, plus D107 no-context narrowing.
+// workspace, plus no-context narrowing.
 it("workspace scope on the builder shows only the context workspace's rows plus account-wide rows", function (): void {
     $workspaceId = ($this->makeWorkspace)('wsA');
     $otherWorkspaceId = ($this->makeWorkspace)('wsB');
@@ -216,7 +217,7 @@ it("workspace scope on the builder shows only the context workspace's rows plus 
     expect($ids)->toEqualCanonicalizing([$matching->id, $accountWide->id]);
 });
 
-it('workspace scope shows only account-wide rows when no workspace is narrowed in context (D107)', function (): void {
+it('workspace scope shows only account-wide rows when no workspace is narrowed in context ', function (): void {
     app()->instance(TenancyManager::class, new FakeTenancyManager(null));
 
     $role = ($this->newRole)();
@@ -235,7 +236,7 @@ it('workspace scope shows only account-wide rows when no workspace is narrowed i
     expect($ids)->toBe([$accountWide->id]);
 });
 
-// D117 — cascade_view, negative before positive (Code Guidance).
+// cascade_view, negative before positive.
 it('cascade_view off hides child-workspace rows; on shows them', function (): void {
     $parentWs = ($this->makeWorkspace)('wsParent');
     $childWs = ($this->makeWorkspace)('wsParent.child');
@@ -262,7 +263,7 @@ it('cascade_view off hides child-workspace rows; on shows them', function (): vo
     expect($idsOn)->toContain($childRow->id);
 });
 
-// D109 — account lifts EXACTLY the effective scope class, never an unrelated one.
+// account lifts EXACTLY the effective scope class, never an unrelated one.
 it('account scope lifts exactly the pinned workspace scope class, never an unrelated global scope', function (): void {
     app()->instance(EffectiveWorkspaceScope::class, new EffectiveWorkspaceScope(FakeWorkspaceScope::class));
 
@@ -291,7 +292,7 @@ it('account scope lifts exactly the pinned workspace scope class, never an unrel
         ->and($result)->not->toContain($hiddenBySentinel->id);
 });
 
-// AC-23 — max-scope-wins across multiple roles, mirrored on the builder path.
+// max-scope-wins across multiple roles, mirrored on the builder path.
 it('resolves the max weight across multiple roles held by the same principal', function (): void {
     $roleLow = ($this->newRole)();
     $roleHigh = ($this->newRole)();
@@ -313,7 +314,7 @@ it('resolves the max weight across multiple roles held by the same principal', f
     expect($ids)->toEqualCanonicalizing([$mine->id, $other->id]);
 });
 
-// AC-24 — a context row narrows (to none) the builder scope for its own context only.
+// A context row narrows (to none) the builder scope for its own context only.
 it('a context row narrows the builder scope for its own context only', function (): void {
     $role = ($this->newRole)();
     $stageId = (string) Str::uuid7();
@@ -335,7 +336,7 @@ it('a context row narrows the builder scope for its own context only', function 
         ->and($narrowedIds)->toBeEmpty();
 });
 
-// AC-25 — agent principals degrade own/dept/dept_tree to none on the builder path; account does not degrade.
+// agent principals degrade own/dept/dept_tree to none on the builder path; account does not degrade.
 it('agent principals degrade own/dept/dept_tree to none on the builder path, but not account', function (Scope $scope, bool $expectEmpty): void {
     $role = ($this->newRole)(['assignable_to' => [PrincipalType::User->value, PrincipalType::Agent->value]]);
     ($this->grantScope)($role, $scope);
@@ -358,7 +359,7 @@ it('agent principals degrade own/dept/dept_tree to none on the builder path, but
     'account does not degrade' => [Scope::Account, false],
 ]);
 
-// D110 — parity: apply() and canOnRecord() agree for every scope × principal type.
+// parity: apply() and canOnRecord() agree for every scope × principal type.
 it('apply() and canOnRecord() agree for every scope across every principal type', function (Scope $scope, PrincipalType $type): void {
     $role = ($this->newRole)(['assignable_to' => [PrincipalType::User->value, PrincipalType::Agent->value, PrincipalType::ApiKey->value]]);
     ($this->grantScope)($role, $scope);
@@ -431,7 +432,74 @@ it('matches real department records to the same IDs through ScopeResolver and Ac
     'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
 ]);
 
-// Monotonicity holds ONLY on a fixture with the NAMED invariants below (premortem A7) — asserted here, not assumed globally.
+it('checks both department tables and matches a record in two statements', function (Scope $scope): void {
+    $workspaceId = ($this->makeWorkspace)('departmentCheck');
+    $departmentId = ($this->makeDepartment)($workspaceId, null, 'departmentCheck.parent');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($departmentId));
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($departmentId)]);
+    $queries = 0;
+    DB::listen(static function () use (&$queries): void {
+        $queries++;
+    });
+
+    expect(resolve(ScopePredicate::class)->matches($scope, $record, $identity))->toBeTrue()
+        ->and($queries)->toBe(2);
+})->with([Scope::Dept, Scope::DeptTree]);
+
+it('checks the active PostgreSQL schema again after a host changes the search path', function (): void {
+    $workspaceId = ($this->makeWorkspace)('liveSchema');
+    $departmentId = ($this->makeDepartment)($workspaceId, null, 'liveSchema.parent');
+    $principal = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($departmentId));
+    $record = (object) ['owner_id' => $principal->principalId()];
+    $predicate = resolve(ScopePredicate::class);
+
+    DB::transaction(function () use ($predicate, $principal, $record): void {
+        expect($predicate->matches(Scope::Dept, $record, $principal))->toBeTrue();
+        DB::statement('SET LOCAL search_path TO pg_catalog');
+        expect($predicate->matches(Scope::Dept, $record, $principal))->toBeFalse();
+    });
+});
+
+it('compares department paths through prefixed table aliases', function (): void {
+    $workspaceId = ($this->makeWorkspace)('prefixed');
+    $parentId = ($this->makeDepartment)($workspaceId, null, 'prefixed.parent');
+    $childId = ($this->makeDepartment)($workspaceId, $parentId, 'prefixed.parent.child');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentId));
+    $record = (object) ['owner_id' => ($this->makeUser)($childId)];
+    $connection = DB::connection();
+    $connection->statement('CREATE TABLE prefix_users AS TABLE users');
+    $connection->statement('CREATE TABLE prefix_sys_departments AS TABLE sys_departments');
+    $connection->setTablePrefix('prefix_');
+
+    try {
+        expect(resolve(ScopePredicate::class)->matches(Scope::DeptTree, $record, $identity))->toBeTrue();
+        expect(DepartmentQueries::contains(id: $childId, path: 'prefixed.parent'))->toBeTrue()
+            ->and(DepartmentQueries::contains(id: $parentId, path: 'prefixed.parent.child'))->toBeFalse();
+    } finally {
+        $connection->setTablePrefix('');
+    }
+});
+
+it('drops removed owner and principal departments out of dept_tree, as the builder does', function (bool $removeOwnerDepartment): void {
+    $workspaceId = ($this->makeWorkspace)('removedDepartments');
+    $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'removedDepartments.parent');
+    $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'removedDepartments.parent.child');
+    $identity = new PrincipalIdentity(PrincipalType::User, ($this->makeUser)($parentDepartmentId));
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => ($this->makeUser)($childDepartmentId)]);
+    $predicate = resolve(ScopePredicate::class);
+
+    expect($predicate->matches(Scope::DeptTree, $record, $identity))->toBeTrue();
+
+    DB::table('sys_departments')->where('id', $removeOwnerDepartment ? $childDepartmentId : $parentDepartmentId)->update(['deleted_at' => now()]);
+
+    expect($predicate->matches(Scope::DeptTree, $record, $identity))->toBeFalse()
+        ->and(resolve(ScopePredicate::class)->applyTo(Deal::query(), Scope::DeptTree, $identity)->pluck('id')->all())->toBe([]);
+})->with([
+    'owner department removed' => [true],
+    'principal department removed' => [false],
+]);
+
+// Monotonicity holds ONLY on a fixture with the NAMED invariants below — asserted here, not assumed globally.
 it('own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where every owner is in-subtree and in-workspace', function (): void {
     $workspaceId = ($this->makeWorkspace)('wsMono');
     $parentDept = ($this->makeDepartment)($workspaceId, null, 'deptMono');
@@ -504,7 +572,7 @@ it('denies dept/dept_tree on the builder when the principal has no department', 
     expect($ids)->toBeEmpty();
 })->with(fn (): array => [Scope::Dept, Scope::DeptTree]);
 
-// Fail-closed when users/sys_departments do not exist at all (boxed profile, AC-28) — independent of driver.
+// Fail-closed when users/sys_departments do not exist at all (boxed profile) — independent of driver.
 it('denies dept/dept_tree on the builder when users/sys_departments tables do not exist', function (Scope $scope): void {
     $this->resetPgSchema();
     $this->migrateAutSchema();
@@ -523,7 +591,7 @@ it('denies dept/dept_tree on the builder when users/sys_departments tables do no
     expect($ids)->toBeEmpty();
 })->with(fn (): array => [Scope::Dept, Scope::DeptTree]);
 
-// D114 — MatrixValidator's second rule: declaration drift produces a warning, never an exception, at matrix-authoring time.
+// MatrixValidator's second rule: declaration drift produces a warning, never an exception, at matrix-authoring time.
 it('MatrixValidator warns when a matrix row names a scope the entity is missing the capability for', function (): void {
     resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.drift',
@@ -545,4 +613,30 @@ it('MatrixValidator warns when a matrix row names a scope the entity is missing 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('crm.drift')
         ->and($warnings[0])->toContain('ownable');
+});
+
+it('MatrixValidator stays quiet for a consistent matrix, an unknown entity and a column the table lacks', function (): void {
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
+        handle: 'crm.columnless',
+        model: Deal::class,
+        table: 'users',
+        module: 'corex/access-tests',
+        labelSingular: 'Columnless',
+        labelPlural: 'Columnless',
+        capabilities: [],
+        fields: [],
+        titleAttribute: null,
+    ));
+
+    $role = ($this->newRole)(['assignable_to' => [PrincipalType::User->value, PrincipalType::Agent->value]]);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'workspace']);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'update', 'scope' => 'account']);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.unregistered', 'action' => 'read', 'scope' => 'workspace']);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.columnless', 'action' => 'read', 'scope' => 'workspace']);
+
+    expect(resolve(MatrixValidator::class)->validate(RoleMatrixData::role((string) $role->getKey())))->toBe([]);
+
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'delete', 'scope' => 'own']);
+
+    expect(resolve(MatrixValidator::class)->validate(RoleMatrixData::role((string) $role->getKey())))->toHaveCount(1);
 });

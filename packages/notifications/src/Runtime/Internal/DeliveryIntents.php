@@ -54,7 +54,7 @@ final readonly class DeliveryIntents
             'digest_run_id' => $runId,
             'channel' => $channel,
             'delivery_key' => $effectKey,
-            'state' => 'pending',
+            'state' => DeliveryState::Pending->value,
             'claim_epoch' => '0',
             'attempts' => 0,
             'next_attempt' => $this->clock->now(),

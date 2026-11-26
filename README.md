@@ -1,16 +1,20 @@
 # CoreX
 
-Модульное ядро на Laravel (MIT), на котором собираются продукты Flex-экосистемы (FlexCRM, FlexCMS,
-FlexStore) без переписывания фундамента. Монорепо: разработка здесь, публикация — read-only зеркалами
-по пакету (см. [[ADR-002 Monorepo]]).
+[![CI](https://github.com/axiomasoft/corex/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/axiomasoft/corex/actions/workflows/ci.yml)
 
-## Пакеты
+CoreX is a modular Laravel foundation (MIT) for the Flex products (FlexCRM,
+FlexCMS, FlexStore). Products compose its packages instead of rewriting tenant
+context, access control, schema, auditing, messaging and the other shared
+building blocks. This monorepo is where every package is developed; each
+package is published as its own Composer package.
 
-Назначения, границы и правила именования: [карта пакетов](docs/architecture/package-map.md).
+## Packages
 
-| Пакет | Назначение | Документация |
+Purposes, boundaries and naming rules: [package map](docs/architecture/package-map.md).
+
+| Package | Purpose | Docs |
 |---|---|---|
-| `axiomasoft/corex-access` | Проверка прав, ролевые матрицы, прямые разрешения и видимость записей для текущего контекста. | [access](packages/access/README.md) |
+| `axiomasoft/corex-access` | Authorization, record visibility, role matrices and direct grants on AzGuard. | [access](packages/access/README.md) |
 | `axiomasoft/corex` | CoreX application foundation — tenant context, settings, audit and messaging on Packman modules and schema. | [core](packages/core/README.md) |
 | `axiomasoft/corex-custom-fields` | Typed attribute ports and safe schema-operation bridge for CoreX. | [custom-fields](packages/custom-fields/README.md) |
 | `axiomasoft/corex-intl` | Typed locale, money/rate snapshots, and offline geography reference utilities for CoreX. | [intl](packages/intl/README.md) |
@@ -32,62 +36,50 @@ FlexStore) без переписывания фундамента. Моноре�
 | `axiomasoft/corex-scheduler` | Durable, tenant-local scheduling of one-shot work. | [scheduler](packages/scheduler/README.md) |
 | `axiomasoft/corex-webhooks` | Webhook subscriptions, signing, delivery and replay for CoreX operations. | [webhooks](packages/webhooks/README.md) |
 | `axiomasoft/corex-workflow` | Optional durable workflow engine binding for CoreX modules. | [workflow](packages/workflow/README.md) |
-| `flex/crm` | Продукт FlexCRM поверх CoreX | [flex-crm](products/flex-crm/README.md) |
+| `flex/crm` | FlexCRM product built on CoreX | [flex-crm](products/flex-crm/README.md) |
 
-Перед установкой настройте [канал зависимостей экосистемы](docs/architecture/ecosystem-dependencies.md).
-Для канала CoreX 2.0 используйте `composer require 'axiomasoft/corex:^2.0'`. Конфигурация публикуется командой
-`php artisan vendor:publish --tag=corex-config`; параметры модульного runtime Packman находятся в `config/modules.php`. Для пакетов используются собственные config-ключи и publish-теги из их README.
-
-Схема пакетов устанавливается из зарегистрированных наборов:
+## Quick start
 
 ```bash
+composer require 'axiomasoft/corex:^2.0@dev'
+php artisan vendor:publish --tag=corex-config
 php artisan packman:schema:migrate --scope=tenant
-php artisan packman:schema:status --scope=tenant
 ```
 
-В production для миграции нужен `--force`. Для tenancy центральная база устанавливается
-через `packman:schema:migrate --scope=central --database=<central>`, отдельное соединение
-бюджетов — через `--scope=dedicated`; модули создают свою схему при активации через
-`ModuleLifecycle`. Наборы, драйверы и правила формы — в
-[политике схемы](docs/architecture/schema-policy.md).
+The ecosystem packages (Packman, Tenant, AzGuard, Vaulter) are pinned Git
+snapshots until they are published; set them up first as described in
+[installation](docs/installation.md).
 
-## Стек
+## Stack
 
-- PHP 8.4–8.5, Laravel 13 (см. [[ADR-001 Stack]]).
-- ULID-идентификаторы ([[ADR-003 ULID]]); морфы — через `EntityRegistry`.
-- Деньги — `brick/money`, minor units ([[ADR-005 Money]]).
-- Мульти-тенантность — опциональная; `axiomasoft/corex-tenancy` адаптирует account/workspace к Tenant. Физическими ресурсами владеет host-selected Tenant PostgreSQL adapter.
-- Авторизация — собственная матрица ролей `axiomasoft/corex-access`; интеграции подключаются отдельно.
-- Контракты под строгим SemVer — не ломаются без major ([[ADR-008 Versioning]]).
+- PHP 8.4 and 8.5, Laravel 13.
+- PostgreSQL for tenancy and the PostgreSQL-only stores; SQLite is enough for
+  the default test lane.
+- UUIDv7 identifiers; money in minor units via `brick/money` (`corex-intl`).
+- Optional multi-tenancy: `axiomasoft/corex-tenancy` maps accounts and
+  workspaces onto the external Tenant runtime.
+- Authorization through the `axiomasoft/corex-access` role matrix on AzGuard.
+- Public contracts follow strict SemVer ([policy](docs/architecture/semver-policy.md)).
 
-## Разработка
+## Documentation
 
-Точные внешние refs, требования доступа и локальный Vaulter patch описаны в
-[инструкции установки](docs/architecture/ecosystem-dependencies.md); свежему CI нужны доступные
-источники всех этих commits.
+The [documentation index](docs/index.md) covers installation, architecture,
+configuration, usage, errors, testing and CI.
+
+## Development
 
 ```bash
-scripts/php84 --check
-scripts/test-bounded -- scripts/php84 composer install
-scripts/test-bounded -- scripts/php84 composer test        # Pest + Orchestra Testbench (sqlite :memory:)
-scripts/test-bounded -- scripts/php84 composer analyse     # PHPStan (larastan)
-scripts/test-bounded -- scripts/php84 composer lint        # Pint
+composer install
+composer test          # Pest + Testbench on SQLite
+composer test:pg       # PostgreSQL lane (docker compose up -d; see docs/testing-ci.md)
+composer analyse       # PHPStan, max level
+composer lint:check    # Pint
+composer refactor:check
 ```
 
-Обёртка `scripts/php84` выбирает PHP 8.4 для Composer и дочерних команд. Для локального PostgreSQL используйте `PGSQL_PORT=5434 scripts/test-bounded -- scripts/php84 composer test:pg`.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and
+[testing and CI](docs/testing-ci.md) for every lane.
 
-Ресурсоёмкие локальные прогоны на Linux с systemd запускайте через `scripts/test-bounded`.
-Например, `scripts/test-bounded -- scripts/php84 composer test:hermetic`.
-Обёртка запускает один прогон за раз, ограничивает всё дерево процессов 2 ГиБ RAM и одним CPU
-и использует дисковый каталог `/var/tmp`. Выберите другой существующий дисковый каталог через
-`--scratch`. Для запуска нужны как минимум 6 ГиБ доступной RAM и 3 ГиБ на диске.
-При устойчивом дефиците памяти, снижении резерва RAM ниже 4 ГиБ или свободного места ниже
-1 ГиБ обёртка остановит свой прогон с кодом 75.
-Для `PGDATA` тестовых контейнеров используйте дисковый том и отдельный лимит памяти контейнера.
+## License
 
-Пакеты — чистые библиотеки; тест-харнес и инструменты качества живут в корне монорепо.
-
-Локальное окружение AI-агентов устанавливается через swissknifeman с профилем
-`php-package` и каналом `connect`. Настройки провайдеров, хуки, роли, планы и
-временные отчёты исключены из Git; сторонние skills в проект не копируются.
-Контрактные снимки, тестовые фикстуры и инструменты качества остаются частью исходников.
+MIT, see [LICENSE](LICENSE).

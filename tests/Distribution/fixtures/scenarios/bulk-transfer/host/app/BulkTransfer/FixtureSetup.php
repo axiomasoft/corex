@@ -34,7 +34,7 @@ final class FixtureSetup
             $names[$role] = $identity;
         }
 
-        if (count(array_unique(array_column($names, 'database'))) !== 4 || Scenario::describe(app('db')->connection())['database'] !== $names['a']['database']) {
+        if (count(array_unique(array_column($names, 'database'))) !== 4 || Scenario::describe(resolve('db')->connection())['database'] !== $names['a']['database']) {
             throw new RuntimeException('The tenant, control, budget and sink must have independent physical identities.');
         }
 

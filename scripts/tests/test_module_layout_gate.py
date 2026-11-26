@@ -1,4 +1,4 @@
-"""Planted negatives for the feature-module layout gate (PLAN3.D57). Target: scripts/tests/test_module_layout_gate.py."""
+"""Planted violations for the feature-module layout rules."""
 
 from __future__ import annotations
 

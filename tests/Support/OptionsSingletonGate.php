@@ -10,7 +10,7 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use Throwable;
 
-/** D69 p.3: every `*Options` resolves to one instance; `bind`/`instance` bindings of Options are forbidden. */
+/** every `*Options` resolves to one instance; `bind`/`instance` bindings of Options are forbidden. */
 final class OptionsSingletonGate
 {
     /** @return list<class-string> Options classes declared under `packages/<pkg>/src`. */

@@ -68,7 +68,7 @@ final class AuditSensitiveStub extends Model implements Auditable
  * $guarded = [] model (the pattern both Widget and StubAuditableThing already
  * use elsewhere in this suite) — every attribute is mass-assignable, so
  * `isFillable()` alone cannot keep password/remember_token out of the diff.
- * Regression stub for the targeted audit D63 Blocker: AuditObserver must not
+ * Audit regression: AuditObserver must not
  * rely solely on isFillable() to decide what is audit-safe.
  */
 final class AuditUnguardedStub extends Model implements Auditable
@@ -141,7 +141,7 @@ beforeEach(function (): void {
     config(['corex.audit.enabled' => true]);
     app()->forgetInstance(CoreOptions::class);
 
-    // D12: sys_audit_log is PG-only (jsonb/CHECK/BRIN). Reset to a clean
+    // sys_audit_log is PG-only (jsonb/CHECK/BRIN). Reset to a clean
     // public schema so each test starts with no migration history (mirrors
     // SettingsTest's/ModuleLifecycleTest's pg-lane pattern).
     auditPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
@@ -167,7 +167,7 @@ afterEach(function (): void {
     Date::setTestNow();
 });
 
-it('enqueues on the sync path instead of writing synchronously (AC-23)', function (): void {
+it('enqueues on the sync path instead of writing synchronously', function (): void {
     Queue::fake();
 
     auditLogger()->record(new AuditEntry(
@@ -203,7 +203,7 @@ it('HasAuditLog trait records the diff on update', function (): void {
     expect($entry->changes['name'])->toEqual(['old' => 'one', 'new' => 'two']);
 });
 
-it('auto-observer records byCapability(Auditable) with sensitive masking (AC-20)', function (): void {
+it('auto-observer records byCapability(Auditable) with sensitive masking', function (): void {
     Schema::create('stub_auditable_things', function ($table): void {
         $table->uuid('id')->primary();
         $table->string('name');
@@ -257,7 +257,7 @@ it('actor_type falls back to system when unauthenticated', function (): void {
         ->and($entry->actor_id)->toBeNull();
 });
 
-it('omits guarded/non-fillable attributes from the diff on create (A17)', function (): void {
+it('omits guarded/non-fillable attributes from the diff on create ', function (): void {
     Schema::create('audit_sensitive_stubs', function ($table): void {
         $table->uuid('id')->primary();
         $table->string('name');
@@ -282,7 +282,7 @@ it('omits guarded/non-fillable attributes from the diff on create (A17)', functi
 
     expect($entry->changes)->toHaveKey('name')
         ->and($entry->changes['name']['new'])->toBe('bob')
-        // Guarded fields are ABSENT (not masked) — B-10 §7.4 п.8.
+        // Guarded fields are ABSENT (not masked) .
         ->and($entry->changes)->not->toHaveKey('password')
         ->and($entry->changes)->not->toHaveKey('remember_token')
         ->and($entry->changes)->not->toHaveKey('id')
@@ -290,7 +290,7 @@ it('omits guarded/non-fillable attributes from the diff on create (A17)', functi
         ->and($entry->changes['secret']['new'])->toBe('••••••');
 });
 
-it('excludes password/remember_token even when $guarded = [] makes them fillable (D63 Blocker)', function (): void {
+it('excludes password/remember_token even when $guarded = [] makes them fillable ', function (): void {
     Schema::create('audit_unguarded_stubs', function ($table): void {
         $table->uuid('id')->primary();
         $table->string('name');
@@ -320,7 +320,7 @@ it('excludes password/remember_token even when $guarded = [] makes them fillable
     expect($updated->changes)->not->toHaveKey('password');
 });
 
-it('masks a fillable sensitive field in both old and new on update (A17)', function (): void {
+it('masks a fillable sensitive field in both old and new on update ', function (): void {
     Schema::create('audit_sensitive_stubs', function ($table): void {
         $table->uuid('id')->primary();
         $table->string('name');
@@ -338,7 +338,7 @@ it('masks a fillable sensitive field in both old and new on update (A17)', funct
     expect($entry->changes['secret'])->toEqual(['old' => '••••••', 'new' => '••••••']);
 });
 
-it('killswitch silences the capability path, not only the trait (A60)', function (): void {
+it('killswitch silences the capability path, not only the trait ', function (): void {
     config(['corex.audit.enabled' => false]);
     app()->forgetInstance(CoreOptions::class);
 
@@ -359,12 +359,12 @@ it('killswitch silences the capability path, not only the trait (A60)', function
     expect(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0);
 });
 
-it('killswitch silences a direct AuditLogger::record() at the write seam, not only the observer (D63/D66 defense-in-depth)', function (): void {
+it('killswitch silences a direct AuditLogger::record() at the write seam, not only the observer (defense-in-depth)', function (): void {
     config(['corex.audit.enabled' => false]);
     app()->forgetInstance(CoreOptions::class);
 
     // Bypass the observer entirely — call the AuditLogger contract directly, as
-    // any caller resolving it could. app(AuditObserver::class)->record()'s guard (A60) does
+    // any caller resolving it could. app(AuditObserver::class)->record()'s guard does
     // not cover this path; the write seam must refuse on its own. Sync queue in
     // this suite means an un-guarded record() would write the row synchronously.
     auditLogger()->record(new AuditEntry(
@@ -377,7 +377,7 @@ it('killswitch silences a direct AuditLogger::record() at the write seam, not on
     expect(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0);
 });
 
-it('killswitch aborts in the observer itself — an unconditional logger stays untouched (P1.21 observer isolation)', function (): void {
+it('killswitch aborts in the observer itself — an unconditional logger stays untouched (observer isolation)', function (): void {
     config(['corex.audit.enabled' => false]);
     app()->forgetInstance(CoreOptions::class);
 
@@ -390,7 +390,7 @@ it('killswitch aborts in the observer itself — an unconditional logger stays u
 
     // Unconditional spy: records EVERY call, with NO killswitch of its own. This
     // isolates AuditObserver's guard from QueuedAuditLogger's write-seam guard
-    // (P1.21-killswitch-writeseam pins the latter separately). The existing
+    // (killswitch-writeseam pins the latter separately). The existing
     // 'killswitch silences' tests assert AuditLog stays empty — but that holds
     // even if the observer forgets to guard, because the real logger's write-seam
     // catches it. Only a logger with no guard of its own can prove the observer
@@ -419,7 +419,7 @@ it('killswitch aborts in the observer itself — an unconditional logger stays u
     expect($spy->calls)->toBe(0);
 });
 
-it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)', function (): void {
+it('snapshots occurred_at and workspace_id at enqueue, not in the worker ', function (): void {
     config([
         'queue.connections.database.connection' => 'work-scope-control',
         'queue.default' => 'database',
@@ -433,7 +433,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
         $table->unsignedInteger('available_at');
         $table->unsignedInteger('created_at');
     });
-    $contexts = app(LocalWorkContexts::class);
+    $contexts = resolve(LocalWorkContexts::class);
     $eventWorkspace = new WorkspaceRef((string) Str::uuid7(), 'event', 'team', 'event', null);
     $workerWorkspace = new WorkspaceRef((string) Str::uuid7(), 'worker', 'team', 'worker', null);
     $contexts->setWorkspace($eventWorkspace);
@@ -456,7 +456,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
 
     $job = $queue->pop();
     expect($job)->not->toBeNull();
-    app('queue.worker')->process('database', $job, new WorkerOptions(maxTries: 1));
+    resolve('queue.worker')->process('database', $job, new WorkerOptions(maxTries: 1));
 
     $row = AuditLog::on(AUDIT_TEST_CONNECTION)->sole();
 
@@ -467,20 +467,20 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
 });
 
 it('refuses an audit write under a different workspace without queue restoration', function (): void {
-    $contexts = app(LocalWorkContexts::class);
+    $contexts = resolve(LocalWorkContexts::class);
     $eventWorkspace = new WorkspaceRef((string) Str::uuid7(), 'event', 'team', 'event', null);
     $workerWorkspace = new WorkspaceRef((string) Str::uuid7(), 'worker', 'team', 'worker', null);
     $contexts->setWorkspace($eventWorkspace);
-    $scope = app(WorkScopeFixture::class)->scope();
+    $scope = resolve(WorkScopeFixture::class)->scope();
     $job = new RecordAuditEntry(new AuditEntry(action: 'created', actorType: ActorType::System), $scope);
     $contexts->setWorkspace($workerWorkspace);
 
-    expect(fn () => app()->call([$job, 'handle']))->toThrow(ScopeContextMismatch::class)
+    expect(fn () => app()->call($job->handle(...)))->toThrow(ScopeContextMismatch::class)
         ->and(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0)
         ->and($contexts->current()->workspace)->toBe($workerWorkspace);
 });
 
-it('records restored and forceDeleted, folding the redundant delete of a forceDelete (A17)', function (): void {
+it('records restored and forceDeleted, folding the redundant delete of a forceDelete ', function (): void {
     $widget = Widget::create(['name' => 'x']);
     $widget->delete();
     $widget->restore();
@@ -501,10 +501,10 @@ it('records restored and forceDeleted, folding the redundant delete of a forceDe
         ->and(collect($actions)->filter(static fn (string $a): bool => $a === 'forceDeleted')->count())->toBe(1);
 });
 
-it('paginates the audit journal by the monotonic seq cursor in insertion order (AC-23/D42)', function (): void {
+it('paginates the audit journal by the monotonic seq cursor in insertion order', function (): void {
     // entity_ids are deliberately NOT in sorted order: the keyset must return
     // rows in INSERTION order (what the clock-free bigserial seq encodes), not
-    // sorted-by-id order. The old id-cursor test held for any id type (A65) —
+    // sorted-by-id order. The old id-cursor test held for any id type —
     // this one fails if ordering falls back to any non-insertion column.
     $entityIds = [
         '00000000-0000-7000-8000-0000000000c1', // inserted 1st
@@ -537,7 +537,7 @@ it('paginates the audit journal by the monotonic seq cursor in insertion order (
     expect($after)->toBe([$entityIds[1], $entityIds[2]]);
 });
 
-it('corex:audit:prune deletes rows older than the retention boundary and keeps fresh ones (A64)', function (): void {
+it('corex:audit:prune deletes rows older than the retention boundary and keeps fresh ones ', function (): void {
     Date::setTestNow('2026-06-01 00:00:00');
     auditLogger()->record(new AuditEntry(
         action: 'created',

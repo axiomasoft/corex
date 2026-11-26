@@ -20,7 +20,7 @@ final class DepartmentCycleException extends CodedException
     public function __construct(string $departmentId, string $newParentId)
     {
         parent::__construct(sprintf(
-            'Cannot move department %s under %s — the new parent is inside the moving subtree (B-10 §5.7).',
+            'Cannot move department %s under %s — the new parent is inside the moving subtree.',
             $departmentId,
             $newParentId,
         ));

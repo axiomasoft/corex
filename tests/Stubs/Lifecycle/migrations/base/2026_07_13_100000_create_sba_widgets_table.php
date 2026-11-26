@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // No hand-written claim(): the lifecycle's migration wrapper auto-claims
-// sba_widgets from the schema diff (D41).
+// sba_widgets from the schema diff.
 return new class extends Migration
 {
     public function up(): void

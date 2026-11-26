@@ -81,6 +81,7 @@ final readonly class SqlDigestBuilder implements DigestBuilder
                 ->where($logical)
                 ->where('recipient_kind', $recipient->kind)
                 ->where('recipient_id', $recipient->id)
+                ->whereNull('pruned_at')
                 ->whereNull('cancelled_at')
                 ->where('created_at', '>=', $window->start)
                 ->where('created_at', '<', $window->end)

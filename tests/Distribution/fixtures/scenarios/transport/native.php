@@ -184,7 +184,7 @@ function ledger(Connection $db): array
 
     return [
         'effects' => $db->table('installed_notes')->orderBy('id')->get()->map(static fn (object $row): array => (array) $row)->all(),
-        'receipts' => $db->table('sys_api_idempotency')->where('operation_id', 'notes.create')->orderBy('created_at')->orderBy('key_hash')->get()->map(static fn (object $row): array => (array) $row)->all(),
+        'receipts' => $db->table('sys_api_idempotency')->where('operation_id', 'notes.create')->oldest()->orderBy('key_hash')->get()->map(static fn (object $row): array => (array) $row)->all(),
         'budget' => $budget->table('sys_api_budget_reservations')->orderBy('id')->get()->map(static fn (object $row): array => (array) $row)->all(),
         'buckets' => $budget->table('sys_api_budget_buckets')->orderBy('key')->get()->map(static fn (object $row): array => (array) $row)->all(),
     ];

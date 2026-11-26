@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\File;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use Symfony\Component\Process\Process;
 
-if (($sdkAutoload = getenv('COREX_P3_SDK_AUTOLOAD')) !== false) {
+$sdkAutoload = getenv('COREX_TEST_SDK_AUTOLOAD') ?: getenv('COREX_P3_SDK_AUTOLOAD');
+
+if ($sdkAutoload !== false) {
     require_once $sdkAutoload;
 }
 
@@ -127,7 +129,7 @@ it('refuses local usage through a replaced account root', function (): void {
 
 describe('native object integration', function (): void {
     beforeEach(function (): void {
-        $configPath = getenv('COREX_P3_STORAGE_CONFIG');
+        $configPath = getenv('COREX_TEST_STORAGE_CONFIG') ?: getenv('COREX_P3_STORAGE_CONFIG');
 
         if ($configPath === false) {
             $this->markTestSkipped('Explicit isolated native SDK/service configuration is required.');
@@ -189,7 +191,7 @@ describe('native object integration', function (): void {
         expect(fn () => $storage->disk()->get('document.txt'))->toThrow(StorageOperationFailed::class)
             ->and(fn () => $storage->disk()->put('document.txt', 'wrong-fallback'))->toThrow(StorageOperationFailed::class);
     });
-})->group('p3-native');
+})->group('native-conformance', 'p3-native');
 
 it('denies every retained handle entry point after switching account or ending context', function (): void {
     $disk = $this->storage->disk();

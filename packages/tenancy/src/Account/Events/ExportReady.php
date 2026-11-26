@@ -13,7 +13,7 @@ use Packman\Attributes\SpiKind;
 
 /**
  * Fired by {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::export()} once the
- * `root_account_exports` row reaches `status=ready` (B-11 §7.3). Built with
+ * `root_account_exports` row reaches `status=ready`. Built with
  * an explicit {@see TenantContext} — see {@see AccountPurged}'s docblock
  * for why.
  */

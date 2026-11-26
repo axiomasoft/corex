@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
 
 uses(TestCase::class)->group('pg');
 
-final class P32ConcurrentTemplate implements TemplateIntegrityVerifier
+final class ConcurrentClaimTemplate implements TemplateIntegrityVerifier
 {
     public function qualify(ClaimRequest $request): QualifiedTemplate
     {
@@ -25,7 +25,7 @@ final class P32ConcurrentTemplate implements TemplateIntegrityVerifier
     }
 }
 
-final class P32ClaimWorker
+final class ConcurrentClaimWorker
 {
     /** @var array<int, resource> */
     private array $pipes = [];
@@ -38,7 +38,7 @@ final class P32ClaimWorker
     /** @param array<string, mixed> $payload */
     public function __construct(string $script, array $payload)
     {
-        $this->errors = tempnam(sys_get_temp_dir(), 'corex-p32-worker-');
+        $this->errors = tempnam(sys_get_temp_dir(), 'corex-claim-worker-');
         $this->process = proc_open([PHP_BINARY, $script], [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['file', $this->errors, 'w']], $this->pipes);
         fwrite($this->pipes[0], json_encode($payload, JSON_THROW_ON_ERROR)."\n");
         stream_set_timeout($this->pipes[1], 5);
@@ -98,18 +98,18 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
-    $this->p32Cluster = (string) Str::uuid();
-    $this->p32Template = (string) Str::uuid();
-    DB::table('root_clusters')->insert(['id' => $this->p32Cluster, 'name' => $this->p32Cluster, 'status' => 'active', 'pg_host_writer' => 'test', 'pgbouncer_host' => 'test', 'app_db_user' => 'corex', 'template_version' => 1]);
-    DB::table('root_templates')->insert(['id' => $this->p32Template, 'version' => 1, 'db_name' => 'tpl_p32_logical_test', 'status' => 'ready', 'embedding_model' => 'test', 'embedding_dim' => 1]);
-    $this->p32Candidates = [];
+    $this->claimCluster = (string) Str::uuid();
+    $this->claimTemplate = (string) Str::uuid();
+    DB::table('root_clusters')->insert(['id' => $this->claimCluster, 'name' => $this->claimCluster, 'status' => 'active', 'pg_host_writer' => 'test', 'pgbouncer_host' => 'test', 'app_db_user' => 'corex', 'template_version' => 1]);
+    DB::table('root_templates')->insert(['id' => $this->claimTemplate, 'version' => 1, 'db_name' => 'tpl_claim_logical_test', 'status' => 'ready', 'embedding_model' => 'test', 'embedding_dim' => 1]);
+    $this->claimCandidates = [];
     for ($index = 0; $index < 3; $index++) {
         $id = (string) Str::uuid();
-        DB::table('root_accounts')->insert(['id' => $id, 'cluster_id' => $this->p32Cluster, 'db_name' => 'acc_p32_'.str_replace('-', '', $id).'_test', 'status' => 'pending', 'template_version' => 1, 'embedding_model' => 'test', 'embedding_dim' => 1]);
-        $this->p32Candidates[] = $id;
+        DB::table('root_accounts')->insert(['id' => $id, 'cluster_id' => $this->claimCluster, 'db_name' => 'acc_claim_'.str_replace('-', '', $id).'_test', 'status' => 'pending', 'template_version' => 1, 'embedding_model' => 'test', 'embedding_dim' => 1]);
+        $this->claimCandidates[] = $id;
     }
-    $this->p32Workers = [];
-    $this->p32WorkerScript = tempnam(sys_get_temp_dir(), 'corex-p32-claim-');
+    $this->claimWorkers = [];
+    $this->claimWorkerScript = tempnam(sys_get_temp_dir(), 'corex-claim-worker-');
     $loader = new ReflectionClass(ClassLoader::class)->getFileName();
     assert(is_string($loader));
     $autoload = var_export(dirname($loader, 2).'/autoload.php', true);
@@ -159,27 +159,27 @@ if ($p['op'] === 'raw') {
     echo json_encode(['account' => $result->accountId, 'replayed' => $result->replayed], JSON_THROW_ON_ERROR)."\n";
 }
 PHP;
-    file_put_contents($this->p32WorkerScript, str_replace('AUTOLOAD', $autoload, $source));
+    file_put_contents($this->claimWorkerScript, str_replace('AUTOLOAD', $autoload, $source));
 });
 
 afterEach(function (): void {
-    foreach ($this->p32Workers as $worker) {
+    foreach ($this->claimWorkers as $worker) {
         $worker->stop();
     }
-    unlink($this->p32WorkerScript);
+    unlink($this->claimWorkerScript);
 });
 
-function p32SpawnClaim(string $key, string $operation = 'normal', ?string $account = null): P32ClaimWorker
+function spawnConcurrentClaim(string $key, string $operation = 'normal', ?string $account = null): ConcurrentClaimWorker
 {
     $test = test();
-    $payload = ['config' => DB::connection('pgsql')->getConfig(), 'key' => $key, 'cluster' => $test->p32Cluster, 'template' => $test->p32Template, 'digest' => hash('sha256', $key), 'name' => 'p32-'.$key.'-'.$operation, 'op' => $operation, 'account' => $account];
-    $worker = new P32ClaimWorker(script: $test->p32WorkerScript, payload: $payload);
-    $test->p32Workers = [...$test->p32Workers, $worker];
+    $payload = ['config' => DB::connection('pgsql')->getConfig(), 'key' => $key, 'cluster' => $test->claimCluster, 'template' => $test->claimTemplate, 'digest' => hash('sha256', $key), 'name' => 'claim-'.$key.'-'.$operation, 'op' => $operation, 'account' => $account];
+    $worker = new ConcurrentClaimWorker(script: $test->claimWorkerScript, payload: $payload);
+    $test->claimWorkers = [...$test->claimWorkers, $worker];
 
     return $worker;
 }
 
-function p32AssertBlocked(string $name): void
+function assertConcurrentClaimBlocked(string $name): void
 {
     $deadline = microtime(true) + 5;
     do {
@@ -197,11 +197,11 @@ function p32AssertBlocked(string $name): void
 }
 
 it('overlaps independent claims while an unrelated key progresses before release', function (): void {
-    $first = p32SpawnClaim(key: 'shared', operation: 'pause');
+    $first = spawnConcurrentClaim(key: 'shared', operation: 'pause');
     expect($first->line())->toBe('ready');
-    $second = p32SpawnClaim('shared');
-    p32AssertBlocked('p32-shared-normal');
-    $unrelated = p32SpawnClaim('unrelated');
+    $second = spawnConcurrentClaim('shared');
+    assertConcurrentClaimBlocked('claim-shared-normal');
+    $unrelated = spawnConcurrentClaim('unrelated');
     $other = $unrelated->result();
     expect($other['replayed'])->toBeFalse();
     $first->release();
@@ -213,11 +213,11 @@ it('overlaps independent claims while an unrelated key progresses before release
 });
 
 it('reconciles a named unique-index race against a writer with no advisory cooperation', function (): void {
-    $id = $this->p32Candidates[0];
-    $raw = p32SpawnClaim(key: 'uncooperative', operation: 'raw', account: $id);
+    $id = $this->claimCandidates[0];
+    $raw = spawnConcurrentClaim(key: 'uncooperative', operation: 'raw', account: $id);
     expect($raw->line())->toBe('ready');
-    $claim = p32SpawnClaim('uncooperative');
-    p32AssertBlocked('p32-uncooperative-normal');
+    $claim = spawnConcurrentClaim('uncooperative');
+    assertConcurrentClaimBlocked('claim-uncooperative-normal');
     $raw->release();
     $raw->result();
     $result = $claim->result();
@@ -226,7 +226,7 @@ it('reconciles a named unique-index race against a writer with no advisory coope
     $duplicate = (array) DB::table('root_accounts')->where('id', $id)->first(['signup_key', 'signup_request_digest', 'signup_cluster_id', 'signup_template_id']);
 
     try {
-        DB::table('root_accounts')->where('id', $this->p32Candidates[1])->update($duplicate);
+        DB::table('root_accounts')->where('id', $this->claimCandidates[1])->update($duplicate);
 
         throw new RuntimeException('Named unique constraint did not reject a duplicate.');
     } catch (QueryException $exception) {
@@ -236,22 +236,22 @@ it('reconciles a named unique-index race against a writer with no advisory coope
 });
 
 it('rolls back a killed precommit worker and replays a committed response lost before delivery', function (): void {
-    $before = p32SpawnClaim(key: 'crash-before', operation: 'precommit');
+    $before = spawnConcurrentClaim(key: 'crash-before', operation: 'precommit');
     expect($before->line())->toBe('ready');
     $before->stop();
     expect(DB::table('root_accounts')->where('status', 'pending')->count())->toBe(3);
-    $after = p32SpawnClaim(key: 'crash-after', operation: 'postcommit');
+    $after = spawnConcurrentClaim(key: 'crash-after', operation: 'postcommit');
     expect($after->line())->toBe('committed');
     $id = DB::table('root_accounts')->where('signup_key', 'crash-after')->value('id');
     $after->stop();
-    $replay = p32SpawnClaim('crash-after')->result();
+    $replay = spawnConcurrentClaim('crash-after')->result();
     expect($replay)->toBe(['account' => $id, 'replayed' => true]);
     expect(DB::table('root_accounts')->where('status', 'provisioning')->count())->toBe(1);
 });
 
 it('denies every changed immutable fingerprint and soft-deleted replay without a second reservation', function (): void {
-    $request = new ClaimRequest(requestKey: 'fingerprint', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'original'));
-    $claim = new ClaimAccountSignup(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: new P32ConcurrentTemplate);
+    $request = new ClaimRequest(requestKey: 'fingerprint', clusterId: $this->claimCluster, templateId: $this->claimTemplate, requestDigest: hash('sha256', 'original'));
+    $claim = new ClaimAccountSignup(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: new ConcurrentClaimTemplate);
     $first = $claim->claim($request);
     foreach ([['cluster' => (string) Str::uuid()], ['template' => (string) Str::uuid()], ['digest' => hash('sha256', 'changed')]] as $change) {
         $changed = new ClaimRequest(requestKey: $request->requestKey, clusterId: $change['cluster'] ?? $request->clusterId, templateId: $change['template'] ?? $request->templateId, requestDigest: $change['digest'] ?? $request->requestDigest);

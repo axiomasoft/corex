@@ -79,4 +79,4 @@ Package error identities use backed enums and a boot compiled kernel registry. S
 
 Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
-Схема: наборы `tenant` и `tenant-cloud`, baseline v1. Cloud FK требуют tenancy; boxed использует только `tenant`. Baseline заменяет невыпущенную upgrade-цепочку.
+The `tenant` and `tenant-cloud` schema sets started at baseline v1, which replaced the unreleased upgrade sequence. Cloud foreign keys require tenancy. Boxed installations use only `tenant`.

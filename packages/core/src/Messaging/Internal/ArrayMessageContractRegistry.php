@@ -11,12 +11,8 @@ use Override;
 use Packman\Attributes\Internal;
 
 /**
- * Неизменяемый реестр контрактов, собираемый в composition root.
- *
- * Дубликат идентичности — ошибка построения, а не молчаливое переопределение: это тот
- * же инвариант, что EXT-006 требует от любого реестра. Полная модель реестров
- * (collecting → compiled → frozen, отпечаток) вводится в P11; здесь достаточно
- * неизменяемости после сборки.
+ * Immutable contract registry assembled in the composition root. Duplicate
+ * identities fail at construction, as required by EXT-006.
  */
 #[Internal]
 final readonly class ArrayMessageContractRegistry implements MessageContractRegistry

@@ -12,7 +12,7 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 
 /**
- * Blocking runtime-globals gate (P05.3, D70 п.5–9).
+ * Blocking runtime-globals gate.
  *
  * G1: Illuminate\Support\Facades\* outside the bridge.
  * G2: global helper call (see "helpers" in the config) outside the bridge.

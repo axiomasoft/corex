@@ -4,10 +4,10 @@
 declare(strict_types=1);
 
 /**
- * Table ownership gate (P3.7 · D19): T1/T2/T4 against docs/architecture/table-ownership.md.
+ * Table ownership gate: T1/T2/T4 against docs/architecture/table-ownership.md.
  *
  * T4 cross-package FK: migration package must not reference another owner's table via
- * foreign()/constrained(), except D102 (aut_role_assignments → users/wsp_workspaces via
+ * foreign()/constrained(), except the documented role-assignment references (aut_role_assignments → users/wsp_workspaces via
  * raw SQL is out of scope) and except established platform references to users /
  * wsp_workspaces from packages other than axiomasoft/corex (frozen CRM/tasks parity).
  */

@@ -12,9 +12,9 @@ use Packman\Attributes\Internal;
 
 /**
  * `wsp_workspaces` — hierarchy of companies/branches/partners within an
- * account (B-11 §2.2). `path` (ltree) supports hierarchical predicates
+ * account. `path` (ltree) supports hierarchical predicates
  * (`path <@ :subtree`); `type=partner` membership does not grant visibility
- * of the parent (B-11 §5.4).
+ * of the parent.
  *
  * @property string $id
  * @property ?string $parent_id

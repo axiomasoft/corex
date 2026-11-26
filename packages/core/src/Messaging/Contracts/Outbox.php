@@ -10,14 +10,9 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Запись намерения опубликовать сообщение.
- *
- * Вызывается ВНУТРИ уже открытой транзакции бизнес-операции: атомарность бизнес-
- * изменения и записи outbox — единственная причина, по которой этот механизм
- * существует. dispatch()->afterCommit() его не заменяет (MSG-008,
- * research/P5-design.md §4.1).
- *
- * Порядок доставки НЕ гарантируется (D28, research/P5-design.md §5.9).
+ * Records a publication in the same transaction as the business change (MSG-008).
+ * The business change and outbox row must commit together. A dispatch via
+ * `afterCommit()` cannot make that guarantee. Delivery order is unspecified.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface Outbox

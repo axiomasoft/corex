@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Feature-module layout gate (PLAN3.D57; stdlib; run from the repository root).
+"""Feature-module layout gate (run from the repository root).
 
-Scope: every PHP file under `packages/*/src/` (the product keeps its own layout, glossary N8). Rules:
+Scope: every PHP file under `packages/*/src/` (products use their own layout). Rules:
 
   R0  namespace = path: declared namespace == PSR-4 root of the package + directories under `src/`.
   R1  roots: the kernel `src/` holds only `CoreServiceProvider.php` and directories of the closed kernel-module list;
@@ -11,7 +11,7 @@ Scope: every PHP file under `packages/*/src/` (the product keeps its own layout,
       also hold its service provider directly, and only a package root holds `<Pkg>Module.php` or its package `*Registrar.php`.
   R4  `Internal` only directly under a module (never nested).
   R5  no reference into the `Internal` of another module of the same package, except from a composition root
-      (permitted provider/root entry, `Laravel` directly under the module; PLAN3.D58).
+      (permitted provider/root entry, `Laravel` directly under the module).
 
   R6  runtime files never reference a Tooling, PHPStan or Testing namespace, in any package.
 
@@ -23,7 +23,7 @@ bridges are feature modules. The kernel has no root module. Foreign-package `Int
   python3 scripts/module-layout-gate.py --write-baseline     rewrite the baseline from the current tree
   python3 scripts/module-layout-gate.py --report             print every violation, exit 0
   options: --root DIR (tree to scan), --config FILE, --baseline FILE,
-           --project MAP (design only: evaluate the tree as moved by a P03 module-map.tsv)
+           --project MAP (design only: evaluate the tree as moved by a module-map.tsv)
 """
 from __future__ import annotations
 
@@ -113,7 +113,7 @@ def scan(root: Path, packages: dict) -> list[dict]:
 
 
 def project(files: list[dict], map_path: Path) -> None:
-    """Rewrite paths, namespaces and references as the P03 transfer would (design-time prediction)."""
+    """Rewrite paths, namespaces and references as the proposed module transfer would (design-time prediction)."""
     rows = list(csv.DictReader(map_path.open(encoding='utf-8'), delimiter='\t'))
     by_path = {r['path']: r for r in rows}
     classes = {f"{r['namespace']}\\{r['symbol']}": f"{r['target_namespace']}\\{r['symbol']}"

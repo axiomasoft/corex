@@ -23,12 +23,10 @@ use Throwable;
 
 /**
  * Runs a `root_migration_batches` wave across its target accounts,
- * sequentially (B-11 §5.6, P2.12) — synchronous/injectable so it's testable
+ * sequentially — synchronous/injectable so it's testable
  * without a real queue worker. `-p`/`--skip-failing` (see
  * `TenantsMigrateCommand`) are accepted pass-through flags only: this
- * orchestrator already never aborts a batch on a single account's failure
- * (AC-11), and real parallel dispatch is Scope Excluded (B-15 DDL-worker
- * coordination — only the advisory-lock CALL itself is required, AC-12).
+ * orchestrator already never aborts a batch on a single account's failure, and real parallel dispatch is outside this orchestrator.
  *
  * Batch duration budgets / rate-limiting / `CREATE INDEX CONCURRENTLY`
  * guidance are operational concerns for the migration-file author, not
@@ -162,10 +160,7 @@ final readonly class MigrationWaveOrchestrator
         // caller-supplied $migrationRunner can log/branch on it.
         return function (AccountRef $account): void {
             DB::connection('tenant')->transaction(function () use ($account): void {
-                // AC-12 — the advisory-lock CALL is the actual requirement
-                // here (B-15 DDL-worker coordination itself is Scope
-                // Excluded); `pg_advisory_xact_lock` auto-releases at
-                // transaction end.
+                // Serialize DDL on this connection until the transaction ends.
                 DB::connection('tenant')->select("SELECT pg_advisory_xact_lock(hashtext('fld_ddl')) /* account:{$account->id} */");
 
                 $this->schema->migrate(scope: SchemaScope::Tenant, connection: 'tenant');

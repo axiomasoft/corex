@@ -57,7 +57,7 @@ if (($argv[1] ?? null) === 'produce') {
 }
 $producer = Scenario::barrierRead('produced');
 $proof->check($producer['control']['session'] !== $controlWitness['session'], 'The worker must use a different physical PostgreSQL session');
-$default = app('db')->getDefaultConnection();
+$default = resolve('db')->getDefaultConnection();
 
 if (! $cloud) {
     $before = auth()->guard()->user();
@@ -96,7 +96,7 @@ if (! $cloud) {
         return $outer;
     });
     $proof->same($before, auth()->guard()->user(), 'Boxed host principal restored');
-    $proof->same($default, app('db')->getDefaultConnection(), 'Boxed default connection restored');
+    $proof->same($default, resolve('db')->getDefaultConnection(), 'Boxed default connection restored');
     Scenario::barrier('worked', ['owner' => $seen]);
     $proof->report($control, ['binding-a'], ['default' => $default], ['owner' => $seen, 'principal' => null]);
 
@@ -110,7 +110,7 @@ for ($attempt = 0; $attempt < 3; $attempt++) {
     $states[] = [
         'account' => app(TenancyManager::class)->context()?->id(),
         'principal' => auth()->guard()->user()?->getAuthIdentifier(),
-        'connection' => app('db')->getDefaultConnection(),
+        'connection' => resolve('db')->getDefaultConnection(),
     ];
 }
 $proof->same(array_fill(0, 3, ['account' => null, 'principal' => null, 'connection' => $default]), $states, 'Each Laravel worker attempt must restore central, DB and auth state');
@@ -174,7 +174,7 @@ $admitted = $control->table('corex_scope_tickets')->where('account_id', Scenario
 $proof->check($admitted !== [], 'The independent control store records the named root service admission');
 $proof->same(null, app(TenancyManager::class)->context(), 'The CLI restores the host tenancy frame');
 $proof->same(null, auth()->guard()->user(), 'The CLI leaves no user installed in the host');
-$proof->same($default, app('db')->getDefaultConnection(), 'The CLI restores the host connection');
+$proof->same($default, resolve('db')->getDefaultConnection(), 'The CLI restores the host connection');
 $rootSweep = ['reconcile' => $reconcile, 'sweep' => $sweep, 'wakeup' => $wakeup->id, 'service_admissions' => $admitted, 'effects' => $effects];
 Scenario::barrier('worked', ['queries' => $byRef, 'root_sweep' => $rootSweep]);
 $proof->report($control, $producer['refs'], ['default' => $default], ['states' => $states, 'queries' => $byRef, 'nested' => $ledger->failures, 'root_sweep' => $rootSweep]);

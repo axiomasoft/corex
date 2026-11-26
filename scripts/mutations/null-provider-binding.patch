@@ -1,0 +1,11 @@
+--- a/packages/core/src/Settings/Laravel/SettingsRegistrar.php
++++ b/packages/core/src/Settings/Laravel/SettingsRegistrar.php
+@@ -34,7 +34,7 @@
+         $implementation = $app->make(CoreOptions::class)->settingDefaultsProvider;
+
+         return $implementation === NullSettingDefaultsProvider::class
+-            ? $defaults
++            ? new NullSettingDefaultsProvider
+             : ConfiguredImplementation::resolve(app: $app, contract: SettingDefaultsProvider::class, implementation: $implementation);
+     }
+ }

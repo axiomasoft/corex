@@ -17,13 +17,13 @@ use CoreX\Tests\Support\LocalWorkContexts;
 use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Support\Facades\Queue;
 
-test('P12 stamps a direct AuditLogger call with authoritative impersonation provenance', function (): void {
+test('stamps a direct AuditLogger call with authoritative impersonation provenance', function (): void {
     Queue::fake();
     config(['corex.audit.enabled' => true]);
     app()->forgetInstance(CoreOptions::class);
 
     $state = new ImpersonationState('grant-p12', 'staff-p12', 'target-p12', new DateTimeImmutable('+1 hour'), 'support case 42');
-    app()->instance(ImpersonationService::class, new P12FixedImpersonationService($state));
+    app()->instance(ImpersonationService::class, new AuditContractImpersonationService($state));
     $contexts = LocalWorkContexts::install($this->app);
     $contexts->initialize(new AccountRef('account-p12', 'account', 'active', [], []));
     $contexts->setWorkspace(new WorkspaceRef('workspace-p12', 'main', 'standard', 'main', null));
@@ -61,21 +61,21 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
     });
 });
 
-test('P12 direct audit ratchet rejects bypassing the impersonation stamp', function (): void {
+test('direct audit ratchet rejects bypassing the impersonation stamp', function (): void {
     $path = dirname(__DIR__, 2).'/packages/core/src/Audit/Internal/QueuedAuditLogger.php';
     $original = (string) file_get_contents($path);
     $changed = str_replace('$entry = $entry->withImpersonation($state);', '$entry = $entry;', $original);
     file_put_contents($path, $changed);
 
     try {
-        expect(p12ImpersonationAuditViolations())->toContain('I-DIRECT-AUDIT-BYPASS QueuedAuditLogger::record');
+        expect(impersonationAuditViolations())->toContain('I-DIRECT-AUDIT-BYPASS QueuedAuditLogger::record');
     } finally {
         file_put_contents($path, $original);
     }
 });
 
 /** @return list<string> */
-function p12ImpersonationAuditViolations(): array
+function impersonationAuditViolations(): array
 {
     $path = dirname(__DIR__, 2).'/packages/core/src/Audit/Internal/QueuedAuditLogger.php';
     $tokens = token_get_all((string) file_get_contents($path));
@@ -99,7 +99,7 @@ function p12ImpersonationAuditViolations(): array
         : [];
 }
 
-final readonly class P12FixedImpersonationService implements ImpersonationService
+final readonly class AuditContractImpersonationService implements ImpersonationService
 {
     public function __construct(private ImpersonationState $fixed) {}
 

@@ -19,7 +19,7 @@ final class PostgresExport implements ExportSource
 {
     public function page(DataScope $scope, ExportManifest $manifest, ExportCursor $after, TransferLimits $limits): ExportPage
     {
-        $connection = app('db')->connection();
+        $connection = resolve('db')->connection();
         app(CurrentWorkScope::class)->assert($scope, $connection);
         $isolation = $connection->selectOne('SHOW transaction_isolation')->transaction_isolation;
 

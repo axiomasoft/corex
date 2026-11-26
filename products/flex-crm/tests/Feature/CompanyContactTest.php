@@ -10,6 +10,7 @@ use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Contact\Actions\AssociateContactCompany;
 use Flex\Crm\Contact\Actions\CreateContact;
 use Flex\Crm\Contact\Data\ContactData;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
 
 it('creates a company and a contact linked to it', function (): void {
@@ -62,3 +63,15 @@ it('rolls back a vetoed company update and deletion on the owner connection', fu
     expect($company->fresh()->name)->toBe('Original')
         ->and($company->fresh()->deleted_at)->toBeNull();
 });
+
+it('refuses a blank or overlong association label and a malformed reference', function (?string $label, bool $malformedId): void {
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Acme'));
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Jane'));
+
+    expect(fn () => resolve(AssociateContactCompany::class)->handle($malformedId ? 'not-a-uuid' : $contact->id, $company->id, $label))
+        ->toThrow($malformedId ? AuthorizationException::class : ValidationException::class);
+})->with([
+    'blank label' => ['  ', false],
+    'overlong label' => [str_repeat('x', 65), false],
+    'malformed contact id' => [null, true],
+]);

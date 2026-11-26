@@ -37,7 +37,8 @@
         "orchestra/testbench": "^11.3",
         "orchestra/testbench-core": "^11.5",
         "pestphp/pest": "^5.2",
-        "axiomasoft/corex-webhooks": "^2.0@dev"
+        "axiomasoft/corex-webhooks": "^2.0@dev",
+        "mockery/mockery": "^1.6"
     },
     "autoload": {
         "psr-4": {

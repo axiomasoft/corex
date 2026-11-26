@@ -9,7 +9,7 @@ use CoreX\Tests\Golden\GoldenTestCase;
 use CoreX\Tests\Support\OptionsSingletonGate;
 use stdClass;
 
-// P05.1 (D69 p.3) — Options are lazy singletons: two make() calls return one instance.
+// Options are lazy singletons: two make() calls return one instance.
 
 final class OptionsSingletonTest extends GoldenTestCase
 {

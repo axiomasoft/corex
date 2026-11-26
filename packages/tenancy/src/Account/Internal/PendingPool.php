@@ -21,19 +21,19 @@ use RuntimeException;
 use stdClass;
 
 /**
- * Pending-pool mechanics (B-11 §5.2, AC-4/AC-5): keeps `pending_pool_size`
+ * Pending-pool mechanics: keeps `pending_pool_size`
  * provisioned account resources per cell so signup can claim a prepared resource.
  * Pending accounts carry
  * `status='pending'`, `slug`/`owner_identity_id` NULL — the frozen
- * DB_SCHEMA table-CHECK on `root_accounts` already allows that state
- * (D14/P2.2), so no `pending_since` column is needed: `status` alone encodes "not yet claimed".
+ * database CHECK constraint on `root_accounts` already allows that state,
+ * so no `pending_since` column is needed: `status` alone encodes "not yet claimed".
  *
- * Claiming (premortem A6): {@see pullPending()} flips `status`
+ * Claiming: {@see pullPending()} flips `status`
  * `pending → provisioning` inside a `SELECT … FOR UPDATE SKIP LOCKED`
  * transaction — two concurrent callers never claim the same row. `slug`/
  * `owner_identity_id` stay NULL: the full pending→active transition (slug,
- * owner, status=trial) is P2.12's `AccountLifecycle::activateFromPool`
- * (Scope Excluded) — this class only reserves the row and lays the
+ * owner, status=trial) belongs to `AccountLifecycle::activateFromPool`
+ * — this class only reserves the row and lays the
  * atomicity invariant for that later transition.
  */
 #[Internal]
@@ -50,7 +50,7 @@ final readonly class PendingPool
     /**
      * Create $count pending болванки on $clusterId (least-loaded active
      * cluster per call if omitted), cloning each database synchronously
-     * from the cell's current ready template (D24 parity gate).
+     * from the cell's current ready template.
      *
      * @return list<string> created account ids
      */
@@ -86,7 +86,7 @@ final readonly class PendingPool
     /**
      * Claim a pending account from the least-loaded cell (`ORDER BY
      * db_count`); an empty pool falls back to a synchronous clone
-     * (< 10с, AC-5).
+     * (target duration below ten seconds).
      */
     public function pullPending(): Account
     {
@@ -283,7 +283,7 @@ final readonly class PendingPool
             ->first();
 
         if ($template === null || $template->status !== 'ready') {
-            throw new RuntimeException("Template version [{$version}] is not ready for cloning (template-parity gate, D24).");
+            throw new RuntimeException("Template version [{$version}] is not ready for cloning.");
         }
 
         return $template;

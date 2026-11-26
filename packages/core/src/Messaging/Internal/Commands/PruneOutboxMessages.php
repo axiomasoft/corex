@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal\Commands;
 
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Messaging\Internal\BatchedDelete;
 use DateInterval;
 use Illuminate\Console\Command;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -12,16 +13,14 @@ use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
- * Удаляет терминальные строки sys_outbox_messages старше порога.
+ * Prunes terminal outbox rows. Published messages are retained for
+ * reconciliation. Dead messages are kept separately for investigation.
+ * Pending and publishing rows still require delivery.
  *
- * Два окна, а не одно: опубликованные записи нужны сверке, мёртвые — расследованию,
- * и второе обычно длиннее. Строки в pending и publishing не удаляются никогда — это
- * недоставленная работа, а не история.
+ * Inbox deduplication records are retained because deleting them allows the
+ * same message to be processed again.
  *
- * sys_inbox_messages эта команда НЕ трогает: удаление отметки дедупликации заново
- * открывает окно дублей (research/P5-design.md §7.3, D29).
- *
- * @internal spec: P5.15 — console command is not a supported API
+ * @internal Console commands are outside the supported PHP API.
  */
 #[Internal]
 final class PruneOutboxMessages extends Command
@@ -29,7 +28,8 @@ final class PruneOutboxMessages extends Command
     protected $signature = 'corex:messaging:prune
         {--published-older-than= : DateInterval-parseable age for published rows (default: corex.messaging.outbox_retention)}
         {--dead-older-than= : DateInterval-parseable age for dead rows (default: corex.messaging.dead_retention)}
-        {--database= : Connection to prune (default: the app default)}';
+        {--database= : Connection to prune (default: the app default)}
+        {--batch= : Rows deleted per statement (default: 1000)}';
 
     protected $description = 'Delete terminal sys_outbox_messages rows older than their retention window.';
 
@@ -44,18 +44,17 @@ final class PruneOutboxMessages extends Command
 
         $published = $publishedOption ?? $options->messagingOutboxRetention;
         $dead = $deadOption ?? $options->messagingDeadRetention;
+        $batch = BatchedDelete::batchOption($this->option('batch'));
         $now = $clock->now();
         $table = 'sys_outbox_messages';
 
-        $prunedPublished = $connections->connection($connection)->table($table)
+        $prunedPublished = BatchedDelete::run(query: $connections->connection($connection)->table($table)
             ->where('status', 'published')
-            ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published)))
-            ->delete();
+            ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published))), key: 'id', batch: $batch);
 
-        $prunedDead = $connections->connection($connection)->table($table)
+        $prunedDead = BatchedDelete::run(query: $connections->connection($connection)->table($table)
             ->where('status', 'dead')
-            ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead)))
-            ->delete();
+            ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead))), key: 'id', batch: $batch);
 
         $this->info(sprintf(
             'Outbox retention: pruned %d published (older than %s) and %d dead (older than %s).',

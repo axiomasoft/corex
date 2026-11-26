@@ -111,7 +111,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
         MediaInventory::install();
         foreach ([Scenario::ACCOUNT_A => 'a', Scenario::ACCOUNT_B => 'b'] as $account => $role) {
             self::enter($account, null, static function (DataScope $scope) use ($role): void {
-                $paths = array_values(array_filter(app('migrator')->paths(), static fn ($path) => str_starts_with(realpath($path) ?: '', base_path('vendor/axiomasoft/vaulter-'))));
+                $paths = array_values(array_filter(resolve('migrator')->paths(), static fn ($path) => str_starts_with(realpath($path) ?: '', base_path('vendor/axiomasoft/vaulter-'))));
 
                 if ($paths === [] || Artisan::call('migrate', ['--path' => $paths, '--realpath' => true, '--database' => 'scenario_'.$role, '--force' => true]) !== 0) {
                     throw new RuntimeException('Vaulter owner migrations failed. '.Artisan::output());

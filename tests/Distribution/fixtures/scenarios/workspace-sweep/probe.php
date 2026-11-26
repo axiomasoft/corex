@@ -31,9 +31,7 @@ $mode = $argv[1] ?? '';
 
 function inWorkspaceTwo(Closure $callback): mixed
 {
-    return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static function () use ($callback): mixed {
-        return $callback(app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current()));
-    });
+    return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static fn (): mixed => $callback(resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current())));
 }
 
 function sweepFromWorkspaceOne(Scenario $proof): void
@@ -57,7 +55,7 @@ function row(string $key): array
     return (array) $row;
 }
 
-function request(DataScope $scope, string $kind, string $version, string $key, DateTimeImmutable $fireAt, array $payload, ?WakeupWindow $window = null): WakeupRequest
+function sweepWakeupRequest(DataScope $scope, string $kind, string $version, string $key, DateTimeImmutable $fireAt, array $payload, ?WakeupWindow $window = null): WakeupRequest
 {
     return new WakeupRequest($scope, $kind, $version, $key, $fireAt, $window, JsonDocuments::capture($payload));
 }
@@ -88,7 +86,7 @@ switch ($mode) {
                 'start' => '2026-11-20', 'end' => '2026-11-21', 'aheadDays' => 1, 'pageLimit' => 10, 'maxSeconds' => 5,
             ];
             $window = new WakeupWindow($now->modify('-1 minute'), $now, 'custom');
-            $wakeup = request($scope, 'task-recurrence.materialize', 'task-materialization/1', 'materialize-w2', $now, $data, $window);
+            $wakeup = sweepWakeupRequest($scope, 'task-recurrence.materialize', 'task-materialization/1', 'materialize-w2', $now, $data, $window);
             $scheduler = app(WakeupScheduler::class);
             $created = $scheduler->schedule($wakeup);
             $proof->same('created', $created->status, 'Schedule W2 through the installed Scheduler');
@@ -96,10 +94,10 @@ switch ($mode) {
             $proof->same('existing', $replay->status, 'Identical scope, window and payload replay the stored request');
             $proof->same($created->id, $replay->id, 'Exact replay preserves the original request ID');
             $changed = new WakeupWindow($now->modify('-2 minutes'), $now, 'custom');
-            $proof->same('conflict', $scheduler->schedule(request($scope, $wakeup->kind, $wakeup->handlerVersion, $wakeup->requestKey, $now, $data, $changed))->status, 'A different window on the same key conflicts');
-            $proof->same('created', $scheduler->schedule(request($scope, 'scenario.cas', 'cas/1', 'cancelled', $now, ['fixture' => true]))->status, 'Prepare cancellable request');
+            $proof->same('conflict', $scheduler->schedule(sweepWakeupRequest($scope, $wakeup->kind, $wakeup->handlerVersion, $wakeup->requestKey, $now, $data, $changed))->status, 'A different window on the same key conflicts');
+            $proof->same('created', $scheduler->schedule(sweepWakeupRequest($scope, 'scenario.cas', 'cas/1', 'cancelled', $now, ['fixture' => true]))->status, 'Prepare cancellable request');
             $proof->same('cancelled', $scheduler->cancel($scope, new WakeupIdentity('scenario.cas', 'cancelled'))->status, 'Cancel through the public Scheduler');
-            $proof->same('created', $scheduler->schedule(request($scope, 'scenario.retired', 'retired/1', 'retired', $now->modify('+30 seconds'), ['fixture' => true]))->status, 'The first deployment accepts the legacy handler version.');
+            $proof->same('created', $scheduler->schedule(sweepWakeupRequest($scope, 'scenario.retired', 'retired/1', 'retired', $now->modify('+30 seconds'), ['fixture' => true]))->status, 'The first deployment accepts the legacy handler version.');
 
             return $created->id ?? throw new RuntimeException('Missing durable W2 request ID.');
         });
@@ -186,7 +184,7 @@ switch ($mode) {
     case 'late':
         $clock->advance(120);
         $created = inWorkspaceTwo(static fn (DataScope $scope) => app(WakeupScheduler::class)->schedule(
-            request($scope, 'scenario.cas', 'cas/1', 'expired-cas', $clock->now(), ['fixture' => true]),
+            sweepWakeupRequest($scope, 'scenario.cas', 'cas/1', 'expired-cas', $clock->now(), ['fixture' => true]),
         ));
         $proof->same('created', $created->status, 'Prepare a real late-CAS request in W2');
         sweepFromWorkspaceOne($proof);

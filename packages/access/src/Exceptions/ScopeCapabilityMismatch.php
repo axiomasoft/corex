@@ -13,7 +13,7 @@ use Packman\Errors\Exceptions\CodedException;
 /**
  * An entity's matrix row names a scope (own/dept/dept_tree/workspace) whose
  * physical column exists but whose capability was never declared on the
- * entity's `EntityDefinition` (B-11 §4 п.3, D114). Letter-only compliance
+ * entity's `EntityDefinition`. Letter-only compliance
  * would silently widen the scope to `account` here — a forgotten `ownable`
  * declaration turning "sees own records" into "sees everything" — so this
  * is a fail-closed exception instead: declaration drift is a bug in the

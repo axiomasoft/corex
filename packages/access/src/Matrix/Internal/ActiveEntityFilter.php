@@ -12,14 +12,14 @@ use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /**
  * Single owner of "does this entity_key currently give out a permission
- * key" (AC-27, D112/D113): {@see DatabaseRoleMatrixCompiler} and
+ * key": {@see DatabaseRoleMatrixCompiler} and
  * {@see MatrixPermissionCatalogBuilder} both filter through this one method
  * instead of repeating the two-part condition — unknown entity_key OR
  * inactive owning module — twice.
  *
  * `TenantContextResolver::current()` (not the nullable
  * `TenancyManager::context()`) — the same contract `DomainEvent` itself
- * resolves at construction (B-11 §3.1) — throws `CentralContextException`
+ * resolves at construction — throws `CentralContextException`
  * in the true central/root scope instead of guessing a tenant. Both call
  * sites already assume a tenant-scoped DB connection (`aut_role_matrix` is
  * a tenant table), so a resolvable context is an existing precondition, not

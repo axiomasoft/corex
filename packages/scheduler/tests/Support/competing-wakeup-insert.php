@@ -23,7 +23,7 @@ while (microtime(true) < $end) {
         $db->commit();
         exit(0);
     }
-    usleep(5000);
+    time_nanosleep(0, 5_000_000);
 }
 
 throw new RuntimeException('The competing schedule never reached its PostgreSQL lock.');

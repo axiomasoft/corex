@@ -1,21 +1,6 @@
 #!/usr/bin/env bash
-# Анти-ослабляющий гейт CI (P1.14, plan.md D34/D45; лейны/allowance — P2.15/D93).
-#
-# Ловит диффы, которые "чинят" красный гейт понижением планки вместо фикса:
-#   - ->skip(/markTestSkipped в тестовых файлах (tests/) — тест выключен, а не исправлен;
-#   - continue-on-error в workflow'ах — job формально зелёный при красном шаге;
-#   - рост измеренного потолка PHPStan/dependencies или ownership baseline;
-#   - понижение --min= в composer test:coverage;
-#   - уменьшение числа тестов в любом из двух лейнов (sqlite/pg) относительно базы —
-#     число считается ПО ОБЪЕДИНЕНИЮ корневого `tests/` и всех `packages/*/tests`
-#     (пакетные сьюты D81 — иначе их вынос из корня читается как удаление тестов, D93).
-#
-# Сравнивает HEAD с базой: merge-base с origin/main, либо (fallback) родитель
-# HEAD, либо (первый коммит истории) пропускает численные проверки — не с чем
-# сравнивать. Одобренное владельцем уменьшение числа тестов (напр. снос легаси-каркаса
-# вместе с его тестами) смягчается ТОЛЬКО через `scripts/anti-weakening-allowances.txt`,
-# ЯКОРЕННЫЙ на конкретный base sha — скидка авто-истекает, как только BASE_REF уезжает
-# (постоянный floor намеренно отвергнут — D93, он тихо накапливал бы вычет навсегда).
+# Compare branch history with the integration base. CI supplies the previous
+# main tip on main pushes and the target branch SHA on pull requests.
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
@@ -27,48 +12,63 @@ log_fail() {
     fail=1
 }
 
-git fetch origin main --quiet 2>/dev/null || true
-
-BASE_REF=""
-if git rev-parse --verify --quiet origin/main >/dev/null; then
-    BASE_REF="$(git merge-base HEAD origin/main 2>/dev/null || true)"
-fi
-if [ -z "$BASE_REF" ]; then
-    BASE_REF="$(git rev-parse HEAD^ 2>/dev/null || true)"
-fi
-
-if [ -z "$BASE_REF" ]; then
-    echo "ANTI-WEAKENING GATE: нет базы для сравнения (первый коммит истории) — численные проверки пропущены." >&2
+requested_base="${1:-}"
+if [[ -n "$requested_base" && ! "$requested_base" =~ ^0+$ ]]; then
+    BASE_REF="$(git rev-parse --verify --end-of-options "${requested_base}^{commit}")"
+    git merge-base --is-ancestor "$BASE_REF" HEAD || {
+        echo "The comparison base must be an ancestor of HEAD." >&2
+        exit 1
+    }
 else
-    echo "ANTI-WEAKENING GATE: база сравнения = $BASE_REF"
+    BASE_REF="$(git merge-base HEAD origin/main 2>/dev/null || true)"
+    if [[ -z "$BASE_REF" || "$BASE_REF" = "$(git rev-parse HEAD)" ]]; then
+        BASE_REF="$(git rev-parse --verify HEAD^ 2>/dev/null || true)"
+    fi
 fi
-
-# --- 1. Запрещённые паттерны в добавленных строках диффа (тесты + workflow'ы) ---
-if [ -n "$BASE_REF" ]; then
+if [[ -n "$BASE_REF" ]]; then
+    echo "Anti-weakening comparison base: $BASE_REF"
     DIFF_RANGE="$BASE_REF..HEAD"
 else
-    DIFF_RANGE="HEAD"
+    echo "Initial commit has no prior ceilings."
+    DIFF_RANGE=HEAD
 fi
 
 check_added_pattern() {
     local pattern="$1"
     local label="$2"
-    local pathspec="$3"
+    shift 2
 
     local hits
-    hits="$(git diff "$DIFF_RANGE" -- $pathspec | command grep -E '^\+' | command grep -E -v '^\+\+\+' | command grep -F -- "$pattern" || true)"
+    # Only the literal diagnostic of an existing skip can change freely.
+    # Match its original line in the same hunk to preserve the call and condition.
+    hits="$(git diff --unified=0 --no-color "$DIFF_RANGE" -- "$@" | awk -v pattern="$pattern" '
+        function normalize(line) {
+            sub(/->markTestSkipped\(\047[^\047]*\047\);$/, "->markTestSkipped(<reason>);", line)
+            return line
+        }
+        /^@@ / { delete original; removed = added = 0; next }
+        /^--- / || /^\+\+\+ / { next }
+        /^-/ { original[++removed] = substr($0, 2); next }
+        /^\+/ {
+            line = substr($0, 2)
+            ++added
+            if (index(line, pattern) && !(pattern == "markTestSkipped" && added in original &&
+                normalize(line) != line && normalize(line) == normalize(original[added]))) print $0
+        }
+    ')"
 
     if [ -n "$hits" ]; then
-        log_fail "$label добавлен диффом:"
+        log_fail "$label added in the diff:"
         echo "$hits" >&2
     fi
 }
 
-check_added_pattern '->skip(' "->skip(" 'tests/*.php tests/**/*.php'
-check_added_pattern 'markTestSkipped' 'markTestSkipped' 'tests/*.php tests/**/*.php'
-check_added_pattern 'continue-on-error' 'continue-on-error' '.github/workflows/*.yml'
+test_paths=(':(glob)tests/**/*.php' ':(glob)packages/*/tests/**/*.php' ':(glob)products/*/tests/**/*.php')
+check_added_pattern '->skip(' "->skip(" "${test_paths[@]}"
+check_added_pattern 'markTestSkipped' 'markTestSkipped' "${test_paths[@]}"
+check_added_pattern 'continue-on-error' 'continue-on-error' ':(glob).github/workflows/*.yml' ':(glob).github/workflows/*.yaml'
 
-# PLAN3.D37/D39: bind every change to its preceding committed debt ceiling.
+# Bind every change to its preceding committed debt ceiling.
 # Initial introduction is permitted once; later additions are rejected even when
 # the remote comparison base predates creation. Include uncommitted changes.
 python3 - "$BASE_REF" <<'PYRATCHET' || log_fail "quality ceilings or ownership baseline grew"
@@ -140,93 +140,79 @@ for path, kind in paths.items():
 sys.exit(1 if failed else 0)
 PYRATCHET
 
-# Bind each baseline change to its own rebaseline entry. A historical initial
-# entry in the remote-base diff must not authorize unrelated future changes.
-check_golden_rebaseline() {
-    local before="$1" after="${2:-}"
-    if git diff --name-only "$before" ${after:+"$after"} -- tests/Golden/baseline | command grep -q . \
-       && ! git diff "$before" ${after:+"$after"} -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-'; then
-        log_fail "golden baseline changed without a REBASELINE.md entry ($before ${after:-worktree})"
-    fi
-}
-if [ -n "$BASE_REF" ]; then
-    while read -r golden_commit; do
-        check_golden_rebaseline "$golden_commit^" "$golden_commit"
-    done < <(git rev-list "$DIFF_RANGE" -- tests/Golden/baseline)
-fi
-check_golden_rebaseline HEAD
+python3 "$(dirname "$0")/check-golden-history.py" "$BASE_REF" || log_fail "golden snapshot history changed without a receipt"
 
-# --- 2. --min= в composer.json не понижен ---
-extract_min() {
+# The historical Composer flag is only a fallback for bases without a floor file.
+floor_file=scripts/coverage-min-floor.txt
+read_floor() {
+    local value
+    IFS= read -r value || [[ -n "$value" ]] || return 1
+    [[ "$value" =~ ^(0|[1-9][0-9]?|100)$ ]] || return 1
+    echo "$value"
+}
+floor_at() {
     local ref="$1"
-    git show "$ref:composer.json" 2>/dev/null \
-        | command grep -o '"test:coverage": *"[^"]*"' \
-        | command grep -o -- '--min=[0-9]*' \
-        | command grep -o '[0-9]*' \
-        || true
+    if git cat-file -e "$ref:$floor_file" 2>/dev/null; then
+        read_floor < <(git show "$ref:$floor_file")
+    else
+        git show "$ref:composer.json" 2>/dev/null | sed -nE '/"test:coverage":/s/.*--min=([0-9]+).*/\1/p' || true
+    fi
 }
-
-if [ -n "$BASE_REF" ]; then
-    OLD_MIN="$(extract_min "$BASE_REF")"
-    NEW_MIN="$(extract_min HEAD)"
-
-    # D47-floor: owner-одобренное понижение --min (80->55, 2026-07-14) не должно
-    # перефлагиваться на КАЖДОМ item'е волны только потому, что origin/main ещё несёт
-    # исторический 80 — база сравнения для ЭТОЙ проверки заменяется на floor, если он
-    # выше "сырого" OLD_MIN из origin/main (т.е. floor только смягчает, никогда не
-    # снижает защиту ниже уже одобренного порога).
-    if [ -f "scripts/coverage-min-floor.txt" ]; then
-        FLOOR_MIN="$(command grep -o '^[0-9]*' scripts/coverage-min-floor.txt | head -1)"
-        if [ -n "$FLOOR_MIN" ] && { [ -z "$OLD_MIN" ] || [ "$FLOOR_MIN" -lt "$OLD_MIN" ]; }; then
-            OLD_MIN="$FLOOR_MIN"
-        fi
+check_floor() {
+    local old="$1" new="$2" where="$3"
+    if [[ -z "$new" ]]; then
+        log_fail "root coverage floor missing or invalid at $where"
+    elif [[ -n "$old" && "$new" -lt "$old" ]]; then
+        log_fail "root coverage floor lowered at $where: $old -> $new"
     fi
-
-    if [ -n "$OLD_MIN" ] && [ -n "$NEW_MIN" ] && [ "$NEW_MIN" -lt "$OLD_MIN" ]; then
-        log_fail "coverage --min= понижен: $OLD_MIN -> $NEW_MIN"
-    fi
+}
+if [[ -n "$BASE_REF" ]]; then
+    while read -r revision parents; do
+        [[ -n "$revision" ]] || continue
+        new_min="$(read_floor < <(git show "$revision:$floor_file" 2>/dev/null) || true)"
+        for parent in $parents; do
+            old_min="$(floor_at "$parent")"
+            check_floor "$old_min" "$new_min" "$revision"
+        done
+    done < <(git log --full-history --format='%H %P' "$DIFF_RANGE" -- "$floor_file")
 fi
+head_min="$(read_floor < <(git show "HEAD:$floor_file" 2>/dev/null) || true)"
+work_min="$(read_floor < "$floor_file" || true)"
+base_min=""
+if [[ -n "$BASE_REF" ]]; then
+    base_min="$(floor_at "$BASE_REF")"
+fi
+check_floor "$base_min" "$head_min" HEAD
+check_floor "$head_min" "$work_min" worktree
 
-# --- 3. Число тестов — только вверх (sqlite-лейн исключая ->group('pg'), pg-лейн) ---
-# База сравнения = объединение корневого tests/ и ВСЕХ packages/*/tests (D81/D93):
-# считать только корень значило бы читать миграцию сьюта в пакет как удаление тестов.
+# Git reads the committed test trees directly, including filenames with spaces.
 count_tests() {
-    local ref="$1"
-    local worktree
-    worktree="$(mktemp -d)"
-    git worktree add --quiet --detach "$worktree" "$ref" >/dev/null 2>&1 || {
-        rm -rf "$worktree"
-        echo "0 0"
-        return
-    }
+    python3 - "$1" <<'PYCOUNT'
+import subprocess, sys
 
-    local test_dirs=()
-    [ -d "$worktree/tests" ] && test_dirs+=("$worktree/tests")
-    local pkg_tests
-    for pkg_tests in "$worktree"/packages/*/tests "$worktree"/products/*/tests; do
-        [ -d "$pkg_tests" ] && test_dirs+=("$pkg_tests")
-    done
+revision = sys.argv[1]
+paths = [':(glob)tests/**/*.php', ':(glob)packages/*/tests/**/*.php', ':(glob)products/*/tests/**/*.php']
+def matches(*options):
+    result = subprocess.run(['git', 'grep', *options, revision, '--', *paths], capture_output=True)
+    if result.returncode not in (0, 1):
+        sys.exit(result.stderr.decode())
+    return result.stdout
 
-    local total=0 pg=0
-    if [ "${#test_dirs[@]}" -gt 0 ]; then
-        total="$(command grep -rEo "^\s*(it|test)\(|public function test_" "${test_dirs[@]}" 2>/dev/null | wc -l | tr -d ' ')"
-        # `command` НЕ ставится перед grep здесь: xargs исполняет свой аргумент как
-        # программу через exec(), а не через шелл, где резолвился бы алиас/функция —
-        # `command grep` в этой позиции был вызовом несуществующего файла (pg-счёт
-        # всегда 0, D93 причина 2). Прямые вызовы `command grep` вне xargs (выше и
-        # в блоке 1) защиту от алиасов сохраняют — это shell-builtin, не программа.
-        pg="$(command grep -rl "group('pg')" "${test_dirs[@]}" 2>/dev/null | xargs -r grep -Eo "^\s*(it|test)\(|public function test_" 2>/dev/null | wc -l | tr -d ' ')"
-    fi
-
-    git worktree remove --force "$worktree" >/dev/null 2>&1 || true
-
-    echo "$total $pg"
+pg_files = set(matches('-lzF', "group('pg')").split(b'\0'))
+total = pg = 0
+results = matches('-zcE', '^[[:space:]]*(it|test)\\(|public function test_')
+while results:
+    name, _, remainder = results.partition(b'\0')
+    value, _, results = remainder.partition(b'\n')
+    count = int(value)
+    total += count
+    if name in pg_files:
+        pg += count
+print(total, pg)
+PYCOUNT
 }
 
-# Allowance — одобренное владельцем уменьшение числа тестов лейна, ЯКОРЕННОЕ на base
-# sha (D93): скидка применяется ТОЛЬКО пока текущий BASE_REF равен sha строки (полное
-# сравнение через `git rev-parse`, не префиксы); иная/неизвестная база → строка печатается
-# «неактивной» и не смягчает счёт (fail-closed к строгости, скидки не накапливаются вечно).
+# A retired test allowance applies only to the exact base it was reviewed against.
 ALLOWANCES_FILE="scripts/anti-weakening-allowances.txt"
 
 apply_allowance() {
@@ -246,17 +232,17 @@ apply_allowance() {
         read -r a_sha a_lane a_delta a_issue a_reason <<< "$line"
 
         if [ -z "$a_sha" ] || [ -z "$a_lane" ] || [ -z "$a_delta" ] || [ -z "$a_issue" ]; then
-            log_fail "allowance-строка не разбирается позиционно (ожидается '<sha> <lane> <дельта> <D#> <причина>'): '$line'"
+            log_fail "expected allowance format '<sha> <lane> <delta> <decision> <reason>': '$line'"
             continue
         fi
         if [ "$a_lane" != "sqlite" ] && [ "$a_lane" != "pg" ]; then
-            log_fail "allowance-строка несёт неизвестный лейн '$a_lane': '$line'"
+            log_fail "unknown allowance lane '$a_lane': '$line'"
             continue
         fi
         case "$a_delta" in
             -[0-9]*) : ;;
             *)
-                log_fail "allowance-строка несёт не отрицательную дельту (запрещено — скидка только вниз): '$line'"
+                log_fail "expected a negative allowance delta: '$line'"
                 continue
                 ;;
         esac
@@ -268,16 +254,18 @@ apply_allowance() {
 
         if [ -n "$a_sha_full" ] && [ -n "$BASE_REF" ] && [ "$a_sha_full" = "$BASE_REF" ]; then
             ALLOWANCE_DELTA=$((ALLOWANCE_DELTA + a_delta))
-            echo "ANTI-WEAKENING GATE: allowance применена ($lane $a_delta, $a_issue) — база совпадает $a_sha"
+            echo "ANTI-WEAKENING GATE: allowance applied ($lane $a_delta, $a_issue); matching base $a_sha"
         else
-            echo "ANTI-WEAKENING GATE: allowance НЕАКТИВНА ($lane $a_delta, $a_issue, sha=$a_sha) — база сравнения не совпадает"
+            echo "ANTI-WEAKENING GATE: allowance inactive ($lane $a_delta, $a_issue, sha=$a_sha); different base"
         fi
     done < "$ALLOWANCES_FILE"
 }
 
 if [ -n "$BASE_REF" ]; then
-    read -r OLD_TOTAL OLD_PG <<< "$(count_tests "$BASE_REF")"
-    read -r NEW_TOTAL NEW_PG <<< "$(count_tests HEAD)"
+    base_counts="$(count_tests "$BASE_REF")"
+    head_counts="$(count_tests HEAD)"
+    read -r OLD_TOTAL OLD_PG <<< "$base_counts"
+    read -r NEW_TOTAL NEW_PG <<< "$head_counts"
 
     OLD_SQLITE=$((OLD_TOTAL - OLD_PG))
     NEW_SQLITE=$((NEW_TOTAL - NEW_PG))
@@ -288,13 +276,13 @@ if [ -n "$BASE_REF" ]; then
     OLD_PG_ALLOWED=$((OLD_PG + ALLOWANCE_DELTA))
 
     if [ "$NEW_SQLITE" -lt "$OLD_SQLITE_ALLOWED" ]; then
-        log_fail "число тестов sqlite-лейна уменьшилось: $OLD_SQLITE -> $NEW_SQLITE (после allowance: $OLD_SQLITE_ALLOWED)"
+        log_fail "SQLite test count fell: $OLD_SQLITE -> $NEW_SQLITE (after allowance: $OLD_SQLITE_ALLOWED)"
     fi
     if [ "$NEW_PG" -lt "$OLD_PG_ALLOWED" ]; then
-        log_fail "число тестов pg-лейна уменьшилось: $OLD_PG -> $NEW_PG (после allowance: $OLD_PG_ALLOWED)"
+        log_fail "PostgreSQL test count fell: $OLD_PG -> $NEW_PG (after allowance: $OLD_PG_ALLOWED)"
     fi
 
-    echo "ANTI-WEAKENING GATE: тесты sqlite $OLD_SQLITE -> $NEW_SQLITE, pg $OLD_PG -> $NEW_PG"
+    echo "ANTI-WEAKENING GATE: tests SQLite $OLD_SQLITE -> $NEW_SQLITE, pg $OLD_PG -> $NEW_PG"
 fi
 
 if [ "$fail" -ne 0 ]; then

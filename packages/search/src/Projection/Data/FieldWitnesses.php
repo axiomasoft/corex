@@ -33,12 +33,7 @@ final readonly class FieldWitnesses
         if (count($selection->fields) !== count($this->digests)) {
             return false;
         }
-        foreach ($selection->fields as $field) {
-            if (! isset($this->digests[$field]) || ! hash_equals($this->digests[$field], $values->fieldWitness($field))) {
-                return false;
-            }
-        }
 
-        return true;
+        return array_all($selection->fields, fn (string $field): bool => isset($this->digests[$field]) && hash_equals($this->digests[$field], $values->fieldWitness($field)));
     }
 }

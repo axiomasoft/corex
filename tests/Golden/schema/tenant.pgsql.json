@@ -122,6 +122,16 @@
             },
             "indexes": [
                 {
+                    "name": "aut_role_assignments_granted_by_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "granted_by"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "aut_role_assignments_pk",
                     "kind": "pk",
                     "columns": [
@@ -154,6 +164,16 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": true
+                },
+                {
+                    "name": "aut_role_assignments_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -366,6 +386,16 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "aut_roles_cloned_from_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "cloned_from_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "aut_roles_pk",
                     "kind": "pk",
@@ -716,6 +746,16 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_rate_current_snapshot_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "snapshot_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -928,6 +968,16 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_reference_current_snapshot_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "snapshot_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1077,6 +1127,18 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "corex_reference_records_parent_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "snapshot_id",
+                        "parent_namespace",
+                        "parent_source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "corex_reference_records_pk",
                     "kind": "pk",
@@ -2042,6 +2104,17 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_task_series_state_series_key_active_revision_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "series_key",
+                        "active_revision"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2239,6 +2312,16 @@
             },
             "indexes": [
                 {
+                    "name": "corex_transfer_outbox_job_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "corex_transfer_outbox_operation_key_uq",
                     "kind": "uq",
                     "columns": [
@@ -2357,6 +2440,16 @@
                         "entity",
                         "external_system",
                         "external_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_transfer_refs_job_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "job_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -2659,6 +2752,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_activities_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_activities_pk",
                     "kind": "pk",
                     "columns": [
@@ -2676,6 +2779,16 @@
                         "starts_at"
                     ],
                     "predicate": "(((status)::text = 'planned'::text) AND (deleted_at IS NULL))",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_activities_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 }
@@ -2908,6 +3021,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_companies_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_companies_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -2945,6 +3068,26 @@
                     ],
                     "predicate": null,
                     "method": "gin",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_companies_source_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_companies_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
                     "nulls_not_distinct": false
                 },
                 {
@@ -3204,6 +3347,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_contacts_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_contacts_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -3241,6 +3394,26 @@
                     ],
                     "predicate": null,
                     "method": "gin",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_contacts_source_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_contacts_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
                     "nulls_not_distinct": false
                 },
                 {
@@ -3545,6 +3718,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_deals_company_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "company_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_deals_company_ix",
                     "kind": "ix",
                     "columns": [
@@ -3581,6 +3764,26 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_deals_lost_reason_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "lost_reason_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_deals_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -3588,6 +3791,16 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_pipeline_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "pipeline_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -3609,6 +3822,36 @@
                     ],
                     "predicate": null,
                     "method": "gin",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_source_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_stage_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "stage_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
                     "nulls_not_distinct": false
                 },
                 {
@@ -3856,6 +4099,36 @@
             },
             "indexes": [
                 {
+                    "name": "crm_leads_converted_company_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "converted_company_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_converted_contact_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "converted_contact_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_converted_deal_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "converted_deal_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_leads_kanban_ix",
                     "kind": "ix",
                     "columns": [
@@ -3868,6 +4141,26 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_leads_lost_reason_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "lost_reason_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_leads_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -3875,6 +4168,16 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_pipeline_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "pipeline_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -3896,6 +4199,36 @@
                     ],
                     "predicate": null,
                     "method": "gin",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_source_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_stage_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "stage_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
                     "nulls_not_distinct": false
                 }
             ],
@@ -4191,6 +4524,16 @@
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_pipelines_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -4512,6 +4855,16 @@
             },
             "indexes": [
                 {
+                    "name": "med_conversions_file_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "file_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "med_conversions_pk",
                     "kind": "pk",
                     "columns": [
@@ -4815,6 +5168,17 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "med_operations_file_kind_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "file_id",
+                        "kind"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "med_operations_operation_key_uq",
                     "kind": "uq",
@@ -5537,6 +5901,16 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "ntf_digest_items_run_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "run_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -5743,6 +6117,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "pruned_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
                 "read_at": {
                     "type": "timestamp(0) with time zone",
                     "nullable": true,
@@ -5796,6 +6175,21 @@
             },
             "indexes": [
                 {
+                    "name": "ntf_notifications_inbox_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "recipient_kind",
+                        "recipient_id",
+                        "id"
+                    ],
+                    "predicate": "(pruned_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "ntf_notifications_intent_uq",
                     "kind": "uq",
                     "columns": [
@@ -5819,6 +6213,20 @@
                         "id"
                     ],
                     "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "ntf_notifications_retention_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "read_at",
+                        "id"
+                    ],
+                    "predicate": "((read_at IS NOT NULL) AND (pruned_at IS NULL))",
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -7552,6 +7960,16 @@
                     "predicate": "is_primary",
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_department_user_user_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "user_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -7641,6 +8059,26 @@
             },
             "indexes": [
                 {
+                    "name": "sys_departments_head_user_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "head_user_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_departments_parent_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "parent_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "sys_departments_path_gist_ix",
                     "kind": "ix",
                     "columns": [
@@ -7665,6 +8103,16 @@
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_departments_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -8926,19 +9374,6 @@
             },
             "indexes": [
                 {
-                    "name": "sys_wakeup_requests_due_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "account_id",
-                        "status",
-                        "fire_at",
-                        "id"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
                     "name": "sys_wakeup_requests_identity_uq",
                     "kind": "uq",
                     "columns": [
@@ -8953,24 +9388,24 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "sys_wakeup_requests_lease_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "account_id",
-                        "status",
-                        "lease_until"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
                     "name": "sys_wakeup_requests_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
                     ],
                     "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_wakeup_requests_runnable_due_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "(\nCASE\n    WHEN ((status)::text = ANY ((ARRAY['running'::character varying, 'cancel-requested'::character varying])::text[])) THEN lease_until\n    WHEN ((status)::text = 'retry-scheduled'::text) THEN retry_at\n    ELSE fire_at\nEND)",
+                        "id"
+                    ],
+                    "predicate": "((status)::text = ANY ((ARRAY['pending'::character varying, 'retry-scheduled'::character varying, 'running'::character varying, 'cancel-requested'::character varying])::text[]))",
                     "method": "btree",
                     "nulls_not_distinct": false
                 }
@@ -9451,10 +9886,30 @@
             },
             "indexes": [
                 {
+                    "name": "tsk_projects_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "tsk_projects_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_projects_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -9568,6 +10023,16 @@
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_sprints_project_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "project_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -9784,6 +10249,16 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_task_watchers_user_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "user_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -9948,6 +10423,16 @@
             },
             "indexes": [
                 {
+                    "name": "tsk_tasks_assignee_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "assignee_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "tsk_tasks_assignee_ix",
                     "kind": "ix",
                     "columns": [
@@ -9955,6 +10440,16 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_tasks_author_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "author_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -9981,10 +10476,30 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "tsk_tasks_parent_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "parent_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "tsk_tasks_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_tasks_project_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "project_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -10018,6 +10533,26 @@
                         "sprint_id"
                     ],
                     "predicate": "(sprint_id IS NOT NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_tasks_stage_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "stage_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_tasks_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 }
@@ -10276,6 +10811,16 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_timers_task_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "task_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -10385,6 +10930,16 @@
             },
             "indexes": [
                 {
+                    "name": "users_department_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "department_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "users_email_uq",
                     "kind": "uq",
                     "columns": [
@@ -10491,6 +11046,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "wsp_invitations_invited_by_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "invited_by"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "wsp_invitations_pk",
                     "kind": "pk",
                     "columns": [
@@ -10505,6 +11070,16 @@
                     "kind": "uq",
                     "columns": [
                         "token_hash"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "wsp_invitations_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -10727,6 +11302,16 @@
                         "(true)"
                     ],
                     "predicate": "(is_default AND (deleted_at IS NULL))",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "wsp_workspaces_parent_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "parent_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },

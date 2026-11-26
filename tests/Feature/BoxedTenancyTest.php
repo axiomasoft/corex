@@ -7,14 +7,14 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\NullTenancyManager;
 
 /**
- * P2.5 — boxed TenancyManager binding (D10, B-11 §6.1 L892–907): no
+ * boxed TenancyManager binding: no
  * root-DB/stancl requirement, SingleAccountResolver's constant context flows
  * through unchanged, no Stancl class is ever instantiated (axiomasoft/corex-tenancy is
  * not a dependency of axiomasoft/corex or this test suite — a `use Stancl\*` here
  * would be a hard composer error, not just a runtime skip; see also
  * `grep -r 'use Stancl' packages/core` in the item's Validation).
  */
-it('boxed TenancyManager is the null-manager: constant context, initialized() true, initialize()/setWorkspace()/end() are no-ops (AC-28 г)', function (): void {
+it('boxed TenancyManager is the null-manager: constant context, initialized() true, initialize()/setWorkspace()/end() are no-ops', function (): void {
     $manager = resolve(TenancyManager::class);
 
     expect($manager)->toBeInstanceOf(NullTenancyManager::class)

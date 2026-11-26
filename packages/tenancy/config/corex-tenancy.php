@@ -6,7 +6,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Central connection (B-11 §2.1 / D14)
+    | Central connection
     |--------------------------------------------------------------------------
     | root_* migrations and models target this connection — the control-plane
     | database, never a tenant/account database. Override per-host if the
@@ -19,7 +19,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Tenant content storage (P2.2)
+    | Tenant content storage
     |--------------------------------------------------------------------------
     |
     | These roots are owned by ContextTenantStorage. `fake-s3` is
@@ -35,11 +35,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Host identification (P2.10, B-11 §5.4 п.1–3)
+    | Host identification
     |--------------------------------------------------------------------------
-    | `enabled=false` (boxed profile, AC-28) registers neither the tenant
+    | `enabled=false` (boxed profile) registers neither the tenant
     | middleware group nor the aliases — the package pushes nothing onto the
-    | host application's global middleware stack either way (D10). The cache
+    | host application's global middleware stack either way. The cache
     | holds host → account id only (never a miss) in `cache_store`, which is
     | a host-owned central store; the Tenant host must keep it outside tenant facilities.
     */
@@ -52,7 +52,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Custom-domain trust SPI (P3.1)
+    | Custom-domain trust SPI
     |--------------------------------------------------------------------------
     |
     | CoreX owns only the durable trusted-state transition. A consuming
@@ -68,7 +68,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Account status gate (P2.10, B-11 §5.1)
+    | Account status gate
     |--------------------------------------------------------------------------
     | `payment_route`/`export_route` accept either a route NAME or a path
     | pattern (matched via Request::is()); null = no such route configured,
@@ -84,14 +84,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cloud OIDC login lane (P2.22, D123/D127/D129/D130) — default OFF
+    | Cloud OIDC login lane — default OFF
     |--------------------------------------------------------------------------
-    | `enabled=false` (boxed profile, AC-28) registers NEITHER the
+    | `enabled=false` (boxed profile) registers NEITHER the
     | routes/oidc.php routes NOR the EnforceSessionLifetime middleware — the
-    | package pushes nothing onto the host application's stack either way
-    | (D10), and firebase/php-jwt code never executes. `issuer` is the ONLY
+    | package pushes nothing onto the host application's stack either way, and firebase/php-jwt code never executes. `issuer` is the ONLY
     | endpoint named here; authorize/token/JWKS endpoints always come from
-    | the Discovery document (`Oidc\OidcDiscovery`), never hardcoded (D123).
+    | the Discovery document (`Oidc\OidcDiscovery`), never hardcoded.
     */
     'oidc' => [
         'enabled' => (bool) env('COREX_TENANCY_OIDC_ENABLED', false),
@@ -101,7 +100,7 @@ return [
         'client_secret' => env('COREX_TENANCY_OIDC_CLIENT_SECRET'),
         'redirect_uri' => env('COREX_TENANCY_OIDC_REDIRECT_URI'),
 
-        // RS256-only allow-list (D123) — checked against the id_token
+        // RS256-only allow-list — checked against the id_token
         // HEADER before JWT::decode() ever runs (Oidc\IdTokenVerifier).
         'allowed_algs' => ['RS256'],
         'leeway_seconds' => (int) env('COREX_TENANCY_OIDC_LEEWAY_SECONDS', 30),
@@ -119,20 +118,20 @@ return [
         'jwks' => [
             'cache_store' => env('COREX_TENANCY_OIDC_JWKS_CACHE_STORE'), // null = default store
             'cache_ttl' => (int) env('COREX_TENANCY_OIDC_JWKS_CACHE_TTL', 3600),
-            // D130: ONE forced refetch per unknown kid, gated by this cooldown.
+            // Allow one forced refetch per unknown kid, gated by this cooldown.
             'refetch_cooldown_seconds' => (int) env('COREX_TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS', 60),
         ],
 
-        // P2.11 — grant validation (`root_impersonation_grants`, D143) +
-        // read-only invariant (D141). `enabled=false` (default): an `imp`
+        // Grant validation (`root_impersonation_grants`) +
+        // read-only invariant. `enabled=false` (default): an `imp`
         // claim is rejected (403) and neither the write-guard middleware
-        // nor the Eloquent listeners are registered (AC-28).
+        // nor the Eloquent listeners are registered.
         //
         'impersonation' => [
             'enabled' => (bool) env('COREX_TENANCY_OIDC_IMPERSONATION_ENABLED', false),
         ],
 
-        // AC-15 — enforced by Http\Middleware\EnforceSessionLifetime
+        // Enforced by Http\Middleware\EnforceSessionLifetime
         // regardless of the consuming app's own `session.lifetime`.
         'max_session_lifetime_minutes' => (int) env('COREX_TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES', 720),
     ],
@@ -145,14 +144,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Workspace resolution (P2.23, B-11 §5.4 п.4, AC-18)
+    | Workspace resolution
     |--------------------------------------------------------------------------
     | Wire a route with `->middleware(['tenant', 'tenancy.workspace'])` — in
     | that order, so the workspace only narrows AFTER 'tenant' has proven the
     | session belongs to this account. A route WITHOUT the `tenancy.workspace`
-    | alias keeps the account-wide admin context (B-11 §5.4 п.4) — the
+    | alias keeps the account-wide admin context — the
     | package registers no product routes of its own; `/w/{slug}` and its
-    | route-binding are the consuming application's concern (D133).
+    | route-binding are the consuming application's concern.
     */
     'workspace' => [
         'path_segment' => env('COREX_TENANCY_WORKSPACE_PATH_SEGMENT', 'w'),
@@ -160,21 +159,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Account lifecycle FSM (P2.12, B-11 §5.1)
+    | Account lifecycle FSM
     |--------------------------------------------------------------------------
     | `trial_days` — window `AccountLifecycle::startTrial()` grants before
     | `trial_ends_at`. `grace_days` — window `AccountLifecycle::startGrace()`
     | grants before `grace_until`; `purge_after` is always `grace_until` plus
-    | a further fixed 30 days (§7.3 п.7 retention), not itself configurable.
+    | a further fixed 30 days, not itself configurable.
     */
     'trial_days' => (int) env('COREX_TENANCY_TRIAL_DAYS', 14),
     'grace_days' => (int) env('COREX_TENANCY_GRACE_DAYS', 30),
 
     /*
     |--------------------------------------------------------------------------
-    | Platform domain (P2.12, AC-13)
+    | Platform domain
     |--------------------------------------------------------------------------
-    | Own config key rather than a hardcoded product suffix (D91 — corex/*
+    | Own config key rather than a hardcoded product suffix (corex/*
     | stays product-agnostic): `AccountLifecycle::startTrial()` provisions
     | the platform domain as `<slug>.<platform_domain>`. The default is only
     | a neutral placeholder — every real deployment overrides it.

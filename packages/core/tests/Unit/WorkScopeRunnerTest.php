@@ -27,32 +27,32 @@ it('restores the exact outer workspace after a failing nested work scope', funct
     $outer = $host->scope();
     $contexts->setWorkspace(null);
     $inner = $host->scope();
-    $proof = app(StoredWorkIssuer::class)->issue($inner, 'test.scope', 'nested');
+    $proof = resolve(StoredWorkIssuer::class)->issue($inner, 'test.scope', 'nested');
     $contexts->setWorkspace($workspace);
-    $runner = app(StoredWorkRunner::class);
+    $runner = resolve(StoredWorkRunner::class);
     expect(fn () => $runner->runStored($inner, $proof, function ($context) use ($inner): void {
         expect($context->workspace)->toBeNull();
-        expect(app(CurrentWorkScope::class)->assert($inner, DB::connection()))->toBe($context);
+        expect(resolve(CurrentWorkScope::class)->assert($inner, DB::connection()))->toBe($context);
 
         throw new RuntimeException('work failed');
     }))->toThrow(RuntimeException::class, 'work failed');
-    expect(app(CurrentWorkScope::class)->assert($outer)->workspace)->toBe($workspace);
+    expect(resolve(CurrentWorkScope::class)->assert($outer)->workspace)->toBe($workspace);
 });
 
 it('rejects principal substitution and an independently created connection', function (): void {
     $host = WorkScopeFixture::install(app());
     $scope = $host->scope();
-    expect(fn () => app(CurrentWorkScope::class)->assert($scope, DB::connection('work-scope-control')))->toThrow(ScopeContextMismatch::class);
+    expect(fn () => resolve(CurrentWorkScope::class)->assert($scope, DB::connection('work-scope-control')))->toThrow(ScopeContextMismatch::class);
     $host->principal = new ScopePrincipal('user', 'revoked');
-    expect(fn () => app(WorkScopeRunner::class)->run($scope, fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class);
+    expect(fn () => resolve(WorkScopeRunner::class)->run($scope, fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class);
 });
 
 it('rejects forged or substituted durable provenance before admission', function (): void {
     $host = WorkScopeFixture::install(app());
     $scope = $host->scope();
-    $proof = app(StoredWorkIssuer::class)->issue($scope, 'test.job', 'immutable-request');
+    $proof = resolve(StoredWorkIssuer::class)->issue($scope, 'test.job', 'immutable-request');
     $forged = new StoredWorkProof($proof->owner, 'other-request', $proof->seal);
-    $runner = app(StoredWorkRunner::class);
+    $runner = resolve(StoredWorkRunner::class);
     expect(fn () => $runner->runStored($scope, $forged, static fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class);
     $host->principal = new ScopePrincipal('user', 'other');
     expect(fn () => $runner->runStored($host->scope(), $proof, static fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class)
@@ -68,7 +68,7 @@ it('refuses scope issuance for a sibling workspace supplied by application code'
     $contexts->initialize($account);
     $contexts->setWorkspace($home);
     $issued = $fixture->scope();
-    $factory = app(DataScopeFactory::class);
+    $factory = resolve(DataScopeFactory::class);
     expect(fn () => $factory->forCurrentPrincipal(new TenantContext($account, $sibling)))->toThrow(ScopeContextMismatch::class)
         ->and($factory->forCurrentPrincipal($contexts->current()))->toEqual($issued)
         ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')->count())->toBe(0);
@@ -79,9 +79,9 @@ it('separates user and service grants that share the same principal identifier',
     $service = $fixture->scope();
     $fixture->principal = new ScopePrincipal('user', 'operator');
     $user = $fixture->scope();
-    $work = app(WorkScopeRunner::class);
+    $work = resolve(WorkScopeRunner::class);
     expect(fn () => $work->run($service, static fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class)
-        ->and(fn () => app(StoredWorkIssuer::class)->issue($service, 'test.authority', 'future-service-work'))->toThrow(ScopeContextMismatch::class)
+        ->and(fn () => resolve(StoredWorkIssuer::class)->issue($service, 'test.authority', 'future-service-work'))->toThrow(ScopeContextMismatch::class)
         ->and($work->run($user, static fn () => 'user-work'))->toBe('user-work');
 });
 
@@ -91,11 +91,11 @@ it('keeps the outer transaction and workspace intact when durable work requests 
     $account = new AccountRef('account', 'acct', 'active', [], []);
     $contexts->initialize($account);
     $wide = $host->scope();
-    $proof = app(StoredWorkIssuer::class)->issue($wide, 'test.authority', 'account-work');
+    $proof = resolve(StoredWorkIssuer::class)->issue($wide, 'test.authority', 'account-work');
     $workspace = new WorkspaceRef('team', 'team', 'team', '/team', null);
     $contexts->setWorkspace($workspace);
     DB::connection()->transaction(function () use ($wide, $proof, $workspace, $contexts): void {
-        expect(fn () => app(StoredWorkRunner::class)->runStored($wide, $proof, static fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class)
+        expect(fn () => resolve(StoredWorkRunner::class)->runStored($wide, $proof, static fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class)
             ->and(DB::transactionLevel())->toBe(1)
             ->and($contexts->current()->workspace)->toBe($workspace)
             ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')->count())->toBe(0);
@@ -104,8 +104,8 @@ it('keeps the outer transaction and workspace intact when durable work requests 
 
 it('stops a resident queue worker after its callback leaves the wrong default connection', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
-    $runner = app(WorkScopeRunner::class);
-    $worker = app('queue.worker');
+    $runner = resolve(WorkScopeRunner::class);
+    $worker = resolve('queue.worker');
     $original = DB::getDefaultConnection();
 
     try {

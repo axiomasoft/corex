@@ -74,6 +74,7 @@
     "require-dev": {
         "illuminate/contracts": "^13.0",
         "orchestra/testbench": "^11.3",
-        "orchestra/testbench-core": "^11.5"
+        "orchestra/testbench-core": "^11.5",
+        "mockery/mockery": "^1.6"
     }
 }

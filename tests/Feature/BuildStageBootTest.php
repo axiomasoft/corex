@@ -16,7 +16,7 @@ use Packman\Config\Laravel\RuntimeConfigGate;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
-// P05.1 (D69 p.2, p.7, p.10; examples.md §3) — shape is valid on an empty environment,
+// The configuration shape is valid on an empty environment,
 // runtime requirements and dangerous modes run only before a process accepts work.
 
 final class BuildStageBootTest extends GoldenTestCase

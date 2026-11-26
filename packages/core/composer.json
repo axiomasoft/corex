@@ -7,7 +7,7 @@
         "laravel",
         "kernel",
         "multi-tenancy",
-        "ulid",
+        "uuid",
         "entity-registry",
         "audit",
         "settings"
@@ -20,7 +20,7 @@
     ],
     "require": {
         "ext-ctype": "*",
-        "ext-mbstring": "*",
+        "ext-filter": "*",
         "php": "^8.4",
         "illuminate/auth": "^13.0",
         "illuminate/console": "^13.0",
@@ -40,6 +40,7 @@
     },
     "require-dev": {
         "ext-pdo": "*",
+        "ext-posix": "*",
         "phpstan/phpstan": "^2.2.16",
         "larastan/larastan": "^3.12",
         "mockery/mockery": "^1.6",

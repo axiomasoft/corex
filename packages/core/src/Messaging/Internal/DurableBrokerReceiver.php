@@ -75,7 +75,7 @@ final readonly class DurableBrokerReceiver implements BrokerReceiver
 
             return $result;
         } catch (InvalidMessage|UnknownMessageContract|ScopeContextMismatch|ScopeStale|InboxRefused $failure) {
-            $source->quarantine($consumer, $restrictedRef, hash('sha256', $wire), get_class($failure));
+            $source->quarantine($consumer, $restrictedRef, hash('sha256', $wire), $failure::class);
 
             return BrokerReceipt::Quarantined;
         }

@@ -36,6 +36,7 @@ use Equipment\Registry\Equipment;
 use Equipment\Registry\TransferBulkAdapter;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Sleep;
 use Packman\Modules\Contracts\Lifecycle\ModuleLifecycle;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
@@ -139,7 +140,7 @@ switch ($mode) {
             if ($wait !== '{}') {
                 break;
             }
-            usleep(25_000);
+            Sleep::usleep(25_000);
         } while (hrtime(true) < $deadline);
         $test->same('{'.$owner['session'].'}', $wait, 'Concurrent request did not wait on the first PostgreSQL transaction.');
         $test->same(0, $db->table('sys_api_bulk_operations')->count(), 'Bulk admission escaped its caller transaction.');

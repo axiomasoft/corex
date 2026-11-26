@@ -6,7 +6,7 @@ use CoreX\Testing\CoreXTestCase;
 use CoreX\Tests\Support\SourceScanner;
 use Illuminate\Filesystem\Filesystem;
 
-// P16.10 — D33/D94 closed. CoreX\Testing is dev-autoload only.
+// CoreX\Testing is dev-autoload only.
 // Production src must not import the retired harness namespaces.
 
 test('CoreX\\Testing is dev-autoload only and production src has no harness files', function (): void {

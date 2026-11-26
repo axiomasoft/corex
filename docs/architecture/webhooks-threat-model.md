@@ -1,27 +1,25 @@
-# Вебхуки: модель угроз
+# Webhook threat model
 
-## Активы
-Payload событий арендатора; ключи подписи; внутренняя сеть и metadata-адреса; квота исходящих соединений.
+## Assets and trust boundaries
 
-## Границы доверия
-Арендатор → API подписок; worker → внешняя сеть; оператор → replay.
+Protect tenant event payloads, signing keys, private networks, metadata endpoints and outbound connection capacity. The subscription API accepts tenant input. Workers send to external destinations. Operators can request replay.
 
-## Угрозы и контроли
-| ID | Угроза | Контроль | Доказательство |
-|:--|:--|:--|:--|
-| T1 | URL ведёт во внутреннюю сеть или metadata (SSRF) | `WebhookUrlPolicy`: https, канонический хост, проверка всех A/AAAA, IPv4-mapped IPv6, org CIDR | `WebhookUrlPolicyTest` |
-| T2 | DNS rebinding между проверкой и соединением | DNS pinning `CURLOPT_RESOLVE`, проверка peer IP | `WebhookTransportTest` |
-| T3 | Редирект на внутренний адрес | редиректы не выполняются; 3xx — `redirect_forbidden`, dead | `WebhookFailureReasonTest` |
-| T4 | Арендатор шлёт данные на неразрешённый хост | `WebhookEgressPolicy` при подписке и на каждой попытке | `WebhookEgressPolicyTest`, mutation `P06-egress-skip-on-delivery` |
-| T5 | Подмена или повтор доставки | подпись Standard Webhooks по `id.timestamp.body`, ротация ключей | `WebhookSignatureTest` |
-| T6 | Утечка внутреннего контекста получателю | внешний профиль CloudEvents без `corex*`, `subject`, trace | `CloudEventCodecTest`, `WebhookFanoutTest` |
-| T7 | Чужой арендатор получает payload | доставка привязана к subscription/scope/event; fan-out в транзакции арендатора | `WebhookFanoutTest` |
-| T8 | Бесконечные ретраи, усиление нагрузки | бюджет попыток и горизонт, jitter, Retry-After с потолком | `WebhookRetryBudgetTest` |
-| T9 | Replay на изменённый или запрещённый адрес | replay → pending → обычная попытка с текущими проверками; аудит причины | `WebhookEgressPolicyTest` (replay), `WebhookReplayTest` |
-| T10 | Огромный payload | лимит тела, `payload_too_large`, dead без отправки | `WebhookFanoutTest` |
+| ID | Risk | Control | Evidence |
+|---|---|---|---|
+| T1 | A URL resolves to a private or metadata address | `WebhookUrlPolicy` requires HTTPS, canonical hostnames, checks all A/AAAA records, IPv4-mapped IPv6 addresses and organization CIDRs. | `WebhookUrlPolicyTest` |
+| T2 | DNS changes between validation and connection | Pin the resolution using `CURLOPT_RESOLVE` and check the peer IP. | `WebhookTransportTest` |
+| T3 | A redirect leads to a private address | Stop on 3xx and record `redirect_forbidden` as a terminal failure. | `WebhookFailureReasonTest` |
+| T4 | A tenant sends to a destination outside policy | Enforce `WebhookEgressPolicy` at subscription and on each delivery attempt. | `WebhookEgressPolicyTest` and the delivery egress mutation |
+| T5 | A recipient receives a forged or replayed delivery | Sign `id.timestamp.body` according to Standard Webhooks and support key rotation. | `WebhookSignatureTest` |
+| T6 | A payload exposes internal context | Exclude CoreX extensions, `subject` and trace fields from external CloudEvents. | `CloudEventCodecTest`, `WebhookFanoutTest` |
+| T7 | A tenant receives another tenant's payload | Bind the subscription, scope and event. Fan out within the tenant transaction. | `WebhookFanoutTest` |
+| T8 | Unbounded retries amplify outbound load | Bound attempts and elapsed time, apply jitter and cap Retry-After. | `WebhookRetryBudgetTest` |
+| T9 | Replay reaches a changed or forbidden destination | Replay re-enters pending delivery, applies the current checks and records the reason. | `WebhookEgressPolicyTest`, `WebhookReplayTest` |
+| T10 | An oversized payload consumes bandwidth | Stop before sending and record a terminal `payload_too_large` result. | `WebhookFanoutTest` |
 
-## Остаточные риски
-Сетевой egress-фильтр (прокси, изоляция сети) — ответственность хоста; приложение его не заменяет.
+## Host responsibilities
+
+The host supplies network isolation and outbound proxy or firewall policy.
 
 The default egress policy permits destinations that pass the mandatory URL policy. Hosts can bind `WebhookEgressPolicy` to restrict tenant destinations; denial is checked before DNS and every send, including replay.
 

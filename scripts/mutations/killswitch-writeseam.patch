@@ -1,0 +1,13 @@
+--- a/packages/core/src/Audit/Internal/QueuedAuditLogger.php
++++ b/packages/core/src/Audit/Internal/QueuedAuditLogger.php
+@@ -49,10 +49,6 @@
+         // gate lives at enqueue time, not in RecordAuditEntry::handle(): an
+         // event captured while auditing was ON must still land if config flips
+         // before the worker runs (the journal records what happened).
+-        if (! $this->options->auditEnabled) {
+-            return;
+-        }
+-
+         $state = $this->impersonation->state();
+
+         if ($state !== null) {

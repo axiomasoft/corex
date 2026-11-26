@@ -21,9 +21,9 @@ use Packman\Modules\Enums\Entities\Capability;
  * value is the whole contract, never a log:
  *
  * 1. A role assignable to agent/api_key carries own/dept/dept_tree rows:
- *    those scopes degrade to `none` for non-user principals (B-11 §5.5) — a
+ *    those scopes degrade to `none` for non-user principals — a
  *    role designed for agents should use workspace/account instead.
- * 2. (P2.9, D114) A row names own/dept/dept_tree/workspace on an entity
+ * 2. A row names own/dept/dept_tree/workspace on an entity
  *    whose table HAS the matching column (`owner_id`/`workspace_id`) but
  *    whose `EntityDefinition` never declared the matching capability
  *    (`Ownable`/`WorkspaceScoped`) — declaration drift that

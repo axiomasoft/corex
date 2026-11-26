@@ -224,7 +224,7 @@ final class JsonCanonical
     {
         $hex = substr($json, $index + 1, 4);
 
-        if (preg_match('/^[0-9a-fA-F]{4}$/', $hex) !== 1) {
+        if (preg_match('/^[0-9a-fA-F]{4}$/D', $hex) !== 1) {
             throw new InvalidArgumentException('Invalid JSON unicode escape.');
         }
 

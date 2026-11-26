@@ -15,7 +15,7 @@ use Packman\Modules\Exceptions\Registry\ModuleNotFound;
  * Test double for ModuleRegistry. The real, file-backed
  * `CompiledModuleRegistry` reports `isActive()` false for everything when no
  * `bootstrap/cache/corex_modules.php` exists — which Testbench never writes
- * — so P2.21's active-module filter (`ActiveEntityFilter`, `PermissionsMerger`)
+ * — so the active-module filter (`ActiveEntityFilter`, `PermissionsMerger`)
  * needs an explicit, controllable stand-in rather than the real compiled
  * file, mirroring the `FakeTenancyManager`/`FakeWorkspaceScope` precedent in
  * this directory.

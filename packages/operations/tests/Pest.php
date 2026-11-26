@@ -2,5 +2,4 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__, 3).'/tests/Support/CallerWorkScopeFixture.php';
-require_once dirname(__DIR__, 3).'/tests/Support/WorkScopeFixture.php';
+require_once dirname(__DIR__, 3).'/tests/Support/autoload.php';

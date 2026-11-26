@@ -20,4 +20,6 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped component imports retain their standalone constraint
     ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
     // Pest declares these exact local fixtures while executing its test files.
-    ->ignoreUnknownClasses(['FailingWakeupTestHandler', 'NotAWakeupHandler', 'PayloadRecordingWakeupHandler', 'PgVersionedWakeupHandler', 'RecordingWakeupHint', 'RegistryTestHandler', 'WakeupTestHandler']);
+    ->ignoreUnknownClasses(['FailingWakeupTestHandler', 'NotAWakeupHandler', 'PgVersionedWakeupHandler', 'RecordingWakeupHint', 'RegistryTestHandler', 'WakeupTestHandler'])
+    // Shared monorepo fixtures from tests/Support, loaded by tests/Support/autoload.php; not a Composer package.
+    ->ignoreUnknownClassesRegex('~^CoreX\\\\Tests\\\\Support\\\\~');

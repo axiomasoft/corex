@@ -10,11 +10,11 @@ use Illuminate\Http\Client\Factory as HttpFactory;
 use Packman\Attributes\Internal;
 
 /**
- * `GET {issuer}/.well-known/openid-configuration` (D123/D129 — endpoints
+ * `GET {issuer}/.well-known/openid-configuration` (endpoints
  * come from Discovery, never hardcoded), cached under a configurable
  * store/TTL so a real login does not round-trip the AS on every request.
  * Uses {@see HttpFactory} (not a raw Guzzle/PSR-18 client) so `Http::fake()` works
- * in tests (D130).
+ * in tests.
  *
  * @internal
  */

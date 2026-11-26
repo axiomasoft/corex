@@ -156,6 +156,21 @@ class ParserTests(unittest.TestCase):
                                                    (7499, 10000, 75, False), (75, 100, 75, True)):
             self.assertEqual(m.fraction(killed, valid, threshold)['passed'], expected)
 
+    def test_unknown_confirmation_format_cannot_authorize_a_mutation_exception(self):
+        proof = self.root / 'review.json'
+        legacy_item = m.load(m.ROOT / m.QUALITY / 'infection-compatibility.json')['legacy_confirmation_review_item']
+        for marker, accepted in (({'review_item': legacy_item}, True), ({}, False),
+                                 ({'review_item': 'unrelated review'}, False),
+                                 ({'review_item': legacy_item, 'schema': 'unknown'}, False)):
+            with self.subTest(marker=marker):
+                m.save(proof, {**marker, 'verdict': 'confirmed', 'confirmed': ['key']})
+                ref = m.artifact(proof, self.root)
+                if accepted:
+                    self.assertEqual(['key'], m.confirmation(ref, self.root, 'key')['confirmed'])
+                else:
+                    with self.assertRaisesRegex(m.MutationError, 'Unconfirmed'):
+                        m.confirmation(ref, self.root, 'key')
+
     def test_equivalent_cap_does_not_round_up(self):
         row = self.report['escaped'][0]
         relative = 'packages/tenancy/src/Controls.php'
@@ -163,7 +178,7 @@ class ParserTests(unittest.TestCase):
         replay = self.root / 'replay.txt'
         replay.write_text('exact replay fixture')
         proof = self.root / 'review.json'
-        m.save(proof, {'review_item': 'P09.8', 'verdict': 'confirmed', 'confirmed': [key]})
+        m.save(proof, {'schema': 'corex-mutation-confirmation/1', 'verdict': 'confirmed', 'confirmed': [key]})
         entry = {'id': key, 'path': relative, 'source_sha256': self.ast[relative]['sha256'], 'reason': 'fixture',
                  'replay': m.artifact(replay, self.root), 'confirmation': m.artifact(proof, self.root)}
         ledger = {'schema': 'corex-mutation-equivalents/1', 'cap_percent': 5, 'entries': [entry]}
@@ -237,6 +252,11 @@ class InventoryTests(unittest.TestCase):
     def setUpClass(cls):
         cls.files = m.production_files(m.ROOT)
         cls.mapping = m.make_map(cls.files)
+
+    def test_crm_context_and_notification_delivery_cannot_fall_into_the_default_zone(self):
+        self.assertEqual('security', m.expected_zone('products/flex-crm/src/Context/ContextGuard.php'))
+        self.assertEqual('messaging', m.expected_zone(
+            'packages/notifications/src/Runtime/Internal/Commands/PruneNotifications.php'))
 
     def test_exhaustive_disjoint_inventory(self):
         self.assertEqual(m.check_inventory(self.mapping, m.ROOT), self.files)

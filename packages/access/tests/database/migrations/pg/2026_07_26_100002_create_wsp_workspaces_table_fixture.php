@@ -7,10 +7,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// Test-only fixture (D105) — the real `wsp_workspaces` table belongs to
+// Test-only fixture — the real `wsp_workspaces` table belongs to
 // axiomasoft/corex-tenancy (DB_SCHEMA.md §3.4), which axiomasoft/corex-access does not depend on
-// (boxed doctrine, AC-28). Only the FK target (uuid PK) is reproduced here,
-// plus `settings` jsonb (default `{}`) and `path` ltree (P2.9, D117): the
+// (boxed doctrine). Only the FK target (uuid PK) is reproduced here,
+// plus `settings` jsonb (default `{}`) and `path` ltree: the
 // cascade_view predicate reads both from a real Postgres row.
 return new class extends Migration
 {

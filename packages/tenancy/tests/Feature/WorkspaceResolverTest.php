@@ -24,7 +24,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    // Assembles the golden-template chain (D14/C4): axiomasoft/corex owns
+    // Assembles the golden-template chain: axiomasoft/corex owns
     // sys_departments/sys_department_user, axiomasoft/corex-tenancy owns
     // users/wsp_*/the integration FK — two ordered migrate calls, same as
     // a real golden-template build.
@@ -114,19 +114,19 @@ function actingAsIdWsp(?string $userId): void
     });
 }
 
-it('AC-17: enforces exactly one default workspace via partial-unique index', function (): void {
+it('enforces exactly one default workspace via partial-unique index', function (): void {
     makeWorkspaceWsp(['is_default' => true]);
 
     expect(fn () => makeWorkspaceWsp(['is_default' => true]))->toThrow(QueryException::class);
 });
 
-it('AC-17: enforces unique slug among living workspaces', function (): void {
+it('enforces unique slug among living workspaces', function (): void {
     makeWorkspaceWsp(['slug' => 'dup']);
 
     expect(fn () => makeWorkspaceWsp(['slug' => 'dup']))->toThrow(QueryException::class);
 });
 
-it('AC-17: a soft-deleted workspace frees its slug and default flag for reuse', function (): void {
+it('a soft-deleted workspace frees its slug and default flag for reuse', function (): void {
     $first = makeWorkspaceWsp(['slug' => 'reuse', 'is_default' => true]);
     $first->delete();
 
@@ -135,7 +135,7 @@ it('AC-17: a soft-deleted workspace frees its slug and default flag for reuse', 
     expect($second->slug)->toBe('reuse');
 });
 
-it('AC-17: parent_id + path stay consistent under a subtree move (path <@ predicate)', function (): void {
+it('parent_id + path stay consistent under a subtree move (path <@ predicate)', function (): void {
     $parentA = makeWorkspaceWsp(['name' => 'Parent A']);
     $parentB = makeWorkspaceWsp(['name' => 'Parent B']);
     $childId = (string) Str::uuid7();
@@ -161,14 +161,14 @@ it('AC-17: parent_id + path stay consistent under a subtree move (path <@ predic
         ->and($child->fresh()->parent_id)->toBe($parentB->id);
 });
 
-it('AC-17: parent RESTRICT blocks deleting a workspace that still has children', function (): void {
+it('parent RESTRICT blocks deleting a workspace that still has children', function (): void {
     $parent = makeWorkspaceWsp();
     makeWorkspaceWsp(['parent_id' => $parent->id]);
 
     expect(fn () => DB::table('wsp_workspaces')->where('id', $parent->id)->delete())->toThrow(QueryException::class);
 });
 
-it('AC-18: resolve(slug) 403s without an active membership row', function (): void {
+it('resolve(slug) 403s without an active membership row', function (): void {
     $workspace = makeWorkspaceWsp();
     $user = makeUserWsp();
     actingAsIdWsp($user->id);
@@ -176,7 +176,7 @@ it('AC-18: resolve(slug) 403s without an active membership row', function (): vo
     expect(fn () => new DatabaseWorkspaceResolver(resolve(AuthFactory::class))->resolve($workspace->slug))->toThrow(AuthorizationException::class);
 });
 
-it('AC-18: resolve(slug) 403s a suspended member', function (): void {
+it('resolve(slug) 403s a suspended member', function (): void {
     $workspace = makeWorkspaceWsp();
     $user = makeUserWsp();
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'suspended']);
@@ -185,7 +185,7 @@ it('AC-18: resolve(slug) 403s a suspended member', function (): void {
     expect(fn () => new DatabaseWorkspaceResolver(resolve(AuthFactory::class))->resolve($workspace->slug))->toThrow(AuthorizationException::class);
 });
 
-it('AC-18: resolve(slug) succeeds for an active member', function (): void {
+it('resolve(slug) succeeds for an active member', function (): void {
     $workspace = makeWorkspaceWsp();
     $user = makeUserWsp();
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'active']);
@@ -197,13 +197,13 @@ it('AC-18: resolve(slug) succeeds for an active member', function (): void {
         ->and($ref->slug)->toBe($workspace->slug);
 });
 
-it('AC-18: resolve(slug) throws ModelNotFoundException for a nonexistent slug', function (): void {
+it('resolve(slug) throws ModelNotFoundException for a nonexistent slug', function (): void {
     actingAsIdWsp((string) Str::uuid7());
 
     expect(fn () => new DatabaseWorkspaceResolver(resolve(AuthFactory::class))->resolve('does-not-exist'))->toThrow(ModelNotFoundException::class);
 });
 
-it('AC-18: resolve(null) returns the user default workspace', function (): void {
+it('resolve(null) returns the user default workspace', function (): void {
     $workspace = makeWorkspaceWsp();
     $user = makeUserWsp();
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'active', 'is_default' => true]);
@@ -214,14 +214,14 @@ it('AC-18: resolve(null) returns the user default workspace', function (): void 
     expect($ref->id)->toBe($workspace->id);
 });
 
-it('AC-18: resolve(null) throws when the user has no default workspace membership', function (): void {
+it('resolve(null) throws when the user has no default workspace membership', function (): void {
     $user = makeUserWsp();
     actingAsIdWsp($user->id);
 
     expect(fn () => new DatabaseWorkspaceResolver(resolve(AuthFactory::class))->resolve(null))->toThrow(RuntimeException::class);
 });
 
-it('AC-18: a partner-workspace membership does not grant visibility of its parent', function (): void {
+it('a partner-workspace membership does not grant visibility of its parent', function (): void {
     $parent = makeWorkspaceWsp(['type' => 'company']);
     $partner = makeWorkspaceWsp(['type' => 'partner', 'parent_id' => $parent->id]);
     $user = makeUserWsp();
@@ -234,7 +234,7 @@ it('AC-18: a partner-workspace membership does not grant visibility of its paren
         ->and(fn () => $resolver->resolve($parent->slug))->toThrow(AuthorizationException::class);
 });
 
-it('AC-19: accept() creates membership, marks accepted, and checks users_max', function (): void {
+it('accept() creates membership, marks accepted, and checks users_max', function (): void {
     $workspace = makeWorkspaceWsp();
     $inviter = makeUserWsp();
     $invitee = makeUserWsp();
@@ -322,7 +322,7 @@ it('serializes acceptance of separate invitations competing for one workspace sl
     }
 });
 
-it('AC-19: accept() refuses once the users_max limit is already reached', function (): void {
+it('accept() refuses once the users_max limit is already reached', function (): void {
     $workspace = makeWorkspaceWsp();
     $inviter = makeUserWsp();
 
@@ -340,7 +340,7 @@ it('AC-19: accept() refuses once the users_max limit is already reached', functi
     expect(fn () => $invitation->accept($invitee->id, usersMax: 1))->toThrow(InvitationNotAcceptableException::class);
 });
 
-it('AC-19: accept() refuses a revoked invitation (410-class error)', function (): void {
+it('accept() refuses a revoked invitation (410-class error)', function (): void {
     $workspace = makeWorkspaceWsp();
     $inviter = makeUserWsp();
     $invitee = makeUserWsp();
@@ -357,7 +357,7 @@ it('AC-19: accept() refuses a revoked invitation (410-class error)', function ()
     expect(fn () => $invitation->accept($invitee->id, usersMax: 10))->toThrow(InvitationNotAcceptableException::class);
 });
 
-it('AC-19: accept() refuses an expired invitation even if its status is still pending (lazy expiry)', function (): void {
+it('accept() refuses an expired invitation even if its status is still pending (lazy expiry)', function (): void {
     $workspace = makeWorkspaceWsp();
     $inviter = makeUserWsp();
     $invitee = makeUserWsp();
@@ -373,7 +373,7 @@ it('AC-19: accept() refuses an expired invitation even if its status is still pe
     expect(fn () => $invitation->accept($invitee->id, usersMax: 10))->toThrow(InvitationNotAcceptableException::class);
 });
 
-it('AC-19: wsp_invitations.role_id carries no FK — accepting with a nonexistent role does not fail', function (): void {
+it('wsp_invitations.role_id carries no FK — accepting with a nonexistent role does not fail', function (): void {
     $workspace = makeWorkspaceWsp();
     $inviter = makeUserWsp();
     $invitee = makeUserWsp();

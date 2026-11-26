@@ -11,6 +11,7 @@ use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Data\CancelResult;
+use CoreX\Notifications\Inbox\Data\EntityReference;
 use CoreX\Notifications\Inbox\Data\InboxPage;
 use CoreX\Notifications\Inbox\Data\InboxQuery;
 use CoreX\Notifications\Inbox\Data\NotificationAction;
@@ -36,6 +37,14 @@ use Psr\Clock\ClockInterface;
 final readonly class SqlNotificationCenter implements NotificationCenter
 {
     private const int ScanLimit = 1000;
+
+    private const int InboxBatch = 50;
+
+    /** Columns NotificationVisibility::subject() reads; the payload is never needed to decide visibility. */
+    private const array SubjectColumns = ['id', 'recipient_kind', 'recipient_id', 'related'];
+
+    /** Subject columns plus what reference() projects into a NotificationRef. */
+    private const array InboxColumns = [...self::SubjectColumns, 'event_type', 'revision', 'read_at', 'cancelled_at'];
 
     public function __construct(
         private ConnectionInterface $connection,
@@ -120,7 +129,8 @@ final readonly class SqlNotificationCenter implements NotificationCenter
                 }
             }
 
-            return $this->reference($row);
+            // The verified digest also binds the related reference on a compacted replay.
+            return $this->reference(row: $row, replayRelated: $input->related);
         });
     }
 
@@ -152,8 +162,8 @@ final readonly class SqlNotificationCenter implements NotificationCenter
             ]);
             $this->connection->table('ntf_deliveries')
                 ->where('notification_id', $notificationId)
-                ->whereIn('state', ['pending', 'retry-scheduled', 'claimed'])
-                ->update(['state' => 'cancelled', 'next_attempt' => null, 'lease_until' => null, 'claim_token' => null]);
+                ->whereIn('state', [DeliveryState::Pending, DeliveryState::RetryScheduled, DeliveryState::Claimed])
+                ->update(['state' => DeliveryState::Cancelled, 'next_attempt' => null, 'lease_until' => null, 'claim_token' => null]);
 
             return new CancelResult(cancelled: true, alreadyDispatched: $this->dispatchedChannels($notificationId));
         });
@@ -187,23 +197,34 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         $scope = $this->scopes->of($context);
         $this->current->assert(scope: $scope, connection: $this->connection);
         $before = $this->decodeCursor(scope: $scope, cursor: $query->before);
-        $rows = $this->recipient($scope)
-            ->when($before !== null, static fn (Builder $builder) => $builder->where('id', '<', $before))
-            ->orderByDesc('id')
-            ->limit(self::ScanLimit + 1)
-            ->get();
-
         $result = [];
         $last = null;
-        foreach ($rows as $index => $row) {
-            if ($index === self::ScanLimit || count($result) === $query->limit) {
-                return new InboxPage(items: $result, cursor: $last === null ? null : $this->cursor(scope: $scope, id: $last));
-            }
+        $index = 0;
+        $more = true;
 
-            $last = NotificationValue::text($row->id);
+        // Rows are read newest first in batches sized to the requested page, so a page that the
+        // policy fills quickly loads a few rows instead of the whole scan budget. The budget and
+        // cursor semantics are unchanged: at most ScanLimit rows are examined per page.
+        while ($more) {
+            $batch = min(self::ScanLimit + 1 - $index, max($query->limit + 1, self::InboxBatch));
+            $rows = $this->recipient($scope)
+                ->when($last ?? $before, static fn (Builder $builder, string $id) => $builder->where('id', '<', $id))
+                ->orderByDesc('id')
+                ->limit($batch)
+                ->get(self::InboxColumns);
+            $more = $rows->count() === $batch;
 
-            if ($this->visibility->allows(context: $context, subject: $this->visibility->subject($row))) {
-                $result[] = $this->reference($row);
+            foreach ($rows as $row) {
+                if ($index === self::ScanLimit || count($result) === $query->limit) {
+                    return new InboxPage(items: $result, cursor: $last === null ? null : $this->cursor(scope: $scope, id: $last));
+                }
+
+                $index++;
+                $last = NotificationValue::text($row->id);
+
+                if ($this->visibility->allows(context: $context, subject: $this->visibility->subject($row))) {
+                    $result[] = $this->reference($row);
+                }
             }
         }
 
@@ -214,7 +235,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
     {
         $scope = $this->scopes->of($context);
         $this->current->assert(scope: $scope, connection: $this->connection);
-        $rows = $this->recipient($scope)->whereNull('read_at')->limit(self::ScanLimit + 1)->get();
+        $rows = $this->recipient($scope)->whereNull('read_at')->limit(self::ScanLimit + 1)->get(self::SubjectColumns);
 
         if ($rows->count() > self::ScanLimit) {
             return UnreadCount::unavailable('visibility-scan-limit');
@@ -232,7 +253,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 
     private function notifications(DataScope $scope): Builder
     {
-        return $this->connection->table('ntf_notifications')->where(NotificationScope::logical($scope));
+        return $this->connection->table('ntf_notifications')->where(NotificationScope::logical($scope))->whereNull('pruned_at');
     }
 
     private function recipient(DataScope $scope): Builder
@@ -277,7 +298,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
         return $matches[2];
     }
 
-    private function reference(object $row): NotificationRef
+    private function reference(object $row, ?EntityReference $replayRelated = null): NotificationRef
     {
         $subject = $this->visibility->subject($row);
 
@@ -288,7 +309,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
             revision: NotificationValue::text(NotificationValue::field(row: $row, name: 'revision')),
             readAt: $this->date(NotificationValue::field(row: $row, name: 'read_at')),
             cancelledAt: $this->date(NotificationValue::field(row: $row, name: 'cancelled_at')),
-            related: $subject->related,
+            related: $subject->related ?? $replayRelated,
         );
     }
 
@@ -310,7 +331,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
     {
         return array_values($this->connection->table('ntf_deliveries')
             ->where('notification_id', $notificationId)
-            ->whereIn('state', ['accepted', 'completed', 'unknown', 'sending'])
+            ->whereIn('state', [DeliveryState::Accepted, DeliveryState::Completed, DeliveryState::Unknown, DeliveryState::Sending])
             ->orderBy('channel')
             ->pluck('channel')->map(NotificationValue::text(...))
             ->all());

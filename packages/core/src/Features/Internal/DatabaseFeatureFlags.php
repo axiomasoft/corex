@@ -34,7 +34,7 @@ use Packman\Attributes\Internal;
  * `$connection` mirrors `DatabaseSettingsRepository`'s seam (null = app
  * default), used by the PG-only test lane.
  *
- * @internal spec: B-10 §3.1, AC-22, D27, D38, D12
+ * @internal
  */
 #[Internal]
 final readonly class DatabaseFeatureFlags implements FeatureFlags
@@ -70,7 +70,7 @@ final readonly class DatabaseFeatureFlags implements FeatureFlags
 
         // A NULL override payload means "this override only toggles
         // is_enabled" — it must fall back to the flag's own payload, not
-        // blank it out from under every other scope (A87).
+        // blank it out from under every other scope.
         if ($override instanceof FeatureOverride && $override->payload !== null) {
             return JsonDocuments::capture($override->payload);
         }
@@ -112,7 +112,7 @@ final readonly class DatabaseFeatureFlags implements FeatureFlags
      * `sys_feature_overrides.scope_type` CHECK allows it and `SettingsScope`
      * now has a `department()` factory.
      *
-     * @internal spec: D38
+     * @internal
      */
     private function findOverride(string $flagId, ?SettingsScope $scope): ?FeatureOverride
     {

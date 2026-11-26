@@ -20,7 +20,7 @@ function pubsubPg(): Connection
     return DB::connection(PUBSUB_DB_POLL_TEST_CONNECTION);
 }
 
-/** Fakes a console worker (not Octane) — the only runtime the guard allows by default (P1.24). */
+/** Fakes a console worker (not Octane) — the only runtime the guard allows by default. */
 final class WorkerConsoleRuntime implements WorkerRuntime
 {
     public function isOctane(): bool
@@ -35,7 +35,7 @@ final class WorkerConsoleRuntime implements WorkerRuntime
 }
 
 beforeEach(function (): void {
-    // D12: sys_pubsub_messages/sys_pubsub_cursors are PG-only. Clean schema per
+    // sys_pubsub_messages/sys_pubsub_cursors are PG-only. Clean schema per
     // test (mirrors FeatureFlagsTest's/DepartmentTest's pg-lane pattern).
     pubsubPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
     pubsubPg()->statement('CREATE SCHEMA public');
@@ -63,7 +63,7 @@ function pollingPubSub(): DatabasePollPubSub
     ]);
 }
 
-it('AC-25(a)/(б) publish→subscribe delivers the payload via the poll cursor, from a console worker context', function (): void {
+it('publish→subscribe delivers the payload via the poll cursor, from a console worker context', function (): void {
     $pubsub = pollingPubSub();
 
     $pubsub->publish('module.enabled', ['module' => 'crm']);
@@ -94,7 +94,7 @@ it('persists rows in the configured table with a bigint cursor', function (): vo
         ->and($row->id)->toBeInt();
 });
 
-it('(г) D44: a new subscriber does NOT replay pre-existing history by default (skips straight to max(id))', function (): void {
+it('(г) a new subscriber does NOT replay pre-existing history by default (skips straight to max(id))', function (): void {
     $pubsub = pollingPubSub();
     $pubsub->publish('module.enabled', ['module' => 'crm']);
     $pubsub->publish('module.enabled', ['module' => 'tasks']);
@@ -108,7 +108,7 @@ it('(г) D44: a new subscriber does NOT replay pre-existing history by default (
     expect($received)->toBe([]);
 });
 
-it('(г) D44: a rolling restart of the SAME subscriber resumes from its persisted cursor, not from 0 or from a fresh max(id)', function (): void {
+it('(г) a rolling restart of the SAME subscriber resumes from its persisted cursor, not from 0 or from a fresh max(id)', function (): void {
     $pubsub = pollingPubSub();
 
     $pubsub->publish('module.enabled', ['module' => 'crm']);
@@ -125,7 +125,7 @@ it('(г) D44: a rolling restart of the SAME subscriber resumes from its persiste
     $pubsub->publish('module.enabled', ['module' => 'sales']);
 
     // Second run (the restarted process): must see the restart-window message —
-    // NOT skip it (max(id) start on every subscribe(), the rejected D44
+    // NOT skip it (max(id) start on every subscribe(), the rejected
     // design) and NOT replay 'crm'/'tasks' again (cursor-at-0 fallback).
     $secondRun = [];
     $pubsub->subscribe('module.enabled', function (array $payload) use (&$secondRun): void {

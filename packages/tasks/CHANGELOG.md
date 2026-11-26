@@ -31,7 +31,7 @@
 
 ## Unreleased — baseline v1
 
-- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+- The initial `tenant` baseline replaced the unreleased migration chain for fresh installations.
 
 ## Unreleased — deterministic schema (P08.2)
 
@@ -65,7 +65,7 @@
 
 ## Unreleased — P04.2
 
-- Команды и события используют скалярные views; синхронный TaskCompletionCapture участвует в транзакции сохранения.
+- Commands and events expose scalar views. Synchronous `TaskCompletionCapture` participates in the save transaction.
 
 
 ## Unreleased
@@ -79,10 +79,8 @@
   upgrading; stored `*_type` values holding an old model FQCN no longer resolve (no aliases, PLAN3.D01).
 
 - Added the public `TaskOperationReceipts` owner port and typed operation receipt/kind for transactional integrations; the SQL implementation stays internal.
-- Добавили `TaskPlanningCommand`/`TaskPlanningAccess` и typed planning DTO для
-  project/sprint/time-log с дедупликацией `corex_task_operations`.
-- BREAKING: заменили legacy process/participant-схему на утверждённый UUIDv7-контракт из восьми `tsk_*` таблиц.
-- Добавили lifecycle manifest `corex/tasks`; миграции выполняет CoreX module lifecycle, а не service provider.
-- Добавили DTO-команды создания и перемещения задачи с явной tenant/workspace-проверкой и безопасным default-deny доступом.
-- Добавили атомарные команды изменения и завершения задачи, after-commit события
-  и отдельный default-deny контракт авторизации мутаций.
+- Added `TaskPlanningCommand`, `TaskPlanningAccess` and typed project, sprint and time-log inputs with deduplication in `corex_task_operations`.
+- Breaking schema change: eight UUIDv7 `tsk_*` tables replace the legacy process and participant tables.
+- Registered the `corex/tasks` lifecycle manifest. The module lifecycle applies its migrations.
+- Task creation and moves use explicit tenant and workspace checks and deny writes by default.
+- Atomic update and completion commands publish after-commit events and use a dedicated mutation authorization contract that denies access by default.

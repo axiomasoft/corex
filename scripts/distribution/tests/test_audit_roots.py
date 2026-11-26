@@ -138,7 +138,7 @@ class AuditRootsTest(unittest.TestCase):
         proof = MODULE.read_json(directory / "receipt.json")
         proof["commands"] = [row for row in proof["commands"] if row["role"] != "audit"]
         with self.assertRaisesRegex(MODULE.AuditError, "missing/duplicate audit"):
-            MODULE.verify_commands(proof, directory)
+            MODULE.verify_commands(self.root, proof, directory)
 
     def test_insecure_no_audit_environment_is_red(self):
         self.assert_red(self.run_audit({"COMPOSER_NO_AUDIT": "1"}), "COMPOSER_NO_AUDIT")
@@ -223,6 +223,30 @@ class AuditRootsTest(unittest.TestCase):
         self.assertNotIn("versions", effective["repositories"][0]["options"])
         self.assertEqual("packages/core/composer.json", proof["repository_bindings"][0]["manifest"])
         self.assertEqual(str(parent.relative_to(self.root)), proof["repository_bindings"][0]["owner"])
+
+    def test_isolated_solve_pins_the_reviewed_toolchain_and_verifies_those_exact_arguments(self):
+        root = self.manifest("composer.json", "example/root", locked=True, **{"require-dev": {"phpstan/phpstan": "^2.1"}})
+        lock = MODULE.read_json(root.with_name("composer.lock"))
+        lock["packages-dev"] = [{"name": "phpstan/phpstan", "version": "2.1.40"}]
+        MODULE.write_json(root.with_name("composer.lock"), lock)
+        source = self.manifest("tests/fixtures/worker/composer.json", "example/worker", **{"require-dev": {"phpstan/phpstan": "^2.1"}})
+        receipt = self.run_audit()
+        self.assertEqual("GREEN", receipt["status"], receipt)
+        MODULE.verify_evidence(self.root, self.evidence)
+        solve = next(command for command, *_ in self.runner.calls if command[4] == "update")
+        self.assertEqual(["--with", "phpstan/phpstan:2.1.40"], solve[-2:])
+        row = next(row for row in receipt["roots"] if row["manifest"] == str(source.relative_to(self.root)))
+        directory = self.evidence / row["directory"]
+        proof = MODULE.read_json(directory / "receipt.json")
+        evidence = directory / next(command for command in proof["commands"] if command["role"] == "solve")["output"]
+        recorded = MODULE.read_json(evidence)
+        recorded["command"] = recorded["command"][:-2]
+        MODULE.write_json(evidence, recorded)
+        for command in proof["commands"]:
+            if command["role"] == "solve":
+                command["sha256"] = MODULE.digest(evidence)
+        with self.assertRaisesRegex(MODULE.AuditError, "insecure/missing solve command"):
+            MODULE.verify_commands(self.root, proof, directory)
 
     def test_failed_solve_missing_lock_timeout_or_unstable_harness_is_red(self):
         source = self.manifest("tests/fixtures/worker/composer.json", "example/worker")

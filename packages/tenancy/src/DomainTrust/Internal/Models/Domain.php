@@ -13,7 +13,7 @@ use Override;
 use Packman\Attributes\Internal;
 
 /**
- * `root_domains` — per-account host registry (central connection, D14).
+ * `root_domains` — per-account host registry (central connection).
  * Host resolution uses the central host registry directly.
  *
  * @property string $id

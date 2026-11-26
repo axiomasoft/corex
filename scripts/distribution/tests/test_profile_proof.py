@@ -1,4 +1,4 @@
-"""P17.6 pristine profile matrix negatives and constraint edges."""
+"""Pristine profile matrix negatives and constraint edges."""
 
 from __future__ import annotations
 

@@ -65,7 +65,7 @@ final class Runtime
 
     public static function tenant(): Connection
     {
-        return app('db')->connection('pgsql');
+        return resolve('db')->connection('pgsql');
     }
 
     public static function bulk(string $kind): object

@@ -270,3 +270,32 @@ CREATE INDEX crm_activities_planned_ix ON crm_activities (owner_id, starts_at)
 CREATE INDEX crm_activities_kind_ix ON crm_activities (kind, status) WHERE deleted_at IS NULL;
 
 CREATE INDEX crm_at_entity_ix ON crm_activity_targets (entity_type, entity_id);
+
+-- Referencing-side indexes: parent deletes and key updates look child rows up by these columns.
+CREATE INDEX crm_companies_source_id_ix ON crm_companies (source_id);
+CREATE INDEX crm_contacts_source_id_ix ON crm_contacts (source_id);
+CREATE INDEX crm_pipelines_workspace_id_ix ON crm_pipelines (workspace_id);
+CREATE INDEX crm_leads_converted_company_id_ix ON crm_leads (converted_company_id);
+CREATE INDEX crm_leads_converted_contact_id_ix ON crm_leads (converted_contact_id);
+CREATE INDEX crm_leads_converted_deal_id_ix ON crm_leads (converted_deal_id);
+CREATE INDEX crm_leads_lost_reason_id_ix ON crm_leads (lost_reason_id);
+CREATE INDEX crm_leads_source_id_ix ON crm_leads (source_id);
+CREATE INDEX crm_leads_stage_id_ix ON crm_leads (stage_id);
+CREATE INDEX crm_leads_workspace_id_ix ON crm_leads (workspace_id);
+CREATE INDEX crm_deals_lost_reason_id_ix ON crm_deals (lost_reason_id);
+CREATE INDEX crm_deals_source_id_ix ON crm_deals (source_id);
+CREATE INDEX crm_deals_stage_id_ix ON crm_deals (stage_id);
+CREATE INDEX crm_activities_workspace_id_ix ON crm_activities (workspace_id);
+
+-- Full FK coverage also includes soft-deleted and inactive children.
+CREATE INDEX crm_activities_owner_id_ix ON crm_activities (owner_id);
+CREATE INDEX crm_companies_owner_id_ix ON crm_companies (owner_id);
+CREATE INDEX crm_companies_workspace_id_ix ON crm_companies (workspace_id);
+CREATE INDEX crm_contacts_owner_id_ix ON crm_contacts (owner_id);
+CREATE INDEX crm_contacts_workspace_id_ix ON crm_contacts (workspace_id);
+CREATE INDEX crm_deals_company_id_ix ON crm_deals (company_id);
+CREATE INDEX crm_deals_owner_id_ix ON crm_deals (owner_id);
+CREATE INDEX crm_deals_pipeline_id_ix ON crm_deals (pipeline_id);
+CREATE INDEX crm_deals_workspace_id_ix ON crm_deals (workspace_id);
+CREATE INDEX crm_leads_owner_id_ix ON crm_leads (owner_id);
+CREATE INDEX crm_leads_pipeline_id_ix ON crm_leads (pipeline_id);

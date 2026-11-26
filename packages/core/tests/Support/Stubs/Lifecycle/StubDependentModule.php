@@ -8,7 +8,7 @@ use Packman\Modules\Contracts\Definition\ModuleDefinition;
 use Packman\Modules\Data\Lifecycle\ModuleDependency;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
-/** Requires {@see StubBaseModule} — exercises AC-6/AC-8/cascade. */
+/** Requires {@see StubBaseModule} — exercises dependency cascades. */
 final class StubDependentModule extends ModuleDefinition
 {
     public function manifest(): ModuleManifest

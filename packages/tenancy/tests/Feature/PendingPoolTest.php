@@ -26,7 +26,7 @@ beforeEach(function (): void {
 
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
-    // Golden-template fixture, same one ProvisioningTest (P2.3) uses.
+    // Golden-template fixture, same one ProvisioningTest uses.
     dropPendingTemplateFixture();
     DB::statement('CREATE DATABASE '.PENDING_TEMPLATE_DB);
 
@@ -105,7 +105,7 @@ function makePendingClusterRow(array $overrides = []): string
         'pg_host_writer' => 'writer.local',
         'pgbouncer_host' => 'pgbouncer-a.local',
         // Pre-existing PG role assumed (cell-provisioning is out of scope
-        // here, same allowance as P2.3's ProvisioningTest).
+        // here, same allowance as ProvisioningTest).
         'app_db_user' => 'corex',
         'template_version' => 1,
         'pending_pool_size' => 3,
@@ -149,7 +149,7 @@ function pendingPool(): PendingPool
     );
 }
 
-it('creates pending болванки with cloned databases, status=pending, slug/owner NULL (AC-4)', function (): void {
+it('creates pending болванки with cloned databases, status=pending, slug/owner NULL', function (): void {
     $clusterId = makePendingClusterRow();
     makePendingTemplateRow();
 
@@ -230,7 +230,7 @@ it('two concurrent pullPending() callers never claim the same болванка (
     DB::disconnect('probe_'.$centralDatabase);
 });
 
-it('empty pool falls back to a synchronous clone under the 10s threshold (AC-5)', function (): void {
+it('empty pool falls back to a synchronous clone under the 10s threshold', function (): void {
     $clusterId = makePendingClusterRow();
     makePendingTemplateRow();
 

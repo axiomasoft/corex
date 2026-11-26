@@ -78,7 +78,7 @@ function makeIdentityRW(): string
     return $id;
 }
 
-/** Real per-account tenant DB (golden-template chain, D14/C4) — tenancy IS initialized on return. */
+/** Real per-account tenant DB (golden-template chain) — tenancy IS initialized on return. */
 function initializedAccountRW(array $overrides = []): Account
 {
     $dbName = 'acc_rw_'.Str::lower(Str::random(8));
@@ -267,7 +267,7 @@ it('е: путь /w без следующего сегмента → 403', funct
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w', 'GET'))))->toBe(403);
 });
 
-it('ж: partner получает свой контекст (200), /w/{parent-slug} → 403 (AC-18)', function (): void {
+it('ж: partner получает свой контекст (200), /w/{parent-slug} → 403', function (): void {
     initializedAccountRW();
     $parent = makeWorkspaceRW(['type' => 'company']);
     $partner = makeWorkspaceRW(['type' => 'partner', 'parent_id' => $parent->id]);
@@ -394,7 +394,7 @@ it('о: под резолвленным контекстом WorkspaceScope на
         ->and($visibleIds)->not->toContain($deptB->id);
 });
 
-it('п: алиас corex-tenancy.workspace зарегистрирован (Router::getMiddleware()), но НЕ входит в группу tenant (AC-28)', function (): void {
+it('п: алиас corex-tenancy.workspace зарегистрирован (Router::getMiddleware()), но НЕ входит в группу tenant', function (): void {
     expect(config('corex-tenancy.host_identification.enabled'))->toBeFalse()
         ->and(config('corex-tenancy.oidc.enabled'))->toBeFalse()
         ->and(resolve('router')->getMiddleware())->toHaveKey('tenancy.workspace')

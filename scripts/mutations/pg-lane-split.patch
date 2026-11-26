@@ -1,0 +1,10 @@
+diff --git a/tests/Feature/PubSubDatabasePollTest.php b/tests/Feature/PubSubDatabasePollTest.php
+--- a/tests/Feature/PubSubDatabasePollTest.php
++++ b/tests/Feature/PubSubDatabasePollTest.php
+@@ -8,6 +8,5 @@
+ use Illuminate\Support\Facades\DB;
+ use Psr\Clock\ClockInterface;
+
+-uses()->group('pg');
+
+ const PUBSUB_DB_POLL_TEST_CONNECTION = 'pgsql';

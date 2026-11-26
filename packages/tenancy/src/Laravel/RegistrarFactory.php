@@ -29,7 +29,7 @@ final class RegistrarFactory
             new EventsRegistrar,
         ];
 
-        // TenancyOptions stays bind()-lazy (P7.2/P8.2): make() here would
+        // TenancyOptions stays bind()-lazy: make() here would
         // validate OIDC before Testbench defineEnvironment fills issuer fields.
         $oidc = is_array($corexTenancy['oidc'] ?? null) ? $corexTenancy['oidc'] : [];
         $oidcEnabled = (bool) ($oidc['enabled'] ?? false);

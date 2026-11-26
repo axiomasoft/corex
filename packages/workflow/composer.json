@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
+        "ext-filter": "*",
         "axiomasoft/corex": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-modules": "^0.1.1",
@@ -77,6 +78,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^11.3",
-        "orchestra/testbench-core": "^11.5"
+        "orchestra/testbench-core": "^11.5",
+        "mockery/mockery": "^1.6"
     }
 }

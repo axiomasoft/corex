@@ -78,7 +78,7 @@ it('isolates a central sync job from logged-in session guards and restores the o
     Auth::guard('other')->loginUsingId(2);
     app()->instance('request', Request::create('/account'));
     expect(request()->user()?->getAuthIdentifier())->toBe(1);
-    app(WorkQueueHandlers::class)->central(FrameworkIsolationCentralJob::class);
+    resolve(WorkQueueHandlers::class)->central(FrameworkIsolationCentralJob::class);
     FrameworkIsolationCentralJob::$observed = [];
 
     $dispatch = static fn () => Queue::connection('sync')->push(new FrameworkIsolationCentralJob($fails));
@@ -119,7 +119,7 @@ it('propagates scalar log context without hydrating an Eloquent model on the wor
         $table->unsignedInteger('created_at');
     });
     FrameworkIsolationContextJob::$observed = [];
-    app(WorkQueueHandlers::class)->central(FrameworkIsolationContextJob::class);
+    resolve(WorkQueueHandlers::class)->central(FrameworkIsolationContextJob::class);
     $record = FrameworkIsolationContextModel::findOrFail(1);
     expect($record->owner)->toBe('producer');
     Context::add(['trace' => 'producer-trace', 'record' => $record]);
@@ -132,7 +132,7 @@ it('propagates scalar log context without hydrating an Eloquent model on the wor
     expect(FrameworkIsolationContextModel::findOrFail(1)->owner)->toBe('worker');
     $tenant->enableQueryLog();
     Context::flush()->add('trace', 'outer-trace')->addHidden('secret-trace', 'outer-hidden');
-    app('queue.worker')->process('database', $queue->pop(), new WorkerOptions(maxTries: 1));
+    resolve('queue.worker')->process('database', $queue->pop(), new WorkerOptions(maxTries: 1));
 
     expect($tenant->getQueryLog())->toBe([])
         ->and(FrameworkIsolationContextJob::$observed)->toBe([['producer-trace', 'producer-hidden', false, false]])
@@ -150,7 +150,7 @@ it('freezes the workspace of a deferred sync job before the outer transaction co
     $contexts->initialize($account);
     $contexts->setWorkspace($outer);
     $authority->scope();
-    app(WorkQueueHandlers::class)->tenant(FrameworkIsolationAfterCommitJob::class);
+    resolve(WorkQueueHandlers::class)->tenant(FrameworkIsolationAfterCommitJob::class);
     FrameworkIsolationAfterCommitJob::$workspaces = [];
 
     DB::connection()->transaction(function () use ($contexts, $account, $outer, $producer): void {

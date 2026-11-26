@@ -14,10 +14,10 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Control-plane sweep (B-11 §3.2): re-syncs every `root_identity_accounts`
+ * Control-plane sweep: re-syncs every `root_identity_accounts`
  * row that is `failed`/`pending`, or whose `synced_at` has fallen behind its
  * identity's `updated_at` — the retry path for {@see IdentitySyncer}'s
- * per-account failure isolation (AC-16 з).
+ * per-account failure isolation.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IdentitiesReconcileCommand extends Command

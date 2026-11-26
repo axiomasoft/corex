@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-/** AC-20 test double — a plain workspace_scoped entity; production tables are P3+ (crm/tasks). */
+/** Test double — a plain workspace_scoped entity; CRM and tasks own the production tables. */
 final class WorkspaceScopedRecordStub extends Model
 {
     protected $table = 'wsp_scope_stub_records';
@@ -113,7 +113,7 @@ function seedScopeStubRecords(): array
     return [$workspaceScoped, $otherWorkspaceScoped, $accountWide];
 }
 
-it('AC-20: with a narrowed workspace, the scope keeps that workspace\'s rows plus account-wide (NULL) rows', function (): void {
+it('with a narrowed workspace, the scope keeps that workspace\'s rows plus account-wide (NULL) rows', function (): void {
     [$workspaceScoped, $otherWorkspaceScoped, $accountWide] = seedScopeStubRecords();
 
     /** @var FakeTenancyManagerStub $manager */
@@ -127,7 +127,7 @@ it('AC-20: with a narrowed workspace, the scope keeps that workspace\'s rows plu
         ->and($ids)->not->toContain($otherWorkspaceScoped);
 });
 
-it('AC-20: with no workspace narrowed (account-wide/admin context), the scope does not filter at all', function (): void {
+it('with no workspace narrowed (account-wide/admin context), the scope does not filter at all', function (): void {
     seedScopeStubRecords();
 
     /** @var FakeTenancyManagerStub $manager */

@@ -1,4 +1,4 @@
--- Minimal golden-template fixture for ProvisioningTest (P2.3 Scope Excluded:
+-- Minimal golden-template fixture for ProvisioningTest (Scope Excluded:
 -- the real ~150-table golden template is assembled later from every
 -- package's migrations, CI-side). One table + one row is enough to assert
 -- that STRATEGY WAL_LOG actually copies data, not just an empty database.

@@ -1,25 +1,21 @@
-# Таксономия пакетов CoreX — блок `extra.corex`
+# CoreX package taxonomy
 
-**Версия:** 1.0.0 · **Статус:** нормативный · **Уровень:** 0 (`corex/*`)
+**Version** 1.0.0 · **Status** normative · **Level** 0 (`corex/*`)
 
-Документ описывает архитектурные метаданные пакета в `composer.json` под ключом `extra.corex`.
-Публичная поверхность пакета индексируется статьёй `API-001` конституции; граница пакетов —
-`PKG-009`. Composer `type` и версия пакета этим блоком **не заменяются** (D11).
+The `extra.corex` block of a package's `composer.json` declares its architectural metadata. Articles `API-001` and `PKG-009` of the constitution govern the public surface and package boundaries. Composer retains its own package type and version.
 
-## Две ортогональные оси
+## Composer metadata and architectural metadata
 
-У Composer и у CoreX есть оси с похожими словами; смешивать их — два ответа на один вопрос:
-
-| Вопрос | Ось Composer | Ось CoreX |
+| Question | Composer metadata | CoreX metadata |
 |:--|:--|:--|
-| Как пакет устанавливается и обнаруживается | `type` (`library`, `packman-module`) | — |
-| Какая это ступень релиза | версия и суффикс, `minimum-stability` | — |
-| Какую роль пакет играет в архитектуре уровня 0 | — | `extra.corex.package-type` |
-| Насколько зрела публичная поверхность | — | `extra.corex.stability` |
+| How is the package installed and discovered? | `type` (`library` or `packman-module`) | — |
+| What release stage is it at? | Version, suffix and `minimum-stability` | — |
+| What role does it play in the level 0 architecture? | — | `extra.corex.package-type` |
+| How mature is its public surface? | — | `extra.corex.stability` |
 
-Существующие значения composer `type` **не меняются**: их читает установка и discovery.
+Installation and discovery rely on the existing Composer `type` values.
 
-## Схема `extra.corex`
+## The `extra.corex` schema
 
 ```json
 {
@@ -34,45 +30,41 @@
 }
 ```
 
-| Ключ | Обязателен | Тип | Значение |
+| Key | Required | Type | Meaning |
 |:--|:--|:--|:--|
-| `schema-version` | да | целое | Версия контракта блока. Сегодня `1`. Неизвестная версия — явный отказ читателя. |
-| `module` | нет | строка | Класс модуля. Отсутствие у немодульного пакета — не дефект. |
-| `package-type` | да | строка из закрытого набора | Архитектурный вид. Не совпадает с composer `type`. |
-| `stability` | да | строка из закрытого набора | Зрелость **публичной поверхности**, не релиз Composer. |
+| `schema-version` | Yes | Integer | The block's contract version, currently `1`. Readers must reject unknown versions explicitly. |
+| `module` | No | String | Module class. A non-module package can omit it. |
+| `package-type` | Yes | Enumerated string | Architectural role, independent of Composer's installation type. |
+| `stability` | Yes | Enumerated string | Maturity of the public surface. |
 
-Неизвестные ключи внутри `corex` читатель обязан игнорировать, но обязан отличать
-**отсутствие** блока от **невалидного** блока: первое — состояние, второе — ошибка.
-Метаданные пакета — данные, а не полномочие: ни один ключ не разрешает поведение,
-запрещённое конституцией.
+Readers ignore unknown keys inside `corex`. An absent block is a distinct state. An invalid block is an error. Package metadata cannot authorize behavior prohibited by the constitution.
 
-### `package-type` — закрытый набор
+### Permitted values of `package-type`
 
-| Значение | Что означает | Кому вправе быть нужен |
+| Value | Role | Intended consumers |
 |:--|:--|:--|
-| `foundation` | Примитивы и контракты, на которых стоят остальные пакеты | всем |
-| `capability` | Самостоятельная предметная возможность уровня 0 | продукту и другим возможностям |
-| `integration` | Адаптер между пакетами или к внешней системе | только своим хостам |
-| `product` | Композиция уровня 2: продуктовая семантика | конечному приложению |
-| `tooling` | Инструмент разработки, не runtime продукта | разработчику |
-| `fixture` | Демо- или тестовый потребитель универсальности | приёмке |
+| `foundation` | Shared primitives and contracts | All packages |
+| `capability` | An independent level 0 domain capability | Products and other capabilities |
+| `integration` | Adapter between packages or to an external system | Its hosts |
+| `product` | Level 2 composition with product-specific semantics | The end application |
+| `tooling` | Development tooling outside the product runtime | Developers |
+| `fixture` | Demonstration or test consumer of the shared capability | Acceptance tests |
 
-### `stability` — закрытый набор
+### Permitted values of `stability`
 
-| Значение | Обещание потребителю |
+| Value | Consumer commitment |
 |:--|:--|
-| `stable` | Поверхность меняется по `api-policy.md`; ломающее — только в мажоре |
-| `experimental` | Поверхность может измениться в миноре; изменение — в `CHANGELOG` пакета |
-| `internal` | Пакет не для прямого потребления вне монорепозитория |
-| `deprecated` | Только исправления; названа замена и версия удаления |
-| `unreleased` | Пакет ещё не входит в релизный набор; публикация требует отдельного решения |
+| `stable` | Follow `api-policy.md`. Breaking changes require a major release. |
+| `experimental` | The surface can change in a minor release. Record the change in the package CHANGELOG. |
+| `internal` | Intended for use within the monorepo. |
+| `deprecated` | Fixes only. Identify the replacement and the removal version. |
+| `unreleased` | Outside the release set. Publication requires a separate decision. |
 
-## Текущий состав
+## Current inventory
 
-Публичность определяется source атрибутами; `extra.corex.stability` остаётся независимой
-осью зрелости. BC gate включён; live CI и опубликованный релиз этим не заявляются.
+Source attributes identify public types. `extra.corex.stability` records maturity independently. Snapshot gates check the declared surface. Verify the actual CI run, publication status and release compatibility separately under the [compatibility policy](semver-policy.md).
 
-| Путь | Composer name | Composer type | Package type | Stability |
+| Path | Composer name | Composer type | Package type | Stability |
 |:--|:--|:--|:--|:--|
 | `packages/access` | axiomasoft/corex-access | library | capability | stable |
 | `packages/core` | axiomasoft/corex | library | foundation | stable |
@@ -96,10 +88,6 @@
 | `packages/workflow` | axiomasoft/corex-workflow | packman-module | capability | stable |
 | `products/flex-crm` | flex/crm | packman-module | product | experimental |
 
-Source-derived surface: [public-api](../reference/public-api.md).
+The [public API reference](../reference/public-api.md) is derived from source.
 
-`tools` и `webhooks` — расширения operations: они законно зависят от axiomasoft/corex-operations и
-не образуют отдельного ранга. Контракт обработчика (`OperationHandler`, `RequestContext`, `Principal`,
-`InvocationMetadata`) принадлежит ядру (`CoreX\Invocation`), поэтому продукт (`flex/crm`) объявляет
-операции без prod-зависимости от operations; ребро `flex/crm → axiomasoft/corex-operations` запрещено
-package-graph-gate ([решение](decisions/2026-10-08-invocation-kernel-contract.md)).
+The `tools` and `webhooks` packages extend Operations and can depend on `axiomasoft/corex-operations` without forming a separate architectural level. The kernel owns `OperationHandler`, `RequestContext`, `Principal` and `InvocationMetadata`. The invocation contracts are in `CoreX\Invocation`; the principal contract is in `CoreX\Context`. The product `flex/crm` can therefore declare operations using only its kernel dependency. The package graph gate prohibits a production edge from `flex/crm` to `axiomasoft/corex-operations`. See the [kernel invocation decision](decisions/2026-10-08-invocation-kernel-contract.md).

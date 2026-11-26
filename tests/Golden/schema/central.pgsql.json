@@ -729,6 +729,16 @@
             },
             "indexes": [
                 {
+                    "name": "root_account_exports_account_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_account_exports_pk",
                     "kind": "pk",
                     "columns": [
@@ -882,6 +892,16 @@
                         "status"
                     ],
                     "predicate": "((status)::text <> 'ok'::text)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_account_schema_state_batch_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "batch_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -1053,6 +1073,16 @@
             },
             "indexes": [
                 {
+                    "name": "root_accounts_cluster_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "cluster_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_accounts_cluster_ix",
                     "kind": "ix",
                     "columns": [
@@ -1067,6 +1097,16 @@
                     "kind": "uq",
                     "columns": [
                         "db_name"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_accounts_owner_identity_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_identity_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -1365,6 +1405,16 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "root_domains_account_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "root_domains_host_uq",
                     "kind": "uq",
@@ -1764,6 +1814,16 @@
             },
             "indexes": [
                 {
+                    "name": "root_idp_sessions_identity_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "identity_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_idp_sessions_identity_ix",
                     "kind": "ix",
                     "columns": [
@@ -1881,10 +1941,30 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "root_impersonation_grants_approved_by_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "approved_by"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_impersonation_grants_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_impersonation_grants_staff_identity_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "staff_identity_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -2135,6 +2215,16 @@
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "root_oauth_refresh_tokens_session_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "session_id"
                     ],
                     "predicate": null,
                     "method": "btree",

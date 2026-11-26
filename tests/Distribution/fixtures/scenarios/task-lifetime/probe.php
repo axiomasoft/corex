@@ -168,7 +168,7 @@ function observeBootedActivation(Scenario $proof): array
 function observeBootedReader(Scenario $proof): array
 {
     $proof->same(true, app()->isBooted(), 'Every provider has completed boot');
-    $held = app('task-lifetime.registration-reader');
+    $held = resolve('task-lifetime.registration-reader');
 
     return enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $held): array {
         $engine = app(TaskLifetimeWorkflowEngine::class);
@@ -251,7 +251,7 @@ function gateAtBoot(Scenario $proof): ModuleActivationGate
 {
     $gate = app(ModuleActivationGate::class);
     $proof->check($gate::class !== TaskLifetimeActivationGate::class, 'Bridge boot decorated the current host policy');
-    $proof->check(app('task-lifetime.boot-reader') !== app(RegistryIntrospection::class), 'Provider boot retires the construction-time reader');
+    $proof->check(resolve('task-lifetime.boot-reader') !== resolve(RegistryIntrospection::class), 'Provider boot retires the construction-time reader');
 
     return $gate;
 }
@@ -377,9 +377,9 @@ function provision(Scenario $proof): array
 
         return ['boot_gate' => $bootGate::class, 'tenant_gate' => $gate::class, 'lookups' => $lookups];
     });
-    $availability = $bootGate === null ? [] : checkScopedAvailability($proof, $bootGate, app('task-lifetime.boot-reader'));
+    $availability = $bootGate === null ? [] : checkScopedAvailability($proof, $bootGate, resolve('task-lifetime.boot-reader'));
 
-    return [$migrations, $activation === [] ? [] : ['boot_reader_gate' => app('task-lifetime.introspection-gate'), ...$activation, 'availability' => $availability]];
+    return [$migrations, $activation === [] ? [] : ['boot_reader_gate' => resolve('task-lifetime.introspection-gate'), ...$activation, 'availability' => $availability]];
 }
 
 switch ($argv[1] ?? '') {
@@ -414,7 +414,7 @@ switch ($argv[1] ?? '') {
 
         if ($hasEarlyReader) {
             $bootReadOrder = getenv('COREX_SCENARIO_TASKS_GATE_FIRST') === '1' ? 'gate-first' : 'reader-first';
-            $proof->same($bootReadOrder, app('task-lifetime.boot-read-order'), 'The warm host used the requested public lookup order');
+            $proof->same($bootReadOrder, resolve('task-lifetime.boot-read-order'), 'The warm host used the requested public lookup order');
         }
 
         $gate = $hasEarlyReader ? gateAtBoot($proof) : app(ModuleActivationGate::class);
@@ -429,7 +429,7 @@ switch ($argv[1] ?? '') {
 
             return $reader;
         }, $first);
-        $earlyReader = $hasEarlyReader ? app('task-lifetime.boot-reader') : null;
+        $earlyReader = $hasEarlyReader ? resolve('task-lifetime.boot-reader') : null;
         $availability = checkScopedAvailability($proof, $gate, $firstScopedReader, $earlyReader);
         $proof->report($database, [TASKS], ['early_reader' => $hasEarlyReader, 'first_reader_workspace' => $first], $availability);
 
@@ -465,7 +465,7 @@ switch ($argv[1] ?? '') {
         $tables = ['tsk_tasks', 'corex_task_operations', 'sys_workflow_intents', 'mod_modules', 'mod_lifecycle_log'];
         $writes = array_map(static fn (string $table): int => $database->table($table)->count(), array_combine($tables, $tables));
         $proof->same(array_fill_keys($tables, 0), $writes, 'Denied activation writes no business rows, activation state, or lifecycle log');
-        $proof->report($database, [TASKS], [...$before, 'boot_reader_gate' => app('task-lifetime.introspection-gate'), 'boot_gate' => $bootGate::class], [
+        $proof->report($database, [TASKS], [...$before, 'boot_reader_gate' => resolve('task-lifetime.introspection-gate'), 'boot_gate' => $bootGate::class], [
             ...$after, 'refusal_at' => 'ModuleLifecycle::enable', 'writes' => $writes,
         ]);
 
@@ -484,16 +484,16 @@ switch ($argv[1] ?? '') {
         $outerPolicy = ($argv[6] ?? '') === 'outer';
         $version = config('corex-tasks-workflow.version_ref');
         $supported = $version === VERSION;
-        $order = app('task-lifetime.registration-order');
+        $order = resolve('task-lifetime.registration-order');
         $proof->same($argv[2], $order, 'The catalogue provider ran before the final host registration');
         $proof->same(str_ends_with($wiring, '-alias') ? 'task-lifetime.host-policy' : ModuleActivationGate::class, app()->getAlias(ModuleActivationGate::class), 'The final host retains its canonical binding');
-        $earlyReader = $order === 'reader' ? app('task-lifetime.registration-reader') : null;
+        $earlyReader = $order === 'reader' ? resolve('task-lifetime.registration-reader') : null;
         $reason = $hostDenies ? 'Host declined edition' : ($supported ? null : 'The pinned task workflow definition and version have no active engine.');
         $allowed = $supported && ! $hostDenies;
         $lookups = $hostDenies ? [] : expectedLookup(Scenario::W1, $version);
         $outcome = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $mode, $reason, $allowed, $lookups, $hostDenies, $earlyReader, $outerPolicy): array {
             $gate = app(ModuleActivationGate::class);
-            $host = app()->bound('task-lifetime.registered-host') ? app('task-lifetime.registered-host') : null;
+            $host = app()->bound('task-lifetime.registered-host') ? resolve('task-lifetime.registered-host') : null;
             $expectedDecision = [$allowed, $reason, $hostDenies ? 'upgrade' : null];
             $decision = $gate->check($trusted, TASKS, 'standard');
             $proof->same($expectedDecision, [$decision->allowed, $decision->reason, $decision->upgradeHint], 'The final public gate checks the pin after the host allows');

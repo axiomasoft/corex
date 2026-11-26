@@ -183,7 +183,7 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
         }
         $ledger->observe(ticket: $ticket, observation: self::observation(outcome: $outcome, effectKey: $claim->deliveryKey));
 
-        if ($this->deliveries->complete(claim: $claim, outcome: $outcome, state: 'sending')) {
+        if ($this->deliveries->complete(claim: $claim, outcome: $outcome, state: DeliveryState::Sending)) {
             $admission->settle(ticket: $ticket, evidence: new AttemptEvidence(
                 outcome: $outcome->kind === DeliveryOutcomeKind::Unknown ? 'unknown' : 'reconciled',
                 reference: $claim->id,

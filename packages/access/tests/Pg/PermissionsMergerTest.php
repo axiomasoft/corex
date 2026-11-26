@@ -71,15 +71,15 @@ it('reacts to enable, disable and re-enable events while preserving native matri
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 
     $modules->setActive(['corex/access-tests']);
-    event(new ModuleEnabled('corex/access-tests', 'community', []));
+    Event::dispatch(new ModuleEnabled('corex/access-tests', 'community', []));
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeTrue();
 
     $modules->setActive([]);
-    event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
+    Event::dispatch(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 
     $modules->setActive(['corex/access-tests']);
-    event(new ModuleEnabled('corex/access-tests', 'community', []));
+    Event::dispatch(new ModuleEnabled('corex/access-tests', 'community', []));
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
         ->and($compiled)->toBe([$role->id, $role->id, $role->id])
         ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1);
@@ -93,7 +93,7 @@ it('recompiles on ModuleDisabled without a prior enable event', function (): voi
         $compiled[] = $event->roleId;
     });
 
-    event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
+    Event::dispatch(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
 
     expect($compiled)->toBe([$role->id]);
 });

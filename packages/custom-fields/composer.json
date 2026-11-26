@@ -6,6 +6,7 @@
     "require": {
         "ext-filter": "*",
         "ext-mbstring": "*",
+        "ext-pdo": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^2.0@dev",
         "illuminate/contracts": "^13.0",
@@ -87,5 +88,8 @@
         "orchestra/testbench": "^11.3",
         "orchestra/testbench-core": "^11.5",
         "symfony/process": "^7.2|^8.0"
+    },
+    "suggest": {
+        "ext-pdo_pgsql": "Direct DDL sessions for queued schema operations on PostgreSQL connections."
     }
 }

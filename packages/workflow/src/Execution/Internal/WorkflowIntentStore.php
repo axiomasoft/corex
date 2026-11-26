@@ -111,7 +111,7 @@ final readonly class WorkflowIntentStore
                         ->where(static fn (Builder $lease) => $lease->whereNull('lease_until')->orWhere('lease_until', '<=', self::time($now))))
                     ->orWhere(static fn (Builder $expired) => $expired->whereIn('state', ['claimed', 'sending'])
                         ->where('lease_until', '<=', self::time($now))))
-                ->orderBy('due_at')->orderBy('id')->limit($limit)
+                ->oldest('due_at')->orderBy('id')->limit($limit)
                 ->lock($db->getDriverName() === 'pgsql' ? 'FOR UPDATE SKIP LOCKED' : true)->get();
             $claims = [];
 

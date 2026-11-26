@@ -13,6 +13,6 @@ final class SchemaTestClock implements ClockInterface
 
     public function now(): DateTimeImmutable
     {
-        return (new DateTimeImmutable('now'))->modify('+'.$this->offset.' seconds');
+        return new DateTimeImmutable('now')->modify('+'.$this->offset.' seconds');
     }
 }

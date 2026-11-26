@@ -11,8 +11,6 @@ use Packman\Context\Contracts\ContextScopeInterface;
  * The current account/workspace pair a request or job runs under. Resolved
  * by axiomasoft/corex-tenancy; boxed installs get a constant singleton via
  * {@see SingleAccountResolver}.
- *
- * Contract: B-10 §3.1, B-11 §3.1 (owner: B-11).
  */
 #[Api(since: '1.0')]
 final readonly class TenantContext implements ContextScopeInterface
@@ -25,7 +23,7 @@ final readonly class TenantContext implements ContextScopeInterface
 
     /**
      * True iff this context was produced by {@see SingleAccountResolver}
-     * (boxed installs), not by a real P2 tenancy resolver.
+     * (boxed installs), not by a cloud tenancy resolver.
      */
     public function id(): string
     {

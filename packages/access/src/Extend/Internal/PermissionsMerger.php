@@ -12,22 +12,21 @@ use Packman\Modules\Events\Lifecycle\ModuleDisabled;
 use Packman\Modules\Events\Lifecycle\ModuleEnabled;
 
 /**
- * Ties `aut_role_matrix` compilation to module lifecycle (AC-27, D112/D113):
+ * Ties `aut_role_matrix` compilation to module lifecycle:
  * on ANY enable/disable, {@see RoleMatrixCompiler::recompileAll()} re-runs,
  * so active-entity checks are re-evaluated against
  * the module's new state. This class creates NO `aut_role_matrix` rows
- * itself (D113 — the merger only merges the SURFACE, modules write the
+ * itself (the merger only merges the SURFACE, modules write the
  * matrix); the rows a disabled module's entities leave behind stay in the
  * table for re-enable.
  *
  * `merge()` also validates `CompiledRegistry::$permissions` declarations
  * against {@see EntityRegistry}: a declaration whose `entity` is unknown to
  * the registry cannot be attributed to any module (the compiled slot
- * carries no module attribution of its own, findings/P2.9-seam-inventory
- * §6) and is skipped fail-closed — surfaced as a warning in the return
+ * carries no module attribution of its own) and is skipped fail-closed — surfaced as a warning in the return
  * value, never a log (same contract as {@see CoreX\Access\Matrix\Internal\MatrixValidator}).
  *
- * @internal spec: B-11 §4 п.2/п.4, P2.21 D112/D113, AC-27
+ * @internal
  */
 #[Internal]
 final readonly class PermissionsMerger

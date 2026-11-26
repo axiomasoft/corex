@@ -71,7 +71,7 @@ final class WorkQueueBoundary
             $seal = ($this->application)()->make(StoredWorkIssuer::class)->issue($scope, 'corex.queue', $this->commandRef(id: $id, handler: $handler, data: $data))->seal;
         }
         $log = ($this->application)()->make(LogContext::class);
-        $metadata = ['seal' => $seal, 'context' => array_filter($log->all(), 'is_scalar'), 'hidden' => array_filter($log->allHidden(), 'is_scalar'), 'handler' => $handler, 'transport' => $transport, 'mode' => $mode, 'scope' => $wire];
+        $metadata = ['seal' => $seal, 'context' => array_filter($log->all(), is_scalar(...)), 'hidden' => array_filter($log->allHidden(), is_scalar(...)), 'handler' => $handler, 'transport' => $transport, 'mode' => $mode, 'scope' => $wire];
 
         return ['job' => WorkQueueHandler::class.'@fire', 'illuminate:log:context' => null, 'corex_scope' => [...$metadata, 'signature' => $this->sign(id: $id, metadata: $metadata, data: $data)]];
     }
@@ -116,17 +116,17 @@ final class WorkQueueBoundary
             }
             $wire = $metadata['scope'];
 
-            if ($wire !== null && (! is_array($wire) || count(array_filter(array_keys($wire), 'is_string')) !== count($wire))) {
+            if ($wire !== null && (! is_array($wire) || count(array_filter(array_keys($wire), is_string(...))) !== count($wire))) {
                 throw new ScopeContextMismatch('Malformed work scope.');
             }
-            $scope = $wire === null ? null : ($this->application)()->make(DataScopeCodec::class)->decode(array_filter($wire, 'is_string', ARRAY_FILTER_USE_KEY));
+            $scope = $wire === null ? null : ($this->application)()->make(DataScopeCodec::class)->decode(array_filter($wire, is_string(...), ARRAY_FILTER_USE_KEY));
 
             if ($scope !== null && ! is_string($metadata['seal'] ?? null)) {
                 throw new ScopeContextMismatch('Missing work provenance.');
             }
             $proof = $scope === null ? null : new StoredWorkProof(owner: 'corex.queue', reference: $this->commandRef(id: $payload['uuid'], handler: $metadata['handler'], data: $data), seal: $metadata['seal']);
             $log = ($this->application)()->make(LogContext::class);
-            $this->frames[] = ['proof' => $proof, 'outer' => $log->all(), 'outerHidden' => $log->allHidden(), 'context' => array_filter($metadata['context'], 'is_string', ARRAY_FILTER_USE_KEY), 'hidden' => array_filter($metadata['hidden'], 'is_string', ARRAY_FILTER_USE_KEY), 'job' => $job, 'handler' => $metadata['handler'], 'transport' => $metadata['transport'], 'connection' => $event->connectionName, 'scope' => $scope];
+            $this->frames[] = ['proof' => $proof, 'outer' => $log->all(), 'outerHidden' => $log->allHidden(), 'context' => array_filter($metadata['context'], is_string(...), ARRAY_FILTER_USE_KEY), 'hidden' => array_filter($metadata['hidden'], is_string(...), ARRAY_FILTER_USE_KEY), 'job' => $job, 'handler' => $metadata['handler'], 'transport' => $metadata['transport'], 'connection' => $event->connectionName, 'scope' => $scope];
         } catch (Throwable $error) {
             // Refused bytes must never enter Laravel's serialized failure callback.
             $this->quarantine(job: $job, connection: $event->connectionName, error: $error);

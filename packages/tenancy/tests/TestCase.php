@@ -26,9 +26,9 @@ use Tenant\Contracts\Verification\BindingVerifier;
 use Tenant\Laravel\TenantServiceProvider;
 
 /**
- * root_* is PG-only DDL on the central connection (D14/D16) — no sqlite
+ * root_* is PG-only DDL on the central connection — no sqlite
  * fallback, mirrors packages/access's self-contained testbench pattern (the
- * root monorepo tests/ suite does not run this package, D19 exception
+ * root monorepo tests/ suite does not run this package, exception
  * already established for axiomasoft/corex-access).
  */
 abstract class TestCase extends Orchestra
@@ -41,7 +41,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * P2.22 (OidcLoginTest/GlobalLogoutTest) opt-in flag — file-scoped via a
+     * OidcLoginTest/GlobalLogoutTest opt-in flag — file-scoped via a
      * plain `beforeAll()`/`afterAll()` pair in THOSE TWO FILES ONLY (never
      * `uses()->beforeAll()`, which is directory-wide and would leak into
      * every other Feature test). Reset to `false` in `afterAll()` so a
@@ -72,7 +72,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             CoreServiceProvider::class,
-            // Core's scoped semantic restorer is decorated by tenancy (D49).
+            // Core's scoped semantic restorer is decorated by tenancy.
             // Testbench disables package discovery, so register both owners.
             // The host supplies Tenant runtime facilities and trusted account projections.
             TenantServiceProvider::class,
@@ -174,8 +174,8 @@ abstract class TestCase extends Orchestra
         $app['config']->set('corex-tenancy.oidc.redirect_uri', 'https://app.example.test/auth/callback');
 
         // Stands in for the app-configured `auth.provider` a real consumer
-        // would wire to axiomasoft/corex-access's `corex-principal` driver (D125) —
-        // axiomasoft/corex-tenancy itself does not depend on axiomasoft/corex-access (AC-28). The
+        // would wire to axiomasoft/corex-access's `corex-principal` driver —
+        // axiomasoft/corex-tenancy itself does not depend on axiomasoft/corex-access. The
         // seam `OidcLoginController`/`LogoutController` resolve through via
         // `Auth::guard()->loginUsingId()`/`->id()` (parity, premortem C4).
         $app->singleton(StubIdentityProvider::class);

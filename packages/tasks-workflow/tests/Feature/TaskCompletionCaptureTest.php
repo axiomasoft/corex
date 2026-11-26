@@ -507,7 +507,7 @@ final class TaskCompletionCaptureTest extends TestCase
         $this->app->forgetInstance(ModuleRegistry::class);
         $this->discover([(new TasksModule)->manifest()]);
 
-        $originalArguments = $_SERVER['argv'] ?? null;
+        $originalServer = $_SERVER;
         $_SERVER['argv'] = ['artisan', 'modules:compile'];
 
         try {
@@ -515,7 +515,7 @@ final class TaskCompletionCaptureTest extends TestCase
             self::assertSame($before, file_get_contents($this->moduleCache));
             $this->artisan('modules:compile')->assertSuccessful();
         } finally {
-            $_SERVER['argv'] = $originalArguments;
+            $_SERVER = $originalServer;
         }
 
         self::assertNotSame($before, file_get_contents($this->moduleCache));
@@ -743,9 +743,9 @@ final class TaskCompletionCaptureTest extends TestCase
     {
         [$definition, $version] = $this->providedData();
         $app['config']->set('corex-tasks-workflow', ['enabled' => true, 'definition_ref' => $definition, 'version_ref' => $version]);
-        $app->scoped('fixture.activation-policy', fn (): ModuleActivationGate => new class($this->workspaceEdition) implements ModuleActivationGate
+        $app->scoped('fixture.activation-policy', fn (): ModuleActivationGate => new readonly class($this->workspaceEdition) implements ModuleActivationGate
         {
-            public function __construct(private readonly bool $workspaceEdition) {}
+            public function __construct(private bool $workspaceEdition) {}
 
             public function check(ContextScopeInterface $ctx, string $module, string $edition): ModuleActivationDecision
             {

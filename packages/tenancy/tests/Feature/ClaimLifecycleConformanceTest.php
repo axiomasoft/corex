@@ -33,18 +33,18 @@ use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
 
-function p32Probe(string $database): Connection
+function claimDatabaseProbe(string $database): Connection
 {
     $configuration = DB::connection('pgsql')->getConfig();
     $configuration['database'] = $database;
 
-    return new ConnectionFactory(app())->make($configuration, 'p32-probe');
+    return new ConnectionFactory(app())->make($configuration, 'claim-probe');
 }
 
 /** @param list<string> $command */
-function p32ArchiveCommand(array $command, string $path, bool $input = false): void
+function runClaimArchiveCommand(array $command, string $path, bool $input = false): void
 {
-    $errors = tempnam(sys_get_temp_dir(), 'p32-command-');
+    $errors = tempnam(sys_get_temp_dir(), 'claim-command-');
     $descriptors = [0 => $input ? ['file', $path, 'r'] : ['file', '/dev/null', 'r'], 1 => $input ? ['file', '/dev/null', 'w'] : ['file', $path, 'w'], 2 => ['file', $errors, 'w']];
     $configuration = DB::connection('pgsql')->getConfig();
     $databaseArgument = array_search('-d', $command, true);
@@ -74,7 +74,7 @@ function p32ArchiveCommand(array $command, string $path, bool $input = false): v
     expect($status)->toBe(0, (string) $message);
 }
 
-function p32Lifecycle(DatabaseTenantLifecycle $database): AccountLifecycle
+function createClaimLifecycle(DatabaseTenantLifecycle $database): AccountLifecycle
 {
     return new AccountLifecycle(
         lifecycle: resolve(AccountLifecyclePolicy::class), connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), connectionFactory: resolve(ConnectionFactory::class), hostCache: resolve(HostResolverCacheInvalidator::class),
@@ -88,7 +88,7 @@ function p32Lifecycle(DatabaseTenantLifecycle $database): AccountLifecycle
 }
 
 /** A disposable consumer writer/verifier using the existing two callbacks. */
-final class P32ArchiveFixture
+final class ClaimArchiveFixture
 {
     public bool $crash = false;
 
@@ -109,7 +109,7 @@ final class P32ArchiveFixture
         }
         $path = $directory.'/'.$exportId.'.dump';
         $database = DB::table('root_accounts')->where('id', $account->id)->value('db_name');
-        p32ArchiveCommand(['pg_dump', '-d', $database, '-Fc'], $path);
+        runClaimArchiveCommand(['pg_dump', '-d', $database, '-Fc'], $path);
         $size = filesize($path);
         $manifest = ['account_id' => $account->id, 'size' => $size, 'sha256' => hash_file('sha256', $path)];
         file_put_contents($path.'.manifest', json_encode($manifest, JSON_THROW_ON_ERROR));
@@ -160,10 +160,10 @@ beforeEach(function (): void {
     DB::purge('pgsql');
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
     $suffix = bin2hex(random_bytes(8));
-    $this->p32Databases = ['tpl_p32_'.$suffix.'_test', 'acc_p32_archive_'.$suffix.'_test', 'acc_p32_lab_'.$suffix.'_test', 'acc_p32_restore_'.$suffix.'_test'];
-    foreach ($this->p32Databases as $index => $name) {
+    $this->claimDatabases = ['tpl_claim_'.$suffix.'_test', 'acc_claim_archive_'.$suffix.'_test', 'acc_claim_lab_'.$suffix.'_test', 'acc_claim_restore_'.$suffix.'_test'];
+    foreach ($this->claimDatabases as $index => $name) {
         DB::statement('CREATE DATABASE "'.$name.'"');
-        $probe = p32Probe($name);
+        $probe = claimDatabaseProbe($name);
 
         if ($index !== 3) {
             $probe->statement('CREATE TABLE records (id integer PRIMARY KEY, content text NOT NULL)');
@@ -172,78 +172,78 @@ beforeEach(function (): void {
         $probe->disconnect();
     }
     $cluster = (string) Str::uuid();
-    $this->p32Cluster = $cluster;
+    $this->claimCluster = $cluster;
     DB::table('root_clusters')->insert(['id' => $cluster, 'name' => $suffix, 'status' => 'active', 'pg_host_writer' => '127.0.0.1', 'pgbouncer_host' => '127.0.0.1', 'app_db_user' => 'corex', 'template_version' => 1]);
     $template = (string) Str::uuid();
-    $this->p32Template = $template;
-    DB::table('root_templates')->insert(['id' => $template, 'version' => 1, 'db_name' => $this->p32Databases[0], 'status' => 'ready', 'embedding_model' => 'test', 'embedding_dim' => 1, 'built_at' => now()]);
-    TestCase::trustTemplate(templateId: $template, database: $this->p32Databases[0]);
-    $this->p32Accounts = [];
+    $this->claimTemplate = $template;
+    DB::table('root_templates')->insert(['id' => $template, 'version' => 1, 'db_name' => $this->claimDatabases[0], 'status' => 'ready', 'embedding_model' => 'test', 'embedding_dim' => 1, 'built_at' => now()]);
+    TestCase::trustTemplate(templateId: $template, database: $this->claimDatabases[0]);
+    $this->claimAccounts = [];
     foreach (['archive', 'lab'] as $index => $slug) {
         $id = (string) Str::uuid();
         $owner = (string) Str::uuid();
         DB::table('root_identities')->insert(['id' => $owner, 'email' => $owner.'@example.test']);
-        DB::table('root_accounts')->insert(['id' => $id, 'cluster_id' => $cluster, 'owner_identity_id' => $owner, 'slug' => $slug, 'db_name' => $this->p32Databases[$index + 1], 'status' => 'grace', 'template_version' => 1, 'embedding_model' => 'test', 'embedding_dim' => 1]);
-        $this->p32Accounts[] = new AccountRef(id: $id, slug: $slug, status: 'grace', features: [], limits: []);
+        DB::table('root_accounts')->insert(['id' => $id, 'cluster_id' => $cluster, 'owner_identity_id' => $owner, 'slug' => $slug, 'db_name' => $this->claimDatabases[$index + 1], 'status' => 'grace', 'template_version' => 1, 'embedding_model' => 'test', 'embedding_dim' => 1]);
+        $this->claimAccounts[] = new AccountRef(id: $id, slug: $slug, status: 'grace', features: [], limits: []);
     }
-    $this->p32Directory = sys_get_temp_dir().'/corex-p32-'.$suffix;
-    mkdir($this->p32Directory, 0700);
-    $this->p32Archive = new P32ArchiveFixture(root: $this->p32Directory, account: $this->p32Accounts[0]);
+    $this->claimDirectory = sys_get_temp_dir().'/corex-claim-'.$suffix;
+    mkdir($this->claimDirectory, 0700);
+    $this->claimArchive = new ClaimArchiveFixture(root: $this->claimDirectory, account: $this->claimAccounts[0]);
 });
 
 afterEach(function (): void {
-    foreach ($this->p32Databases as $name) {
+    foreach ($this->claimDatabases as $name) {
         expect($name)->toEndWith('_test');
         DB::statement('DROP DATABASE IF EXISTS "'.$name.'"');
     }
-    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->p32Directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $file) {
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->claimDirectory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $file) {
         $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
     }
-    rmdir($this->p32Directory);
+    rmdir($this->claimDirectory);
 });
 
 it('refuses size-only archives without a qualified integrity verifier', function (): void {
-    $account = $this->p32Accounts[0];
-    $adapter = new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', resources: new TestAccountResources(writer: $this->p32Archive->write(...)));
-    expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
+    $account = $this->claimAccounts[0];
+    $adapter = new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', resources: new TestAccountResources(writer: $this->claimArchive->write(...)));
+    expect(fn () => createClaimLifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
-    expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
+    expect(fn () => createClaimLifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
     $legacyId = (string) Str::uuid7();
-    $legacy = $this->p32Archive->write($account, $legacyId);
+    $legacy = $this->claimArchive->write($account, $legacyId);
     DB::table('root_account_exports')->insert(['id' => $legacyId, 'account_id' => $account->id, 'kind' => 'offboarding', 'status' => 'ready', 'storage_path' => $legacy['storage_path'], 'size_bytes' => $legacy['size_bytes']]);
     expect(fn () => $adapter->drop($account))->toThrow(RuntimeException::class, 'verifier');
-    expect(DB::table('pg_database')->where('datname', $this->p32Databases[1])->exists())->toBeTrue();
+    expect(DB::table('pg_database')->where('datname', $this->claimDatabases[1])->exists())->toBeTrue();
 });
 
 it('refuses missing unreadable size-bad and hash-bad archives before ready and DROP', function (string $fault): void {
-    $account = $this->p32Accounts[0];
-    $this->p32Archive->fault = $fault;
-    $adapter = $this->p32Archive->adapter();
-    expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class);
+    $account = $this->claimAccounts[0];
+    $this->claimArchive->fault = $fault;
+    $adapter = $this->claimArchive->adapter();
+    expect(fn () => createClaimLifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class);
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
-    expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
+    expect(fn () => createClaimLifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
     // Even a forged ready flag cannot bypass physical-owner verification.
     $id = DB::table('root_account_exports')->value('id');
-    $path = $this->p32Directory.'/'.$account->id.'/'.$id.'.dump';
+    $path = $this->claimDirectory.'/'.$account->id.'/'.$id.'.dump';
     $manifest = json_decode((string) file_get_contents($path.'.manifest'), true, flags: JSON_THROW_ON_ERROR);
     DB::table('root_account_exports')->update(['status' => 'ready', 'storage_path' => $path, 'size_bytes' => $manifest['size']]);
     expect(fn () => $adapter->drop($account))->toThrow(RuntimeException::class);
-    expect(DB::table('pg_database')->where('datname', $this->p32Databases[1])->exists())->toBeTrue();
+    expect(DB::table('pg_database')->where('datname', $this->claimDatabases[1])->exists())->toBeTrue();
 })->with(['missing', 'unreadable', 'size', 'hash']);
 
 it('retries interrupted export then restores actual data and reconciles a crash after DROP', function (): void {
-    $account = $this->p32Accounts[0];
-    $fixture = $this->p32Archive;
+    $account = $this->claimAccounts[0];
+    $fixture = $this->claimArchive;
     $fixture->crash = true;
-    $lifecycle = p32Lifecycle($fixture->adapter());
+    $lifecycle = createClaimLifecycle($fixture->adapter());
     expect(fn () => $lifecycle->requestExport($account))->toThrow(RuntimeException::class, 'interrupted');
     expect(DB::table('root_accounts')->where('id', $account->id)->value('status'))->toBe('exporting');
     expect(fn () => $lifecycle->purge($account))->toThrow(ValidationException::class);
     $export = $lifecycle->requestExport($account);
     $row = DB::table('root_account_exports')->where('id', $export)->first();
     expect($row->status)->toBe('ready');
-    p32ArchiveCommand(['pg_restore', '--exit-on-error', '--no-owner', '--no-privileges', '-d', $this->p32Databases[3]], $row->storage_path, input: true);
-    $restored = p32Probe($this->p32Databases[3]);
+    runClaimArchiveCommand(['pg_restore', '--exit-on-error', '--no-owner', '--no-privileges', '-d', $this->claimDatabases[3]], $row->storage_path, input: true);
+    $restored = claimDatabaseProbe($this->claimDatabases[3]);
     expect($restored->table('records')->get()->map(fn ($r): array => (array) $r)->all())->toBe([['id' => 1, 'content' => 'archive-sentinel']]);
     $restored->disconnect();
     $interrupted = false;
@@ -255,61 +255,61 @@ it('retries interrupted export then restores actual data and reconciles a crash 
         }
     });
     expect(fn () => $lifecycle->purge($account))->toThrow(RuntimeException::class, 'Crash after physical DROP');
-    expect(DB::table('pg_database')->where('datname', $this->p32Databases[1])->exists())->toBeFalse();
+    expect(DB::table('pg_database')->where('datname', $this->claimDatabases[1])->exists())->toBeFalse();
     expect(DB::table('root_accounts')->where('id', $account->id)->value('status'))->toBe('exporting');
     $lifecycle->purge($account);
     $lifecycle->purge($account);
     expect(DB::table('root_accounts')->where('id', $account->id)->value('status'))->toBe('deleted');
     expect(DB::table('root_account_events')->where('account_id', $account->id)->where('event', 'account.purged')->count())->toBe(1);
-    $lab = p32Probe($this->p32Databases[2]);
+    $lab = claimDatabaseProbe($this->claimDatabases[2]);
     expect($lab->table('records')->value('content'))->toBe('lab-sentinel');
     $lab->disconnect();
 });
 
 it('rechecks integrity and ownership after ready without dropping another tenant', function (): void {
-    $adapter = $this->p32Archive->adapter();
-    $account = $this->p32Accounts[0];
-    $id = p32Lifecycle($adapter)->requestExport($account);
+    $adapter = $this->claimArchive->adapter();
+    $account = $this->claimAccounts[0];
+    $id = createClaimLifecycle($adapter)->requestExport($account);
     $path = DB::table('root_account_exports')->where('id', $id)->value('storage_path');
     $size = filesize($path);
     file_put_contents($path, str_repeat('z', $size));
-    expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(RuntimeException::class);
-    $lab = $this->p32Accounts[1];
+    expect(fn () => createClaimLifecycle($adapter)->purge($account))->toThrow(RuntimeException::class);
+    $lab = $this->claimAccounts[1];
     expect(fn () => $adapter->export($lab, 'manual'))->toThrow(RuntimeException::class, 'Wrong tenant');
     DB::table('root_account_exports')->where('account_id', $lab->id)->update(['status' => 'ready', 'storage_path' => $path, 'size_bytes' => $size]);
     expect(fn () => $adapter->drop($lab))->toThrow(RuntimeException::class);
     foreach ([1, 2] as $index) {
-        expect(DB::table('pg_database')->where('datname', $this->p32Databases[$index])->exists())->toBeTrue();
+        expect(DB::table('pg_database')->where('datname', $this->claimDatabases[$index])->exists())->toBeTrue();
     }
-    $probe = p32Probe($this->p32Databases[2]);
+    $probe = claimDatabaseProbe($this->claimDatabases[2]);
     $probe->statement('CREATE TABLE tampered (id integer)');
     $probe->disconnect();
-    resolve(TemplateIntegrityVerifier::class)->deniedDatabases[] = $this->p32Databases[2];
-    expect(fn () => resolve(TemplateIntegrityVerifier::class)->verifyAccount(new TemplateAccountView(1, $this->p32Cluster, $this->p32Databases[2])))->toThrow(TemplateIntegrityException::class);
+    resolve(TemplateIntegrityVerifier::class)->deniedDatabases[] = $this->claimDatabases[2];
+    expect(fn () => resolve(TemplateIntegrityVerifier::class)->verifyAccount(new TemplateAccountView(1, $this->claimCluster, $this->claimDatabases[2])))->toThrow(TemplateIntegrityException::class);
 });
 
 it('a newer interrupted export wins even when export timestamps are equal', function (): void {
-    $account = $this->p32Accounts[0];
-    $lifecycle = p32Lifecycle($this->p32Archive->adapter());
+    $account = $this->claimAccounts[0];
+    $lifecycle = createClaimLifecycle($this->claimArchive->adapter());
     $first = $lifecycle->requestExport($account);
-    $this->p32Archive->crash = true;
+    $this->claimArchive->crash = true;
     expect(fn () => $lifecycle->requestExport($account))->toThrow(RuntimeException::class);
     $second = DB::table('root_account_exports')->where('id', '!=', $first)->value('id');
     expect(strcmp($second, $first))->toBeGreaterThan(0);
     DB::table('root_account_exports')->update(['created_at' => '2026-09-15 00:00:00+00']);
     expect(fn () => $lifecycle->purge($account))->toThrow(ValidationException::class);
-    expect(fn () => $this->p32Archive->adapter()->drop($account))->toThrow(RuntimeException::class);
-    expect(DB::table('pg_database')->where('datname', $this->p32Databases[1])->exists())->toBeTrue();
+    expect(fn () => $this->claimArchive->adapter()->drop($account))->toThrow(RuntimeException::class);
+    expect(DB::table('pg_database')->where('datname', $this->claimDatabases[1])->exists())->toBeTrue();
 });
 
 it('refuses exhausted soft-deleted pools and a template rejected by its physical owner before reserving', function (): void {
-    $request = new ClaimRequest(requestKey: 'pool-denial', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'pool'));
+    $request = new ClaimRequest(requestKey: 'pool-denial', clusterId: $this->claimCluster, templateId: $this->claimTemplate, requestDigest: hash('sha256', 'pool'));
     $claim = new ClaimAccountSignup(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: resolve(TemplateIntegrityVerifier::class));
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);
-    DB::table('root_accounts')->where('id', $this->p32Accounts[1]->id)->update(['status' => 'pending', 'deleted_at' => now()]);
+    DB::table('root_accounts')->where('id', $this->claimAccounts[1]->id)->update(['status' => 'pending', 'deleted_at' => now()]);
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);
-    DB::table('root_accounts')->where('id', $this->p32Accounts[1]->id)->update(['deleted_at' => null]);
-    resolve(TemplateIntegrityVerifier::class)->revoke($this->p32Template);
+    DB::table('root_accounts')->where('id', $this->claimAccounts[1]->id)->update(['deleted_at' => null]);
+    resolve(TemplateIntegrityVerifier::class)->revoke($this->claimTemplate);
     expect(fn () => $claim->claim($request))->toThrow(TemplateIntegrityException::class);
     expect(DB::table('root_accounts')->where('status', 'provisioning')->count())->toBe(0);
 });

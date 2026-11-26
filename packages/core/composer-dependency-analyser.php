@@ -24,8 +24,23 @@ return (new Configuration)
     ->ignoreErrorsOnPackage('illuminate/database', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped Illuminate imports/helpers use this component
     ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
-    // discovery: Pest loads local test classes and late use aliases when executing the recorded test files
-    ->ignoreUnknownClasses(['RemediationManifestListener'])
+    // Core has no standalone suite: the root suite runs these tests with the monorepo autoload-dev
+    // (tests/Stubs, core test fixtures, Tenancy's TestCase, Tenant) or declares the class in the test file.
+    ->ignoreUnknownClasses([
+        'CoreXDependentIntegrationModule',
+        'CoreXLateIntegrationModule',
+        'CoreXPackmanIntegrationModule',
+        'CoreX\\Tenancy\\Tests\\TestCase',
+        'CoreX\\Tests\\Modules\\Fixtures\\CommittedCleanupOwner',
+        'CoreX\\Tests\\Stubs\\Lifecycle\\StubBaseModule',
+        'CoreX\\Tests\\Stubs\\StubModuleDefinition',
+        'FrameworkIsolationAfterCommitJob',
+        'FrameworkIsolationCentralJob',
+        'FrameworkIsolationContextJob',
+        'FrameworkIsolationContextModel',
+        'LifecycleQueueCommand',
+        'Tenant\\Exceptions\\Runtime\\StaleHandle',
+    ])
     // discovery: Testbench laravel/framework replaces illuminate/auth; shipped component imports retain their standalone constraint
     ->ignoreErrorsOnPackage('illuminate/auth', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/console; shipped component imports retain their standalone constraint
@@ -33,4 +48,6 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/events; shipped component imports retain their standalone constraint
     ->ignoreErrorsOnPackage('illuminate/events', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/queue; shipped component imports retain their standalone constraint
-    ->ignoreErrorsOnPackage('illuminate/queue', [ErrorType::UNUSED_DEPENDENCY]);
+    ->ignoreErrorsOnPackage('illuminate/queue', [ErrorType::UNUSED_DEPENDENCY])
+    // Shared monorepo fixtures from tests/Support, loaded by tests/Support/autoload.php; not a Composer package.
+    ->ignoreUnknownClassesRegex('~^CoreX\\\\Tests\\\\Support\\\\~');

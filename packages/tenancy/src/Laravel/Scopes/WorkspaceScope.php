@@ -13,11 +13,11 @@ use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Eloquent global scope on nullable workspace_id; preserves unrelated scopes and relations.
- * Global scope for workspace_scoped entities (B-11 §5.4, AC-20):
+ * Global scope for workspace_scoped entities:
  * `workspace_id = context.workspace.id OR workspace_id IS NULL` (NULL =
  * account-wide record, visible regardless of the narrowed workspace).
  * No workspace narrowed in the current context (account-wide/admin routes,
- * P2.9 ScopeResolver's concern) → no-op, the model is left unfiltered.
+ * handled by ScopeResolver) → no-op, the model is left unfiltered.
  *
  * @implements Scope<Model>
  */

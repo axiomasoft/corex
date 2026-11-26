@@ -13,22 +13,22 @@ use Illuminate\Database\Eloquent\Model;
 use Packman\Attributes\Internal;
 
 /**
- * L2 — Eloquent layer of the read-only invariant (D141/D142): global
+ * L2 — Eloquent layer of the read-only invariant: global
  * wildcard listeners on `eloquent.saving`/`eloquent.deleting`/
  * `eloquent.restoring` reject a write on EVERY model — including ones that
  * do not exist in the tree yet — while an impersonation is active, except
  * the two models a compliance session cannot function without. NOT a
- * hermetic gate (D142, RAG:✅ Laravel 13 `eloquent.md`): mass-update/delete
+ * hermetic gate (Eloquent model events): mass-update/delete
  * and the `DB` facade never dispatch these events at all; L1 (web) and L3
  * (privileged core services) cover what L2 structurally cannot.
  *
- * @internal spec: B-11 §5.9, D141/D142
+ * @internal
  */
 #[Internal]
 final class ImpersonatedModelWriteGuard
 {
     /**
-     * CLOSED literal, not a config key (D116/D121 — a config-gated exempt
+     * CLOSED literal, not a config key (a config-gated exempt
      * list would let the gate be switched off by settings): `AuditLog` so
      * the compliance record itself can be written while `queue=sync` runs
      * it inline; `ImpersonationGrant` because the grant row is the carrier
@@ -64,7 +64,7 @@ final class ImpersonatedModelWriteGuard
 
     /**
      * Scoped escape hatch for an intentional write under impersonation
-     * (premortem A8/A9) — the flag is reset in `finally` even if `$callback`
+     * — the flag is reset in `finally` even if `$callback`
      * throws, so a failed intentional write never leaves the guard
      * permanently open for the rest of the request.
      *

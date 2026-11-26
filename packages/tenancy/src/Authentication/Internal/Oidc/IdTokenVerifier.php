@@ -10,8 +10,7 @@ use Packman\Attributes\Internal;
 use Throwable;
 
 /**
- * Verifies one `id_token` in the Implementation Rule order (research/10
- * §3): header (`alg` allow-list + `kid` present) BEFORE `JWT::decode()` —
+ * Verifies one `id_token` in the ID-token validation sequence: header (`alg` allow-list + `kid` present) BEFORE `JWT::decode()` —
  * an `alg: none`/HS256-with-public-key-as-secret forgery must never reach
  * the decoder — then signature, then `iss`/`aud`/`nonce`/`sub`. Membership
  * (`acct`/`root_identity_accounts.status`) and the `imp` gate are NOT this

@@ -265,7 +265,7 @@ final readonly class ApiOptions
             CapabilityDescriptor::assertPublicLimits($publicLimits);
             $limits = $publicLimits;
 
-            if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/', $id) !== 1 || ! in_array($status, ['available', 'deprecated'], true)) {
+            if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/D', $id) !== 1 || ! in_array($status, ['available', 'deprecated'], true)) {
                 throw new InvalidArgumentException('id and status must be public');
             }
 

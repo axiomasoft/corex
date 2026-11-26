@@ -13,7 +13,7 @@ use Packman\Attributes\Internal;
 
 /**
  * Keeps `root_clusters.pending_pool_size` pre-cloned account databases
- * ready per cell (AC-4, B-11 §5.2). Without `--count`, tops each targeted
+ * ready per cell. Without `--count`, tops each targeted
  * cluster up to its own `pending_pool_size` (steady-state/cron usage);
  * `--count=N` overrides with an explicit number (ad hoc seeding).
  */

@@ -89,7 +89,7 @@ function makeAccountTSS(array $overrides = []): Account
     ], $overrides));
 }
 
-/** Golden-template chain (D14/C4, mirrors WorkspaceResolverTest) — the tenant `sessions`
+/** Golden-template chain (also exercised by WorkspaceResolverTest) — the tenant `sessions`
  *  migration coexists with `users`/`wsp_*`, whose cross-package FK migration needs
  *  axiomasoft/corex's `sys_departments` to already exist on the same (now-switched) connection. */
 function migrateTenantSessionsTSS(): void

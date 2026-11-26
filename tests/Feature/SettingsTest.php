@@ -46,7 +46,7 @@ function settingsRepositoryFor(array $defaults = [], array $sensitive = []): Set
 
 beforeEach(function (): void {
     $this->previousDefault = DB::getDefaultConnection();
-    // D12: sys_settings is PG-only (jsonb/CHECK/UNIQUE NULLS NOT DISTINCT).
+    // sys_settings is PG-only (jsonb/CHECK/UNIQUE NULLS NOT DISTINCT).
     // Reset to a clean public schema so each test starts with no migration
     // history (mirrors ModuleLifecycleTest's pg-lane pattern).
     settingsPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
@@ -128,7 +128,7 @@ it('updates in place through the repository rather than duplicating a row', func
 });
 
 it('rejects a duplicate account-level row at the DB constraint (UNIQUE NULLS NOT DISTINCT), bypassing the repository', function (): void {
-    // A57/A63: the repository always goes through updateOrCreate(), which
+    // the repository always goes through updateOrCreate(), which
     // never emits a second INSERT for an existing row — that path can never
     // exercise the constraint. Hit the table directly with a raw duplicate
     // insert so the CHECK is the thing actually under test.
@@ -200,7 +200,7 @@ it('forget() removes exactly its own scope level, leaving other levels intact', 
         ->and(JsonDocuments::decode($repository->get('crm', 'theme')))->toBe('account-theme');
 });
 
-it('rejects a department scope on every method (sys_settings has no department level, D38)', function (): void {
+it('rejects a department scope on every method (sys_settings has no department level)', function (): void {
     $repository = settingsRepositoryFor();
     $department = SettingsScope::department('00000000-0000-0000-0000-000000000301');
 

@@ -45,6 +45,6 @@ final class ScenarioQueue
 
     public static function next(): void
     {
-        app('queue.worker')->runNextJob('database', 'stage-one', new WorkerOptions(sleep: 0, maxTries: 1));
+        resolve('queue.worker')->runNextJob('database', 'stage-one', new WorkerOptions(sleep: 0, maxTries: 1));
     }
 }

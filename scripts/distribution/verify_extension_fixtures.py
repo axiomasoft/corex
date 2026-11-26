@@ -461,7 +461,7 @@ def verify(
             rows.append(proof)
     receipt = {
         "schema_version": "corex-extension-fixture-receipt/1",
-        "item": "P17.2",
+        "item": json.loads(Path(__file__).with_name("legacy-receipt-items.json").read_text())["corex-extension-fixture-receipt/1"],
         "result": "PASS",
         **binding,
         "fixtures": rows,

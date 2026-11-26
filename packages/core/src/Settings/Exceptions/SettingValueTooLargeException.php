@@ -19,7 +19,7 @@ final class SettingValueTooLargeException extends CodedException
     public function __construct(string $namespace, string $key, int $bytes, int $limit)
     {
         parent::__construct(sprintf(
-            'Setting %s.%s value is %d bytes, exceeding the %d byte quota (B-10 §7.2).',
+            'Setting %s.%s value is %d bytes, exceeding the %d byte quota.',
             $namespace,
             $key,
             $bytes,

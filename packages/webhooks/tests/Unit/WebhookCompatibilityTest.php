@@ -10,9 +10,9 @@ final class WebhookCompatibilityTest extends TestCase
 {
     public function test_planted_webhook_incompatibilities_fail_and_additive_topics_pass(): void
     {
-        $source = __DIR__.'/../../../../api/v1';
+        $source = __DIR__.'/../../../../api/v2';
         $topic = [
-            'major' => 'v1',
+            'major' => 'v2',
             'name' => 'orders.placed',
             'payload' => [
                 'additionalProperties' => false,
@@ -65,7 +65,7 @@ final class WebhookCompatibilityTest extends TestCase
 
     private function snapshot(string $source): string
     {
-        $target = sys_get_temp_dir().'/corex-p1420-'.bin2hex(random_bytes(4));
+        $target = sys_get_temp_dir().'/corex-webhook-contract-'.bin2hex(random_bytes(4));
         mkdir($target);
 
         foreach (scandir($source) ?: [] as $name) {
@@ -85,6 +85,14 @@ final class WebhookCompatibilityTest extends TestCase
         $path = $directory.'/webhooks.json';
         $document = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
         file_put_contents($path, json_encode($mutate($document), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n");
+
+        // v2 snapshots carry a digest per payload; keep it in step so the gate compares content.
+        $manifestPath = $directory.'/manifest.json';
+        $manifest = json_decode((string) file_get_contents($manifestPath), true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($manifest);
+        self::assertIsArray($manifest['files'] ?? null);
+        $manifest['files']['webhooks.json'] = hash_file('sha256', $path);
+        file_put_contents($manifestPath, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n");
     }
 
     /** @return array{exit: int, output: string} */

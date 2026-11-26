@@ -7,7 +7,7 @@ Install the lock and execute the bounded checks from the repository root:
 
 ```bash
 scripts/php84 python3 scripts/composer-with-snapshots.py --working-dir=packages/core/tests/Release/octane-consumer update --prefer-dist --no-interaction --no-progress --no-scripts
-scripts/php84 python3 scripts/quality/octane-proof.py --source-root . --matrix all --evidence-dir build/quality/P09.15/octane
+scripts/php84 python3 scripts/quality/octane-proof.py --source-root . --matrix all --evidence-dir build/quality/octane
 python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py
 ```
 
@@ -24,7 +24,7 @@ lock, installed Octane sources, raw JUnit and per-case event traces. Verificatio
 can be repeated without executing handlers:
 
 ```bash
-python3 scripts/quality/octane-proof.py --source-root . --matrix all --evidence-dir build/quality/P09.15/octane --verify build/quality/P09.15/octane/receipt.json
+python3 scripts/quality/octane-proof.py --source-root . --matrix all --evidence-dir build/quality/octane --verify build/quality/octane/receipt.json
 ```
 
 Missing/failed/skipped handlers or assertions, stale inputs, wrong implementation,

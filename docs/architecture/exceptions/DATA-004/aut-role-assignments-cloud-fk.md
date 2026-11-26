@@ -1,19 +1,7 @@
-# Исключение: DATA-004 — cross-package FK в cloud-профиле auth
+# DATA-004 exception for the cloud authorization schema
 
-**Нарушаемая статья.** DATA-004
+**Owner** · `axiomasoft/corex-access`
 
-**Затронутые пути.**
-`packages/access/database/migrations/tenant-cloud/2026_10_01_030050_add_aut_role_assignments_cloud_fks.php`;
-столбцы `aut_role_assignments.workspace_id → wsp_workspaces.id`,
-`aut_role_assignments.granted_by → users.id`.
+The tenant-cloud migration `packages/access/database/migrations/tenant-cloud/2026_10_01_030050_add_aut_role_assignments_cloud_fks.php` links `aut_role_assignments.workspace_id` to `wsp_workspaces.id` and `aut_role_assignments.granted_by` to `users.id`. Tenancy owns both referenced tables. Boxed installations can use Access without installing them.
 
-**Владелец.** `axiomasoft/corex-access`
-
-**Причина.** Таблицы `wsp_workspaces` и `users` принадлежат `axiomasoft/corex-tenancy` и отсутствуют в
-boxed-профиле; `axiomasoft/corex-access` должен оставаться функциональным без tenancy в boxed-установке.
-
-**Компенсирующий контроль.** Отдельный набор `axiomasoft/corex-access:tenant-cloud` с требованием зарегистрированной tenancy-схемы: cloud-профиль
-ставит FK отдельной миграцией; boxed публикует только каталог `tenant/` без этих ограничений.
-
-**Условие снятия.** Постоянное по решению D102 — снятие не планируется без нового решения
-владельца данных и миграции схемы.
+The `axiomasoft/corex-access:tenant-cloud` schema set requires a registered tenancy schema and adds the constraints separately. The boxed profile installs the ordinary tenant set. This exception remains in effect until the data owner approves a replacement and supplies its migration.

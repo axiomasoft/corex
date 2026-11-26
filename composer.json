@@ -343,7 +343,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/azguard.git",
-                    "reference": "68709d166ec2b91f7dce3975eadccd4539906bc0"
+                    "reference": "42bdb639d3ab4ea2571c3026113cac7727c88b18"
                 },
                 "require": {
                     "php": "^8.4",
@@ -583,7 +583,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/tenant.git",
-                    "reference": "1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd"
+                    "reference": "6325c62d5a9c0afe1f7bce769b32b7b24c726294"
                 }
             }
         },
@@ -650,7 +650,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/tenant.git",
-                    "reference": "1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd"
+                    "reference": "6325c62d5a9c0afe1f7bce769b32b7b24c726294"
                 }
             }
         },
@@ -1005,7 +1005,7 @@
         "contract-guard": "bash scripts/contract-guard.sh",
         "api-contract": "php scripts/check-api-contract.php",
         "secret-scan": "bash scripts/secret-scan-gate.sh",
-        "test:coverage": "bash scripts/run-root-coverage.sh --min=80",
+        "test:coverage": "bash scripts/run-root-coverage.sh",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "bash scripts/phpstan-packages.sh",

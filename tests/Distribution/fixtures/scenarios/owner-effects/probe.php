@@ -36,7 +36,6 @@ use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Database\Events\TransactionCommitted;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -349,7 +348,7 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
             $ref = storedConversion();
             $unknown = $observer->table('med_operations')->where(['kind' => 'purge', 'file_id' => $ref->fileId])->sole();
             $proof->same('unknown', $unknown->state, 'Retry uses the same uncertain owner receipt');
-            Date::setTestNow(Carbon::parse($unknown->next_attempt_at)->addSecond());
+            Date::setTestNow(Date::parse($unknown->next_attempt_at)->addSecond());
             Event::listen(TransactionCommitted::class, static function ($event) use ($ref, $observer, $proof, $unknown): void {
                 if ($event->connection->transactionLevel() !== 0) {
                     return;

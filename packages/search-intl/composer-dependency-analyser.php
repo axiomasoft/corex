@@ -11,4 +11,6 @@ return (new Configuration)
     // discovery: standalone Testbench installs laravel/framework, which replaces the declared illuminate components
     ->ignoreErrorsOnPackage('laravel/framework', [ErrorType::SHADOW_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped Illuminate imports/helpers use this component
-    ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY]);
+    ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
+    // Shared monorepo fixtures from tests/Support, loaded by tests/Support/autoload.php; not a Composer package.
+    ->ignoreUnknownClassesRegex('~^CoreX\\\\Tests\\\\Support\\\\~');

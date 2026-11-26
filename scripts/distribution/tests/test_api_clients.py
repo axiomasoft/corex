@@ -1,4 +1,4 @@
-"""P17.3 external REST and MCP client contract."""
+"""External REST and MCP client contract."""
 from __future__ import annotations
 
 import importlib.util

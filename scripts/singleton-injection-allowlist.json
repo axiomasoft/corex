@@ -1,5 +1,5 @@
 {
   "schema_version": 1,
-  "description": "Frozen singleton constructor violations (P4.12). Empty since P05.3 (D70 п.11): new entries are not accepted.",
+  "description": "The allowlist for singleton constructor dependencies is empty and closed to new entries.",
   "entries": []
 }

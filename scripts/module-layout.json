@@ -1,6 +1,6 @@
 {
  "schema": "module-layout/1",
- "decision": "PLAN3.D57",
+ "decision": "docs/architecture/structure-profiles.md",
  "kernel_modules": [
   "Audit",
   "Config",

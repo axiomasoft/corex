@@ -83,28 +83,32 @@ final readonly class ContextGuard
     {
         $this->id($id);
         $db = $this->connection($ctx);
-        $user = $db->table('users')->where('id', $id)->where('is_active', true)->whereNull('deleted_at');
+        $user = $db->table('users')->where('users.id', $id)->where('users.is_active', true)->whereNull('users.deleted_at');
 
         if ($lock) {
             $user->sharedLock();
         }
 
-        if ($user->first() === null) {
+        $workspaceId = $ctx->tenant->workspace?->id;
+
+        if ($workspaceId !== null) {
+            // FOR SHARE on this inner join locks the user, membership and workspace together.
+            $member = (clone $user)
+                ->join('wsp_workspace_members as membership', 'membership.user_id', '=', 'users.id')
+                ->join('wsp_workspaces as workspace', 'workspace.id', '=', 'membership.workspace_id')
+                ->where('workspace.id', $workspaceId)->whereNull('workspace.deleted_at')->where('membership.status', 'active');
+
+            if ($member->first(['users.id']) !== null) {
+                return;
+            }
+        }
+
+        if ($user->first(['users.id']) === null) {
             throw new AuthorizationException('CRM principal/owner must be an active user in this account.');
         }
 
-        if ($ctx->tenant->workspace !== null) {
-            $workspace = $db->table('wsp_workspaces')->where('id', $ctx->tenant->workspace->id)->whereNull('deleted_at');
-            $membership = $db->table('wsp_workspace_members')->where('workspace_id', $ctx->tenant->workspace->id)->where('user_id', $id)->where('status', 'active');
-
-            if ($lock) {
-                $workspace->sharedLock();
-                $membership->sharedLock();
-            }
-
-            if ($workspace->first() === null || $membership->first() === null) {
-                throw new AuthorizationException('CRM workspace membership is missing or revoked.');
-            }
+        if ($workspaceId !== null) {
+            throw new AuthorizationException('CRM workspace membership is missing or revoked.');
         }
     }
 

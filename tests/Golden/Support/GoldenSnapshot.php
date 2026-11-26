@@ -11,6 +11,18 @@ use CoreX\Messaging\Events\DomainEvent;
 use FilesystemIterator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\NodeFinder;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\Parser;
+use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter\Standard;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -26,7 +38,7 @@ final class GoldenSnapshot
     /** @return list<class-string> */
     public static function sourceClasses(string $repoRoot): array
     {
-        // P01 includes historical classmap roots whose namespaces differ from their paths.
+        // Some classmap roots contain namespaces that differ from their paths.
         // Read declarations, then let Composer load their actual names exactly once.
         $classes = [];
         $files = [];
@@ -117,19 +129,34 @@ final class GoldenSnapshot
         return $classes;
     }
 
-    /** @return array<string, mixed> */
     /**
      * @param  list<class-string>  $classes
-     * @return array<string, mixed>
+     * @return array<class-string, array{
+     *     kind: 'enum'|'interface'|'trait'|'class', final: bool, abstract: bool, readonly: bool,
+     *     internal: bool, parent: class-string|null, interfaces: list<string>,
+     *     constants: array<string, array{value: mixed, type: string}>,
+     *     properties: array<string, array{name: string, type: string, static: bool, readonly: bool}>,
+     *     methods: array<string, array{static: bool, return: string, params: list<array{name: string, type: string, variadic: bool, byRef: bool, default?: mixed}>}>,
+     *     traits?: list<string>, backing_type?: string, trait_adaptations?: list<string>
+     * }>
      */
     public static function phpSurface(array $classes): array
     {
         $out = [];
+        $parser = (new ParserFactory)->createForHostVersion();
         foreach ($classes as $class) {
             $r = new ReflectionClass($class);
+            $declaration = self::declaration($r, $parser);
+            $declaredConstants = [];
+            foreach ($declaration->getConstants() as $statement) {
+                foreach ($statement->consts as $item) {
+                    $declaredConstants[$item->name->toString()] = true;
+                }
+            }
+
             $constants = [];
             foreach ($r->getReflectionConstants() as $constant) {
-                if (! $constant->isPublic() || $constant->getDeclaringClass()->getName() !== $class) {
+                if (! $constant->isPublic() || (! $constant->isEnumCase() && ! isset($declaredConstants[$constant->getName()]))) {
                     continue;
                 }
                 $value = $constant->getValue();
@@ -139,9 +166,16 @@ final class GoldenSnapshot
                 ];
             }
             ksort($constants);
+            $promoted = [];
+            foreach ($declaration->getMethod('__construct')->params ?? [] as $parameter) {
+                if ($parameter->isPromoted() && $parameter->var instanceof Variable && is_string($parameter->var->name)) {
+                    $promoted[$parameter->var->name] = true;
+                }
+            }
+
             $properties = [];
             foreach ($r->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-                if ($property->getDeclaringClass()->getName() !== $class) {
+                if ($declaration->getProperty($property->getName()) === null && ! isset($promoted[$property->getName()])) {
                     continue;
                 }
                 $properties[$property->getName()] = [
@@ -154,7 +188,7 @@ final class GoldenSnapshot
             ksort($properties);
             $methods = [];
             foreach ($r->getMethods(ReflectionMethod::IS_PUBLIC) as $m) {
-                if ($m->getDeclaringClass()->getName() !== $class) {
+                if ($declaration->getMethod($m->getName()) === null) {
                     continue;
                 }
                 $methods[$m->getName()] = [
@@ -184,14 +218,58 @@ final class GoldenSnapshot
                 'readonly' => $r->isReadOnly(),
                 'internal' => str_contains($class, '\\Internal\\'),
                 'parent' => $r->getParentClass() !== false ? $r->getParentClass()->getName() : null,
-                'interfaces' => self::sorted($r->getInterfaceNames()),
+                'interfaces' => self::sorted(array_map(static fn (Name $name): string => $name->toString(), match (true) {
+                    $declaration instanceof Interface_ => $declaration->extends,
+                    $declaration instanceof Class_, $declaration instanceof Enum_ => $declaration->implements,
+                    default => [],
+                })),
                 'constants' => $constants,
                 'properties' => $properties,
                 'methods' => $methods,
             ];
+
+            if ($r->getTraitNames() !== []) {
+                $out[$class]['traits'] = self::sorted($r->getTraitNames());
+            }
+
+            if ($declaration instanceof Enum_ && $declaration->scalarType !== null) {
+                $out[$class]['backing_type'] = $declaration->scalarType->toString();
+            }
+            $adaptations = [];
+            foreach ($declaration->getTraitUses() as $use) {
+                foreach ($use->adaptations as $adaptation) {
+                    $adaptations[] = (new Standard)->prettyPrint([$adaptation]);
+                }
+            }
+
+            if ($adaptations !== []) {
+                $out[$class]['trait_adaptations'] = self::sorted($adaptations);
+            }
         }
 
         return $out;
+    }
+
+    /** @param ReflectionClass<object> $class */
+    private static function declaration(ReflectionClass $class, Parser $parser): ClassLike
+    {
+        $file = $class->getFileName();
+        $source = $file === false ? false : file_get_contents($file);
+
+        if ($source === false) {
+            throw new RuntimeException("Cannot read declaration of {$class->getName()}");
+        }
+
+        // Reflection flattens trait constants and properties and reports transitive
+        // interfaces. Source identifies ownership, while reflection supplies runtime types.
+        $nodes = new NodeTraverser(new NameResolver)->traverse($parser->parse($source) ?? []);
+        foreach ((new NodeFinder)->findInstanceOf($nodes, ClassLike::class) as $declaration) {
+            if (($declaration->namespacedName ?? null)?->toString() === $class->getName()) {
+                return $declaration;
+            }
+        }
+
+        throw new RuntimeException("No declaration of {$class->getName()} in {$file}");
     }
 
     private static function surfaceValue(mixed $value): mixed
@@ -297,7 +375,7 @@ final class GoldenSnapshot
     }
 
     /**
-     * @param  list<string>  $values
+     * @param  array<array-key, string>  $values
      * @return list<string>
      */
     private static function sorted(array $values): array

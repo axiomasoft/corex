@@ -1,91 +1,38 @@
 # flex/crm
 
-CRM-модуль CoreX поверх `axiomasoft/corex`: **воронка продаж** (pipelines → stages → deals) **+ CRM-ядро**
-(контакты, компании-аккаунты, лиды, конверсия) **+ полиморфная timeline активностей**. Демонстрирует и
-проверяет доменные возможности ядра — настраиваемые ID (по умолчанию UUIDv7), деньги в
-minor units (`MoneyCast`, ADR-005), морф-карту через `EntityRegistry`. Изоляция тенантов — физическая
-(DB-per-account, B-11); компании, контакты и связи дополнительно ограничены доверенным workspace-контекстом.
+The CoreX CRM module manages sales pipelines, companies, contacts and leads. An activity timeline links calls, meetings and emails to CRM records. CRM models generate UUIDv7 primary keys. Deals store money in minor units through `MoneyCast`, and the entity registry supplies the morph map. Each account has its own database. Company, contact and association queries also enforce the current workspace.
 
-Company/contact/M2M public API, context binding and extension guarantees:
-[COMPANY_CONTACT_API.md](COMPANY_CONTACT_API.md). Breaking changes and safe upgrade boundaries:
-[UPGRADE.md](UPGRADE.md).
+See the [company and contact API](COMPANY_CONTACT_API.md) for relationships, context binding and extension points. The [upgrade guide](UPGRADE.md) describes breaking changes and historical data conversion.
 
-## Состав
+## Domain operations
 
-- **Воронка продаж**: `Pipeline`, `Stage` (порядок, вероятность, won/lost), `Deal` — сумма как
-  `Brick\Money\Money` (`DealStatus`), связи `contact`/`company`, `custom_fields`.
-- **CRM-ядро**: `Company` (аккаунт), `Contact`, `Lead`, полиморфная `Activity` (привязка к любой
-  сущности через морф `subject`).
-- **Actions** (граница use-case = `DB::transaction`, событие после commit):
-  - сделки — `CreateDeal`, `MoveDealToStage`;
-  - сущности — `CreateCompany`, `CreateContact`, `CreateLead`;
-  - конверсия — `ConvertLead` (Lead → Contact [+Company] [+Deal в воронке]);
-  - активности — `LogActivity` (полиморфно).
-- **Events** (`ShouldDispatchAfterCommit`): `DealCreated`/`DealMovedToStage`,
-  `CompanyCreated`/`ContactCreated`/`LeadCreated`, `LeadConverted`, `ActivityLogged`.
-- **Enums**: `DealStatus`, `LeadSource`, `LeadStatus`, `ActivityType`.
-- Сущности зарегистрированы в `EntityRegistry` (алиасы `crm_pipeline/stage/deal/company/contact/lead/activity`) —
-  морфы (`Activity.subject`) резолвятся через единую морф-карту ядра.
+- A `Pipeline` orders its `Stage` records and tracks won and lost stages. `CreateDeal` and `MoveDealToStage` update deals. A `Deal` exposes its monetary amount as `Brick\Money\Money` and uses `DealStatus` for its status.
+- `CreateCompany`, `CreateContact` and `CreateLead` create CRM records. `ConvertLead` creates a contact and can also create a company and a deal. `AssociateContactCompany` links a contact to a company.
+- `LogActivity` records a typed `ActivityType` against a supported CRM subject. The module registers pipeline, stage, deal, company, contact, lead and activity entities through `EntityRegistry`.
+- Actions run inside transactions. `DealCreated`, `DealMovedToStage`, `CompanyCreated`, `ContactCreated`, `ContactCompanyAssociated`, `LeadCreated`, `LeadConverted` and `ActivityLogged` dispatch after the outer transaction commits.
 
-## Пример
+These actions and models belong to the CRM implementation. The public PHP manifest lists the context contract and integration types. See the [API manifest](resources/contracts/php-api.json).
 
-```php
-$lead = app(CreateLead::class)->handle('Jane Doe', LeadSource::Website, companyName: 'Acme');
-$contact = app(ConvertLead::class)->handle($lead, $pipeline, withCompany: true); // + Company + Deal
-app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call');
-```
+## Installation and lifecycle
 
-## Зависимости
+Install `flex/crm` with Composer on Laravel 13. Applications can install `axiomasoft/corex-access` for permissions and record filtering. For HTTP dispatch of the declared operations, install `axiomasoft/corex-operations` and register its `OperationsServiceProvider`.
 
-`composer require flex/crm` устанавливает CRM и компиляцию деклараций для Laravel 13.
-Для прав и фильтрации записей приложение может подключить `axiomasoft/corex-access`.
-Для HTTP-исполнения объявленных операций подключите `axiomasoft/corex-operations`
-и зарегистрируйте его `OperationsServiceProvider`.
+1. Prepare the tenant connection. Install the host tables `users`, `wsp_workspaces` and `wsp_workspace_members`, using `axiomasoft/corex-tenancy` or a compatible host schema. CRM expects UUID user and workspace keys and references these tables through foreign keys.
+2. Run `php artisan modules:compile`. Composer discovers `CrmModule` as a `packman-module`. Enable `flex/crm` in the target tenant through `ModuleLifecycle::enable()`. For tenant template preparation, use `php artisan packman:schema:migrate --scope=tenant --modules --database=tenant`.
+3. Inspect the migration journal with `php artisan packman:schema:status`. Disabling the module preserves its data. Enabling it again is idempotent.
 
-## Установка и lifecycle
+For installations with CRM tables predating the module manifest, back up the account before migrating. Reconcile historical data and ownership claims before using lifecycle operations. Company and contact storage includes JSON channels and PostgreSQL GIN indexes. Historical `custom_fields` require a separate migration decision.
 
-Composer обнаруживает `flex/crm` как `packman-module` через `CrmModule`.
-После `modules:compile` включите его через `ModuleLifecycle::enable('flex/crm')`
-в целевой tenant DB. Lifecycle выполняет миграции и учитывает владение схемой;
-provider больше не запускает CRM-миграции при общей команде `migrate`.
-Disable сохраняет данные, повторный enable идемпотентен.
+## Execution context
 
-Для существующей установки, мигрировавшей CRM до появления manifest, сначала
-сделайте резервную копию и выполните обновление CRM-миграций явным `--path`.
-Не выполняйте purge: старые ownership claims автоматически не восстанавливаются.
-Согласование исторической схемы и claims — отдельная процедура миграции потребителя.
+Bind `Flex\Crm\Context\Contracts\CrmExecutionContext` to the host implementation. Each `current()` call verifies the actor and account admission and returns `Flex\Crm\Context\Data\ExecutionContext` with the tenant context, connection name, actor and current principal ID. Account-wide access requires an explicit capability. Revoke access by changing the user's active status or membership. Subsequent CRM operations check the current rows, including changes made earlier in the same transaction.
 
-## Тесты
+## Tests
 
-Тесты находятся в `products/flex-crm/tests/`. Из корня монорепо:
+The package suite is under `products/flex-crm/tests`. From the monorepo root run the following with the package dependencies installed. Point the PostgreSQL suite to an isolated test database.
 
 ```bash
-composer --working-dir=products/flex-crm test       # SQLite
-composer --working-dir=products/flex-crm test:pg    # только изолированная corex_test
+composer --working-dir=products/flex-crm test
+composer --working-dir=products/flex-crm test:pg
 composer --working-dir=products/flex-crm analyse
 ```
-
-Company/contact fields follow approved storage, including JSON channels and PostgreSQL GIN indexes;
-legacy `custom_fields` on those two models are not part of that contract.
-
-## Контекст операций
-
-Привяжите `Flex\Crm\Context\Contracts\CrmExecutionContext` к реализации хоста.
-Для каждого вызова `current()` она подтверждает актёра и допуск к текущему аккаунту,
-затем возвращает `Flex\Crm\Context\Data\ExecutionContext` с tenant-контекстом,
-именем соединения, `Actor` и идентификатором действующего пользователя. Для доступа
-ко всему аккаунту требуется явно подтверждённое разрешение. При отсутствии допуска
-реализация отклоняет вызов.
-
-## Хранение данных
-
-До миграции CRM подготовьте tenant-соединение. Владельцем схемы пользователей,
-рабочих пространств и членства может быть `axiomasoft/corex-tenancy` или приложение
-с эквивалентной схемой. CRM использует UUID в `users.id` и `wsp_workspaces.id`,
-проверяет активное членство через `wsp_workspace_members` и создаёт внешние ключи к
-уже существующим таблицам.
-
-1. Выполните миграции владельца таблиц пользователей, пространств и членства в целевой tenant-БД.
-2. Выполните `php artisan modules:compile` и включите `flex/crm` через `ModuleLifecycle::enable()`.
-   Для подготовки шаблона выполните `php artisan packman:schema:migrate --scope=tenant --modules --database=tenant`.
-3. Проверьте журнал через `php artisan packman:schema:status`.

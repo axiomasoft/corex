@@ -7,7 +7,7 @@ namespace CoreX\Access\Enums;
 use Packman\Attributes\Api;
 
 /**
- * Row-visibility scope compiled from the role matrix (B-11 §5.5). Several
+ * Row-visibility scope compiled from the role matrix. Several
  * roles resolve to the max weight of their base rows; a contextual row
  * (pipeline/stage) then overrides the base row for its own context,
  * including narrowing it.

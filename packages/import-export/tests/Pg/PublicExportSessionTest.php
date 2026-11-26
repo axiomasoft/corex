@@ -63,7 +63,7 @@ it('keeps transfer session refusal closed for a mismatched connection and a stal
     $runtime->assertCurrent($tenant, $scope);
     $assertRefused(DB::connection('work-scope-control'), ScopeContextMismatch::class);
 
-    $owner = app(DatabaseScopeControl::class);
+    $owner = resolve(DatabaseScopeControl::class);
     $closed = $owner->drain($scope->accountId, $owner->close($scope->accountId, 1));
     $next = new PhysicalBinding($scope->deploymentId, $scope->bindingId, $scope->bindingGeneration, $scope->accountIncarnation, str_repeat('c', 64));
     $owner->reopen($scope->accountId, $closed, $next, static fn () => true);

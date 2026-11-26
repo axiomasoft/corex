@@ -15,9 +15,8 @@ use Packman\Errors\Exceptions\CodedException;
 /**
  * Any OIDC login-flow failure (Discovery, JWKS, token exchange, id_token
  * verification, membership, impersonation gate) — always renders 403, never
- * a partial login (research/10 §3/§7). Messages name only claim/step
- * identifiers, never token content, `client_secret`, or `code_verifier`
- * (Implementation Rule 8).
+ * a partial login. Messages name only claim/step
+ * identifiers, never token content, `client_secret`, or `code_verifier`.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class OidcAuthenticationException extends CodedException

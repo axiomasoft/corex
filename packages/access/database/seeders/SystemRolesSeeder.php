@@ -9,10 +9,10 @@ use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Database\Seeder;
 
 /**
- * Seeds the three system roles with an EMPTY matrix (AC-21) — modules fill
- * it in via `Extend\Permissions` (B-11 §4 п.2, P2.9), the core never
+ * Seeds the three system roles with an EMPTY matrix — modules fill
+ * it in via `Extend\Permissions`, the core never
  * invents entity/action rows. `owner`'s wildcard capability lives at the
- * grant-source level (D103, P2.20), not as a stored `'*'` permission key.
+ * grant-source level, not as a stored `'*'` permission key.
  */
 final class SystemRolesSeeder extends Seeder
 {
@@ -34,7 +34,7 @@ final class SystemRolesSeeder extends Seeder
             [
                 'slug' => 'owner',
                 'name' => 'Owner',
-                'description' => 'Full account control; capability comes from the grant-source layer (D103), not a stored matrix.',
+                'description' => 'Full account control through the owner grant source.',
                 'is_system' => true,
                 'assignable_to' => $onlyUser,
             ],

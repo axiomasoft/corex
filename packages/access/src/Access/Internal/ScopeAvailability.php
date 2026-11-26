@@ -15,7 +15,7 @@ use Packman\Modules\Enums\Entities\Capability;
 
 /**
  * Normalizes a compiled Scope against the entity's declared capabilities
- * (B-11 §4 п.3, D114) before it reaches {@see ScopePredicate}: own/dept/
+ * before it reaches {@see ScopePredicate}: own/dept/
  * dept_tree require Capability::Ownable, workspace requires
  * Capability::WorkspaceScoped. Letter-only compliance ("no capability =>
  * account") silently widens access when the physical column DOES exist and
@@ -28,7 +28,7 @@ use Packman\Modules\Enums\Entities\Capability;
  * Memoized per (entity_key, scope) for the life of the request so
  * `Schema::hasColumn()` does not hit the schema on every call.
  *
- * @internal spec: B-11 §4 п.3, P2.9 D114
+ * @internal
  */
 #[Internal]
 final class ScopeAvailability

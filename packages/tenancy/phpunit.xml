@@ -12,6 +12,7 @@
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
+            <file>tests/ConfigReportSectionTest.php</file>
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
@@ -20,8 +21,7 @@
             <directory>tests/Pg</directory>
         </testsuite>
 
-        <!-- P2.13 — статические гейты изоляции (cross-DB FK, партиция
-             путей миграций): без БД и контейнера, поэтому вне pg-лейна. -->
+        <!-- Cross-database foreign-key and migration-path checks read source files directly. -->
         <testsuite name="Arch">
             <directory>tests/Arch</directory>
         </testsuite>
@@ -37,7 +37,7 @@
     <php>
         <ini name="memory_limit" value="1G"/>
 
-        <!-- root_* is PG-only DDL (D14/D16) — no sqlite lane for this package. -->
+        <!-- The root tables require PostgreSQL. -->
         <env name="PGSQL_HOST" value="127.0.0.1"/>
         <env name="PGSQL_PORT" value="5434"/>
         <env name="PGSQL_DATABASE" value="corex_test"/>
