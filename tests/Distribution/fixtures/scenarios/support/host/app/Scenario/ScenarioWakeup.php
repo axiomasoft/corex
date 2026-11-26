@@ -18,8 +18,8 @@ final class ScenarioWakeup implements DueWakeupHandler
     public function handle(WakeupDelivery $delivery): void
     {
         $database = DB::connection();
-        resolve(CurrentWorkScope::class)->assert($delivery->request->scope, $database);
-        $page = resolve(Search::class)->query($delivery->request->scope, new SearchQuery(ScenarioSearchSchema::entity(), 'equipment', ['marker']));
+        app(CurrentWorkScope::class)->assert($delivery->request->scope, $database);
+        $page = app(Search::class)->query($delivery->request->scope, new SearchQuery(ScenarioSearchSchema::entity(), 'equipment', ['marker']));
 
         if (($page->hits[0]->record->id ?? null) !== Scenario::RECORD) {
             throw new RuntimeException('The installed wakeup did not query its real Search target.');

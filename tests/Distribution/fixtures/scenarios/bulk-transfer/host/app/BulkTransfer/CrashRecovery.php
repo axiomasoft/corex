@@ -71,14 +71,14 @@ final class CrashRecovery
         $test->same($ids, $actual->pluck('ticket_id')->all(), 'Route has an unresolved admission without a verified killed-process witness.');
 
         foreach ($actual as $row) {
-            $ticketScope = resolve(DataScopeCodec::class)->decode(json_decode($row->scope, true, flags: JSON_THROW_ON_ERROR));
+            $ticketScope = app(DataScopeCodec::class)->decode(json_decode($row->scope, true, flags: JSON_THROW_ON_ERROR));
             $test->same(get_object_vars($scope), get_object_vars($ticketScope), 'Cannot reconcile a local ticket owned by a different work scope.');
             $test->same(AdmissionKind::LocalWrite->value, $row->kind, 'Provider effects must already have independent reconciliation receipts.');
             $test->same(null, $row->provider_identity, 'Local reconciliation must never touch provider evidence.');
             $ticket = new AdmissionTicket($row->ticket_id, $ticketScope, (int) $row->control_revision,
                 new OperationKey($row->operation_id, (int) $row->attempt), AdmissionKind::LocalWrite);
             $proof = $witness[$row->ticket_id];
-            resolve(ScopeAdmission::class)->settle($ticket, new AttemptEvidence(
+            app(ScopeAdmission::class)->settle($ticket, new AttemptEvidence(
                 'reconciled', 'confirmed-worker-exit:'.$proof['session'].':'.$proof['owner'],
             ));
         }

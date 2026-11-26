@@ -51,7 +51,7 @@ function headHasIndex(Connection $database, string $indexField): bool
 
 function advancePast(string $deadline): void
 {
-    $clock = resolve(ScenarioClock::class);
+    $clock = app(ScenarioClock::class);
     $advance = new DateTimeImmutable($deadline)->getTimestamp() - $clock->now()->getTimestamp() + 1;
 
     if ($advance < 1) {

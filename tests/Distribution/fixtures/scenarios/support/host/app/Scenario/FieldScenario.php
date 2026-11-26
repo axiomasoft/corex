@@ -56,7 +56,7 @@ final class FieldScenario
             'account_id' => Scenario::BOXED, 'workspace_id' => Scenario::W1, 'service' => self::WORKER,
         ]);
         self::within(static function (): void {
-            resolve(ModuleLifecycle::class)->enable(self::EXTENSION, cascade: true);
+            app(ModuleLifecycle::class)->enable(self::EXTENSION, cascade: true);
         });
         $database->table('cas_equipment')->insert([
             ['id' => self::RECORD_RACE, 'name' => 'Coincident writer record'],
@@ -81,7 +81,7 @@ final class FieldScenario
     public static function within(Closure $work, string $actor = Scenario::USER_A): mixed
     {
         return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, $actor, static function () use ($work): mixed {
-            $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
+            $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
 
             return $work($scope);
         });
@@ -99,12 +99,12 @@ final class FieldScenario
 
     public static function catalogue(DataScope $scope): FieldSchemaSnapshot
     {
-        return resolve(FieldCatalogue::class)->snapshot($scope, self::entity());
+        return app(FieldCatalogue::class)->snapshot($scope, self::entity());
     }
 
     public static function apply(DataScope $scope, FieldSchemaChange $change, string $key): SchemaOperationRef
     {
-        $schemas = resolve(FieldSchemas::class);
+        $schemas = app(FieldSchemas::class);
         $plan = $schemas->plan($scope, $change, self::catalogue($scope)->revision);
 
         return $schemas->apply($scope, $plan->ref, $plan->digest, new OperationKey($key, 1));
@@ -112,8 +112,8 @@ final class FieldScenario
 
     public static function step(): void
     {
-        $context = resolve(TenantContextResolver::class)->current();
-        $status = resolve(ScenarioPrincipalAuthority::class)->forService($context, self::WORKER,
+        $context = app(TenantContextResolver::class)->current();
+        $status = app(ScenarioPrincipalAuthority::class)->forService($context, self::WORKER,
             static fn (): int => Artisan::call('corex:custom-fields:work', ['--limit' => 1]));
 
         if ($status !== 0) {
@@ -125,7 +125,7 @@ final class FieldScenario
     public static function advanceTo(DataScope $scope, SchemaOperationRef $operation, array $states): SchemaOperationStatus
     {
         for ($steps = 0; $steps < 32; $steps++) {
-            $status = resolve(FieldSchemas::class)->inspect($scope, $operation);
+            $status = app(FieldSchemas::class)->inspect($scope, $operation);
 
             if (in_array($status->state, $states, true)) {
                 return $status;
@@ -135,7 +135,7 @@ final class FieldScenario
                 break;
             }
             self::step();
-            resolve(ScenarioClock::class)->advance(1);
+            app(ScenarioClock::class)->advance(1);
         }
 
         throw new RuntimeException('The Fields operation did not reach '.implode(', ', $states).'. Last receipt '.json_encode($status, JSON_THROW_ON_ERROR));

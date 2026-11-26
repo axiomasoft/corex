@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\AppToResolveRector;
 use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\SleepFuncToSleepStaticCallRector;
 use CoreX\Tooling\Rector\Laravel\Rector\StaticCall\DispatchToHelperFunctionsRector;
 use Rector\Config\RectorConfig;
@@ -21,6 +22,9 @@ return RectorConfig::configure()
         __DIR__.'/scripts',
     ])
     ->withSkip([
+        // resolve() delegates to app(), but their first parameter names differ.
+        // Rewriting app(abstract: ...) would produce an invalid named argument.
+        AppToResolveRector::class,
         ...glob(__DIR__.'/packages/*/database/migrations', GLOB_ONLYDIR),
         ...glob(__DIR__.'/products/*/database/migrations', GLOB_ONLYDIR),
         ...glob(__DIR__.'/packages/*/tests/Fixtures/vendor', GLOB_ONLYDIR),

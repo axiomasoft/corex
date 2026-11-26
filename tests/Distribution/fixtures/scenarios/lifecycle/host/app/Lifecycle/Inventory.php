@@ -27,7 +27,7 @@ final class Inventory implements LifecycleInventory
 
     public static function scope(): DataScope
     {
-        return resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
+        return app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
     }
 
     public static function enter(string $account, ?string $workspace, Closure $work): mixed
@@ -42,7 +42,7 @@ final class Inventory implements LifecycleInventory
 
     public function revision(DataScope $operator, ModuleRef $target): string
     {
-        resolve(CurrentWorkScope::class)->assert($operator);
+        app(CurrentWorkScope::class)->assert($operator);
         $row = Scenario::connection('control')->table('scenario_deployment')->sole();
         $sites = Scenario::connection('control')->table('scenario_binding_locations')->orderBy('role')->get()->all();
 
@@ -103,7 +103,7 @@ final class Inventory implements LifecycleInventory
     public function run(DataScope $scope, Closure $operation): mixed
     {
         $work = static function () use ($scope, $operation): mixed {
-            resolve(CurrentWorkScope::class)->assert($scope, DB::connection());
+            app(CurrentWorkScope::class)->assert($scope, DB::connection());
 
             return $operation();
         };

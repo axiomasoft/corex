@@ -17,7 +17,7 @@ final class SearchScenarioPg implements PostgresCorpus, PostgresSnapshotAuthorit
 {
     public function rows(IndexTarget $target, ConnectionInterface $connection): PostgresCorpusRows
     {
-        resolve(CurrentWorkScope::class)->assert($target->scope, $connection);
+        app(CurrentWorkScope::class)->assert($target->scope, $connection);
         $rows = SearchScenarioData::rows($target->scope, $target->entity);
 
         return new PostgresCorpusRows($rows, 'id', ['title' => 'title', 'secret' => 'secret'],
@@ -26,7 +26,7 @@ final class SearchScenarioPg implements PostgresCorpus, PostgresSnapshotAuthorit
 
     public function covers(DataScope $scope, ConnectionInterface $connection): bool
     {
-        resolve(CurrentWorkScope::class)->assert($scope, $connection);
+        app(CurrentWorkScope::class)->assert($scope, $connection);
         $mode = $connection->selectOne("SELECT current_setting('transaction_isolation') AS isolation, current_setting('transaction_read_only') AS read_only");
 
         return DB::connection() === $connection && $connection->transactionLevel() > 0 && $mode?->isolation === 'repeatable read' && $mode?->read_only === 'on';

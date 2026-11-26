@@ -67,7 +67,7 @@ function initializePatch(string $schema, string $inspection = ' a-42 '): FieldPa
 
 function modify(DataScope $scope, string $record, array $operations, string $key): FieldWriteReceipt
 {
-    $values = resolve(FieldValues::class);
+    $values = app(FieldValues::class);
     $reference = FieldScenario::record($record);
     $observed = $values->read($scope, $reference, new FieldSelection([]));
     $patch = new FieldPatch($operations, $observed->schemaRevision, $observed->valueRevision);
@@ -118,7 +118,7 @@ function expectRejection(Scenario $proof, Closure $call, string $class, string $
 
 function visiblePair(DataScope $scope): array
 {
-    $batch = resolve(FieldValues::class)->readMany($scope, new RecordSelection([FieldScenario::record(), FieldScenario::record(FieldScenario::RECORD_BAD)]), new FieldSelection([LEGACY]));
+    $batch = app(FieldValues::class)->readMany($scope, new RecordSelection([FieldScenario::record(), FieldScenario::record(FieldScenario::RECORD_BAD)]), new FieldSelection([LEGACY]));
 
     return array_map(static fn ($item): array => ['revision' => $item->schemaRevision->value, 'value' => JsonDocuments::decode($item->values[LEGACY]->document)], $batch->items);
 }
@@ -166,7 +166,7 @@ switch ($mode) {
             $backend = FieldPgWitness::markSession($db, $first ? 'writer-a' : 'writer-b');
             $record = FieldScenario::record();
             $patch = initializePatch($schema);
-            $write = static fn () => receipt(resolve(FieldValues::class)->update($scope, $record, $patch, $patch->token($scope, $record, TOKEN)));
+            $write = static fn () => receipt(app(FieldValues::class)->update($scope, $record, $patch, $patch->token($scope, $record, TOKEN)));
 
             if (! $first) {
                 Scenario::barrier('token-b-ready', $backend);
@@ -216,7 +216,7 @@ switch ($mode) {
         $proof->same($first['value_revision'], $payload['value_revision'], 'The immutable fact publishes the committed value revision');
         $proof->check(! str_contains($fact->payload, 'A-42'), 'The external value is absent from the fact payload');
         FieldScenario::within(static function (DataScope $scope) use ($proof, $schema): void {
-            $values = resolve(FieldValues::class);
+            $values = app(FieldValues::class);
             $record = FieldScenario::record();
             $fields = new FieldSelection([FieldScenario::INSPECTION, DECIMAL, MONEY, MULTI]);
             $snapshot = $values->read($scope, $record, $fields);
@@ -227,7 +227,7 @@ switch ($mode) {
             $proof->same('USD', $money['currency'], 'Money keeps its currency');
             $proof->same('17.25', $money['amount'], 'Money keeps the exact decimal amount');
             $field = new FieldId(FieldScenario::INSPECTION);
-            $filter = resolve(FieldFilter::class)->compile($scope, FieldScenario::catalogue($scope), new FilterNode($field, FieldOperator::Eq, FieldInput::from(' a-42 ')));
+            $filter = app(FieldFilter::class)->compile($scope, FieldScenario::catalogue($scope), new FilterNode($field, FieldOperator::Eq, FieldInput::from(' a-42 ')));
             $proof->same('inspection:A-42', JsonDocuments::decode($filter->operand), 'The installed filter compiles the external encoded operand');
             $proof->same([FieldScenario::RECORD_RACE], $filter->recordIds, 'The filter exposes one verified policy corpus');
             $proof->same($field->value, $filter->field->value, 'The filter addresses the stable field UUID');
@@ -240,7 +240,7 @@ switch ($mode) {
         });
         $otherPrincipal = FieldScenario::within(static fn (DataScope $scope): DataScope => $scope);
         FieldScenario::within(static function (DataScope $scope) use ($proof, $otherPrincipal): void {
-            $values = resolve(FieldValues::class);
+            $values = app(FieldValues::class);
             $record = FieldScenario::record();
             $serial = new FieldSelection([FieldScenario::SERIAL]);
             expectRejection($proof, static fn () => $values->read($otherPrincipal, $record, $serial), ScopeContextMismatch::class, 'A valid scope for a different principal is rejected');
@@ -250,7 +250,7 @@ switch ($mode) {
             $restricted = $values->read($scope, $record, new FieldSelection([FieldScenario::SERIAL, FieldScenario::INSPECTION]));
             $proof->same([FieldScenario::SERIAL], array_keys($restricted->values), 'Record visibility does not disclose the separately restricted external field');
             expectRejection($proof, static fn () => modify($scope, FieldScenario::RECORD_RACE, [fieldSet(FieldScenario::SERIAL, 'forbidden')], TOKEN), RuntimeException::class, 'The restricted reader cannot write the otherwise readable field', 'custom-fields.access-denied');
-            expectRejection($proof, static fn () => resolve(FieldFilter::class)->compile($scope, FieldScenario::catalogue($scope), new FilterNode(new FieldId(FieldScenario::SERIAL), FieldOperator::Eq, FieldInput::from('EQ-READY'))), RuntimeException::class, 'Read authority does not allow filter compilation', 'custom-fields.access-denied');
+            expectRejection($proof, static fn () => app(FieldFilter::class)->compile($scope, FieldScenario::catalogue($scope), new FilterNode(new FieldId(FieldScenario::SERIAL), FieldOperator::Eq, FieldInput::from('EQ-READY'))), RuntimeException::class, 'Read authority does not allow filter compilation', 'custom-fields.access-denied');
         }, Scenario::USER_B);
         $proof->same([$first['message']], facts($database), 'Denied writes and token conflicts leave the original fact unchanged');
         $proof->report($database, [$first['receipt'], $first['message']], [], ['receipt' => $second, 'fact' => $payload]);
@@ -259,7 +259,7 @@ switch ($mode) {
 
     case 'evolution':
         $change = FieldScenario::within(static function (DataScope $scope) use ($proof, $database): array {
-            $values = resolve(FieldValues::class);
+            $values = app(FieldValues::class);
             $record = FieldScenario::record();
             $serial = new FieldSelection([FieldScenario::SERIAL]);
             modify($scope, $record->id, [fieldSet(FieldScenario::SERIAL, null)], 'store-explicit-null');
@@ -310,7 +310,7 @@ switch ($mode) {
     case 'backfill':
         $phase = Scenario::barrierRead('field-expanded');
         $due = new DateTimeImmutable(FieldScenario::schemaRow($database, $phase['operation'])->next_attempt_at);
-        $clock = resolve(ScenarioClock::class);
+        $clock = app(ScenarioClock::class);
         $clock->advance(max(0, $due->getTimestamp() - $clock->now()->getTimestamp()));
         FieldScenario::within(static fn () => FieldScenario::step());
         $written = Scenario::barrierRead('dual-write-committed');
@@ -345,7 +345,7 @@ switch ($mode) {
             $proof->same($prior, document($database), 'Failed dual conversion preserves both previous slots');
             $proof->same($before, facts($database), 'Failed dual conversion emits no user fact');
             modify($scope, FieldScenario::RECORD_BAD, [fieldSet(LEGACY, 'x-10')], 'repair-historical-value');
-            resolve(FieldSchemas::class)->retry($scope, $operation, $blocked->generation);
+            app(FieldSchemas::class)->retry($scope, $operation, $blocked->generation);
             FieldScenario::advanceTo($scope, $operation, ['verifying']);
 
             return FieldScenario::catalogue($scope)->revision->value;

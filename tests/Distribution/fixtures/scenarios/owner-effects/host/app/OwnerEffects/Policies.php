@@ -24,14 +24,14 @@ final class Policies implements MediaPolicy
             || $context->tenant->workspace?->id !== $scope->workspaceId || $scope->principalKind !== 'user') {
             return false;
         }
-        $definition = resolve(ModuleRegistry::class)->compiled()->entities[Effects::ENTITY] ?? null;
+        $definition = app(ModuleRegistry::class)->compiled()->entities[Effects::ENTITY] ?? null;
 
         if ($definition?->module !== Effects::MODULE || ! is_subclass_of($definition->model, Model::class)) {
             return false;
         }
         $record = ($definition->model)::query()->find(Scenario::RECORD);
 
-        if ($record === null || ! resolve(AccessChecker::class)->canOnRecord(auth()->user(), 'read', $record)) {
+        if ($record === null || ! app(AccessChecker::class)->canOnRecord(auth()->user(), 'read', $record)) {
             return false;
         }
 

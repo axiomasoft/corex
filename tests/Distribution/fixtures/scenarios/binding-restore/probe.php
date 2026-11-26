@@ -32,15 +32,15 @@ require getcwd().'/vendor/autoload.php';
 Scenario::boot();
 $proof = new Scenario;
 $control = Scenario::connection('control');
-$owner = resolve(DatabaseScopeControl::class);
+$owner = app(DatabaseScopeControl::class);
 $account = Scenario::account(Scenario::ACCOUNT_A);
 $mode = $argv[1] ?? '';
 
 function enqueueWakeup(string $reference): array
 {
     return ScenarioQueue::inScope(Scenario::ACCOUNT_A, Scenario::W1, Scenario::USER_A, static function () use ($reference): array {
-        $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
-        $stored = resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
+        $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
+        $stored = app(WakeupScheduler::class)->schedule(new WakeupRequest(
             $scope, 'scenario.wakeup', 'scenario-wakeup/1', $reference,
             new DateTimeImmutable('2000-01-01T00:00:00Z'), null, JsonDocuments::capture(['reference' => $reference]),
         ));
@@ -188,10 +188,10 @@ switch ($mode) {
         break;
 
     case 'provider':
-        $admission = resolve(ScopeAdmission::class);
-        $ledger = resolve(ProviderEffectLedger::class);
+        $admission = app(ScopeAdmission::class);
+        $ledger = app(ProviderEffectLedger::class);
         $ticket = ScenarioQueue::inScope(Scenario::ACCOUNT_A, Scenario::W1, Scenario::USER_A, static function () use ($ledger): AdmissionTicket {
-            $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
+            $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
             $effect = new ProviderEffectRef(
                 accountId: $scope->accountId,
                 accountIncarnation: $scope->accountIncarnation,

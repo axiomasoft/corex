@@ -18,11 +18,11 @@ final class ScenarioQueue
         $previous = $guard->user();
 
         try {
-            return resolve(TenancyManager::class)->runFor(
+            return app(TenancyManager::class)->runFor(
                 Scenario::account($account),
                 $workspace === null ? null : Scenario::workspace($workspace),
                 static function () use ($principal, $callback): mixed {
-                    resolve(ScenarioPrincipalAuthority::class)->authenticate(resolve(TenantContextResolver::class)->current(), $principal);
+                    app(ScenarioPrincipalAuthority::class)->authenticate(app(TenantContextResolver::class)->current(), $principal);
 
                     return $callback();
                 },

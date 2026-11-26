@@ -111,7 +111,7 @@ final class TransportProofServiceProvider extends ServiceProvider
         {
             public function allows(DataScope $scope, WebhookDestination $destination): bool
             {
-                resolve(CurrentWorkScope::class)->assert($scope);
+                app(CurrentWorkScope::class)->assert($scope);
 
                 return in_array($scope->workspaceId, [null, Scenario::W1], true) && $destination->host === FixtureWebhookTransport::HOST;
             }

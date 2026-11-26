@@ -36,7 +36,7 @@ final readonly class FixtureNotificationPolicy implements NotificationPolicy, Re
             ? NotificationRelated::query()->find($subject->related->id)
             : null;
 
-        return $record !== null && resolve(AccessChecker::class)->canOnRecord(new PrincipalIdentity(PrincipalType::User, $principal->id), 'read', $record);
+        return $record !== null && app(AccessChecker::class)->canOnRecord(new PrincipalIdentity(PrincipalType::User, $principal->id), 'read', $record);
     }
 
     public function resolve(NotificationContext $context, RecipientReference $recipient, string $channel): ?DeliveryTarget

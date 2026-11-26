@@ -3485,7 +3485,7 @@
             "root": {
                 "path": "tests/Distribution/fixtures/scenarios/transport/host/app/Providers/TransportProofServiceProvider.php",
                 "anchor": "McpToolEndpoint::class)->middleware(",
-                "sha256": "2ecb03ea973197fda145104b467d53aac773140dad841ef15d1403dfc522b3ec"
+                "sha256": "8527e1dba08f6e97de9652a7c87e25c7dd6969589a53bc29ff8e53fdf2bb99ce"
             },
             "expires": null
         },
@@ -3498,7 +3498,7 @@
             "root": {
                 "path": "tests/Distribution/fixtures/scenarios/transport/host/app/Providers/TransportProofServiceProvider.php",
                 "anchor": "McpToolEndpoint::class)->middleware(",
-                "sha256": "2ecb03ea973197fda145104b467d53aac773140dad841ef15d1403dfc522b3ec"
+                "sha256": "8527e1dba08f6e97de9652a7c87e25c7dd6969589a53bc29ff8e53fdf2bb99ce"
             },
             "expires": null
         },

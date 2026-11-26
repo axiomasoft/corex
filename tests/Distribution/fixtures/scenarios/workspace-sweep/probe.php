@@ -26,7 +26,7 @@ require getcwd().'/vendor/autoload.php';
 Scenario::boot();
 $proof = new Scenario;
 $database = Scenario::connection('a');
-$clock = resolve(ScenarioClock::class);
+$clock = app(ScenarioClock::class);
 $mode = $argv[1] ?? '';
 
 function inWorkspaceTwo(Closure $callback): mixed
@@ -37,9 +37,9 @@ function inWorkspaceTwo(Closure $callback): mixed
 function sweepFromWorkspaceOne(Scenario $proof): void
 {
     ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, Scenario::USER_A, static function () use ($proof): void {
-        $proof->same(Scenario::W1, resolve(TenantContextResolver::class)->current()->workspace?->id, 'The sweep starts as W1');
+        $proof->same(Scenario::W1, app(TenantContextResolver::class)->current()->workspace?->id, 'The sweep starts as W1');
         $proof->same(0, Artisan::call('corex:scheduler:sweep', ['--limit' => 1]), 'Run the installed Laravel Scheduler command');
-        $proof->same(Scenario::W1, resolve(TenantContextResolver::class)->current()->workspace?->id, 'Sweep restores its ambient workspace');
+        $proof->same(Scenario::W1, app(TenantContextResolver::class)->current()->workspace?->id, 'Sweep restores its ambient workspace');
         $proof->same(Scenario::USER_A, auth()->guard()->user()?->getAuthIdentifier(), 'Sweep restores its own ambient actor');
     });
 }
@@ -87,7 +87,7 @@ switch ($mode) {
             ];
             $window = new WakeupWindow($now->modify('-1 minute'), $now, 'custom');
             $wakeup = sweepWakeupRequest($scope, 'task-recurrence.materialize', 'task-materialization/1', 'materialize-w2', $now, $data, $window);
-            $scheduler = resolve(WakeupScheduler::class);
+            $scheduler = app(WakeupScheduler::class);
             $created = $scheduler->schedule($wakeup);
             $proof->same('created', $created->status, 'Schedule W2 through the installed Scheduler');
             $replay = $scheduler->schedule($wakeup);
@@ -141,7 +141,7 @@ switch ($mode) {
         inWorkspaceTwo(static function (DataScope $scope) use ($proof): void {
             $proof->same(Scenario::W2, $scope->workspaceId, 'A separate process initially opens W2 after the abandoned claim');
             sweepFromWorkspaceOne($proof);
-            $proof->same(Scenario::W2, resolve(TenantContextResolver::class)->current()->workspace?->id, 'The replacement sweep exits back to W2');
+            $proof->same(Scenario::W2, app(TenantContextResolver::class)->current()->workspace?->id, 'The replacement sweep exits back to W2');
             $proof->same(Scenario::USER_B, auth()->guard()->user()?->getAuthIdentifier(), 'The replacement sweep restores the previous W2 actor');
         });
         $task = $database->table('tsk_tasks')->first();
@@ -162,7 +162,7 @@ switch ($mode) {
                 $proof->same($scope->workspaceId, $stored['workspace_id'], 'Continuation retains W2');
                 $proof->same($scope->principalId, $stored['principal_id'], 'Continuation retains the authorizing actor');
                 $identity = new WakeupIdentity($continuation->kind, $continuation->request_key);
-                $proof->same('cancelled', resolve(WakeupScheduler::class)->cancel($scope, $identity)->status, 'Cancel future continuation before testing the removed handler');
+                $proof->same('cancelled', app(WakeupScheduler::class)->cancel($scope, $identity)->status, 'Cancel future continuation before testing the removed handler');
             }
         });
         $proof->report($database, [$completed['id'], $task->id], ['old' => $old], ['claim' => $completed, 'task' => (array) $task, 'continuations' => $continuations]);
@@ -183,7 +183,7 @@ switch ($mode) {
 
     case 'late':
         $clock->advance(120);
-        $created = inWorkspaceTwo(static fn (DataScope $scope) => resolve(WakeupScheduler::class)->schedule(
+        $created = inWorkspaceTwo(static fn (DataScope $scope) => app(WakeupScheduler::class)->schedule(
             sweepWakeupRequest($scope, 'scenario.cas', 'cas/1', 'expired-cas', $clock->now(), ['fixture' => true]),
         ));
         $proof->same('created', $created->status, 'Prepare a real late-CAS request in W2');

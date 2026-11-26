@@ -126,10 +126,10 @@ function actor(): ActorData
 function enterTaskScope(Closure $work, ?string $workspace = Scenario::W1): mixed
 {
     return ScenarioQueue::inScope(Scenario::BOXED, $workspace, Scenario::USER_A, static function () use ($work): mixed {
-        $context = resolve(TenantContextResolver::class)->current();
-        $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($context);
+        $context = app(TenantContextResolver::class)->current();
+        $scope = app(DataScopeFactory::class)->forCurrentPrincipal($context);
 
-        return resolve(WorkScopeRunner::class)->run($scope, static fn (TenantContext $trusted): mixed => $work($scope, $trusted));
+        return app(WorkScopeRunner::class)->run($scope, static fn (TenantContext $trusted): mixed => $work($scope, $trusted));
     });
 }
 
@@ -142,7 +142,7 @@ function observeBootedActivation(Scenario $proof): array
     $before = $counts();
     $proof->same(array_fill_keys($tables, 0), $before, 'The lifecycle test starts with five empty tables');
     $outcome = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof): array {
-        $lifecycle = resolve(ModuleLifecycle::class);
+        $lifecycle = app(ModuleLifecycle::class);
         $proof->same(ModuleState::Available, $lifecycle->status(TASKS)->state, 'Tasks starts available');
         $reason = null;
 
@@ -153,9 +153,9 @@ function observeBootedActivation(Scenario $proof): array
         }
 
         $proof->same('The pinned task workflow definition and version have no active engine.', $reason, 'The first public activation checks the unavailable pin');
-        $lookups = resolve(TaskLifetimeWorkflowEngine::class)->lookups;
+        $lookups = app(TaskLifetimeWorkflowEngine::class)->lookups;
         $proof->same(expectedLookup(Scenario::W1, 'fixture:missing-version'), $lookups, 'Public lifecycle consults the exact missing pin once');
-        $proof->same(false, resolve(ModuleRegistry::class)->isActive(TASKS, $trusted), 'The refused module remains inactive');
+        $proof->same(false, app(ModuleRegistry::class)->isActive(TASKS, $trusted), 'The refused module remains inactive');
 
         return ['reason' => $reason, 'lookups' => $lookups];
     });
@@ -171,11 +171,11 @@ function observeBootedReader(Scenario $proof): array
     $held = resolve('task-lifetime.registration-reader');
 
     return enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $held): array {
-        $engine = resolve(TaskLifetimeWorkflowEngine::class);
+        $engine = app(TaskLifetimeWorkflowEngine::class);
         $rows = [];
 
         foreach (['held-first', 'held-again', 'fresh'] as $label) {
-            $reader = $label === 'fresh' ? resolve(RegistryIntrospection::class) : $held;
+            $reader = $label === 'fresh' ? app(RegistryIntrospection::class) : $held;
             $offset = count($engine->lookups);
             $status = $reader->why(TASKS, $trusted)->status;
             $lookups = array_slice($engine->lookups, $offset);
@@ -186,7 +186,7 @@ function observeBootedReader(Scenario $proof): array
 
         foreach (['gate-first', 'gate-again'] as $label) {
             $offset = count($engine->lookups);
-            $allowed = resolve(ModuleActivationGate::class)->check($trusted, TASKS, 'standard')->allowed;
+            $allowed = app(ModuleActivationGate::class)->check($trusted, TASKS, 'standard')->allowed;
             $lookups = array_slice($engine->lookups, $offset);
             $proof->same(true, $allowed, 'The current gate permits the supported pin');
             $proof->same(expectedLookup(Scenario::W1), $lookups, 'Each independent gate call checks the pin once');
@@ -199,12 +199,12 @@ function observeBootedReader(Scenario $proof): array
 
 function complete(string $task): TaskReference
 {
-    return resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData($task, actor()));
+    return app(CompleteTaskCommand::class)->handle(new CompleteTaskData($task, actor()));
 }
 
 function move(string $task, string $stage, ?string $workspace = Scenario::W1): void
 {
-    enterTaskScope(static fn (): TaskReference => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData($task, $stage, actor())), $workspace);
+    enterTaskScope(static fn (): TaskReference => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData($task, $stage, actor())), $workspace);
 }
 
 function taskId(string $title): string
@@ -249,7 +249,7 @@ function assertSingleCompletion(Scenario $proof, string $task, array $state): vo
 
 function gateAtBoot(Scenario $proof): ModuleActivationGate
 {
-    $gate = resolve(ModuleActivationGate::class);
+    $gate = app(ModuleActivationGate::class);
     $proof->check($gate::class !== TaskLifetimeActivationGate::class, 'Bridge boot decorated the current host policy');
     $proof->check(resolve('task-lifetime.boot-reader') !== resolve(RegistryIntrospection::class), 'Provider boot retires the construction-time reader');
 
@@ -258,7 +258,7 @@ function gateAtBoot(Scenario $proof): ModuleActivationGate
 
 function gateInScope(Scenario $proof, ModuleActivationGate $bootGate): ModuleActivationGate
 {
-    $gate = resolve(ModuleActivationGate::class);
+    $gate = app(ModuleActivationGate::class);
     $proof->same($bootGate::class, $gate::class, 'Tenant entry retains the bridge on the next scoped gate');
     $proof->check($bootGate !== $gate, 'Tenant entry resolved a fresh scoped gate');
 
@@ -277,8 +277,8 @@ function checkScopedAvailability(Scenario $proof, ModuleActivationGate $bootGate
     foreach ([Scenario::W1, null, Scenario::W1] as $workspace) {
         $verdicts[] = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $bootGate, $retainedReader, $earlyReader, $workspace): array {
             $gate = gateInScope($proof, $bootGate);
-            $engine = resolve(TaskLifetimeWorkflowEngine::class);
-            $outer = app()->bound(TaskLifetimeOuterGate::class) ? resolve(TaskLifetimeOuterGate::class) : null;
+            $engine = app(TaskLifetimeWorkflowEngine::class);
+            $outer = app()->bound(TaskLifetimeOuterGate::class) ? app(TaskLifetimeOuterGate::class) : null;
             $denial = $gate->check($trusted, TASKS, 'restricted');
             $proof->same([false, 'Host declined edition', 'upgrade'], [$denial->allowed, $denial->reason, $denial->upgradeHint], 'The scoped host denial preserves its reason and upgrade hint');
             $proof->check($gate->check($trusted, 'fixture/other', 'standard')->allowed, 'An unrelated module passes to the host');
@@ -295,9 +295,9 @@ function checkScopedAvailability(Scenario $proof, ModuleActivationGate $bootGate
             $expected = $workspace === Scenario::W1;
             $expectedDecision = $expected ? [true, null, null] : [false, 'Host declined edition', 'upgrade'];
             $expectedLookups = $expected ? expectedLookup($workspace) : [];
-            $proof->check(resolve(ModuleRegistry::class)->isActive(TASKS, $trusted), 'The stored Tasks activation remains enabled in each scope');
+            $proof->check(app(ModuleRegistry::class)->isActive(TASKS, $trusted), 'The stored Tasks activation remains enabled in each scope');
             $outerChecks = $outer?->checks;
-            $explanation = resolve(RegistryIntrospection::class)->why(TASKS, $trusted);
+            $explanation = app(RegistryIntrospection::class)->why(TASKS, $trusted);
             $proof->same($expected ? 'active' : 'inactive', $explanation->status, 'Public why uses the composed activation gate');
             $proof->same([$expected ? 'enabled_for_tenant' : 'activation_gate_denied'], $explanation->reasons, 'The explanation distinguishes tenant activation from gate denial');
             $readerLookups = $engine->lookups;
@@ -361,15 +361,15 @@ function provision(Scenario $proof): array
     $proof->check($migrations['a'] !== [], 'The installed Packman schema sets migrated the actual writer');
     $bootGate = config('corex-tasks-workflow.enabled') ? gateAtBoot($proof) : null;
     $activation = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $bootGate): array {
-        resolve(ModuleLifecycle::class)->enable(TASKS, cascade: true);
-        $proof->check(resolve(ModuleRegistry::class)->isActive(TASKS, $trusted), 'The public lifecycle activates Tasks for the trusted tenant');
+        app(ModuleLifecycle::class)->enable(TASKS, cascade: true);
+        $proof->check(app(ModuleRegistry::class)->isActive(TASKS, $trusted), 'The public lifecycle activates Tasks for the trusted tenant');
 
         if ($bootGate === null) {
             return [];
         }
 
         $gate = gateInScope($proof, $bootGate);
-        $lookups = resolve(TaskLifetimeWorkflowEngine::class)->lookups;
+        $lookups = app(TaskLifetimeWorkflowEngine::class)->lookups;
         $proof->same(expectedLookup(Scenario::W1), $lookups, 'Public enable validates the supported pin exactly once in the tenant scope');
         $captures = iterator_to_array(app()->tagged(TaskCompletionCapture::TAG));
         $proof->check(count($captures) === 1 && $captures[0] instanceof TaskCompletionCapture
@@ -387,7 +387,7 @@ switch ($argv[1] ?? '') {
         $proof->same([true, true, true], array_map(InstalledVersions::isInstalled(...), [TASKS, WORKFLOW, BRIDGE]), 'Composer discovered Tasks, Workflow and the enabled bridge');
         $proof->same(true, config('corex-tasks-workflow.enabled'), 'This startup proof uses the enabled bridge');
         $proof->same([false, false], [app()->resolved(ModuleActivationGate::class), app()->resolved(EngineAdapter::class)], 'Application boot leaves both tenant-only ports unresolved');
-        $proof->report($database, [TASKS], [], ['resolver' => resolve(TenantContextResolver::class)::class]);
+        $proof->report($database, [TASKS], [], ['resolver' => app(TenantContextResolver::class)::class]);
 
         break;
 
@@ -395,14 +395,14 @@ switch ($argv[1] ?? '') {
         $proof->same([false, false], [app()->resolved(ModuleActivationGate::class), app()->resolved(EngineAdapter::class)], 'The tenant-only ports are unresolved at boot');
         ScenarioSetup::install('task-lifetime', false);
         $activation = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof): array {
-            $lifecycle = resolve(ModuleLifecycle::class);
+            $lifecycle = app(ModuleLifecycle::class);
             $proof->same(ModuleState::Available, $lifecycle->status(TASKS)->state, 'Tasks is available before tenant activation');
             $lifecycle->enable(TASKS, cascade: true);
             $proof->same(ModuleState::Enabled, $lifecycle->status(TASKS)->state, 'Public lifecycle enables Tasks in W1');
-            $lookups = resolve(TaskLifetimeWorkflowEngine::class)->lookups;
+            $lookups = app(TaskLifetimeWorkflowEngine::class)->lookups;
             $proof->same(expectedLookup(Scenario::W1), $lookups, 'Activation resolves the exact pin in the tenant workspace');
 
-            return ['gate' => resolve(ModuleActivationGate::class)::class, 'lookups' => $lookups];
+            return ['gate' => app(ModuleActivationGate::class)::class, 'lookups' => $lookups];
         });
         $proof->report($database, [TASKS], [], $activation);
 
@@ -417,14 +417,14 @@ switch ($argv[1] ?? '') {
             $proof->same($bootReadOrder, resolve('task-lifetime.boot-read-order'), 'The warm host used the requested public lookup order');
         }
 
-        $gate = $hasEarlyReader ? gateAtBoot($proof) : resolve(ModuleActivationGate::class);
+        $gate = $hasEarlyReader ? gateAtBoot($proof) : app(ModuleActivationGate::class);
 
         if (($argv[3] ?? '') === 'outer') {
-            $proof->check(resolve(TaskLifetimeOuterGate::class) instanceof TaskLifetimeOuterGate, 'The public chain includes the host decorator installed in boot');
+            $proof->check(app(TaskLifetimeOuterGate::class) instanceof TaskLifetimeOuterGate, 'The public chain includes the host decorator installed in boot');
         }
         $first = ($argv[2] ?? 'account') === 'workspace' ? Scenario::W1 : null;
         $firstScopedReader = enterTaskScope(static function (): RegistryIntrospection {
-            $reader = resolve(RegistryIntrospection::class);
+            $reader = app(RegistryIntrospection::class);
             $reader->extensionPoints();
 
             return $reader;
@@ -441,8 +441,8 @@ switch ($argv[1] ?? '') {
         $proof->same('fixture:missing-version', config('corex-tasks-workflow.version_ref'), 'The cached config pins the unavailable version');
         $bootGate = gateAtBoot($proof);
         [$before, $after] = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $bootGate): array {
-            $lifecycle = resolve(ModuleLifecycle::class);
-            $modules = resolve(ModuleRegistry::class);
+            $lifecycle = app(ModuleLifecycle::class);
+            $modules = app(ModuleRegistry::class);
             $before = ['state' => $lifecycle->status(TASKS)->state->value, 'active' => $modules->isActive(TASKS, $trusted)];
             $proof->same(['state' => ModuleState::Available->value, 'active' => false], $before, 'Tasks is available before the activation attempt');
 
@@ -457,7 +457,7 @@ switch ($argv[1] ?? '') {
             $after = ['state' => $lifecycle->status(TASKS)->state->value, 'active' => $modules->isActive(TASKS, $trusted)];
             $proof->same($before, $after, 'The refused activation leaves Tasks available and inactive');
             $gate = gateInScope($proof, $bootGate);
-            $lookups = resolve(TaskLifetimeWorkflowEngine::class)->lookups;
+            $lookups = app(TaskLifetimeWorkflowEngine::class)->lookups;
             $proof->same(expectedLookup(Scenario::W1, 'fixture:missing-version'), $lookups, 'Public enable consults the scoped engine exactly once for the unavailable pin');
 
             return [$before, [...$after, 'tenant_gate' => $gate::class, 'lookups' => $lookups]];
@@ -492,7 +492,7 @@ switch ($argv[1] ?? '') {
         $allowed = $supported && ! $hostDenies;
         $lookups = $hostDenies ? [] : expectedLookup(Scenario::W1, $version);
         $outcome = enterTaskScope(static function (DataScope $scope, TenantContext $trusted) use ($proof, $mode, $reason, $allowed, $lookups, $hostDenies, $earlyReader, $outerPolicy): array {
-            $gate = resolve(ModuleActivationGate::class);
+            $gate = app(ModuleActivationGate::class);
             $host = app()->bound('task-lifetime.registered-host') ? resolve('task-lifetime.registered-host') : null;
             $expectedDecision = [$allowed, $reason, $hostDenies ? 'upgrade' : null];
             $decision = $gate->check($trusted, TASKS, 'standard');
@@ -503,12 +503,12 @@ switch ($argv[1] ?? '') {
                 $proof->same(false, app()->resolved(EngineAdapter::class), 'Host denial leaves the engine unresolved');
             }
 
-            $engine = resolve(TaskLifetimeWorkflowEngine::class);
+            $engine = app(TaskLifetimeWorkflowEngine::class);
             $proof->same($lookups, $engine->lookups, 'The final public gate consults the exact pin once on host allowance');
             $result = ['decision' => $expectedDecision, 'gate_lookups' => $engine->lookups];
 
             if ($outerPolicy) {
-                $outer = resolve(TaskLifetimeOuterGate::class);
+                $outer = app(TaskLifetimeOuterGate::class);
                 $checks = $outer->checks;
                 $denial = $gate->check($trusted, TASKS, 'outer-restricted');
                 $proof->same([false, 'Outer edition restricted', 'outer-upgrade'], [$denial->allowed, $denial->reason, $denial->upgradeHint], 'An opaque outer policy may deny after its delegate allows');
@@ -516,7 +516,7 @@ switch ($argv[1] ?? '') {
                 $proof->same($lookups, $engine->lookups, 'The final outer denial avoids an engine lookup');
             }
 
-            $lifecycle = resolve(ModuleLifecycle::class);
+            $lifecycle = app(ModuleLifecycle::class);
 
             if ($mode === 'enable') {
                 $proof->same(ModuleState::Available, $lifecycle->status(TASKS)->state, 'The activation starts with Tasks available');
@@ -533,7 +533,7 @@ switch ($argv[1] ?? '') {
                 $proof->same($lookups, $result['activation_lookups'], 'Public lifecycle consults the exact pin once after host allowance');
             }
 
-            $result['active'] = resolve(ModuleRegistry::class)->isActive(TASKS, $trusted);
+            $result['active'] = app(ModuleRegistry::class)->isActive(TASKS, $trusted);
             $proof->same($allowed, $result['active'], 'The final activation state matches the gate decision');
 
             if ($earlyReader !== null && $result['active']) {
@@ -568,7 +568,7 @@ switch ($argv[1] ?? '') {
                 ['id' => DONE, 'project_id' => PROJECT, 'code' => 'closed', 'name' => '{"en":"Closed"}', 'auto_status' => 'done'],
             ]);
 
-            return array_map(static fn (string $title): string => resolve(CreateTaskCommand::class)->handle(
+            return array_map(static fn (string $title): string => app(CreateTaskCommand::class)->handle(
                 new TaskDraft(Scenario::W1, $title, actor(), projectId: PROJECT),
             )->id, ['Race task', 'Conflict task']);
         });
@@ -589,7 +589,7 @@ switch ($argv[1] ?? '') {
             $identity = FieldPgWitness::markSession($writer, $mode);
 
             if ($mode === 'complete-a') {
-                $class = resolve(EntityRegistry::class)->get('tsk.task')->model;
+                $class = app(EntityRegistry::class)->get('tsk.task')->model;
                 Event::listen('eloquent.updating: '.$class, static function (Model $model) use ($proof, $task, $writer, $identity): void {
                     $proof->same($task, $model->getKey(), 'The Task ORM is about to save the raced row');
                     $proof->same(TaskStatus::Done, $model->getAttribute('status'), 'The changed status is Done inside the writer');
@@ -639,7 +639,7 @@ switch ($argv[1] ?? '') {
         move($task, IN_PROGRESS);
         $reopened = snapshot($database, $task);
         $proof->same(['in_progress', IN_PROGRESS, null], [$reopened['task']['status'], $reopened['task']['stage_id'], $reopened['task']['completed_at']], 'Move to the InProgress stage reopens and clears completion time');
-        resolve(ScenarioClock::class)->advance(90);
+        app(ScenarioClock::class)->advance(90);
         move($task, DONE);
         $closed = snapshot($database, $task);
         $proof->same(DONE, $closed['task']['stage_id'], 'Move to the Done stage commits the configured stage');
@@ -658,11 +658,11 @@ switch ($argv[1] ?? '') {
         $historyTask = taskId('Race task');
         [$oldScope, $oldProof] = enterTaskScope(static fn (DataScope $scope): array => [
             $scope,
-            resolve(StoredWorkIssuer::class)->issue($scope, 'fixture.owner', 'complete:'.$task),
+            app(StoredWorkIssuer::class)->issue($scope, 'fixture.owner', 'complete:'.$task),
         ]);
-        $stored = resolve(StoredWorkRunner::class);
+        $stored = app(StoredWorkRunner::class);
         $proof->same(Scenario::W1, $stored->runStored($oldScope, $oldProof, static fn (TenantContext $context): ?string => $context->workspace?->id), 'The old signed work is admissible before the restore');
-        $control = resolve(DatabaseScopeControl::class);
+        $control = app(DatabaseScopeControl::class);
         $account = Scenario::account(Scenario::BOXED);
         $old = $control->resolve($account);
         $closed = $control->drain($account->id, $control->close($account->id, $old->controlRevision));
@@ -695,10 +695,10 @@ switch ($argv[1] ?? '') {
         move($historyTask, IN_PROGRESS, workspace: null);
         $reopened = snapshot($database, $historyTask);
         $proof->same(['in_progress', null], [$reopened['task']['status'], $reopened['task']['completed_at']], 'The fresh frame can reopen the adopted historical task');
-        resolve(ScenarioClock::class)->advance(210);
+        app(ScenarioClock::class)->advance(210);
         enterTaskScope(static function () use ($proof, $historyTask): void {
-            resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData($historyTask, DONE, actor()));
-            $proof->same([], resolve(TaskLifetimeWorkflowEngine::class)->lookups, 'An authorized account-wide repeat reuses the receipt without a Workflow lookup');
+            app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData($historyTask, DONE, actor()));
+            $proof->same([], app(TaskLifetimeWorkflowEngine::class)->lookups, 'An authorized account-wide repeat reuses the receipt without a Workflow lookup');
         }, workspace: null);
         $completed = snapshot($database, $historyTask);
         assertSingleCompletion($proof, $historyTask, $completed);
@@ -716,7 +716,7 @@ switch ($argv[1] ?? '') {
         $key = enterTaskScope(static function (DataScope $scope, TenantContext $context) use ($proof, $task): string {
             $key = hash('sha256', json_encode(['completion-capture/2', $scope->accountId, $scope->accountIncarnation, $task], JSON_THROW_ON_ERROR));
             $connection = DB::connection();
-            $result = $connection->transaction(static fn () => resolve(WorkflowBinding::class)->capture(new TriggerRequest(
+            $result = $connection->transaction(static fn () => app(WorkflowBinding::class)->capture(new TriggerRequest(
                 $context, $scope, TASKS, 'tsk.task', 'task:'.$task, 'completed', 'task:'.$task, DEFINITION, VERSION,
                 JsonDocuments::capture(['taskId' => $task, 'status' => 'divergent-fixture']), $key,
             ), $connection));
@@ -773,7 +773,7 @@ switch ($argv[1] ?? '') {
         $proof->same([true, $workflow, $recurring, $bridge], array_map(InstalledVersions::isInstalled(...), [TASKS, WORKFLOW, RECURRING, BRIDGE]), 'Composer resolved the independent installed package composition');
         $proof->same($workflow, $database->getSchemaBuilder()->hasTable('sys_workflow_intents'), 'Workflow tenant schema is present exactly when installed');
         $proof->same($recurring, $database->getSchemaBuilder()->hasTable('corex_task_occurrences'), 'The RecurringTasks owner schema is present exactly when installed');
-        $task = $recurring ? TaskLifetimeSeries::materialize($proof, $database, enterTaskScope(...)) : enterTaskScope(static fn (): string => resolve(CreateTaskCommand::class)->handle(new TaskDraft(Scenario::W1, 'Independent task', actor()))->id);
+        $task = $recurring ? TaskLifetimeSeries::materialize($proof, $database, enterTaskScope(...)) : enterTaskScope(static fn (): string => app(CreateTaskCommand::class)->handle(new TaskDraft(Scenario::W1, 'Independent task', actor()))->id);
         $before = snapshot($database, $task, $workflow);
         $proof->same('open', $before['task']['status'], 'The installed Tasks owner persists Open prior to completion');
         enterTaskScope(static fn (): TaskReference => complete($task));

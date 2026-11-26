@@ -63,7 +63,7 @@ $control = Scenario::connection('control');
 
 function savedView(): SavedViewRef
 {
-    return resolve(SavedViewRepository::class)->save(Views::context(), new SaveViewInput(null, '', Views::scopes()[1], 'table', ['en' => 'Inspections'],
+    return app(SavedViewRepository::class)->save(Views::context(), new SaveViewInput(null, '', Views::scopes()[1], 'table', ['en' => 'Inspections'],
         JsonDocuments::capture(['version' => 'saved-view/1', 'filters' => ['field' => 'inspection_code', 'op' => 'eq', 'value' => 'A-42'],
             'sorts' => [], 'columns' => ['inspection_code'], 'groupBy' => null, 'presentation' => []])));
 }
@@ -120,7 +120,7 @@ if ($mode === 'native-search') {
 if ($mode === 'stale') {
     $account = Scenario::account(Scenario::ACCOUNT_B);
     $physical = Scenario::connection('b');
-    $route = resolve(DatabaseScopeControl::class);
+    $route = app(DatabaseScopeControl::class);
     $module = new ModuleId(Inventory::MODULE);
     $fields = Inventory::enter($account->id, Scenario::W2, static function (DataScope $scope) use ($proof): array {
         $inventory = array_find(iterator_to_array(app()->tagged(ModuleReferences::class)), static fn ($p) => $p->owner() === 'axiomasoft/corex-custom-fields');
@@ -136,7 +136,7 @@ if ($mode === 'stale') {
 
         return $blocks;
     });
-    [$old, $plan] = Inventory::enter($account->id, null, static fn (DataScope $s) => [$s, resolve(LifecyclePlans::class)->plan($s, $module, LifecycleAction::Disable)]);
+    [$old, $plan] = Inventory::enter($account->id, null, static fn (DataScope $s) => [$s, app(LifecyclePlans::class)->plan($s, $module, LifecycleAction::Disable)]);
     $original = $route->resolve($account);
     $closed = $route->drain($account->id, $route->close($account->id, $original->controlRevision));
     $next = Scenario::binding($original->bindingId, $original->bindingGeneration, 'b', $account->id);
@@ -147,12 +147,12 @@ if ($mode === 'stale') {
     });
     $before = $physical->table('sys_lifecycle_plans')->where('plan_id', $plan->ref->id)->sole();
     $new = Inventory::enter($account->id, null, static function (DataScope $scope) use ($proof, $plan, $old): DataScope {
-        $plans = resolve(LifecyclePlans::class);
+        $plans = app(LifecyclePlans::class);
         FixtureLifecycleOperators::grant($scope, Inventory::MODULE, 'disable');
         FixtureLifecycleOperators::grant($scope, Inventory::MODULE, 'inspect');
         deny($proof, ScopeStale::class, static fn () => $plans->apply($old, $plan->ref, $plan->digest));
         deny($proof, LifecycleBlocked::class, static fn () => $plans->apply($scope, $plan->ref, $plan->digest));
-        $proof->same(ModuleState::Enabled, resolve(ModuleLifecycle::class)->status(Inventory::MODULE)->state, 'The stale plan cannot advance Packman under fresh grants');
+        $proof->same(ModuleState::Enabled, app(ModuleLifecycle::class)->status(Inventory::MODULE)->state, 'The stale plan cannot advance Packman under fresh grants');
 
         return $scope;
     });
@@ -166,25 +166,25 @@ $workspace = in_array($mode, ['writer', 'denied-writer', 'lost-writer'], true) ?
 Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $scope) use ($mode, $proof, $observer, $control): void {
     $module = new ModuleId(Inventory::MODULE);
     $target = new ModuleRef(Inventory::MODULE);
-    $plans = resolve(LifecyclePlans::class);
-    $lifecycle = resolve(ModuleLifecycle::class);
+    $plans = app(LifecyclePlans::class);
+    $lifecycle = app(ModuleLifecycle::class);
     $before = [];
     $after = [];
     switch ($mode) {
         case 'prerequisites':
             $dependency = new ModuleRef('axiomasoft/packman-panels');
             [$installed, $proposed] = Deployment::digests($dependency->package);
-            $required = deny($proof, RuntimeException::class, static fn () => resolve(ProviderRemovalGate::class)->prepare($dependency, $installed, $proposed));
+            $required = deny($proof, RuntimeException::class, static fn () => app(ProviderRemovalGate::class)->prepare($dependency, $installed, $proposed));
             $composer = json_decode($required, true, flags: JSON_THROW_ON_ERROR);
             $proof->same($dependency->package, $composer['required'], 'Composer identifies the exact package selected for removal');
             $proof->check(isset($composer['dependents'][Inventory::PROVIDER]), 'The installed Panels provider retains the prerequisite with its version constraint');
             $lifecycle->enable(HostModule::PACKAGE);
             $refusal = deny($proof, LifecycleBlocked::class, static fn () => $lifecycle->disable(Inventory::MODULE, DisableReason::Manual));
-            $consumer = resolve(ModuleRegistry::class)->get(HostModule::PACKAGE);
+            $consumer = app(ModuleRegistry::class)->get(HostModule::PACKAGE);
             $requirement = array_find($consumer->requires, static fn (array $r) => $r['kind'] === 'module' && $r['package'] === Inventory::MODULE);
             $proof->check($requirement !== null && $lifecycle->status($consumer->composerName)->state === ModuleState::Enabled,
                 'The actual enabled runtime dependent declares the refused module in the compiled registry');
-            $proof->same(null, resolve(DatabaseScopeControl::class)->moduleClosure($scope, $target), 'The prerequisite refusal precedes opening a destructive plan');
+            $proof->same(null, app(DatabaseScopeControl::class)->moduleClosure($scope, $target), 'The prerequisite refusal precedes opening a destructive plan');
             $lifecycle->disable(HostModule::PACKAGE, DisableReason::Manual);
             $after = ['composer' => ['scope' => $scope, 'owner' => Inventory::PROVIDER, 'ref' => $dependency, 'constraints' => $composer['dependents']],
                 'runtime' => ['scope' => $scope, 'owner' => $consumer->composerName, 'ref' => $module, 'requirement' => $requirement, 'refusal' => $refusal]];
@@ -194,14 +194,14 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
         case 'writer':
         case 'lost-writer':
             if ($mode === 'lost-writer') {
-                $admission = new ObservedAdmission(resolve(ScopeAdmission::class));
+                $admission = new ObservedAdmission(app(ScopeAdmission::class));
                 app()->instance(ScopeAdmission::class, $admission);
             }
             DB::beginTransaction();
             $view = savedView();
-            $compiled = resolve(SavedViewRepository::class)->compile(Views::context(), $view->id);
+            $compiled = app(SavedViewRepository::class)->compile(Views::context(), $view->id);
             $proof->check(count($compiled->projection) === 1, 'Packman compiled the active saved view inside the real outer transaction');
-            $ids = resolve(DatabaseScopeControl::class)->outstandingReferences($scope, $target);
+            $ids = app(DatabaseScopeControl::class)->outstandingReferences($scope, $target);
             $proof->same(1, count($ids), 'One active transaction retains target membership');
             $before = ['scope' => $scope, 'view' => $view, 'ticket' => $ids[0], 'compiled' => $compiled->projection, 'backend' => Scenario::describe(DB::connection())];
 
@@ -215,7 +215,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
             }
             Scenario::barrier('before-commit', $before);
             DB::commit();
-            $proof->same([], resolve(DatabaseScopeControl::class)->outstandingReferences($scope, $target), 'Outermost commit settled the admission');
+            $proof->same([], app(DatabaseScopeControl::class)->outstandingReferences($scope, $target), 'Outermost commit settled the admission');
             $after = ['committed' => $view->id];
 
             break;
@@ -223,7 +223,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
         case 'fence':
             $writer = Scenario::barrierRead('before-commit');
             $error = deny($proof, LifecycleBlocked::class, static fn () => $lifecycle->disable(Inventory::MODULE, DisableReason::Manual));
-            $ref = new LifecyclePlanRef(resolve(DatabaseScopeControl::class)->moduleClosure($scope, $target));
+            $ref = new LifecyclePlanRef(app(DatabaseScopeControl::class)->moduleClosure($scope, $target));
             $status = $plans->inspect($scope, $ref);
             $proof->same([$writer['ticket']], array_column($status->blockers, 'resourceId'), 'The live before-fence writer blocks transition');
             $proof->same(ModuleState::Enabled, $lifecycle->status(Inventory::MODULE)->state, 'Blocked transition keeps the module enabled');
@@ -234,7 +234,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
 
         case 'denied-writer':
             $reason = deny($proof, LifecycleBlocked::class, savedView(...));
-            $proof->same([], resolve(SavedViewRepository::class)->viewsFor(Views::context(), Views::scopes()[1]), 'Second connection sees neither an uncommitted view nor a denied write');
+            $proof->same([], app(SavedViewRepository::class)->viewsFor(Views::context(), Views::scopes()[1]), 'Second connection sees neither an uncommitted view nor a denied write');
             $after = ['denial' => $reason, 'scope' => $scope];
 
             break;
@@ -252,7 +252,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
                 $proof->same(1, count($matching), 'Exact scoped blocker '.$kind.' '.$id);
             }
             Installation::record('blockers', $status);
-            $after = ['status' => $status, 'composer' => Deployment::digests(), 'runtime' => resolve(ModuleRegistry::class)->compiled()->fingerprint];
+            $after = ['status' => $status, 'composer' => Deployment::digests(), 'runtime' => app(ModuleRegistry::class)->compiled()->fingerprint];
 
             break;
 
@@ -286,7 +286,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
             $blocker = array_find($status->blockers, static fn ($b) => $b->resourceKind === 'saved-view');
             $proof->check($blocker !== null, 'Current operator can inspect the exact saved reference');
             $after = Inventory::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $workspace) use ($blocker, $status, $proof): array {
-                $repo = resolve(SavedViewRepository::class);
+                $repo = app(SavedViewRepository::class);
                 $view = $repo->viewsFor(Views::context(), Views::scopes()[1])[0];
                 $proof->same([$blocker->resourceId, get_object_vars($blocker->scope)], [$view->id, get_object_vars($workspace)], 'Remedy names the original reference and fenced scope');
                 DB::table('scenario_view_remedies')->insert(['id' => $view->id, 'revision' => $view->revision,
@@ -294,7 +294,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
                 $repo->delete(Views::context(), $view->id);
                 $proof->same([], $repo->viewsFor(Views::context(), Views::scopes()[1]), 'Packman confirms saved view removal');
                 $index = ExternalResources::catalogue();
-                $task = resolve(ExternalResources::class)->remediate($workspace);
+                $task = app(ExternalResources::class)->remediate($workspace);
                 $retired = ExternalResources::catalogue();
                 $proof->same(null, $retired, 'The PostgreSQL catalog confirms retired invalid CIC');
 
@@ -311,7 +311,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
             try {
                 $lifecycle->uninstall(Inventory::MODULE, keepData: true);
             } catch (LifecycleBlocked $failure) {
-                $ref = new LifecyclePlanRef(resolve(DatabaseScopeControl::class)->moduleClosure($scope, $target));
+                $ref = new LifecyclePlanRef(app(DatabaseScopeControl::class)->moduleClosure($scope, $target));
 
                 throw new RuntimeException(json_encode($plans->inspect($scope, $ref), JSON_THROW_ON_ERROR), previous: $failure);
             }
@@ -365,7 +365,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
                 putenv('MEILISEARCH_HOST='.$host);
             }
             $proof->same(LifecyclePhase::Blocked, $status->phase, 'Loss of backend connectivity keeps the plan resumable');
-            $proof->same($ref->id, resolve(DatabaseScopeControl::class)->moduleClosure($scope, $target), 'Network failure retains the same durable fence');
+            $proof->same($ref->id, app(DatabaseScopeControl::class)->moduleClosure($scope, $target), 'Network failure retains the same durable fence');
             $proof->same([], $status->receipts, 'The unavailable backend cannot produce an absence receipt');
             $after = ['status' => $status];
 
@@ -460,16 +460,16 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
         case 'authority-off':
             app()->offsetUnset(DeploymentOwners::class);
             [$installed, $proposed] = Deployment::digests();
-            $after = ['refusal' => deny($proof, LifecycleBlocked::class, static fn () => resolve(ProviderRemovalGate::class)->prepare(new ModuleRef(Inventory::PROVIDER), $installed, $proposed))];
+            $after = ['refusal' => deny($proof, LifecycleBlocked::class, static fn () => app(ProviderRemovalGate::class)->prepare(new ModuleRef(Inventory::PROVIDER), $installed, $proposed))];
             $proof->same(null, $control->table('scenario_deployment')->sole()->rollout, 'An absent fleet authority cannot certify an empty installation');
 
             break;
 
         case 'provider':
             [$installed, $proposed] = Deployment::digests();
-            $gate = resolve(ProviderRemovalGate::class);
+            $gate = app(ProviderRemovalGate::class);
             $provider = new ModuleRef(Inventory::PROVIDER);
-            $proof->check(! array_any(resolve(ModuleRegistry::class)->all(), static fn ($m) => $m->composerName === $provider->package), 'Provider has no module declaration');
+            $proof->check(! array_any(app(ModuleRegistry::class)->all(), static fn ($m) => $m->composerName === $provider->package), 'Provider has no module declaration');
             $control->table('scenario_unavailable')->insert(['account' => Scenario::ACCOUNT_B]);
             $why = deny($proof, RuntimeException::class, static fn () => $gate->prepare($provider, $installed, $proposed));
             $proof->same('Physical owner unavailable.', $why, 'Second owner unavailability blocks promotion');
@@ -499,7 +499,7 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
             $partial = Scenario::barrierRead('partial-lease-release');
             $prior = $partial['receipt'];
             $replacement = Inventory::enter($partial['scope']['accountId'], $partial['scope']['workspaceId'], static function (DataScope $subject) use ($prior, $control, $proof): object {
-                $views = resolve(SavedViewInventory::class);
+                $views = app(SavedViewInventory::class);
                 $current = $control->table('scenario_exclusions')->where(['namespace' => $prior['namespace'], 'target' => Inventory::PROVIDER])->sole();
                 $newLease = new OwnerLease($prior['owner'], $current->namespace, $current->plan, $current->token);
                 $proof->check($newLease->token !== $prior['token'] && $newLease->revision !== $prior['plan'], 'An independent deployment owns a fresh token in the same namespace');
@@ -523,15 +523,15 @@ Inventory::enter(Scenario::ACCOUNT_A, $workspace, static function (DataScope $sc
             $plan = $plans->plan($scope, $module, LifecycleAction::Disable);
             $status = $plans->inspect($scope, $plan->ref);
             $proof->check(in_array($lost['ticket'], array_column($status->blockers, 'resourceId'), true), 'Process death alone cannot settle the original writer ticket');
-            $views = Inventory::enter(Scenario::ACCOUNT_A, Scenario::W1, static fn () => resolve(SavedViewRepository::class)->viewsFor(Views::context(), Views::scopes()[1]));
+            $views = Inventory::enter(Scenario::ACCOUNT_A, Scenario::W1, static fn () => app(SavedViewRepository::class)->viewsFor(Views::context(), Views::scopes()[1]));
             $proof->same([], $views, 'Killed outer transaction left no durable view');
             $outcome = $observer->scalar('SELECT pg_xact_status(?::xid8)', [$lost['xid']]);
             $proof->same('aborted', $outcome, 'PostgreSQL confirms rollback of the exact killed transaction');
             $original = $lost['original'];
             $ticket = new AdmissionTicket($original['id'], new DataScope(...$original['scope']), $original['controlRevision'],
                 new OperationKey(...$original['key']), AdmissionKind::from($original['kind']));
-            resolve(ScopeAdmission::class)->settle($ticket, new AttemptEvidence('rolled-back', 'postgres:'.$lost['backend']['database'].'/xid:'.$lost['xid']));
-            $proof->same([], resolve(DatabaseScopeControl::class)->outstandingReferences($scope, $target), 'Verified rollback settles the original ticket');
+            app(ScopeAdmission::class)->settle($ticket, new AttemptEvidence('rolled-back', 'postgres:'.$lost['backend']['database'].'/xid:'.$lost['xid']));
+            $proof->same([], app(DatabaseScopeControl::class)->outstandingReferences($scope, $target), 'Verified rollback settles the original ticket');
             $after = ['lost' => $lost, 'status' => $status, 'postgres_outcome' => $outcome];
 
             break;

@@ -16,8 +16,8 @@ final class RootSweepEffect implements DueWakeupHandler
     {
         $connection = DB::connection();
         $scope = $delivery->request->scope;
-        resolve(CurrentWorkScope::class)->assert($scope, $connection);
-        $principal = resolve(WorkPrincipalAuthority::class)->current($delivery->context);
+        app(CurrentWorkScope::class)->assert($scope, $connection);
+        $principal = app(WorkPrincipalAuthority::class)->current($delivery->context);
 
         $connection->table('scenario_effects')->insert([
             'reference' => $delivery->request->requestKey,

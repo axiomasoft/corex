@@ -49,11 +49,11 @@ switch ($mode) {
         $fact = Runtime::scoped(static function (DataScope $scope): string {
             $envelope = new MessageEnvelope(
                 messageId: (string) Str::uuid7(), source: 'fixture', name: 'fixture.recordchanged', contractVersion: 1,
-                occurredAt: resolve(ScenarioClock::class)->now(), scope: $scope, payload: new MessagePayload(['record' => Scenario::RECORD]),
+                occurredAt: app(ScenarioClock::class)->now(), scope: $scope, payload: new MessagePayload(['record' => Scenario::RECORD]),
                 piiClass: PiiClass::None, subject: new RecordRef('scenario.equipment', Scenario::RECORD), correlationId: 'installed-transport-fact',
             );
             $connection = DB::connection();
-            $connection->transaction(static fn () => resolve(Outbox::class)->append($connection, $envelope));
+            $connection->transaction(static fn () => app(Outbox::class)->append($connection, $envelope));
 
             return $envelope->messageId;
         }, null);
@@ -95,7 +95,7 @@ switch ($mode) {
         $proof->same([200, 200, 200], [$listed['status'], $shown['status'], $attempts['status']], 'Actual native list, show and attempts route to owner rows.');
         $proof->same($id, $shown['body']['data']['id'], 'Known ref lookup matches actual delivered identity.');
         $proof->same(1, count($attempts['body']['data']['items']), 'Actual attempt is projected.');
-        $now = resolve(ScenarioClock::class)->now();
+        $now = app(ScenarioClock::class)->now();
         $rangeBody = [
             'subscription_id' => $subscription['id'], 'from' => $now->modify('-1 hour')->format(DATE_ATOM),
             'to' => $now->modify('+1 second')->format(DATE_ATOM), 'max' => 1, 'audit_reason' => 'Installed bounded replay',

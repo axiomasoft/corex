@@ -37,7 +37,7 @@ $proof = new Scenario;
 $database = Scenario::connection('a');
 $mode = $argv[1] ?? '';
 $variant = getenv('COREX_SCENARIO_VARIANT');
-$trace = resolve(SearchScenarioTrace::class);
+$trace = app(SearchScenarioTrace::class);
 
 function changeTitle(Scenario $proof, string $id, string $title): array
 {
@@ -68,14 +68,14 @@ function laneIdentity(object $lane): array
 
 function targetWire(IndexTarget $target): array
 {
-    return ['scope' => resolve(DataScopeCodec::class)->encode($target->scope), 'generation' => $target->generation,
+    return ['scope' => app(DataScopeCodec::class)->encode($target->scope), 'generation' => $target->generation,
         'backend' => $target->backend, 'cluster' => $target->cluster, 'uid' => $target->uid, 'mapping' => $target->mappingDigest,
         'allocation' => $target->allocationId];
 }
 
 function targetFrom(array $target): IndexTarget
 {
-    return new IndexTarget(resolve(DataScopeCodec::class)->decode($target['scope']), Owner::entity(), $target['backend'], $target['cluster'],
+    return new IndexTarget(app(DataScopeCodec::class)->decode($target['scope']), Owner::entity(), $target['backend'], $target['cluster'],
         $target['generation'], $target['uid'], $target['mapping'], $target['allocation']);
 }
 
@@ -118,10 +118,10 @@ function settleCrashedPublication(Scenario $proof, Connection $database, Rebuild
     $outcome = $committed ? 'committed' : 'rolled-back';
 
     if ($row->state === 'outstanding') {
-        $scope = resolve(DataScopeCodec::class)->decode(json_decode($row->scope, true, flags: JSON_THROW_ON_ERROR));
+        $scope = app(DataScopeCodec::class)->decode(json_decode($row->scope, true, flags: JSON_THROW_ON_ERROR));
         $key = new OperationKey($row->operation_id, (int) $row->attempt, $row->effect_key,
             $row->deadline === null ? null : new DateTimeImmutable($row->deadline));
-        resolve(DatabaseScopeControl::class)->settle(new AdmissionTicket($row->ticket_id, $scope, (int) $row->control_revision, $key, AdmissionKind::LocalWrite),
+        app(DatabaseScopeControl::class)->settle(new AdmissionTicket($row->ticket_id, $scope, (int) $row->control_revision, $key, AdmissionKind::LocalWrite),
             new AttemptEvidence($outcome, 'search-rebuild/'.$ref->id.'/'.$outcome.'/'.$session['session']));
     }
     $proof->same($outcome, Scenario::connection('control')->table('corex_scope_tickets')->where('ticket_id', $row->ticket_id)->value('state'), 'Independent admission records the proven transaction outcome');
@@ -137,7 +137,7 @@ if ($mode === 'produce') {
         $active = Rebuild::bootstrap($scope, 'initial-active');
         $target = Rebuild::target($scope, $active->destination);
         $proof->same('before-initial-scan', Meili::value(Meili::document($target, Owner::FIRST), 'title'), 'The original immutable index is ready in actual Meilisearch');
-        $page = resolve(Search::class)->query($scope, new SearchQuery(Owner::entity(), fields: ['title'], limit: 1));
+        $page = app(Search::class)->query($scope, new SearchQuery(Owner::entity(), fields: ['title'], limit: 1));
         $proof->same(Owner::FIRST, $page->hits[0]->record->id, 'The original authoritative index supplies the public query');
         $proof->check(is_string($page->cursor) && $page->cursor !== '', 'The old generation issues a real opaque continuation');
 
@@ -210,7 +210,7 @@ switch ($mode) {
     case 'set-barrier':
         $removed = tombstone($proof, Owner::SECOND);
         $prior = changeTitle($proof, Owner::FIRST, 'before-h');
-        $status = Owner::within(static fn (DataScope $scope) => resolve(RebuildWorker::class)->barrier($scope, $ref), service: true);
+        $status = Owner::within(static fn (DataScope $scope) => app(RebuildWorker::class)->barrier($scope, $ref), service: true);
         $proof->same('barrier', $status->state, 'The installed worker commits the durable publish barrier');
         $proof->same(5, $status->barrier, 'H is the actual last allocated sequence including before-H writes');
         Scenario::barrier('generation-h', ['h' => $status->barrier, 'tombstone' => $removed['id'], 'latest_before' => $prior['id']]);
@@ -240,7 +240,7 @@ switch ($mode) {
             $proof->same(false, Rebuild::step($scope, $new->generation), 'The destination cannot advance beyond the unresolved H task');
 
             try {
-                resolve(RebuildWorker::class)->publish($scope, $ref);
+                app(RebuildWorker::class)->publish($scope, $ref);
             } catch (LogicException $blocked) {
                 $proof->same('Search publication barrier is not ready.', $blocked->getMessage(), 'Publication refuses an unconfirmed destination watermark');
 
@@ -297,7 +297,7 @@ switch ($mode) {
                     $checkpoint();
                 }
             });
-            resolve(RebuildWorker::class)->publish($scope, $ref);
+            app(RebuildWorker::class)->publish($scope, $ref);
 
             throw new RuntimeException('The publisher must be killed at the designated real SQL checkpoint.');
         }, service: true);
@@ -349,7 +349,7 @@ switch ($mode) {
         $proof->same([], Owner::blockingTickets(), 'All crash and late provider attempts are terminal before querying an obsolete cursor');
 
         try {
-            Owner::within(static fn (DataScope $scope) => resolve(Search::class)->query($scope,
+            Owner::within(static fn (DataScope $scope) => app(Search::class)->query($scope,
                 new SearchQuery(Owner::entity(), fields: ['title'], limit: 1, cursor: $run['old_cursor'])), service: true);
 
             throw new RuntimeException('The previous generation continuation unexpectedly survived publication.');
@@ -364,7 +364,7 @@ switch ($mode) {
         break;
 
     case 'restore':
-        $authority = resolve(DatabaseScopeControl::class);
+        $authority = app(DatabaseScopeControl::class);
         $account = Scenario::account(Scenario::BOXED);
         $original = $authority->resolve($account);
         $closing = $authority->close($account->id, $original->controlRevision);
@@ -388,7 +388,7 @@ switch ($mode) {
 
         $fresh = Owner::within(static function (DataScope $scope) use ($proof, $trace, $old, $new): array {
             try {
-                resolve(Search::class)->query($scope, new SearchQuery(Owner::entity(), fields: ['title']));
+                app(Search::class)->query($scope, new SearchQuery(Owner::entity(), fields: ['title']));
 
                 throw new RuntimeException('The published pointer from the restored backup escaped the epoch fence.');
             } catch (IndexNotReady) {
@@ -398,7 +398,7 @@ switch ($mode) {
             $published = Rebuild::bootstrap($scope, 'fresh-epoch');
             $target = Rebuild::target($scope, $published->destination);
             $proof->check(! in_array($target->uid, [$old->uid, $new->uid], true), 'A verified new epoch allocates a different immutable UID');
-            $page = resolve(Search::class)->query($scope, new SearchQuery(Owner::entity(), fields: ['title'], limit: 1));
+            $page = app(Search::class)->query($scope, new SearchQuery(Owner::entity(), fields: ['title'], limit: 1));
             $proof->same(['title' => 'before-scan'], $page->hits[0]->projection->values, 'The new public Search entry point reads the restored owner through the fresh generation');
             $proof->same([$target->uid], array_column($trace->backend, 'target'), 'Only the fresh index UID receives the live query');
 
@@ -411,7 +411,7 @@ switch ($mode) {
     case 'cancel':
         $result = Owner::within(static function (DataScope $scope) use ($proof, $database, $ref, $old, $new): array {
             Rebuild::scan($scope, Rebuild::inspect($scope, $ref->id));
-            $barrier = resolve(RebuildWorker::class)->barrier($scope, $ref);
+            $barrier = app(RebuildWorker::class)->barrier($scope, $ref);
             $proof->same(1, $barrier->barrier, 'Cancellation is tested after electing a real frozen H');
             $initial = Rebuild::generation($database, $old->generation);
             $proof->same(0, (int) $initial->confirmed_seq, 'The original provider watermark is independently visible');
@@ -422,7 +422,7 @@ switch ($mode) {
             $proof->same(false, Rebuild::step($scope, $old->generation), 'The frozen original writer cannot dispatch dirty work');
             $snapshot = Rebuild::lane($database);
             $proof->same(2, (int) $snapshot->last_allocated_seq, 'H+1 is durable before cancellation');
-            $cancelled = resolve(SearchRebuilds::class)->cancel($scope, $ref);
+            $cancelled = app(SearchRebuilds::class)->cancel($scope, $ref);
             $lane = Rebuild::lane($database);
             $proof->same('cancelled', $cancelled->state, 'The public cancel call records the terminal state');
             $proof->same($old->generation, (int) $lane->active_generation, 'Cancellation preserves the authoritative previous generation');

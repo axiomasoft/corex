@@ -73,14 +73,14 @@ final class Effects implements ExportSchemaWitness, ExportSource
 
     public static function scope(): DataScope
     {
-        return resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
+        return app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
     }
 
     public static function media(): MediaContext
     {
         $scope = self::scope();
 
-        return new MediaContext(resolve(TenantContextResolver::class)->current(), $scope->principalKind, $scope->principalId);
+        return new MediaContext(app(TenantContextResolver::class)->current(), $scope->principalKind, $scope->principalId);
     }
 
     public static function identity(DataScope $scope): string
@@ -103,7 +103,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
             }
         }
         $sets = ScenarioSetup::install('owner-effects', true);
-        $sets['budget'] = resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget']);
+        $sets['budget'] = app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget']);
         $a = Scenario::connection('a');
         $w2 = Scenario::workspace(Scenario::W2);
         $a->table('wsp_workspaces')->insert(['id' => $w2->id, 'slug' => $w2->slug, 'name' => $w2->slug, 'type' => $w2->type, 'path' => $w2->path]);
@@ -119,7 +119,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
                 foreach ([self::MEDIA, self::MODULE] as $module) {
                     FixtureLifecycleOperators::grant($scope, $module, 'enable');
                     FixtureLifecycleOperators::grant($scope, $module, 'inspect');
-                    resolve(ModuleLifecycle::class)->enable($module);
+                    app(ModuleLifecycle::class)->enable($module);
                 }
                 DB::unprepared(<<<'SQL'
                     CREATE TABLE scenario_vaulter_journal(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, owner text NOT NULL, reference text NOT NULL, blob text NOT NULL, action text NOT NULL, scope jsonb NOT NULL);
@@ -132,7 +132,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
         }
         foreach ([[Scenario::ACCOUNT_A, Scenario::W1], [Scenario::ACCOUNT_A, Scenario::W2], [Scenario::ACCOUNT_B, Scenario::W2]] as [$account, $workspace]) {
             self::enter($account, $workspace, static function (DataScope $scope): void {
-                resolve(DirectGrants::class)->grant(auth()->user(), self::ENTITY, 'read');
+                app(DirectGrants::class)->grant(auth()->user(), self::ENTITY, 'read');
                 MediaInventory::recordGrant($scope);
                 foreach ([[self::ENTITY, Scenario::RECORD, 'read', 'record'], [self::ENTITY, Scenario::RECORD, 'write', 'record'],
                     [self::ENTITY, Scenario::RECORD, 'export', 'name'], ['import-export.transfer', self::TRANSFER, 'read', 'record'],
@@ -156,7 +156,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
         ob_start();
         imagepng($image);
         $bytes = ob_get_clean();
-        $file = resolve(MediaLibrary::class)->store(self::media(), new UploadInput('owner-effects-source', new UploadFile($bytes, 'source.png', true, strlen($bytes), 'image/png'), 'attachment'));
+        $file = app(MediaLibrary::class)->store(self::media(), new UploadInput('owner-effects-source', new UploadFile($bytes, 'source.png', true, strlen($bytes), 'image/png'), 'attachment'));
         foreach (['read', 'attach', 'detach', 'delete'] as $ability) {
             DB::table('scenario_file_grants')->insertOrIgnore(['scope' => self::identity($scope), 'file' => $file->id, 'ability' => $ability]);
         }
@@ -170,7 +170,7 @@ final class Effects implements ExportSchemaWitness, ExportSource
             Charge::class, JsonDocuments::capture([]), JsonDocuments::capture([]), [], 200, OperationMode::Command,
             idempotency: IdempotencyRequirement::Required, contractHash: hash('sha256', 'fixture.media.charge/1'),
             effectMode: 'tenant_transactional', cost: ['base' => 5, 'side_effect' => 0]);
-        $context = ResolvedContexts::make(resolve(TenantContextResolver::class)->current(), auth()->user(), new InvocationMetadata('owner-effects', 'v2', $op->id, 'POST'));
+        $context = ResolvedContexts::make(app(TenantContextResolver::class)->current(), auth()->user(), new InvocationMetadata('owner-effects', 'v2', $op->id, 'POST'));
 
         return new OperationInvocation($op, $context, JsonDocuments::capture([]), [], 'owner-effects-charge');
     }
@@ -204,17 +204,17 @@ final class Effects implements ExportSchemaWitness, ExportSource
     public static function knownReferences(DataScope $scope): array
     {
         $stamp = ['owners' => [self::MODULE]];
-        $operation = resolve(BulkOperationStore::class)->submit(new BulkOperationDefinition(self::BULK, self::BULK, 'fixture.media.export', 'v2',
-            hash('sha256', 'fixture.media.export/1'), resolve(DataScopeCodec::class)->encode($scope), $scope->principalId,
+        $operation = app(BulkOperationStore::class)->submit(new BulkOperationDefinition(self::BULK, self::BULK, 'fixture.media.export', 'v2',
+            hash('sha256', 'fixture.media.export/1'), app(DataScopeCodec::class)->encode($scope), $scope->principalId,
             'fixture', JsonDocuments::capture($stamp), JsonDocuments::capture(['kind' => 'export', 'record' => Scenario::RECORD])));
         $ref = new TransferRef(self::TRANSFER);
         $session = self::exportSession($scope, $ref, self::MANIFEST);
         $sealed = $session->runner->seal($scope, $ref->id, $session->manifest, $session->cursor);
-        resolve(ExportPublications::class)->publish($scope, $ref, $sealed);
+        app(ExportPublications::class)->publish($scope, $ref, $sealed);
         $bytes = $session->runner->emit($scope, $sealed, new ExportCursor('0', '0', $sealed->partsHash));
 
         return ['operation' => $operation->definition->id, 'transfer' => $ref->id, 'sealed' => $sealed, 'sha256' => hash('sha256', $bytes),
-            'result' => resolve(TransferResultReader::class)->result($scope, $ref)];
+            'result' => app(TransferResultReader::class)->result($scope, $ref)];
     }
 
     public static function exportSession(DataScope $scope, TransferRef $transfer, string $manifest): ExportSession
@@ -222,6 +222,6 @@ final class Effects implements ExportSchemaWitness, ExportSource
         $draft = new ExportManifest($manifest, 'coherent', self::projectionHash(), $scope->restoreEpoch,
             JsonDocuments::capture(['owners' => [self::MODULE]]), str_repeat('0', 64));
 
-        return resolve(ImportExportFactory::class)->openExport($scope, $transfer, new self, $draft, new ExportCursor('0', '0', $draft->partsHash));
+        return app(ImportExportFactory::class)->openExport($scope, $transfer, new self, $draft, new ExportCursor('0', '0', $draft->partsHash));
     }
 }

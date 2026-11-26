@@ -27,7 +27,7 @@ function setupTransport(Scenario $proof, Connection $a, bool $cloud): array
 {
     if ($cloud) {
         $migrations = ScenarioSetup::install('transport', true);
-        $migrations['budget'] = resolve(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
+        $migrations['budget'] = app(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
         $workspace = Scenario::workspace(Scenario::W2);
         $a->table('wsp_workspaces')->insert(['id' => $workspace->id, 'slug' => $workspace->slug, 'name' => $workspace->slug, 'type' => $workspace->type, 'path' => $workspace->path]);
         $a->table('wsp_workspace_members')->insert(['id' => (string) Str::uuid7(), 'workspace_id' => $workspace->id, 'user_id' => Scenario::USER_A, 'status' => 'active']);
@@ -70,8 +70,8 @@ function setupTransport(Scenario $proof, Connection $a, bool $cloud): array
     });
     $host = $cloud ? Scenario::ACCOUNT_A : Scenario::BOXED;
     $active = ScenarioQueue::inScope($host, null, Scenario::USER_A, static function () use ($cloud, $proof): array {
-        $context = resolve(TenantContextResolver::class)->current();
-        $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($context);
+        $context = app(TenantContextResolver::class)->current();
+        $scope = app(DataScopeFactory::class)->forCurrentPrincipal($context);
         $owners = [NotesManifest::OWNER];
 
         if (! $cloud) {
@@ -80,8 +80,8 @@ function setupTransport(Scenario $proof, Connection $a, bool $cloud): array
         foreach ($owners as $owner) {
             FixtureLifecycleOperators::grant($scope, $owner, 'inspect');
             FixtureLifecycleOperators::grant($scope, $owner, 'enable');
-            resolve(ModuleLifecycle::class)->enable($owner, cascade: true);
-            $proof->same(true, resolve(ModuleRegistry::class)->isActive($owner, $context), 'Compiled installed owner activated.');
+            app(ModuleLifecycle::class)->enable($owner, cascade: true);
+            $proof->same(true, app(ModuleRegistry::class)->isActive($owner, $context), 'Compiled installed owner activated.');
         }
 
         return ['owners' => $owners, 'scope' => $scope];

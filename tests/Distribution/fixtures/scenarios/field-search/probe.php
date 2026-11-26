@@ -39,12 +39,12 @@ require getcwd().'/vendor/autoload.php';
 Scenario::boot();
 $proof = new Scenario;
 $database = Scenario::connection('a');
-$trace = resolve(SearchScenarioTrace::class);
+$trace = app(SearchScenarioTrace::class);
 $mode = $argv[1] ?? '';
 
 function searchEquipment(DataScope $scope, array $options = []): SearchPage
 {
-    return resolve(Search::class)->query($scope, new SearchQuery(Owner::entity(), ...$options));
+    return app(Search::class)->query($scope, new SearchQuery(Owner::entity(), ...$options));
 }
 
 function stores(Connection $db): array
@@ -59,7 +59,7 @@ function stores(Connection $db): array
 
 function assetValue(DataScope $scope, string $field): mixed
 {
-    $value = resolve(FieldValues::class)->read($scope, Owner::record(), new FieldSelection([$field]))->values[$field];
+    $value = app(FieldValues::class)->read($scope, Owner::record(), new FieldSelection([$field]))->values[$field];
 
     return JsonDocuments::decode($value->document);
 }
@@ -86,7 +86,7 @@ function delivery(Scenario $proof, string $id, string $expected): array
 {
     $control = Scenario::connection('control');
     $prior = $control->table('scenario_field_search_broker')->where('id', $id)->sole();
-    $receipt = resolve(FieldSearchSubscriber::class)->consume($id);
+    $receipt = app(FieldSearchSubscriber::class)->consume($id);
     $proof->same($expected, $receipt->value, 'Normal bridge consumes the exact durable broker wire');
     $after = $control->table('scenario_field_search_broker')->where('id', $id)->sole();
     $proof->same($prior->digest, $after->digest, 'Replay reads the same immutable broker bytes');
@@ -132,7 +132,7 @@ switch ($mode) {
         $proof->same('baseline-pump', Meili::value(Meili::document($target, Owner::ASSET), Owner::SERIAL), 'The enabled bridge indexed the real stored stable custom field');
         $private = Locale::shape(Locale::PRIVATE_ID, 'en');
         $physical = Owner::within(static function (DataScope $scope) use ($private): string {
-            $fields = resolve(SearchProjectionContributor::class)->describe(new ProjectionContext($scope, Owner::entity()))->fields;
+            $fields = app(SearchProjectionContributor::class)->describe(new ProjectionContext($scope, Owner::entity()))->fields;
             $descriptor = array_find($fields, static fn ($field): bool => $field->id === $private);
 
             return $descriptor?->physicalId ?? throw new RuntimeException('The real locale contributor has no physical key for the hidden shape.');
@@ -240,7 +240,7 @@ switch ($mode) {
             $localizedHit = searchEquipment($scope, ['text' => 'Насос', 'searchFields' => [$ru], 'fields' => [$ru]])->hits[0];
             $proof->same(Owner::ASSET, $localizedHit->record->id, 'Actual Meilisearch resolves permitted Cyrillic text through the physical key');
             $proof->same([$ru => 'Насос'], $localizedHit->projection->values, 'The public result preserves the semantic locale field ID');
-            $policy = resolve(FieldUsePolicy::class);
+            $policy = app(FieldUsePolicy::class);
             foreach ([FieldUse::Read, FieldUse::Search, FieldUse::Filter, FieldUse::Sort, FieldUse::Aggregate] as $use) {
                 $proof->same(FieldUsePlanKind::Unconditional, $policy->plan($scope, Owner::entity(), new FieldUseRequest(new FieldSelection([$hidden]), $use))->kind,
                     'The role allows the semantic shape alone');
@@ -267,7 +267,7 @@ switch ($mode) {
         $old = Scenario::barrierRead('equipment-ready');
         $operation = Owner::fieldChange(true);
         $head = Owner::within(static function (DataScope $scope) use ($proof, $trace, $old): array {
-            $schema = resolve(FieldCatalogue::class)->snapshot($scope, Owner::entity());
+            $schema = app(FieldCatalogue::class)->snapshot($scope, Owner::entity());
             $proof->same('int', $schema->field('priority')->type->value, 'The effective Fields head now declares the actual new type');
             $proof->same(17, assetValue($scope, Owner::PRIORITY), 'The actual owner converter publishes an integer value');
             refuses(IndexNotReady::class, static fn () => searchEquipment($scope, ['fields' => [Owner::PRIORITY]]), $proof, $trace, 'The published old mapping is rejected before a ready replacement');
@@ -329,8 +329,8 @@ switch ($mode) {
             $hit = searchEquipment($scope, ['text' => 'zeolite', 'searchFields' => [Owner::SERIAL], 'fields' => [Owner::PRIORITY]])->hits[0];
             $proof->same(Owner::ASSET, $hit->record->id, 'The new ready generation finds the same opaque equipment key');
             $proof->same([Owner::PRIORITY => 17], $hit->projection->values, 'The ready mapping hydrates the stable ID with its current type');
-            $schema = resolve(FieldCatalogue::class)->snapshot($scope, Owner::entity());
-            $filter = resolve(FieldFilter::class)->compile($scope, $schema, new FilterNode($schema->field('priority')->id, FieldOperator::Eq, FieldInput::from(17)));
+            $schema = app(FieldCatalogue::class)->snapshot($scope, Owner::entity());
+            $filter = app(FieldFilter::class)->compile($scope, $schema, new FilterNode($schema->field('priority')->id, FieldOperator::Eq, FieldInput::from(17)));
             $proof->same(17, JsonDocuments::decode($filter->operand), 'The current owner codec compiles the new typed predicate');
             refuses(GenerationChanged::class, static fn () => searchEquipment($scope, ['fields' => ['title'], 'limit' => 1, 'cursor' => $before['cursor']]), $proof, $trace, 'The old cursor cannot cross the immutable generation boundary');
         });

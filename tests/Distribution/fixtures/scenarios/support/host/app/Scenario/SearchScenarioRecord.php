@@ -23,7 +23,7 @@ final class SearchScenarioRecord extends Model
     protected static function booted(): void
     {
         self::addGlobalScope('scenarioOwnerWorkspace', static function (Builder $query): void {
-            $workspace = resolve(TenantContextResolver::class)->current()->workspace?->id;
+            $workspace = app(TenantContextResolver::class)->current()->workspace?->id;
             $query->where('scenario_search_records.workspace_id', $workspace);
         });
     }

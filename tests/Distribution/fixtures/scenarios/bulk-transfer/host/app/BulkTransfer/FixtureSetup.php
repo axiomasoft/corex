@@ -44,7 +44,7 @@ final class FixtureSetup
     public static function install(string $case = 'bulk-transfer'): void
     {
         ScenarioSetup::install($case, false);
-        resolve(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
+        app(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
         $tenant = Scenario::connection('a');
         $schema = $tenant->getSchemaBuilder();
 

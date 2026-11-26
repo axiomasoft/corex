@@ -93,17 +93,17 @@ final class Deployment implements DeploymentOwners
         }
 
         return Inventory::enter($owner, null, function (DataScope $scope) use ($provider, $revision, $owner): string {
-            $control = resolve(DatabaseScopeControl::class);
+            $control = app(DatabaseScopeControl::class);
             $control->fenceModule($scope, $provider, $revision, null);
 
             if ($control->outstandingReferences($scope, $provider) !== []) {
                 throw new RuntimeException('Admitted writers still hold the provider.');
             }
-            $inventory = resolve(Inventory::class);
+            $inventory = app(Inventory::class);
             $table = Scenario::connection('control')->table('scenario_owner_certificates');
             $old = $table->where(['rollout' => $revision, 'account' => $owner])->first();
             $original = $old === null ? [] : json_decode($old->proof, true, flags: JSON_THROW_ON_ERROR);
-            $proof = ['composition' => self::digests(), 'catalogue' => resolve(ModuleRegistry::class)->compiled()->fingerprint,
+            $proof = ['composition' => self::digests(), 'catalogue' => app(ModuleRegistry::class)->compiled()->fingerprint,
                 'revision' => $inventory->revision($scope, $provider), 'scope' => $scope, 'rollout' => $revision];
             foreach ($inventory->scopes($scope, $provider) as $subject) {
                 $proof['pages'][] = $inventory->run($subject, static function () use ($provider, $subject, $revision, $original, &$proof): array {

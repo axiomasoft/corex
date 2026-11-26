@@ -87,10 +87,10 @@ if ($mode === 'setup') {
     $proof->check($budget->getSchemaBuilder()->hasTable('sys_api_budget_reservations'), 'Dedicated owner has the budget reservations');
     $file = Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $scope, MediaContext $context) use ($proof): string {
         $file = Effects::upload();
-        $links = resolve(MediaAttachments::class);
+        $links = app(MediaAttachments::class);
         $links->attach($context, new AttachmentInput($file, Effects::ENTITY, Scenario::RECORD, 'evidence'));
         $proof->same([$file], array_column($links->usages($context, $file), 'fileId'), 'Verified principal attached the real stored file');
-        $proof->same(['corex.media.file' => 1], resolve(BlobPins::class)->countByOwner(), 'The original exact reference is pinned by Vaulter');
+        $proof->same(['corex.media.file' => 1], app(BlobPins::class)->countByOwner(), 'The original exact reference is pinned by Vaulter');
 
         return $file;
     });
@@ -103,10 +103,10 @@ if ($mode === 'retention') {
     $db = Scenario::connection('b');
     $prior = Effects::enter(Scenario::ACCOUNT_B, Scenario::W2, static function (DataScope $scope, MediaContext $context) use ($proof, $db): array {
         $id = Effects::upload();
-        $files = resolve(MediaLibrary::class);
+        $files = app(MediaLibrary::class);
         $ref = $files->requestConversion($context, $id, 'thumbnail');
         $proof->same(0, Artisan::call('corex:media:sweep', ['--limit' => 5]), 'Poller reconciles the B-site conversion');
-        $conversion = resolve(ConversionOperations::class)->inspect($context, $ref);
+        $conversion = app(ConversionOperations::class)->inspect($context, $ref);
         $proof->same(ConversionState::Ready, $conversion->state, 'Site B owns a confirmed conversion before retirement');
         $proof->check($files->delete($context, $id)->purgePending, 'The public file API durably schedules pin releases');
         $proof->same(0, Artisan::call('corex:media:sweep', ['--limit' => 5]), 'The file owner confirms its exact releases');
@@ -121,8 +121,8 @@ if ($mode === 'retention') {
         foreach (['enable', 'inspect', 'disable', 'purge', 'repair'] as $ability) {
             FixtureLifecycleOperators::grant($scope, Effects::MEDIA, $ability);
         }
-        $lifecycle = resolve(ModuleLifecycle::class);
-        $plans = resolve(LifecyclePlans::class);
+        $lifecycle = app(ModuleLifecycle::class);
+        $plans = app(LifecyclePlans::class);
         $module = new ModuleId(Effects::MEDIA);
         $disable = $plans->plan($scope, $module, LifecycleAction::Disable);
         $inspection = $plans->inspect($scope, $disable->ref);
@@ -161,9 +161,9 @@ if ($mode === 'isolation') {
         $known = Effects::knownReferences($scope);
         $proof->same(Effects::MANIFEST, $known['result']['manifestId'], 'A published result is readable before the foreign reference test');
         $proof->same($known['result']['parts'][0]['sha256'], $known['sha256'], 'The authorized owner emitted the known sealed result bytes');
-        $proof->check($known['result']['parts'] !== [] && resolve(BulkOperationStore::class)->find($scope, Effects::BULK) !== null, 'Both known references have actual owner records');
+        $proof->check($known['result']['parts'] !== [] && app(BulkOperationStore::class)->find($scope, Effects::BULK) !== null, 'Both known references have actual owner records');
         $input = new AttachmentInput($ref->fileId, Effects::ENTITY, Scenario::RECORD, 'restricted');
-        $links = resolve(MediaAttachments::class);
+        $links = app(MediaAttachments::class);
         $record = DB::table('scenario_field_grants')->where(['workspace_id' => $scope->workspaceId, 'principal_id' => $scope->principalId,
             'entity' => Effects::ENTITY, 'record_id' => Scenario::RECORD, 'field_id' => 'record']);
         $writeGrant = (array) (clone $record)->where('field_use', 'write')->sole();
@@ -174,18 +174,18 @@ if ($mode === 'isolation') {
         (clone $record)->where('field_use', 'read')->delete();
         $proof->same([], $links->usages($context, $ref->fileId), 'Record read revocation removes the usage with file read still granted');
         DB::table('scenario_field_grants')->insert($readGrant);
-        $files = resolve(MediaLibrary::class);
+        $files = app(MediaLibrary::class);
         $read = $files->readConversion($context, $ref->fileId, $ref->profile);
         $fileGrant = DB::table('scenario_file_grants')->where(['scope' => Effects::identity($scope), 'file' => $ref->fileId]);
         (clone $fileGrant)->where('ability', 'attach')->delete();
         refused($proof, [MediaAccessDenied::class], static fn () => $links->attach($context, $input));
         (clone $fileGrant)->where('ability', 'read')->delete();
         refused($proof, [MediaAccessDenied::class], static fn () => ($read->openStream)());
-        refused($proof, [MediaAccessDenied::class], static fn () => resolve(ConversionOperations::class)->inspect($context, $ref));
+        refused($proof, [MediaAccessDenied::class], static fn () => app(ConversionOperations::class)->inspect($context, $ref));
         DB::table('scenario_file_grants')->insert(['scope' => Effects::identity($scope), 'file' => $ref->fileId, 'ability' => 'read']);
-        resolve(DirectGrants::class)->revoke(auth()->user(), Effects::ENTITY, 'read');
+        app(DirectGrants::class)->revoke(auth()->user(), Effects::ENTITY, 'read');
         refused($proof, [MediaAccessDenied::class], static fn () => $files->read($context, $ref->fileId));
-        resolve(DirectGrants::class)->grant(auth()->user(), Effects::ENTITY, 'read');
+        app(DirectGrants::class)->grant(auth()->user(), Effects::ENTITY, 'read');
 
         return $known;
     });
@@ -193,22 +193,22 @@ if ($mode === 'isolation') {
     foreach ([[Scenario::ACCOUNT_A, Scenario::W2], [Scenario::ACCOUNT_B, Scenario::W2]] as [$account, $workspace]) {
         $results[] = Effects::enter($account, $workspace, static function (DataScope $scope, MediaContext $context) use ($proof, $ref, $known): array {
             $own = Effects::upload();
-            $proof->check($own !== $ref->fileId && resolve(MediaLibrary::class)->read($context, $own)->sizeBytes > 0, 'The foreign frame can read its own immutable file');
+            $proof->check($own !== $ref->fileId && app(MediaLibrary::class)->read($context, $own)->sizeBytes > 0, 'The foreign frame can read its own immutable file');
             $types = [MediaAccessDenied::class, MediaOperationConflict::class];
-            $links = resolve(MediaAttachments::class);
+            $links = app(MediaAttachments::class);
             $input = new AttachmentInput($ref->fileId, Effects::ENTITY, Scenario::RECORD, 'evidence');
             $session = Effects::exportSession($scope, new TransferRef(Effects::LOCAL_TRANSFER), Effects::LOCAL_MANIFEST);
             $denials = [
                 refused($proof, $types, static fn () => $links->attach($context, $input)),
                 refused($proof, $types, static fn () => $links->detach($context, $input)),
                 refused($proof, $types, static fn () => $links->usages($context, $ref->fileId)),
-                refused($proof, $types, static fn () => resolve(ConversionOperations::class)->inspect($context, $ref)),
-                refused($proof, $types, static fn () => resolve(MediaLibrary::class)->readConversion($context, $ref->fileId, $ref->profile)),
-                refused($proof, [ImportUnavailable::class, SessionUnavailable::class], static fn () => resolve(TransferResultReader::class)->result($scope, new TransferRef($known['transfer']))),
+                refused($proof, $types, static fn () => app(ConversionOperations::class)->inspect($context, $ref)),
+                refused($proof, $types, static fn () => app(MediaLibrary::class)->readConversion($context, $ref->fileId, $ref->profile)),
+                refused($proof, [ImportUnavailable::class, SessionUnavailable::class], static fn () => app(TransferResultReader::class)->result($scope, new TransferRef($known['transfer']))),
                 refused($proof, [ExportUnavailable::class, SessionUnavailable::class], static fn () => $session->runner->emit($scope, $known['sealed'],
                     new ExportCursor('0', '0', $known['sealed']->partsHash))),
             ];
-            $proof->same(null, resolve(BulkOperationStore::class)->find($scope, $known['operation']), 'Foreign operation lookup discloses no known operation');
+            $proof->same(null, app(BulkOperationStore::class)->find($scope, $known['operation']), 'Foreign operation lookup discloses no known operation');
 
             return ['scope' => $scope, 'denials' => $denials, 'local_file' => $own];
         });
@@ -219,8 +219,8 @@ if ($mode === 'isolation') {
 }
 
 Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $scope, MediaContext $context) use ($mode, $proof, $observer, $budget): void {
-    $files = resolve(MediaLibrary::class);
-    $statuses = resolve(ConversionOperations::class);
+    $files = app(MediaLibrary::class);
+    $statuses = app(ConversionOperations::class);
     $connection = DB::connection();
     $before = [];
     $after = [];
@@ -265,7 +265,7 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
             $read = $files->readConversion($context, $ref->fileId, $ref->profile);
             $output = bytesFrom(($read->openStream)());
             $proof->same([$status->sha256, $status->width, $status->height], [hash('sha256', $output), ...array_slice(getimagesizefromstring($output), 0, 2)], 'Published digest and dimensions match bytes');
-            $proof->check($output === bytesFrom(resolve(BlobStore::class)->read($status->blobRef)), 'Actual Vaulter stream matches authorized Media read');
+            $proof->check($output === bytesFrom(app(BlobStore::class)->read($status->blobRef)), 'Actual Vaulter stream matches authorized Media read');
             $op = $observer->table('med_operations')->where('operation_key', $ref->id)->sole();
             $proof->same([$initial['operation'], $initial['digest'], $initial['source_version']], [$op->id, $op->profile_digest, $op->source_version], 'Same durable operation retains its profile revision and source version');
             $conversion = $observer->table('med_conversions')->where('file_id', $ref->fileId)->sole();
@@ -293,13 +293,13 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
 
                 throw new RuntimeException('The runner must kill the process before settlement.');
             });
-            resolve(OperationInvoker::class)->invoke(Effects::invocation());
+            app(OperationInvoker::class)->invoke(Effects::invocation());
 
             throw new RuntimeException('Dedicated settlement barrier was never reached.');
         case 'replay':
             $original = Scenario::barrierRead('before-settlement');
             $receipt = $original['receipt'];
-            $result = resolve(OperationInvoker::class)->invoke(Effects::invocation());
+            $result = app(OperationInvoker::class)->invoke(Effects::invocation());
             $proof->same(true, $result->replayed, 'Public invoker recovered the committed tenant outcome');
             $hold = $budget->table('sys_api_budget_reservations')->where('id', $receipt['reservation_id'])->sole();
             $proof->same(['settled', $receipt['actual_units'] * 1000000], [$hold->state, (int) $hold->charged], 'One charge settled against the original dedicated hold');
@@ -307,11 +307,11 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
             $proof->same($original['owner_digest'], hash('sha256', $observer->table('sys_api_idempotency')->sole()->outcome_json), 'Tenant budget receipt remains immutable');
             $reservations = $budget->table('sys_api_budget_reservations')->orderBy('id')->get()->all();
             $proof->same([$receipt['reservation_id']], array_column($reservations, 'id'), 'The whole dedicated ledger contains only the original hold');
-            $again = resolve(OperationInvoker::class)->invoke(Effects::invocation());
+            $again = app(OperationInvoker::class)->invoke(Effects::invocation());
             $proof->same(true, $again->replayed, 'A settled receipt remains replayable');
             $proof->same(json_encode($reservations), json_encode($budget->table('sys_api_budget_reservations')->orderBy('id')->get()->all()), 'Settled replay leaves the entire dedicated ledger unchanged');
             $proof->same(1, $observer->table('scenario_charged_effects')->count(), 'Settled replay does not enter the tenant handler');
-            $ledger = resolve(ProviderEffectLedger::class);
+            $ledger = app(ProviderEffectLedger::class);
             $effect = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, 'axiomasoft/corex-operations', 'budget-reservation', $hold->id);
             $evidence = $ledger->inspect($effect);
             $proof->same(ProviderObservationKind::Confirmed, $evidence?->observation?->kind, 'Independent provider ledger confirms the original dedicated reservation');
@@ -325,7 +325,7 @@ Effects::enter(Scenario::ACCOUNT_A, Scenario::W1, static function (DataScope $sc
         case 'cleanup-unknown':
             $ref = storedConversion();
             $original = $statuses->inspect($context, $ref);
-            $links = resolve(MediaAttachments::class);
+            $links = app(MediaAttachments::class);
             $links->detach($context, new AttachmentInput($ref->fileId, Effects::ENTITY, Scenario::RECORD, 'evidence'));
             $proof->same([], $links->usages($context, $ref->fileId), 'The related record reference was detached');
             $proof->check($files->delete($context, $ref->fileId)->purgePending, 'Public delete accepted a durable cleanup obligation');

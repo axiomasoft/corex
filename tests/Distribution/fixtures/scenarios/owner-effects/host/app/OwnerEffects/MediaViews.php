@@ -29,7 +29,7 @@ final class MediaViews implements SavedViewInventory, ViewAccessPolicy
     public function connection(DataScope $scope): ConnectionInterface
     {
         $db = DB::connection();
-        resolve(CurrentWorkScope::class)->assert($scope, $db);
+        app(CurrentWorkScope::class)->assert($scope, $db);
 
         return $db;
     }
@@ -37,9 +37,9 @@ final class MediaViews implements SavedViewInventory, ViewAccessPolicy
     public function scopes(DataScope $scope): array
     {
         $this->connection($scope);
-        $actor = new ViewContext(resolve(TenantContextResolver::class)->current(), $scope->principalKind, $scope->principalId);
+        $actor = new ViewContext(app(TenantContextResolver::class)->current(), $scope->principalKind, $scope->principalId);
         $directory = [];
-        foreach (resolve(ModuleRegistry::class)->compiled()->entities as $entity) {
+        foreach (app(ModuleRegistry::class)->compiled()->entities as $entity) {
             $directory[] = [$actor, new ViewScope($entity->handle, $scope->workspaceId, null, null)];
             $directory[] = [$actor, new ViewScope($entity->handle, $scope->workspaceId, $scope->principalKind, $scope->principalId)];
         }

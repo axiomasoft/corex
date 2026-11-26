@@ -34,7 +34,7 @@ Scenario::boot();
 $proof = new Scenario;
 $database = Scenario::connection('a');
 $mode = $argv[1] ?? '';
-$trace = resolve(SearchScenarioTrace::class);
+$trace = app(SearchScenarioTrace::class);
 
 function role(string $workspace): string
 {
@@ -45,7 +45,7 @@ function rightsQuery(DataScope $scope, array $options = []): SearchPage
 {
     $args = array_replace(['fields' => ['title', 'secret'], 'limit' => 1], $options);
 
-    return resolve(Search::class)->query($scope, new SearchQuery(Owner::entity(), ...$args));
+    return app(Search::class)->query($scope, new SearchQuery(Owner::entity(), ...$args));
 }
 
 function hits(SearchPage $page): array
@@ -79,7 +79,7 @@ if ($mode === 'produce') {
     $targets = [];
     foreach ([Scenario::W1, Scenario::W2] as $workspace) {
         $roles[$workspace] = Owner::within(static function () use ($workspace): string {
-            $roles = resolve(RoleAdministration::class);
+            $roles = app(RoleAdministration::class);
             $id = $roles->create('fixture-search-'.$workspace, 'Authorized search reader');
             foreach (['read', 'search', 'filter', 'sort', 'aggregate', 'field.title.read', 'field.title.search', 'field.secret.read',
                 'field.secret.search', 'field.secret.filter', 'field.visible_flag.filter', 'field.rank.read', 'field.rank.sort', 'field.rank.aggregate'] as $action) {
@@ -100,7 +100,7 @@ if ($mode === 'produce') {
     }
     $uids = array_map(static fn (IndexTarget $target): string => $target->uid, $targets);
     $proof->check(count(array_unique($uids)) === 2, 'The same record PK lives in two immutable UIDs on one Meilisearch cluster');
-    $credential = resolve(MeilisearchCredentialProvider::class)->forTarget($targets[Scenario::W1], MeilisearchAccess::Search)->reveal();
+    $credential = app(MeilisearchCredentialProvider::class)->forTarget($targets[Scenario::W1], MeilisearchAccess::Search)->reveal();
     $provedCredential = Meili::admin()->withToken($credential);
     $proof->same(200, $provedCredential->post('/indexes/'.$uids[Scenario::W1].'/search', ['q' => ''])->status(), 'The issued key can perform its one allowed search');
     $proof->same(403, $provedCredential->post('/indexes/'.$uids[Scenario::W2].'/search', ['q' => ''])->status(), 'Meilisearch denies that key to the coincident PK in the other real index');
@@ -130,7 +130,7 @@ switch ($mode) {
             $proof->same([Owner::SECOND], array_column(hits(rightsQuery($scope, [...$search, 'text' => 'second'])), 'id'), 'Unchanged authorized text still matches');
             Owner::put($database, Owner::FIRST, 'shared equipment A first', 'private-a', 1);
 
-            $admin = resolve(RoleAdministration::class);
+            $admin = app(RoleAdministration::class);
             $id = role(Scenario::W1);
             $admin->setScope($id, SearchScenarioRecord::ENTITY, 'field.secret.read', Scope::None);
             $hidden = rightsQuery($scope);
@@ -146,9 +146,9 @@ switch ($mode) {
             ] as [$field, $use, $options]) {
                 $action = 'field.'.$field.'.'.$use->value;
                 $request = new FieldUseRequest(new FieldSelection([$field]), $use);
-                $proof->same(FieldUsePlanKind::ScopedPredicate, resolve(FieldUsePolicy::class)->plan($scope, Owner::entity(), $request)->kind, 'The native role originally grants this use');
+                $proof->same(FieldUsePlanKind::ScopedPredicate, app(FieldUsePolicy::class)->plan($scope, Owner::entity(), $request)->kind, 'The native role originally grants this use');
                 $admin->setScope($id, SearchScenarioRecord::ENTITY, $action, Scope::None);
-                $proof->same(FieldUsePlanKind::Denied, resolve(FieldUsePolicy::class)->plan($scope, Owner::entity(), $request)->kind, 'The native role denies the revoked use itself');
+                $proof->same(FieldUsePlanKind::Denied, app(FieldUsePolicy::class)->plan($scope, Owner::entity(), $request)->kind, 'The native role denies the revoked use itself');
                 denyBeforeBackend($proof, $trace, static fn (): SearchPage => rightsQuery($scope, $options), $use->value);
                 $proof->same('private-a', rightsQuery($scope)->hits[0]->projection->values['secret'], 'Field read authority remains independently available');
                 $admin->setScope($id, SearchScenarioRecord::ENTITY, $action, Scope::Own);
@@ -225,7 +225,7 @@ switch ($mode) {
         $projected = Scenario::barrierRead('rights-projected');
         $proof->same('private-a', $projected['values']['secret'], 'The independent writer sees the previously authorized value at the named projection barrier');
         Owner::within(static function (): void {
-            resolve(RoleAdministration::class)->setScope(role(Scenario::W1), SearchScenarioRecord::ENTITY, 'field.secret.read', Scope::None);
+            app(RoleAdministration::class)->setScope(role(Scenario::W1), SearchScenarioRecord::ENTITY, 'field.secret.read', Scope::None);
         });
         $proof->report($database, [], ['projection' => $projected], ['role' => role(Scenario::W1), 'revoked' => 'field.secret.read']);
 
