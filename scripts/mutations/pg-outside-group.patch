@@ -3,7 +3,7 @@
 @@ -119,7 +119,6 @@
          }, $this->fanout(new ExportProjector));
      }
- 
+
 -    #[Group('pg')]
      public function test_postgresql_inbox_and_delivery_roll_back_together(): void
      {

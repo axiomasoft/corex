@@ -11,5 +11,5 @@ index b6b538a..bc057a5 100644
 +                where path <@ ?::ltree',
 +                [$newParentPath, $oldPath, $departmentId, $newParentId, $oldPath],
              );
- 
-             // A6: dispatch AFTER the transaction commits, not inside it — the
+
+             // Dispatch AFTER the transaction commits, not inside it — the

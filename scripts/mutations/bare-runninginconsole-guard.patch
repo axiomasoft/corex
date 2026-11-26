@@ -14,7 +14,7 @@ index 9a8777e..2946edc 100644
 -            throw new LogicException(sprintf(
 -                '%s::subscribe() detected an Octane runtime. Octane workers stay in the same long-running '.
 -                'CLI process across requests, so runningInConsole() cannot tell an HTTP request from a worker '.
--                'command apart (A29) — subscribe() called from an HTTP handler would block that worker forever. '.
+-                'command apart — subscribe() called from an HTTP handler would block that worker forever. '.
 -                'Call it only from a dedicated worker command that explicitly sets '.
 -                "config(['corex.pubsub.octane_worker_opt_in' => true]) before subscribing.",
 -                $driverClass,

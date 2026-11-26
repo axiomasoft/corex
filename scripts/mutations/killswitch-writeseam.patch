@@ -9,5 +9,5 @@
 -        }
 -
          $state = $this->impersonation->state();
- 
+
          if ($state !== null) {

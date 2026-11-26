@@ -1,6 +1,6 @@
 --- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 +++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
-@@ -78,37 +78,15 @@
+@@ -78,36 +78,14 @@
      public function move(string $departmentId, ?string $newParentId): void
      {
          $this->db()->transaction(function () use ($departmentId, $newParentId): void {
@@ -8,30 +8,30 @@
 -            //     so it can be read before the lock; the raw (soft-delete-blind)
 -            //     query still returns it for a row mid-deletion, so we always
 -            //     serialize on the right workspace. Absent row → explicit throw,
--            //     never a silent no-op (A5 If-then).
+-            //     never a silent no-op.
 -            $lockWorkspaceId = $this->db()->table('sys_departments')
 -                ->where('id', $departmentId)
 -                ->value('workspace_id');
-+            // MUTATION (stale-read, A5/A24): read the moving row BEFORE the lock
++            // MUTATION (stale-read): read the moving row BEFORE the lock
 +            // and never re-read it under the lock — and read it soft-delete-blind
 +            // (withTrashed), so a concurrently removed/stale row is used instead
-+            // of triggering the explicit throw. This is exactly the A5 defect.
++            // of triggering the explicit throw.
 +            /** @var Models\Department $moving */
 +            $moving = Models\Department::on($this->connection)->withTrashed()->where('id', $departmentId)->firstOrFail();
 +            $lockWorkspaceId = $moving->workspace_id;
- 
+
 -            if (! is_string($lockWorkspaceId)) {
 -                throw (new ModelNotFoundException)->setModel(Models\Department::class, [$departmentId]);
 -            }
 -
--            // (2) Advisory lock BEFORE reading the mutable path (A5). Xact-scoped,
+-            // (2) Advisory lock BEFORE reading the mutable path. Xact-scoped,
 -            //     released on commit — no session-level lock.
 -            $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$lockWorkspaceId]);
 -
 -            // (3) RE-READ the moving row UNDER the lock — fresh path/parent_id.
 -            //     Eloquent (SoftDeletes) excludes a concurrently soft-deleted row,
 -            //     so firstOrFail() throws instead of running a no-op UPDATE that
--            //     matches nothing (A5/A24 If-then). All downstream maths use THIS
+-            //     matches nothing. All downstream maths use THIS
 -            //     row, never the pre-lock read.
 -            /** @var Models\Department $moving */
 -            $moving = Models\Department::on($this->connection)->where('id', $departmentId)->firstOrFail();
@@ -43,6 +43,5 @@
 -                throw new RuntimeException("Department {$departmentId} changed workspace concurrently during move().");
 -            }
 +            $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$moving->workspace_id]);
- 
+
              $newParentPath = '';
- 

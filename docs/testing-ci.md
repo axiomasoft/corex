@@ -139,3 +139,26 @@ Shared steps live in composite actions:
 
 `distribution-proof.yml` runs the distribution proofs on pull requests that
 touch dependency or distribution files, and on demand.
+
+### Ownership of fixed mutation checks
+
+The fixed registry mutates CoreX-owned code and tests. Run a single case with
+`bash scripts/mutation-check.sh <case-id>` or list cases with `--list`. Each
+carrier must pass before its mutation can count. PostgreSQL cases need a
+dedicated test database. The optional mutation dispatch runs the registry.
+
+The module compiler and lifecycle now ship in `axiomasoft/packman-modules`.
+The following former mutation targets are exercised in that package's
+`packages/modules/tests` tree at the version pinned in `composer.lock`.
+
+| Behaviour | Owner suite |
+| --- | --- |
+| Foreign SQL prefix detection and false positives | `PHPStan/ModuleBoundaryRulesTest.php`. CoreX also runs `tests/PHPStan/ModuleBoundaryRulesTest.php` with its own consumer fixtures. |
+| Compiled entity persistence, failed atomic rename, missing strict registry and cache without tags | `Feature/ModuleRegistryTest.php` |
+| Activation epoch across nodes and the explicitly configured state-reader connection | `Feature/ModuleLifecycleTest.php` |
+| Entity table-prefix requirements and compiler stage order | `Feature/RegistryCompilerTest.php` |
+| Rollback of failed enable or upgrade, reverse creation order during purge and UUIDv7 lifecycle event identity | `Feature/ModuleLifecycleTest.php`. CoreX consumes the lifecycle events in `packages/access/tests/Pg/PermissionsMergerTest.php`. |
+
+CoreX still mutates its own input validation, egress-policy check, audit timestamp
+precision and settings-provider integration. The settings case checks that a
+manifest default reaches the CoreX container.

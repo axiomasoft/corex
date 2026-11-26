@@ -1,10 +1,10 @@
 --- a/packages/webhooks/src/Internal/WebhookDeliveryWorker.php
 +++ b/packages/webhooks/src/Internal/WebhookDeliveryWorker.php
-@@ -92,15 +92,6 @@
- 
-         $deliveryScope = $this->scopeCodec->decode($delivery->scope);
- 
--        if (! $this->egress->allows(scope: $deliveryScope, destination: $destination)) {
+@@ -124,14 +124,6 @@
+             ));
+         }
+
+-        if (! $this->egress->allows(scope: $scope, destination: $destination)) {
 -            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
 -                status: null,
 -                retryAfter: null,
@@ -12,7 +12,6 @@
 -                durationMs: 0,
 -            ));
 -        }
--
+
          try {
-             $request = $this->urlPolicy->validate(
-                 url: $delivery->endpointSnapshot,
+             $signed = $this->signer->sign(

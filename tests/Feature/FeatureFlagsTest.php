@@ -37,7 +37,7 @@ function featureFlags(): DatabaseFeatureFlags
 
 beforeEach(function (): void {
     $this->previousDefault = DB::getDefaultConnection();
-    // D12: sys_feature_flags/overrides are PG-only. Reset to a clean public
+    // sys_feature_flags/overrides are PG-only. Reset to a clean public
     // schema so each test starts with no migration history (mirrors
     // SettingsTest's/AuditLogTest's pg-lane pattern).
     featureFlagsPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
@@ -95,7 +95,7 @@ it('define() is idempotent and does not stomp an admin-toggled is_enabled', func
         ->and(FeatureFlag::on(FEATURE_FLAGS_TEST_CONNECTION)->where('key', 'crm.lead_mode')->count())->toBe(1);
 });
 
-it('AC-22: a narrower workspace override wins over the account-level default', function (): void {
+it('a narrower workspace override wins over the account-level default', function (): void {
     $flags = featureFlags();
     $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: false));
 
@@ -167,7 +167,7 @@ it('rejects an override scope_type outside workspace/user/department (CHECK cons
     ]))->toThrow(QueryException::class);
 });
 
-it('AC-22 (a): a user-override wins for a user-scoped read, and the workspace-override is independently reachable', function (): void {
+it('a user-override wins for a user-scoped read, and the workspace-override is independently reachable', function (): void {
     $flags = featureFlags();
     $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: false));
     $flagId = FeatureFlag::on(FEATURE_FLAGS_TEST_CONNECTION)->where('key', 'crm.lead_mode')->value('id');
@@ -192,14 +192,14 @@ it('AC-22 (a): a user-override wins for a user-scoped read, and the workspace-ov
         ->and($flags->active('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1)))->toBeTrue();
 });
 
-it('AC-22 (b): a department-override is independently reachable, and the workspace-override still resolves alongside it', function (): void {
+it('a department-override is independently reachable, and the workspace-override still resolves alongside it', function (): void {
     $flags = featureFlags();
     $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: false));
     $flagId = FeatureFlag::on(FEATURE_FLAGS_TEST_CONNECTION)->where('key', 'crm.lead_mode')->value('id');
     $departmentId = '00000000-0000-0000-0000-000000000201';
 
     // Both overrides deliberately disagree with the account-level default
-    // (false), same rationale as AC-22 (a).
+    // (false), as in the user-scoped case.
     FeatureOverride::on(FEATURE_FLAGS_TEST_CONNECTION)->create([
         'flag_id' => $flagId,
         'scope_type' => 'workspace',
@@ -217,7 +217,7 @@ it('AC-22 (b): a department-override is independently reachable, and the workspa
         ->and($flags->active('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1)))->toBeTrue();
 });
 
-it('AC-22 (c): falls back to the account-level default when no narrow override matches', function (): void {
+it('falls back to the account-level default when no narrow override matches', function (): void {
     $flags = featureFlags();
     $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: true));
 
@@ -225,13 +225,13 @@ it('AC-22 (c): falls back to the account-level default when no narrow override m
         ->and($flags->active('crm.lead_mode', SettingsScope::department('00000000-0000-0000-0000-000000000202')))->toBeTrue();
 });
 
-it('AC-22 (d): value() falls back to the flag payload when the override payload is NULL', function (): void {
+it('value() falls back to the flag payload when the override payload is NULL', function (): void {
     $flags = featureFlags();
     $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: false, payload: JsonDocuments::nullable(['variant' => 'flag-level'])));
     $flagId = FeatureFlag::on(FEATURE_FLAGS_TEST_CONNECTION)->where('key', 'crm.lead_mode')->value('id');
 
     // This override only toggles is_enabled — payload NULL must not blank
-    // the flag's own payload out (A87).
+    // the flag's own payload out.
     FeatureOverride::on(FEATURE_FLAGS_TEST_CONNECTION)->create([
         'flag_id' => $flagId,
         'scope_type' => 'workspace',

@@ -3,7 +3,7 @@
 @@ -111,17 +111,6 @@
                  /** @var Models\Department $newParent */
                  $newParent = Models\Department::on($this->connection)->where('id', $newParentId)->firstOrFail();
- 
+
 -                // Parent-side workspace guard, symmetric to the descendant-side
 -                // filter on the UPDATE below: the new parent
 -                // is read UNDER the already-held advisory lock and must share the

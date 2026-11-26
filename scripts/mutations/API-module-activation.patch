@@ -1,11 +1,10 @@
 --- a/packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php
 +++ b/packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php
-@@ -43,7 +43,7 @@
+@@ -43,6 +43,6 @@
              throw new ApiError(errorCode: OperationsErrorCode::OperationUnsupported, status: 404, message: 'Operation is not executable.');
          }
- 
+
 -        if (! $this->modules->isActive(name: $operation->module, ctx: $invocation->context->tenant())) {
 +        if (false && ! $this->modules->isActive(name: $operation->module, ctx: $invocation->context->tenant())) {
              throw new ApiError(errorCode: OperationsErrorCode::ModuleUnavailable, status: 404, message: 'Operation not found.');
          }
- 

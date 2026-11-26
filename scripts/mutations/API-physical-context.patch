@@ -3,7 +3,7 @@
 @@ -34,7 +34,7 @@
              throw new ApiError(errorCode: OperationsErrorCode::ContextRequired, status: 403, message: 'An initialized account context is required.');
          }
- 
+
 -        if ($this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
 +        if (false && $this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
              || ($this->manager->context() <=> $tenant) !== 0)) {

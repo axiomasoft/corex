@@ -1,6 +1,6 @@
 --- a/packages/core/src/Features/Internal/DatabaseFeatureFlags.php
 +++ b/packages/core/src/Features/Internal/DatabaseFeatureFlags.php
-@@ -105,7 +105,7 @@
+@@ -105,6 +105,6 @@
       */
      private function findOverride(string $flagId, ?SettingsScope $scope): ?FeatureOverride
      {
@@ -8,4 +8,3 @@
 +        if ($scope === null || $scope->type === SettingScope::Account || $scope->type === SettingScope::Workspace) {
              return null;
          }
- 
