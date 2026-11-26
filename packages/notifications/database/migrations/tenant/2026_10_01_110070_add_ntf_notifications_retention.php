@@ -14,13 +14,24 @@ return new class extends PackmanMigration
 
     public function up(): void
     {
-        $this->db()->getSchemaBuilder()->table('ntf_notifications', function (Blueprint $table): void {
-            $table->timestampTz('pruned_at')->nullable();
+        $connection = $this->db();
+        // SQLite's migration journal can lag behind committed DDL. A retry also repairs an
+        // installation that stopped partway through the original, nontransactional migration.
+        $connection->transaction(static function () use ($connection): void {
+            $schema = $connection->getSchemaBuilder();
+
+            if (! $schema->hasColumn('ntf_notifications', 'pruned_at')) {
+                $schema->table('ntf_notifications', static function (Blueprint $table): void {
+                    $table->timestampTz('pruned_at')->nullable();
+                });
+            }
+
+            $table = $connection->getQueryGrammar()->wrapTable('ntf_notifications');
+            $connection->statement("CREATE INDEX IF NOT EXISTS ntf_notifications_retention_ix ON {$table} (account_id, account_incarnation, workspace_scope, read_at, id) WHERE read_at IS NOT NULL AND pruned_at IS NULL");
+            // The old inbox index has the same name and covers archived rows as well.
+            $connection->statement('DROP INDEX IF EXISTS ntf_notifications_inbox_ix');
+            $connection->statement("CREATE INDEX ntf_notifications_inbox_ix ON {$table} (account_id, account_incarnation, workspace_scope, recipient_kind, recipient_id, id) WHERE pruned_at IS NULL");
         });
-        $table = $this->db()->getQueryGrammar()->wrapTable('ntf_notifications');
-        $this->db()->statement("CREATE INDEX ntf_notifications_retention_ix ON {$table} (account_id, account_incarnation, workspace_scope, read_at, id) WHERE read_at IS NOT NULL AND pruned_at IS NULL");
-        $this->db()->statement('DROP INDEX IF EXISTS ntf_notifications_inbox_ix');
-        $this->db()->statement("CREATE INDEX ntf_notifications_inbox_ix ON {$table} (account_id, account_incarnation, workspace_scope, recipient_kind, recipient_id, id) WHERE pruned_at IS NULL");
     }
 
     public function down(): void

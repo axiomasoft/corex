@@ -17,7 +17,7 @@ return new class extends PackmanMigration
         $this->db()->statement('DROP INDEX IF EXISTS sys_wakeup_requests_lease_ix');
         $this->db()->statement('DROP INDEX IF EXISTS sys_wakeup_requests_due_ix');
         $this->db()->statement(<<<SQL
-            CREATE INDEX sys_wakeup_requests_runnable_due_ix ON {$table} (account_id,
+            CREATE INDEX IF NOT EXISTS sys_wakeup_requests_runnable_due_ix ON {$table} (account_id,
                 (case when status in ('running', 'cancel-requested') then lease_until when status = 'retry-scheduled' then retry_at else fire_at end), id)
             WHERE status IN ('pending', 'retry-scheduled', 'running', 'cancel-requested')
             SQL);
