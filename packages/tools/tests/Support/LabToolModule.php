@@ -12,7 +12,7 @@ use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
-/** Selected P7 laboratory cohort contributions; disjoint from archive cohort. */
+/** Selected laboratory cohort contributions; disjoint from archive cohort. */
 final class LabToolModule implements ModuleRegistry
 {
     public const string COMPOSER_NAME = 'example/lab-tools';
@@ -31,19 +31,21 @@ final class LabToolModule implements ModuleRegistry
         $input = ArchiveToolModule::inputSchema();
         $output = ArchiveToolModule::outputSchema();
 
+        $descriptions = ArchiveToolModule::approvedDescriptions();
+
         return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Lab tools')
                 ->tablePrefix('lab')
                 ->extends([
                     Api::tool('locale.format', CountingHandler::class, 'locale.read', $input, $output, 'read', 'read-only')
-                        ->titled('Format locale', 'Approved P7 locale contribution'),
+                        ->titled('Format locale', $descriptions['locale.format']),
                     Api::tool('fx.convert', CountingHandler::class, 'fx.read', $input, $output, 'read', 'read-only')
-                        ->titled('Convert currency', 'Approved P7 FX contribution'),
+                        ->titled('Convert currency', $descriptions['fx.convert']),
                     Api::tool('geo.resolve', CountingHandler::class, 'geo.read', $input, $output, 'read', 'read-only')
-                        ->titled('Resolve geography', 'Approved P7 geo contribution'),
+                        ->titled('Resolve geography', $descriptions['geo.resolve']),
                     Api::tool('tasks.complete', CountingHandler::class, 'tasks.write', $input, $output, 'write', 'domain-key')
-                        ->titled('Complete task', 'Approved P7 task mutation contribution'),
+                        ->titled('Complete task', $descriptions['tasks.complete']),
                     Api::entity('lab.task'),
                 ]),
         ], installedPackages: []);
