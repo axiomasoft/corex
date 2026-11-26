@@ -70,7 +70,7 @@ it('registers upstream saved-view storage as platform infrastructure', function 
         ->and(Schema::connection('pgsql')->hasTable('sys_saved_view_scopes'))->toBeTrue();
 });
 
-it('preserves explicit microsecond precision on every sys and module timestamp (D32)', function (): void {
+it('preserves explicit microsecond precision on every sys and module timestamp ', function (): void {
     $this->migrateSchemaScope(SchemaScope::Tenant, 'pgsql');
     /** @var list<stdClass> $columns */
     $columns = DB::connection('pgsql')->select(<<<'SQL'
@@ -87,7 +87,7 @@ it('preserves explicit microsecond precision on every sys and module timestamp (
     }
 });
 
-it('preserves the monotonic audit sequence cursor (D42)', function (): void {
+it('preserves the monotonic audit sequence cursor ', function (): void {
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     config(['corex.audit.enabled' => true]);
     app()->forgetInstance(CoreOptions::class);
