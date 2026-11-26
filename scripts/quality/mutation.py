@@ -424,10 +424,13 @@ def php_environment(sandbox, fragment):
     require(re.fullmatch(r'[a-z0-9_]+_test', env['PGSQL_DATABASE']), 'Unsafe worker DB')
     env.pop('PGSQL_BUDGET_DATABASE', None)
     env.pop('PGSQL_CONTROL_DATABASE', None)
+    env.pop('COREX_LIFECYCLE_CONTROL_DATABASE', None)
     if fragment['package'] == 'operations':
         env['PGSQL_BUDGET_DATABASE'] = env['PGSQL_DATABASE'].removesuffix('_test') + '_budget_test'
-    if fragment['package'] == 'search':
+    if fragment['package'] in ('core', 'search'):
         env['PGSQL_CONTROL_DATABASE'] = env['PGSQL_DATABASE'].removesuffix('_test') + '_control_test'
+    if fragment['package'] == 'core':
+        env['COREX_LIFECYCLE_CONTROL_DATABASE'] = env['PGSQL_CONTROL_DATABASE']
     return binary, version, env
 
 

@@ -9,12 +9,22 @@ import tempfile
 import signal
 import time
 import unittest
+from unittest.mock import patch
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'mutation.py'
 spec = importlib.util.spec_from_file_location('mutation', SCRIPT)
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 FIXTURE = Path(__file__).parent / 'fixtures/mutation/infection-0.35.6.json'
+
+
+class DatabaseEnvironmentTests(unittest.TestCase):
+    def test_core_uses_an_isolated_control_database_even_with_inherited_overrides(self):
+        with patch.dict(os.environ, {'PGSQL_CONTROL_DATABASE': 'foreign', 'COREX_LIFECYCLE_CONTROL_DATABASE': 'foreign'}):
+            _, _, env = m.php_environment(Path('/tmp/sandbox'), {'package': 'core', 'zone': 'messaging'})
+        self.assertEqual(env['PGSQL_DATABASE'], 'corex_msi_core_messaging_test')
+        self.assertEqual(env['PGSQL_CONTROL_DATABASE'], 'corex_msi_core_messaging_control_test')
+        self.assertEqual(env['COREX_LIFECYCLE_CONTROL_DATABASE'], env['PGSQL_CONTROL_DATABASE'])
 
 
 class ParserTests(unittest.TestCase):
