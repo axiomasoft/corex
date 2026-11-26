@@ -772,18 +772,15 @@ final class UsageScanner
         };
         $needle = $tokens('<?php '.$anchor);
         $length = count($needle);
+
         if ($length === 0) {
             return false;
         }
 
         $haystack = $tokens($source);
-        foreach ($haystack as $offset => $token) {
-            if ($token === $needle[0] && array_slice($haystack, $offset, $length) === $needle) {
-                return true;
-            }
-        }
 
-        return false;
+        return array_any($haystack, static fn (string $token, int $offset): bool => $token === $needle[0]
+            && array_slice($haystack, $offset, $length) === $needle);
     }
 
     /** @return array<string, true> */
