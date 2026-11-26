@@ -25,7 +25,7 @@ return new class extends PackmanMigration
 
         if ($this->db()->getDriverName() === 'pgsql') {
             $table = $this->db()->getQueryGrammar()->wrapTable('wsp_invitations');
-            $this->db()->statement("COMMENT ON COLUMN {$table}.role_id IS 'Optional role reference owned by the access package. The application resolves stale references when accepting an invitation.'");
+            $this->db()->statement("COMMENT ON COLUMN {$table}.role_id IS 'Optional role ID owned by the access package. Invitations store this reference without a foreign key.'");
             $table = $this->db()->getQueryGrammar()->wrapTable('wsp_workspaces');
             $this->db()->statement("COMMENT ON COLUMN {$table}.path IS 'Hierarchy path for subtree predicates. The parent foreign key is stored in parent_id. Partner membership grants no visibility into its parent.'");
         }
