@@ -7,6 +7,6 @@
         "*/src/**/*ConfigSection.php"
     ],
     "allow_paths": {
-        "packages/tenancy/src/Runtime/Internal/FrameworkConfig.php": "Tenant runtime seam: reads and switches the framework's own database/cache/session runtime configuration per account (PLAN3.D95); package settings arrive as typed Options"
+        "packages/tenancy/src/Runtime/Internal/FrameworkConfig.php": "Tenant runtime seam: reads and switches the framework's own database/cache/session runtime configuration per account; package settings arrive as typed Options"
     }
 }
