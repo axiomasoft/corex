@@ -1,14 +1,8 @@
-# Local services for the pg-lane tests (D12), matching the CI PG lane:
-# PostgreSQL 18 with the lane's extra databases, and Meilisearch for the
-# search adapter suite. sys_*/mod_* migrations need jsonb/ltree/BRIN/
-# advisory locks that sqlite can't provide. No app service — this monorepo
-# has no deployed app, only packages exercised by the test suite
-# (`composer test:pg` / `pest --group=pg`). See docs/testing-ci.md for the
-# environment variables.
+# Local PostgreSQL and Meilisearch services for the PostgreSQL suite.
+# See docs/testing-ci.md for connection settings and parallel projects.
 services:
   pgsql:
     image: postgres:18-alpine
-    container_name: corex_pgsql_test
     restart: unless-stopped
     ports:
       # Loopback only — not published to the network.
@@ -24,14 +18,13 @@ services:
       POSTGRES_USER: ${PGSQL_USERNAME:-corex}
       POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-corex}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 5s
       timeout: 5s
       retries: 10
 
   meilisearch:
     image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
-    container_name: corex_meilisearch_test
     restart: unless-stopped
     ports:
       # Loopback only — not published to the network.
@@ -40,6 +33,11 @@ services:
       MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY:-corex-local-disposable-meilisearch-key}
       MEILI_NO_ANALYTICS: 'true'
       MEILI_ENV: development
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:7700/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   corex_pgsql18_data:

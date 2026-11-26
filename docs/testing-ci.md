@@ -8,7 +8,7 @@
 | `composer test:pg` | Every `pg` group test against PostgreSQL |
 | `composer test:arch` | Architecture and layer rules |
 | `composer golden` | Golden surface and wire-contract snapshots |
-| `composer test:coverage` | Root coverage, merged across processes, minimum 80% |
+| `composer test:coverage` | Merged line coverage for the source directories in `phpunit.xml`, with the minimum in `scripts/coverage-min-floor.txt` |
 | `composer test:packages` | Each package suite with its own `phpunit.xml` |
 | `composer analyse` | PHPStan at max level across all packages |
 | `composer lint:check` / `composer lint` | Pint check / fix |
@@ -20,8 +20,8 @@ Heavy runs on a shared machine can be bounded with
 
 ### PostgreSQL
 
-`docker compose up -d` starts loopback-only PostgreSQL 18 and Meilisearch, the
-services of the CI `PG lane` job. On a fresh data volume
+`docker compose up -d --wait` starts loopback-only PostgreSQL 18 and Meilisearch, the
+services of the CI `PG lane` job. Use separate Compose project names and host ports (`PGSQL_PORT`, `MEILISEARCH_PORT`) for concurrent checkouts. On a fresh data volume
 `docker/pgsql/create-test-databases.sh` creates the lane's extra databases
 (`corex_search_a_test`, `corex_search_b_test`, `corex_budget_test`,
 `corex_control_test`, `corex_search_control_test`, `corex_sink_test`). The
@@ -41,7 +41,7 @@ The PostgreSQL lanes read:
 To run the lane as CI does against the compose services:
 
 ```bash
-docker compose up -d
+docker compose up -d --wait
 PGSQL_PORT=5434 \
 PGSQL_BUDGET_DATABASE=corex_budget_test \
 PGSQL_CONTROL_DATABASE=corex_search_control_test \
@@ -63,7 +63,7 @@ Some suites shell out to host tools or need PHP extensions:
 - The media thumbnail tests need `ext-gd`; without it the GD driver and its
   conversion profile are not registered.
 - The tenancy Redis account-menu tests need `ext-redis` and a disposable
-  Redis server; set `P3_REDIS_PORT` to its port on `127.0.0.1` (they use
+  Redis server; set `COREX_TEST_REDIS_PORT` to its port on `127.0.0.1` (they use
   database 15). Without the variable they are skipped. The tenancy CI job
   runs them against a `redis:8-alpine` service.
 
@@ -88,12 +88,11 @@ root.
 
 ```mermaid
 flowchart LR
-    changes[Changes] --> quality[Quality]
-    quality --> tests[PHP 8.4 / 8.5]
-    quality --> pg[PG lane 16 / 18 + Meilisearch]
-    quality --> packages[Package matrix and package lanes]
-    quality --> analysis[Static analysis: PHPStan, Rector, quality gates]
-    quality --> gates[Layer, golden, ownership, dependencies, coverage, Octane]
+    changes[Changes] & quality[Quality] --> tests[PHP 8.4 / 8.5]
+    changes & quality --> pg[PG lane 16 / 18 + Meilisearch]
+    changes & quality --> packages[Package matrix and package lanes]
+    changes & quality --> analysis[Static analysis: PHPStan, Rector, quality gates]
+    changes & quality --> gates[Layer, golden, ownership, dependencies, coverage, Octane, mutation inventory]
     awg[Anti-weakening] --> gate
     secrets[Secret scan] --> gate
     contract[Contract guard] --> gate
@@ -101,23 +100,30 @@ flowchart LR
 ```
 
 - **Changes** skips the PHP lanes when a push only touches Markdown, `docs/`
-  or `LICENSE`. Pushes to `main` and manual runs always run everything.
+  or `LICENSE`. Pushes to `main` and manual runs without a job selection enable every regular lane.
 - **Quality** is the fast gate: root `composer audit`, manifest policy, strict
   `composer validate` of every package, Pint, actionlint and zizmor.
 - Lanes then run in parallel. The matrix only covers dimensions that add
   signal: PHP 8.4 and 8.5 for the root suite and Octane, PostgreSQL 16 and 18
   for the PG lane.
-- **CI gate** is the single check to require in branch protection. Skipped
-  lanes count as passed; failed or cancelled lanes fail it. Its step summary
-  lists every job result.
-- Mutation testing runs only on `workflow_dispatch` with `mutation: true`.
-- After fixing a failure, re-check only what broke: re-run the failed jobs
-  (`gh run rerun <run-id> --failed`) or dispatch the workflow with `jobs` set
-  to the job ids, for example
-  `gh workflow run ci.yml --ref <branch> -f jobs=tests-pg,panels-tests`.
-  Changes and Quality always run; every other job outside the list is
-  skipped and the CI gate stays green for it. Run the full workflow once
-  at the end.
+- **CI gate** is the check to require on `main`. A code run requires every
+  regular lane to succeed. A documentation-only change can skip the PHP lanes.
+  Quality, change detection, secret scanning, the history guard and the PHP
+  contract guard must still pass.
+- Code changes also check mutation inventory and parser controls in parallel
+  with the package jobs. Dispatch with `mutation: true` to measure fragment
+  scores and run the mutation registry.
+- A targeted dispatch reports **Selected CI lanes** and has its own cancellation
+  group. Use `gh workflow run ci.yml --ref <branch> -f jobs=tests-pg,panels-tests`
+  to check those jobs and Quality. A full check is available by dispatching
+  without `jobs`. Use `gh run rerun <run-id> --failed` to retry jobs on the same SHA.
+
+Changing the files under `tests/Golden/baseline/` or `tests/Golden/schema/`, or the
+rename map, package projection or promoted fixtures in `tests/Golden/`, needs a dated row in `tests/Golden/REBASELINE.md` explaining the affected layer and
+reason. Add a new row in the snapshot commit. To record an earlier change,
+append `(commit <full SHA>)` to the decision column of a new row. Each row
+covers one commit. Keep the row in the final ledger. Make translations or
+editorial revisions in a separate commit.
 
 Practices: actions pinned by commit SHA, `permissions: {}` at the top with
 read-only grants per job, `persist-credentials: false`, a timeout on every job,
