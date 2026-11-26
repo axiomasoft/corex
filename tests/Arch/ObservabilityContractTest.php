@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 use CoreX\Tests\Support\SourceScanner;
 
-const P12_METRIC_LABELS = ['package', 'operation', 'outcome', 'category', 'retry_bucket'];
+const OBSERVABILITY_METRIC_LABELS = ['package', 'operation', 'outcome', 'category', 'retry_bucket'];
 
-test('P12 observability gate keeps labels bounded and failure payloads redacted', function (): void {
-    expect(p12ObservabilityViolations())->toBe([]);
+test('observability gate keeps labels bounded and failure payloads redacted', function (): void {
+    expect(observabilityViolations())->toBe([]);
 });
 
-test('P12 observability gate rejects an identifier metric label', function (): void {
+test('observability gate rejects an identifier metric label', function (): void {
     $path = SourceScanner::packagePath('core', 'src/Observability/Internal/MetricAttributes.php');
     $original = (string) file_get_contents($path);
     $changed = str_replace("        'retry_bucket',", "        'retry_bucket',\n        'account_id',", $original);
     file_put_contents($path, $changed);
 
     try {
-        expect(p12ObservabilityViolations())->toContain('O-LABEL-SET account_id');
+        expect(observabilityViolations())->toContain('O-LABEL-SET account_id');
     } finally {
         file_put_contents($path, $original);
     }
 });
 
-test('P12 observability gate rejects an arbitrary OpenTelemetry attribute map', function (): void {
-    $path = SourceScanner::packagePath('core', 'src/Observability/P12AttributeMapProbe.php');
+test('observability gate rejects an arbitrary OpenTelemetry attribute map', function (): void {
+    $path = SourceScanner::packagePath('core', 'src/Observability/UnboundedAttributeMapProbe.php');
 
     file_put_contents($path, <<<'PHP'
 <?php
-final class P12AttributeMapProbe
+final class UnboundedAttributeMapProbe
 {
     public function record(object $counter): void
     {
@@ -38,7 +38,7 @@ final class P12AttributeMapProbe
 PHP);
 
     try {
-        expect(p12ObservabilityViolations())->toContain('O-ARBITRARY-ATTRIBUTES packages/core/src/Observability/P12AttributeMapProbe.php');
+        expect(observabilityViolations())->toContain('O-ARBITRARY-ATTRIBUTES packages/core/src/Observability/UnboundedAttributeMapProbe.php');
     } finally {
         if (is_file($path)) {
             unlink($path);
@@ -46,12 +46,12 @@ PHP);
     }
 });
 
-test('P12 observability gate rejects raw Throwable logging', function (): void {
-    $path = SourceScanner::packagePath('core', 'src/Observability/P12ThrowableLogProbe.php');
+test('observability gate rejects raw Throwable logging', function (): void {
+    $path = SourceScanner::packagePath('core', 'src/Observability/ThrowableLogProbe.php');
 
     file_put_contents($path, <<<'PHP'
 <?php
-final class P12ThrowableLogProbe
+final class ThrowableLogProbe
 {
     public function record(object $logger, Throwable $error): void
     {
@@ -61,7 +61,7 @@ final class P12ThrowableLogProbe
 PHP);
 
     try {
-        expect(p12ObservabilityViolations())->toContain('O-RAW-THROWABLE packages/core/src/Observability/P12ThrowableLogProbe.php');
+        expect(observabilityViolations())->toContain('O-RAW-THROWABLE packages/core/src/Observability/ThrowableLogProbe.php');
     } finally {
         if (is_file($path)) {
             unlink($path);
@@ -70,17 +70,17 @@ PHP);
 });
 
 /** @return list<string> */
-function p12ObservabilityViolations(): array
+function observabilityViolations(): array
 {
     $violations = [];
     $metricPath = SourceScanner::packagePath('core', 'src/Observability/Internal/MetricAttributes.php');
-    $labels = p12StringConstant($metricPath, 'ALLOWED');
+    $labels = observabilityStringConstant($metricPath, 'ALLOWED');
 
-    foreach (array_values(array_diff($labels, P12_METRIC_LABELS)) as $label) {
+    foreach (array_values(array_diff($labels, OBSERVABILITY_METRIC_LABELS)) as $label) {
         $violations[] = 'O-LABEL-SET '.$label;
     }
 
-    foreach (array_values(array_diff(P12_METRIC_LABELS, $labels)) as $label) {
+    foreach (array_values(array_diff(OBSERVABILITY_METRIC_LABELS, $labels)) as $label) {
         $violations[] = 'O-LABEL-MISSING '.$label;
     }
 
@@ -89,7 +89,7 @@ function p12ObservabilityViolations(): array
     foreach (SourceScanner::filesMatching($directory, '/->(?:add|record|setAttribute|setAttributes|debug|info|notice|warning|error|critical|alert|emergency|log)\s*\(/') as $path) {
         $relative = substr($path, strlen(SourceScanner::repoRoot()) + 1);
 
-        foreach (p12ObjectMethodCalls($path) as $call) {
+        foreach (observabilityObjectMethodCalls($path) as $call) {
             if (in_array($call['method'], ['setAttribute', 'setAttributes'], true)
                 || (in_array($call['method'], ['add', 'record'], true)
                     && isset($call['arguments'][1])
@@ -110,7 +110,7 @@ function p12ObservabilityViolations(): array
 }
 
 /** @return list<string> */
-function p12StringConstant(string $path, string $constant): array
+function observabilityStringConstant(string $path, string $constant): array
 {
     $tokens = token_get_all((string) file_get_contents($path));
     $count = count($tokens);
@@ -122,7 +122,7 @@ function p12StringConstant(string $path, string $constant): array
 
         for ($cursor = $index + 1; $cursor < $count; $cursor++) {
             if (is_array($tokens[$cursor]) && $tokens[$cursor][0] === T_STRING && $tokens[$cursor][1] === $constant) {
-                while ($cursor < $count && p12ObservabilityTokenText($tokens[$cursor]) !== '[') {
+                while ($cursor < $count && observabilityTokenText($tokens[$cursor]) !== '[') {
                     $cursor++;
                 }
 
@@ -130,7 +130,7 @@ function p12StringConstant(string $path, string $constant): array
                 $depth = 0;
 
                 for (; $cursor < $count; $cursor++) {
-                    $text = p12ObservabilityTokenText($tokens[$cursor]);
+                    $text = observabilityTokenText($tokens[$cursor]);
 
                     if ($text === '[') {
                         $depth++;
@@ -146,7 +146,7 @@ function p12StringConstant(string $path, string $constant): array
                 }
             }
 
-            if (p12ObservabilityTokenText($tokens[$cursor]) === ';') {
+            if (observabilityTokenText($tokens[$cursor]) === ';') {
                 break;
             }
         }
@@ -156,7 +156,7 @@ function p12StringConstant(string $path, string $constant): array
 }
 
 /** @return list<array{method: string, arguments: list<string>}> */
-function p12ObjectMethodCalls(string $path): array
+function observabilityObjectMethodCalls(string $path): array
 {
     $tokens = token_get_all((string) file_get_contents($path));
     $calls = [];
@@ -178,7 +178,7 @@ function p12ObjectMethodCalls(string $path): array
 
         $method = $tokens[$cursor][1];
 
-        while (isset($tokens[$cursor]) && p12ObservabilityTokenText($tokens[$cursor]) !== '(') {
+        while (isset($tokens[$cursor]) && observabilityTokenText($tokens[$cursor]) !== '(') {
             $cursor++;
         }
 
@@ -186,21 +186,21 @@ function p12ObjectMethodCalls(string $path): array
             continue;
         }
 
-        [$arguments, $index] = p12ObservabilityBalanced($tokens, $cursor);
-        $calls[] = ['method' => $method, 'arguments' => p12ObservabilityArguments($arguments)];
+        [$arguments, $index] = observabilityBalanced($tokens, $cursor);
+        $calls[] = ['method' => $method, 'arguments' => observabilityArguments($arguments)];
     }
 
     return $calls;
 }
 
 /** @param array<int, array{0: int, 1: string, 2?: int}|string> $tokens */
-function p12ObservabilityBalanced(array $tokens, int $start): array
+function observabilityBalanced(array $tokens, int $start): array
 {
     $depth = 0;
     $contents = [];
 
     for ($index = $start; $index < count($tokens); $index++) {
-        $text = p12ObservabilityTokenText($tokens[$index]);
+        $text = observabilityTokenText($tokens[$index]);
 
         if ($text === '(') {
             $depth++;
@@ -223,14 +223,14 @@ function p12ObservabilityBalanced(array $tokens, int $start): array
 }
 
 /** @param array<int, array{0: int, 1: string, 2?: int}|string> $tokens */
-function p12ObservabilityArguments(array $tokens): array
+function observabilityArguments(array $tokens): array
 {
     $parts = [];
     $current = '';
     $depth = 0;
 
     foreach ($tokens as $token) {
-        $text = p12ObservabilityTokenText($token);
+        $text = observabilityTokenText($token);
 
         if (in_array($text, ['(', '[', '{'], true)) {
             $depth++;
@@ -255,7 +255,7 @@ function p12ObservabilityArguments(array $tokens): array
     return $parts;
 }
 
-function p12ObservabilityTokenText(array|string $token): string
+function observabilityTokenText(array|string $token): string
 {
     return is_array($token) ? $token[1] : $token;
 }

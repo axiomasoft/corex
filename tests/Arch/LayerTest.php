@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Tests\Support\SourceScanner;
 
-// P3.5 — deterministic machine gates for the layer doctrine (D70).
+// deterministic machine gates for the layer doctrine.
 //
 // Tool choice (Implementation Rules: pick by expressibility, negative-prove it):
 // pest-plugin-arch's `expect('CoreX')->not->toUse('Flex')` was evaluated and
@@ -50,7 +50,7 @@ test('foundation package discovery covers the monorepo', function () use ($found
 });
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
-// The vendor inversion D70 fixed was exactly this kind of leak.
+// A vendor import can also introduce an upward dependency.
 test('foundation packages do not import flex/* namespaces', function () use ($foundationPackages): void {
     $offenders = [];
 
@@ -131,20 +131,20 @@ test('tenant content does not bypass its owning storage adapter', function (): v
     expect($unexpected)->toBe([]);
 });
 
-// (3) No product bindings in the TEXT of foundation sources (P2.17, OQ-17/D94).
+// (3) No product bindings in the TEXT of foundation sources.
 // Rules 1/2 model namespaces and the require-graph; a `flex` literal in DDL, a
 // composer description or a README creates no code dependency and passed those
 // rules silently — the 2026-07-26 inventory found 11 such files while the gate
-// stayed green. Layer 0 (D91) is literal: "no Flex binding at all, neither in
+// stayed green. Layer 0 is literal: "no Flex binding at all, neither in
 // identifiers nor in DDL nor in descriptions" — so the text is scanned too.
 test('foundation packages carry no flex product literals', function () use ($foundationPackages): void {
     // EXPLICIT allow-list — every entry carries its reason and decision. Widening
-    // it "to make the gate pass" is forbidden (P2.17 Code Guidance): a literal
+    // it "to make the gate pass" is forbidden: a literal
     // that fits no reason below gets CLEANED, not permitted. Directory-wide
     // exemptions are banned outright — they would re-open the hole.
     $allowedLine = [
         // `flex/crm` / `Flex\Crm` — the TARGET name of the L2 thematic package
-        // (D82/D70). Naming the neighbouring layer creates no dependency on it;
+        // Naming the neighbouring layer creates no dependency on it;
         // packages/tasks/README.md uses it precisely to declare isolation FROM it.
         '#flex/crm#i',
         '#Flex\\\\Crm#',
@@ -153,7 +153,7 @@ test('foundation packages carry no flex product literals', function () use ($fou
     // Whole-file allowance, by filename, for history that must not be rewritten.
     $allowedFile = [
         // CHANGELOG entries record the `flex/modules` → `axiomasoft/corex` and
-        // `flex:modules:*` → `modules:*` renames themselves (P2.0/P3.3).
+        // `flex:modules:*` → `modules:*` renames themselves.
         // Scrubbing the old names would make the changelog false.
         'CHANGELOG.md',
         'packman-modules-CHANGELOG.md',

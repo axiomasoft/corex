@@ -14,7 +14,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
- * Простые правила transaction-pooling дисциплины (B-10 §7.3 п.1–5 + eval):
+ * Простые правила transaction-pooling дисциплины:
  * позитив ловится, легальный код молчит.
  *
  * @extends RuleTestCase<Rule>

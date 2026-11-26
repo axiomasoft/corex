@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P05.3 — blocking runtime-globals gate (D70 п.5–9). Each rule has a planted negative control
+// blocking runtime-globals gate. Each rule has a planted negative control
 // that must exit 1 and name the probe file; the baseline is a ratchet limited to Impersonation.
 
 /**

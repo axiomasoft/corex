@@ -10,7 +10,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
- * P3-design §7.3 — маркер DurablePayload и deny-list на объявленных свойствах.
+ * Checks the DurablePayload marker and prohibited property types.
  *
  * @extends RuleTestCase<Rule>
  */

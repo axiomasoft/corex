@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P8.6 — blocking provider-size gate. The plant must name the file.
+// blocking provider-size gate. The plant must name the file.
 
 test('provider size gate exits 0 on a clean tree', function (): void {
     $repoRoot = dirname(__DIR__, 2);

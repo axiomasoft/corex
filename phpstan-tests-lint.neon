@@ -1,22 +1,8 @@
-# Второй, САМОСТОЯТЕЛЬНЫЙ PHPStan-прогон: 9 правил Packman Modules
-# (transaction-pooling дисциплина, P1.13) на каталоге `tests/` — item P1.28, D48.
-#
-# ПОЧЕМУ ОТДЕЛЬНЫЙ КОНФИГ, а не `paths += tests` в корневом `phpstan.neon`:
-# корневой прогон включает `larastan/extension.neon` на `level: 6`, а Pest-идиома
-# (`$this`-биндинг в `it()`/`beforeEach()`) даёт под Larastan 60 несвязанных
-# `property.notFound` — они сорвали P1.14 (D48). Здесь Larastan НЕ подключается:
-# mixin-резолюция Pest не участвует, шум исчезает вместе с ней, а 9 правил
-# работают ТЕМИ ЖЕ — они читают AST и строки-константы, а не типы.
-# `includes:` умышленно НЕ ссылается на `phpstan.neon` — иначе Larastan вернулся бы
-# транзитивно.
-#
-# ПОЧЕМУ `level: 0` (эмпирически, первый прогон 2026-07-28 — Implementation Rules P1.28).
-# Замер без `excludePaths`/`ignoreErrors` (всего / из них находки правил / посторонние):
-#   level 0 → 23 / 23 / 0
-#   level 1 → 98 /  9 / 89   (`method.notFound`/`staticMethod.notFound`/`property.notFound` —
-#   level 2 → 103 / 9 / 94    без Larastan фасады и Eloquent не резолвятся)
-# С level ≥ 1 PHPStan обрывает анализ выражения на первой ошибке, и до правил доходит
-# ВТРОЕ меньше вызовов: подъём уровня здесь ОСЛАБЛЯЕТ гейт, а не усиливает.
+# Run CoreX and Packman module rules over the test harness. Larastan is enabled
+# separately for production code. The Pest mixin infers unrelated properties on
+# test closures. Level 0 visits their complete expressions for the AST rules.
+# In the original comparison, level 0 exposed 23 rule violations. At levels 1
+# and 2, type resolution stopped earlier and only nine violations reached them.
 
 includes:
     - packages/core/extension.neon
@@ -55,56 +41,36 @@ parameters:
 
     excludePaths:
         analyse:
-            # Негативные фикстуры самих правил: это ВХОДНЫЕ ДАННЫЕ `RuleTestCase`
-            # (`tests/PHPStan/ModuleBoundaryRulesTest.php`, `TransactionPoolingRulesTest.php`),
-            # а не код проекта. Каждый файл — нарушение ПО ЗАМЫСЛУ (иначе правило
-            # не пинилось бы). Анализировать их этим же прогоном — категориальная
-            # ошибка: 7 гарантированно-красных строк, ничего не измеряющих.
+            # RuleTestCase consumes these intentionally invalid inputs.
             - tests/PHPStan/data
             - tests/fixtures/package-graph/tenancy-wakeup-foreign-context.php
             - tests/fixtures/table-write-ownership/foreign-table-write.php
 
     ignoreErrors:
-        # ────────────────────────────────────────────────────────────────────────
-        # Первый прогон (2026-07-28) дал 16 находок в 5 файлах. Каждая прочитана
-        # построчно: все — НАМЕРЕННЫЙ обход контракта, и обход и есть предмет теста.
-        # Это НЕ baseline (скрытый долг, который «когда-нибудь починим») — это
-        # доменная граница: правила писаны для РАНТАЙМ-КОДА МОДУЛЯ, а корневой
-        # `tests/` — харнесс САМОГО ядра. Тот же структурный слепок, что P1.14 уже
-        # признал для миграций (`NoDirectSystemTableWriteRule::isMigrationFile()`):
-        # владелец таблицы без неймспейса правилу неотличим от чужого модуля.
-        #
-        # `count` точный + `reportUnmatchedIgnoredErrors` (дефолт `true`) ⇒ гейт
-        # краснеет в ОБЕ стороны: новая находка в этих файлах не пролезет, исчезнувшая
-        # заставит обновить конфиг. Правила остаются вооружёнными на всём остальном
-        # `tests/` — новый файл с `SET`/`LISTEN`/temp-table/`PREPARE`/`eval`/записью
-        # в `sys_*`/`mod_*` красит прогон.
+        # Tests exercise database constraints through the owning tables. Scope each
+        # exception to its path and count so new and obsolete exceptions fail the gate.
 
         # --- modules.directSystemTableWrite -----------------------------------
-        # Прямая запись в `sys_*`/`mod_*` в arrange/assert: через контракт владельца
-        # эти тесты недостижимы по построению.
+        # These fixtures insert rows the tested contracts cannot produce.
         -
-            # Дубль `is_primary` — предмет теста partial-unique в БД (AC-24d);
-            # плюс arrange для subtree()/primaryOf()/soft-delete (AC-24e/AC-24).
+            # Duplicating is_primary exercises the partial unique constraint.
+            # Other writes arrange subtree(), primaryOf() and soft deletion.
             identifier: modules.directSystemTableWrite
             path: tests/Feature/DepartmentTest.php
             count: 4
         -
-            # Регрессия расширенного CHECK `actor_type` (D138): строка обязана
-            # писаться СЫРЬЁМ, иначе контракт подставит своё значение и CHECK
-            # не будет тем, что под тестом.
+            # Raw inserts exercise the actor_type CHECK with values the API would normalize.
             identifier: modules.directSystemTableWrite
             path: tests/Feature/ImpersonatedActorTest.php
             count: 4
         -
-            # Дубль account-строки СЫРЫМ insert'ом: репозиторий ходит через
-            # `updateOrCreate()` и второй INSERT не эмитит никогда — через него
-            # констрейнт `UNIQUE NULLS NOT DISTINCT` недостижим (A57/A63).
+            # Insert a second account row directly to exercise UNIQUE NULLS NOT DISTINCT.
+            # The repository would update the existing row.
             identifier: modules.directSystemTableWrite
             path: tests/Feature/SettingsTest.php
             count: 2
 
-        # --- package-suite fixtures (P1.1) ------------------------------------
+        # Package fixtures
         # ScopeResolver's raw rows establish the ltree department hierarchy
         # consumed by the resolver under test, and soft-delete departments to
         # prove removed ones drop out of scope; the owning contract cannot
@@ -173,14 +139,9 @@ parameters:
             count: 1
 
         # --- modules.setWithoutLocal -----------------------------------------
-        # Единственный санкционированный session-level `SET` в харнессе —
-        # `set lock_timeout` на ОТДЕЛЬНОМ пробном коннекшене: он обязан пережить
-        # оператор и подействовать на СЛЕДУЮЩИЙ вызов `move()`,
-        # который открывает собственную транзакцию. `SET LOCAL` здесь не просто
-        # эквивалент — он сделал бы доказательство взятия advisory-lock пустым.
-        # Привязка — ТОЛЬКО по файлу и точному счёту: сообщение правила не несёт
-        # самого SQL, отличить `SET lock_timeout` от `SET search_path` регексом
-        # нечем. Второй session-level `SET` в этом файле красит прогон.
+        # The advisory-lock test sets lock_timeout on its dedicated probe connection
+        # before move() opens a transaction. SET LOCAL would expire too soon.
+        # The diagnostic omits the SQL text, so constrain the exception by file and count.
         -
             identifier: modules.setWithoutLocal
             path: tests/Feature/DepartmentTest.php

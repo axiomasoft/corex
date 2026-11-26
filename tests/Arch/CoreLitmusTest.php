@@ -5,16 +5,16 @@ declare(strict_types=1);
 use CoreX\Tests\Support\SourceScanner;
 use Illuminate\Foundation\Application;
 
-// P6.3 — Foundation litmus (A29, D34). The file list is an explicit constant
+// Foundation litmus. The file list is an explicit constant
 // of the live Foundation map, not "every file except another zone".
 // Condition 3 is fail-closed outside LITMUS_ELOQUENT. A new allowlist
 // path needs a decision record. Condition 1 below the grep bar is a warning.
 // An unobservable reference is unresolved, not a failure. Condition 5 above
-// 200 lines outside Contracts, Enums, or Data is unresolved (P2 §7.1).
+// 200 lines outside Contracts, Enums, or Data is unresolved.
 
 /**
  * Foundation paths. Mirrors the live map in docs/architecture/core-zones.md
- * after P6.1. The design baseline of 109 files is not this list.
+ * and enumerates the files checked by this test.
  *
  * @var list<string>
  */
@@ -56,7 +56,7 @@ const LITMUS_FOUNDATION = [
 ];
 
 /**
- * Closed Eloquent/HTTP/Application exception. Only BaseModel remains after D112.
+ * Closed Eloquent/HTTP/Application exception. Only BaseModel is allowed.
  *
  * @var list<string>
  */

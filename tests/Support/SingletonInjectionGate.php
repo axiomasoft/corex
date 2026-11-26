@@ -18,9 +18,9 @@ use RuntimeException;
 use Stringable;
 
 /**
- * P4.12 — scan package ServiceProviders and Registrars for singleton ::class literals and flag
+ * scan package ServiceProviders and Registrars for singleton ::class literals and flag
  * constructors that capture Application, Request, or Config Repository (L1).
- * P05.3 (D70 п.11): L2 — a singleton constructor takes a type registered as scoped
+ * L2 — a singleton constructor takes a type registered as scoped
  * (captive dependency); L3 — a singleton constructor takes a database connection.
  */
 final class SingletonInjectionGate

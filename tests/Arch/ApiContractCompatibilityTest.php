@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P13.11 — the Arch test invokes the compatibility CLI. It does not reimplement the comparator.
+// the Arch test invokes the compatibility CLI. It does not reimplement the comparator.
 
 test('api contract gate accepts the committed snapshot and additive fixtures', function (): void {
     $repoRoot = dirname(__DIR__, 2);
