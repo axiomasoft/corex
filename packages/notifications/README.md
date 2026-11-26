@@ -11,6 +11,8 @@ Schedule `corex:notifications:prune` in each active account and workspace. The c
 expired read notifications from the inbox and clears their payload and related reference.
 The read time and any dismissal or cancellation must all be older than
 `corex-notifications.retention.settled_days` (a positive integer, default 90).
+The generated configuration schema records the integer type and default. The package also
+validates the minimum of one day when it resolves the configuration, before it scans any rows.
 Unread notifications, digest members and notifications with any unfinished delivery retain their
 full content. An accepted provider delivery remains unfinished until its final confirmation.
 
