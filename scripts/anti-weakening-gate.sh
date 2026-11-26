@@ -39,7 +39,23 @@ check_added_pattern() {
     shift 2
 
     local hits
-    hits="$(git diff "$DIFF_RANGE" -- "$@" | command grep -E '^\+' | command grep -E -v '^\+\+\+' | command grep -F -- "$pattern" || true)"
+    # Only the literal diagnostic of an existing skip can change freely.
+    # Match its original line in the same hunk to preserve the call and condition.
+    hits="$(git diff --unified=0 --no-color "$DIFF_RANGE" -- "$@" | awk -v pattern="$pattern" '
+        function normalize(line) {
+            sub(/->markTestSkipped\(\047[^\047]*\047\);$/, "->markTestSkipped(<reason>);", line)
+            return line
+        }
+        /^@@ / { delete original; removed = added = 0; next }
+        /^--- / || /^\+\+\+ / { next }
+        /^-/ { original[++removed] = substr($0, 2); next }
+        /^\+/ {
+            line = substr($0, 2)
+            ++added
+            if (index(line, pattern) && !(pattern == "markTestSkipped" && added in original &&
+                normalize(line) != line && normalize(line) == normalize(original[added]))) print $0
+        }
+    ')"
 
     if [ -n "$hits" ]; then
         log_fail "$label added in the diff:"

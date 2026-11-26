@@ -164,6 +164,28 @@ class HistoryTest(unittest.TestCase):
         self.commit()
         self.gate(error='->skip(')
 
+    def test_an_existing_skip_can_update_its_diagnostic(self):
+        path = 'packages/example/tests/Feature/OptionalAdapterTest.php'
+        self.write(path, "test()->markTestSkipped('Original diagnostic');\n")
+        before = self.commit()
+        self.write(path, "test()->markTestSkipped('An isolated Redis server is required');\n")
+        self.commit()
+        self.gate(before)
+
+    def test_existing_failure_controls_reject_semantic_changes(self):
+        cases = [
+            ('tests/OptionalTest.php', "if ($missing) test()->markTestSkipped('Needed');", "test()->markTestSkipped('Needed');", 'markTestSkipped'),
+            ('tests/PestTest.php', "it('works')->skip($offline);", "it('works')->skip(true);", '->skip('),
+            ('.github/workflows/ci.yml', 'continue-on-error: false', 'continue-on-error: true', 'continue-on-error'),
+        ]
+        for path, original, weakened, error in cases:
+            with self.subTest(path=path):
+                self.write(path, original + '\n')
+                before = self.commit()
+                self.write(path, weakened + '\n')
+                self.commit()
+                self.gate(before, error=error)
+
     def test_invalid_committed_floor_is_rejected(self):
         self.write(FLOOR, '80disabled\n')
         self.commit()
