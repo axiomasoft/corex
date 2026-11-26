@@ -318,7 +318,7 @@ def input_hashes(root):
                     '.cache' not in p.name and not any(part.startswith('.phpunit') for part in p.parts):
                 paths.add(str(p.relative_to(root)))
     paths.update(('composer.json', 'composer.lock', 'phpunit.xml', '.github/workflows/ci.yml', 'scripts/php84'))
-    native_config = os.environ.get('COREX_TEST_STORAGE_CONFIG')
+    native_config = os.environ.get('COREX_TEST_STORAGE_CONFIG') or os.environ.get('COREX_P3_STORAGE_CONFIG')
     if native_config:
         native_path = Path(native_config).resolve()
         require(native_path.is_relative_to(root.resolve()) and native_path.is_file(), 'Native test config must be inside the repository')
@@ -829,7 +829,9 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
                'versions': versions, 'database': db, 'lanes': lanes,
                'environment': php_witness(binary),
                'connection': {k: env[k] for k in ('PGSQL_HOST', 'PGSQL_PORT', 'PGSQL_USERNAME')},
-               'native_test_environment': {k: env[k] for k in ('COREX_TEST_REDIS_PORT', 'COREX_TEST_STORAGE_CONFIG') if k in env},
+               'native_test_environment': {k: env[k] for k in ('COREX_TEST_REDIS_PORT', 'COREX_TEST_STORAGE_CONFIG',
+                                                               'COREX_TEST_SDK_AUTOLOAD', 'P3_REDIS_PORT',
+                                                               'COREX_P3_STORAGE_CONFIG', 'COREX_P3_SDK_AUTOLOAD') if k in env},
                'process_evidence': [artifact(p, base) for directory in ('processes', 'invalid')
                                     for p in sorted((base / directory).rglob('*')) if p.is_file()],
                'duration_seconds': round(time.monotonic() - start, 3),

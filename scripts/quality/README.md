@@ -66,9 +66,12 @@ The runner is serial (`threads=1`), initial tests have a 600s limit, mutants 10s
 and CI workers a 60 minute job budget with at most four concurrent workers.
 Existing fixed sabotage cases remain a separate `scripts/mutation-check.sh` gate.
 
-Tenancy's native Redis and S3 conformance tests require `COREX_TEST_REDIS_PORT` and
-`COREX_TEST_STORAGE_CONFIG`. The latter must name a JSON configuration file inside
+Set `COREX_TEST_REDIS_PORT` for the isolated Redis endpoint and
+`COREX_TEST_STORAGE_CONFIG` for native S3 conformance. The latter must name a JSON configuration file inside
 the repository; its content is hashed into every receipt. The root development
 dependencies include Tenancy's exact S3 adapter pin so these tests run without
-optional-SDK skips. Use the same native environment for all fragments: any
+optional-SDK skips. Package tests also accept `COREX_TEST_SDK_AUTOLOAD` for a separate SDK loader.
+The previous `P3_REDIS_PORT`, `COREX_P3_STORAGE_CONFIG` and
+`COREX_P3_SDK_AUTOLOAD` environment names remain accepted.
+Use the same native environment for all fragments: any
 source, test, tooling, lock or native-configuration change invalidates all receipts.
