@@ -1,94 +1,69 @@
-# Политика расширения
+# Extension policy
 
-Инварианты — статьи `EXT-001` … `EXT-009` конституции; закрытый набор механизмов расширения
-принадлежит [dev-doctrine.md](../dev-doctrine.md) §4 и здесь не переписывается.
+Articles `EXT-001` through `EXT-009` of the constitution define the invariants. Section 4 of the [development doctrine](../dev-doctrine.md) lists the permitted extension mechanisms.
 
-## Что обязан объявить каждый реестр
+## Registry declarations
 
-| Свойство | Требование |
+| Property | Requirement |
 |:--|:--|
-| Тип идентификатора | Названный тип и правило его образования; идентификатор стабилен |
-| Политика дубликата | Дубликат — ошибка компиляции. Замена возможна только явной декларацией с проверкой существования цели и отсутствия циклов |
-| Момент заморозки | Названная точка, после которой регистрация невозможна |
-| Порядок | Детерминированный и объявленный. Равный приоритет не разрешает конфликт: нужен обязательный вторичный критерий |
-| Инвалидация | Что входит в отпечаток артефакта и что заставляет его пересобрать |
-| Отношение к тенанту | Общий артефакт либо артефакт на аккаунт — названо явно |
+| Identifier | Name its type and derivation rule. The identifier must be stable. |
+| Duplicates | Reject duplicates during compilation. Explicit replacement requires an existing target and an acyclic replacement graph. |
+| Freeze point | State exactly when registration closes. |
+| Order | Declare a deterministic order with a secondary rule for equal priorities. |
+| Invalidation | Declare the inputs to the artifact fingerprint and the changes that trigger a rebuild. |
+| Tenant scope | Declare whether the artifact is shared or account-specific. |
 
-## Идентичность точек compiled registry
+## Identity at each compiled extension point
 
-Идентичность принадлежит точке. Владелец входит в идентификатор только там, где точка
-намеренно допускает нескольких авторов одного предмета. Дубликат — ошибка компиляции до
-проекции; диагностика называет точку, канонический id, первого и второго владельца.
-Замена — только явная директива `ModuleManifest::replace(point, targetId, replacementId)` в той же
-точке. Путь, время, тенант и эпоха активации в идентичность и version metadata не входят.
+Each extension point owns its identity rule. Include the owner in the identifier only when that point permits several contributors for the same subject. Reject collisions before projection and identify the point, canonical ID and both owners in the diagnostic. An explicit `ModuleManifest::replace(point, targetId, replacementId)` can replace a contribution within the same point. Paths, timestamps, tenants and activation epochs are excluded from identity and version metadata.
 
-| Точка | Канонический id | Правило коллизии |
+| Point | Canonical ID | Collision rule |
 |:--|:--|:--|
-| `entity` | resolved entity handle | Глобальный дубликат — ошибка компиляции |
-| `entity_field` | `entityHandle.fieldHandle` | Глобальный дубликат — ошибка компиляции |
-| `permissions` | `panel:entity` | Одна эффективная группа на слот; массивы действий — полезная нагрузка, не идентичность |
-| `api.operation` | `version:operationId` | Дубликат id или нормализованной пары method/path — ошибка компиляции |
-| `api.tool` | `module:toolCode:toolVersion` | Существующий кортеж остаётся каноническим; коллизия wire-name тоже ошибка |
-| `api.resource` | `module:mode:entityHandle` | Несколько авторов, поэтому владелец входит в идентичность |
-| `filament` | `module:panel:kind:class-or-entity` | Несколько авторов; списки классов раскрываются в записи до хеша |
-| `menu` | `panel:handle` | Глобальный дубликат; `afterHandle` задаёт порядок, не идентичность |
-| `routes` | `module:kind:normalized-file:prefix` | Несколько авторов; дубликат внутри владельца — ошибка. Абсолютный путь хоста в id не входит |
-| `workflow.step` | step class-string | Глобальный дубликат |
-| `workflow.trigger` | `module:entityHandle:eventName` | Одна нормализованная запись на событие |
-| `settings` | `namespace:key` | Глобальный дубликат |
-| `feature_flags` | flag key | Глобальный дубликат |
-| `listeners` | `module:event:listener` | Точный дубликат — ошибка; порядок лексический |
+| `entity` | Resolved entity handle | Reject global duplicates. |
+| `entity_field` | `entityHandle.fieldHandle` | Reject global duplicates. |
+| `permissions` | `panel:entity` | One effective group per slot. The action array is payload. |
+| `api.operation` | `version:operationId` | Reject duplicate IDs and duplicate normalized method/path pairs. |
+| `api.tool` | `module:toolCode:toolVersion` | Keep the existing tuple canonical. Reject wire-name collisions as well. |
+| `api.resource` | `module:mode:entityHandle` | Include the owner to allow multiple contributors. |
+| `filament` | `module:panel:kind:class-or-entity` | Allow multiple contributors. Expand class lists into records before hashing. |
+| `menu` | `panel:handle` | Reject global duplicates. `afterHandle` controls order. |
+| `routes` | `module:kind:normalized-file:prefix` | Allow multiple contributors and reject duplicates within one owner. Exclude the host's absolute path from the ID. |
+| `workflow.step` | Step class-string | Reject global duplicates. |
+| `workflow.trigger` | `module:entityHandle:eventName` | Keep one normalized entry per event. |
+| `settings` | `namespace:key` | Reject global duplicates. |
+| `feature_flags` | Flag key | Reject global duplicates. |
+| `listeners` | `module:event:listener` | Reject exact duplicates and order entries lexically. |
 
-Durable-решение, которое называет конкретное расширение, несёт `ExtensionStamp`: point, id,
-version и диагностический отпечаток реестра. Отпечаток всего каталога не подменяет точную
-пару id+version.
+A durable decision that references a specific extension carries an `ExtensionStamp` with its point, ID, version and diagnostic registry fingerprint. The exact ID and version identify the extension.
 
-## Три фазы жизни реестра
+## Registry lifecycle
 
-`collecting` — вклады собираются; `compiled` — собран неизменяемый артефакт с отпечатком;
-`frozen` — регистрация невозможна, попытка регистрации — ошибка.
+1. In `collecting`, gather contributions.
+2. In `compiled`, publish an immutable artifact and its fingerprint.
+3. In `frozen`, reject further registration as an error.
 
-Отпечаток покрывает состав и версии включённых модулей, нормализованные декларации, версию
-схемы `corex-registry/1` и версию сборки. Путь хоста, время, tenant id, epoch активации и порядок
-обнаружения не входят в canonical bytes. Без отпечатка
-возникает классический дефект: пакет обновили, а устаревший скомпилированный артефакт выжил.
+The fingerprint covers the enabled module set and versions, normalized declarations, the `corex-registry/1` schema version and the build version. Exclude host paths, timestamps, tenant IDs, activation epochs and discovery order from the canonical bytes. A change to a fingerprinted input invalidates the compiled artifact.
 
-## Authority и проекции
+## Authorities and projections
 
-| Поверхность | Класс | Граница |
+| Surface | Classification | Responsibility |
 |:--|:--|:--|
-| `RegistryCompiler` → `CompiledRegistry` → `CompiledModuleRegistry` | authority code snapshot | Один canonical compile, fingerprint и публикация. |
-| `ArrayEntityRegistry`, `OperationRegistry`, `CompiledToolCatalogue`, `ModuleFieldCatalogue` | projection | Читают frozen declarations; новой регистрации code extensions не открывают. |
-| `ModulePanelCatalogue` и wakeup handler map | boot-built catalogue | Собирают типизированные вклады один раз, затем запрещают дубликаты и late mutation. |
-| `CompositeFieldCatalogue` и другие field catalogues | data catalogue | Сохраняют собственный `schemaHash` для data schema, не подменяют module fingerprint. |
-| `SearchManager` | driver factory | Выбирает драйвер; ему не требуется фиктивная фаза compile/freeze. |
+| `RegistryCompiler` → `CompiledRegistry` → `CompiledModuleRegistry` | Authoritative code snapshot | Produce one canonical compilation, fingerprint and published artifact. |
+| `ArrayEntityRegistry`, `OperationRegistry`, `CompiledToolCatalogue`, `ModuleFieldCatalogue` | Projection | Read frozen declarations. Registration of new code extensions is closed. |
+| `ModulePanelCatalogue` and the wakeup handler map | Catalogue built at boot | Collect typed contributions once and reject duplicates and late mutations. |
+| `CompositeFieldCatalogue` and other field catalogues | Data catalogue | Maintain a separate data-schema `schemaHash` alongside the module fingerprint. |
+| `SearchManager` | Driver factory | Select a driver. No compilation or freeze phase is required. |
 
-Гейт `scripts/extension-contract-gate.php` содержит полный поимённый список классов и
-интерфейсов с суффиксом `Registry`, `Catalogue` или `Manager`. Новый кандидат не проходит
-гейт до явной классификации; не-каталожные runtime managers также отмечены поимённо.
-`Packman\Modules\Testing\ExtensionContract::verify()` принимает manifests и явные
-`InstalledPackageVersion` из scalar fixtures. Он возвращает типизированный результат с
-`passed()`, `summary()` и fingerprint; Pest/PHPUnit и внешние пакеты могут использовать
-одну и ту же проверку без контейнера Laravel.
+`scripts/extension-contract-gate.php` classifies every `Registry`, `Catalogue` and `Manager` class or interface by name, including runtime managers that do not implement catalogues. Introducing a candidate requires an explicit classification. `Packman\Modules\Testing\ExtensionContract::verify()` takes manifests and explicit `InstalledPackageVersion` values from scalar fixtures. It returns a typed result with `passed()`, `summary()` and a fingerprint. Pest, PHPUnit and external package suites can run this check without a Laravel container.
 
-## Durable-решение и состав расширений
+## Replaying a durable decision
 
-Решение, сохранённое для последующего исполнения и зависящее от состава расширений, обязано
-сохранить отпечаток реестра либо идентификатор и версию использованного расширения. Иначе
-повтор задачи после активации или обновления расширения молча выполнит другую реализацию —
-и следа, почему результат изменился, не останется.
+When delayed execution depends on the set of extensions, store the registry fingerprint or the chosen extension's ID and version with the decision. This allows workers to detect intervening activation or upgrade when retrying the job.
 
-Для работы, называющей конкретное расширение, replay сравнивает точные `point + id + version`.
-`registryFingerprint` остаётся диагностической provenance и не входит в request hash или
-wakeup replay digest (D59, D103). Несовпадение версии и отсутствие обязательного stamp
-отказывают в исполнении; legacy unstamped wakeup допускается только явной настройкой
-конкретного handler. Workflow сохраняет legacy identity algorithm для уже записанных refs.
+For work that names a specific extension, replay must match the exact `point + id + version`. Keep `registryFingerprint` for diagnostic provenance and exclude it from the request hash and wakeup replay digest (D59, D103). Refuse execution when the version differs or a required stamp is missing. Legacy unstamped wakeups require explicit opt-in for each handler. Workflow retains its legacy identity algorithm for previously stored references.
 
-## Замена снапшота для долгоживущих процессов
+## Replacing snapshots in long-lived processes
 
-Замена атомарна: собрать → проверить → опубликовать с новой версией. Исполнитель берёт новый
-снапшот на границе задачи, никогда посреди неё.
+Build and verify the replacement before publishing it atomically with its new version. Workers adopt it at a job boundary. A running job retains the snapshot it started with.
 
-Активация модулей ведётся отдельным tenant epoch и не меняет code fingerprint. Queue worker
-сбрасывает memo до следующей задачи; Octane получает новый code snapshot через deploy reload.
-Одновременный fleet-wide cutover не гарантируется.
+Tenant activation has its own epoch and leaves the code fingerprint unchanged. Queue workers clear memoized state before the next job. Octane picks up a new code snapshot on deployment reload. Workers across a fleet can transition at different times.

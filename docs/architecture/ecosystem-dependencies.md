@@ -1,64 +1,40 @@
-# Зависимости экосистемы
+# Ecosystem dependencies
 
-CoreX использует публичные контракты Packman, Tenant, AzGuard и Vaulter.
-Версия снимка Packman в корневом Composer-репозитории — `0.1.2`. Для `packman-modules` CoreX требует
-`^0.1.1`, чтобы использовать публичный контракт компиляции. Для
-Tenant (`^1.0@dev`), AzGuard (`^2.0@dev`) и Vaulter (`^1.0@dev`) проверяются
-development-снимки владельцев. Ограничения версий сами по себе не проверяют
-доступность удалённых исходников.
+CoreX uses the public contracts of Packman, Tenant, AzGuard and Vaulter. The root Composer repository pins the Packman snapshot to `0.1.2`. CoreX requires `packman-modules` `^0.1.1` for its public compilation contract. The reviewed development snapshots for Tenant, AzGuard and Vaulter satisfy `^1.0@dev`, `^2.0@dev` and `^1.0@dev`, respectively. Separately verify that the environment can fetch each source commit.
 
-## Зафиксированные исходники
+## Pinned sources
 
-Корневой `composer.json` содержит inline-репозитории `type: package`; `composer.lock`
-фиксирует разрешённые зависимости. Каждый снимок содержит точный Git commit и
-PSR-4 пути внутри монорепозитория владельца. Они нужны потому, что одного VCS URL
-монорепозитория недостаточно для обнаружения его дочерних Composer-пакетов.
+The root `composer.json` contains inline repositories of `type: package`. The root `composer.lock` records resolved versions. Each snapshot identifies the exact Git commit and PSR-4 paths inside the owner's monorepo. Those paths and the child package metadata are needed for Composer to discover the packages inside a monorepo.
 
-| Владелец | Пакеты | Source reference |
+| Owner | Packages | Source reference |
 |---|---|---|
 | Packman (`0.1.2`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `d4eaf2ad01d22a822368765d154ae51ff70981f2` |
 | AzGuard | `azguard` | `42bdb639d3ab4ea2571c3026113cac7727c88b18` |
 | Tenant | `tenant`, `tenant-laravel` | `6325c62d5a9c0afe1f7bce769b32b7b24c726294` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `b230f6e27b53c92145fa81be2fdeb89ea5c8ae03` |
 
-Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.2`,
-а остальные снимки используют `dev-main` и числовой branch alias владельца; это
-метаданные разрешения, а не доказательство, что commit находится в опубликованном
-remote `main`. AzGuard source URL указывает на публичный репозиторий
-[`axiomasoft/azguard`](https://github.com/axiomasoft/azguard).
-Его имя содержит `private`, но для скачивания исходников авторизация не нужна.
-Snapshot metadata требуются из-за дочерних Composer-пакетов внутри монорепозитория,
-а не из-за ограничения доступа. Проверенный commit AzGuard доступен
-в [PR #131](https://github.com/axiomasoft/azguard/pull/131) для защищённой ветки.
+All package names in the table use the `axiomasoft/` prefix. Packman is pinned to `0.1.2`. The other packages use `dev-main` and their owner's numeric branch alias for dependency resolution. A branch alias alone does not establish that the remote default branch contains the commit. The pinned AzGuard source URL points to the [AzGuard repository](https://github.com/axiomasoft/azguard). The reviewed commit was also available through [PR 131](https://github.com/axiomasoft/azguard/pull/131).
 
-При работе с локальными монорепозиториями владельцев до публикации commits в
-remote GitHub чистый CI не сможет получить их только по `composer.lock`.
-Локальный успешный install из доступного checkout/cache не доказывает remote install.
+Source metadata serves child-package discovery regardless of repository access controls. A developer can install using a local checkout or cache before the source is available to a clean CI worker. Reproducible CI requires access to the referenced commit.
 
-Для авторизации приложению достаточно потребовать `axiomasoft/corex-access`: Composer
-установит движок транзитивно по закреплённому снимку. Работайте через CoreX
-`AccessChecker` для проверки разрешения и `ScopeResolver` для ограничения выборки.
+For authorization, an application can require `axiomasoft/corex-access`. Composer installs the engine transitively from the pinned snapshot. Use the CoreX `AccessChecker` to check permissions and `ScopeResolver` to restrict queries.
 
-## Разработка в монорепозитории
+## Working in the monorepo
 
-При доступности всех source commits запускайте из корня:
+With all source commits available, run the following from the repository root.
 
 ```bash
 scripts/php84 --check
 scripts/php84 composer install --prefer-source
 ```
 
-CoreX-пакеты и продукт устанавливаются из относительных `packages/*` и `products/*`.
-Внешние снимки не зависят от соседних директорий. Для локального checkout Vaulter
-нужен переданный checkout с указанным commit или Git bundle, развёрнутый в отдельный
-локальный репозиторий. Проверить commit можно без изменения checkout:
+The CoreX packages and product install from the relative `packages/*` and `products/*` directories. External snapshots can be installed independently of sibling directory layouts. For a local Vaulter source, obtain a checkout containing the required commit or import a supplied Git bundle into a separate repository. Check for the commit without changing the checkout.
 
 ```bash
 git -C /absolute/path/vaulter cat-file -e b230f6e27b53c92145fa81be2fdeb89ea5c8ae03^{commit}
 ```
 
-Для локальной установки можно направить только Vaulter source URL на этот checkout
-через настройки Git **одного процесса**, сохранив Composer-манифест и lockfile:
+To use that repository for just this installation, map the Vaulter source URL through process-local Git configuration. This preserves the Composer manifest and lockfile.
 
 ```bash
 env \
@@ -68,72 +44,36 @@ env \
   scripts/php84 composer install --prefer-source
 ```
 
-Замените абсолютный путь своим. Если Git environment уже настроен через
-`GIT_CONFIG_COUNT`, добавьте правило к нему, сохранив прежние записи. Не коммитьте
-машинные пути, токены или credentials в Composer metadata. Публикация patch в
-upstream либо доставка проверенного Git bundle в CI — отдельный обязательный шаг
-перед воспроизводимой установкой на чистой машине.
+Substitute the actual absolute path. If the environment already uses `GIT_CONFIG_COUNT`, append a new rule and preserve its existing entries. Keep machine-specific paths, tokens and credentials out of Composer metadata. Before relying on a clean installation, either publish the patch upstream or supply CI with a verified Git bundle.
 
-## Отдельная установка пакета для разработки
+## Installing one package for development
 
-Корневой `composer install` достаточен для обычных проверок монорепозитория.
-Если проверке нужен собственный `vendor` пакета, используйте общий wrapper:
+The root `composer install` covers ordinary monorepo checks. Use the shared wrapper when a check requires the package's own `vendor` directory.
 
 ```bash
 scripts/php84 python3 scripts/composer-with-snapshots.py --working-dir=packages/media update --prefer-source --no-interaction
 scripts/php84 python3 scripts/composer-with-snapshots.py --working-dir=packages/media audit --locked
 ```
 
-Wrapper использует то же наследование репозиториев, что и source audit: сохраняет
-пакетные объявления, затем добавляет репозитории родителей. Локальные path-зависимости
-должны находиться внутри этого checkout. Внешние development-зависимости разрешены
-только при точном совпадении source и package metadata с reviewed root lock; общий
-`minimum-stability` остаётся `stable`. Composer требует root stability flags, поэтому
-wrapper добавляет `@dev` только достижимым по `require` проверенным снимкам владельцев;
-пакеты из остальных optional-интеграций не устанавливаются.
-При `update` PHPStan, strict rules и Larastan получают точные версии из root lock,
-если входят в граф зависимостей пакета; тот же список инструментов использует root CI.
-Packman devtools/testkit также входят в reviewed toolchain; wrapper добавляет их
-точные версии только когда они достижимы, без установки лишних dev-зависимостей.
+The wrapper preserves the package's repository declarations and adds repositories from its parents, following the same inheritance rules as the source audit. Local path dependencies must lie inside this checkout. An external development dependency must match the reviewed root lock's source and package metadata. Global `minimum-stability` remains `stable`. To meet Composer's root stability requirements, the wrapper adds `@dev` only for reviewed owner snapshots reachable through `require`. Unrelated optional integrations stay outside the install.
 
-Рядом с исходным манифестом создаются игнорируемые `.composer-snapshots.json` и
-`.composer-snapshots.lock`. Исходные `composer.json`/`composer.lock` не переписываются;
-`vendor` и пути autoload остаются локальными для пакета. Последующие `install`,
-`validate` и `audit --locked` этого окружения запускаются тем же wrapper. Обычные
-Composer scripts пакета используют установленный `vendor`. Генерируемые manifests
-и locks содержат локальные paths, поэтому не входят в артефакты публикации.
-Octane consumer harness использует эту же установку; его исходный манифест сохраняет
-точный PHPUnit constraint, а устаревший lock до выделения Packman удалён.
+During `update`, PHPStan, strict rules and Larastan use the exact versions in the root lock when the package requires them. Root CI uses the same tool versions. Packman devtools and testkit also belong to the reviewed toolchain and are pinned only when reachable.
 
-## Приложение-потребитель и дистрибуция
+The wrapper writes ignored `.composer-snapshots.json` and `.composer-snapshots.lock` files alongside the source manifest. It preserves the source `composer.json` and `composer.lock`, and keeps `vendor` and autoload paths local to the package. Run subsequent `install`, `validate` and `audit --locked` commands through the same wrapper. Package Composer scripts use the installed `vendor` directory. Exclude generated manifests and locks from release artifacts because they contain local paths.
 
-Composer не наследует `repositories` зависимостей. Корень приложения должен иметь
-свой одобренный CoreX Composer-канал и соответствующие внешние package-снимки либо
-доступный Composer-канал владельцев с эквивалентными пакетами. Не копируйте
-монорепозиторные `path` repositories в приложение. Для временного snapshot-канала
-копируются целиком соответствующие `type: package` записи, включая `source`,
-`require`, `autoload`, providers и branch aliases; один commit без этих метаданных
-не описывает дочерний пакет.
+The Octane consumer harness follows this installation process. Its source manifest retains the exact PHPUnit constraint. The obsolete lock predating the Packman split was removed.
 
-После настройки канала выберите нужные пакеты, например
-`composer require 'axiomasoft/corex:^2.0'`, и сохраните lockfile приложения.
-Split-артефакты CoreX не включают чужой исходный код и не предоставляют внешний
-Composer-канал автоматически. Проверки consumer fixtures добавляют снимки владельцев
-после candidate-репозитория; для их Git sources действуют те же требования доступа.
+## Consumer applications and distribution
 
-При обновлении владельца согласованно обновляют inline metadata и lockfile,
-проверяют API адаптера и его интеграционные тесты. Перед публикацией CoreX каждый
-используемый source reference должен быть доступен целевой среде; локальный patch
-нужно доставить отдельно или заменить доступным проверенным upstream commit.
+Composer uses repository declarations from the root package. An application must configure an approved CoreX channel together with the external package snapshots, or an accessible owner channel that provides their equivalents. Keep monorepo `path` repositories out of application configuration. For a temporary snapshot channel, copy the complete `type: package` entries, including `source`, `require`, `autoload`, providers and branch aliases. A commit alone cannot describe a child Composer package.
 
-## Общие проверки Packman
+Once the channel is available, select the required packages, for example with `composer require 'axiomasoft/corex:^2.0'`, and retain the application's lockfile. CoreX split artifacts contain CoreX source only. Distributors supply the external Composer channel separately. The consumer fixtures register owner snapshots after the candidate repository and require access to the same Git sources.
 
-`packman-devtools` и `packman-testkit` устанавливаются только для разработки.
-`packman.json` перечисляет 20 пакетов и `products/flex-crm`; `extra.packman` хранит
-таксономию и error-prefix. `extra.corex` остаётся входом предметных гейтов CoreX.
-Модули с lifecycle сохраняют `type: packman-module` и `extra.packman.module`.
-Локальные профили в `schemas/profiles/` уточняют Composer type и лимит 80 строк
-для модулей и продукта; они не отключают проверки поверхности.
+When updating an owner, change the inline metadata and lockfile together, then check the adapter API and its integration tests. Before publishing CoreX, verify that each source reference is available to the target environment. Distribute any local patch separately or replace it with a verified, accessible upstream commit.
+
+## Shared Packman checks
+
+Install `packman-devtools` and `packman-testkit` for development. The root `packman.json` lists 20 packages and `products/flex-crm`. The `extra.packman` block carries taxonomy and the error prefix. CoreX domain gates also read `extra.corex`. Modules with lifecycle support retain `type: packman-module` and `extra.packman.module`. The local profiles in `schemas/profiles/` refine the Composer type and the 80-line limit for modules and the product while keeping surface checks enabled.
 
 ```bash
 scripts/php84 vendor/bin/packman gate
@@ -142,19 +82,10 @@ scripts/php84 vendor/bin/packman error-codes --check
 scripts/php84 vendor/bin/packman config-schema --check
 ```
 
-Все проверки запускаются последовательно. Архитектурные negative tests временно
-меняют исходники: во время `composer test` нельзя запускать Rector, PHPStan,
-Packman или другой source/API/graph scanner.
+Run these checks sequentially. Some architecture tests temporarily modify files to prove their checks fail. Give `composer test` exclusive access to its checkout while running those tests. Run Rector, PHPStan, Packman and source, API or graph scanners before or after that test run.
 
-Packman пишет `resources/contracts/php-api.json`. CoreX `composer php-api` дополнительно
-проверяет полную типовую границу и справочник публичного API. Error URN использует
-`urn:packman:problem:`; доменные коды CoreX сохраняют собственные префиксы.
+Packman generates `resources/contracts/php-api.json`. CoreX's `composer php-api` additionally verifies the complete type boundary and public API reference. Error URNs use the `urn:packman:problem:` prefix and CoreX domain error codes retain their own prefixes.
 
-Нативный `TableWriteOwnershipGate` в Packman сверяет `gates.table_owners[table]`
-с текущим Composer-пакетом: запись в собственные `sys_*` разрешена только явному
-владельцу из каталога, а неизвестные системные таблицы и чужие владельцы запрещены;
-DATA-003 независимо проверяет реальные записи.
-Все четыре source reference из таблицы должны быть доступны CI через canonical
-GitHub URL либо переданный checkout/bundle. Для каждого локального источника
-добавляйте отдельный `url.file:///.../.insteadOf` в process-local `GIT_CONFIG_COUNT`;
-не меняйте sibling checkout, глобальную конфигурацию Git или Composer source URLs.
+Packman's `TableWriteOwnershipGate` checks `gates.table_owners[table]` against the current Composer package. Only the recorded owner can write its `sys_*` tables. The gate rejects unknown system tables and writes to another owner's tables. DATA-003 independently verifies actual writes.
+
+CI must be able to read all four source references via their canonical GitHub URLs or a supplied checkout or bundle. For each local source, add a distinct `url.file:///.../.insteadOf` rule to the process-local `GIT_CONFIG_COUNT`. Preserve sibling checkouts, global Git settings and Composer source URLs.

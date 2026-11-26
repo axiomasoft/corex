@@ -1,70 +1,56 @@
-# Словарь имён CoreX
+# CoreX naming vocabulary
 
-**Версия:** 1.0.0 · **Статус:** нормативный · **Уровень:** 0 (`corex/*`)
+**Version** 1.0.0 · **Status** normative · **Level** 0 (`corex/*`)
 
-Правила имён классов и публичных сигнатур. Гейт словаря — P3; здесь только норма.
-Публичные сигнатуры индексируются `API-009` конституции.
+This policy governs class names and public signatures. P3 defines the naming gate. Article `API-009` of the constitution indexes public signatures.
 
-## Критерий: суффикс обязан что-то запрещать
+## Choosing a suffix
 
-Суффикс имени ставится не для красоты и не по списку паттернов. Он ставится тогда, когда
-из имени можно предсказать публичные методы класса, его зависимости и причину изменения —
-и когда по имени видно, какой метод добавлять в него **нельзя**.
+Use a suffix when it helps a reader predict a class's public methods, dependencies and reason to change. It should also make clear which responsibilities belong elsewhere.
 
-Проверка перед тем, как назвать класс:
+1. Read the name before opening the file. List the operations and dependencies you expect.
+2. Inspect the implementation. Unexpected methods, dependencies or side effects suggest that the suffix is too broad.
+3. Consider the next method you plan to add. If it fits equally well in several classes, split their responsibilities or rename the classes.
 
-1. Прочитайте имя, не открывая файл. Назовите ожидаемые глаголы и зависимости.
-2. Откройте файл. Если методы, зависимости или побочные эффекты удивляют — суффикс широк.
-3. Возьмите метод, который вы собираетесь добавить. Если «он мог бы жить и здесь, и там» —
-   имя не работает: делите класс или переименовывайте.
+The noun before a suffix must describe the domain just as precisely as the suffix describes the role.
 
-Существительное перед суффиксом обязано быть таким же точным, как сам суффикс.
+## Suffix vocabulary
 
-## Словарь суффиксов
-
-| Суффикс | Класс обязан | Класс не вправе |
+| Suffix | Responsibility | Excluded responsibilities |
 |:--|:--|:--|
-| `Repository` | давать доступ к сохранённым данным одной сущности | считать, решать, отправлять |
-| `Factory` | собирать валидный объект из входных данных | сохранять, читать из хранилища |
-| `Resolver` | выбирать реализацию или значение по входу | выполнять выбранную работу |
-| `Registry` | хранить именованный набор вкладов и отдавать их детерминированно | создавать вклады, менять их |
-| `Policy` | отвечать «можно или нельзя» и объяснять почему | изменять состояние |
-| `Provider` | участвовать в bootstrap-жизненном цикле Laravel | нести предметную логику |
-| `Builder` | пошагово собирать сложное значение | исполнять собранное |
-| `Codec` | переводить значение между представлениями без потерь | валидировать бизнес-правила |
-| `Handler` | выполнять ровно одну названную операцию | быть точкой входа нескольких операций |
-| `Checker` | проверять условие и возвращать решение-данные | бросать исключение вместо ответа |
-| `Sweeper` | находить и обрабатывать просроченное | планировать будущее |
-| `Compiler` | превращать декларации в неизменяемый артефакт | читать артефакт в рантайме |
+| `Repository` | Access the stored data of one entity | Calculate, decide, dispatch |
+| `Factory` | Construct a valid object from inputs | Persist data or read from storage |
+| `Resolver` | Select an implementation or value from inputs | Perform the selected operation |
+| `Registry` | Hold named contributions and return them deterministically | Create or modify contributions |
+| `Policy` | Decide whether an action is allowed and explain why | Change state |
+| `Provider` | Participate in the Laravel bootstrap lifecycle | Implement domain logic |
+| `Builder` | Assemble a complex value step by step | Execute the assembled operation |
+| `Codec` | Convert a value between representations without loss | Validate business rules |
+| `Handler` | Perform one named operation | Serve as the entry point for multiple operations |
+| `Checker` | Evaluate a condition and return the result as data | Throw an exception in place of a decision |
+| `Sweeper` | Find and process overdue work | Schedule future work |
+| `Compiler` | Convert declarations into an immutable artifact | Read that artifact at runtime |
 
-## Имена, которые не вводятся
+## Names requiring justification
 
-Это **запахи, а не абсолютные запреты** — у каждого есть легальный случай. Документ
-формулирует «не вводится новое без названной причины». Часть имён **встречается в дереве**
-(долг, переименование — `rename-registry.md`, исполнен P15.13); часть **не встречается** (профилактика).
+New uses of the following names require a documented reason. The P3 gate checks newly introduced names. Historical renames are recorded in `rename-registry.md` (P15.13).
 
-| Имя | Статус | Легальный случай, названный явно |
+| Name | Rule | Recognized exception |
 |:--|:--|:--|
-| `Dep` | снят в P15.1, класс теперь `ModuleDependency`; новое вхождение запрещено | нет |
-| `*Info` | встречается (`CurrencyInfo` в `axiomasoft/corex-intl`) → P16 | устоявшийся термин предметной области |
-| `Manager` | новое не вводится | узкий технический термин с жизненным циклом (`SearchManager` — легальный случай) |
-| `Service` | новое не вводится | только при записанном здесь значении суффикса; сегодня не записано |
-| `Data` | как **каталог** ограничен STR-006 | как суффикс DTO не используется |
-| `Helper`, `Util`, `Common`, `Misc`, `Processor`, `BaseService`, `AbstractManager`, `DataManager` | не вводятся | в дереве 0 совпадений — запрет профилактический |
+| `Dep` | Removed in P15.1 in favor of `ModuleDependency`. Reintroduction is prohibited. | None |
+| `*Info` | Historical use includes `CurrencyInfo` in `axiomasoft/corex-intl` (P16). | An established domain term |
+| `Manager` | Avoid new uses. | A narrowly defined technical lifecycle, as in `SearchManager` |
+| `Service` | Avoid new uses. | Requires a suffix definition in this policy. None is currently defined. |
+| `Data` | STR-006 governs the directory name. | Do not use it as a DTO suffix. |
+| `Helper`, `Util`, `Common`, `Misc`, `Processor`, `BaseService`, `AbstractManager`, `DataManager` | Do not introduce them. | The original inventory found no matches. |
 
-Правило гейта (P3): проверяется **появление нового** имени из списка, а не существующий долг.
+## Variables and public signatures
 
-## Правила имён переменных, идентификаторов, булевых, коллекций
+- Name the entity an identifier belongs to, for example `accountId`, `workspaceId` or `actorId`. Use a bare `$id` only inside a method where its type makes the subject clear.
+- Name booleans as affirmative statements, such as `$isFrozen`, `$hasWorkspace` and `$allowsRetry`. Avoid negative names such as `$notReady`.
+- Use the plural of the contents for a collection, for example `$modules` or `$candidates`. Avoid `$modulesList`, `$modulesArray` and `$modulesCollection`.
+- Name both sides of a mapping, for example `$moduleById` or `$definitionsByEntity`.
+- Include the unit when the type does not convey it, as in `$maxMemoryMiB`, `$maxRuntimeSeconds` or `$amountMinor`.
+- Name an enum case for the value it represents, as in `AttributeLifecycle::Deprecated`.
 
-- Идентификатор в сигнатуре называет, **чей** он: `accountId`, `workspaceId`, `actorId`.
-  Голый `$id` допустим только внутри метода, где предмет очевиден из типа.
-- Булево называет утверждение, а не вопрос: `$isFrozen`, `$hasWorkspace`, `$allowsRetry`.
-  Отрицательные имена (`$notReady`) не вводятся.
-- Коллекция — множественное число содержимого: `$modules`, `$candidates`. Суффиксы
-  `$modulesList`, `$modulesArray`, `$modulesCollection` не вводятся.
-- Отображение называет обе стороны: `$moduleById`, `$definitionsByEntity`.
-- Единица измерения в имени, если не следует из типа: `$maxMemoryMiB`, `$maxRuntimeSeconds`,
-  `$amountMinor`.
-- Enum-случай — значение, а не код: `AttributeLifecycle::Deprecated`.
-
-Гейт (P3) применяется **только к публичным сигнатурам**; локальные переменные — ревью.
+The P3 gate applies only to public signatures. Review local variable names during code review.
