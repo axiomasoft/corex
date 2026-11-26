@@ -127,7 +127,7 @@ it('refuses local usage through a replaced account root', function (): void {
 
 describe('native object integration', function (): void {
     beforeEach(function (): void {
-        $configPath = getenv('COREX_P3_STORAGE_CONFIG');
+        $configPath = getenv('COREX_TEST_STORAGE_CONFIG');
 
         if ($configPath === false) {
             $this->markTestSkipped('Explicit isolated native SDK/service configuration is required.');

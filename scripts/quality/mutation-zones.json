@@ -5,7 +5,6 @@
         "packages/access/src/Access/Internal/CoreXAccessContextMapper.php",
         "packages/access/src/Access/Internal/DirectGrantLookup.php",
         "packages/access/src/Access/Internal/EffectiveWorkspaceScope.php",
-        "packages/access/src/Access/Internal/ExistingTables.php",
         "packages/access/src/Access/Internal/MatrixCell.php",
         "packages/access/src/Access/Internal/MatrixPanel.php",
         "packages/access/src/Access/Internal/MatrixPermission.php",
@@ -96,10 +95,10 @@
         "packages/core/src/Messaging/Exceptions/OutboxRefused.php",
         "packages/core/src/Messaging/Exceptions/UnknownMessageContract.php",
         "packages/core/src/Messaging/Internal/ArrayMessageContractRegistry.php",
+        "packages/core/src/Messaging/Internal/BatchedDelete.php",
         "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
         "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
         "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
-        "packages/core/src/Messaging/Internal/BatchedDelete.php",
         "packages/core/src/Messaging/Internal/DatabasePollPubSub.php",
         "packages/core/src/Messaging/Internal/DefaultWorkerRuntime.php",
         "packages/core/src/Messaging/Internal/DomainEventDefaults.php",
@@ -525,17 +524,6 @@
         "products/flex-crm/src/Contact/Events/ContactCreated.php",
         "products/flex-crm/src/Contact/Models/Contact.php",
         "products/flex-crm/src/Contact/Models/ContactCompany.php",
-        "products/flex-crm/src/Context/Channels.php",
-        "products/flex-crm/src/Context/ContextGuard.php",
-        "products/flex-crm/src/Context/Contracts/CrmExecutionContext.php",
-        "products/flex-crm/src/Context/CrmScope.php",
-        "products/flex-crm/src/Context/Data/Actor.php",
-        "products/flex-crm/src/Context/Data/ExecutionContext.php",
-        "products/flex-crm/src/Context/Internal/LockedAdmissions.php",
-        "products/flex-crm/src/Context/Internal/RecordRules.php",
-        "products/flex-crm/src/Context/Models/Concerns/HasActivities.php",
-        "products/flex-crm/src/Context/Models/Concerns/HasCrmContext.php",
-        "products/flex-crm/src/Context/Models/Source.php",
         "products/flex-crm/src/CrmModule.php",
         "products/flex-crm/src/CrmServiceProvider.php",
         "products/flex-crm/src/Deal/Actions/CreateDeal.php",
@@ -561,6 +549,22 @@
       ],
       "package": "flex-crm",
       "zone": "other"
+    },
+    {
+      "files": [
+        "products/flex-crm/src/Context/Channels.php",
+        "products/flex-crm/src/Context/ContextGuard.php",
+        "products/flex-crm/src/Context/Contracts/CrmExecutionContext.php",
+        "products/flex-crm/src/Context/CrmScope.php",
+        "products/flex-crm/src/Context/Data/Actor.php",
+        "products/flex-crm/src/Context/Data/ExecutionContext.php",
+        "products/flex-crm/src/Context/Internal/RecordRules.php",
+        "products/flex-crm/src/Context/Models/Concerns/HasActivities.php",
+        "products/flex-crm/src/Context/Models/Concerns/HasCrmContext.php",
+        "products/flex-crm/src/Context/Models/Source.php"
+      ],
+      "package": "flex-crm",
+      "zone": "security"
     },
     {
       "files": [
@@ -814,6 +818,7 @@
         "packages/notifications/src/Runtime/Internal/DeliveryCoordinator.php",
         "packages/notifications/src/Runtime/Internal/DeliveryIntents.php",
         "packages/notifications/src/Runtime/Internal/DeliveryReceiptProjector.php",
+        "packages/notifications/src/Runtime/Internal/DeliveryState.php",
         "packages/notifications/src/Runtime/Internal/DeliveryStore.php",
         "packages/notifications/src/Runtime/Internal/DenyNotificationPolicy.php",
         "packages/notifications/src/Runtime/Internal/DigestRunIdentity.php",
@@ -824,6 +829,7 @@
         "packages/notifications/src/Runtime/Internal/Jobs/DeliverNotification.php",
         "packages/notifications/src/Runtime/Internal/NotificationDigestDueSource.php",
         "packages/notifications/src/Runtime/Internal/NotificationModuleReferences.php",
+        "packages/notifications/src/Runtime/Internal/NotificationRetention.php",
         "packages/notifications/src/Runtime/Internal/NotificationScope.php",
         "packages/notifications/src/Runtime/Internal/NotificationValue.php",
         "packages/notifications/src/Runtime/Internal/NotificationVisibility.php",
@@ -833,7 +839,7 @@
         "packages/notifications/src/Runtime/Internal/SqlNotificationCenter.php"
       ],
       "package": "notifications",
-      "zone": "other"
+      "zone": "messaging"
     },
     {
       "files": [

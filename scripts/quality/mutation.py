@@ -25,7 +25,7 @@ GROUPS = {'killed': 'killedCount', 'escaped': 'escapedCount', 'timeouted': 'time
           'killedByStaticAnalysis': 'killedByStaticAnalysisCount', 'ignored': 'ignoredCount'}
 STATS = {'totalMutantsCount', 'skippedCount', 'msi', 'mutationCodeCoverage', 'coveredCodeMsi', *GROUPS.values()}
 SECURITY_PACKAGES = {'access', 'tenancy', 'tools', 'webhooks'}
-MESSAGING_PACKAGES = {'scheduler', 'workflow', 'recurring-tasks', 'import-export'}
+MESSAGING_PACKAGES = {'notifications', 'scheduler', 'workflow', 'recurring-tasks', 'import-export'}
 SECURITY_CORE = ('Context/', 'Tenancy/', 'Database/', 'Data/', 'Foundation/Internal/PackmanActorResolver.php',
                  'Foundation/Internal/PackmanContextResolver.php', 'Foundation/Internal/PackmanFeatureFlags.php')
 ANCHORS = ('Foundation/Internal/PackmanActorResolver.php', 'Foundation/Internal/PackmanContextResolver.php',
@@ -82,6 +82,8 @@ def expected_zone(path):
     require(len(parts) >= 4 and parts[2] == 'src', 'Invalid production path: ' + path)
     package = parts[1]
     relative = '/'.join(parts[3:])
+    if parts[0] == 'products' and package == 'flex-crm' and relative.startswith('Context/'):
+        return 'security'
     if parts[0] == 'packages':
         if package in SECURITY_PACKAGES:
             return 'security'
@@ -182,7 +184,12 @@ def confirmation(ref, root, identity):
     path = (root / ref['path']).resolve()
     require(path.is_relative_to(root.resolve()) and path.is_file() and sha(path) == ref['sha256'], 'Stale confirmation')
     report = load(path)
-    require(report.get('review_item') == 'P09.8' and report.get('verdict') == 'confirmed' and
+    if 'schema' in report:
+        recognized = report['schema'] == 'corex-mutation-confirmation/1'
+    else:
+        legacy_item = load(ROOT / QUALITY / 'infection-compatibility.json')['legacy_confirmation_review_item']
+        recognized = report.get('review_item') == legacy_item
+    require(recognized and report.get('verdict') == 'confirmed' and
             identity in report.get('confirmed', []), 'Unconfirmed exception: ' + identity)
     return report
 
@@ -311,7 +318,7 @@ def input_hashes(root):
                     '.cache' not in p.name and not any(part.startswith('.phpunit') for part in p.parts):
                 paths.add(str(p.relative_to(root)))
     paths.update(('composer.json', 'composer.lock', 'phpunit.xml', '.github/workflows/ci.yml', 'scripts/php84'))
-    native_config = os.environ.get('COREX_P3_STORAGE_CONFIG')
+    native_config = os.environ.get('COREX_TEST_STORAGE_CONFIG')
     if native_config:
         native_path = Path(native_config).resolve()
         require(native_path.is_relative_to(root.resolve()) and native_path.is_file(), 'Native test config must be inside the repository')
@@ -822,7 +829,7 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
                'versions': versions, 'database': db, 'lanes': lanes,
                'environment': php_witness(binary),
                'connection': {k: env[k] for k in ('PGSQL_HOST', 'PGSQL_PORT', 'PGSQL_USERNAME')},
-               'native_test_environment': {k: env[k] for k in ('P3_REDIS_PORT', 'COREX_P3_STORAGE_CONFIG') if k in env},
+               'native_test_environment': {k: env[k] for k in ('COREX_TEST_REDIS_PORT', 'COREX_TEST_STORAGE_CONFIG') if k in env},
                'process_evidence': [artifact(p, base) for directory in ('processes', 'invalid')
                                     for p in sorted((base / directory).rglob('*')) if p.is_file()],
                'duration_seconds': round(time.monotonic() - start, 3),
@@ -831,7 +838,7 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
     save(output / ('probe-latest.json' if probe else 'latest-' + fragment['package'] + '-' + fragment['zone'] + '.json'),
          artifact(base / 'receipt.json', output))
     print(fragment['package'] + '/' + fragment['zone'] + ': MSI=' + lanes[-1]['score']['msi'] + '; SQLite + PG initial suites', flush=True)
-    require(probe or receipt['result'] == 'passed', 'Fragment below threshold; behavioral repairs belong to P09.12–14')
+    require(probe or receipt['result'] == 'passed', 'Fragment below threshold')
     return receipt
 
 
