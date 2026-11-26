@@ -34,8 +34,6 @@ return new class extends PackmanMigration
         DB::statement("ALTER TABLE root_account_schema_state ADD CONSTRAINT root_account_schema_state_status_ck CHECK (status IN ('ok','migrating','failed','blocked'))");
 
         DB::statement("CREATE INDEX root_account_schema_state_bad_ix ON root_account_schema_state (status) WHERE status <> 'ok'");
-
-        DB::statement("COMMENT ON COLUMN root_account_schema_state.status IS 'migrating = сигнал для B-15: DDL-воркер кастомных полей аккаунта откладывает ops (R-13 §3.5); failed→blocked = аккаунт исключён из волн до разбора, код обслуживает совместимой версией'");
     }
 
     public function down(): void

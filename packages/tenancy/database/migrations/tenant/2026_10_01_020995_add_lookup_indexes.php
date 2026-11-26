@@ -22,6 +22,13 @@ return new class extends PackmanMigration
 
         $table = $this->db()->getQueryGrammar()->wrapTable('wsp_workspaces');
         $this->db()->statement("CREATE INDEX IF NOT EXISTS wsp_workspaces_parent_id_ix ON {$table} (parent_id)");
+
+        if ($this->db()->getDriverName() === 'pgsql') {
+            $table = $this->db()->getQueryGrammar()->wrapTable('wsp_invitations');
+            $this->db()->statement("COMMENT ON COLUMN {$table}.role_id IS 'Optional role reference owned by the access package. The application resolves stale references when accepting an invitation.'");
+            $table = $this->db()->getQueryGrammar()->wrapTable('wsp_workspaces');
+            $this->db()->statement("COMMENT ON COLUMN {$table}.path IS 'Hierarchy path for subtree predicates. The parent foreign key is stored in parent_id. Partner membership grants no visibility into its parent.'");
+        }
     }
 
     public function down(): void

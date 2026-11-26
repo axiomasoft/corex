@@ -35,6 +35,18 @@ return new class extends PackmanMigration
 
         $table = $this->db()->getQueryGrammar()->wrapTable('root_oauth_refresh_tokens');
         $this->db()->statement("CREATE INDEX IF NOT EXISTS root_oauth_refresh_tokens_session_ix ON {$table} (session_id)");
+
+        if ($this->db()->getDriverName() === 'pgsql') {
+            $table = $this->db()->getQueryGrammar()->wrapTable('root_account_schema_state');
+            $this->db()->statement("COMMENT ON COLUMN {$table}.status IS 'Migrating defers custom-field DDL. A blocked account stays out of migration waves until the failure is resolved and uses a compatible application version.'");
+            $table = $this->db()->getQueryGrammar()->wrapTable('root_accounts');
+            $this->db()->statement("COMMENT ON COLUMN {$table}.embedding_model IS 'The database has one active embedding model. Changing its vector dimension requires a schema change and reindexing.'");
+            $table = $this->db()->getQueryGrammar()->wrapTable('root_clusters');
+            $this->db()->statement("COMMENT ON TABLE {$table} IS 'PostgreSQL cells used to route tenant databases and track their capacity.'");
+            $this->db()->statement("COMMENT ON COLUMN {$table}.app_db_user IS 'One PostgreSQL role per cell keeps the PgBouncer pool count proportional to the number of databases.'");
+            $table = $this->db()->getQueryGrammar()->wrapTable('root_impersonation_grants');
+            $this->db()->statement("COMMENT ON COLUMN {$table}.target_user_id IS 'User ID in the tenant database. A foreign key cannot span the two databases.'");
+        }
     }
 
     public function down(): void

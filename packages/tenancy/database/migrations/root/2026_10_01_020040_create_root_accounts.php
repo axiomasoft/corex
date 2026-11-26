@@ -60,7 +60,6 @@ return new class extends PackmanMigration
         DB::statement('CREATE INDEX root_accounts_purge_ix ON root_accounts (purge_after) WHERE purge_after IS NOT NULL');
 
         DB::statement("COMMENT ON COLUMN root_accounts.db_name IS 'acc_||hex(id); UNIQUE, никогда не переименовывается'");
-        DB::statement("COMMENT ON COLUMN root_accounts.embedding_model IS 'Контракт провижининга R-16: одна активная embedding-модель на БД; смена dim = ALTER+реиндекс, вне happy-path'");
     }
 
     public function down(): void

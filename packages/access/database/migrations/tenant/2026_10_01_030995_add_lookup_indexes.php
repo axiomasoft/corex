@@ -19,6 +19,13 @@ return new class extends PackmanMigration
 
         $table = $this->db()->getQueryGrammar()->wrapTable('aut_roles');
         $this->db()->statement("CREATE INDEX IF NOT EXISTS aut_roles_cloned_from_id_ix ON {$table} (cloned_from_id)");
+
+        if ($this->db()->getDriverName() === 'pgsql') {
+            $table = $this->db()->getQueryGrammar()->wrapTable('aut_role_assignments');
+            $this->db()->statement("COMMENT ON TABLE {$table} IS 'Role assignments apply to users, agents and API keys. An agent acting for a user is limited to permissions shared by the user and the agent role.'");
+            $table = $this->db()->getQueryGrammar()->wrapTable('aut_role_matrix');
+            $this->db()->statement("COMMENT ON TABLE {$table} IS 'Base grants use the widest scope across roles. A matching contextual grant overrides the base grant and may narrow it. A missing grant has no permissions.'");
+        }
     }
 
     public function down(): void

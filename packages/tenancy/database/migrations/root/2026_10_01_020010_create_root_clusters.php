@@ -39,9 +39,6 @@ return new class extends PackmanMigration
         });
 
         DB::statement("ALTER TABLE root_clusters ADD CONSTRAINT root_clusters_status_ck CHECK (status IN ('provisioning','active','draining','readonly','retired'))");
-
-        DB::statement("COMMENT ON TABLE root_clusters IS 'PG-ячейки (шарды) парка — capacity/routing control plane (B-11 §2.1)'");
-        DB::statement("COMMENT ON COLUMN root_clusters.app_db_user IS 'Один PG-юзер на ячейку: пулы PgBouncer = кол-ву БД, не БД×юзеров (R-15)'");
     }
 
     public function down(): void

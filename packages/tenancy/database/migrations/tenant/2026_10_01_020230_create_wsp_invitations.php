@@ -37,8 +37,6 @@ return new class extends PackmanMigration
         DB::statement("ALTER TABLE wsp_invitations ALTER COLUMN expires_at SET DEFAULT (now() + interval '7 days')");
 
         DB::statement('CREATE INDEX wsp_invitations_email_ix ON wsp_invitations (lower(email)) WHERE status = \'pending\'');
-
-        DB::statement("COMMENT ON COLUMN wsp_invitations.role_id IS 'Soft-ref, NO FK (D21): aut_roles lands later with axiomasoft/corex-access (P2.8); cleanup on accept is application-level, not ON DELETE SET NULL'");
     }
 
     public function down(): void
