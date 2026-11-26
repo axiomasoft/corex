@@ -1,22 +1,12 @@
-# Отклонённые решения
+# Rejected proposals
 
-Здесь живут предложения, у которых **верная предпосылка** и отвергнутое решение. Документ
-существует, чтобы одно и то же предложение не возвращалось каждые полгода без новых данных.
+Review these decisions when preparing a major release. Each row identifies the evidence that would justify reconsidering the proposal.
 
-Опровергнутая предпосылка сюда не попадает: для неё нет решения, которое можно принять или
-отклонить. Такие пункты не включаются в этот реестр.
-
-Каждая запись обязана нести условие возврата. Запись без условия возврата — не отказ, а
-забывание.
-
-**Каденция пересмотра:** перечень просматривается при подготовке каждого мажорного релиза.
-Пересмотр без новых данных не меняет решения — это и есть смысл записи.
-
-| Что отклонено | Почему | Условие возврата |
-|:--|:--|:--|
-| Каталоги `packages/capabilities/` и `packages/integrations/` (A24) | 20 path-репозиториев, пути CI-джобов, конфигурации статанализа и рецепты публикации пришлось бы переписать при нулевом изменении направления зависимостей, которое и так проверяется гейтом | Радикальный рост числа пакетов |
-| Немедленное выделение девяти возможностей `axiomasoft/corex` в отдельные пакеты (A30) | Отдельный Composer-пакет на один-два файла даёт постоянную стоимость (имя, зеркало, CHANGELOG, CI-джоб, версия, матрица совместимости) при нулевом выигрыше в границе, которую даёт arch-тест | Собственный release lifecycle, внешний потребитель без остального ядра либо тяжёлая зависимость |
-| Переименование `Extend`→`Extension(s)` и `Gate`→`Activation` (A45) | Косметика с высоким радиусом при доктринально закреплённом имени закрытого набора | Смена самого набора механизмов расширения через RFC |
-| Date-based версии `YYYY-MM` как основной механизм совместимости внешнего API (S03) | Сервер и клиенты self-hosted обновляются независимо; дата в пути не отвечает на вопрос «установлен ли модуль» | Переход продукта в модель с централизованным контролем раскатки |
-| Выделение `operations-http` / `operations-tools` в отдельные пакеты (S34) | Нет измеренного dependency pressure | Тяжёлая транспортная зависимость, которую часть установок не хочет ставить |
-| Квартальный cadence версий внешнего API | Следствие предыдущего пункта: без date-версий квартальный ритм теряет предмет | Возврат date-версий |
+| Proposal | Reason | Reconsider when |
+|---|---|---|
+| Add `packages/capabilities/` and `packages/integrations/` directories | Moving 20 path repositories would require changes to CI, analysis and publishing. The architecture gate already enforces dependency direction. | The number of packages grows substantially. |
+| Split nine kernel capabilities into packages immediately | Each split would require a name, mirror, changelog, CI lane, versioning and compatibility checks for one or two files. Existing architecture tests enforce the boundaries. | A capability needs independent releases, has a consumer outside the kernel, or introduces a heavy dependency. |
+| Rename `Extend` to `Extension(s)` and `Gate` to `Activation` | The established names identify a closed set of extension mechanisms. Changing them would impose a migration on consumers. | An RFC changes the extension mechanisms themselves. |
+| Use `YYYY-MM` as the primary external API compatibility signal | Self-hosted clients and servers update independently. Clients need to discover installed capabilities. | The product centrally controls deployment. |
+| Split `operations-http` and `operations-tools` | No measured dependency cost currently justifies separate packages. | Some installations need to avoid a substantial transport dependency. |
+| Release an external API version quarterly | A calendar cadence only served the date-based versioning proposal. | The project adopts date-based versions. |
