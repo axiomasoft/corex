@@ -3,7 +3,7 @@
 ## Unreleased — notification retention
 
 - Add `corex:notifications:prune` and `corex-notifications.retention.settled_days` (positive integer, default 90). In the active account and workspace, compact expired read notifications in bounded transactions. Unread notifications, digest members and records with unfinished deliveries, including provider acceptance awaiting confirmation, keep their content.
-- Preserve replay identities and provider receipts after compaction. Tenant schema v3 adds an archive marker and an index for the retention scan. Apply the schema migration before deploying the new runtime.
+- Preserve replay identities and provider receipts after compaction. Apply tenant schema v3 before deploying the new runtime. On PostgreSQL, schedule a maintenance window for large inboxes because the migration holds a table lock while it builds both indexes. Rollback checks for archived rows while concurrent pruning is excluded.
 
 ## Unreleased — CoreX 2.0 delivery receipts
 

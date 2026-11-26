@@ -52,7 +52,7 @@ final readonly class NotificationRetention
                 $compacted = $this->compact(connection: $connection, scope: $scope, ids: NotificationValue::strings($rows->pluck('id')->all()), now: $now, cutoff: $cutoff);
 
                 return [$rows->last(), $compacted];
-            }, attempts: 3);
+            }, 3);
             $total += $compacted;
         } while ($after !== null);
 

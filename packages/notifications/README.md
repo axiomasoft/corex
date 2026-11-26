@@ -60,4 +60,7 @@ validated replay and safe mapping.
 
 Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
-Tenant schema v3 adds retention metadata and indexes to existing installations. Rollback is blocked once the command has compacted a notification.
+Tenant schema v3 adds the archive marker and builds two inbox indexes in the same transaction.
+On PostgreSQL the migration holds an exclusive lock on `ntf_notifications` until both indexes
+are ready. Schedule a maintenance window for large inboxes. The command's `--batch` setting
+applies to pruning. Rollback is blocked once the command has compacted a notification.

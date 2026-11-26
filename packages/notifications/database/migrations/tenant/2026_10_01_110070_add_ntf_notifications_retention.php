@@ -36,14 +36,31 @@ return new class extends PackmanMigration
 
     public function down(): void
     {
-        if ($this->db()->table('ntf_notifications')->whereNotNull('pruned_at')->exists()) {
-            throw new RuntimeException('MigrationRollbackDenied: archived notifications require their replay records.');
-        }
-        $this->db()->getSchemaBuilder()->table('ntf_notifications', function (Blueprint $table): void {
-            $table->dropIndex('ntf_notifications_retention_ix');
-            $table->dropIndex('ntf_notifications_inbox_ix');
-            $table->dropColumn('pruned_at');
-            $table->index(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'id'], 'ntf_notifications_inbox_ix');
+        $connection = $this->db();
+        $connection->transaction(static function () use ($connection): void {
+            $table = $connection->getQueryGrammar()->wrapTable('ntf_notifications');
+
+            if ($connection->getDriverName() === 'pgsql') {
+                $connection->statement("LOCK TABLE {$table} IN ACCESS EXCLUSIVE MODE");
+            } else {
+                // Reserve the SQLite writer before checking for archived rows.
+                $connection->statement("UPDATE {$table} SET id = id WHERE 0 = 1");
+            }
+
+            $schema = $connection->getSchemaBuilder();
+            $hasArchiveMarker = $schema->hasColumn('ntf_notifications', 'pruned_at');
+            if ($hasArchiveMarker && $connection->table('ntf_notifications')->whereNotNull('pruned_at')->exists()) {
+                throw new RuntimeException('MigrationRollbackDenied: archived notifications require their replay records.');
+            }
+
+            $connection->statement('DROP INDEX IF EXISTS ntf_notifications_retention_ix');
+            $connection->statement('DROP INDEX IF EXISTS ntf_notifications_inbox_ix');
+            if ($hasArchiveMarker) {
+                $schema->table('ntf_notifications', static function (Blueprint $blueprint): void {
+                    $blueprint->dropColumn('pruned_at');
+                });
+            }
+            $connection->statement("CREATE INDEX ntf_notifications_inbox_ix ON {$table} (account_id, account_incarnation, workspace_scope, recipient_kind, recipient_id, id)");
         });
     }
 };
