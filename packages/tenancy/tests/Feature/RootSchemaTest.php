@@ -191,7 +191,7 @@ it('cascades identity_accounts on delete and restricts cluster deletion while re
     expect(DB::table('root_identity_accounts')->where('account_id', $accountId)->exists())->toBeFalse();
 });
 
-it('accepts any application product slug but keeps the shape invariant (P2.17/D94)', function (): void {
+it('accepts any application product slug but keeps the shape invariant ', function (): void {
     $accountId = makeAccount(makeCluster(), makeIdentity());
 
     // The kernel schema no longer enumerates products: an arbitrary slug from
@@ -217,7 +217,7 @@ it('accepts any application product slug but keeps the shape invariant (P2.17/D9
     ]))->toThrow(QueryException::class);
 });
 
-it('carries table/column comments (AC-32)', function (): void {
+it('carries table/column comments', function (): void {
     $comment = DB::selectOne(
         "SELECT obj_description('root_clusters'::regclass) AS comment",
     );

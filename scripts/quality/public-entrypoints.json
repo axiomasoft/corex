@@ -2642,7 +2642,7 @@
             "root": {
                 "path": "packages/tenancy/tests/Feature/WorkspaceResolverTest.php",
                 "anchor": "$invitation = Invitation::query()->create([",
-                "sha256": "560fdd78a9c8cc4c5fb98761076b6d4555c955e218c34d0f69f832ca048e377d"
+                "sha256": "95c19a028a0518669f06b3ba22aeef35adba78ef8e1297cb44c1cb3b6dd3c61b"
             },
             "expires": null
         },

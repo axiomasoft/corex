@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Enums\SchemaScope;
 
-// P2.12 — MigrationWaveOrchestrator + corex:tenancy:migrate (B-11 §5.6). "MW"
+// MigrationWaveOrchestrator + corex:tenancy:migrate. "MW"
 // suffix on shared helpers, same reasoning as AccountLifecycleTest.php's
 // "LC" suffix (Pest loads every test file into one process).
 uses()->group('pg');
@@ -151,7 +151,7 @@ function makeMwBatch(int $toVersion = 1, string $wave = 'internal'): string
     return $id;
 }
 
-it('AC-11: a failing account does not abort the batch; a second failure escalates failed→blocked', function (): void {
+it('a failing account does not abort the batch; a second failure escalates failed→blocked', function (): void {
     [$goodId, $badId] = makeMwAccounts(2);
     $batchId = makeMwBatch();
 
@@ -190,7 +190,7 @@ it('AC-11: a failing account does not abort the batch; a second failure escalate
         ->and($good->current_version)->toBe(1);
 });
 
-it('AC-12: the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\')) on the account\'s own connection', function (): void {
+it('the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\')) on the account\'s own connection', function (): void {
     makeMwAccounts(1);
     $batchId = makeMwBatch();
 
@@ -204,7 +204,7 @@ it('AC-12: the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\'))
     // this test's bare fixture database doesn't have, so the migrate step
     // itself may fail past the lock statement; that failure is swallowed
     // into schema_state.status='failed' by the orchestrator (already
-    // covered by the AC-11 test) — irrelevant to AC-12, which only asserts
+    // covered by the migration test) — this test only checks
     // the lock CALL itself was issued.
     $orchestrator = new MigrationWaveOrchestrator(
         schema: resolve(SchemaMigrator::class),

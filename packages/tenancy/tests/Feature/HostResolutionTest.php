@@ -298,7 +298,7 @@ it('ж: смена домена → старый host больше не резо
     $resolver = resolverHR();
     expect($resolver->resolve('old.example.test'))->toBe($account->id); // primes the cache
 
-    // Retiring a domain (soft-delete, D122/§7.3 п.9 semantics) — NOT an
+    // Retiring a domain (soft deletion) — NOT an
     // in-place rename of `host`: InvalidatesTenantsResolverCache invalidates
     // via the account's CURRENT `domains` set, which still surfaces a
     // soft-deleted row (the relation is unscoped) as long as its `host`
@@ -320,7 +320,7 @@ it('ж: смена домена → старый host больше не резо
     expect(resolverHR()->resolve('new.example.test'))->toBe($account->id);
 });
 
-it('з: два аккаунта × два домена, чередование запросов → 0 пересечений (AC-30)', function (): void {
+it('з: два аккаунта × два домена, чередование запросов → 0 пересечений', function (): void {
     [$accountA] = makeAccountWithDomainHR('tenant-a.example.test');
     [$accountB] = makeAccountWithDomainHR('tenant-b.example.test');
 

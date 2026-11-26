@@ -38,7 +38,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Psr\Clock\ClockInterface;
 
-// P2.12 — AccountLifecycle FSM (B-11 §5.1). Reuses PendingPoolTest's
+// AccountLifecycle FSM. Reuses PendingPoolTest's
 // physical-clone bootstrap style with an "LC"-suffixed const/helper set
 // (Pest loads every test file into the same process — a shared name would
 // fatal-collide with PendingPoolTest.php).
@@ -197,7 +197,7 @@ function activateLcAccount(): AccountRef
     return lcLifecycle()->activateFromPool($slug, $ownerId, 'crm');
 }
 
-it('activateFromPool() claims, sets slug/owner/vertical, transitions provisioning→trial and provisions the platform domain (AC-13)', function (): void {
+it('activateFromPool() claims, sets slug/owner/vertical, transitions provisioning→trial and provisions the platform domain', function (): void {
     Event::fake([TrialStarted::class]);
 
     $account = activateLcAccount();
@@ -272,7 +272,7 @@ it('startGrace() sets grace_until/purge_after and fires GraceStarted', function 
     Event::assertDispatched(GraceStarted::class, fn (GraceStarted $e): bool => $e->accountId === $account->id);
 });
 
-it('purge() before a ready export throws and does NOT drop the database (AC-7)', function (): void {
+it('purge() before a ready export throws and does NOT drop the database', function (): void {
     $account = activateLcAccount();
     lcLifecycle()->activate($account);
     lcLifecycle()->startGrace($account);
@@ -300,7 +300,7 @@ it('purge() before a ready export throws and does NOT drop the database (AC-7)',
         ->and($raw->deleted_at)->toBeNull();
 });
 
-it('purge() after a ready export drops the DB, soft-deletes the account, removes its domains, fires AccountPurged (AC-7)', function (): void {
+it('purge() after a ready export drops the DB, soft-deletes the account, removes its domains, fires AccountPurged', function (): void {
     Event::fake([AccountPurged::class]);
 
     $account = activateLcAccount();
@@ -431,7 +431,7 @@ it('holds the account row lock while validating and committing a transition', fu
     $other->disconnect();
 });
 
-it('purge() under active impersonation throws ImpersonationRestrictedException and never touches the tenant DB (D151)', function (): void {
+it('purge() under active impersonation throws ImpersonationRestrictedException and never touches the tenant DB ', function (): void {
     $account = activateLcAccount();
     lcLifecycle()->activate($account);
     lcLifecycle()->startGrace($account);

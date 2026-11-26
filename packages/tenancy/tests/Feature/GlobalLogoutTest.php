@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 
-// AC-15 — global logout revokes root_idp_sessions/root_oauth_refresh_tokens
+// global logout revokes root_idp_sessions/root_oauth_refresh_tokens
 // (a real revoke, never a DELETE) and the local tenant session dies with it;
 // EnforceSessionLifetime independently caps a session's lifetime at
 // corex-tenancy.oidc.max_session_lifetime_minutes (720 = 12h) regardless of what
@@ -180,7 +180,7 @@ it('г: локальная сессия убита — Auth::check()===false, se
         ->and($this->app['session']->getId())->not->toBe($sessionIdBefore);
 });
 
-// (д) EnforceSessionLifetime: 11h in → still authenticated; 12h01m in → session killed (AC-15).
+// (д) EnforceSessionLifetime: 11h in → still authenticated; 12h01m in → session killed.
 it('д: EnforceSessionLifetime — сессия жива через 11ч', function (): void {
     $identityId = makeIdentityGL();
 
@@ -194,7 +194,7 @@ it('д: EnforceSessionLifetime — сессия жива через 11ч', funct
     $this->get('/oidc-lifetime-probe')->assertOk()->assertSee('authed');
 });
 
-it('д: EnforceSessionLifetime — сессия убита через 12ч01м (AC-15)', function (): void {
+it('д: EnforceSessionLifetime — сессия убита через 12ч01м', function (): void {
     $identityId = makeIdentityGL();
 
     Route::middleware('tenant')->get('/oidc-lifetime-probe', fn () => response(auth()->check() ? 'authed' : 'guest'));
