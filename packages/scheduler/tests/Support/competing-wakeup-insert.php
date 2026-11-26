@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Sleep;
-
 // The parent performs schedule() in a live Laravel transaction. Keep the competing
 // insert uncommitted until PostgreSQL itself reports that it blocks that backend.
 [$connection, $row, $parentPid] = json_decode(stream_get_contents(STDIN), true, flags: JSON_THROW_ON_ERROR);
@@ -25,7 +23,7 @@ while (microtime(true) < $end) {
         $db->commit();
         exit(0);
     }
-    Sleep::usleep(5000);
+    time_nanosleep(0, 5_000_000);
 }
 
 throw new RuntimeException('The competing schedule never reached its PostgreSQL lock.');
