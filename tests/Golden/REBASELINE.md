@@ -71,3 +71,4 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 | 2026-11-26 | Index tokens by session (commit 9aeb9dcb862d6ea8763af0cb1f243f315fb043f9) | schema | Support token revocation and foreign key checks. |
 | 2026-11-26 | Index referencing columns (commit 9747991962519525f88d2d886a3cf3de51235ffb) | schema | Support lookups from referenced parent rows. |
 | 2026-11-26 | Install lookup indexes on existing schemas | schema | Full referencing indexes cover inactive and soft-deleted child rows. The scheduler uses a dedicated runnable due-time index. |
+| 2026-11-26 | Record owned PHP declarations and explicit composition | php-surface | Freeze directly declared methods, constants and properties together with traits, trait adaptations, direct interfaces and enum backing types. |
