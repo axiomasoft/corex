@@ -8,7 +8,7 @@ Each entry names a specific mechanism that informed a CoreX decision and identif
 | Drupal | Keep the package category in `type`, tool configuration in `extra` and a cache of plugin definitions. | [Package taxonomy](taxonomy.md), EXT-003 |
 | TYPO3 | Version the extension metadata subtree in `composer.json`. | [Package taxonomy](taxonomy.md), `schema-version` |
 | Laravel | Discover packages through `extra.laravel` and keep local policy in the project root. | [Package taxonomy](taxonomy.md) |
-| Composer | Assign an owner to each namespace in `extra`. Express release stability in the version. | [Package taxonomy](taxonomy.md), D11 |
+| Composer | Assign an owner to each namespace in `extra`. Express release stability in the version. | [Package taxonomy](taxonomy.md) |
 | Shopware | Define the extension lifecycle in terms of installation, activation, deactivation and removal. | EXT-003 |
 | Shopify | Give a component exclusive ownership of its data. Enforce cross-boundary access restrictions mechanically. | DATA-001, DATA-003 |
 | Spring Modulith | A code-module boundary alone cannot isolate database access. | [Data ownership policy](data-ownership-policy.md) |

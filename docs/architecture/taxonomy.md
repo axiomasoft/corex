@@ -2,7 +2,7 @@
 
 **Version** 1.0.0 · **Status** normative · **Level** 0 (`corex/*`)
 
-The `extra.corex` block of a package's `composer.json` declares its architectural metadata. Articles `API-001` and `PKG-009` of the constitution govern the public surface and package boundaries. Composer retains its own package type and version (D11).
+The `extra.corex` block of a package's `composer.json` declares its architectural metadata. Articles `API-001` and `PKG-009` of the constitution govern the public surface and package boundaries. Composer retains its own package type and version.
 
 ## Composer metadata and architectural metadata
 

@@ -2,7 +2,7 @@
 
 **Version** 1.0.0 · **Status** normative · **Level** 0 (`corex/*`)
 
-This policy governs class names and public signatures. P3 defines the naming gate. Article `API-009` of the constitution indexes public signatures.
+This policy governs class names and public signatures. The naming gate checks new public signatures. Article `API-009` of the constitution indexes public signatures.
 
 ## Choosing a suffix
 
@@ -33,12 +33,12 @@ The noun before a suffix must describe the domain just as precisely as the suffi
 
 ## Names requiring justification
 
-New uses of the following names require a documented reason. The P3 gate checks newly introduced names. Historical renames are recorded in `rename-registry.md` (P15.13).
+New uses of the following names require a documented reason. The naming gate checks newly introduced names. Historical renames are recorded in `rename-registry.md`.
 
 | Name | Rule | Recognized exception |
 |:--|:--|:--|
-| `Dep` | Removed in P15.1 in favor of `ModuleDependency`. Reintroduction is prohibited. | None |
-| `*Info` | Historical use includes `CurrencyInfo` in `axiomasoft/corex-intl` (P16). | An established domain term |
+| `Dep` | Replaced by `ModuleDependency`. Reintroduction is prohibited. | None |
+| `*Info` | Historical use includes `CurrencyInfo` in `axiomasoft/corex-intl`. | An established domain term |
 | `Manager` | Avoid new uses. | A narrowly defined technical lifecycle, as in `SearchManager` |
 | `Service` | Avoid new uses. | Requires a suffix definition in this policy. None is currently defined. |
 | `Data` | STR-006 governs the directory name. | Do not use it as a DTO suffix. |
@@ -53,4 +53,4 @@ New uses of the following names require a documented reason. The P3 gate checks 
 - Include the unit when the type does not convey it, as in `$maxMemoryMiB`, `$maxRuntimeSeconds` or `$amountMinor`.
 - Name an enum case for the value it represents, as in `AttributeLifecycle::Deprecated`.
 
-The P3 gate applies only to public signatures. Review local variable names during code review.
+The naming gate applies only to public signatures. Review local variable names during code review.

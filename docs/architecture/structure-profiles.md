@@ -2,7 +2,7 @@
 
 **Version** 2.0.0 · **Status** normative · **Level** 0 (`axiomasoft/corex*`)
 
-Articles STR-002 through STR-006 define a common package layout regardless of the number of files. Decisions PLAN3.D57 and PLAN3.D58 established it. The historical glossary in Git defines the terms and the closed list of kernel modules (N5). The product in `products/flex-crm` retains its own layout (N8). See the [constitution](constitution.md#str-package-structure).
+Articles STR-002 through STR-006 define a common package layout regardless of the number of files. The historical glossary in Git defines the terms and the closed list of kernel modules. The product in `products/flex-crm` retains its own layout. See the [constitution](constitution.md#str-package-structure).
 
 ## Root and feature modules
 

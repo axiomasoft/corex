@@ -1,6 +1,6 @@
 # PHP API and SPI compatibility
 
-A type's source attribute declares its supported surface (PLAN3.D63/D64). The `since` value identifies the version that introduced the symbol. A published release requires separate verification.
+A type's source attribute declares its supported surface. The `since` value identifies the version that introduced the symbol. A published release requires separate verification.
 
 | Layer | Consumer use | Examples of breaking changes |
 |:--|:--|:--|

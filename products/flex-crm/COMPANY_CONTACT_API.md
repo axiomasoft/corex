@@ -39,7 +39,7 @@ must be an active, non-soft-deleted account user; current workspace must exist a
 soft-deleted, with active exact membership. Mutation checks hold shared user/workspace/
 membership locks through commit. Losing membership makes subsequent reads/writes fail.
 For user actors id equals principalId. Agent/api/workflow/import/system use a verified
-run-as principal under the same checks. Actor storage and events carry B-13
+run-as principal under the same checks. Actor storage and events carry
 `{source: user|agent|api|workflow|import|system, id, name}`; this is distinct from audit ACTOR.
 
 Workspace reads see only the current workspace; NULL records are included only with
@@ -65,7 +65,7 @@ No country/provider is inferred. Text components collapse Unicode whitespace; em
 components become NULL. Display name is last/first/middle joined with spaces and truncated
 deterministically to 255 Unicode characters. If no name exists, use primary email then first
 email, otherwise primary/first phone norm. If none exists, reject; never store an empty title.
-Search is rebuilt on model saving using PostgreSQL to_tsvector, `russian` by B-13 default;
+Search is rebuilt on model saving using PostgreSQL to_tsvector, with `russian` as the default configuration;
 consumers may set `flex-crm.search_language` to another installed regconfig. Invalid config
 causes transaction rollback. JSON channels defaults are []; duplicate INN is allowed.
 

@@ -25,7 +25,7 @@ Named exceptions include an owner and a removal condition. See the [exception re
 
 ## Enforcement index
 
-The historical P1 review counted automated checks for 13 of its 58 articles. The index below points to the current constitution. Each row names the primary evidence or the human review required for that article. Structural enforcement follows PLAN3.D57/D58. Existing layout exceptions are recorded in [the layout baseline](../../scripts/module-layout-baseline.json).
+The initial review counted automated checks for 13 of its 58 articles. The index below points to the current constitution. Each row names the primary evidence or the human review required for that article. The [module layout policy](structure-profiles.md) defines the structural checks. Existing layout exceptions are recorded in [the layout baseline](../../scripts/module-layout-baseline.json).
 
 | Article | Requirement | Check or review |
 |:--|:--|:--|

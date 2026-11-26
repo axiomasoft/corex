@@ -60,7 +60,7 @@ The fingerprint covers the enabled module set and versions, normalized declarati
 
 When delayed execution depends on the set of extensions, store the registry fingerprint or the chosen extension's ID and version with the decision. This allows workers to detect intervening activation or upgrade when retrying the job.
 
-For work that names a specific extension, replay must match the exact `point + id + version`. Keep `registryFingerprint` for diagnostic provenance and exclude it from the request hash and wakeup replay digest (D59, D103). Refuse execution when the version differs or a required stamp is missing. Legacy unstamped wakeups require explicit opt-in for each handler. Workflow retains its legacy identity algorithm for previously stored references.
+For work that names a specific extension, replay must match the exact `point + id + version`. Keep `registryFingerprint` for diagnostic provenance and exclude it from the request hash and wakeup replay digest. Refuse execution when the version differs or a required stamp is missing. Legacy unstamped wakeups require explicit opt-in for each handler. Workflow retains its legacy identity algorithm for previously stored references.
 
 ## Replacing snapshots in long-lived processes
 
