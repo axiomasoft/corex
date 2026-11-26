@@ -31,7 +31,6 @@ return new class extends PackmanMigration
             $table->json('provenance');
             $table->primary(['snapshot_id', 'namespace', 'source_id'], 'corex_reference_records_pk');
             $table->index(['snapshot_id', 'kind', 'normalized_name'], 'corex_reference_records_scan_ix');
-            $table->index(['snapshot_id', 'parent_namespace', 'parent_source_id'], 'corex_reference_records_parent_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

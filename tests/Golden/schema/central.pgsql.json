@@ -1073,6 +1073,16 @@
             },
             "indexes": [
                 {
+                    "name": "root_accounts_cluster_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "cluster_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "root_accounts_cluster_ix",
                     "kind": "ix",
                     "columns": [
@@ -1395,6 +1405,16 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "root_domains_account_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "root_domains_host_uq",
                     "kind": "uq",
@@ -1793,6 +1813,16 @@
                 }
             },
             "indexes": [
+                {
+                    "name": "root_idp_sessions_identity_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "identity_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "root_idp_sessions_identity_ix",
                     "kind": "ix",

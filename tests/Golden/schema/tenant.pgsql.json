@@ -2752,6 +2752,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_activities_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_activities_pk",
                     "kind": "pk",
                     "columns": [
@@ -3011,6 +3021,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_companies_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_companies_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -3055,6 +3075,16 @@
                     "kind": "ix",
                     "columns": [
                         "source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_companies_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -3317,6 +3347,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_contacts_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_contacts_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -3361,6 +3401,16 @@
                     "kind": "ix",
                     "columns": [
                         "source_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_contacts_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -3668,6 +3718,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_deals_company_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "company_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_deals_company_ix",
                     "kind": "ix",
                     "columns": [
@@ -3714,6 +3774,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_deals_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_deals_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -3721,6 +3791,16 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_pipeline_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "pipeline_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -3759,6 +3839,16 @@
                     "kind": "ix",
                     "columns": [
                         "stage_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_deals_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -4061,6 +4151,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "crm_leads_owner_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "crm_leads_owner_ix",
                     "kind": "ix",
                     "columns": [
@@ -4068,6 +4168,16 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "crm_leads_pipeline_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "pipeline_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -7980,6 +8090,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "sys_departments_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "sys_departments_workspace_ix",
                     "kind": "ix",
                     "columns": [
@@ -9235,18 +9355,6 @@
             },
             "indexes": [
                 {
-                    "name": "sys_wakeup_requests_due_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "account_id",
-                        "(\nCASE\n    WHEN ((status)::text = ANY ((ARRAY['running'::character varying, 'cancel-requested'::character varying])::text[])) THEN lease_until\n    WHEN ((status)::text = 'retry-scheduled'::text) THEN retry_at\n    ELSE fire_at\nEND)",
-                        "id"
-                    ],
-                    "predicate": "((status)::text = ANY ((ARRAY['pending'::character varying, 'retry-scheduled'::character varying, 'running'::character varying, 'cancel-requested'::character varying])::text[]))",
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
                     "name": "sys_wakeup_requests_identity_uq",
                     "kind": "uq",
                     "columns": [
@@ -9267,6 +9375,18 @@
                         "id"
                     ],
                     "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_wakeup_requests_runnable_due_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "(\nCASE\n    WHEN ((status)::text = ANY ((ARRAY['running'::character varying, 'cancel-requested'::character varying])::text[])) THEN lease_until\n    WHEN ((status)::text = 'retry-scheduled'::text) THEN retry_at\n    ELSE fire_at\nEND)",
+                        "id"
+                    ],
+                    "predicate": "((status)::text = ANY ((ARRAY['pending'::character varying, 'retry-scheduled'::character varying, 'running'::character varying, 'cancel-requested'::character varying])::text[]))",
                     "method": "btree",
                     "nulls_not_distinct": false
                 }
@@ -9767,6 +9887,16 @@
                     "nulls_not_distinct": false
                 },
                 {
+                    "name": "tsk_projects_workspace_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "workspace_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "tsk_projects_ws_ix",
                     "kind": "ix",
                     "columns": [
@@ -9874,6 +10004,16 @@
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_sprints_project_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "project_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -10264,6 +10404,16 @@
             },
             "indexes": [
                 {
+                    "name": "tsk_tasks_assignee_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "assignee_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
                     "name": "tsk_tasks_assignee_ix",
                     "kind": "ix",
                     "columns": [
@@ -10271,6 +10421,16 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_tasks_author_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "author_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -10311,6 +10471,16 @@
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "tsk_tasks_project_id_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "project_id"
                     ],
                     "predicate": null,
                     "method": "btree",

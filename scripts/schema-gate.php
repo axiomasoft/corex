@@ -291,7 +291,7 @@ final class SchemaGate
             } elseif (preg_match('/\bRENAME\s+CONSTRAINT\b/i', $sql) === 1) {
                 $this->hit('S4', $file, $line, 'literal constraint rename target required');
             }
-            preg_match_all('/\b(?:CONSTRAINT|(?:UNIQUE\s+)?INDEX)\s+["`]?([a-z0-9_]+)["`]?/i', $sql, $names);
+            preg_match_all('/\b(?:CONSTRAINT|CREATE\s+(?:UNIQUE\s+)?INDEX(?:\s+CONCURRENTLY)?(?:\s+IF\s+NOT\s+EXISTS)?)\s+["`]?([a-z0-9_]+)["`]?/i', $sql, $names);
             foreach ($names[1] as $object) {
                 preg_match('/\b(?:ALTER\s+TABLE|ON|CREATE\s+TABLE)\s+["`]?([a-z0-9_]+)/i', $sql, $target);
                 $this->object($file, $line, $object, $target[1] ?? '', $scope);

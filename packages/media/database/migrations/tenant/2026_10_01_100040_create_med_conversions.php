@@ -40,8 +40,6 @@ return new class extends PackmanMigration
             $table->unique([
                 'account_id', 'account_incarnation', 'workspace_scope', 'file_id', 'source_version', 'profile_key', 'profile_digest',
             ], 'med_conversions_scope_file_profile_uq');
-            // Purge completion releases every conversion of a file by file id alone.
-            $table->index(['file_id'], 'med_conversions_file_ix');
         });
     }
 

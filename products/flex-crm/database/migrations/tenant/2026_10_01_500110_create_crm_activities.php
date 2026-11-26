@@ -41,7 +41,6 @@ return new class extends PackmanMigration
 
             $t->foreign(['owner_id'], 'crm_activities_owner_id_fk')->references(['id'])->on('users')->onDelete('set null')->onUpdate('no action');
             $t->foreign(['workspace_id'], 'crm_activities_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
-            $t->index(['workspace_id'], 'crm_activities_workspace_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

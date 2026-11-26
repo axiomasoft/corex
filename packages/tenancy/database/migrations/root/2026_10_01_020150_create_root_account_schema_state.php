@@ -29,7 +29,6 @@ return new class extends PackmanMigration
 
             $table->foreign('account_id', 'root_account_schema_state_account_id_fk')->references('id')->on('root_accounts')->cascadeOnDelete();
             $table->foreign('batch_id', 'root_account_schema_state_batch_id_fk')->references('id')->on('root_migration_batches')->nullOnDelete();
-            $table->index(['batch_id'], 'root_account_schema_state_batch_id_ix');
         });
 
         DB::statement("ALTER TABLE root_account_schema_state ADD CONSTRAINT root_account_schema_state_status_ck CHECK (status IN ('ok','migrating','failed','blocked'))");

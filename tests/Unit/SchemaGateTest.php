@@ -172,6 +172,15 @@ it('rejects a nonbaseline date independently of filename shape', function (): vo
     expect(array_values(array_unique(array_column(schemaGateProbe($source, filename: '2026_10_02_010010_create_sys_gate_probe.php'), 'code'))))->toBe(['S8']);
 });
 
+it('checks the declared index name when a retryable migration uses IF NOT EXISTS', function (string $index, array $codes): void {
+    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
+    $source = str_replace('Schema::create(', "DB::statement('DROP INDEX IF EXISTS sys_gate_probe_lookup_ix');\n        DB::statement('CREATE INDEX IF NOT EXISTS {$index} ON sys_gate_probe (id)');\n        Schema::create(", $source);
+    expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe($codes);
+})->with([
+    'valid literal' => ['sys_gate_probe_lookup_ix', []],
+    'invalid literal' => ['unqualified', ['S4']],
+]);
+
 it('rejects duplicate object names in one scope', function (): void {
     $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
     $source = str_replace('$'."table->primary(['id'], 'sys_gate_probe_pk');", '$'."table->primary(['id'], 'sys_gate_probe_pk');\n            $"."table->index(['id'], 'sys_gate_probe_pk');", $source);

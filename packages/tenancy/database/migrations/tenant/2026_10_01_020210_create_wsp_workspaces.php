@@ -29,7 +29,6 @@ return new class extends PackmanMigration
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
             $table->timestampTz('deleted_at', precision: 6)->nullable();
-            $table->index(['parent_id'], 'wsp_workspaces_parent_id_ix');
         });
 
         // Self-referencing FK added AFTER the blueprint's own inline

@@ -33,8 +33,6 @@ return new class extends PackmanMigration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
 
             $table->foreign('role_id', 'aut_role_assignments_role_id_fk')->references('id')->on('aut_roles')->cascadeOnDelete();
-            $table->index(['granted_by'], 'aut_role_assignments_granted_by_ix');
-            $table->index(['workspace_id'], 'aut_role_assignments_workspace_id_ix');
         });
 
         DB::statement("ALTER TABLE aut_role_assignments ADD CONSTRAINT aut_role_assignments_principal_type_ck CHECK (principal_type IN ('user','agent','api_key'))");

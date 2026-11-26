@@ -44,7 +44,6 @@ return new class extends PackmanMigration
             $table->foreign(['owner_id'], 'crm_contacts_owner_id_fk')->references(['id'])->on('users')->onDelete('set null')->onUpdate('no action');
             $table->foreign(['source_id'], 'crm_contacts_source_id_fk')->references(['id'])->on('crm_sources')->onDelete('set null')->onUpdate('no action');
             $table->foreign(['workspace_id'], 'crm_contacts_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
-            $table->index(['source_id'], 'crm_contacts_source_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

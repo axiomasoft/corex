@@ -286,3 +286,16 @@ CREATE INDEX crm_deals_lost_reason_id_ix ON crm_deals (lost_reason_id);
 CREATE INDEX crm_deals_source_id_ix ON crm_deals (source_id);
 CREATE INDEX crm_deals_stage_id_ix ON crm_deals (stage_id);
 CREATE INDEX crm_activities_workspace_id_ix ON crm_activities (workspace_id);
+
+-- Full FK coverage also includes soft-deleted and inactive children.
+CREATE INDEX crm_activities_owner_id_ix ON crm_activities (owner_id);
+CREATE INDEX crm_companies_owner_id_ix ON crm_companies (owner_id);
+CREATE INDEX crm_companies_workspace_id_ix ON crm_companies (workspace_id);
+CREATE INDEX crm_contacts_owner_id_ix ON crm_contacts (owner_id);
+CREATE INDEX crm_contacts_workspace_id_ix ON crm_contacts (workspace_id);
+CREATE INDEX crm_deals_company_id_ix ON crm_deals (company_id);
+CREATE INDEX crm_deals_owner_id_ix ON crm_deals (owner_id);
+CREATE INDEX crm_deals_pipeline_id_ix ON crm_deals (pipeline_id);
+CREATE INDEX crm_deals_workspace_id_ix ON crm_deals (workspace_id);
+CREATE INDEX crm_leads_owner_id_ix ON crm_leads (owner_id);
+CREATE INDEX crm_leads_pipeline_id_ix ON crm_leads (pipeline_id);

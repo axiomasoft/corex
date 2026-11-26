@@ -44,7 +44,6 @@ return new class extends PackmanMigration
 
             $table->foreign('cluster_id', 'root_accounts_cluster_id_fk')->references('id')->on('root_clusters')->restrictOnDelete();
             $table->foreign('owner_identity_id', 'root_accounts_owner_identity_id_fk')->references('id')->on('root_identities')->restrictOnDelete();
-            $table->index(['owner_identity_id'], 'root_accounts_owner_identity_id_ix');
         });
 
         DB::statement("ALTER TABLE root_accounts ADD CONSTRAINT root_accounts_status_ck CHECK (status IN ('pending','provisioning','trial','active','suspended','grace','exporting','deleted'))");

@@ -31,8 +31,6 @@ return new class extends PackmanMigration
 
             $table->foreign('workspace_id', 'wsp_invitations_workspace_id_fk')->references('id')->on('wsp_workspaces')->cascadeOnDelete();
             $table->foreign('invited_by', 'wsp_invitations_invited_by_fk')->references('id')->on('users')->restrictOnDelete();
-            $table->index(['invited_by'], 'wsp_invitations_invited_by_ix');
-            $table->index(['workspace_id'], 'wsp_invitations_workspace_id_ix');
         });
 
         DB::statement("ALTER TABLE wsp_invitations ADD CONSTRAINT wsp_invitations_status_ck CHECK (status IN ('pending','accepted','revoked','expired'))");

@@ -29,7 +29,6 @@ return new class extends PackmanMigration
             $table->timestampTz('dedup_deadline')->nullable();
             $table->timestampsTz();
             $table->foreign('job_id', 'corex_transfer_outbox_job_id_fk')->references('id')->on('corex_transfer_jobs')->restrictOnDelete();
-            $table->index(['job_id'], 'corex_transfer_outbox_job_id_ix');
         });
     }
 

@@ -70,3 +70,4 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 | 2026-11-26 | Index media references (commit d17031e5b333ef21846534593b0e422cc314872e) | schema | Support file lookups in operations and conversions. |
 | 2026-11-26 | Index tokens by session (commit 9aeb9dcb862d6ea8763af0cb1f243f315fb043f9) | schema | Support token revocation and foreign key checks. |
 | 2026-11-26 | Index referencing columns (commit 9747991962519525f88d2d886a3cf3de51235ffb) | schema | Support lookups from referenced parent rows. |
+| 2026-11-26 | Install lookup indexes on existing schemas | schema | Full referencing indexes cover inactive and soft-deleted child rows. The scheduler uses a dedicated runnable due-time index. |
