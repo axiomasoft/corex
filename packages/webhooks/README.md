@@ -38,4 +38,4 @@ Error constructors require `ErrorCode`; descriptors keep scoped string wire code
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
 
-Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+Fresh installations use `axiomasoft/corex-webhooks:tenant` v2.

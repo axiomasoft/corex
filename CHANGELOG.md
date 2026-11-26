@@ -1,211 +1,129 @@
 # Changelog
 
-Все заметные изменения монорепозитория CoreX документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Notable changes to the CoreX monorepo follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- Validator patterns anchored with `$` now use the `D` modifier, so identifiers, API versions and names with a trailing newline are rejected. `tests/Arch/RegexAnchorTest.php` guards shipped sources.
+- `corex:notifications:prune` compacts expired read notifications in the active account and workspace. The positive integer `corex-notifications.retention.settled_days` defaults to 90. `--older-than-days` overrides the window and `--batch` sets the number of read rows examined per transaction (1–10,000, default 1,000). Unread notifications, digest members, recent dismissals or cancellations, and deliveries awaiting completion keep their content. Replays retain the original ID and conflicts, and provider receipts remain available for reconciliation. Apply the notifications tenant schema v3 migration before deploying the runtime.
+- CoreX 2.0 distribution covers 22 split archives, five API v2 snapshots, the application-facing MCP projection and independent Equipment Registry and FlexCRM installation scenarios. The earlier 20-archive installation check introduced independent contract comparison and a standalone Webhooks transfer prototype with a signed plan and transactional checkpoints. See the [compatibility decision](docs/architecture/corex-2.md).
 
 ### Changed
 
-- Every foreign key has an index on its referencing columns (42 new indexes, including `users.department_id`, `tsk_tasks`, `crm_*`, `wsp_invitations` and the `root_*` control-plane tables). `tests/Arch/ForeignKeyIndexTest.php` checks the schema goldens.
-- `outbox:prune` and the pub/sub prune delete in bounded batches (`--batch`, default 1000) instead of one unbounded `DELETE`.
-- A CRM save reads the principal's user, workspace and membership rows once per transaction instead of on every guard check (a company update: 35 → 20 statements on SQLite, a create: 31 → 19). The proof is taken under share locks, is dropped with the savepoint or transaction that took them, and lives in a scoped binding that Octane and queue workers reset between requests and jobs.
-- dept and dept_tree record access checks run one joined statement instead of four or six. The `users` and `sys_departments` table probes run once per request or job, so later checks in the same request issue only that statement.
-- CI is a job graph ending in a single `CI gate` check; manual runs can target selected jobs. See [Testing and CI](docs/testing-ci.md).
-- Documentation is English and indexed from [docs/index.md](docs/index.md).
+- The outbox command `corex:messaging:prune` and the pub/sub command `corex:messaging:prune-pubsub` delete eligible rows in bounded statements. Both accept `--batch` from 1 through 10,000, default 1,000.
+- Forward migrations install lookup and foreign-key indexes on existing databases as well as fresh installations. Index coverage includes `users.department_id`, `tsk_tasks`, CRM, workspace invitations and tenancy control-plane tables. A partial index that excludes referencing rows cannot serve as the only foreign-key index. `tests/Arch/ForeignKeyIndexTest.php` checks the catalogs.
+- CRM rechecks the principal's user, workspace and membership at each protected write. A joined query takes shared locks and observes a revocation made earlier in the same transaction, including after a savepoint. CRM model primary keys are documented as UUIDv7.
+- Department and department-tree authorization uses joined record checks. Table availability is read from the active connection, including its PostgreSQL search path, on each check. The public `DepartmentQueries::contains()` signature is preserved.
+- Notifications reads inbox pages from the recipient/ID index in page-sized batches. Inbox and unread-count queries select only the columns required for visibility and projection.
+- The root coverage floor is 80%, recorded in `scripts/coverage-min-floor.txt`. CI checks changes against the event base. A golden change requires its own rebaseline record. The PHP snapshot tracks explicitly declared members, interfaces, traits, adaptations and enum backing types. Dependency trait members no longer enter the package surface merely because a framework release adds them.
+- Documentation gate JSON uses `corex-package-docs-gate/2`. Violations identify their package, and the `producer_phase` field has been removed. The unused-public entrypoint ledger uses `unused-public-entrypoints/2`. Vendor evidence specifies a path and executable PHP token anchor. Repository evidence retains its path, anchor and SHA-256.
+- GitHub Actions runs the fast quality checks before dependent lanes execute in parallel. Only a complete run can publish the required `CI gate`. Targeted manual runs report `Selected CI lanes` and use a separate cancellation group. Superseded runs are cancelled. CI also checks mutation inventory coverage, applies security criteria to CRM admission and messaging criteria to retention, and runs Redis-backed tenancy tests against Redis. See [Testing and CI](docs/testing-ci.md).
+- The local Compose services use PostgreSQL 18 and Meilisearch. Health checks wait for usable services, and separate checkout projects can run concurrently. The English documentation entry point is the [documentation index](docs/index.md).
 
-### Added
+### Installation requirements
 
-- Поставка CoreX 2.0 включает 22 split-архива, пять снимков API v2, проекцию MCP для приложений и независимые установочные сценарии Equipment Registry и FlexCRM.
-- CoreX 2.0 получает независимое сравнение контрактов, проверку установок из 20 split-архивов и автономный прототип переноса Webhooks с подписанным планом и транзакционными checkpoint. [Решение о совместимости](docs/architecture/corex-2.md).
+- Core, Panels, Search, Tools and Workflow declare `ext-filter` at runtime. Core drops its unused direct `ext-mbstring` requirement. Tenancy drops direct requirements for `ext-ctype`, `ext-session` and `ext-sodium`. Transitive dependencies can still require extensions independently.
+- Custom Fields requires `ext-pdo` and suggests `ext-pdo_pgsql` for its PostgreSQL store. Webhooks now requires `axiomasoft/packman-modules` at runtime. Recurrence drops its unused dependency on `axiomasoft/corex`. Panels moves `psr/clock` to `require-dev`.
+- Standalone package test manifests declare the test libraries they use, including Mockery, PHPUnit and Packman Schema where applicable. Tasks Workflow now has its own dependency analyser configuration. The root lock records the updated local package metadata.
+- The Laravel and Symfony lock entries were updated for security advisories. AzGuard and Tenant are pinned to published commits.
+
+### Fixed
+
+- Anchored validators reject trailing newlines in identifiers, API versions, names, digests and related values. `tests/Arch/RegexAnchorTest.php` checks shipped patterns.
+- Search registers driver factories through a closure that Laravel 13 can bind. Host factories may still be static.
+- Consumer installation probes use the exact portable owner snapshots, prefer the candidate and report the current CoreX package names. Standalone CI and source audits share the generated-manifest installer, accept reachable reviewed development snapshots and retain the root analysis toolchain pins. Installation documentation identifies the unpublished Vaulter compatibility patch and its source distribution requirement.
 
 ### Removed
 
-- Удалены маршруты HTTP v1 и wildcard выбора мажора. Исторические снимки оставлены в `api/v1` для сравнения контрактов.
-- Audit 2026-10-08 (owner decision): Roave BC diff removed — `composer bc-check`, `scripts/bc-check.sh`, `scripts/bc/**` (accepted base, approved-deltas list and its plan-decision binding), the `backward-compatibility` CI job, `tests/Arch/PhpApiBcTest.php` and the `roave/backward-compatibility-check` dev dependency. Public surface stays guarded by `composer php-api` snapshots, golden php-surface + REBASELINE and package CHANGELOGs.
-- `dod-release` CI job removed (DoD preflight is bound to `plans/`).
+- The HTTP v1 routes and wildcard major-version selector were removed. Historical snapshots remain in `api/v1` for contract comparison.
+- The unused internal CSV and NDJSON import codecs were removed. The public transfer contracts and supported source adapters retain their own interfaces.
+- The retired Infection spike and obsolete Composer update wrapper were removed. The mutation runner and zone inventory remain in use.
+- Following the October 8, 2026 audit, the Roave backward-compatibility job, development dependency, `composer bc-check`, `scripts/bc-check.sh`, its baseline and approved-delta files, and `PhpApiBcTest` were retired. Public contracts continue to be checked through `composer php-api`, the PHP surface golden and rebaseline history, and package changelogs. The old `dod-release` job that depended on private planning files was also removed.
 
-### Changed
+## Earlier pre-release work
 
-- REST и MCP используют один `OperationInvoker`. Повтор с тем же ключом проверяет текущие права и возвращает исходный результат с прежним расчётом бюджета. REST v2 публикует ошибки RFC 9457 и typed acceptance со ссылкой на статус.
-- `DataScope` v3 передаёт логическую область, проверяемого principal и версию физической привязки. `WorkScopeRunner` проводит допуск до выбора handler. Scheduler восстанавливает исходную область каждой записи wakeup и сверяет версию handler и всё окно запуска.
-- Двадцать пакетов CoreX переходят на общую Composer-линию 2.x и наборы схем CoreX версии 2. FlexCRM сохраняет собственную версию.
-- Unify all 21 CoreX packages and Flex CRM under native Packman governance. Pin Packman runtime, devtools and testkit to the reviewed integration commit; adopt its public attributes, configuration/error contracts and composable schema facets without compatibility aliases. Preserve the redesigned package names and external engine ownership. Native contract manifests and CoreX architecture checks share one verified source tree.
-- Apply a commit/hash-bound development-tool patch so Packman table-write checks honor the exact declared table owner; CoreX DATA-003 still validates that ownership against its schema catalogue.
+These entries describe the package names, interfaces, checks and installation profiles in use when each change was introduced. Later entries above and the individual package changelogs cover subsequent replacements.
 
-- Pre-release package redesign: explicit `import-export`, `scheduler` and `recurring-tasks` package identities; matching Laravel provider names; Packman owns panel and saved-view engines and schema. CoreX panels is a trusted-context bridge. The [package map](docs/architecture/package-map.md) documents ownership and dependency directions.
+### Distribution, governance and operations
 
-- P16.12: path-bearing Composer/PHPStan/graph-gate/CI/docs/CHANGELOG carriers reconciled to post-P16 physical layout; `extra.corex.public-api` namespaces unchanged (D92). Generated graph report and PHPStan contour regenerated via owners. Mutation P1.24 patches retargeted from `packages/core/src/PubSub/` to `packages/core/src/Messaging/`.
-- P15.13: реестр переименований помечен исполненным; `scripts/p15-rename-completeness-gate.php` и manifest сверяют 40 old-token исходов P15 с outcome-aware allowlist; корневой `CHANGELOG.md` — единственный release-visible журнал rename (D85).
-- P15.11–P15.12: идентичность пакетов принята владельцем (D134, D135). `corex/api` / `packages/api` стали `corex/operations` / `packages/operations`; `corex/auth` / `packages/auth` стали `corex/access` / `packages/access`. Пространства `CoreX\Api` и `CoreX\Auth`, ключи конфигурации, префиксы маршрутов, идентификаторы операций и префиксы таблиц не менялись. Composer `replace` не добавлялся.
-- P15.10: публичные FQCN зон ядра переехали без alias. `CoreX\PubSub\*` стал `CoreX\Messaging\*`, контракты аудита и `Auditable` — `CoreX\Audit\Contracts\*`, `AuditLog` — `CoreX\Audit\Internal\AuditLog`, `CoreX\Views\*` — `CoreX\SavedViews\*`, `DataScopeAccessDecision` — `CoreX\Support\Data\DataScopeAccessDecision`. Имена таблиц и morph-значения не менялись.
+- REST and MCP adopted one `OperationInvoker`. A repeated key rechecks current grants and returns the original result and budget settlement. REST v2 exposes RFC 9457 errors and typed acceptance with a status reference.
+- `DataScope` v3 carries logical scope, the verified principal and the physical binding version. `WorkScopeRunner` performs admission before selecting a handler. Scheduler restores each wakeup's original scope and checks the handler version and complete execution window.
+- Twenty CoreX packages adopted a common Composer 2.x line and generation 2 schema sets. FlexCRM retained its independent version. Native Packman governance was adopted across the then-current 21 CoreX packages and FlexCRM. Runtime, devtools and testkit used a reviewed integration revision, public attributes, configuration/error contracts and composable schema facets. The native contract manifests and CoreX checks shared the same source tree. A revision- and hash-bound development patch made Packman table-write checks honor the declared table owner, with DATA-003 checking the schema catalog.
+- The package redesign established `import-export`, `scheduler` and `recurring-tasks` with matching provider names. Packman owns panels, saved views and their schema. CoreX Panels supplies trusted context. See the [package map](docs/architecture/package-map.md).
+- Historical Composer, PHPStan, package graph, CI and documentation paths were reconciled with the new source layout. The declared `extra.corex.public-api` namespaces were preserved. The graph and static-analysis inventories were regenerated, and mutation fixtures moved from `packages/core/src/PubSub/` to `packages/core/src/Messaging/`.
+- The rename register and its gate checked 40 legacy tokens with an allowlist that distinguished their expected outcomes. The root changelog records the release-visible renames. `corex/api` and `packages/api` became `corex/operations` and `packages/operations`. `corex/auth` and `packages/auth` became `corex/access` and `packages/access`. At that step, `CoreX\Api`, `CoreX\Auth`, configuration keys, route prefixes, operation IDs and table prefixes kept their original values. No Composer `replace` alias was added.
+- The public kernel names `CoreX\PubSub\*` and `CoreX\Views\*` moved to `CoreX\Messaging\*` and `CoreX\SavedViews\*`. Audit contracts and `Auditable` moved to `CoreX\Audit\Contracts\*`, `AuditLog` to `CoreX\Audit\Internal\AuditLog`, and `DataScopeAccessDecision` to `CoreX\Support\Data\DataScopeAccessDecision`. These moves supplied no aliases and preserved table names and stored morph values.
+- The local release preflight checked release criteria, complete qualification, archive reproducibility and read-only mirror state before constructing a digest-bound publication packet. Failed, skipped or stale checks returned `NO-GO`. Local qualification moved the 19-package 1.0.0 candidate's metadata to stable without publishing it.
+- The 1.0 release criteria comprised 25 audit checks and two additional checks, with a fail-closed verifier and generated documentation. CI ran the static subset. The release workflow ran all 27 and rejected stale evidence. Two failed checks remained with their original producers. The 20-package, 12-dimension scorecard recorded measured shortcomings. The package documentation gate checked README coverage, compilable examples and public API imports.
+- Documentation for `operation-cost/1`, `bulk-operation/1` and `webhook-delivery/1` covered shared and tenant schemas, global enforcement and lower-scope observation, conservative settlement, partial cancellation, import recovery and export restart, synthetic signing and rotation, pinned HTTPS, and bounded retries, replay and retention. Five API v1 snapshots shared a generator and compatibility check. Remote delivery remained disabled during local qualification.
+- `operation-contract/1` was frozen locally. Feature and architecture checks covered HTTP/tool parity, the single compiled registry and invoker, field guards, snapshot drift and the absence of a GraphQL entry point. The API policy, source reference and package README were updated before release.
+- Root checks pinned public error codes, bounded observability labels and the audit stamp for impersonation. Evidence covered package, architecture, PostgreSQL and optional OpenTelemetry cases, including negative fixtures.
+- `ExtensionContract` checked the compiled registry and exact extension stamp. The extension gate classified registry, catalog and manager surfaces and rejected unclassified types. `corex/modules` introduced repeatable `Manifest::replace()`, Composer version/reference discovery with `InstalledPackageVersion`, and a dependency-neutral `ExtensionStamp`. The extension policy named each compiled extension point.
 
-### Fixed
+### Packages, configuration and worker boundaries
 
-- Search регистрирует фабрики драйверов через bindable-замыкание для Laravel 13.0. Внешние фабрики по-прежнему могут быть статическими.
-- Consumer distribution probes inherit exact portable owner snapshots, preserve candidate precedence and record current CoreX package names. Removed the machine-local AzGuard 0.2 archive substitution. Standalone CI and source audits use a shared generated-manifest installer, admit only reachable reviewed development snapshots and preserve the root analysis toolchain pins. Installation documentation now names the unpublished Vaulter compatibility patch and its source-delivery requirement.
+- The former `corex/attributes` package grouped schema, values, query, storage, integration and Laravel internals into six subsystems with explicit Composer namespace maps. The architecture gate rejected Search imports, runtime configuration reads, foreign DDL and per-field storage drivers. Both database suites and the public API sweep covered the change. Store engines required schema validation even when no `FieldCatalogue` was supplied.
+- Tenancy adopted a 13-directory structure with a compatibility fingerprint. The table-write ownership gate included a fixture for writes to another package's table. Task operation receipts and identity password rehashes use owner ports. Core context signature types were made public while the restorer implementation remained private.
+- Tenancy's optional Wakeup adapter moved to `Integration/Wakeup`, with a package graph exception restricted to that host-supplied integration. `Workspaces` became `Workspace`. DomainTrust, Impersonation and Workspace models and events moved beside their owners while retaining fully qualified names. OIDC moved to `Authentication/Oidc` and synchronization to `Identity/`. Models, events, the job, HTTP controllers, routes and `oidc.enabled` retained their identities.
+- Account lifecycle and physical database provisioning moved to `Account/` and `Provisioning/`. A classmap preserved `TemplateClonePostgreSQLManager`. PSR-4 maps preserved events, the job and models. Membership was split into ten subsystems, with `Expiration` replacing the `Expiry` directory and `Membership/Transport` absorbing `Central`. Membership events and `RefreshAccountMembership` kept their fully qualified names.
+- Runtime tenancy and Laravel composition moved to `Runtime/` and `Laravel/` through compatible PSR-4 maps. The scoped `ConnectionGuardedTenantContextRestorer` checked the active connection. Restoring a payload did not initialize tenancy from the payload. The core `TenancyManager` contract dropped its import of a concrete Tenancy implementation.
+- The provider-size gate counted literal `singleton`, `scoped`, `bind` and `bindIf` registrations in service providers, enforced a threshold of 20 against the measured tree, and returned exit 1 with the offending file for a planted violation. Module registry, lifecycle, settings and boot bindings moved to Laravel registrars, preserving binding keys, concretes and lifetimes. Providers retained options, publishing and optimization.
+- Tenancy moved Runtime, Database and Provisioning registrations, and console, HTTP and event bootstrapping, into registrars. The legacy Stancl projection and `UniqueIdentifierGenerator` remained in `RuntimeRegistrar::boot`. The seven bootstrappers retained their configured order. Identity, Workspace and DomainTrust gained registrars. Authentication and Wakeup registered only when enabled. `PackageRegistrar` and `RegistersNothingOnBoot` exposed the two public composition contracts independently of service provider inheritance.
+- The configuration gate began failing on `config()` reads outside composition. The prior `Support/Config.php` exemption was removed. A justified FlexCRM search-language exception remained for `RecordRules.php`. A planted violation returned exit 1 and rule C1. `packman:config:validate` reported effective drivers, adapter availability and all options violations while redacting secrets.
+- `MediaServiceProvider` supplied `MediaOptions` to `SqlMediaLibrary` and `ConversionCoordinator`. `ModulesServiceProvider` supplied `ModulesOptions` to `RepositoryModuleRegistryCache` and the connection/cache hot paths. `AccessServiceProvider` supplied `AuthOptions` to access/matrix, identity selection and AzGuard pin projection.
+- Workspace and OIDC controllers consumed `ImpersonationPolicy` and `TenancyOptions`. Lifecycle, host, template integrity and membership consumed `AccountLifecyclePolicy` and `TenancyOptions`. Impersonation and status HTTP code consumed `ImpersonationPolicy`, `StatusGatePolicy` and `TenancyOptions`. The provider supplied the options and all three policies, represented `oidc.client_secret` as `SecretRef`, and accumulated validation errors in `InvalidConfiguration`.
+- `CoreOptions` and `SecretRef` captured the kernel configuration during provider construction. Saved Views accepted an explicit connection and resolved the current default at each operation. Core's `CoreX\Testing` development namespace mapped to `src/Testing`, with an architecture check and a transition period for production autoloading.
+- Money and a first-level departments package were identified as possible future extractions. Six architectural criteria were applied to Foundation. Three named Eloquent paths were exceptions to the third criterion. A kernel zone test replaced the separate Messaging test, assigned `PubSub/` to Messaging by path and restricted six public imports to exact file/symbol pairs. The kernel zone map covered ten internal zones, Composition and Testing, and 146 PHP files.
+- Messaging introduced an import allowlist and confined access to `Messaging\Internal` to the composition boundary. The wakeup package provided its PSR-20 clock only when the host had no `ClockInterface` binding, allowing Notifications to resolve Wakeup without the kernel provider and preserving an injected `FrozenClock`. PostgreSQL materialization tests for Tasks Workflow were attached to `PgTestCase` and the `pg` group for root Pest runs.
+- A singleton injection test rejected `Application`, `Request` and `Config\Repository` in constructors of classes registered as literal class-name singletons, subject to the named allowlist. Core added `psr/clock`, provided `psr/clock-implementation`, supplied `SystemClock`, `FrozenClock` and `LaravelClock` in `CoreX\Support\Time`, and bound PSR-20 to the Laravel clock. Wakeup's `SweepRunner` and `SqlWakeupScheduler` used the injected clock for retry and lease tests.
+- `DataScope` first exposed scalar `accountId`, `workspaceId`, `boxed` and `version`, `VERSION` and `fromTenantContext()`. The later versioned scalar constructor removed the public `TenantContext $context` property. The scope stopped serializing an authorization closure. Execution resolves the `DataScopeAuthorizer` contract locally. `DataScopeCodec`, `ArrayDataScopeCodec` and `InvalidScopePayload` introduced a fixed-order, versioned wire representation. `TenantContextRestorer`, its scoped guarded implementation and `ScopeContextMismatch` checked the active context.
+- Core introduced `CoreX\Contracts\DurablePayload` and the PHPStan rule `corex.durablePayload.nonSerializableProperty`. Marked `DataScope` values were later checked by `corex.durablePayload.untypedArrayProperty`, which rejects arrays without a value type and `array<mixed>`.
 
-- P5.16: PostgreSQL-миграции messaging создают outbox/inbox по настроенным именам таблиц; цели raw partial indexes безопасно экранируются грамматикой соединения.
-- P5.15: `corex/core` объявляет публичными корнями только `CoreX\Messaging\Contracts` и `CoreX\Messaging\Data`; команды `PruneOutboxMessages`, `RelayOutbox` и `ShowDeliveryHealth` помечены `@internal` и не входят в поддерживаемый API. R4b читает class-level docblock у `final` / `abstract` / `readonly` типов.
-- P5.14: `corex/wakeup` связывает внутренние PSR-20 часы `SystemClock` только если контейнер ещё не содержит `ClockInterface`, поэтому `corex/notifications` резолвит wakeup без `CoreServiceProvider`; заранее переданный `FrozenClock` остаётся тем же экземпляром.
-- P5.13: PostgreSQL-тесты materialization в `tasks-workflow` явно привязаны к `PgTestCase` и группе `pg` при запуске из корневого Pest.
-- P3.3: гейт графа пакетов — правила R4 (импорт вне `public-api`), R4b (незаявленная поверхность со снимком `package-graph-undeclared-surface.json`), R5 (направление `package-type`); чтение `extra.corex` в `discoverPackages`; allowlist `public_api_exceptions` (176 frozen edges).
-- P3.2: гейт графа пакетов — сбор рёбер через `token_get_all` (group-use, FQCN, extends/implements, traits); слепое пятно `parseUseImport` снято (G-GATE-BLIND). снят `scripts/.plan-close-deferred`; CI на `academici/corex-mirror` — stancl provider staging, PG test DB prep, Meilisearch в coverage job, jobs auth/tasks/tenancy; публичный AzGuard VCS (`axiomasoft/azguard`) без секретов.
-- Гейт графа пакетов: allowlist проверяет содержимое `guard_file` по `guard_contains`; host-reserved namespace валидируется по трём условиям §2.3; резервации и именованные исключения печатаются в отчёте (P12A.4, A1).
-- `corex/core`: `DataScope` больше не несёт `Closure $authorize` — проверка доступа через контракт `DataScopeAuthorizer`, резолвимый на исполняющей стороне; объект полностью сериализуем (P12.8, G-API/D41).
-- `corex/intl`: `IntlModule` приведён к контракту `CorexModule` — discovery модулей больше не падает на `InvalidManifestException`.
-- `corex/core`: контракт `TenancyManager` больше не импортирует реализацию из `corex/tenancy`.
-- `corex/search`: коллизия биндинга `SearchProvider` снята — единый реестр драйверов `SearchManager`, fail-closed конфигурация (P12.5).
-- `corex/attributes`: обязательная schema-валидация в store-движках; nullable `FieldCatalogue` больше не пропускает writes (P12.7).
+### Messaging contracts
 
-### Added
+- The messaging policy documented envelope types and limits, integration contract registration, consumer shape, ordering and at-least-once delivery limits, the open-transaction requirement versus `afterCommit`, and inbox/outbox retention.
+- Core introduced `MessageEnvelope`, `MessagePayload`, `MessageContract`, `PiiClass`, `MessageClass` and `InvalidMessage`, canonicalized payloads and marked the envelope as a durable payload. `MessageContractRegistry`, `ArrayMessageContractRegistry` and `UnknownMessageContract` supplied an initially empty registry through `CoreServiceProvider`.
+- Tenant schema added `sys_outbox_messages` and `sys_inbox_messages` with partial indexes for frequent queries. The `corex.messaging` section and configuration accessors were added alongside ownership records. PostgreSQL migrations honored the configured table names and used the connection grammar to quote partial index targets.
+- The scoped `Outbox` implementation `SqlOutbox::append()` requires an open transaction. It reports refusals through `OutboxRefused`, including messaging contract and transaction failures (MSG-007 and MSG-008). SQLite and PostgreSQL tests cover rollback. `SqlInbox::claim()` uses `insertOrIgnore` within the consumer transaction, exposes `Inbox` and `InboxRefused`, and has PostgreSQL concurrency coverage (MSG-006).
+- `OutboxRelay` and `SqlOutboxRelay` claim work under short `SKIP LOCKED` leases, fence updates, back off and dead-letter exhausted work. `LeasedMessage` and `OutboxLeaseLost` expose the claim state. `MessagePublisher` and `DurableMessagePublisher` require durable acknowledgement. `corex:messaging:relay` supports cooperative shutdown.
+- `DeliveryHealth`, `SqlDeliveryHealth` and `corex:messaging:health --max-age` exposed the relay health probe. `corex:messaging:prune` introduced separate windows for published and dead outbox rows while retaining inbox deduplication records.
+- `DeliveryGuaranteesTest` and `RecordingPublisher` checked at-least-once delivery after relay failure, idempotent inbox consumption, competing leases, atomic outbox/business writes, durable handoff and bounded reclaim/dead-letter behavior on PostgreSQL.
+- The then-current kernel declared `CoreX\Messaging\Contracts` and `CoreX\Messaging\Data` as its public messaging roots. `PruneOutboxMessages`, `RelayOutbox` and `ShowDeliveryHealth` were classified as internal. The surface scanner learned to read class-level annotations on final, abstract and readonly types.
 
-- P17.11: локальный `scripts/distribution/release_preflight.py` проверяет release DoD, полную квалификацию, воспроизводимость архивов и read-only состояние зеркал перед созданием digest-bound пакета публикации. Красные, пропущенные и устаревшие проверки дают `NO-GO`; метаданные 19 пакетов кандидата 1.0.0 переводятся в stable после локальной квалификации, без публикации.
-- P17.9–P17.10: нормативный манифест `scripts/dod-1.0.json` (25 проверок аудита плюс DOD-26/DOD-27, D95) и fail-closed гейт `scripts/dod-1.0.py`. Документ `docs/architecture/dod-1.0.md` только генерируется. CI гоняет статический subset; release workflow гоняет все 27 и отвергает stale CI evidence. Красные DOD-24/DOD-25 остаются за producer-фазами и не переписываются здесь.
-- P17.8: финальный 20×12 scorecard (`docs/architecture/scorecard.md`) и гейт README/example/public-API `scripts/package-docs-gate.php`; низкие оценки объяснены измерением, проза пакетов не переписывалась.
-- P14.21: документация `operation-cost/1`, `bulk-operation/1` и `webhook-delivery/1`: explicit shared/tenant schema setup, global enforcement и lower-scope observe, conservative settlement, partial cancellation, import recovery/export restart, synthetic signing/rotation, pinned HTTPS, bounded retry/replay/retention. Пять снимков `api/v1` используют один generator и compatibility gate; итоговая матрица и текущие команды/хеши — `findings/P14-execution-validation.md`. Remote delivery остаётся выключена; local qualification не является разрешением live rollout, production DDL или rotation.
-- P13.12: локально заморожен `operation-contract/1`; корневые feature/architecture ratchets проверяют HTTP/tool parity, единый compiled registry/invoker, отсутствие GraphQL, field guard и дрейф снимка. Политика API, справочник источников и README пакета обновлены; выпуск и тег остаются за P17.
-- P12.8: root ratchets freeze the P12 public error vocabulary, bounded observability labels and direct-audit impersonation stamp; the phase receipt records package, architecture, PostgreSQL, optional-OpenTelemetry and planted-negative evidence.
-- P11.8: `ExtensionContract` даёт переиспользуемую проверку compiled registry и точной extension stamp; `extension-contract-gate.php` закрепляет классификацию registry/catalogue/manager поверхностей и отвергает новый неклассифицированный тип.
-- P11.1: `corex/modules` adds repeatable `Manifest::replace()`, Composer version/reference discovery (`InstalledPackageVersion`) and dependency-neutral `ExtensionStamp`. Extension policy names the canonical id of every compiled point.
-- P10.8: \`corex/attributes\` groups schema, values, query, storage, integration and Laravel internals in six top-level subsystems with explicit Composer namespace maps. The architecture gate rejects search imports, runtime config reads, foreign DDL and field-level storage drivers; both database lanes and the public API sweep are recorded in \`findings/P10-receipts.md\`.
-- P9.8: tenancy 13-directory structure and compatibility fingerprint ratchet; DATA-003 source-write ownership gate with a foreign-table negative fixture. Cross-package writes now use owner ports for task operation receipts and identity password rehash; core context signature types are explicitly public, while the restorer implementation remains private.
-- P9.7: optional `corex/wakeup` adapter живёт в `Integration/Wakeup`; package-graph allowlist называет только эту host-first boundary.
-- P9.6: `Workspaces` стал `Workspace`; модели и события DomainTrust/Impersonation/Workspace стоят рядом с owners и сохраняют FQCN.
-- P9.5: OIDC живёт в `Authentication/Oidc` как context-first adapter; identity sync — в `Identity/` с сохранёнными FQCN моделей, событий, job и HTTP-контроллеров. Routes и `oidc.enabled` не менялись.
-- P9.4: Account lifecycle и physical-database provisioning собраны в `Account/` и `Provisioning/`. `TemplateClonePostgreSQLManager` сохраняет FQCN через classmap; события, job и models — через PSR-4 maps.
-- P9.3: Membership разложен на десять подсистем без `Internal`; `Expiry` стал путём `Expiration`. `Central` поглощён в `Membership/Transport`. События membership и `RefreshAccountMembership` сохраняют FQCN через PSR-4 maps.
-- P9.2: runtime tenancy и Laravel boundary собраны в `Runtime/` и `Laravel/`; стабильные FQCN сохранены PSR-4 maps. `ConnectionGuardedTenantContextRestorer` сверяет активное соединение и не инициализирует tenancy из payload. Единственная binding-дельта — scoped `TenantContextRestorer`.
-- P8.6: блокирующий гейт `scripts/provider-size-gate.php` считает call site
-  `singleton|scoped|bind|bindIf` только в классах `ServiceProvider`; порог 20
-  и ratchet измеренного дерева. Посадка `ProviderSizeProbeProvider.php`
-  завершается exit 1 и называет файл.
-- P8.5: `corex/modules` выносит Registry/Lifecycle/Settings/Boot
-  в `Laravel/*Registrar` без смены ключа, concrete и lifetime; провайдер
-  оставляет Options, publishes и optimizes.
-- P8.4: boot tenancy вынесен в Console/Http/Events registrar'ы; проекция stancl
-  и `UniqueIdentifierGenerator` живут в `RuntimeRegistrar::boot`. Порядок семи
-  bootstrapper'ов совпадает с `bootstrapper_order` и `tenancy.bootstrappers`.
-- P8.3: Identity/Workspace/DomainTrust registrar'ы; Authentication и Wakeup
-  включаются только по предикату, без повторного `if` внутри класса.
-- P8.2: `corex/tenancy` выносит Runtime/Database/Provisioning register()-биндинги
-  в `Laravel/*Registrar` без смены ключа, concrete и lifetime.
-- P8.1: публичный `PackageRegistrar` и trait `RegistersNothingOnBoot` — composition API
-  без наследования `ServiceProvider`; в `public-api` ровно эти два символа.
-- P7.11: гейт `config()` вне composition стал блокирующим (`blocking: true`);
-  `Support/Config.php` снят с allowlist; `RecordRules.php` оставлен с причиной
-  `E-FLEX-CRM-SEARCH-LANGUAGE`. Посадка `ConfigCompositionProbe.php` даёт
-  exit 1 и `C1`.
-- P7.10: `packman:config:validate` печатает эффективные драйверы и доступность
-  адаптеров, накапливает нарушения Options и не выводит значения секретов.
-- P7.9: `MediaOptions` связывается в `MediaServiceProvider`; `SqlMediaLibrary` и
-  `ConversionCoordinator` читают снимок `corex-media` вместо `config()`.
-- P7.8: `ModulesOptions` связывается в `ModulesServiceProvider`;
-  `RepositoryModuleRegistryCache` и hot-path потребители connection/cache
-  читают снимок `packman-modules` вместо `config()`.
-- P7.7: access/matrix в `corex/auth` читают `AuthOptions` вместо `config()`.
-- P7.6: `AuthOptions` связывается в `AccessServiceProvider`; identity lane и
-  проекция AzGuard pins берут снимок `corex-auth` на границе composition.
-- P7.5: workspace и OIDC-контроллеры читают `ImpersonationPolicy` /
-  `TenancyOptions` вместо `config()`.
-- P7.4: lifecycle, host, template integrity и membership читают
-  `AccountLifecyclePolicy` / `TenancyOptions` вместо `config()`.
-- P7.3: impersonation/status HTTP читают `ImpersonationPolicy`,
-  `StatusGatePolicy` и `TenancyOptions` вместо `config()`.
-- P7.2: `TenancyOptions` и три policy связываются в `TenancyServiceProvider`;
-  `oidc.client_secret` типизирован как `SecretRef`, boot-валидация накапливает
-  нарушения через `InvalidConfiguration`.
-- P7.1: `CoreOptions` и `SecretRef` связывают снимок `corex` в `Config`
-  при загрузке провайдера. Saved views берут явное соединение из
-  конструктора и текущий default на каждую операцию.
-- P6.5: канонический `autoload-dev` `CoreX\Testing` → `src/Testing`
-  в `corex/core` и arch-гейт R-T1. Production autoload сохранён до P16 (D33).
-- P6.4: roadmap candidates money package and departments level-1
-- P6.3: arch-гейт `tests/Arch/CoreLitmusTest` проверяет шесть условий
-  литмуса только для Foundation. Условие 3 закрыто правилом R-L3,
-  кроме трёх путей `LITMUS_ELOQUENT`.
-- P6.2: корневой arch-гейт `tests/Arch/CoreZoneTest` (R-Z0, R-Z1, R-Z2).
-  `PubSub/` входит в Messaging по пути; FQCN не двигается (D32). `MessagingZoneTest` поглощён.
-  Шесть публичных импортов закрыты по паре «файл + символ» (D116), матрица зон не открыта.
-- P6.1: `docs/architecture/core-zones.md` — нормативная карта десяти внутренних зон `corex/core`, Composition/Testing, полный текущий контур 146 PHP-файлов, закрытые исключения и целевые FQCN для P15.
-- P5.11: arch-гейт `tests/Arch/MessagingZoneTest` (R-M1 закрытый allow-list импортов зоны `Messaging`, R-M2 запрет `Messaging\Internal` вне composition root); `findings/P5-zone-map.md` для P6.
-- P5.8: `corex/core` — контракт `Inbox`, `SqlInbox::claim()` (`insertOrIgnore` / MSG-006, только внутри транзакции), `InboxRefused`; `InboxClaimTest` §7.4(1–4), pg `InboxConcurrencyTest` §7.4(5).
-- P5.12: pg-доказательства `DeliveryGuaranteesTest` (шесть witnesses §12: at-least-once после падения relay, идемпотентный inbox-потребитель, конкурентный lease, атомарность outbox+бизнес, durable handoff, bounded reclaim/dead); фикстура `RecordingPublisher`.
-- P5.6: `corex/core` — контракт `OutboxRelay`, `SqlOutboxRelay` (короткий lease со `SKIP LOCKED`, fence-отметки, backoff, dead-letter), `LeasedMessage`, `OutboxLeaseLost`; pg-тесты §5.11.
-- P5.10: `corex/core` — `DeliveryHealth`, `SqlDeliveryHealth`, команда `corex:messaging:health` (probe `--max-age`); pg-тесты §9.4.
-- P5.9: `corex/core` — команда `corex:messaging:prune` (два окна retention outbox, inbox не трогается); тесты §8.
-- P5.7: `corex/core` — контракты `MessagePublisher` / `DurableMessagePublisher` (durable-ack, без lossy default), команда `corex:messaging:relay` с кооперативной остановкой; тесты §6.3.
-- P5.5: `corex/core` — контракт `Outbox`, `SqlOutbox::append()` в открытой транзакции (`OutboxRefused` / `MSG-008`, `MSG-007`), `scoped`-привязка; тесты sqlite и pg-отката.
-- P5.4: `corex/core` — tenant DDL `sys_outbox_messages` / `sys_inbox_messages` (частичные индексы горячего пути), блок `corex.messaging` и аксессоры в `Support/Config`; записи владения вне `DB_SCHEMA.md` FROZEN v1.0.
-- P5.2: `corex/core` — словарь messaging: `MessageEnvelope`, `MessagePayload`, `MessageContract`, `PiiClass`, `MessageClass`, `InvalidMessage` (канонизация payload, `DurablePayload` на конверте).
-- P5.3: `corex/core` — `MessageContractRegistry`, `ArrayMessageContractRegistry`, `UnknownMessageContract`; пустой реестр по умолчанию в `CoreServiceProvider` (`MSG-002`).
-- P5.1: `docs/architecture/message-policy.md` — типы и пределы полей конверта, процедура объявления интеграционного контракта, не-обещания (порядок, at-least-once, `MSG-008` vs `afterCommit`), форма потребителя, retention outbox/inbox.
-- P4.12: Arch-гейт `SingletonInjectionTest` + `SingletonInjectionGate` — запрет `Application` / `Request` / `Config\Repository` в конструкторах классов, зарегистрированных через `->singleton(` с литералом `::class`; allowlist `scripts/singleton-injection-allowlist.json`; аудит `findings/P4-binding-audit.md`.
-- P4.9: `corex/core` — зависимость `psr/clock` и `provide` `psr/clock-implementation`; `SystemClock`, `FrozenClock`, `LaravelClock` (`CoreX\Support\Time`); singleton-привязка `Psr\Clock\ClockInterface` → `LaravelClock`.
-- P4.10: `corex/wakeup` — durable-пути `SweepRunner` и `SqlWakeupScheduler` на инъектированном `Psr\Clock\ClockInterface`; тесты backoff и границы lease через `FrozenClock`.
-- P4.8: `corex/core` — контракт `DataScopeCodec`, `ArrayDataScopeCodec` (versioned wire-массив с фиксированным порядком ключей), `InvalidScopePayload`; singleton-привязка в `CoreServiceProvider`.
-- P4.2: `corex/core` — контракт `TenantContextRestorer`, `GuardedTenantContextRestorer` (сверка скоупа с активным контекстом, D22) и `ScopeContextMismatch`; `scoped`-привязка в `CoreServiceProvider`.
-- P4.1: `corex/core` — транзитная форма `DataScope`: публичные скаляры `accountId`, `workspaceId`, `boxed`, `version`, константа `VERSION` и именованный конструктор `fromTenantContext()`; поле `TenantContext $context` сохранено до P4.7 (D21).
-- P3.7: Arch-тесты инвариантов A57/A61/A99 и гейт владения таблиц `scripts/table-ownership-gate.php` (T1/T2/T4; DATA-003 вне скоупа — D19).
-- P3.6: гейт имён публичного API (`scripts/naming-gate.php`, снимок `naming-gate-grandfather.json`) и наблюдательный гейт `config()` вне composition boundary (`scripts/config-composition-gate.php`, `composition-boundary.json`; N12 allowlist для `Support/Config.php`).
-- P3.5: маркер `CoreX\Contracts\DurablePayload` и PHPStan-правило `corex.durablePayload.nonSerializableProperty` на объявленных свойствах помеченных типов (deny-list; `array<mixed>` — предел до P4).
-- P3.4: Roave BC-дифф — `roave/backward-compatibility-check` ^8.22, `scripts/bc-check.sh`, `composer bc-check`, CI job `backward-compatibility` на PHP 8.4; blocking только для `stability=stable` (D98).
-- P3.1: контур PHPStan — `scripts/phpstan-contour.php`, `composer analyse:packages`, `phpstan-contour.json` (20 пакетов); корневой `phpstan.neon` расширен с 7 до 19 зелёных `src` (debt: `corex/attributes`).
-- P2.6: базовый архитектурный scorecard пакетов (docs/architecture/scorecard.md).
-- P2.4: реестр конфигурации (docs/architecture/configuration.md) — 161 ключ из 18 config-файлов, 17 undeclared-read, CFG-006 exception для corex-intl-search.
-- P2.3: реестр владения таблицами (docs/architecture/table-ownership.md) — 99 таблиц, 4 пакета-владельца sys_*, DATA-004 exception aut_role_assignments.
-- P1.7: реестр референсов, отклонённые решения, README каталога architecture (docs/architecture/references.md, docs/rejected-optimizations.md, docs/architecture/README.md).
-- P1.6: четыре политики CFG/DATA/MSG/EXT — классификации, процедуры, конверт и реестры (docs/architecture/config-policy.md, data-ownership-policy.md, message-policy.md, extension-policy.md).
-- P1.5: политика публичной поверхности — три носителя, граница `@internal` vs пакет, BC-список (docs/architecture/api-policy.md).
-- P1.2: схема `extra.corex` и заполнение 20 `composer.json` (docs/architecture/taxonomy.md).
-- P1.3: словарь имён и реестр переименований (docs/architecture/naming.md, rename-registry.md).
-- P1.4: профили структуры A/B/C и назначение по пакетам (docs/architecture/structure-profiles.md).
-- P1.1: архитектурная конституция — 58 статей, 22 анти-цели, каталог исключений (docs/architecture/constitution.md).
-- P8.1 source qualification: `findings/P8-source-qualification.md` (QUAL-01–05), delivery `tool-source-qualification-20260915/`; кандидат `opis/json-schema` 2.4.1 квалифицирован, не установлен в root vendor.
-- P8.2 tool declarations: `Api::tool` / `Api::exposeTool` в `corex/modules`, `ToolDescriptor` и bounded `tool-schema/1` validation (`ToolSchemaSupervisor` + optional Opis) в `corex/api`; `findings/P8-descriptors.md` (DESC-01–09).
-- P8.3 tool catalogue/policy: `ToolCatalogue`, `ToolPolicy`, `CompiledToolCatalogue`, `DenyToolPolicy`, `ToolsServiceProvider` в `corex/api`; current-policy discover без authority cache; `findings/P8-catalogue-policy.md` (CAT-01–09).
-- P8.4 guarded invocation: `ToolInvoker`, `ToolExecutionGuard`, `GuardedToolInvoker`, `ReadOnlyToolExecutionGuard`, `ToolCall`, `ToolResult`, `ToolRequestContext` в `corex/api`; schema/contract-hash guarded headless invoke; `findings/P8-invocation.md` (INVOKE-01–12).
-- P8.5 registry introspection: `RegistryIntrospection`, `RegistryMap`, `ModuleExplanation`, `ReadRegistryIntrospection` и CLI `modules:why` в `corex/modules`; bounded extension-point map и read-only activation diagnostics; `findings/P8-introspection.md` (INTRO-01–07).
-- P8.6 contribution bindings: `packages/api/docs/tool-integration.md`, neutral `ArchiveToolModule`/`LabToolModule` fixtures, `ToolContributionsTest`; selected P3–P7 bindings и external19 ownership map; `findings/P8-contributions.md` (CONTRIB-01–08).
-- P8.7 installed tool seal: `McpToolsProjection`, `InstalledToolContractTest`, delivery `tool-install-qualification-20260915/`; cold ZIP install + fake MCP parity; `findings/P8-installed.md` (INST-01–06) и `findings/P8-tool-receipts.md` (p8-tool-receipts/1 seal).
-- P9.2 cohort dist export: `scripts/distribution/remaining-cohort-export.py`, `remaining-cohort-policy.json`, delivery `remaining-cohort-20260915/build/` + `public/packages.json`; `findings/P9-artifacts.md` (DIST-01–08).
-- P9.3 local matrix: `scripts/distribution/remaining-cohort-quality.py`, `remaining-cohort-runner.py`, `remaining-cohort-publish.py`, `.github/workflows/remaining-cohort-proof.yml`, CI `packages-tests` aggregator; delivery `local/matrix.json` + `runner-plan.json`; `findings/P9-local-matrix.md` (MATRIX-01–07).
-- P9.4 installed candidate: `scripts/distribution/remaining-cohort-installed.py`, `remaining-cohort-private.py`, neutral lab fixtures, delivery `installed-candidate/receipt.json`, `runner-packet.json`, `private-read-packet.json`; `findings/P9-installed-candidate.md` (INSTALL-01–09).
-- P9.5 hosted cohort proof: `scripts/distribution/remaining-cohort-hosted.py`, `stage-stancl-providers.py`, mirror execution on `academici/corex-mirror`; `findings/P9-hosted-runs.md` (RUN-01–07).
-- Печать корректирующей фазы P12A: `findings/P12A-correction-receipts.md` (`p12a-correction-receipts/1`); разблокировка P8 без автозапуска (P12A.6).
-- Исполняемый гейт графа пакетов: `scripts/package-graph-gate.php` + `tests/Arch/PackageGraphTest.php` (R1 undeclared dependency, R2 foreign `Internal`, R3 namespace ownership); конфиг `scripts/package-graph-gate.json`; отчёт `artifacts/P12-package-graph/report.json` (P12.3).
-- Триада разбора аудитов 2026-09-17: `docs/audit-2026-09-17.md`, `docs/audit-2026-09-17-remediation.md`, `docs/audit-2026-09-17-deferred.md` — ledger девяти отложенных дефектов и пяти отклонённых идей (P12.9).
-- Печать фазы P12: `findings/P12-rebaseline-receipts.md` (receipt'ы P12.1–P12.9).
+### Discovery, tooling and release qualification
 
-### Changed
+- Package graph checks gained rules for undeclared dependencies, foreign `Internal` imports, namespace ownership, imports outside public API, undeclared public surfaces and package-type dependency direction. The scanner reads `extra.corex` and collects grouped imports, fully qualified names, inheritance, interfaces and trait edges via `token_get_all`. The baseline recorded 176 named public API exceptions. Exception guard text is checked against the actual guard file. Host-reserved namespaces must meet all three reservation criteria. Reports list reservations and named exceptions.
+- Architecture checks covered table ownership, including rules T1/T2/T4 and the three preexisting ownership invariants. Public API naming acquired a baseline. The configuration-composition check initially recorded exceptions such as `Support/Config.php` before becoming blocking. The historical PHPStan inventory covered 20 packages. Root analysis grew from seven to nineteen source trees, with the former Attributes package outstanding. `composer analyse:packages` ran package analysis.
+- The historical Roave BC check used `roave/backward-compatibility-check` ^8.22, `composer bc-check` and a PHP 8.4 CI job. It blocked stable contracts only. The removal above supersedes that gate.
+- Architecture work established an initial package scorecard, a configuration register (161 keys, 18 config files, 17 undeclared reads and one Intl Search exception) and a table ownership register (99 tables, four owners of `sys_*` tables and an exception for `aut_role_assignments`). The constitution documented 58 articles, 22 non-goals and an exception register. Separate references covered rejected alternatives, configuration, data ownership, messaging and extensions, and three sources of public API evidence and their compatibility rules. Twenty Composer manifests adopted the `extra.corex` taxonomy. Naming, renames and structure profiles A/B/C were recorded.
+- Tool schema qualification evaluated `opis/json-schema` 2.4.1 without installing it in the root. `Api::tool` and `Api::exposeTool` declared tools. `ToolDescriptor`, `ToolSchemaSupervisor` and optional Opis implemented bounded `tool-schema/1` validation. `ToolCatalogue`, `ToolPolicy`, `CompiledToolCatalogue`, `DenyToolPolicy` and `ToolsServiceProvider` supplied discovery against current policy without caching authority.
+- `ToolInvoker`, `ToolExecutionGuard`, `GuardedToolInvoker`, `ReadOnlyToolExecutionGuard`, `ToolCall`, `ToolResult` and `ToolRequestContext` enabled headless invocation guarded by schema and contract hash. `RegistryIntrospection`, `RegistryMap`, `ModuleExplanation`, `ReadRegistryIntrospection` and `modules:why` exposed a bounded extension-point map and read-only diagnostics.
+- Archive and Lab example modules and `ToolContributionsTest` qualified the contribution bindings and external ownership map. `McpToolsProjection` and `InstalledToolContractTest` compared a cold ZIP install with the test MCP projection. The September 2026 distribution checks exported the remaining cohort and its package index, ran a local matrix with a package-test aggregator, verified installed candidate and private-read receipts, and staged Stancl providers for hosted runs on `academici/corex-mirror`. Jobs covered Access, Tasks, Tenancy, PostgreSQL preparation and Meilisearch coverage. The public AzGuard repository installed without secrets.
+- The September 17, 2026 audit recorded nine deferred defects and five rejected proposals. Correction checks and release qualification were archived when their work completed. Distribution tooling and archive references followed the then-current Transfer and Search Intl names.
+- Package tests expanded from eight to twenty. The kernel and Modules added `test`, `test:coverage`, `analyse` and `lint:check` using the root PHPUnit configuration and their package suites. The root required Attributes, Transfer and Search Meilisearch and added development autoloading for package tests without their own vendor tree. A package graph script was added, and Tasks Workflow bound `RecurrenceExpander` without importing a foreign internal type.
 
-- **BREAKING** `corex/modules`: `Dep`→`ModuleDependency` (`$kind`/`$package`), `Manifest`→`ModuleManifest`, `GateDecision`→`ModuleActivationDecision`, `SettingDefault`→`DefaultSettingDefinition`, `ModuleContext`→`ModuleRuntimeContext`, `CorexModule`→`ModuleDefinition`, `WhyCommand`→`ExplainModuleCommand`. Composer module id и сигнатура `modules:why` сохранены; алиасов нет (P15.1, D85/D86).
-- **BREAKING** `corex/attributes`: `RegistryFieldCatalogue`→`ModuleFieldCatalogue`, `StructuralAttributeFilter`→`SchemaAttributeFilter`, `WriteResult`→`AttributeWriteResult`, `OperationKey`→`SchemaOperationId`; алиасов нет (P15.2, D85).
-- **BREAKING** `corex/search`: `UnsupportedSearchProvider`→`UnavailableSearchProvider` (P15.3, D85).
-- **BREAKING** `corex/search-meilisearch`: `MeilisearchQueryAdapter`→`MeilisearchSearchProvider` (P15.4, D85).
-- **BREAKING** `corex/transfer`: `DatabaseTransferRunner`→`SqlTransferExecutor`, `ImportTarget`→`TransferSink` (P15.5, D85).
-- **BREAKING** `corex/tasks-workflow`: `CompletionCaptureObserver`→`CaptureTaskCompletion`, `RecurringTasksModule`→`TaskWorkflowIntegration`; Composer module id `corex/tasks-workflow` сохранён (P15.6, D85/D86).
-- **BREAKING** `corex/wakeup`: `DueSource`→`DueWakeupSource`, `WakeupHandler`→`DueWakeupHandler`, `WakeupHint`→`WakeupScheduleHint`, `WakeupSweeper`→`DueWakeupSweeper`; `WakeupScheduler` сохранён; алиасов нет (P15.7, D85/D87).
-- **BREAKING** `corex/api`: `Dispatcher`→`OperationDispatcher`, `ErrorBoundary`→`OperationErrorBoundary`, `RequestMetadata`→`InvocationMetadata`, `OpenApi`→`OpenApiDocumentGenerator`; маршруты, config keys, operation id и OpenAPI/error wire не менялись; алиасов нет (P15.8, D85).
-- **BREAKING** `corex/tenancy`: `AccountsResult`→`AvailableAccounts`; поля конструктора и сериализация Redis/cache без изменений; алиасов нет (P15.9, D85).
-- **BREAKING** `corex/core`: `DataScope` — скалярный versioned конструктор, удалено публичное свойство `TenantContext $context`, тип помечен `DurablePayload`; PHPStan-правило `corex.durablePayload.untypedArrayProperty` отвергает `array` без типа значения и `array<mixed>` (P4.7, D6/D21, G-API).
-- PLAN1 `2026.09.15-№1-COREX-FLEXCRM-REMAINING` перенесён в `plans/archive/` после терминального закрытия; скрипты `remaining-cohort-*` и `plans/ACTIVE.md` указывают на архивный путь.
-- `phases/P9/P9.2.md`: пути `Files` обновлены с `import-export`/`intl-search` на `transfer`/`search-intl` после rename P12.4/P12.6 (P12A.6, A8).
-- `corex/attributes`: имена таблиц через иммутабельный `AttributeTables`; обязательная schema-валидация в store-движках; `corex/modules` перенесён в `suggest` с guarded fallback (P12.7).
-- `corex/search`: `SearchManager` с реестром драйверов (`null`, `postgres`); fail-closed конфигурация; дефолт `corex-search.driver` — `null` (P12.5).
-- `corex/search-meilisearch`: неймспейс `CoreX\Search\Meilisearch\`; драйвер регистрируется через `SearchManager::extend()` вместо биндинга `SearchProvider`; ключ `enabled` удалён (P12.5).
-- Пакет `corex/search-intl`: hard rename из `corex/intl-search` (PSR-4 `CoreX\SearchIntl\`; P12.6).
-- Пакет `corex/transfer`: hard rename (PSR-4 `CoreX\ImportExport\`, каталог `src/Data/` вместо `src/Support/`, конфиг `corex-import-export.*`; P12.4).
-- `corex/intl`: в `require` добавлен `corex/modules` (наследование `CorexModule`).
-- `corex/tasks-workflow`: в `require` добавлен `corex/workflow` (фактические импорты `CoreX\Workflow\*`).
+### Historical breaking renames and package requirements
 
-### Deferred (named, not resolved — P12.9)
+The following pre-release renames supplied no compatibility aliases.
 
-- Presence-семантика `ValuePatch`/`ValueBag`; разделение `DatabaseTransferRunner` (TR2–TR4); полная декомпозиция `DataScope`; сокращение `corex/core`; вынос `config()` из domain; tenant `singleton` → scoped; DTO в `Contracts/`; public API census; пин Meilisearch SDK — см. `docs/audit-2026-09-17-deferred.md`.
-- Корневой `composer test:packages` расширен с 8 до 20 пакетов; `corex/core` и `corex/modules` получили скрипты `test`/`test:coverage`/`analyse`/`lint:check` (прогон через корневой `phpunit.xml` и testsuite `CorePackage`/`ModulesPackage`).
-- Корневой `composer.json`: в `require` добавлены `corex/attributes`, `corex/transfer`, `corex/search-meilisearch`; в `autoload-dev` — тестовые неймспейсы пакетов без локального `vendor`.
-- `corex/intl`: в манифест добавлен `tablePrefix('int')` — обязательное поле D37 для `modules:compile` (таблицы пакета по-прежнему `corex_*`; выравнивание префикса со схемой — отдельная работа).
-- Корневой `composer.json`: скрипт `package-graph-gate`; `corex/tasks-workflow`: привязка `RecurrenceExpander` без `use` чужого `Internal` (совместимость с R2).
+| Package at the time | Change |
+| --- | --- |
+| `corex/modules` | `Dep` → `ModuleDependency` (arguments `$kind`, `$package`), `Manifest` → `ModuleManifest`, `GateDecision` → `ModuleActivationDecision`, `SettingDefault` → `DefaultSettingDefinition`, `ModuleContext` → `ModuleRuntimeContext`, `CorexModule` → `ModuleDefinition`, `WhyCommand` → `ExplainModuleCommand`. The Composer module ID and `modules:why` signature were preserved. |
+| `corex/attributes` | `RegistryFieldCatalogue` → `ModuleFieldCatalogue`, `StructuralAttributeFilter` → `SchemaAttributeFilter`, `WriteResult` → `AttributeWriteResult`, `OperationKey` → `SchemaOperationId`. |
+| `corex/search` | `UnsupportedSearchProvider` → `UnavailableSearchProvider`. |
+| `corex/search-meilisearch` | `MeilisearchQueryAdapter` → `MeilisearchSearchProvider`. |
+| `corex/transfer` | `DatabaseTransferRunner` → `SqlTransferExecutor`, `ImportTarget` → `TransferSink`. |
+| `corex/tasks-workflow` | `CompletionCaptureObserver` → `CaptureTaskCompletion`, `RecurringTasksModule` → `TaskWorkflowIntegration`. The Composer module ID was preserved. |
+| `corex/wakeup` | `DueSource` → `DueWakeupSource`, `WakeupHandler` → `DueWakeupHandler`, `WakeupHint` → `WakeupScheduleHint`, `WakeupSweeper` → `DueWakeupSweeper`. `WakeupScheduler` remained available. |
+| `corex/api` | `Dispatcher` → `OperationDispatcher`, `ErrorBoundary` → `OperationErrorBoundary`, `RequestMetadata` → `InvocationMetadata`, `OpenApi` → `OpenApiDocumentGenerator`. Routes, config keys, operation IDs, OpenAPI and error serialization kept their formats at this rename. |
+| `corex/tenancy` | `AccountsResult` → `AvailableAccounts`. Constructor fields and Redis/cache serialization were preserved. |
+
+- Attributes resolved table names through immutable `AttributeTables`, required schema validation in stores and treated Modules as a suggested dependency with a guarded fallback.
+- `SearchManager` became the single registry for the `null` and `postgres` drivers, with invalid configuration rejected and `null` as the default. Meilisearch registered via `SearchManager::extend()` in `CoreX\Search\Meilisearch\` and removed its `enabled` key. `corex/intl-search` became `corex/search-intl` with namespace `CoreX\SearchIntl\`.
+- The historical Transfer rename used namespace `CoreX\ImportExport\`, moved `src/Support/` to `src/Data/` and kept the `corex-import-export.*` configuration prefix. Later releases adopted the explicit ImportExport package identity.
+- Intl added its direct Modules dependency for `CorexModule`, corrected `IntlModule` discovery and declared `tablePrefix('int')` for `modules:compile`. Physical `corex_*` tables retained their existing names at that point. Tasks Workflow added Workflow for its direct `CoreX\Workflow\*` imports.
+
+### Items deferred by the September audit
+
+The historical audit deferred presence semantics for `ValuePatch` and `ValueBag`, splitting `DatabaseTransferRunner`, fully decomposing `DataScope`, reducing the kernel, moving remaining `config()` calls out of domain code, tenant binding lifetimes, DTO placement in `Contracts/`, a public API inventory and a Meilisearch SDK pin. Subsequent changes are documented in the relevant package histories.

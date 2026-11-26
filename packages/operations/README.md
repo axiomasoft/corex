@@ -457,5 +457,5 @@ Error constructors require `ErrorCode`; descriptors keep scoped string wire code
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
 
-Наборы схем новой установки — `axiomasoft/corex-operations:tenant` v3 и
+Fresh installations use `axiomasoft/corex-operations:tenant` v3 and
 `axiomasoft/corex-operations:budget` v2 (dedicated).

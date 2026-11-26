@@ -56,7 +56,7 @@
 
 - Correct JSON decoder and schema budget PHPDoc to preserve numeric object member names and recursive schema lists; native signatures and accepted JSON values remain unchanged (PLAN3.D128).
 
-- Схема: набор(ы) `tenant` и `budget` (Dedicated), baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+- The initial `tenant` and `budget` (Dedicated) baseline replaced the unreleased migration chain for fresh installations.
 
 ## Unreleased — schema set connection ownership
 
@@ -104,7 +104,7 @@
 
 ## Unreleased — P04.2
 
-- Публичные JSON-поля операций и результатов закрыты JsonDocument; интеграционные парсеры отделены от неизменяемых DTO.
+- Public JSON fields in operations and results use `JsonDocument`. Integration parsers live outside the immutable DTOs.
 
 
 ## Unreleased — package identifier alignment

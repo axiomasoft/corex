@@ -31,7 +31,7 @@
 
 ## Unreleased — baseline v1
 
-- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+- The initial `tenant` baseline replaced the unreleased migration chain for fresh installations.
 
 ## Unreleased — thin providers and registrars (P05.2)
 
