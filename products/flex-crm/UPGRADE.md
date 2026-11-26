@@ -1,28 +1,16 @@
 # Full CRM storage parity upgrade
 
-This is a pre-1.0 breaking MINOR candidate after monorepo v0.2.0. No release tag is implied.
-Back up the account database before a separately authorized installation/upgrade.
+## Installing the current schema
 
-Fresh or empty legacy installations: initialize the existing `users`, `wsp_workspaces`
-and `wsp_workspace_members` owning schema with UUID keys, compile the
-installed modules, then enable `flex/crm` in that account connection. The additive
-`2026_09_14_000002_company_contact_parity` migration replaces only empty historical
-company/contact tables and creates sources and the typed association. Earlier migration
-files remain unchanged. PostgreSQL 15+ is required; FlexCRM models generate UUIDv7 identifiers.
+Back up the account database before an upgrade. The current `flex/crm:tenant` schema set ships versioned files from the package. Provision `users`, `wsp_workspaces` and `wsp_workspace_members` with UUID keys on the tenant PostgreSQL connection, compile the installed modules and enable `flex/crm`. The kernel requires PostgreSQL 16 or later. FlexCRM generates UUIDv7 primary keys and stores them in UUID columns.
 
-Populated legacy installations are explicitly unsupported by automatic in-place upgrade.
-The migration throws `CRM_PARITY_UPGRADE_REQUIRES_EXPORT` before changing CRM tables.
-Legacy storage has no reliable `created_by`; it also contains `custom_fields` and
-`merged_into_id`, which cannot be silently discarded or added to the approved target.
-The safe conversion procedure is an offline export into a new isolated account database:
-retain a read-only source backup; obtain a provenance mapping for every source row;
-map `website` to domain only after extracting/validating the hostname, name components
-to the new names, scalar channels to normalized lists and `company_id` to a primary
-association; retain source IDs only under the same ID profile; export custom/merge
-metadata separately until its owning storage is approved. Validate tax-ID widths, all
-references, complete row counts and provenance before any separately authorized cutover.
-Do not label unknown historical authors as system/import or overwrite the source database.
-A production backfill/cutover tool is outside this fresh first-consumer slice.
+An installation already using the published baseline can run `php artisan packman:schema:migrate --scope=tenant --modules --database=tenant` to apply outstanding module migrations to the selected tenant connection. Verify its migration journal with `packman:schema:status`. The current package does not ship the unreleased September migrations named `company_contact_parity` and `full_storage_parity`.
+
+## Converting a pre-baseline database
+
+The current baseline expects a fresh schema. For populated, pre-baseline tables, prepare a separate offline conversion to a new account database. Historical records can lack reliable `created_by` values. Export `custom_fields` and `merged_into_id` separately until their destination is agreed.
+
+Keep a read-only backup and obtain a provenance mapping for every row. Extract and validate a hostname before mapping `website` to `domain`. Map contact name components to their current fields, convert scalar channels to normalized lists and convert `company_id` to a primary association. Retain source IDs only if they are valid UUIDs and all their references can be preserved. Verify row counts, references and actor provenance before switching the host connection.
 
 Replace `CreateCompany::handle(...)` with `handle(CompanyData $data)` and
 `CreateContact::handle(...)` with `handle(ContactData $data)`. There are no silent
@@ -33,16 +21,7 @@ legacy aliases. Replace `Contact::company()` / `company_id` with `companies()` a
 transaction; its authenticated execution context is mandatory. Malformed legacy phones,
 invalid owners or absent context reject and roll back conversion explicitly.
 
-Disable preserves data. Re-enable is idempotent. Parity `down()` refuses a destructive
-loss of target data: restore a verified backup only in an authorized maintenance operation.
-Do not use module purge as an upgrade or rollback mechanism.
-
-The subsequent `2026_09_15_000001_full_storage_parity` migration admits the approved
-PostgreSQL CRM profile for all enabled tables, including lost reasons, activity targets
-and the deal/contact association required by the existing conversion Action. It checks
-all affected tables, matching ID types and owning prerequisites before transactional DDL.
-It refuses ANY populated affected table, including already canonical company/contact
-data; enabling a module is not authorization to delete or convert that data.
+Disabling the module preserves account data. Re-enabling it is idempotent. Restore a verified backup to roll back a conversion.
 
 Sales API compatibility (next pre-1.0 MINOR, not a release): `CreateLead` now requires
 `title`, with explicit optional `contactName`, `email`, `phone`, `companyName`, `ownerId`

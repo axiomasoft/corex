@@ -29,18 +29,33 @@ function crmDeactivatePrincipal(Connection $db, string $id): void
     $db->table('users')->where('id', $id)->update(['is_active' => false]);
 }
 
-it('reads the principal rows once per save transaction instead of on every check', function (): void {
-    $principal = $this->crmContext->context->principalId;
-    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Original', ownerId: $principal));
+it('checks current workspace admission in one query', function (): void {
+    $ctx = $this->crmContext->current();
+    $guard = resolve(ContextGuard::class);
 
-    // The unlocked pre-check before the transaction and the first locked check
-    // inside it read users, workspace and membership; the locked re-check, the
-    // tenant scope, both saving observers and the owner check reuse that proof.
-    // Before: 7 rounds of 3 reads.
-    expect(crmPrincipalReads(static fn () => resolve(UpdateCompany::class)->handle(companyId: $company->id, changes: ['name' => 'Renamed'])))->toBe(6);
+    expect(crmPrincipalReads(static fn () => $guard->user(ctx: $ctx, id: $ctx->principalId, lock: true)))->toBe(1);
 });
 
-it('forgets a proof when the savepoint that took the locks rolls back', function (): void {
+it('refuses a company write after the same transaction withdraws admission', function (Closure $withdraw): void {
+    $ctx = $this->crmContext->current();
+    $guard = resolve(ContextGuard::class);
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Original', ownerId: $ctx->principalId));
+    $db = $guard->connection($ctx);
+
+    $db->transaction(function () use ($guard, $ctx, $db, $withdraw, $company): void {
+        $guard->user(ctx: $ctx, id: $ctx->principalId, lock: true);
+        $withdraw($db, $ctx->principalId, $ctx->tenant->workspace->id);
+
+        expect(fn () => resolve(UpdateCompany::class)->handle(companyId: $company->id, changes: ['name' => 'Revoked']))->toThrow(AuthorizationException::class)
+            ->and($db->table('crm_companies')->where('id', $company->id)->value('name'))->toBe('Original');
+    });
+})->with([
+    'deactivated user' => [static fn (Connection $db, string $user, string $workspace) => crmDeactivatePrincipal($db, $user)],
+    'revoked membership' => [static fn (Connection $db, string $user, string $workspace) => $db->table('wsp_workspace_members')->where('user_id', $user)->where('workspace_id', $workspace)->delete()],
+    'removed workspace' => [static fn (Connection $db, string $user, string $workspace) => $db->table('wsp_workspaces')->where('id', $workspace)->update(['deleted_at' => now()])],
+]);
+
+it('checks the current admission after a savepoint rollback', function (): void {
     $ctx = $this->crmContext->current();
     $guard = resolve(ContextGuard::class);
     $db = $guard->connection($ctx);
@@ -60,7 +75,7 @@ it('forgets a proof when the savepoint that took the locks rolls back', function
     });
 });
 
-it('does not carry a proof into the next transaction', function (): void {
+it('checks current admission in the next transaction', function (): void {
     $ctx = $this->crmContext->current();
     $guard = resolve(ContextGuard::class);
     $db = $guard->connection($ctx);
@@ -71,13 +86,12 @@ it('does not carry a proof into the next transaction', function (): void {
     expect(fn () => $db->transaction(static fn () => $guard->user(ctx: $ctx, id: $ctx->principalId, lock: true)))->toThrow(AuthorizationException::class);
 });
 
-it('does not share proofs across requests on the same worker', function (): void {
+it('checks current admission on the next worker request', function (): void {
     $ctx = $this->crmContext->current();
     $db = resolve(ContextGuard::class)->connection($ctx);
 
     $db->transaction(function () use ($ctx, $db): void {
         resolve(ContextGuard::class)->user(ctx: $ctx, id: $ctx->principalId, lock: true);
-        expect(crmPrincipalReads(static fn () => resolve(ContextGuard::class)->user(ctx: $ctx, id: $ctx->principalId, lock: true)))->toBe(0);
 
         // What Octane and the queue worker do between requests and jobs.
         app()->forgetScopedInstances();
@@ -87,7 +101,7 @@ it('does not share proofs across requests on the same worker', function (): void
     });
 });
 
-it('never trusts an unlocked check as a proof', function (): void {
+it('rechecks an earlier unlocked admission at the write boundary', function (): void {
     $ctx = $this->crmContext->current();
     $guard = resolve(ContextGuard::class);
     $db = $guard->connection($ctx);

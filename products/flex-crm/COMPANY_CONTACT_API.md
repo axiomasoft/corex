@@ -1,42 +1,24 @@
 # Company/contact API
 
-Public commands in `Flex\Crm\Actions`:
+The host installs the CRM module and Operations to expose its company and contact endpoints. The supported PHP integration types are listed in the [API manifest](resources/contracts/php-api.json). Bind the execution context before accepting requests.
 
-```php
-CreateCompany::handle(CompanyData $data): Company;
-CreateContact::handle(ContactData $data): Contact;
-AssociateContactCompany::handle(
-    string|int $contactId,
-    string|int $companyId,
-    ?string $label = null,
-    bool $isPrimary = false,
-): ContactCompany;
+## Create and associate records
+
+Send the following JSON to `POST /api/v2/companies` in an authorized account and workspace:
+
+```json
+{"name": "Acme", "domain": "acme.test", "inn": "7700000000"}
 ```
 
-All Data classes are final readonly. `CompanyData` takes name, legalName, domain,
-inn, kpp, ogrn, phones, emails, address, bankDetails, sourceId, ownerId and accountLevel.
-`ContactData` takes nameFirst/nameLast/nameMiddle, jobTitle, birthday (YYYY-MM-DD),
-phones, emails, sourceId, ownerId and accountLevel. Neither takes actor, workspace ID,
-connection or display/search payload. See their constructors for exact types/defaults.
+Send the contact to `POST /api/v2/contacts`:
 
-```php
-use Flex\Crm\Actions\{CreateCompany, CreateContact, AssociateContactCompany};
-use Flex\Crm\Data\{CompanyData, ContactData};
-use Flex\Crm\Models\{Company, Contact};
-
-$company = app(CreateCompany::class)->handle(new CompanyData(
-    name: 'Acme', domain: 'acme.test', inn: '7700000000',
-));
-$contact = app(CreateContact::class)->handle(new ContactData(
-    nameFirst: 'Jane', nameLast: 'Doe',
-    emails: [['value' => 'Jane@acme.test', 'type' => 'work', 'is_primary' => true]],
-));
-$link = app(AssociateContactCompany::class)->handle(
-    contactId: $contact->id, companyId: $company->id, label: 'Decision maker', isPrimary: true,
-);
-$companies = Company::query()->orderBy('name')->get();
-$card = Contact::query()->with('companies')->findOrFail($contact->id);
+```json
+{"name_first": "Jane", "name_last": "Doe", "emails": [{"value": "Jane@acme.test", "type": "work", "is_primary": true}]}
 ```
+
+Use the resulting contact ID in `POST /api/v2/contacts/{contactId}/companies`. Supply the UUID returned by the company operation as `company_id`, and optionally `label` and `is_primary`.
+
+## Host execution context
 
 Before dispatch, the application binds `Flex\Crm\Context\Contracts\CrmExecutionContext` to
 a scoped implementation. Its only method is `current(): ExecutionContext`; return the
@@ -92,30 +74,13 @@ pair and partial primary index remain authoritative for all concurrent writers. 
 pair and second primary reject (no implicit replacement/update); label NULL is allowed.
 Hard delete cascades associations; soft delete retains their storage and hides deleted
 endpoints from normal relationships. Owner/source hard deletion SET NULL is separate from
-soft deletion. All ID columns retain CoreX's uuid7/uuid/ulid/int profiles with compatible
-prerequisites; UUIDv7 is the FlexCRM profile.
+soft deletion. FlexCRM models generate UUIDv7 primary keys. CRM keys and their references use UUID columns.
 
-Extend through composition of Actions and existing manifest listeners:
+## Transaction and event behavior
 
-```php
-return ModuleManifest::make('acme/integration')->title('Integration')->tablePrefix('aci')
-    ->listens([CompanyCreated::class => [CompanyListener::class]]);
-```
+`CompanyCreated`, `ContactCreated` and `ContactCompanyAssociated` dispatch after the outer transaction commits, in registration order. A rollback discards pending callbacks. These in-process events have no durable delivery guarantee. A synchronous listener exception propagates after commit and can interrupt subsequent callbacks. Check the committed record before retrying a failed request. Queue independent integrations with their own retry and idempotency policy.
 
-The package introduces no plugin/workflow/pipeline system and no per-class interfaces.
-Required additional consumer steps belong inside a composed Action on the same initialized
-connection and outer transaction. Events CompanyCreated, ContactCreated and
-ContactCompanyAssociated implement ShouldDispatchAfterCommit: callbacks run after the
-outer successful commit and are discarded on rollback. In a successful composite they are
-registered in command order. They are in-process notifications, not durable exactly-once
-delivery: no outbox/crash recovery is claimed. Synchronous listeners run in Laravel registration
-order; a listener exception propagates after data is committed and can prevent later listeners/
-callbacks. Do not retry create blindly after that exception. Queue independent integrations
-with ShouldQueue and their own retry/idempotency policy. Mandatory invariants never live in
-after-commit listeners. Avoid listener ordering dependencies; compose dependent steps explicitly.
-Direct query-builder/bulk mutations and scope removal are privileged maintenance escape
-hatches, not supported extension points. Application HTTP/UI and its Policy remain outside
-the domain package.
+Callers use the installed Operations declarations for writes. Direct query-builder updates bypass the domain checks. The host owns its HTTP authorization policy.
 
 ## Installed HTTP operations
 
