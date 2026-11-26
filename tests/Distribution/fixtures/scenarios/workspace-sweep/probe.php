@@ -26,22 +26,20 @@ require getcwd().'/vendor/autoload.php';
 Scenario::boot();
 $proof = new Scenario;
 $database = Scenario::connection('a');
-$clock = app(ScenarioClock::class);
+$clock = resolve(ScenarioClock::class);
 $mode = $argv[1] ?? '';
 
 function inWorkspaceTwo(Closure $callback): mixed
 {
-    return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static function () use ($callback): mixed {
-        return $callback(app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current()));
-    });
+    return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static fn (): mixed => $callback(resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current())));
 }
 
 function sweepFromWorkspaceOne(Scenario $proof): void
 {
     ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, Scenario::USER_A, static function () use ($proof): void {
-        $proof->same(Scenario::W1, app(TenantContextResolver::class)->current()->workspace?->id, 'The sweep starts as W1');
+        $proof->same(Scenario::W1, resolve(TenantContextResolver::class)->current()->workspace?->id, 'The sweep starts as W1');
         $proof->same(0, Artisan::call('corex:scheduler:sweep', ['--limit' => 1]), 'Run the installed Laravel Scheduler command');
-        $proof->same(Scenario::W1, app(TenantContextResolver::class)->current()->workspace?->id, 'Sweep restores its ambient workspace');
+        $proof->same(Scenario::W1, resolve(TenantContextResolver::class)->current()->workspace?->id, 'Sweep restores its ambient workspace');
         $proof->same(Scenario::USER_A, auth()->guard()->user()?->getAuthIdentifier(), 'Sweep restores its own ambient actor');
     });
 }
@@ -57,7 +55,7 @@ function row(string $key): array
     return (array) $row;
 }
 
-function request(DataScope $scope, string $kind, string $version, string $key, DateTimeImmutable $fireAt, array $payload, ?WakeupWindow $window = null): WakeupRequest
+function sweepWakeupRequest(DataScope $scope, string $kind, string $version, string $key, DateTimeImmutable $fireAt, array $payload, ?WakeupWindow $window = null): WakeupRequest
 {
     return new WakeupRequest($scope, $kind, $version, $key, $fireAt, $window, JsonDocuments::capture($payload));
 }
@@ -88,18 +86,18 @@ switch ($mode) {
                 'start' => '2026-11-20', 'end' => '2026-11-21', 'aheadDays' => 1, 'pageLimit' => 10, 'maxSeconds' => 5,
             ];
             $window = new WakeupWindow($now->modify('-1 minute'), $now, 'custom');
-            $wakeup = request($scope, 'task-recurrence.materialize', 'task-materialization/1', 'materialize-w2', $now, $data, $window);
-            $scheduler = app(WakeupScheduler::class);
+            $wakeup = sweepWakeupRequest($scope, 'task-recurrence.materialize', 'task-materialization/1', 'materialize-w2', $now, $data, $window);
+            $scheduler = resolve(WakeupScheduler::class);
             $created = $scheduler->schedule($wakeup);
             $proof->same('created', $created->status, 'Schedule W2 through the installed Scheduler');
             $replay = $scheduler->schedule($wakeup);
             $proof->same('existing', $replay->status, 'Identical scope, window and payload replay the stored request');
             $proof->same($created->id, $replay->id, 'Exact replay preserves the original request ID');
             $changed = new WakeupWindow($now->modify('-2 minutes'), $now, 'custom');
-            $proof->same('conflict', $scheduler->schedule(request($scope, $wakeup->kind, $wakeup->handlerVersion, $wakeup->requestKey, $now, $data, $changed))->status, 'A different window on the same key conflicts');
-            $proof->same('created', $scheduler->schedule(request($scope, 'scenario.cas', 'cas/1', 'cancelled', $now, ['fixture' => true]))->status, 'Prepare cancellable request');
+            $proof->same('conflict', $scheduler->schedule(sweepWakeupRequest($scope, $wakeup->kind, $wakeup->handlerVersion, $wakeup->requestKey, $now, $data, $changed))->status, 'A different window on the same key conflicts');
+            $proof->same('created', $scheduler->schedule(sweepWakeupRequest($scope, 'scenario.cas', 'cas/1', 'cancelled', $now, ['fixture' => true]))->status, 'Prepare cancellable request');
             $proof->same('cancelled', $scheduler->cancel($scope, new WakeupIdentity('scenario.cas', 'cancelled'))->status, 'Cancel through the public Scheduler');
-            $proof->same('created', $scheduler->schedule(request($scope, 'scenario.retired', 'retired/1', 'retired', $now->modify('+30 seconds'), ['fixture' => true]))->status, 'The first deployment accepts the legacy handler version.');
+            $proof->same('created', $scheduler->schedule(sweepWakeupRequest($scope, 'scenario.retired', 'retired/1', 'retired', $now->modify('+30 seconds'), ['fixture' => true]))->status, 'The first deployment accepts the legacy handler version.');
 
             return $created->id ?? throw new RuntimeException('Missing durable W2 request ID.');
         });
@@ -143,7 +141,7 @@ switch ($mode) {
         inWorkspaceTwo(static function (DataScope $scope) use ($proof): void {
             $proof->same(Scenario::W2, $scope->workspaceId, 'A separate process initially opens W2 after the abandoned claim');
             sweepFromWorkspaceOne($proof);
-            $proof->same(Scenario::W2, app(TenantContextResolver::class)->current()->workspace?->id, 'The replacement sweep exits back to W2');
+            $proof->same(Scenario::W2, resolve(TenantContextResolver::class)->current()->workspace?->id, 'The replacement sweep exits back to W2');
             $proof->same(Scenario::USER_B, auth()->guard()->user()?->getAuthIdentifier(), 'The replacement sweep restores the previous W2 actor');
         });
         $task = $database->table('tsk_tasks')->first();
@@ -164,7 +162,7 @@ switch ($mode) {
                 $proof->same($scope->workspaceId, $stored['workspace_id'], 'Continuation retains W2');
                 $proof->same($scope->principalId, $stored['principal_id'], 'Continuation retains the authorizing actor');
                 $identity = new WakeupIdentity($continuation->kind, $continuation->request_key);
-                $proof->same('cancelled', app(WakeupScheduler::class)->cancel($scope, $identity)->status, 'Cancel future continuation before testing the removed handler');
+                $proof->same('cancelled', resolve(WakeupScheduler::class)->cancel($scope, $identity)->status, 'Cancel future continuation before testing the removed handler');
             }
         });
         $proof->report($database, [$completed['id'], $task->id], ['old' => $old], ['claim' => $completed, 'task' => (array) $task, 'continuations' => $continuations]);
@@ -185,8 +183,8 @@ switch ($mode) {
 
     case 'late':
         $clock->advance(120);
-        $created = inWorkspaceTwo(static fn (DataScope $scope) => app(WakeupScheduler::class)->schedule(
-            request($scope, 'scenario.cas', 'cas/1', 'expired-cas', $clock->now(), ['fixture' => true]),
+        $created = inWorkspaceTwo(static fn (DataScope $scope) => resolve(WakeupScheduler::class)->schedule(
+            sweepWakeupRequest($scope, 'scenario.cas', 'cas/1', 'expired-cas', $clock->now(), ['fixture' => true]),
         ));
         $proof->same('created', $created->status, 'Prepare a real late-CAS request in W2');
         sweepFromWorkspaceOne($proof);

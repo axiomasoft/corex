@@ -30,10 +30,4 @@ final class DepartmentQueries
         return Department::query()->toBase()
             ->whereRaw('path <@ ?::ltree', [$path])->select('id');
     }
-
-    public static function contains(string $id, string $path): bool
-    {
-        return Department::query()->toBase()
-            ->where('id', $id)->whereRaw('path <@ ?::ltree', [$path])->exists();
-    }
 }

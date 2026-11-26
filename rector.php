@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\SleepFuncToSleepStaticCallRector;
 use CoreX\Tooling\Rector\Laravel\Rector\StaticCall\DispatchToHelperFunctionsRector;
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -23,6 +24,10 @@ return RectorConfig::configure()
         ...glob(__DIR__.'/packages/*/database/migrations', GLOB_ONLYDIR),
         ...glob(__DIR__.'/products/*/database/migrations', GLOB_ONLYDIR),
         ...glob(__DIR__.'/packages/*/tests/Fixtures/vendor', GLOB_ONLYDIR),
+        // Runs as a bare `php` child process with no Composer autoloader.
+        SleepFuncToSleepStaticCallRector::class => [
+            __DIR__.'/packages/custom-fields/tests/Pg/Support/ObserveConcurrentIndex.php',
+        ],
     ])
     ->withSets([
         __DIR__.'/scripts/quality/rector/Laravel/config/sets/laravel-code-quality.php',
@@ -37,7 +42,9 @@ return RectorConfig::configure()
         ],
     ])
     ->withConfiguredRule(ServerVariableToRequestFacadeRector::class, [
+        // argv in CLI tools is process state, never request input.
         ServerVariableToRequestFacadeRector::PRESERVE_PATHS => [
+            __DIR__.'/scripts',
         ],
     ])
     ->withConfiguredRule(ClassPropertyAssignToConstructorPromotionRector::class, [
@@ -47,6 +54,8 @@ return RectorConfig::configure()
     ->withConfiguredRule(StringClassNameToClassConstantRector::class, [
         // Optional container binding identifier; importing it creates a production/dev dependency edge.
         'Laravel\\Octane\\Octane',
+        // Optional Octane event; importing it adds a static edge to a suggested package.
+        'Laravel\\Octane\\Events\\WorkerErrorOccurred',
         'Symfony\\Component\\HttpFoundation\\Request',
         'Psr\\Container\\ContainerInterface',
         'Illuminate\\Contracts\\Container\\Container',

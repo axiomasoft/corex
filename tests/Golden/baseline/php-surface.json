@@ -185,6 +185,37 @@
         },
         "readonly": true
     },
+    "CoreX\\Access\\Access\\Internal\\ExistingTables": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "has": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "table",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Access\\Access\\Internal\\MatrixCell": {
         "abstract": false,
         "constants": [],
@@ -912,6 +943,12 @@
                         "byRef": false,
                         "name": "connections",
                         "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "tables",
+                        "type": "CoreX\\Access\\Access\\Internal\\ExistingTables",
                         "variadic": false
                     }
                 ],
@@ -4832,6 +4869,11 @@
                         "variadic": false
                     }
                 ],
+                "return": "",
+                "static": false
+            },
+            "releaseUsingBackoff": {
+                "params": [],
                 "return": "",
                 "static": false
             },
@@ -19295,24 +19337,6 @@
         "internal": false,
         "kind": "class",
         "methods": {
-            "contains": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "id",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "path",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": true
-            },
             "path": {
                 "params": [
                     {
@@ -36057,6 +36081,11 @@
                 "return": "",
                 "static": false
             },
+            "releaseUsingBackoff": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
             "restoreModel": {
                 "params": [
                     {
@@ -36599,6 +36628,11 @@
                         "variadic": false
                     }
                 ],
+                "return": "",
+                "static": false
+            },
+            "releaseUsingBackoff": {
+                "params": [],
                 "return": "",
                 "static": false
             },
@@ -39818,6 +39852,60 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Messaging\\Internal\\BatchedDelete": {
+        "abstract": false,
+        "constants": {
+            "DEFAULT_BATCH": {
+                "type": "int",
+                "value": 1000
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "batchOption": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "run": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "Illuminate\\Database\\Query\\Builder",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "batch",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages": {
         "abstract": false,
@@ -45209,6 +45297,11 @@
                         "variadic": false
                     }
                 ],
+                "return": "",
+                "static": false
+            },
+            "releaseUsingBackoff": {
+                "params": [],
                 "return": "",
                 "static": false
             },
@@ -81402,6 +81495,11 @@
                 "return": "",
                 "static": false
             },
+            "releaseUsingBackoff": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
             "restoreModel": {
                 "params": [
                     {
@@ -85125,6 +85223,11 @@
                         "variadic": false
                     }
                 ],
+                "return": "",
+                "static": false
+            },
+            "releaseUsingBackoff": {
+                "params": [],
                 "return": "",
                 "static": false
             },
@@ -105491,6 +105594,12 @@
                         "name": "modules",
                         "type": "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "admissions",
+                        "type": "Flex\\Crm\\Context\\Internal\\LockedAdmissions",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -105773,6 +105882,67 @@
             }
         },
         "readonly": true
+    },
+    "Flex\\Crm\\Context\\Internal\\LockedAdmissions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "proven": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "remember": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "Flex\\Crm\\Context\\Internal\\RecordRules": {
         "abstract": false,

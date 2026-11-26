@@ -18,6 +18,7 @@ use CoreX\Search\Index\Enums\IndexAction;
 use CoreX\SearchMeilisearch\Enums\MeilisearchAccess;
 use CoreX\SearchMeilisearch\Internal\MeilisearchIndexAdapter;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
+use Illuminate\Container\Container;
 use Meilisearch\Client;
 use Override;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,10 @@ abstract class MeilisearchTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // These cases run without a Laravel application. A Testbench case that ran
+        // earlier in the same process leaves its flushed application as the global
+        // container, and the caller scope fixture would try to resolve config from it.
+        Container::setInstance();
 
         $endpoint = getenv('MEILISEARCH_HOST') ?: 'http://127.0.0.1:7700';
 

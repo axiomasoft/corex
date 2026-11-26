@@ -6,6 +6,7 @@ use Composer\InstalledVersions;
 use CoreX\CoreServiceProvider;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Sleep;
 
 require getcwd().'/vendor/autoload.php';
 $app = require getcwd().'/bootstrap/app.php';
@@ -26,7 +27,7 @@ $before = $pdo->query('SELECT 1')->fetchColumn();
 $barrier = getenv('COREX_SCENARIO_BARRIERS').'/booted';
 file_put_contents($barrier.'.reached', (string) getmypid(), LOCK_EX);
 while (! is_file($barrier.'.release')) {
-    usleep(25_000);
+    Sleep::usleep(25_000);
 }
 
 $after = $pdo->query('SELECT 1')->fetchColumn();

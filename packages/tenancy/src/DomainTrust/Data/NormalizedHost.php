@@ -27,7 +27,7 @@ final readonly class NormalizedHost implements Stringable
 
         $labels = explode('.', $normalized);
 
-        if (count($labels) < 2 || array_any($labels, static fn (string $label): bool => preg_match('/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/', $label) !== 1)) {
+        if (count($labels) < 2 || array_any($labels, static fn (string $label): bool => preg_match('/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/D', $label) !== 1)) {
             throw new InvalidArgumentException('Host must contain valid DNS labels.');
         }
 

@@ -159,7 +159,7 @@ final readonly class BuiltinFieldType implements FieldType
             throw new InvalidArgumentException('Invalid field string.');
         }
 
-        return $this->type->value === 'datetime' ? (new DateTimeImmutable($value))->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:s.u\Z') : $value;
+        return $this->type->value === 'datetime' ? new DateTimeImmutable($value)->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:s.u\Z') : $value;
     }
 
     /** @param array<string,mixed> $limits

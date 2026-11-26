@@ -62,10 +62,8 @@ final readonly class SearchModuleReferences implements ModuleReferences, Referen
         };
 
         return SqlReferenceInventory::scan(owner: $this->owner(), tables: [
-            LaneStore::LANES => [$tenant, ['entity', 'active_generation', 'writer_generation', 'rebuild_id'], function (array $row, string $id) use ($scope): ?LifecycleBlocker {
-                return $row['active_generation'] === null && $row['rebuild_id'] === null ? null
-                    : new LifecycleBlocker(owner: $this->owner(), resourceKind: 'search-lane', resourceId: $id, scope: $scope, requiredAction: 'retire-or-rebind-active-lane');
-            }],
+            LaneStore::LANES => [$tenant, ['entity', 'active_generation', 'writer_generation', 'rebuild_id'], fn (array $row, string $id): ?LifecycleBlocker => $row['active_generation'] === null && $row['rebuild_id'] === null ? null
+                : new LifecycleBlocker(owner: $this->owner(), resourceKind: 'search-lane', resourceId: $id, scope: $scope, requiredAction: 'retire-or-rebind-active-lane')],
             LaneStore::DIRTY => [$tenant, ['source', 'lane_key'], null, $child],
             LaneStore::RUNS => [$tenant, ['state', 'lane_key'], null, $child],
             LaneStore::GENERATIONS => [$tenant, ['generation', 'uid', 'state', 'lane_key'], function (array $row) use ($scope, $module): CleanupAction|LifecycleBlocker {

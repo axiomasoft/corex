@@ -36,6 +36,7 @@ use Equipment\Registry\Equipment;
 use Equipment\Registry\TransferBulkAdapter;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Sleep;
 use Packman\Modules\Contracts\Lifecycle\ModuleLifecycle;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
@@ -54,7 +55,7 @@ switch ($mode) {
     case 'setup':
         FixtureSetup::install();
         Runtime::scoped(static function (DataScope $scope) use ($test): void {
-            $lifecycle = app(ModuleLifecycle::class);
+            $lifecycle = resolve(ModuleLifecycle::class);
             $packages = [BulkDeclaration::MODULE];
 
             if (getenv('COREX_SCENARIO_VARIANT') === 'equipment') {
@@ -64,12 +65,12 @@ switch ($mode) {
                 FixtureLifecycleOperators::grant($scope, $package, 'enable');
                 FixtureLifecycleOperators::grant($scope, $package, 'inspect');
                 $lifecycle->enable($package, cascade: true);
-                $test->check(app(ModuleRegistry::class)->isActive($package, app(TenantContextResolver::class)->current()),
+                $test->check(resolve(ModuleRegistry::class)->isActive($package, resolve(TenantContextResolver::class)->current()),
                     'Installed host declaration was not activated through ModuleLifecycle.');
             }
 
             if (getenv('COREX_SCENARIO_VARIANT') === 'equipment') {
-                $test->check(app(BulkOwner::class) instanceof TransferBulkAdapter, 'Equipment owner port must resolve to the installed adapter.');
+                $test->check(resolve(BulkOwner::class) instanceof TransferBulkAdapter, 'Equipment owner port must resolve to the installed adapter.');
                 $test->same(Equipment::Handle, InputIdentity::ENTITY, 'Fixture export must use the actual declared equipment entity.');
                 $test->same(DeclaredEquipmentFields::Serial, InputIdentity::SERIAL, 'Owner grants and codec must use the actual stable equipment field ID.');
             }
@@ -139,7 +140,7 @@ switch ($mode) {
             if ($wait !== '{}') {
                 break;
             }
-            usleep(25_000);
+            Sleep::usleep(25_000);
         } while (hrtime(true) < $deadline);
         $test->same('{'.$owner['session'].'}', $wait, 'Concurrent request did not wait on the first PostgreSQL transaction.');
         $test->same(0, $db->table('sys_api_bulk_operations')->count(), 'Bulk admission escaped its caller transaction.');
@@ -163,7 +164,7 @@ switch ($mode) {
         $test->same(['settled'], array_column($budget, 'state'), 'The entire dedicated ledger contains one settled reservation.');
         $test->same([$ownerReceipt['reservation_id']], array_column($budget, 'id'), 'The settlement belongs to the original tenant receipt.');
         $test->same(array_column($admitted, 'id'), array_column($budget, 'id'), 'Concurrent replay uses the original hold.');
-        $operation = array_find(app(OperationRegistry::class)->all('v2'),
+        $operation = array_find(resolve(OperationRegistry::class)->all('v2'),
             static fn ($declaration): bool => $declaration->id === 'equipment.bulk.transfer');
         $test->same([1_000_000 * ($operation->cost['base'] ?? 1)], array_column($budget, 'charged'), 'The business reservation is charged once.');
         $test->check(! hasTargets(targets('local-write', 'outstanding'), ['equipment/registry']), 'Lifecycle admission was not settled after outer commit.');
@@ -279,7 +280,7 @@ switch ($mode) {
         $test->same(200, $failures['status'], 'Typed import failure page unavailable.');
         $test->same($expected, $failures['body'], 'Second row did not retain its exact typed failure and path.');
         $test->check(str_contains($failures['cache'], 'private') && str_contains($failures['cache'], 'no-store'), 'Failure page is publicly cacheable.');
-        $direct = Runtime::scoped(static fn (DataScope $scope) => app(TransferResultReader::class)->failures($scope, new TransferRef($job->id), null, 1));
+        $direct = Runtime::scoped(static fn (DataScope $scope) => resolve(TransferResultReader::class)->failures($scope, new TransferRef($job->id), null, 1));
         $test->same($expected, $direct, 'Direct owner failure read differs from the Bulk projection.');
         $bulk = Runtime::bulk('import');
         foreach (['owner_result_ref', 'failure_page_ref'] as $field) {
@@ -417,9 +418,9 @@ switch ($mode) {
         try {
             $observed = Runtime::scoped(static function (DataScope $scope) use ($test, $id, $transfer): array {
                 $record = new RecordRef(InputIdentity::ENTITY, InputIdentity::SECOND);
-                $test->check(app(DataScopeAuthorizer::class)->authorize($scope, $record, new FieldSelection([InputIdentity::SERIAL]), FieldUse::Export)->allowed,
+                $test->check(resolve(DataScopeAuthorizer::class)->authorize($scope, $record, new FieldSelection([InputIdentity::SERIAL]), FieldUse::Export)->allowed,
                     'Schema drift control requires the underlying current Export grant.');
-                $reader = app(TransferResultReader::class);
+                $reader = resolve(TransferResultReader::class);
 
                 return [
                     'result' => Runtime::http('GET', Runtime::BASE.'/'.$id.'/result')['status'],
@@ -450,11 +451,11 @@ switch ($mode) {
             $grant->delete();
             Runtime::scoped(static function (DataScope $scope) use ($test, $id, $transfer): void {
                 $record = new RecordRef(InputIdentity::ENTITY, InputIdentity::SECOND);
-                $test->check(app(DataScopeAuthorizer::class)->authorize($scope, $record, new FieldSelection([InputIdentity::SERIAL]), FieldUse::Read)->allowed, 'Read should survive independent Export revocation.');
+                $test->check(resolve(DataScopeAuthorizer::class)->authorize($scope, $record, new FieldSelection([InputIdentity::SERIAL]), FieldUse::Read)->allowed, 'Read should survive independent Export revocation.');
                 $test->same(404, Runtime::http('GET', Runtime::BASE.'/'.$id.'/result')['status'], 'Revoked export field or record was accessible by known Bulk ref.');
                 $test->same(404, Runtime::http('GET', Runtime::BASE.'/'.$id.'/failures')['status'], 'Revoked export remained visible through the failure route.');
-                expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->result($scope, $transfer));
-                expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->failures($scope, $transfer, null, 1));
+                expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->result($scope, $transfer));
+                expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->failures($scope, $transfer, null, 1));
             });
             $db->table('scenario_field_grants')->insert([
                 'principal_id' => Scenario::USER_A, 'workspace_id' => Scenario::W1, 'entity' => InputIdentity::ENTITY,
@@ -472,13 +473,13 @@ switch ($mode) {
                 foreach (['/result', '/failures'] as $suffix) {
                     $test->same(404, Runtime::http('GET', Runtime::BASE.'/'.$id.$suffix)['status'], 'Foreign workspace read leaked a known operation.');
                 }
-                expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->result($scope, $ref));
-                expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->failures($scope, $ref, null, 1));
+                expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->result($scope, $ref));
+                expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->failures($scope, $ref, null, 1));
             }, Scenario::W2);
             Runtime::scoped(static function (DataScope $scope) use ($id, $ref, $test): void {
                 $foreign = new DataScope(...[...get_object_vars($scope), 'accountId' => Scenario::ACCOUNT_B]);
-                expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->result($foreign, $ref));
-                expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->failures($foreign, $ref, null, 1));
+                expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->result($foreign, $ref));
+                expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->failures($foreign, $ref, null, 1));
                 putenv('COREX_BULK_CLIENT=other-client');
 
                 try {
@@ -521,7 +522,7 @@ switch ($mode) {
     case 'expiry':
         $id = Runtime::id('export');
         $result = Runtime::scoped(static function () use ($id): array {
-            app(ScenarioClock::class)->advance(5000);
+            resolve(ScenarioClock::class)->advance(5000);
 
             return [
                 Runtime::http('GET', Runtime::BASE.'/'.$id.'/result'),
@@ -539,7 +540,7 @@ switch ($mode) {
         $oldScope = Runtime::scoped(static fn (DataScope $scope): DataScope => $scope);
         $pending = Runtime::scoped(static fn () => Runtime::submit('import', 'fixture-restore'));
         $pendingId = accepted($test, $pending);
-        $control = app(DatabaseScopeControl::class);
+        $control = resolve(DatabaseScopeControl::class);
         $account = Scenario::account(Scenario::BOXED);
         $prior = $control->resolve($account);
         $closing = $control->close($account->id, $prior->controlRevision);
@@ -566,8 +567,8 @@ switch ($mode) {
             foreach (['/result', '/failures'] as $suffix) {
                 $test->same(404, Runtime::http('GET', Runtime::BASE.'/'.$id.$suffix)['status'], 'Old-epoch result remained visible through the new route.');
             }
-            expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->result($scope, $ref));
-            expectOwnerDenied($test, static fn () => app(TransferResultReader::class)->result($oldScope, $ref));
+            expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->result($scope, $ref));
+            expectOwnerDenied($test, static fn () => resolve(TransferResultReader::class)->result($oldScope, $ref));
         });
         $snapshot = Runtime::snapshot($db->table('sys_api_bulk_operations')->where('id', $pendingId)->sole());
         $effects = sink()->table('bulk_sink_journal')->count();
@@ -653,7 +654,7 @@ function verifyExport(Scenario $test, string $id, array &$after): void
     $test->same(200, $response['status'], 'Authorized published export result unavailable.');
     $test->check(str_contains($response['cache'], 'private') && str_contains($response['cache'], 'no-store'), 'The public endpoint permits caching of the private export result.');
     $result = $response['body'];
-    $test->same($result, Runtime::scoped(static fn (DataScope $scope) => app(TransferResultReader::class)->result($scope, $ref)), 'Bulk changed the owner result projection.');
+    $test->same($result, Runtime::scoped(static fn (DataScope $scope) => resolve(TransferResultReader::class)->result($scope, $ref)), 'Bulk changed the owner result projection.');
     $test->same(TransferBulkAdapter::manifestId($id), $result['manifestId'], 'The public result refers to an unrelated manifest.');
     $test->same(2, count($result['parts']), 'Expected a real multipart manifest.');
     $tuples = [];

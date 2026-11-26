@@ -736,14 +736,8 @@ final class DatabaseLifecyclePlans implements LifecyclePlans
     /** @param list<string> $tables */
     private function relationsAbsent(Connection $db, array $tables): bool
     {
-        foreach ($tables as $table) {
-            // Check every relation kind, including a view or a relation later on the search path.
-            if ($db->scalar('select to_regclass(quote_ident(?))', [$db->getTablePrefix().$table], false) !== null) {
-                return false;
-            }
-        }
-
-        return true;
+        // Check every relation kind, including a view or a relation later on the search path.
+        return array_all($tables, fn (string $table): bool => $db->scalar('select to_regclass(quote_ident(?))', [$db->getTablePrefix().$table], false) === null);
     }
 
     private function inventory(): LifecycleInventory

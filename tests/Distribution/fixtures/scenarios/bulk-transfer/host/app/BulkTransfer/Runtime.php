@@ -32,7 +32,7 @@ final class Runtime
             $headers['HTTP_IDEMPOTENCY_KEY'] = $key;
         }
         $request = Request::create($uri, $method, [], [], [], $headers, json_encode((object) $data, JSON_THROW_ON_ERROR));
-        $kernel = app(Kernel::class);
+        $kernel = resolve(Kernel::class);
         $response = $kernel->handle($request);
         $kernel->terminate($request, $response);
 
@@ -47,16 +47,16 @@ final class Runtime
     public static function scoped(Closure $work, ?string $workspace = Scenario::W1): mixed
     {
         return ScenarioQueue::inScope(Scenario::BOXED, $workspace, Scenario::USER_A, static function () use ($work): mixed {
-            $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
+            $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
 
-            return app(WorkScopeRunner::class)->run($scope, static fn (): mixed => $work($scope));
+            return resolve(WorkScopeRunner::class)->run($scope, static fn (): mixed => $work($scope));
         });
     }
 
     public static function work(int $seconds): int
     {
         return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, Scenario::USER_A, static function () use ($seconds): int {
-            app(ScenarioClock::class)->advance($seconds);
+            resolve(ScenarioClock::class)->advance($seconds);
             CrashRecovery::start();
 
             return Artisan::call('corex:operations:bulk-work', ['--worker' => 'api-bulk']);
@@ -65,7 +65,7 @@ final class Runtime
 
     public static function tenant(): Connection
     {
-        return app('db')->connection('pgsql');
+        return resolve('db')->connection('pgsql');
     }
 
     public static function bulk(string $kind): object

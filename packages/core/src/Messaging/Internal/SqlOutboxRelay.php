@@ -128,7 +128,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
                     'deployment_id' => $row->deployment_id, 'binding_id' => $row->binding_id, 'binding_generation' => $row->binding_generation,
                     'restore_epoch' => $row->restore_epoch, 'status' => 'publishing',
                 ])->where('lease_until', '>', $this->clock->now())->update(['status' => 'quarantined', 'claim_token' => null, 'lease_owner' => null, 'lease_until' => null,
-                    'failure_class' => 'invalid-fact', 'last_error' => get_class($error), 'updated_at' => $this->clock->now()]);
+                    'failure_class' => 'invalid-fact', 'last_error' => $error::class, 'updated_at' => $this->clock->now()]);
             }
         }
 
@@ -155,7 +155,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     public function quarantine(LeasedMessage $message, Throwable $error): void
     {
         if ($this->claimRow($message)->update(['status' => 'quarantined', 'claim_token' => null, 'lease_owner' => null, 'lease_until' => null,
-            'failure_class' => 'untrusted-work', 'last_error' => get_class($error), 'updated_at' => $this->clock->now()]) !== 1) {
+            'failure_class' => 'untrusted-work', 'last_error' => $error::class, 'updated_at' => $this->clock->now()]) !== 1) {
             throw OutboxLeaseLost::superseded($message->envelope->messageId);
         }
     }

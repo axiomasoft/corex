@@ -21,7 +21,7 @@ final readonly class WakeupHandlerDefinition
         public string $version,
         string $handler,
     ) {
-        if (preg_match('/^[a-z][a-z0-9._-]{0,63}$/', $kind) !== 1) {
+        if (preg_match('/^[a-z][a-z0-9._-]{0,63}$/D', $kind) !== 1) {
             throw new InvalidArgumentException('Wakeup handler kind must be a stable lower-case identifier.');
         }
 

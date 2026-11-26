@@ -25,12 +25,12 @@ final readonly class MaintenanceReceipts implements TaskRecurrenceCommand
     public function materialize(DataScope $scope, SeriesReference $series, MaterializationWindow $window, WriteToken $token): MaterializationReceipt
     {
         $db = DB::connection();
-        app(CurrentWorkScope::class)->assert($scope, $db);
+        resolve(CurrentWorkScope::class)->assert($scope, $db);
 
         return $db->transaction(function () use ($scope, $series, $window, $token, $db): MaterializationReceipt {
             $record = new RecordRef('task-series', $series->id);
 
-            if (! app(DataScopeAuthorizer::class)->authorize(scope: $scope, record: $record, fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
+            if (! resolve(DataScopeAuthorizer::class)->authorize(scope: $scope, record: $record, fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
                 throw new AuthorizationException('The current fixture actor cannot materialize this equipment series.');
             }
 

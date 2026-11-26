@@ -21,6 +21,7 @@ return new class extends PackmanMigration
             $table->primary(['dataset_key'], 'corex_reference_current_pk');
             $table->string('snapshot_id', 128);
             $table->decimal('generation', total: 20, places: 0)->default(0);
+            $table->index(['snapshot_id'], 'corex_reference_current_snapshot_id_ix');
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {

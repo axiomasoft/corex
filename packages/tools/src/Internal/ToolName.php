@@ -11,9 +11,9 @@ use Packman\Attributes\Internal;
 #[Internal]
 final class ToolName
 {
-    private const string CANONICAL_PATTERN = '/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/';
+    private const string CANONICAL_PATTERN = '/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/D';
 
-    private const string VERSION_PATTERN = '/^v[1-9][0-9]*$/';
+    private const string VERSION_PATTERN = '/^v[1-9][0-9]*$/D';
 
     public static function assertCanonical(string $code): void
     {

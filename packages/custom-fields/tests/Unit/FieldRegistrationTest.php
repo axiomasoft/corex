@@ -16,7 +16,7 @@ use CoreX\CustomFields\Types\Internal\RegisteredFieldTypes;
 use CoreX\Messaging\Testing\MessagingFixtures;
 
 it('encodes normalized third-party data on a distinct reversible wire representation', function (): void {
-    $type = (new RegisteredFieldTypes([new ExtensionType], []))->resolve(new FieldTypeId('test.serial'), 1);
+    $type = new RegisteredFieldTypes([new ExtensionType], [])->resolve(new FieldTypeId('test.serial'), 1);
     $normalized = $type->normalize(FieldInput::from(' one '), typedField('test.serial'));
     $codec = $type->definition()->codec;
     expect($codec->encode($normalized)->canonicalJson)->toBe('"wire:ONE"')
@@ -43,7 +43,7 @@ it('rejects reserved unqualified type names supplied by a host', function (): vo
 });
 
 it('fails closed for an unsupported codec version of a builtin', function (): void {
-    expect(fn () => (new RegisteredFieldTypes([], []))->resolve(new FieldTypeId('int'), 2))->toThrow(FieldFailure::class, 'field-type-unavailable');
+    expect(fn () => new RegisteredFieldTypes([], [])->resolve(new FieldTypeId('int'), 2))->toThrow(FieldFailure::class, 'field-type-unavailable');
 });
 
 it('fails closed for an unregistered type or converter', function (): void {

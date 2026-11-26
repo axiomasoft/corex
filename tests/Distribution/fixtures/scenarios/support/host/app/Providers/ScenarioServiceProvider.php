@@ -165,7 +165,7 @@ final class ScenarioServiceProvider extends ServiceProvider
                 'scenario.wakeup' => ['handler' => ScenarioWakeup::class, 'version' => 'scenario-wakeup/1'],
             ]);
             $this->app->resolving(CandidateDriver::class, static function (): void {
-                $connection = app('db')->connection();
+                $connection = resolve('db')->connection();
                 Scenario::connection('control')->table('scenario_search_resolutions')->insert([
                     'target' => Scenario::describe($connection)['database'],
                 ]);

@@ -70,7 +70,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
-require_once dirname(__DIR__, 4).'/tests/Support/WorkScopeFixture.php';
+require_once dirname(__DIR__, 4).'/tests/Support/autoload.php';
 
 final class ToolIdempotentInvocationTest extends TestCase
 {

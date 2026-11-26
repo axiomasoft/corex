@@ -73,7 +73,7 @@ final readonly class SchemaWorker
             $this->report(sweep: $sweep, row: $row, state: SchemaValue::text($row->state), blockers: []);
         } catch (SchemaConflict $conflict) {
             $this->report(sweep: $sweep, row: $row, state: 'blocked', blockers: [$conflict->getMessage()]);
-        } catch (ScopeContextMismatch|ScopeStale|FieldFailure $failure) {
+        } catch (ScopeContextMismatch|ScopeStale|FieldFailure) {
             $this->report(sweep: $sweep, row: $row, state: 'blocked', blockers: ['work-scope-or-capability-unavailable']);
         } catch (QueryException $failure) {
             $this->report(sweep: $sweep, row: $row, state: 'failed', blockers: ['postgresql-'.$failure->getCode()]);
@@ -123,7 +123,7 @@ final readonly class SchemaWorker
             $row = (clone $query)->whereIn('state', ['queued', 'expanding', 'backfilling', 'verifying', 'switched', 'contracting'])
                 ->where('next_attempt_at', '<=', $now->format('Y-m-d H:i:s.uP'))
                 ->where(static fn (Builder $due) => $due->whereNull('claim_token')->orWhere('lease_until', '<=', $now->format('Y-m-d H:i:s.uP')))
-                ->orderBy('next_attempt_at')->orderBy('id')->lock('for update skip locked')->first();
+                ->oldest('next_attempt_at')->orderBy('id')->lock('for update skip locked')->first();
 
             if ($row === null) {
                 return null;

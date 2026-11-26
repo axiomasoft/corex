@@ -101,7 +101,7 @@ final readonly class DurableInbox
 
     private function assertOwner(string $owner): void
     {
-        if ($this->table === self::PhysicalTable && preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $owner) !== 1) {
+        if ($this->table === self::PhysicalTable && preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iD', $owner) !== 1) {
             throw new InboxConflict('Physical inbox owner must be a canonical UUID.');
         }
     }

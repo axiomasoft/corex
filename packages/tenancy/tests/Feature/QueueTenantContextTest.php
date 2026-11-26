@@ -64,7 +64,7 @@ beforeEach(function (): void {
     }
 
     $this->host = WorkScopeFixture::install(app());
-    app(WorkQueueHandlers::class)->tenant(RecordContextJob::class);
+    resolve(WorkQueueHandlers::class)->tenant(RecordContextJob::class);
     $routes = $this->databases;
     $accounts = $this->accounts;
     app()->scoped(PhysicalBindingVerifier::class, static fn () => new class($routes, $accounts) implements PhysicalBindingVerifier
@@ -94,7 +94,7 @@ afterEach(function (): void {
 });
 
 it('captures a signed scope at enqueue and resumes the original account, workspace and physical database', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $payloads = [];
     Event::listen(JobProcessing::class, function (JobProcessing $event) use (&$payloads): void {
         $payloads[] = $event->job->payload();
@@ -127,7 +127,7 @@ it('captures a signed scope at enqueue and resumes the original account, workspa
 });
 
 it('restores the outer account after a failing nested synchronous job', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($this->accounts['a'], ($this->workspace)('a'), function () use ($manager): void {
         $this->host->scope();
         Queue::connection('sync')->push(new RecordContextJob('first'));
@@ -158,7 +158,7 @@ function reserveScopeJob(string $name): DatabaseJob
     ]]);
     $queue = Queue::connection('scope_broker');
     $fixture = test();
-    app(TenancyManager::class)->runFor($fixture->accounts[$name], ($fixture->workspace)($name), function () use ($fixture, $queue, $name): void {
+    resolve(TenancyManager::class)->runFor($fixture->accounts[$name], ($fixture->workspace)($name), function () use ($fixture, $queue, $name): void {
         $fixture->host->scope();
         $queue->push(new RecordContextJob($name));
     });
@@ -187,13 +187,13 @@ it('quarantines a correctly signed job when its account has disappeared from the
         ->and($job->hasFailed())->toBeTrue()
         ->and($job->isDeleted())->toBeTrue()
         ->and(RecordContextJob::$runs)->toBe([])
-        ->and(app(TenancyManager::class)->context())->toBeNull()
+        ->and(resolve(TenancyManager::class)->context())->toBeNull()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
 });
 
 it('refuses a retired workspace even when the previous account has a live workspace with the same id', function (): void {
     $job = reserveScopeJob('b');
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($this->accounts['b'], null, fn () => DB::table('wsp_workspaces')->where('id', $this->workspaceId)->delete());
     $manager->runFor($this->accounts['a'], ($this->workspace)('a'), function () use ($manager, $job): void {
         $this->host->scope();
@@ -207,15 +207,13 @@ it('refuses a retired workspace even when the previous account has a live worksp
 
 it('rejects an earlier restore epoch at delivery and accepts a fresh enqueue for the unchanged account database', function (): void {
     $oldJob = reserveScopeJob('a');
-    $owner = app(DatabaseScopeControl::class);
+    $owner = resolve(DatabaseScopeControl::class);
     $account = $this->accounts['a'];
     $route = $owner->resolve($account);
     $closed = $owner->drain($account->id, $owner->close($account->id, $route->controlRevision));
     $next = new PhysicalBinding($route->deploymentId, $route->bindingId, $route->bindingGeneration, $route->accountIncarnation, str_repeat('e', 64));
-    $owner->reopen($account->id, $closed, $next, function (PhysicalBinding $candidate) use ($account): bool {
-        return app(TenancyManager::class)->runFor($account, null, fn () => DB::selectOne('select current_database() as owner')->owner === $this->databases['a']
-            && $candidate->bindingId === 'resource:'.hash('sha256', $account->id));
-    });
+    $owner->reopen($account->id, $closed, $next, fn (PhysicalBinding $candidate): bool => resolve(TenancyManager::class)->runFor($account, null, fn () => DB::selectOne('select current_database() as owner')->owner === $this->databases['a']
+        && $candidate->bindingId === 'resource:'.hash('sha256', $account->id)));
 
     expect(fn () => fireReservedScopeJob($oldJob))->toThrow(ScopeStale::class)
         ->and($oldJob->isDeleted())->toBeTrue()
@@ -240,6 +238,6 @@ it('ignores a repeated completion for the inner job and preserves the admitted o
     }
     expect(array_column(RecordContextJob::$runs, 'database'))->toBe([$this->databases['b'], $this->databases['a']])
         ->and(array_column(RecordContextJob::$runs, 'workspace'))->toBe(['ws-b', 'ws-a'])
-        ->and(app(TenancyManager::class)->context())->toBeNull()
+        ->and(resolve(TenancyManager::class)->context())->toBeNull()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
 });

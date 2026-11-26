@@ -49,7 +49,7 @@ final class PinJournal implements BlobPins
     {
         $db = $this->database->connection();
 
-        if ($db->transactionLevel() === 0 || $db !== app('db')->connection()) {
+        if ($db->transactionLevel() === 0 || $db !== resolve('db')->connection()) {
             throw new RuntimeException('Pin evidence must commit on the Media and Vaulter owner transaction.');
         }
         $db->table('scenario_vaulter_journal')->insert(['blob' => $blob instanceof BlobSnapshot ? $blob->id : (string) $blob,

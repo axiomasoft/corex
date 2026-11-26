@@ -11,6 +11,7 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Sleep;
 use RuntimeException;
 use Throwable;
 
@@ -72,7 +73,7 @@ final class Scenario
 
     public static function connection(string $role): Connection
     {
-        return app('db')->connection('scenario_'.$role);
+        return resolve('db')->connection('scenario_'.$role);
     }
 
     public static function describe(ConnectionInterface $connection): array
@@ -111,7 +112,7 @@ final class Scenario
         file_put_contents($temporary, json_encode(['pid' => getmypid(), ...$state], JSON_THROW_ON_ERROR), LOCK_EX);
         rename($temporary, $marker.'.reached');
         while (! is_file($marker.'.release')) {
-            usleep(25_000);
+            Sleep::usleep(25_000);
         }
     }
 

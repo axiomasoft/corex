@@ -222,7 +222,7 @@ it('runs schema claims and lifecycle through Packman while CoreX persists featur
         expect(fn () => $lifecycle->status($name))->toThrow(AuthorizationException::class);
         $contexts->setWorkspace(null);
         $account = $host->scope();
-        $this->app->instance(LifecycleInventory::class, new class($account, $workspace, $contexts) implements LifecycleInventory
+        $this->app->instance(LifecycleInventory::class, new readonly class($account, $workspace, $contexts) implements LifecycleInventory
         {
             public function __construct(private DataScope $account, private DataScope $workspace, private LocalWorkContexts $contexts) {}
 
@@ -343,7 +343,7 @@ it('runs schema claims and lifecycle through Packman while CoreX persists featur
                     throw new RuntimeException('Owner lease release committed before acknowledgement.');
                 }
             });
-            app('events')->listen(ModulePurged::class, static function (ModulePurged $event) use ($name, $listenerFailure, &$notifications): void {
+            resolve('events')->listen(ModulePurged::class, static function (ModulePurged $event) use ($name, $listenerFailure, &$notifications): void {
                 if ($event->module === $name) {
                     $notifications++;
 
@@ -359,7 +359,7 @@ it('runs schema claims and lifecycle through Packman while CoreX persists featur
             }
             $done = $plans->inspect($account, $resumed->ref);
             expect($done->phase)->toBe(LifecyclePhase::Done)
-                ->and(app(LocalWorkTransactions::class)->localTicket($account, $database))->toBeNull()
+                ->and(resolve(LocalWorkTransactions::class)->localTicket($account, $database))->toBeNull()
                 ->and($reported)->toBe($listenerFailure)
                 ->and($notifications)->toBe(1)
                 ->and($done->transitionResult)->toBe(ModuleState::Purged->value)
@@ -451,7 +451,7 @@ it('serializes real reference writers across outer commits, rollbacks, process d
     $host = WorkScopeFixture::install($this->app, principalId: 'operator');
     config(['corex.scope.control_connection' => 'lifecycle-control']);
     $this->app->forgetInstance(ScopeOptions::class);
-    $this->app->instance(ControlStoreIsolation::class, new class($independent) implements ControlStoreIsolation
+    $this->app->instance(ControlStoreIsolation::class, new readonly class($independent) implements ControlStoreIsolation
     {
         public function __construct(private Connection $control) {}
 

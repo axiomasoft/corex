@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Foundation\Laravel\ReferenceWrites;
 use Flex\Crm\Context\Contracts\CrmExecutionContext;
 use Flex\Crm\Context\Data\ExecutionContext;
+use Flex\Crm\Context\Internal\LockedAdmissions;
 use Flex\Crm\Internal\Value;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Connection;
@@ -26,6 +27,7 @@ final readonly class ContextGuard
         private TenantContextResolver $tenants,
         private AccountConnectionResolver $connections,
         private ModuleRegistry $modules,
+        private LockedAdmissions $admissions,
     ) {}
 
     public function current(bool $lock = false): ExecutionContext
@@ -83,6 +85,11 @@ final readonly class ContextGuard
     {
         $this->id($id);
         $db = $this->connection($ctx);
+        $proof = json_encode([$id, $ctx->tenant->workspace?->id], JSON_THROW_ON_ERROR);
+
+        if ($this->admissions->proven(connection: $db, key: $proof)) {
+            return;
+        }
         $user = $db->table('users')->where('id', $id)->where('is_active', true)->whereNull('deleted_at');
 
         if ($lock) {
@@ -105,6 +112,10 @@ final readonly class ContextGuard
             if ($workspace->first() === null || $membership->first() === null) {
                 throw new AuthorizationException('CRM workspace membership is missing or revoked.');
             }
+        }
+
+        if ($lock) {
+            $this->admissions->remember(connection: $db, key: $proof);
         }
     }
 

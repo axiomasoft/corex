@@ -24,6 +24,7 @@ return new class extends PackmanMigration
 
             $table->foreign(['task_id'], 'tsk_task_watchers_task_id_fk')->references(['id'])->on('tsk_tasks')->onDelete('cascade')->onUpdate('no action');
             $table->foreign(['user_id'], 'tsk_task_watchers_user_id_fk')->references(['id'])->on('users')->onDelete('cascade')->onUpdate('no action');
+            $table->index(['user_id'], 'tsk_task_watchers_user_id_ix');
         });
     }
 

@@ -14,7 +14,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Illuminate\Database\Query\JoinClause;
 use Packman\Attributes\Internal;
 use UnexpectedValueException;
 
@@ -28,6 +28,7 @@ final readonly class ScopePredicate
         private TenancyManager $tenancyManager,
         private EffectiveWorkspaceScope $workspaceScope,
         private ConnectionResolverInterface $connections,
+        private ExistingTables $tables,
     ) {}
 
     /**
@@ -81,7 +82,7 @@ final readonly class ScopePredicate
             return $this->applyNone($q);
         }
 
-        if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
             return $this->applyNone($q);
         }
 
@@ -128,7 +129,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
+        if (! $this->hasTable('users') || ! $this->hasTable(DepartmentQueries::table())) {
             return false;
         }
 
@@ -138,24 +139,33 @@ final readonly class ScopePredicate
             return false;
         }
 
-        $ownerDeptId = $this->connections->connection()->table('users')->where('id', $ownerId)->value('department_id');
-        $principalDeptId = $this->connections->connection()->table('users')->where('id', $p->principalId())->value('department_id');
+        $connection = $this->connections->connection();
 
-        if (! is_string($ownerDeptId) || ! is_string($principalDeptId)) {
-            return false;
-        }
-
+        // One statement per check: the owner and principal rows (and, for the
+        // tree, both departments) are joined instead of fetched one by one.
         if (! $tree) {
-            return $ownerDeptId === $principalDeptId;
+            return $connection->table('users as owner')
+                ->join('users as principal', 'principal.department_id', '=', 'owner.department_id')
+                ->where('owner.id', $ownerId)
+                ->where('principal.id', $p->principalId())
+                ->exists();
         }
 
-        $principalPath = DepartmentQueries::path($principalDeptId);
+        $departments = DepartmentQueries::table();
 
-        if (! is_string($principalPath)) {
-            return false;
-        }
-
-        return DepartmentQueries::contains(id: $ownerDeptId, path: $principalPath);
+        // Both departments must be live: a removed department drops out of
+        // scope, as on the builder path.
+        return $connection->table('users as owner')
+            ->join($departments.' as owner_department', static fn (JoinClause $join): JoinClause => $join
+                ->on('owner_department.id', '=', 'owner.department_id')
+                ->whereNull('owner_department.deleted_at'))
+            ->join('users as principal', static fn (JoinClause $join): JoinClause => $join->where('principal.id', '=', $p->principalId()))
+            ->join($departments.' as principal_department', static fn (JoinClause $join): JoinClause => $join
+                ->on('principal_department.id', '=', 'principal.department_id')
+                ->whereNull('principal_department.deleted_at'))
+            ->where('owner.id', $ownerId)
+            ->whereRaw('owner_department.path <@ principal_department.path')
+            ->exists();
     }
 
     // ─── workspace — Builder + record ──────────────────────────────────────
@@ -251,7 +261,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! $this->schema()->hasTable('wsp_workspaces')) {
+        if (! $this->hasTable('wsp_workspaces')) {
             return false;
         }
 
@@ -285,11 +295,11 @@ final readonly class ScopePredicate
         return $q;
     }
 
-    private function schema(): SchemaBuilder
+    private function hasTable(string $table): bool
     {
         /** @var Connection */
         $connection = $this->connections->connection();
 
-        return $connection->getSchemaBuilder();
+        return $this->tables->has(connection: $connection, table: $table);
     }
 }

@@ -20,7 +20,7 @@ final readonly class ProblemDetailsSerializer
     public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
     {
         $body = [
-            ...(new ProblemProjection($this->problems))->document($error),
+            ...new ProblemProjection($this->problems)->document($error),
             'request_id' => $metadata->requestId,
             'correlation_id' => $metadata->correlationId,
             'api_version' => $metadata->version,

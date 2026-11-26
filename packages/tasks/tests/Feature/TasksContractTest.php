@@ -422,9 +422,9 @@ it('completes a task atomically and does not emit a duplicate event', function (
 
 function taskCompletionContributor(Closure $capture): void
 {
-    $contributor = new class($capture) implements TaskCompletionCapture
+    $contributor = new readonly class($capture) implements TaskCompletionCapture
     {
-        public function __construct(private readonly Closure $capture) {}
+        public function __construct(private Closure $capture) {}
 
         public function capture(TaskCompletionCandidate $candidate, ConnectionInterface $connection): TaskCompletionAdmission
         {

@@ -83,7 +83,7 @@ it('keeps assignment boundaries and rolls back a scope change if compilation is 
     $expiry = new DateTimeImmutable('2099-05-17T11:16:22.123456+04:00');
     $roles->assign($role, $user, $workspace, $expiry);
     $storedExpiry = DB::table('aut_role_assignments')->where('workspace_id', $workspace)->value('expires_at');
-    expect((new DateTimeImmutable($storedExpiry))->format('U.u'))->toBe($expiry->format('U.u'));
+    expect(new DateTimeImmutable($storedExpiry)->format('U.u'))->toBe($expiry->format('U.u'));
     $roles->assign($role, $user);
     $roles->unassign($role, $user, $workspace);
     expect(DB::table('aut_role_assignments')->pluck('workspace_id')->all())->toBe([null]);

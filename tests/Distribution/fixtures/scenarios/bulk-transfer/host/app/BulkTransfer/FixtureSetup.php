@@ -34,7 +34,7 @@ final class FixtureSetup
             $names[$role] = $identity;
         }
 
-        if (count(array_unique(array_column($names, 'database'))) !== 4 || Scenario::describe(app('db')->connection())['database'] !== $names['a']['database']) {
+        if (count(array_unique(array_column($names, 'database'))) !== 4 || Scenario::describe(resolve('db')->connection())['database'] !== $names['a']['database']) {
             throw new RuntimeException('The tenant, control, budget and sink must have independent physical identities.');
         }
 
@@ -44,7 +44,7 @@ final class FixtureSetup
     public static function install(string $case = 'bulk-transfer'): void
     {
         ScenarioSetup::install($case, false);
-        app(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
+        resolve(SchemaMigrator::class)->migrate(SchemaScope::Dedicated);
         $tenant = Scenario::connection('a');
         $schema = $tenant->getSchemaBuilder();
 

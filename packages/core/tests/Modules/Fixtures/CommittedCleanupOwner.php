@@ -28,7 +28,7 @@ final class CommittedCleanupOwner implements ModuleReferences, ReferenceCleanup,
 
     public readonly CleanupAction $action;
 
-    public function __construct(private Connection $db, private string $table, private DataScope $account)
+    public function __construct(private readonly Connection $db, private readonly string $table, private readonly DataScope $account)
     {
         $this->resource = 'original-resource';
         $this->action = new CleanupAction($this->owner(), $table, 'external-record', $this->resource, '1', 'remove-'.$table);

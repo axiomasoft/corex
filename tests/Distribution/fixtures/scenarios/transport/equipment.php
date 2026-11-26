@@ -154,10 +154,10 @@ switch ($mode) {
     case 'schema-index':
     case 'replace-index':
         $after['generation'] = Runtime::scoped(static function () use ($mode) {
-            $context = app(TenantContextResolver::class)->current();
+            $context = resolve(TenantContextResolver::class)->current();
 
-            return app(WorkerAuthority::class)->runAs($context, WorkerAuthority::SEARCH, static function () use ($context, $mode) {
-                $scope = app(DataScopeFactory::class)->forCurrentPrincipal($context);
+            return resolve(WorkerAuthority::class)->runAs($context, WorkerAuthority::SEARCH, static function () use ($context, $mode) {
+                $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($context);
 
                 return EquipmentOwner::rebuild($scope, 'installed-metadata-'.$mode);
             });
@@ -237,8 +237,8 @@ switch ($mode) {
     case 'schema-change':
         $after['change'] = Runtime::scoped(static function (DataScope $scope) use ($proof): array {
             $entity = EquipmentOwner::entity();
-            $fields = app(FieldCatalogue::class);
-            $schemas = app(FieldSchemas::class);
+            $fields = resolve(FieldCatalogue::class);
+            $schemas = resolve(FieldSchemas::class);
             $previous = $fields->snapshot($scope, $entity);
             $definition = new FieldDefinition(
                 id: new FieldId(EquipmentOwner::PRIORITY), entity: $entity, machineKey: 'priority', type: new FieldTypeId('text'),
@@ -246,12 +246,12 @@ switch ($mode) {
             );
             $plan = $schemas->plan($scope, FieldSchemaChange::add($definition), $previous->revision);
             $ref = $schemas->apply($scope, $plan->ref, $plan->digest, new OperationKey('transport-visible-field', 1));
-            $worker = app(WorkerAuthority::class);
-            $context = app(TenantContextResolver::class)->current();
+            $worker = resolve(WorkerAuthority::class);
+            $context = resolve(TenantContextResolver::class)->current();
             $commands = [];
             for ($steps = 0; $steps < 32 && $schemas->inspect($scope, $ref)->state !== 'completed'; $steps++) {
                 $commands[] = $worker->runAs($context, WorkerAuthority::SCHEMA, static fn (): int => Artisan::call('corex:custom-fields:work', ['--limit' => 1]));
-                app(ScenarioClock::class)->advance(1);
+                resolve(ScenarioClock::class)->advance(1);
             }
             $status = $schemas->inspect($scope, $ref);
             $current = $fields->snapshot($scope, $entity);
@@ -277,7 +277,7 @@ switch ($mode) {
         ]]);
         $proof->same(200, $after['conditional_search']['status'], 'The old Search tag refreshes after schema publication.');
         $proof->same($after['views']['search']['etag'], $after['conditional_search']['etag'], 'The refreshed Search tag identifies the current view.');
-        $after['active'] = Runtime::scoped(static fn (DataScope $scope) => app(ActiveGenerations::class)->active($scope, EquipmentOwner::entity()));
+        $after['active'] = Runtime::scoped(static fn (DataScope $scope) => resolve(ActiveGenerations::class)->active($scope, EquipmentOwner::entity()));
         $proof->check($after['active'] !== null, 'Readiness is backed by the actual current published generation.');
         saveMetadata($db, $mode, $after);
 
@@ -286,7 +286,7 @@ switch ($mode) {
     case 'metadata-views':
         $prior = loadMetadata($db, 'metadata-schema');
         $initial = loadMetadata($db, 'metadata-first');
-        $after['active'] = Runtime::scoped(static fn (DataScope $scope) => app(ActiveGenerations::class)->active($scope, EquipmentOwner::entity()));
+        $after['active'] = Runtime::scoped(static fn (DataScope $scope) => resolve(ActiveGenerations::class)->active($scope, EquipmentOwner::entity()));
         $after['backend'] = Wire::http('GET', $paths['search'], options: ['headers' => ['HTTP_IF_NONE_MATCH' => $prior['views']['search']['etag'], 'HTTP_ACCEPT_LANGUAGE' => 'en']]);
         $proof->same(200, $after['backend']['status'], 'A different real backend generation invalidates the conditional read.');
         $proof->check($after['backend']['etag'] !== $prior['views']['search']['etag'] && $after['active']->generation !== $prior['active']['generation'], 'Backend witnessed a different generation.');

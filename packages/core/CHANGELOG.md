@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — access checks and retention
+
+- Remove `DepartmentQueries::contains()`. Access record checks now resolve dept_tree membership in a single joined statement and no caller is left; use `DepartmentQueries::subtreeIds()` to build a subtree predicate.
+- `outbox:prune` and the pub/sub prune command accept `--batch` and delete in bounded batches.
+
 ## CoreX 2.0 — Scope errors
 
 - Keep `ScopeContextMismatch` and `ScopeStale` as separate final coded errors. Recovery callers handle both explicitly when they support both causes.

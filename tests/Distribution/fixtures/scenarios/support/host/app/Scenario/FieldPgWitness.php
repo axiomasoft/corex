@@ -6,6 +6,7 @@ namespace App\Scenario;
 
 use Closure;
 use Illuminate\Database\Connection;
+use Illuminate\Support\Sleep;
 use RuntimeException;
 
 final readonly class FieldPgWitness
@@ -151,7 +152,7 @@ final readonly class FieldPgWitness
             if ($value !== null) {
                 return $value;
             }
-            usleep($pollMicroseconds);
+            Sleep::usleep($pollMicroseconds);
         } while (hrtime(true) < $deadline);
 
         throw new RuntimeException('The fixture timed out after '.$timeoutSeconds.' seconds before observing '.$event.'.');

@@ -62,7 +62,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
                 "anchor": "$this->registerGlobalScopes($this->newModelQuery())",
-                "sha256": "1970585898bc1a01b1cc6d606169bdaebf9e0395851fcdb17c9574b124b6c80f"
+                "sha256": "6cc643f12225f160a2005735cb33a33ac248d6834cd396ae99cfd4d1e2b2d4b2"
             },
             "expires": null
         },
@@ -218,7 +218,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -231,7 +231,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -244,7 +244,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -257,7 +257,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -810,7 +810,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
-            "source_sha256": "afbf05c67dfcbdaef4551b7504f46f15bfc36d83bc9a83a7e7200ad07d2ae31a",
+            "source_sha256": "3677618cafcb58bc45a41a1ddc5bfc8e88a9f292d4cfd4ac2c6a05c30fc219ab",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -862,7 +862,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\PrunePubSubMessages::handle",
             "source": "packages/core/src/Messaging/Internal/PrunePubSubMessages.php",
-            "source_sha256": "ef089af3e39360a516fb5959207c8450816f4c7db2ac14f1a2043323e659c2ff",
+            "source_sha256": "590f017fe37dd1ab54aa9d2957066a55cecb5da75d5c773ab5ab07dee3e046c0",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\PrunePubSubMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -1239,7 +1239,7 @@
         {
             "symbol": "CoreX\\Recurrence\\Data\\DateWindow::__construct",
             "source": "packages/recurrence/src/Data/DateWindow.php",
-            "source_sha256": "1fea9300f8860fba1cbec25b91234a2f32e67737d30e960eb6d8f61811076db7",
+            "source_sha256": "bd869fe14db2f19c95486a6da1a5d3eda5d5fcb4c415d46ba48f7a3cf756beda",
             "kind": "external-api",
             "reason": "Host recurrence queries construct a bounded date or UTC instant window before passing it to the recurrence engine.",
             "root": {
@@ -1622,7 +1622,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1635,7 +1635,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1648,7 +1648,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1661,7 +1661,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1674,7 +1674,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1700,7 +1700,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1713,7 +1713,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1726,7 +1726,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1739,7 +1739,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1752,7 +1752,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1765,7 +1765,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1778,7 +1778,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1791,7 +1791,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1804,7 +1804,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1817,7 +1817,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1830,7 +1830,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1843,7 +1843,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1856,7 +1856,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1869,7 +1869,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1960,7 +1960,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1973,7 +1973,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1986,7 +1986,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -1999,7 +1999,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2032,7 +2032,7 @@
         {
             "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\NormalizedHost::__toString",
             "source": "packages/tenancy/src/DomainTrust/Data/NormalizedHost.php",
-            "source_sha256": "d4c9747c2299beb45571ae5fc0d33bbbc0379cc7f8ab1501eee89c72d4083da0",
+            "source_sha256": "06967bc67dcd576f2adbd4d65d5da985ad5cb7bb5e350972a6bd2d53e837ee78",
             "kind": "external-api",
             "reason": "Host logging and string interpolation invoke the value object string conversion to obtain its validated scalar representation.",
             "root": {
@@ -2129,7 +2129,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2240,7 +2240,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Commands\\PendingClearCommand::handle",
             "source": "packages/tenancy/src/Laravel/Commands/PendingClearCommand.php",
-            "source_sha256": "eb3bed5ce5ca5c21ae889bc8c50e4b51e5e0bec8736e7e1b98c0cbc5205243f5",
+            "source_sha256": "86a006659ed44f0fec39846c4f43327bf53f49c88de497a6dc70c63b197e4447",
             "kind": "framework",
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
@@ -2714,7 +2714,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2727,7 +2727,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2740,7 +2740,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2753,7 +2753,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2766,7 +2766,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2779,7 +2779,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2792,7 +2792,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2974,7 +2974,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -2987,7 +2987,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3000,7 +3000,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3013,7 +3013,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3039,7 +3039,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
                 "anchor": "'boot'.class_basename($trait)",
-                "sha256": "1970585898bc1a01b1cc6d606169bdaebf9e0395851fcdb17c9574b124b6c80f"
+                "sha256": "6cc643f12225f160a2005735cb33a33ac248d6834cd396ae99cfd4d1e2b2d4b2"
             },
             "expires": null
         },
@@ -3078,7 +3078,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3091,7 +3091,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3104,7 +3104,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3117,7 +3117,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3130,7 +3130,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3143,7 +3143,7 @@
             "root": {
                 "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php",
                 "anchor": "Relation::withConstraintsForNestedRelation(fn () => $this->$method())",
-                "sha256": "1cabf1764355b8a8a6ac7c26c11d6826252e035c51cf77d678f0e16a1c4f06b5"
+                "sha256": "eb90bf3cde32e5ccea0755f469b02e8a1ccf871f229a92a1cc58038f02b0c971"
             },
             "expires": null
         },
@@ -3182,7 +3182,7 @@
             "root": {
                 "path": "packages/core/src/Context/Laravel/WorkQueueBoundary.php",
                 "anchor": "WorkQueueHandler::class.'@fire'",
-                "sha256": "bb2ff59e81453ea4f40def7b71a547736c09d454167017624a469e3ecc13cc34"
+                "sha256": "bc316e092bc0d011e2b96af97b03f5b4e6616b4b7758deca4431f69414b6404b"
             },
             "expires": null
         },
@@ -3195,7 +3195,7 @@
             "root": {
                 "path": "packages/core/src/Context/Laravel/WorkQueueBoundary.php",
                 "anchor": "WorkQueueHandler::class.'@fire'",
-                "sha256": "bb2ff59e81453ea4f40def7b71a547736c09d454167017624a469e3ecc13cc34"
+                "sha256": "bc316e092bc0d011e2b96af97b03f5b4e6616b4b7758deca4431f69414b6404b"
             },
             "expires": null
         },
@@ -3208,7 +3208,7 @@
             "root": {
                 "path": "packages/core/src/Context/Laravel/WorkQueueBoundary.php",
                 "anchor": "WorkQueueHandler::class.'@fire'",
-                "sha256": "bb2ff59e81453ea4f40def7b71a547736c09d454167017624a469e3ecc13cc34"
+                "sha256": "bc316e092bc0d011e2b96af97b03f5b4e6616b4b7758deca4431f69414b6404b"
             },
             "expires": null
         },
@@ -3221,7 +3221,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Internal/DatabaseLifecyclePlans.php",
                 "anchor": "self::encode($scan['blockers'])",
-                "sha256": "9ca42b97eef29a70c2c63953fb4613372444facfeecd0a6ec688c5c79b8a55b9"
+                "sha256": "93303096a24e7bba7606725f91f30777ace5cd04a6d9d21466354a6f4994382c"
             },
             "expires": null
         },
@@ -3345,7 +3345,7 @@
         {
             "symbol": "CoreX\\Search\\Projection\\Data\\FieldWitnesses::matches",
             "source": "packages/search/src/Projection/Data/FieldWitnesses.php",
-            "source_sha256": "c839ef6a24fc9b799e38e5f5ee1e055ca31a1bee18c32d6b4f36c5912ccfbf5c",
+            "source_sha256": "cd1b2ee325c6a14b86a55f4a6227a90053d76e8c3b25e95e3ea10b90e6f00a07",
             "kind": "dynamic",
             "reason": "AuthorizedHydrator rechecks typed candidate field witnesses after current policy and hydration, before returning a SearchHit.",
             "root": {
@@ -3462,7 +3462,7 @@
         {
             "symbol": "CoreX\\CustomFields\\Schemas\\Internal\\ShadowBackfill::__construct",
             "source": "packages/custom-fields/src/Schemas/Internal/ShadowBackfill.php",
-            "source_sha256": "cfa5021e2d2a9a5248f6f196df0e724198999432f5fe9af1c41b84526331fc2e",
+            "source_sha256": "3f557d8f163d4e17e07948ce32db760a6983de87ec7e407eabdcaaa1fc82d638",
             "kind": "framework",
             "reason": "FieldSchemaRegistrar resolves SchemaSteps into the active scope. Laravel autowires this exact constructor as its typed dependency.",
             "root": {
@@ -3559,7 +3559,7 @@
             "root": {
                 "path": "tests/Distribution/fixtures/scenarios/transport/host/app/Providers/TransportProofServiceProvider.php",
                 "anchor": "McpToolEndpoint::class)->middleware(",
-                "sha256": "8527e1dba08f6e97de9652a7c87e25c7dd6969589a53bc29ff8e53fdf2bb99ce"
+                "sha256": "2ecb03ea973197fda145104b467d53aac773140dad841ef15d1403dfc522b3ec"
             },
             "expires": null
         },
@@ -3572,7 +3572,7 @@
             "root": {
                 "path": "tests/Distribution/fixtures/scenarios/transport/host/app/Providers/TransportProofServiceProvider.php",
                 "anchor": "McpToolEndpoint::class)->middleware(",
-                "sha256": "8527e1dba08f6e97de9652a7c87e25c7dd6969589a53bc29ff8e53fdf2bb99ce"
+                "sha256": "2ecb03ea973197fda145104b467d53aac773140dad841ef15d1403dfc522b3ec"
             },
             "expires": null
         },

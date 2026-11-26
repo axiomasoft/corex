@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
+        "ext-filter": "*",
         "axiomasoft/corex": "^2.0@dev",
         "axiomasoft/corex-operations": "^2.0@dev",
         "axiomasoft/packman": "^0.1",

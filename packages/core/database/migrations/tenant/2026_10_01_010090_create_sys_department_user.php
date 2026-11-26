@@ -27,6 +27,7 @@ return new class extends PackmanMigration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
 
             $table->primary(['department_id', 'user_id'], 'sys_department_user_pk');
+            $table->index(['user_id'], 'sys_department_user_user_id_ix');
         });
 
         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_department_user_role_ck CHECK (role IN ('member','head','deputy'))");

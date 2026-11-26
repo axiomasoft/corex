@@ -137,7 +137,7 @@ final class QueryFixture implements ActiveGenerations, CandidateDriver, DataScop
         $ids = $request->recordIds === null ? $this->ids : array_values(array_intersect($this->ids, $request->recordIds));
 
         if ($request->text !== null) {
-            $ids = array_values(array_filter($ids, fn (string $id): bool => array_any($request->searchFields, fn (string $field): bool => stripos($this->indexed[$id][$field] ?? '', $request->text) !== false)));
+            $ids = array_values(array_filter($ids, fn (string $id): bool => array_any($request->searchFields, fn (string $field): bool => stripos($this->indexed[$id][$field] ?? '', (string) $request->text) !== false)));
         }
         $batch = array_slice($ids, $offset, $request->limit);
         $result = [];

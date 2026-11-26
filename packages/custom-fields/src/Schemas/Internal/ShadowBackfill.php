@@ -131,7 +131,7 @@ final readonly class ShadowBackfill
     private function yieldClaim(stdClass $claim): bool
     {
         // Reserve half the claim for the next conversion's runtime variance and the journal CAS.
-        return $this->clock->now() >= (new DateTimeImmutable(SchemaValue::text($claim->lease_until)))->modify(sprintf('-%d seconds', intdiv(SchemaJournal::LEASE_SECONDS, 2)));
+        return $this->clock->now() >= new DateTimeImmutable(SchemaValue::text($claim->lease_until))->modify(sprintf('-%d seconds', intdiv(SchemaJournal::LEASE_SECONDS, 2)));
     }
 
     private function range(Builder $query, stdClass $checkpoint): void
@@ -231,7 +231,7 @@ final readonly class ShadowBackfill
 
         try {
             $value = $this->convert(plan: $plan, row: $row);
-        } catch (InvalidArgumentException|FieldFailure $failure) {
+        } catch (InvalidArgumentException|FieldFailure) {
             // Conversion can race a correction. Only a still-current failed source blocks verification.
             $kind = $db->table('sys_attribute_documents')->where($key)->exists() ? 'error' : 'retry';
             $this->marker(db: $db, claim: $claim, row: $row, kind: $kind);

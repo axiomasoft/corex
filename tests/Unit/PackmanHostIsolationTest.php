@@ -33,7 +33,7 @@ it('resolves actors for the owning host and current scope and keeps its Artisan 
 
         return $app;
     };
-    $commands = static fn (Application $app): Artisan => (new Artisan($app, $app->make(Dispatcher::class), $app->version()))->setContainerCommandLoader();
+    $commands = static fn (Application $app): Artisan => new Artisan($app, $app->make(Dispatcher::class), $app->version())->setContainerCommandLoader();
 
     $first = $host('alice');
     $first->register(SchedulerServiceProvider::class);

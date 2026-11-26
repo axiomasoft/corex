@@ -148,9 +148,9 @@ final class WebhookDeliveryTest extends TestCase
             self::assertSame('operations.conflict', $error->errorCode);
         }
 
-        $this->app->instance(WebhookProviderLookup::class, new class($first->effectKey) implements WebhookProviderLookup
+        $this->app->instance(WebhookProviderLookup::class, new readonly class($first->effectKey) implements WebhookProviderLookup
         {
-            public function __construct(private readonly string $expected) {}
+            public function __construct(private string $expected) {}
 
             public function lookup(WebhookProviderReference $effect): ?ProviderObservation
             {

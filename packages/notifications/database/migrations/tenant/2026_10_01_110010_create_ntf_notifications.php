@@ -37,6 +37,9 @@ return new class extends PackmanMigration
             $table->timestampsTz();
             $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'source', 'event_id', 'template_action'], 'ntf_notifications_intent_uq');
             $table->index(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'read_at', 'id'], 'ntf_notifications_scan_ix');
+            // The inbox pages a recipient's notifications newest first by id; read_at in the scan
+            // index above would force a sort of every notification the recipient ever received.
+            $table->index(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'id'], 'ntf_notifications_inbox_ix');
         });
     }
 

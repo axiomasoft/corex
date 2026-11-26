@@ -33,8 +33,8 @@ it('rejects unsafe duplicate or untyped projection, filter and candidate fields'
 it('binds text witnesses to field identity and distinguishes exact scalar types, null and absence', function (): void {
     $digests = [];
     foreach ([[], ['name' => null], ['name' => '1'], ['name' => 1], ['name' => true], ['name' => '']] as $values) {
-        $digests[] = (new ProjectedValues($values))->fieldWitness('name');
+        $digests[] = new ProjectedValues($values)->fieldWitness('name');
     }
     expect(array_unique($digests))->toHaveCount(6)
-        ->and((new ProjectedValues([]))->fieldWitness('other'))->not->toBe($digests[0]);
+        ->and(new ProjectedValues([])->fieldWitness('other'))->not->toBe($digests[0]);
 });

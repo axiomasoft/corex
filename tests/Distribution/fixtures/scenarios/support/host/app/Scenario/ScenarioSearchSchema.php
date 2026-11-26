@@ -98,6 +98,6 @@ final class ScenarioSearchSchema implements PostgresCorpus, SearchProjectionCont
         if ($entity->value !== self::ENTITY) {
             throw new RuntimeException('The queue scenario has no source for that search entity.');
         }
-        app(CurrentWorkScope::class)->assert($scope, $connection);
+        resolve(CurrentWorkScope::class)->assert($scope, $connection);
     }
 }

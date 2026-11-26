@@ -400,7 +400,7 @@ it('rejects a genuine work proof issued for another owner before admitting a wak
 
 it('installs one UTC system clock when the host has no clock binding', function (): void {
     unset(app()[ClockInterface::class]);
-    (new SchedulerServiceProvider(app()))->register();
+    new SchedulerServiceProvider(app())->register();
     $clock = resolve(ClockInterface::class);
     expect($clock)->toBeInstanceOf(SystemClock::class)->and($clock->now()->getTimezone()->getName())->toBe('UTC')
         ->and(resolve(ClockInterface::class))->toBe($clock);
@@ -410,7 +410,7 @@ it('installs one UTC system clock when the host has no clock binding', function 
 
 it('uses the host clock when the provider registers over an existing binding', function (): void {
     $clock = resolve(ClockInterface::class);
-    (new SchedulerServiceProvider(app()))->register();
+    new SchedulerServiceProvider(app())->register();
     expect(resolve(ClockInterface::class))->toBe($clock);
     $due = $clock->now()->modify('+1 minute');
     resolve(WakeupScheduler::class)->schedule(wakeupRequest(at: $due));

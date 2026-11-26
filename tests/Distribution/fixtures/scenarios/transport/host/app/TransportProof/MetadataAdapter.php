@@ -28,7 +28,7 @@ final readonly class MetadataAdapter implements EntityMetadata
     {
         $owner = $this->owner->describe(scope: $scope, entity: $entity);
         $body = JsonDocuments::map($owner->body);
-        $request = app(Request::class);
+        $request = resolve(Request::class);
         $language = str_replace('_', '-', $request->getPreferredLanguage(['en', 'ru-RU']) ?? 'en');
         $resolution = $this->locales->resolve(new LocaleInputs($language, null, 'equipment'), $this->policy);
         $body['capabilities']['locale'] = $resolution->used;

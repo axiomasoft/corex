@@ -92,7 +92,7 @@ final class SearchScenarioData
             throw new RuntimeException('The fixture has no source in that entity or workspace.');
         }
         $db = DB::connection();
-        app(CurrentWorkScope::class)->assert($scope, $db);
+        resolve(CurrentWorkScope::class)->assert($scope, $db);
 
         return $db->table('scenario_search_records')->where('workspace_id', $scope->workspaceId);
     }
@@ -109,10 +109,10 @@ final class SearchScenarioData
         $actor = $workspace === Scenario::W1 ? Scenario::USER_A : Scenario::USER_B;
 
         return ScenarioQueue::inScope(Scenario::BOXED, $workspace, $actor, static function () use ($service, $work): mixed {
-            $context = app(TenantContextResolver::class)->current();
-            $run = static fn () => $work(app(DataScopeFactory::class)->forCurrentPrincipal($context));
+            $context = resolve(TenantContextResolver::class)->current();
+            $run = static fn () => $work(resolve(DataScopeFactory::class)->forCurrentPrincipal($context));
 
-            return $service ? app(ScenarioPrincipalAuthority::class)->forService($context, self::SERVICE, $run) : $run();
+            return $service ? resolve(ScenarioPrincipalAuthority::class)->forService($context, self::SERVICE, $run) : $run();
         });
     }
 }

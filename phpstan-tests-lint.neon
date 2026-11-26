@@ -106,12 +106,13 @@ parameters:
 
         # --- package-suite fixtures (P1.1) ------------------------------------
         # ScopeResolver's raw rows establish the ltree department hierarchy
-        # consumed by the resolver under test; the owning contract cannot
+        # consumed by the resolver under test, and soft-delete departments to
+        # prove removed ones drop out of scope; the owning contract cannot
         # create this deliberately malformed/cross-branch fixture.
         -
             identifier: modules.directSystemTableWrite
             path: packages/access/tests/Pg/ScopeResolverTest.php
-            count: 1
+            count: 2
         # AccessChecker uses the same real core ltree department fixture to
         # prove its public record path, then removes its table for the
         # fail-closed path; sibling/NULL/non-user cases deny.

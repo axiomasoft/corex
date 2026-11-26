@@ -30,6 +30,8 @@ return new class extends PackmanMigration
             $table->timestampTz('deleted_at', precision: 6)->nullable();
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+            $table->index(['parent_id'], 'sys_departments_parent_id_ix');
+            $table->index(['head_user_id'], 'sys_departments_head_user_id_ix');
         });
 
         // Add the self-reference after the primary key exists.

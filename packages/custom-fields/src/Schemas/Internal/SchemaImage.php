@@ -6,13 +6,14 @@ namespace CoreX\CustomFields\Schemas\Internal;
 
 use CoreX\CustomFields\Schemas\Data\FieldDefinition;
 use CoreX\CustomFields\Schemas\Data\FieldId;
+use CoreX\CustomFields\Types\Data\FieldInput;
 use CoreX\CustomFields\Types\Data\FieldTypeId;
 use CoreX\Data\Data\EntityHandle;
 use CoreX\Data\Enums\FieldUse;
 use Packman\Attributes\Internal;
 
 /**
- * @phpstan-import-type Json8 from \CoreX\CustomFields\Types\Data\FieldInput
+ * @phpstan-import-type Json8 from FieldInput
  * @phpstan-import-type FieldMetadata from FieldDefinition
  */
 #[Internal]

@@ -51,8 +51,8 @@ function headHasIndex(Connection $database, string $indexField): bool
 
 function advancePast(string $deadline): void
 {
-    $clock = app(ScenarioClock::class);
-    $advance = (new DateTimeImmutable($deadline))->getTimestamp() - $clock->now()->getTimestamp() + 1;
+    $clock = resolve(ScenarioClock::class);
+    $advance = new DateTimeImmutable($deadline)->getTimestamp() - $clock->now()->getTimestamp() + 1;
 
     if ($advance < 1) {
         throw new RuntimeException('Expected a previously live DDL claim lease.');

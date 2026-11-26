@@ -142,10 +142,15 @@ PYRATCHET
 
 # Bind each baseline change to its own rebaseline entry. A historical initial
 # entry in the remote-base diff must not authorize unrelated future changes.
+# A pushed commit cannot be amended without rewriting shared history, so an
+# entry added later on the branch also counts when it names that commit's full
+# sha; it still authorizes exactly one change.
 check_golden_rebaseline() {
     local before="$1" after="${2:-}"
     if git diff --name-only "$before" ${after:+"$after"} -- tests/Golden/baseline | command grep -q . \
-       && ! git diff "$before" ${after:+"$after"} -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-'; then
+       && ! git diff "$before" ${after:+"$after"} -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-' \
+       && ! { [ -n "$after" ] && git diff "$BASE_REF" HEAD -- tests/Golden/REBASELINE.md \
+                | command grep -E '^\+\| [0-9]{4}-' | command grep -qF "$(git rev-parse "$after")"; }; then
         log_fail "golden baseline changed without a REBASELINE.md entry ($before ${after:-worktree})"
     fi
 }

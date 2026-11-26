@@ -78,9 +78,9 @@ final readonly class CallerWorkScopeFixture implements CurrentWorkScope, DataSco
     public static function bind(Application $app, ?DataScope $expected = null): void
     {
         $fixture = new self(
-            new class($app) implements TenantContextResolver
+            new readonly class($app) implements TenantContextResolver
             {
-                public function __construct(private readonly Application $app) {}
+                public function __construct(private Application $app) {}
 
                 public function current(): TenantContext
                 {
@@ -181,9 +181,9 @@ final class CallerReferenceAuthority implements ControlStoreIsolation, Reference
     /** @var array<string, DataScope> */
     private array $enlisted = [];
 
-    private LocalWorkTransactions $transactions;
+    private readonly LocalWorkTransactions $transactions;
 
-    private Connection $connection;
+    private readonly Connection $connection;
 
     private function __construct(private readonly Application $app)
     {

@@ -24,10 +24,10 @@ final class FixtureLifecycleOperators
     {
         foreach (['inspect', 'enable', 'upgrade', 'repair', 'disable', 'detach', 'purge', 'remove-provider'] as $ability) {
             $gate->define('corex.lifecycle.'.$ability, static function (ScopePrincipal $subject, DataScope $scope, ModuleRef $target, ?LifecyclePlanRef $ref = null, ?PlanDigest $digest = null) use ($ability): bool {
-                $context = app(CurrentWorkScope::class)->assert($scope);
+                $context = resolve(CurrentWorkScope::class)->assert($scope);
 
                 if ($subject->kind !== 'user' || $subject->id !== $scope->principalId || $scope->principalKind !== $subject->kind
-                    || app(DataScopeFactory::class)->forCurrentPrincipal($context) != $scope) {
+                    || resolve(DataScopeFactory::class)->forCurrentPrincipal($context) != $scope) {
                     return false;
                 }
                 $query = Scenario::connection('control')->table(self::GRANTS)->where(self::key($scope, $target->package, $ability));
@@ -60,7 +60,7 @@ final class FixtureLifecycleOperators
     /** The host provisions each authorized action for the verified physical account and execution frame. */
     public static function grant(DataScope $scope, string $package, string $ability, ?LifecyclePlanRef $ref = null, ?PlanDigest $digest = null): void
     {
-        app(CurrentWorkScope::class)->assert($scope);
+        resolve(CurrentWorkScope::class)->assert($scope);
         Scenario::connection('control')->table(self::GRANTS)->insertOrIgnore([
             ...self::key($scope, $package, $ability), 'plan' => $ref?->id ?? '', 'digest' => $digest?->value ?? '',
         ]);
@@ -68,7 +68,7 @@ final class FixtureLifecycleOperators
 
     public static function revoke(DataScope $scope, string $package, string $ability): void
     {
-        app(CurrentWorkScope::class)->assert($scope);
+        resolve(CurrentWorkScope::class)->assert($scope);
         Scenario::connection('control')->table(self::GRANTS)->where(self::key($scope, $package, $ability))->delete();
     }
 
@@ -86,7 +86,7 @@ final class FixtureLifecycleOperators
 
         if ($actor !== null) {
             ScenarioQueue::inScope(Scenario::BOXED, $workspace, $actor, static function () use ($packages): void {
-                $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
+                $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(resolve(TenantContextResolver::class)->current());
                 foreach ($packages as $package) {
                     foreach (['inspect', 'enable'] as $ability) {
                         self::grant($scope, $package, $ability);

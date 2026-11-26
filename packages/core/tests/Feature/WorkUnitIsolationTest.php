@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\DB;
 
 it('upgrades the independent control store without discarding a route or ticket', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
-    $owner = app(DatabaseScopeControl::class);
+    $owner = resolve(DatabaseScopeControl::class);
     $control = DB::connection('work-scope-control');
     $schema = $control->getSchemaBuilder();
     $ticket = $owner->acquire($scope, new OperationKey('before-lifecycle', 1), AdmissionKind::LocalWrite);
@@ -46,7 +46,7 @@ it('drains an in-flight provider attempt before reopening a restored binding', f
     $fixture = WorkScopeFixture::install(app());
     $scope = $fixture->scope();
     $effect = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, 'delivery', 'provider', 'effect-1');
-    app()->instance(ProviderRecoveryAuthority::class, new class($effect) implements ProviderRecoveryAuthority
+    app()->instance(ProviderRecoveryAuthority::class, new readonly class($effect) implements ProviderRecoveryAuthority
     {
         public function __construct(private ProviderEffectRef $permitted) {}
 
@@ -57,8 +57,8 @@ it('drains an in-flight provider attempt before reopening a restored binding', f
             }
         }
     });
-    $owner = app(DatabaseScopeControl::class);
-    $ledger = app(ProviderEffectLedger::class);
+    $owner = resolve(DatabaseScopeControl::class);
+    $ledger = resolve(ProviderEffectLedger::class);
     $ticket = $ledger->reserve($scope, new ProviderAttempt($effect, 'owner-row', 'claim', 1, new DateTimeImmutable('+1 minute'), hash('sha256', 'payload')));
     $closing = $owner->close($scope->accountId, 1);
     expect(fn () => $owner->acquire($scope, new OperationKey('after-close', 1), AdmissionKind::LocalWrite))->toThrow(ScopeContextMismatch::class);
@@ -72,7 +72,7 @@ it('drains an in-flight provider attempt before reopening a restored binding', f
     expect(fn () => $owner->reopen($scope->accountId, $closed, $next, static fn () => false))->toThrow(ScopeContextMismatch::class);
     $owner->reopen($scope->accountId, $closed, $next, static fn () => true);
     $ran = false;
-    expect(fn () => app(WorkScopeRunner::class)->run($scope, function () use (&$ran) {
+    expect(fn () => resolve(WorkScopeRunner::class)->run($scope, function () use (&$ran) {
         $ran = true;
     }))->toThrow(ScopeStale::class)
         ->and($ran)->toBeFalse()->and($fixture->scope()->restoreEpoch)->toBe(str_repeat('b', 64));
@@ -83,13 +83,13 @@ it('drains an in-flight provider attempt before reopening a restored binding', f
 
 it('preserves the caller transaction and holds its ticket until commit', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
-    $owner = app(DatabaseScopeControl::class);
+    $owner = resolve(DatabaseScopeControl::class);
     $business = DB::connection();
     $business->beginTransaction();
 
     try {
-        app(WorkScopeRunner::class)->run($scope, function () use ($scope, $business): void {
-            expect(app(CurrentWorkScope::class)->assert($scope, $business)->account->id)->toBe($scope->accountId)
+        resolve(WorkScopeRunner::class)->run($scope, function () use ($scope, $business): void {
+            expect(resolve(CurrentWorkScope::class)->assert($scope, $business)->account->id)->toBe($scope->accountId)
                 ->and($business->transactionLevel())->toBe(1);
         });
         $closing = $owner->close($scope->accountId, 1);
@@ -106,15 +106,15 @@ it('preserves the caller transaction and holds its ticket until commit', functio
 it('pins a direct transaction once and retains its ticket while a nested savepoint rolls back', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
     $db = DB::connection();
-    $owner = app(DatabaseScopeControl::class);
+    $owner = resolve(DatabaseScopeControl::class);
     $db->beginTransaction();
 
     try {
         $db->beginTransaction();
-        app(CurrentWorkScope::class)->assert($scope, $db);
+        resolve(CurrentWorkScope::class)->assert($scope, $db);
         $closing = $owner->close($scope->accountId, 1);
         $db->rollBack();
-        app(CurrentWorkScope::class)->assert($scope, $db);
+        resolve(CurrentWorkScope::class)->assert($scope, $db);
         expect(DB::connection('work-scope-control')->table('corex_scope_tickets')->count())->toBe(1)
             ->and(fn () => $owner->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
         $db->rollBack();
@@ -130,26 +130,26 @@ it('pins a direct transaction once and retains its ticket while a nested savepoi
 it('refuses to issue an uncommitted ticket on a host-owned outer control transaction', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
     DB::connection('work-scope-control')->transaction(function () use ($scope): void {
-        expect(fn () => app(DatabaseScopeControl::class)->acquire($scope, new OperationKey('pinned', 1), AdmissionKind::LocalWrite))
+        expect(fn () => resolve(DatabaseScopeControl::class)->acquire($scope, new OperationKey('pinned', 1), AdmissionKind::LocalWrite))
             ->toThrow(ScopeAuthorityUnavailable::class);
     });
 });
 
 it('rejects generic provider admission and freezes the owner linkage under a typed reservation', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
-    $control = app(DatabaseScopeControl::class);
+    $control = resolve(DatabaseScopeControl::class);
     $deadline = new DateTimeImmutable('+1 minute');
     expect(fn () => $control->acquire($scope, new OperationKey('send', 1, 'payment-1', $deadline), AdmissionKind::ProviderSend))->toThrow(ScopeContextMismatch::class)
         ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')->count())->toBe(0);
     $effect = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, 'delivery', 'provider', 'payment-1');
-    $ticket = app(ProviderEffectLedger::class)->reserve($scope, new ProviderAttempt($effect, 'payment-row', 'claim-1', 1, $deadline, hash('sha256', 'payment')));
+    $ticket = resolve(ProviderEffectLedger::class)->reserve($scope, new ProviderAttempt($effect, 'payment-row', 'claim-1', 1, $deadline, hash('sha256', 'payment')));
     $row = DB::connection('work-scope-control')->table('corex_scope_tickets')->sole();
     expect($row->ticket_id)->toBe($ticket->id)->and($row->effect_key)->toBe('payment-1')->and($row->deadline)->not->toBeNull()->and($row->provider_identity)->toBe($effect->identity())->and($row->claim_token)->toBe('claim-1');
 });
 
 it('accepts identical completion evidence on retry and preserves the original receipt on conflict', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
-    $control = app(DatabaseScopeControl::class);
+    $control = resolve(DatabaseScopeControl::class);
     $ticket = $control->acquire($scope, new OperationKey('apply', 2), AdmissionKind::LocalWrite);
     $receipt = new AttemptEvidence('committed', 'receipt-2');
     $control->settle($ticket, $receipt);
@@ -162,7 +162,7 @@ it('accepts identical completion evidence on retry and preserves the original re
 it('keeps admission closed when an earlier autocommit effect survives a later transaction rollback', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
     DB::statement('CREATE TABLE local_effects (label text NOT NULL)');
-    $work = app(WorkScopeRunner::class);
+    $work = resolve(WorkScopeRunner::class);
     expect(fn () => $work->run($scope, static function (): void {
         DB::table('local_effects')->insert(['label' => 'committed']);
         DB::transaction(static function (): void {
@@ -173,7 +173,7 @@ it('keeps admission closed when an earlier autocommit effect survives a later tr
     }))->toThrow(RuntimeException::class, 'local failure');
     expect(DB::table('local_effects')->pluck('label')->all())->toBe(['committed'])
         ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')->sole()->state)->toBe('unknown');
-    $control = app(DatabaseScopeControl::class);
+    $control = resolve(DatabaseScopeControl::class);
     $closing = $control->close($scope->accountId, 1);
     expect(fn () => $control->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
 });

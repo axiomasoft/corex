@@ -26,6 +26,9 @@ return new class extends PackmanMigration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
 
             $table->foreign('session_id', 'root_oauth_refresh_tokens_session_id_fk')->references('id')->on('root_idp_sessions')->cascadeOnDelete();
+            // Global logout revokes tokens by session and the cascade deletes them by session; the
+            // table spans every identity and keeps rotated tokens, so both need this index.
+            $table->index(['session_id'], 'root_oauth_refresh_tokens_session_ix');
         });
     }
 

@@ -27,7 +27,7 @@ final class SavedViews implements SavedViewInventory
     public function connection(DataScope $scope): ConnectionInterface
     {
         $db = DB::connection();
-        app(CurrentWorkScope::class)->assert($scope, $db);
+        resolve(CurrentWorkScope::class)->assert($scope, $db);
 
         return $db;
     }
@@ -50,7 +50,7 @@ final class SavedViews implements SavedViewInventory
         if ($id !== null) {
             $found = [];
             foreach ($directory as [$actor, $namespace]) {
-                foreach (app(SavedViewRepository::class)->viewsFor($actor, $namespace) as $view) {
+                foreach (resolve(SavedViewRepository::class)->viewsFor($actor, $namespace) as $view) {
                     if ($view->id === $id) {
                         $found[] = $view;
                     }
@@ -66,7 +66,7 @@ final class SavedViews implements SavedViewInventory
 
                 if ($lease !== null) {
                     $this->verify($scope, new OwnerLease(self::OWNER, $lease->namespace, $lease->plan, $lease->token));
-                    $closure = app(DatabaseScopeControl::class)->moduleClosure($scope, new ModuleRef(Inventory::MODULE));
+                    $closure = resolve(DatabaseScopeControl::class)->moduleClosure($scope, new ModuleRef(Inventory::MODULE));
 
                     if ($closure === $lease->plan && DB::table('scenario_view_remedies')->where(['id' => $id, 'revision' => $found[0]->revision,
                         'plan' => $lease->plan, 'scope_hash' => hash('sha256', json_encode($scope, JSON_THROW_ON_ERROR))])->delete() === 1) {

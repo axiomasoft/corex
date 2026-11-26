@@ -125,7 +125,7 @@ beforeEach(function (): void {
     LocalWorkContexts::install(app())->initialize($context->account);
     $principal = new WorkScopeFixture(app(), $control, 'service', 'search-worker');
     app()->scoped(WorkPrincipalAuthority::class, static fn () => $principal);
-    $verifier = new class($owner, $this->scope) implements PhysicalBindingVerifier
+    $verifier = new readonly class($owner, $this->scope) implements PhysicalBindingVerifier
     {
         public function __construct(private ConnectionInterface $owner, private DataScope $scope) {}
 
@@ -140,7 +140,7 @@ beforeEach(function (): void {
     };
     app()->scoped(PhysicalBindingVerifier::class, static fn () => $verifier);
     app()->instance(ScopeOptions::class, new ScopeOptions('index-install', 'index_control', [], []));
-    app()->instance(ControlStoreIsolation::class, new class($control) implements ControlStoreIsolation
+    app()->instance(ControlStoreIsolation::class, new readonly class($control) implements ControlStoreIsolation
     {
         public function __construct(private ConnectionInterface $expected) {}
 
@@ -307,7 +307,7 @@ it('holds generation allocation through the caller commit and refuses a previous
     config(['database.connections.search_observer' => [...$owner->getConfig(), 'name' => 'search_observer']]);
     $observer = DB::connection('search_observer');
     expect($observer->getPdo())->not->toBe($owner->getPdo());
-    $control = app(DatabaseScopeControl::class);
+    $control = resolve(DatabaseScopeControl::class);
     $search = new ModuleRef('axiomasoft/corex-search');
     $plan = $this->runs->plan($this->scope, new RebuildInput($this->entity));
     $later = $this->runs->plan($this->scope, new RebuildInput($this->entity));
@@ -566,7 +566,7 @@ it('rolls back a precommit interruption and inspects exactly one publication aft
         ->and($this->runs->inspect($this->scope, $ref)->state)->toBe('barrier')
         ->and($this->active->active($this->scope, $this->entity)->generation)->toBe(1);
     $lostResponse = false;
-    app('events')->listen(TransactionCommitted::class,
+    resolve('events')->listen(TransactionCommitted::class,
         function (TransactionCommitted $event) use (&$lostResponse): void {
             if (! $lostResponse && $event->connection === DB::connection() && DB::table('corex_search_lanes')->value('active_generation') === 2) {
                 $lostResponse = true;
@@ -599,7 +599,7 @@ it('recovers independent control settlement after the owner committed the confir
     $this->worker->advance($this->scope, $this->entity, 1);
     $row = DB::table('corex_search_submissions')->where('first_seq', 1)->first();
     $armed = true;
-    app('events')->listen(TransactionCommitted::class, function ($event) use (&$armed, $row): void {
+    resolve('events')->listen(TransactionCommitted::class, function ($event) use (&$armed, $row): void {
         if ($armed && $event->connection === DB::connection() && DB::table('corex_search_submissions')->where('submission_id', $row->submission_id)->value('state') === 'confirmed') {
             $armed = false;
 
@@ -624,7 +624,7 @@ it('drains an exact provider receipt while closing with all ordinary index work 
 
     if ($ownerAlreadyConfirmed) {
         $armed = true;
-        app('events')->listen(TransactionCommitted::class, function ($event) use (&$armed, $batch): void {
+        resolve('events')->listen(TransactionCommitted::class, function ($event) use (&$armed, $batch): void {
             if ($armed && $event->connection === DB::connection() && DB::table('corex_search_submissions')->where('submission_id', $batch->submission_id)->value('state') === 'confirmed') {
                 $armed = false;
 
@@ -641,7 +641,7 @@ it('drains an exact provider receipt while closing with all ordinary index work 
     expect(fn () => $this->worker->advance($s, $this->entity, 1))->toThrow(ScopeContextMismatch::class)
         ->and(fn () => $control->drain($s->accountId, $closing))->toThrow(ScopeContextMismatch::class)
         ->and(fn () => app()->make(ProviderEffectRecovery::class)->recover($effect))->toThrow(ScopeContextMismatch::class);
-    app()->instance(ProviderRecoveryAuthority::class, new class($effect) implements ProviderRecoveryAuthority
+    app()->instance(ProviderRecoveryAuthority::class, new readonly class($effect) implements ProviderRecoveryAuthority
     {
         public function __construct(private ProviderEffectRef $expected) {}
 
@@ -710,7 +710,7 @@ it('preserves the rollback target and drains its outstanding claim before retent
     $this->driver->pending = false;
     indexDrain($active->generation);
     expect($lane->value('next_seq'))->toBe(3);
-    $this->clock->advance($this->clock->now()->diff((new DateTimeImmutable($until))->modify('+1 second')));
+    $this->clock->advance($this->clock->now()->diff(new DateTimeImmutable($until)->modify('+1 second')));
 
     if ($claim !== 'planned') {
         $this->driver->pending = true;

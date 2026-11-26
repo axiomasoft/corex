@@ -28,6 +28,7 @@ return new class extends PackmanMigration
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
             $table->timestampTz('deleted_at', precision: 6)->nullable();
+            $table->index(['cloned_from_id'], 'aut_roles_cloned_from_id_ix');
         });
 
         // Self-referencing FK added after the blueprint's own inline

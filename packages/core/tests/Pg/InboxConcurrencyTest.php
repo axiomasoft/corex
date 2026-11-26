@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\ConsumerId;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Sleep;
 use Symfony\Component\Process\Process;
 
 require_once __DIR__.'/../Support/Messaging.php';
@@ -47,7 +48,7 @@ it('inserts exactly one inbox row when two connections race on the same key', fu
 
                 break;
             }
-            usleep(10000);
+            Sleep::usleep(10000);
         }
         expect($blocked)->toBeTrue();
         $db->commit();

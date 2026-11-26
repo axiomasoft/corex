@@ -50,14 +50,14 @@ Scenario::boot();
 $proof = new Scenario;
 $database = Scenario::connection('a');
 $control = Scenario::connection('control');
-$clock = app(ScenarioClock::class);
+$clock = resolve(ScenarioClock::class);
 $mode = $argv[1] ?? '';
 
 function inWorkspace(Closure $work, string $actor = Scenario::USER_A): mixed
 {
     return ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, $actor, static function () use ($work): mixed {
-        $context = app(TenantContextResolver::class)->current();
-        $scope = app(DataScopeFactory::class)->forCurrentPrincipal($context);
+        $context = resolve(TenantContextResolver::class)->current();
+        $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($context);
 
         return $work($context, $scope);
     });
@@ -127,15 +127,15 @@ if ($mode === 'produce') {
     $database->table('wsp_workspace_members')->insert(['id' => (string) Str::uuid7(), 'workspace_id' => Scenario::W1, 'user_id' => Scenario::USER_B, 'status' => 'active']);
     $refs = inWorkspace(static function ($context, $scope) use ($proof, $clock, $database): array {
         foreach (['axiomasoft/corex-notifications', 'axiomasoft/corex-workflow'] as $module) {
-            app(ModuleLifecycle::class)->enable($module, cascade: true);
+            resolve(ModuleLifecycle::class)->enable($module, cascade: true);
         }
-        $notification = app(NotificationCenter::class)->notify(new NotificationContext($context, 'user', Scenario::USER_A), new NotificationInput(
+        $notification = resolve(NotificationCenter::class)->notify(new NotificationContext($context, 'user', Scenario::USER_A), new NotificationInput(
             requestKey: 'provider-notification', eventType: 'fixture.notify', recipient: new RecipientReference('user', Scenario::USER_A),
             templateKey: 'fixture.notification', payload: JsonDocuments::capture(['scenario' => 'lost-ack']), related: null,
             channels: [FixtureNotificationDriver::CHANNEL],
         ));
         $now = $clock->now();
-        $subscription = app(WebhookSubscriptionStore::class)->create($scope, new WebhookSubscription(
+        $subscription = resolve(WebhookSubscriptionStore::class)->create($scope, new WebhookSubscription(
             'fixture-subscription', 0, 'v2', 'fixture.recordchanged', 1, 'https://'.FixtureWebhookTransport::HOST.'/hook',
             'active', 'none', [FixtureWebhookTransport::KEY], $now, $now,
         ), sensitiveAbility: false, policyAllows: true);
@@ -147,9 +147,9 @@ if ($mode === 'produce') {
         );
         $writer = DB::connection();
         $capture = $writer->transaction(static function () use ($writer, $context, $scope, $message) {
-            app(Outbox::class)->append($writer, $message);
+            resolve(Outbox::class)->append($writer, $message);
 
-            return app(WorkflowBinding::class)->capture(new TriggerRequest(
+            return resolve(WorkflowBinding::class)->capture(new TriggerRequest(
                 context: $context, scope: $scope, module: 'axiomasoft/corex-workflow', entityHandle: 'scenario.record',
                 eventId: $message->messageId, eventName: 'record.changed', subjectRef: Scenario::RECORD, definitionRef: 'fixture:workflow',
                 versionRef: 'fixture:version1', scalarSnapshot: JsonDocuments::capture(['marker' => 'provider-effect']), requestKey: 'provider-workflow',
@@ -182,7 +182,7 @@ $webhook = static fn () => ownerRow($database, 'webhooks', $refs['webhooks']);
 
 switch ($mode) {
     case 'notification-send':
-        inWorkspace(static fn () => app(DeliveryExecution::class)->deliver($refs['notifications']));
+        inWorkspace(static fn () => resolve(DeliveryExecution::class)->deliver($refs['notifications']));
 
         throw new RuntimeException('The runner must kill the worker at the lost ACK barrier.');
     case 'notification-sending':
@@ -217,7 +217,7 @@ switch ($mode) {
         $positive = $mode === 'notification-confirmed';
         $clock->advance($positive ? 50 : 10);
         inWorkspace(static function () use ($refs, $positive): void {
-            $owner = app(DeliveryExecution::class);
+            $owner = resolve(DeliveryExecution::class);
             $owner->reconcile($refs['notifications']);
 
             if ($positive) {
@@ -312,7 +312,7 @@ switch ($mode) {
             runCommand($proof, 'corex:webhooks:deliver', ['--max' => 1]);
 
             try {
-                app(WebhookReplay::class)->one($scope, $refs['webhooks'], true, 'Fixture requested replay');
+                resolve(WebhookReplay::class)->one($scope, $refs['webhooks'], true, 'Fixture requested replay');
             } catch (ApiError $error) {
                 $proof->same(409, $error->status, 'The real replay entry refuses a still unknown effect');
 
@@ -335,14 +335,14 @@ switch ($mode) {
         $row = $webhook();
         $ticket = providerTicket($control, $row);
         $proof->same('unknown', $ticket->state, 'The independent webhook ticket is still unresolved');
-        $authority = app(DatabaseScopeControl::class);
+        $authority = resolve(DatabaseScopeControl::class);
         $binding = $authority->resolve(Scenario::account(Scenario::BOXED));
         $closing = $authority->close(Scenario::BOXED, $binding->controlRevision);
         expectScopeDenial($proof, static fn () => $authority->drain(Scenario::BOXED, $closing), 'An unresolved provider ticket blocks route drain');
         $effect = new ProviderEffectRef(Scenario::BOXED, $binding->accountIncarnation, Scenario::W1, $ticket->provider_owner, $ticket->provider_namespace, $row->effect_key);
         $context = static fn (Closure $work, string $actor) => ScenarioQueue::inScope(Scenario::BOXED, Scenario::W1, $actor, $work);
-        expectScopeDenial($proof, static fn () => $context(static fn () => app(ProviderEffectRecovery::class)->recover($effect), Scenario::USER_A), 'The original producer lacks closed-route operator authority');
-        expectScopeDenial($proof, static fn () => $context(static fn () => app(FixtureProviderRecoveryAuthority::class)->asOperator(static fn () => app(ProviderEffectRecovery::class)->recover($effect)), Scenario::USER_B), 'An operator without the specific effect grant cannot reconcile');
+        expectScopeDenial($proof, static fn () => $context(static fn () => resolve(ProviderEffectRecovery::class)->recover($effect), Scenario::USER_A), 'The original producer lacks closed-route operator authority');
+        expectScopeDenial($proof, static fn () => $context(static fn () => resolve(FixtureProviderRecoveryAuthority::class)->asOperator(static fn () => resolve(ProviderEffectRecovery::class)->recover($effect)), Scenario::USER_B), 'An operator without the specific effect grant cannot reconcile');
         $control->table('scenario_provider_operator_grants')->insert([
             'operator_id' => Scenario::USER_B, 'account_id' => $effect->accountId, 'workspace_id' => $effect->workspaceId,
             'owner' => $effect->owner, 'provider_namespace' => $effect->providerNamespace, 'effect_key' => $effect->effectKey,
@@ -350,12 +350,12 @@ switch ($mode) {
         $journal = singleEffect($proof, 'webhooks', $row->effect_key);
         $reference = $journal['effects'][0]['provider_ref'];
         $context(static function () use ($proof, $effect, $ticket, $reference): void {
-            app(FixtureProviderRecoveryAuthority::class)->asOperator(static function () use ($proof, $effect, $ticket, $reference): void {
-                $ledger = app(ProviderEffectLedger::class);
+            resolve(FixtureProviderRecoveryAuthority::class)->asOperator(static function () use ($proof, $effect, $ticket, $reference): void {
+                $ledger = resolve(ProviderEffectLedger::class);
                 $status = $ledger->inspect($effect);
                 $proof->same($ticket->ticket_id, $status?->ticket->id, 'Operator inspects the existing ticket on the independent control store');
                 $ledger->observe($status->ticket, new ProviderObservation(ProviderObservationKind::Confirmed, $reference, 'operator:'.Scenario::USER_B));
-                $proof->same(true, app(ProviderEffectRecovery::class)->recover($effect), 'Authorized closed-route recovery applies the independent positive evidence');
+                $proof->same(true, resolve(ProviderEffectRecovery::class)->recover($effect), 'Authorized closed-route recovery applies the independent positive evidence');
             });
         }, Scenario::USER_B);
         $after = $webhook();

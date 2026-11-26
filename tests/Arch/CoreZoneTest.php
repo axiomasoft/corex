@@ -5,6 +5,8 @@ declare(strict_types=1);
 use CoreX\Audit\Internal\AuditLog;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\AdmissionTicket;
+use CoreX\Context\Data\ProviderAttempt;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Messaging\Events\DomainEvent;
@@ -90,8 +92,8 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php'
  */
 const CORE_ZONE_EXACT_IMPORTS = [
     'packages/core/src/Foundation/Contracts/ReferenceAdmission.php' => [
-        'CoreX\Context\Data\AdmissionTicket',
-        'CoreX\Context\Data\ProviderAttempt',
+        AdmissionTicket::class,
+        ProviderAttempt::class,
     ],
     'packages/core/src/Context/Internal/ImpersonationGuard.php' => [AuditLog::class],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [

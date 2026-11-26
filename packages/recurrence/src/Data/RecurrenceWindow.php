@@ -20,7 +20,7 @@ final readonly class RecurrenceWindow
         }
 
         if ($valueType === 'DATE') {
-            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) !== 1 || preg_match('/^\d{4}-\d{2}-\d{2}$/', $end) !== 1) {
+            if (preg_match('/^\d{4}-\d{2}-\d{2}$/D', $start) !== 1 || preg_match('/^\d{4}-\d{2}-\d{2}$/D', $end) !== 1) {
                 throw new InvalidArgumentException('DATE windows require calendar dates.');
             }
         } else {
@@ -36,6 +36,6 @@ final readonly class RecurrenceWindow
 
     private static function isUtcInstant(string $value): bool
     {
-        return preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $value) === 1;
+        return preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/D', $value) === 1;
     }
 }

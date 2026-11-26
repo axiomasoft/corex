@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal\Commands;
 
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Messaging\Internal\BatchedDelete;
 use DateInterval;
 use Illuminate\Console\Command;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -29,7 +30,8 @@ final class PruneOutboxMessages extends Command
     protected $signature = 'corex:messaging:prune
         {--published-older-than= : DateInterval-parseable age for published rows (default: corex.messaging.outbox_retention)}
         {--dead-older-than= : DateInterval-parseable age for dead rows (default: corex.messaging.dead_retention)}
-        {--database= : Connection to prune (default: the app default)}';
+        {--database= : Connection to prune (default: the app default)}
+        {--batch= : Rows deleted per statement (default: 1000)}';
 
     protected $description = 'Delete terminal sys_outbox_messages rows older than their retention window.';
 
@@ -44,18 +46,17 @@ final class PruneOutboxMessages extends Command
 
         $published = $publishedOption ?? $options->messagingOutboxRetention;
         $dead = $deadOption ?? $options->messagingDeadRetention;
+        $batch = BatchedDelete::batchOption($this->option('batch'));
         $now = $clock->now();
         $table = 'sys_outbox_messages';
 
-        $prunedPublished = $connections->connection($connection)->table($table)
+        $prunedPublished = BatchedDelete::run(query: $connections->connection($connection)->table($table)
             ->where('status', 'published')
-            ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published)))
-            ->delete();
+            ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published))), key: 'id', batch: $batch);
 
-        $prunedDead = $connections->connection($connection)->table($table)
+        $prunedDead = BatchedDelete::run(query: $connections->connection($connection)->table($table)
             ->where('status', 'dead')
-            ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead)))
-            ->delete();
+            ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead))), key: 'id', batch: $batch);
 
         $this->info(sprintf(
             'Outbox retention: pruned %d published (older than %s) and %d dead (older than %s).',

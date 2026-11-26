@@ -14,6 +14,7 @@ use CoreX\CustomFields\Tests\Pg\SchemaPgTestCase;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Sleep;
 use Symfony\Component\Process\Process;
 
 uses(SchemaPgTestCase::class)->group('pg');
@@ -50,7 +51,7 @@ it('repairs the observed invalid object after another session stops the concurre
     try {
         $limit = hrtime(true) + 5_000_000_000;
         while (! is_file($dir.'/ready') && $observer->isRunning() && hrtime(true) < $limit) {
-            usleep(10000);
+            Sleep::usleep(10000);
         }
         expect(is_file($dir.'/ready'))->toBeTrue();
 

@@ -18,4 +18,6 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped Illuminate imports/helpers use this component
     ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Pest loads local test classes and late use aliases when executing the recorded test files
-    ->ignoreUnknownClasses(['DB']);
+    ->ignoreUnknownClasses(['DB'])
+    // Shared monorepo fixtures from tests/Support, loaded by tests/Support/autoload.php; not a Composer package.
+    ->ignoreUnknownClassesRegex('~^CoreX\\\\Tests\\\\Support\\\\~');
