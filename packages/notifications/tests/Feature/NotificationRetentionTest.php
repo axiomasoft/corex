@@ -164,6 +164,7 @@ it('preserves provider confirmation and its idempotent replay across retention',
     $completed = $delivery->firstOrFail();
 
     $this->artisan('corex:notifications:prune')->expectsOutputToContain('pruned 1')->assertSuccessful();
+    expect($delivery->firstOrFail())->toEqual($completed);
     $driver->shouldReceive('reconcile')->once()->withArgs(function (DeliveryInput $input) use ($row): bool {
         expect($input->deliveryKey)->toBe($row->delivery_key)
             ->and($input->target->reference)->toBe('recipient')
