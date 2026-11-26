@@ -17,7 +17,7 @@ use Stringable;
 use Throwable;
 
 /**
- * Executable package dependency graph gate (P12.3 · D41).
+ * Executable package dependency graph gate.
  *
  * Reads static references (`use`, group-use, FQCN, extends/implements, traits) — not
  * autoload-resolved classes — and applies:

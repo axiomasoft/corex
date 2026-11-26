@@ -8,7 +8,7 @@ namespace CoreX\Tooling\ApiContract;
 use RuntimeException;
 
 /**
- * Intra-major API compatibility gate (P13.11, D73).
+ * Intra-major API compatibility gate.
  *
  * Compares parsed canonical snapshot structures. It never updates a baseline
  * and never line-diffs JSON. Diagnostics name the rule, the operation or

@@ -31,7 +31,7 @@ use stdClass;
  * it.
  *
  * `retrieveByToken()`/`updateRememberToken()` are permanent no-ops: the
- * frozen `users` DDL (P2.7, D125) carries no `remember_token` column and one
+ * frozen `users` DDL carries no `remember_token` column and one
  * is not being added — "remember me" is simply unsupported by this
  * provider.
  */

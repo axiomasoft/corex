@@ -27,7 +27,7 @@ use Packman\Attributes\Internal;
  * @property string|null $head_user_id
  * @property int $sort_order
  *
- * @internal spec: B-10 §2, P2.9
+ * @internal spec: B-10 §2
  */
 #[Internal]
 final class Department extends Model

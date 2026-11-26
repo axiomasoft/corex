@@ -25,8 +25,7 @@ use Psr\Clock\ClockInterface;
 
 /**
  * Authorization-code + PKCE RP endpoints (AC-14). `callback()` runs the
- * checks EXACTLY in the order of research/10 §3 / Implementation Rule 5,
- * extended by D145 (P2.11) for the `imp` branch: one-time `state` → code
+ * checks in the following order, including the `imp` branch: one-time `state` → code
  * exchange → id_token header/signature/`iss`/`aud`/`nonce`/`sub` (all inside
  * {@see IdTokenVerifier}) → `acct` === current tenant (BOTH lanes) → `imp`
  * claim: present ⇒ {@see ImpersonationService::start()} (membership NOT
@@ -37,9 +36,7 @@ use Psr\Clock\ClockInterface;
  * `session()->regenerate()` → `Guard::loginUsingId()` (the ONLY seam that
  * constructs the Principal — never a class from `axiomasoft/corex-access`, D125) →
  * `_corex_auth_at` marker (AC-15, read by `EnforceSessionLifetime`). Any
- * failure is an {@see OidcAuthenticationException} — no partial login. The
- * ordinary (non-`imp`) lane is UNCHANGED from P2.22 — its own Validation
- * suite must stay green without edits (D145).
+ * failure is an {@see OidcAuthenticationException} and prevents a partial login.
  */
 #[Internal]
 final readonly class OidcLoginController
@@ -234,9 +231,7 @@ final readonly class OidcLoginController
             return null;
         }
 
-        // Fail-closed gate kept from P2.22 (D145 does not change this
-        // outcome, only what runs AFTER it): an `imp` claim while the
-        // feature is off is rejected, never silently accepted.
+        // Reject impersonation claims when the feature is disabled.
         if (! $this->impersonationPolicy->enabled) {
             throw OidcAuthenticationException::impersonationDenied();
         }

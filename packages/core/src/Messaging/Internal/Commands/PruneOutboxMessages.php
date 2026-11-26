@@ -22,7 +22,7 @@ use Psr\Clock\ClockInterface;
  * sys_inbox_messages эта команда НЕ трогает: удаление отметки дедупликации заново
  * открывает окно дублей (research/P5-design.md §7.3, D29).
  *
- * @internal spec: P5.15 — console command is not a supported API
+ * @internal Console commands are outside the supported PHP API.
  */
 #[Internal]
 final class PruneOutboxMessages extends Command

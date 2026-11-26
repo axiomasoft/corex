@@ -36,7 +36,7 @@ use Throwable;
  * mirror order (session first) because the tenant session, not the audit
  * mirror, is the safety-critical half of the pair.
  *
- * @internal spec: B-11 §5.9, D139/D140/D143/D144/D146
+ * @internal spec: B-11 §5.9
  */
 #[Internal]
 final class DatabaseImpersonationService implements ImpersonationService

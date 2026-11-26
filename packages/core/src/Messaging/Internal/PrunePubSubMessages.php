@@ -25,7 +25,7 @@ use Psr\Clock\ClockInterface;
  * Example scheduler wiring (host's `routes/console.php` or `AppServiceProvider`):
  * `Schedule::command('corex:messaging:prune-pubsub')->daily();`
  *
- * @internal spec: D44, P1.24, pre-mortem P1R C7
+ * @internal
  */
 #[Internal]
 final class PrunePubSubMessages extends Command

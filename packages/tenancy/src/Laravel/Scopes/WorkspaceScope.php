@@ -17,7 +17,7 @@ use Packman\Attributes\SpiKind;
  * `workspace_id = context.workspace.id OR workspace_id IS NULL` (NULL =
  * account-wide record, visible regardless of the narrowed workspace).
  * No workspace narrowed in the current context (account-wide/admin routes,
- * P2.9 ScopeResolver's concern) → no-op, the model is left unfiltered.
+ * handled by ScopeResolver) → no-op, the model is left unfiltered.
  *
  * @implements Scope<Model>
  */

@@ -169,7 +169,7 @@
         {
             "symbol": "CoreX\\Access\\Extend\\Internal\\PermissionsMerger::__invoke",
             "source": "packages/access/src/Extend/Internal/PermissionsMerger.php",
-            "source_sha256": "b81a55a942877b7918d3d8e9de58668542b4532cddb042d24720894ad595fe01",
+            "source_sha256": "0a5d3941dda0f0f0e2845e18ec7e8c2a6accdf55c105bd2b0bab4df6d89dc901",
             "kind": "framework",
             "reason": "Laravel's event dispatcher invokes this exact invokable listener registered for module lifecycle permission-surface recompilation.",
             "root": {
@@ -254,7 +254,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::created",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "5d823b7623d0965bf7e5fb696d44c0c38c24148c52aa097e64ff6aea428ac4ae",
+            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
             "kind": "framework",
             "reason": "Eloquent dispatches its created lifecycle event to the created method of this exact registered observer.",
             "root": {
@@ -267,7 +267,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::deleted",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "5d823b7623d0965bf7e5fb696d44c0c38c24148c52aa097e64ff6aea428ac4ae",
+            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
             "kind": "framework",
             "reason": "Eloquent dispatches its deleted lifecycle event to the deleted method of this exact registered observer.",
             "root": {
@@ -280,7 +280,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::forceDeleted",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "5d823b7623d0965bf7e5fb696d44c0c38c24148c52aa097e64ff6aea428ac4ae",
+            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
             "kind": "framework",
             "reason": "Eloquent SoftDeletes dispatches its forceDeleted lifecycle event to this exact registered observer's forceDeleted method.",
             "root": {
@@ -293,7 +293,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::restored",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "5d823b7623d0965bf7e5fb696d44c0c38c24148c52aa097e64ff6aea428ac4ae",
+            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
             "kind": "framework",
             "reason": "Eloquent SoftDeletes dispatches its restored lifecycle event to this exact registered observer's restored method.",
             "root": {
@@ -306,7 +306,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\AuditObserver::updated",
             "source": "packages/core/src/Audit/Internal/AuditObserver.php",
-            "source_sha256": "5d823b7623d0965bf7e5fb696d44c0c38c24148c52aa097e64ff6aea428ac4ae",
+            "source_sha256": "aced276310ecad17b9728277ff8d11a10fc136dea24f17dafa3d13dd109d1dfc",
             "kind": "framework",
             "reason": "Eloquent dispatches its updated lifecycle event to the updated method of this exact registered observer.",
             "root": {
@@ -332,7 +332,7 @@
         {
             "symbol": "CoreX\\Audit\\Internal\\RecordAuditEntry::handle",
             "source": "packages/core/src/Audit/Internal/RecordAuditEntry.php",
-            "source_sha256": "6e0444ba601920477b3dcd0532312f785d76b529a09cfb297e5f6ec03ac6b429",
+            "source_sha256": "c6857a5e62c6a219958b95920a9476b7e73597bd0341ebbd1a3ad068e912a545",
             "kind": "framework",
             "reason": "AuditRegistrar registers the tenant job; the signed queue invokes handle after QueuedAuditLogger dispatches the AuditEntry with the scoped proof.",
             "root": {
@@ -789,7 +789,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
-            "source_sha256": "3677618cafcb58bc45a41a1ddc5bfc8e88a9f292d4cfd4ac2c6a05c30fc219ab",
+            "source_sha256": "7577c96898ed0a77931dbba94b7c5d2834c4bbea0fc8bf4b17c637606657f35f",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\PruneOutboxMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -802,7 +802,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\RelayOutbox::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
-            "source_sha256": "65c7f635de660129fd9131f2e09b9f39c5f5ae915ec68b2cc9224f8e36809a08",
+            "source_sha256": "b9b07fa5d9b2d0435fc673e90636c44cc2b2cf78a19f6c3290f104372b753cda",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\RelayOutbox::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -815,7 +815,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\Commands\\ShowDeliveryHealth::handle",
             "source": "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
-            "source_sha256": "e76e2c29f9f2e1e2fbcb790eb34c9b53613a406f13ac17f3c8673588c3d12bad",
+            "source_sha256": "f6b92f16802c72f1b27720eeaddc2a773c272f57b078910d7c924d4bc981c628",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\Commands\\ShowDeliveryHealth::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -841,7 +841,7 @@
         {
             "symbol": "CoreX\\Messaging\\Internal\\PrunePubSubMessages::handle",
             "source": "packages/core/src/Messaging/Internal/PrunePubSubMessages.php",
-            "source_sha256": "590f017fe37dd1ab54aa9d2957066a55cecb5da75d5c773ab5ab07dee3e046c0",
+            "source_sha256": "cadc3c8dc9c9e7156d6c0d78202491bbb2657ccd478c66e3af04d002f5066e16",
             "kind": "framework",
             "reason": "Laravel invokes CoreX\\Messaging\\Internal\\PrunePubSubMessages::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
@@ -2157,13 +2157,13 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\AuthenticationRegistrar::register",
             "source": "packages/tenancy/src/Laravel/AuthenticationRegistrar.php",
-            "source_sha256": "28a5ae623e7a70e0d007ad27be23e33ea4081aba707153b0e127c2ee659d1734",
+            "source_sha256": "654e0f88aecd07a05a8030a58f671ceb52f16940281ad435fb3a24699ba9f1e0",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new AuthenticationRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2207,7 +2207,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand::handle",
             "source": "packages/tenancy/src/Laravel/Commands/TenantsMigrateCommand.php",
-            "source_sha256": "eb524c32de713a8f608fa4c642b15a7ca55e6e586cc824a207d38ef5d6c2e865",
+            "source_sha256": "10f6044aac46f38cc95b2bf9d5c2c0c80b69812780927670bfad6d062900ac3d",
             "kind": "external-spi",
             "reason": "Artisan dispatch invokes this registered command handler; application operators invoke the command through its declared signature.",
             "root": {
@@ -2226,7 +2226,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new ConsoleRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2239,7 +2239,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new DomainTrustRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2252,7 +2252,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new EventsRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2265,7 +2265,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new EventsRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2278,7 +2278,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new HttpRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2291,7 +2291,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new HttpRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2311,7 +2311,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites::handle",
             "source": "packages/tenancy/src/Laravel/Http/Middleware/DenyImpersonatedWrites.php",
-            "source_sha256": "7e392f3208b1eb1630db676abf78cefd299882c6516bdced8a020c99c205031e",
+            "source_sha256": "ba33d5f42a3d229c635edee7f6a8ae817e383b39f9a08a4d89119e5387b0786b",
             "kind": "external-spi",
             "reason": "The host adds this middleware to its route/session stack; Laravel Pipeline invokes handle() around the next request handler.",
             "root": {
@@ -2337,7 +2337,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard::handle",
             "source": "packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php",
-            "source_sha256": "7d89391f0cf3237ff1afa3cfde36b02b7b6e96da7f9da74a8a6cf1431d230f1b",
+            "source_sha256": "cb740bedd2c640c4f35ca7aaa195168abe7d1a30b4a409564f1c070ffcedc7db",
             "kind": "external-spi",
             "reason": "The host adds this middleware to its route/session stack; Laravel Pipeline invokes handle() around the next request handler.",
             "root": {
@@ -2356,7 +2356,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new IdentityRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2369,7 +2369,7 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new ProvisioningRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2382,14 +2382,14 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new RuntimeRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope::apply",
             "source": "packages/tenancy/src/Laravel/Scopes/WorkspaceScope.php",
-            "source_sha256": "dc56197d814860f0945c68bba0944dd87896033005f00f1a9eb92ed82c3c2849",
+            "source_sha256": "f67fd2f068f81a297683a249a560f2c880c925fa67be06bcaedb05618029b4d7",
             "kind": "external-spi",
             "reason": "Consumer Eloquent models install the exported workspace scope; Eloquent invokes apply when building scoped queries.",
             "root": {
@@ -2408,20 +2408,20 @@
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new WakeupRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\WorkspaceRegistrar::register",
             "source": "packages/tenancy/src/Laravel/WorkspaceRegistrar.php",
-            "source_sha256": "fd0676d751bede0478ba33609bb6a3f79be7b7c41847a197ed084655be5c36d7",
+            "source_sha256": "7885540521aae5fd37d83b34716f8aedfbd8c2c7a980653ecd054199f9f1896f",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
                 "path": "packages/tenancy/src/Laravel/RegistrarFactory.php",
                 "anchor": "new WorkspaceRegistrar",
-                "sha256": "edfa2554d162427af708d8cc948e3e8febb468c2bb659844024e25ebdaa2e8e1"
+                "sha256": "3984a753c1cc4992c15e825d74c2c7849dc39e4efe7c18637e37bbfb065c2d1e"
             },
             "expires": null
         },
@@ -2623,7 +2623,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException::errorDescriptor",
             "source": "packages/tenancy/src/Workspace/Exceptions/NoDefaultWorkspaceException.php",
-            "source_sha256": "db4375f178ce6aa34410668afac6ac8712a1d388bd72328d128637ea0eba5c34",
+            "source_sha256": "5183b9b23e21651add1624b5549c61e1f2f03d22d8e54e0710d74d89ceea7042",
             "kind": "external-api",
             "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
             "root": {
@@ -2636,7 +2636,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::accept",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
-            "source_sha256": "f62cd8c2c699ef5fbabee2024b6f8e02f7831134048101c1e8afb9bed0b958a0",
+            "source_sha256": "2364ce8a7224131115ba6391ee7549efa7bf2f1366aa7f8a79cfeb28e37c3e83",
             "kind": "dynamic",
             "reason": "WorkspaceResolverTest creates this exact Invitation through Eloquent's model builder and invokes accept on the returned invitation. The query builder's generic model result is the precise receiver root.",
             "root": {
@@ -2649,7 +2649,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::invitedBy",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
-            "source_sha256": "f62cd8c2c699ef5fbabee2024b6f8e02f7831134048101c1e8afb9bed0b958a0",
+            "source_sha256": "2364ce8a7224131115ba6391ee7549efa7bf2f1366aa7f8a79cfeb28e37c3e83",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::invitedBy by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2661,7 +2661,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::workspace",
             "source": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
-            "source_sha256": "f62cd8c2c699ef5fbabee2024b6f8e02f7831134048101c1e8afb9bed0b958a0",
+            "source_sha256": "2364ce8a7224131115ba6391ee7549efa7bf2f1366aa7f8a79cfeb28e37c3e83",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation::workspace by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2709,7 +2709,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::user",
             "source": "packages/tenancy/src/Workspace/Internal/Models/WorkspaceMember.php",
-            "source_sha256": "19873c1b590364b4e865de7b328915c12be41e4b53648947d36ba504bd3b57da",
+            "source_sha256": "fb3c48d69d64b17660e0f5ff7a76068f22140e15a6848f0313b0d3cac005a14d",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::user by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -2721,7 +2721,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::workspace",
             "source": "packages/tenancy/src/Workspace/Internal/Models/WorkspaceMember.php",
-            "source_sha256": "19873c1b590364b4e865de7b328915c12be41e4b53648947d36ba504bd3b57da",
+            "source_sha256": "fb3c48d69d64b17660e0f5ff7a76068f22140e15a6848f0313b0d3cac005a14d",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember::workspace by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {

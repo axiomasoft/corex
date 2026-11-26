@@ -24,7 +24,7 @@ use Psr\Clock\ClockInterface;
  * different (or absent) tenant context and would otherwise stamp a foreign
  * workspace and the write moment instead of the event moment.
  *
- * @internal spec: B-10 §7.1, P1.6, P1.7, D12
+ * @internal spec: B-10 §7.1
  */
 #[Internal]
 final class RecordAuditEntry implements ShouldQueueAfterCommit

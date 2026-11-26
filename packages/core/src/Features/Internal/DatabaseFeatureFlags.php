@@ -34,7 +34,7 @@ use Packman\Attributes\Internal;
  * `$connection` mirrors `DatabaseSettingsRepository`'s seam (null = app
  * default), used by the PG-only test lane.
  *
- * @internal spec: B-10 §3.1, AC-22, D27, D38, D12
+ * @internal spec: B-10 §3.1, AC-22
  */
 #[Internal]
 final readonly class DatabaseFeatureFlags implements FeatureFlags

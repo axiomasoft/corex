@@ -41,7 +41,7 @@ use Psr\Clock\ClockInterface;
  * finite count lets tests observe delivery without blocking — it does NOT
  * bypass the worker-context guard (SubscribeGuard runs regardless).
  *
- * @internal spec: B-10 §6.1, D44, P1.24, Implementation Rules, pre-mortem C7
+ * @internal spec: B-10 §6.1
  */
 #[Internal]
 final readonly class DatabasePollPubSub implements PubSub
@@ -86,7 +86,7 @@ final readonly class DatabasePollPubSub implements PubSub
      *                               of the channel's history instead of the current `max(id)`. Never
      *                               defaults to `true`.
      *
-     * @internal spec: D44, Implementation Rules, P1.24
+     * @internal
      */
     public function subscribe(
         string $channel,

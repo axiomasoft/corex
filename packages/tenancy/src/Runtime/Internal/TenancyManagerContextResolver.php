@@ -11,7 +11,7 @@ use CoreX\Context\Exceptions\CentralContextException;
 use Packman\Attributes\Internal;
 
 /**
- * Adapts the cloud {@see TenancyManager} to the P1.12
+ * Adapts the cloud {@see TenancyManager} to the
  * {@see TenantContextResolver} contract (B-11 §3.2): `current()` reads
  * whatever context `TenantRuntimeManager::initialize()` last set, throwing
  * when called outside any initialized tenant.

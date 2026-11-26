@@ -7,7 +7,7 @@ namespace Flex\Crm\Support;
 use Packman\Attributes\Internal;
 use Packman\Config\Laravel\ConfigurationValidator;
 
-/** @internal Package composition type for flex-crm config (D38 / P16.8). */
+/** @internal Package composition type for flex-crm config. */
 #[Internal]
 final readonly class CrmOptions
 {

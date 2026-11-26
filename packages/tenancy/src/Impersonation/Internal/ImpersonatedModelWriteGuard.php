@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Packman\Attributes\Internal;
 
 /**
- * L2 — Eloquent layer of the read-only invariant (D141/D142): global
+ * L2 — Eloquent layer of the read-only invariant: global
  * wildcard listeners on `eloquent.saving`/`eloquent.deleting`/
  * `eloquent.restoring` reject a write on EVERY model — including ones that
  * do not exist in the tree yet — while an impersonation is active, except
@@ -22,13 +22,13 @@ use Packman\Attributes\Internal;
  * and the `DB` facade never dispatch these events at all; L1 (web) and L3
  * (privileged core services) cover what L2 structurally cannot.
  *
- * @internal spec: B-11 §5.9, D141/D142
+ * @internal spec: B-11 §5.9
  */
 #[Internal]
 final class ImpersonatedModelWriteGuard
 {
     /**
-     * CLOSED literal, not a config key (D116/D121 — a config-gated exempt
+     * CLOSED literal, not a config key (a config-gated exempt
      * list would let the gate be switched off by settings): `AuditLog` so
      * the compliance record itself can be written while `queue=sync` runs
      * it inline; `ImpersonationGrant` because the grant row is the carrier

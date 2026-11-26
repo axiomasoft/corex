@@ -10,7 +10,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 /**
- * Runs one `root_migration_batches` wave (B-11 §5.6, P2.12). `-p`/
+ * Runs one `root_migration_batches` wave (B-11 §5.6). `-p`/
  * `--skip-failing` are accepted pass-through flags, logged only —
  * {@see MigrationWaveOrchestrator::runBatch()} already never aborts a batch
  * on a single account's failure (AC-11); real parallel worker dispatch is

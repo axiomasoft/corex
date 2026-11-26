@@ -23,7 +23,7 @@ use Throwable;
 
 /**
  * Runs a `root_migration_batches` wave across its target accounts,
- * sequentially (B-11 §5.6, P2.12) — synchronous/injectable so it's testable
+ * sequentially (B-11 §5.6) — synchronous/injectable so it's testable
  * without a real queue worker. `-p`/`--skip-failing` (see
  * `TenantsMigrateCommand`) are accepted pass-through flags only: this
  * orchestrator already never aborts a batch on a single account's failure

@@ -252,7 +252,7 @@ final readonly class ScopePredicate
      * Fail-closed by construction (D117): no `wsp_workspaces` table (boxed
      * profile, AC-28) · no row for the ctx workspace · flag absent or not
      * strictly `'true'` · empty `path` ⇒ cascade off. Default `settings =
-     * '{}'` (DDL P2.6) means cascade is off unless explicitly turned on.
+     * '{}'` means cascade is off unless explicitly turned on.
      */
     private function cascadeEnabled(WorkspaceRef $ctxWorkspace): bool
     {

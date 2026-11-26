@@ -19,7 +19,7 @@ use Packman\Attributes\Internal;
  * `config('corex.pubsub.octane_worker_opt_in')`, set only by a dedicated
  * worker command — never by request-handling code.
  *
- * @internal spec: P1.24, D44, A29, D16
+ * @internal
  */
 #[Internal]
 final class SubscribeGuard

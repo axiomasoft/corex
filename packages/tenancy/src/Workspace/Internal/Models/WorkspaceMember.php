@@ -14,7 +14,7 @@ use Packman\Attributes\Internal;
 /**
  * `wsp_workspace_members` — fast admission flag for the resolver (403
  * without an active row); roles are NOT stored here (axiomasoft/corex-access owns
- * aut_role_assignments, P2.8). No soft deletes — the table carries no
+ * aut_role_assignments). No soft deletes — the table carries no
  * `deleted_at` (B-11 §2.2).
  *
  * @property string $id

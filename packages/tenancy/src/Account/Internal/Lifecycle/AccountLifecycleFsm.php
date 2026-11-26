@@ -20,7 +20,7 @@ use RuntimeException;
  * grace → (active | exporting)
  * exporting → deleted
  *
- * @internal spec: B-11 §5.1, P2.12
+ * @internal spec: B-11 §5.1
  */
 #[Internal]
 final class AccountLifecycleFsm

@@ -25,14 +25,14 @@ use stdClass;
  * provisioned account resources per cell so signup can claim a prepared resource.
  * Pending accounts carry
  * `status='pending'`, `slug`/`owner_identity_id` NULL — the frozen
- * DB_SCHEMA table-CHECK on `root_accounts` already allows that state
- * (D14/P2.2), so no `pending_since` column is needed: `status` alone encodes "not yet claimed".
+ * DB_SCHEMA table-CHECK on `root_accounts` already allows that state,
+ * so no `pending_since` column is needed: `status` alone encodes "not yet claimed".
  *
  * Claiming (premortem A6): {@see pullPending()} flips `status`
  * `pending → provisioning` inside a `SELECT … FOR UPDATE SKIP LOCKED`
  * transaction — two concurrent callers never claim the same row. `slug`/
  * `owner_identity_id` stay NULL: the full pending→active transition (slug,
- * owner, status=trial) is P2.12's `AccountLifecycle::activateFromPool`
+ * owner, status=trial) belongs to `AccountLifecycle::activateFromPool`
  * (Scope Excluded) — this class only reserves the row and lays the
  * atomicity invariant for that later transition.
  */

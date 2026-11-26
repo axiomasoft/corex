@@ -41,7 +41,7 @@ final readonly class AuditObserver
      *
      * @var list<string>
      *
-     * @internal spec: D63, P1.21
+     * @internal
      */
     private const array ALWAYS_EXCLUDED = ['password', 'remember_token'];
 

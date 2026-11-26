@@ -11,7 +11,7 @@ use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
 use DateTimeImmutable;
 use Packman\Attributes\Internal;
 
-/** @internal Bounded in-memory conflict fixture; durable inbox belongs to P4.6. */
+/** @internal Bounded in-memory conflict fixture. The durable inbox has its own storage. */
 #[Internal]
 final class TriggerParser
 {

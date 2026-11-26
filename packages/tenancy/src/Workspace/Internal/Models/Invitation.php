@@ -76,7 +76,7 @@ final class Invitation extends Model
      * (persisted-or-lazily) expired → not acceptable; `$usersMax` (from the
      * account's `limits`) is checked against the workspace's active member
      * count before creating the membership. Role assignment lands with
-     * axiomasoft/corex-access's `aut_role_assignments` (P2.8, Scope Excluded here) —
+     * axiomasoft/corex-access's `aut_role_assignments` —
      * `role_id` is only carried on the invitation row.
      */
     public function accept(string $userId, int $usersMax): ?WorkspaceMember

@@ -12,7 +12,7 @@ use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /**
  * Single owner of "does this entity_key currently give out a permission
- * key" (AC-27, D112/D113): {@see DatabaseRoleMatrixCompiler} and
+ * key" (AC-27): {@see DatabaseRoleMatrixCompiler} and
  * {@see MatrixPermissionCatalogBuilder} both filter through this one method
  * instead of repeating the two-part condition — unknown entity_key OR
  * inactive owning module — twice.

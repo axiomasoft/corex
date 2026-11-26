@@ -32,7 +32,7 @@ use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /**
- * The account FSM (B-11 §5.1/§5.2, P2.12) — `root_accounts.status` MUST be
+ * The account FSM (B-11 §5.1/§5.2) — `root_accounts.status` MUST be
  * mutated ONLY through this class. Every transition writes one
  * `root_account_events` row ({@see writeEvent()}); the transitions that own
  * a dedicated {@see DomainEvent} subclass also fire it
@@ -40,8 +40,7 @@ use RuntimeException;
  * `startGrace`→GraceStarted; `AccountPurged`/`ExportReady` are fired by
  * {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle}, not
  * here — see that class's docblock). `activate()`/`resume()`/
- * `requestExport()` have no dedicated event class in this item's scope
- * (Files list, P2.12) — they still write a `root_account_events` row.
+ * `requestExport()` write a `root_account_events` row without a dedicated event class.
  *
  * D151 — every mutating method asserts {@see ImpersonationGuard} first
  * (before `activateFromPool`'s pool claim only, per that method's own

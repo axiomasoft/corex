@@ -14,7 +14,7 @@ use Packman\Attributes\Internal;
  * Экспорт в OpenTelemetry, имена спанов и метрики messaging.* — обязательство P12, не P5
  * (research/P5-design.md §9.4).
  *
- * @internal spec: P5.15 — console command is not a supported API
+ * @internal Console commands are outside the supported PHP API.
  */
 #[Internal]
 final class ShowDeliveryHealth extends Command

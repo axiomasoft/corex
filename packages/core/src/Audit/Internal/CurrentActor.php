@@ -22,7 +22,7 @@ use Stringable;
  * import (D139 — this class lives in ядро, level 0 must not depend on the
  * cloud package).
  *
- * @internal spec: B-10 §3.1, P2, D137/D139
+ * @internal spec: B-10 §3.1
  */
 #[Internal]
 final readonly class CurrentActor

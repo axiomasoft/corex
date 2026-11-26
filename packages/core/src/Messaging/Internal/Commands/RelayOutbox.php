@@ -31,7 +31,7 @@ use Throwable;
  * `--once` выполняет один проход и выходит: это режим планировщика. Без него команда
  * работает циклом и завершается по SIGTERM/SIGINT после текущего сообщения.
  *
- * @internal spec: P5.15 — console command is not a supported API
+ * @internal Console commands are outside the supported PHP API.
  */
 #[Internal]
 final class RelayOutbox extends Command

@@ -14,15 +14,8 @@ use Packman\Modules\Enums\Entities\Capability;
 
 /**
  * Auto-registers the workspace global scope on every model whose entity
- * declares `Capability::WorkspaceScoped` (D115) — closes the P2.6 debt of
- * nobody ever calling `Model::addGlobalScope()` on `WorkspaceScope`. Not an
- * arch-test ("every workspace_scoped model must register it") on purpose:
- * the tree carries ZERO such entities today (rolling the capability out to
- * real product entities is out of this package's scope, D70/D91), so that
- * test would be green on an empty set — the same "gate green on nothing"
- * class this plan already caught twice (D84, D93). Automatic registration
- * makes the mismatch structurally impossible instead, proven by a stub
- * (positive + negative case).
+ * declares `Capability::WorkspaceScoped`. Register the scope through
+ * `Model::addGlobalScope()` during package boot.
  *
  * $scopeClass comes from {@see EffectiveWorkspaceScope} (fail-closed: a
  * configured class must exist). null ⇒ boxed profile without
@@ -33,7 +26,7 @@ use Packman\Modules\Enums\Entities\Capability;
  * Called from {@see AccessServiceProvider::boot()}, the same
  * precedent as `CoreX\Audit\Internal\ModuleAuditHook`.
  *
- * @internal spec: B-11 §5.4 п.5, P2.9 D115
+ * @internal spec: B-11 §5.4(5)
  */
 #[Internal]
 final class WorkspaceScopeWiring

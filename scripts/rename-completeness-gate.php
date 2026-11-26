@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 /*
- * Rename completeness gate (PLAN3 P02, D44/D45): no tracked file outside history may name a symbol,
+ * Rename completeness gate: no tracked file outside history may name a symbol,
  * namespace, composer package, path or identifier that P02 renamed away. Tokens come from
  * scripts/rename-completeness.json, generated before the transfer from the P00 maps.
  *

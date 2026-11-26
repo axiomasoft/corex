@@ -20,14 +20,14 @@ use Packman\Modules\Data\Extenders\Permissions;
  * which scope options are legal for each.
  *
  * `isScopeable() === false` ⇒ the entity does not participate in the scope
- * axis at all, so `account` is the only legal value (B-11 §4 п.3). Scopeable
+ * axis at all, so `account` is the only legal value (B-11 §4(3)). Scopeable
  * entities get every {@see Scope} case normalized through
  * {@see ScopeAvailability} — a scope whose capability the entity never
  * declared collapses to `account` (or throws {@see ScopeCapabilityMismatch}
  * when the physical column exists without the declaration, D114 — a
  * genuine entity-registration bug this surface deliberately does not hide).
  *
- * @internal spec: B-11 §4 п.2/п.3, P2.21 D112/D113
+ * @internal spec: B-11 §4(2–3)
  */
 #[Internal]
 final readonly class PermissionSurface
