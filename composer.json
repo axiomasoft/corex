@@ -63,7 +63,8 @@
         "axiomasoft/vaulter-core": "^1.0@dev",
         "axiomasoft/vaulter-media": "^1.0@dev",
         "axiomasoft/packman-devtools": "^0.1",
-        "axiomasoft/packman-testkit": "^0.1"
+        "axiomasoft/packman-testkit": "^0.1",
+        "composer/pcre": "^3.4"
     },
     "autoload-dev": {
         "psr-4": {
