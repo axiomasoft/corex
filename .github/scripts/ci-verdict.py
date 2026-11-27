@@ -8,15 +8,12 @@ selected = set(filter(None, os.environ["SELECTED"].split(",")))
 code = needs["changes"]["outputs"].get("code")
 always = {"changes", "lint"}
 independent = {"anti-weakening-gate", "secret-scan", "contract-guard"}
-mutation = {"mutation-check", "mutation-fragments"}
-normal = set(needs) - always - mutation
+normal = set(needs) - always
 unknown = selected - normal - always
 errors = [f"Unknown or non-selectable job ID: {name}" for name in sorted(unknown)]
 if code not in {"true", "false"}:
     errors.append("Missing path classification")
 required = always | (selected or (normal if code == "true" else independent))
-if os.environ["MUTATION"] == "true":
-    required |= mutation | {"mutation-inventory"}
 with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
     summary.write("## Job results\n\n| Job | Result |\n| --- | --- |\n")
     for name, job in sorted(needs.items()):

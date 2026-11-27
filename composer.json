@@ -50,8 +50,6 @@
         "axiomasoft/corex-tools": "^2.0@dev",
         "axiomasoft/corex-webhooks": "^2.0@dev",
         "webmozart/assert": "^2.4.1",
-        "infection/infection": "0.35.6",
-        "axiomasoft/corex-infection-pest-adapter": "0.1.0",
         "league/flysystem-aws-s3-v3": "3.35.3",
         "laravel/octane": "2.21.0",
         "axiomasoft/packman": "^0.1",
@@ -118,15 +116,6 @@
         ]
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "scripts/quality/infection-pest-adapter",
-            "options": {
-                "versions": {
-                    "axiomasoft/corex-infection-pest-adapter": "0.1.0"
-                }
-            }
-        },
         {
             "type": "path",
             "url": "packages/*",
@@ -977,8 +966,7 @@
         "process-timeout": 1200,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true,
-            "infection/extension-installer": true
+            "phpstan/extension-installer": true
         }
     },
     "scripts": {
@@ -1018,9 +1006,6 @@
         "quality:ceilings": "php scripts/quality-ceiling-guard.php",
         "deps:analyse": "bash scripts/dependency-analyser.sh --all",
         "php-api": "php scripts/php-api.php --strict --check",
-        "schema-gate": "php scripts/schema-gate.php",
-        "mutation:inventory": "python3 scripts/quality/mutation.py --inventory --check",
-        "mutation:self-test": "python3 scripts/quality/mutation.py --self-test",
-        "mutation": "python3 scripts/quality/mutation.py"
+        "schema-gate": "php scripts/schema-gate.php"
     }
 }

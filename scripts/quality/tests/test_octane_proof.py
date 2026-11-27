@@ -1,4 +1,4 @@
-"""Receipt integrity tests; no package source patches or mutation runners."""
+"""Receipt integrity tests."""
 from __future__ import annotations
 
 import copy

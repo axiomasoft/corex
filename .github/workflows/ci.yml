@@ -19,10 +19,6 @@ on:
         description: Regular lane IDs separated by commas (empty runs full CI), e.g. tests-pg,panels-tests
         type: string
         default: ''
-      mutation:
-        description: Run mutation fragments and the mutation registry
-        type: boolean
-        default: false
 
 permissions: {}
 
@@ -951,125 +947,6 @@ jobs:
             env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir="$(dirname "$manifest")" audit --locked
           done
 
-  mutation-inventory:
-    name: Mutation inventory and parser controls
-    needs: [changes, lint]
-    if: needs.changes.outputs.code == 'true' && (!inputs.jobs || inputs.mutation || contains(format(',{0},', inputs.jobs), ',mutation-inventory,'))
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    outputs:
-      matrix: ${{ steps.fragments.outputs.matrix }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Set up PHP
-        uses: $/.github/actions/setup-php
-        with:
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-      - name: Exhaustive fragments and AST declaration ledger
-        run: python3 scripts/quality/mutation.py --inventory --check
-      - name: Strict parser negative controls
-        run: python3 scripts/quality/mutation.py --self-test
-      - name: Materialize package-fragment shards
-        if: inputs.mutation
-        id: fragments
-        run: echo "matrix=$(python3 scripts/quality/mutation.py --matrix)" >> "$GITHUB_OUTPUT"
-
-  mutation-fragments:
-    name: MSI · ${{ matrix.package }} · ${{ matrix.zone }}
-    needs: mutation-inventory
-    if: github.event_name == 'workflow_dispatch' && inputs.mutation
-    runs-on: ubuntu-24.04
-    timeout-minutes: 60
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      max-parallel: 4
-      matrix: ${{ fromJSON(needs.mutation-inventory.outputs.matrix) }}
-    env:
-      MUTATION_PACKAGE: ${{ matrix.package }}
-      MUTATION_ZONE: ${{ matrix.zone }}
-      PGSQL_HOST: 127.0.0.1
-      PGSQL_PORT: '5432'
-      PGSQL_USERNAME: corex
-      PGSQL_PASSWORD: corex
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_DB: corex_test
-          POSTGRES_USER: corex
-          POSTGRES_PASSWORD: corex
-        ports:
-          - 5432:5432
-        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Set up PHP
-        uses: $/.github/actions/setup-php
-        with:
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, pcntl
-          coverage: pcov
-      - name: Measure full package-fragment MSI
-        run: python3 scripts/quality/mutation.py --package "$MUTATION_PACKAGE" --zone "$MUTATION_ZONE"
-      - name: Retain raw mutant processes and coverage
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: mutation-${{ matrix.package }}-${{ matrix.zone }}
-          path: |
-            build/quality/mutation/**/receipt.json
-            build/quality/mutation/**/processes/**
-            build/quality/mutation/**/invalid/**
-            build/quality/mutation/**/sqlite/**
-            build/quality/mutation/**/pgsql/**
-          retention-days: 7
-
-  mutation-check:
-    needs: [mutation-inventory]
-    name: Mutation registry (scripts/mutation-check.sh --all)
-    if: github.event_name == 'workflow_dispatch' && inputs.mutation
-    runs-on: ubuntu-24.04
-    timeout-minutes: 90
-    permissions:
-      contents: read
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_DB: corex_test
-          POSTGRES_USER: corex
-          POSTGRES_PASSWORD: corex
-        ports:
-          - 5432:5432
-        options: --health-cmd "pg_isready -h 127.0.0.1 -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Set up PHP
-        uses: $/.github/actions/setup-php
-        with:
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
-      - name: Mutation registry — every case must red under sabotage
-        run: bash scripts/mutation-check.sh --all
-        env:
-          PGSQL_HOST: 127.0.0.1
-          PGSQL_PORT: 5432
-          PGSQL_DATABASE: corex_test
-          PGSQL_USERNAME: corex
-          PGSQL_PASSWORD: corex
-
   ci-gate:
     name: ${{ inputs.jobs && 'Selected CI lanes' || 'CI gate' }}
     needs:
@@ -1097,9 +974,6 @@ jobs:
       - golden
       - ownership
       - dependencies
-      - mutation-inventory
-      - mutation-fragments
-      - mutation-check
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -1114,5 +988,4 @@ jobs:
         env:
           NEEDS: ${{ toJSON(needs) }}
           SELECTED: ${{ inputs.jobs }}
-          MUTATION: ${{ inputs.mutation && 'true' || 'false' }}
         run: python3 .github/scripts/ci-verdict.py

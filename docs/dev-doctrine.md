@@ -31,7 +31,7 @@ scripts/php84 composer test
 scripts/php84 composer test:pg
 ```
 
-Run the affected package suites, architecture checks and relevant API and schema gates. Run PostgreSQL tests in an isolated test database. SQLite and PostgreSQL exercise different behaviors. Root line coverage uses the configured 80% floor for its source directories. Packages may require higher coverage. CI checks the mutation inventory for changed code. Dispatch a mutation run to execute the full fragments. [Testing and CI](testing-ci.md)
+Run the affected package suites, architecture checks and relevant API and schema gates. Run PostgreSQL tests in an isolated test database. SQLite and PostgreSQL exercise different behaviors. Root line coverage uses the configured 80% floor for its source directories. Packages may require higher coverage. [Testing and CI](testing-ci.md)
 
 ## Local tooling
 

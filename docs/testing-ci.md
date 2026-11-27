@@ -92,7 +92,7 @@ flowchart LR
     changes & quality --> pg[PG lane 16 / 18 + Meilisearch]
     changes & quality --> packages[Package matrix and package lanes]
     changes & quality --> analysis[Static analysis: PHPStan, Rector, quality gates]
-    changes & quality --> gates[Layer, golden, ownership, dependencies, coverage, Octane, mutation inventory]
+    changes & quality --> gates[Layer, golden, ownership, dependencies, coverage, Octane]
     awg[Anti-weakening] --> gate
     secrets[Secret scan] --> gate
     contract[Contract guard] --> gate
@@ -110,9 +110,6 @@ flowchart LR
   regular lane to succeed. A documentation-only change can skip the PHP lanes.
   Quality, change detection, secret scanning, the history guard and the PHP
   contract guard must still pass.
-- Code changes also check mutation inventory and parser controls in parallel
-  with the package jobs. Dispatch with `mutation: true` to measure fragment
-  scores and run the mutation registry.
 - A targeted dispatch reports **Selected CI lanes** and has its own cancellation
   group. Use `gh workflow run ci.yml --ref <branch> -f jobs=tests-pg,panels-tests`
   to check those jobs and Quality. A full check is available by dispatching
@@ -139,13 +136,6 @@ Shared steps live in composite actions:
 
 `distribution-proof.yml` runs the distribution proofs on pull requests that
 touch dependency or distribution files, and on demand.
-
-### Ownership of fixed mutation checks
-
-The fixed registry mutates CoreX-owned code and tests. Run a single case with
-`bash scripts/mutation-check.sh <case-id>` or list cases with `--list`. Each
-carrier must pass before its mutation can count. PostgreSQL cases need a
-dedicated test database. The optional mutation dispatch runs the registry.
 
 The module compiler and lifecycle belong to `axiomasoft/packman-modules`.
 CoreX exercises their consumer contract in
